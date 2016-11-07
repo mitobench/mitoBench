@@ -28,7 +28,7 @@ dependencies {
 jar {
     manifest {
         attributes("Implementation-Title": "MitoBench",
-                "Implementation-Version": version, "main-Class": "main.java.MitoBenchRunner")
+                "Implementation-Version": version, "main-Class": "MitoBenchRunner")
     }
     doFirst {
         from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }

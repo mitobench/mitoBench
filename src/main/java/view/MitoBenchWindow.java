@@ -1,15 +1,20 @@
-package main.java.view;
+package view;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import main.java.view.charts.BarPlot;
+import view.charts.BarPlot;
+import view.table.*;
+
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -18,6 +23,8 @@ import main.java.view.charts.BarPlot;
 public class MitoBenchWindow extends Application{
 
     private BorderPane root;
+    private TableManager tableManager;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception
@@ -25,8 +32,6 @@ public class MitoBenchWindow extends Application{
         root = new BorderPane();
         root.setTop(getMenu());
         root.setRight(getRightHBox());
-        //root.setBottom(getFooter());
-        //root.setLeft(getLeftHBox());
         root.setCenter(getCenterPane());
 
         Scene scene = new Scene(root, 900, 500);
@@ -36,14 +41,52 @@ public class MitoBenchWindow extends Application{
         primaryStage.show();
     }
 
-    private MenuBar getMenu()
+    private MenuBar getMenu() throws Exception
     {
         MenuBar menuBar = new MenuBar();
 
         Menu menuFile = new Menu("File");
         Menu menuEdit = new Menu("Edit");
+        Menu menuStatistics = new Menu("Statistics");
         Menu menuHelp = new Menu("Help");
-        menuBar.getMenus().addAll(menuFile, menuEdit, menuHelp);
+        menuBar.getMenus().addAll(menuFile, menuEdit, menuStatistics, menuHelp);
+
+        MenuItem importFile = new MenuItem("Import file");
+        importFile.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                ImportDialogue importDialogue = new ImportDialogue();
+                importDialogue.start(new Stage());
+            }
+        });
+
+
+
+        MenuItem exportFile = new MenuItem("Export DB file");
+        exportFile.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                ExportDialogue exportDialogue = new ExportDialogue();
+                exportDialogue.start(new Stage());
+                String outFileDB = exportDialogue.getOutFile();
+
+                try{
+                    CSVWriter csvWriter = new CSVWriter(tableManager.getData());
+                    csvWriter.writeExcel(outFileDB);
+                } catch (Exception e) {
+                    System.err.println("Caught Exception: " + e.getMessage());
+                }
+
+
+            }
+        });
+
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
+
+        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exit);
 
         return menuBar;
     }
@@ -57,7 +100,8 @@ public class MitoBenchWindow extends Application{
         vbox.setAlignment(Pos.CENTER);
 
         Pane plot = new Pane();
-        BarPlot barchart = new BarPlot();
+        BarPlot barchart = new BarPlot("Country Summary", "Country", "Value");
+
         plot.getChildren().addAll(barchart.getBarChart());
         vbox.getChildren().addAll(plot,new Label("Place for some statistics"));
 
@@ -74,28 +118,30 @@ public class MitoBenchWindow extends Application{
     {
         StackPane stackPane = new StackPane();
         stackPane.setAlignment(Pos.CENTER);
-        TableView table = new TableView();
 
-        final Label label = new Label("MT genome data");
-        label.setFont(new Font("Arial", 20));
+        tableManager = new TableManager(new Label("Mt database selection"));
+        tableManager.addColumn("ID");
+        tableManager.addColumn("MTsequence");
+        tableManager.addColumn("dating");
 
-        table.setEditable(true);
+        // fill table with content
+        tableManager.addEntry(new TableDataModel("1", "AAGGCTGATA", "1804"));
+        tableManager.addEntry(new TableDataModel("2", "AAGGCTGATA", "1803"));
+        tableManager.addEntry(new TableDataModel("3", "AAGGCTGATA", "1806"));
+        tableManager.addEntry(new TableDataModel("4", "AAGGCTGATA", "1810"));
 
-        TableColumn firstNameCol = new TableColumn("ID");
-        TableColumn lastNameCol = new TableColumn("Sequence");
-        TableColumn emailCol = new TableColumn("Date");
-        emailCol.setSortType(TableColumn.SortType.DESCENDING);
 
-        table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
 
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
+        vbox.getChildren().addAll(tableManager.getLabel(), tableManager.getTable());
 
         stackPane.getChildren().addAll(vbox);
 
         return stackPane;
     }
+
+
 
 }

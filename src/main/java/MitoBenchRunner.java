@@ -1,6 +1,5 @@
-package main.java;
 
-import main.java.view.MitoBenchWindow;
+import view.MitoBenchWindow;
 
 /**
  * Created by neukamm on 03.11.16.
@@ -16,8 +15,7 @@ public class MitoBenchRunner {
     {
         new Thread() {
             @Override
-            public void run() {
-                javafx.application.Application.launch(MitoBenchWindow.class);
+            public void run() {javafx.application.Application.launch(MitoBenchWindow.class);
             }
         }.start();
 
