@@ -13,8 +13,6 @@ import javafx.stage.Stage;
 import view.charts.BarPlot;
 import view.table.*;
 
-import java.io.File;
-import java.io.IOException;
 
 
 /**
@@ -41,6 +39,8 @@ public class MitoBenchWindow extends Application{
         primaryStage.show();
     }
 
+
+
     private MenuBar getMenu() throws Exception
     {
         MenuBar menuBar = new MenuBar();
@@ -51,15 +51,28 @@ public class MitoBenchWindow extends Application{
         Menu menuHelp = new Menu("Help");
         menuBar.getMenus().addAll(menuFile, menuEdit, menuStatistics, menuHelp);
 
+        /*
+                        IMPORT DIALOGUE
+
+         */
+
         MenuItem importFile = new MenuItem("Import file");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 ImportDialogue importDialogue = new ImportDialogue();
                 importDialogue.start(new Stage());
+                // read file, parse to table
+                CSVReader csvReader = new CSVReader();
+                csvReader.populateTable(tableManager, importDialogue.getInputCSVFile(), false);
+
             }
         });
 
 
+        /*
+                        EXPORT DIALOGUE
+
+         */
 
         MenuItem exportFile = new MenuItem("Export DB file");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
@@ -70,15 +83,21 @@ public class MitoBenchWindow extends Application{
 
                 try{
                     CSVWriter csvWriter = new CSVWriter(tableManager.getData());
-                    csvWriter.writeExcel(outFileDB);
+                    // todo: user set filename
+                    csvWriter.writeExcel(outFileDB, "mito.txt");
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
-
-
             }
         });
 
+
+        /*
+
+                EXIT OPTION
+
+
+         */
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -91,6 +110,11 @@ public class MitoBenchWindow extends Application{
         return menuBar;
     }
 
+
+    /**
+     *              Plotting and Statistics part
+     * @return
+     */
     private HBox getRightHBox()
     {
         HBox hbox = new HBox();
@@ -113,24 +137,23 @@ public class MitoBenchWindow extends Application{
         return hbox;
     }
 
-
+    /**
+     *              Table
+     * @return
+     */
     private StackPane getCenterPane()
     {
         StackPane stackPane = new StackPane();
         stackPane.setAlignment(Pos.CENTER);
 
         tableManager = new TableManager(new Label("Mt database selection"));
+        tableManager.addColumn("id_intern");
         tableManager.addColumn("ID");
         tableManager.addColumn("MTsequence");
         tableManager.addColumn("dating");
 
         // fill table with content
-        tableManager.addEntry(new TableDataModel("1", "AAGGCTGATA", "1804"));
-        tableManager.addEntry(new TableDataModel("2", "AAGGCTGATA", "1803"));
-        tableManager.addEntry(new TableDataModel("3", "AAGGCTGATA", "1806"));
-        tableManager.addEntry(new TableDataModel("4", "AAGGCTGATA", "1810"));
-
-
+        tableManager.addEntry(new TableDataModel(new String[]{"0", "1", "AAGGCTGATA", "1804"}));
 
         final VBox vbox = new VBox();
         vbox.setSpacing(5);

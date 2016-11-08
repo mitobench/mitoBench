@@ -1,4 +1,4 @@
-group 'com.uni-tuebingen.de.it.eager.mitobench'
+group 'com.uni-tuebingen.de.it.mitobench'
 version '0.1'
 
 apply plugin: 'java'
@@ -20,7 +20,8 @@ sourceSets {
 
 
 dependencies {
-
+    // https://mvnrepository.com/artifact/org.javafxdata/datafx-flow
+    compile group: 'org.javafxdata', name: 'datafx-flow', version: '8.0b5'
 }
 
 
@@ -40,6 +41,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
     }
 }
 
@@ -51,6 +53,7 @@ allprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'java'
     apply plugin: 'idea'
+
 }
 
 
@@ -59,7 +62,7 @@ publishing {
     publications {
         MyPublication(MavenPublication) {
             from components.java
-            groupId 'com.uni-tuebingen.de.it.eager'
+            groupId 'com.uni-tuebingen.de.it.mitobench'
             artifactId 'MitoBench'
         }
     }

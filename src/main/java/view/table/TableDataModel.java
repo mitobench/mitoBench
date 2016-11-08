@@ -10,34 +10,29 @@ public class TableDataModel {
     private final SimpleStringProperty ID;
     private final SimpleStringProperty MTsequence;
     private final SimpleStringProperty dating;
+    private int id_intern;
 
-    public TableDataModel(String id, String mtsequence, String dating) {
-        this.ID = new SimpleStringProperty(id);
-        this.MTsequence = new SimpleStringProperty(mtsequence);
-        this.dating = new SimpleStringProperty(dating);
+    public TableDataModel(String[] entry) {
+        this.id_intern = Integer.parseInt(entry[0]);
+        this.ID = new SimpleStringProperty(entry[1]);
+        this.MTsequence = new SimpleStringProperty(entry[2]);
+        this.dating = new SimpleStringProperty(entry[3]);
+
     }
 
     public String getID() {
         return ID.get();
     }
 
-    public void setID(String ID) {
-        this.ID.set(ID);
-    }
-
     public String getMTsequence() {
         return MTsequence.get();
-    }
-
-    public void setMTsequence(String MTsequence) {
-        this.MTsequence.set(MTsequence);
     }
 
     public String getDating() {
         return dating.get();
     }
 
-    public void setDating(String dating) {
-        this.dating.set(dating);
+    public int getId_intern() {
+        return id_intern;
     }
 }
