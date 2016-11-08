@@ -1,5 +1,5 @@
 group 'com.uni-tuebingen.de.it.eager.mitobench'
-version '0.2'
+version '0.1'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -67,3 +67,24 @@ publishing {
 
 
 
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['MyPublication']
+    publish = true
+    override = true
+    pkg {
+        repo = 'MitoBench'
+        name = 'MitoBench'
+        licenses = ['GPL-3.0']
+        vcsUrl = "https://github.com/apeltzer/MitoBench"
+        version {
+            name = project.version
+            desc = 'Analyzing mt genomes'
+            released  = new Date()
+            vcsTag = project.version
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+        }
+
+    }
+}
