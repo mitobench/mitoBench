@@ -7,17 +7,15 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import view.charts.ABarPlot;
 import view.charts.BarPlotTest;
 import view.table.*;
+import view.tree.TreeHaploChooser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
 
 
 /**
@@ -29,15 +27,22 @@ public class MitoBenchWindow extends Application{
     private TableManager tableManager;
 
 
+
     @Override
     public void start(Stage primaryStage) throws Exception
     {
         root = new BorderPane();
+        root.autosize();
+
         root.setTop(getMenu());
         root.setRight(getRightHBox());
         root.setCenter(getCenterPane());
 
-        Scene scene = new Scene(root, 900, 500);
+
+
+
+
+        Scene scene = new Scene(root, 1200, 600);
         primaryStage.setTitle("Mito Bench");
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
@@ -145,34 +150,42 @@ public class MitoBenchWindow extends Application{
         return hbox;
     }
 
+
+
+
     /**
-     *              Table
+     *              TABLE with Tree view
      * @return
      */
     private StackPane getCenterPane()
     {
         StackPane stackPane = new StackPane();
-        stackPane.setAlignment(Pos.CENTER);
+        stackPane.setAlignment(Pos.BASELINE_LEFT);
 
-        tableManager = new TableManager(new Label("Mt database selection"));
-        tableManager.addColumn("id_intern");
+        tableManager = new TableManager(new Label("\nOwn Mt database"));
         tableManager.addColumn("ID");
         tableManager.addColumn("MTsequence");
-        tableManager.addColumn("dating");
+        tableManager.addColumn("Dating");
+        tableManager.addColumn("Haplogroup");
+
 
         // fill table with content
-        tableManager.addEntry(new TableDataModel(new String[]{"0", "1", "AAGGCTGATA", "1804"}));
+        tableManager.addEntry(new TableDataModel(new String[]{"1", "AAGGC...", "1804", "N"}));
+        tableManager.addEntry(new TableDataModel(new String[]{"2", "AAGGC...", "1804", "N"}));
+        tableManager.addEntry(new TableDataModel(new String[]{"3", "AAGGC...", "1804", "H"}));
+        tableManager.addEntry(new TableDataModel(new String[]{"4", "AAGGC...", "1804", "H"}));
 
         final VBox vbox = new VBox();
-        vbox.setSpacing(5);
+        vbox.setSpacing(10);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(tableManager.getLabel(), tableManager.getTable());
 
         stackPane.getChildren().addAll(vbox);
 
+        TreeHaploChooser treeHaploChooser = new TreeHaploChooser(stackPane, tableManager);
+
         return stackPane;
     }
-
 
 
 }

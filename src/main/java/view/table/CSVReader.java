@@ -48,7 +48,7 @@ public class CSVReader {
                         @Override
                         public void run() {
                             // Add additional columns if necessary:
-                            for (int columnIndex = table.getColumns().size(); columnIndex <= dataValues.length; columnIndex++) {
+                            for (int columnIndex = table.getColumns().size(); columnIndex < dataValues.length; columnIndex++) {
                                 tableManager.addColumn(tableManager.getCol_names().get(columnIndex));
                             }
                             // Add data to table:
