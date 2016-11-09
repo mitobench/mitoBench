@@ -1,6 +1,7 @@
 package view.table;
 
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -8,7 +9,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -27,23 +30,27 @@ public class ExportDialogue extends Application {
     public void start(Stage stage) {
 
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDirectory =
-                directoryChooser.showDialog(stage);
-
-        if(selectedDirectory == null){
-            outFile = "No Directory selected";
-        }else{
-            outFile = selectedDirectory.getAbsolutePath();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save table content");
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            try {
+                outFile = file.getAbsolutePath();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
-//        FileChooser fileChooser = new FileChooser();
+
+
+//        DirectoryChooser directoryChooser = new DirectoryChooser();
+//        File selectedDirectory = directoryChooser.showDialog(stage);
 //
-//        //Show save file dialog
-//        File file = fileChooser.showSaveDialog(stage);
-//
-//        if(file != null){
-//            outFile = file;
+//        if(selectedDirectory == null){
+//            outFile = "No Directory selected";
+//        }else{
+//            outFile = selectedDirectory.getAbsolutePath();
 //        }
+
     }
 
     public String getOutFile() {

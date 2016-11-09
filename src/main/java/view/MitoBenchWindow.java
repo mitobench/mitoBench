@@ -7,12 +7,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import view.charts.BarPlot;
+import view.charts.ABarPlot;
+import view.charts.BarPlotTest;
 import view.table.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -69,6 +74,8 @@ public class MitoBenchWindow extends Application{
         });
 
 
+
+
         /*
                         EXPORT DIALOGUE
 
@@ -83,8 +90,7 @@ public class MitoBenchWindow extends Application{
 
                 try{
                     CSVWriter csvWriter = new CSVWriter(tableManager.getData());
-                    // todo: user set filename
-                    csvWriter.writeExcel(outFileDB, "mito.txt");
+                    csvWriter.writeExcel(outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
@@ -124,7 +130,9 @@ public class MitoBenchWindow extends Application{
         vbox.setAlignment(Pos.CENTER);
 
         Pane plot = new Pane();
-        BarPlot barchart = new BarPlot("Country Summary", "Country", "Value");
+        BarPlotTest barchart = new BarPlotTest("Country Summary", "Country", "Value");
+
+        barchart.addData("data1", Arrays.asList( new double[][]{{1, 45263.37}, {2, 117320.16}, {3, 14845.27}}));
 
         plot.getChildren().addAll(barchart.getBarChart());
         vbox.getChildren().addAll(plot,new Label("Place for some statistics"));

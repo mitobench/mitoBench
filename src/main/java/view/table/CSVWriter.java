@@ -19,13 +19,13 @@ public class CSVWriter {
     }
 
 
-    public void writeExcel(String file, String filename) throws Exception {
+    public void writeExcel(String file) throws Exception {
         Writer writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(new File(file+ File.separator+ filename)));
+            writer = new BufferedWriter(new FileWriter(new File(file+".csv")));
             for (TableDataModel entry : data) {
                 // todo: should be changed ! Iterating over attributes instead....
-                String text = entry.getId_intern() + ";" + entry.getID() + ";" + entry.getMTsequence() + ";" + entry.getDating() + "\n";
+                String text = entry.getID() + ";" + entry.getMTsequence() + ";" + entry.getDating() + "\n";
                 writer.write(text);
             }
         } catch (Exception ex) {

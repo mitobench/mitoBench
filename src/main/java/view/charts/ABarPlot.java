@@ -8,14 +8,14 @@ import javafx.scene.chart.XYChart;
 import java.util.List;
 
 /**
- * Created by neukamm on 03.11.16.
+ * Created by neukamm on 09.11.16.
  */
-public class BarPlot {
+public abstract class ABarPlot {
+
+    protected BarChart<String, Number> bc;
 
 
-    private BarChart<String, Number> bc;
-
-    public BarPlot(String title, String xlabel, String ylabel){
+    public ABarPlot(String title, String xlabel, String ylabel){
 
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -26,22 +26,12 @@ public class BarPlot {
     }
 
 
-    public void addData(String name, List<XYChart.Data> data){
-        XYChart.Series series = new XYChart.Series();
-        series.setName(name);
-
-        for(XYChart.Data d : data){
-            series.getData().add(d);
-        }
-
-        bc.getData().add(series);
-
-
-    }
+    public abstract void addData(String name, List<double[]> data);
 
 
     public BarChart<String,Number> getBarChart() {
         return bc;
     }
+
 
 }
