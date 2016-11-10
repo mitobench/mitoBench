@@ -17,7 +17,6 @@ import view.tree.TreeHaploChooser;
 import java.util.Arrays;
 
 
-
 /**
  * Created by neukamm on 03.11.16.
  */
@@ -175,6 +174,8 @@ public class MitoBenchWindow extends Application{
         tableManager.addEntry(new TableDataModel(new String[]{"3", "AAGGC...", "1804", "H"}));
         tableManager.addEntry(new TableDataModel(new String[]{"4", "AAGGC...", "1804", "H"}));
 
+        tableManager.copyData();
+
         final VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -184,8 +185,21 @@ public class MitoBenchWindow extends Application{
 
         TreeHaploChooser treeHaploChooser = new TreeHaploChooser(stackPane, tableManager);
 
+        // add reset table button
+        Button reset = new Button("Reset table");
+
+        // reset table to state before selection
+        reset.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent paramT) {
+                tableManager.resetTable();
+            }
+        });
+        stackPane.getChildren().add(reset);
+        stackPane.setAlignment(Pos.TOP_RIGHT);
+        StackPane.setMargin(reset, new Insets(10, 10, 0, 0));
+
         return stackPane;
     }
-
 
 }

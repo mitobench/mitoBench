@@ -1,5 +1,7 @@
 package view.table;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -39,11 +41,4 @@ public class TableDataModel {
         return haplogroup.get();
     }
 
-    public int getId_intern() {
-        return id_intern;
-    }
-
-    public void setId_intern(int id_intern) {
-        this.id_intern = id_intern;
-    }
 }

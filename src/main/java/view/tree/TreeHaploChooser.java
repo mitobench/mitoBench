@@ -22,7 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import view.table.TableFilter;
+import view.table.MyTableFilter;
 import view.table.TableManager;
 
 
@@ -105,8 +105,8 @@ public class TreeHaploChooser {
 
 
                 // parse selection to tablefilter
-                TableFilter tableFilter = new TableFilter();
-                tableFilter.filter(tableManager.getTable(), seletcion_haplogroups);
+                MyTableFilter tableFilter = new MyTableFilter();
+                tableFilter.filter(tableManager, seletcion_haplogroups);
 
             }
         });
@@ -124,9 +124,11 @@ public class TreeHaploChooser {
                 togglePaneVisibility();
             }
         });
-        searchPane.getChildren().addAll(GroupBuilder.create().children(sp1).build(), GroupBuilder.create().children(sp2).build());
 
+        searchPane.getChildren().addAll(GroupBuilder.create().children(sp1).build(), GroupBuilder.create().children(sp2).build());
         root.getChildren().add(GroupBuilder.create().children(searchPane).build());
+
+
     }
 
 
@@ -180,8 +182,6 @@ public class TreeHaploChooser {
 
 
 
-
-
     /**
      * Method to toggle the search pane visibility.
      */
@@ -193,7 +193,4 @@ public class TreeHaploChooser {
         }
     }
 
-    public String[] getSeletcion_haplogroups() {
-        return seletcion_haplogroups;
-    }
 }

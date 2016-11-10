@@ -23,6 +23,7 @@ public class TableManager {
     private int id_intern;
 
     private ObservableList<TableDataModel> data;
+    private ObservableList<TableDataModel> data_copy;
 
 
     public TableManager(Label label){
@@ -32,16 +33,15 @@ public class TableManager {
 
         table = new TableView();
         table.setEditable(false);
-        table.getSelectionModel().setSelectionMode(
-                SelectionMode.MULTIPLE
-        );
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         data = FXCollections.observableArrayList();
+        data_copy = FXCollections.observableArrayList();
         col_names = new ArrayList<>();
         id_intern = 1;
 
-
     }
+
 
     /**
      * add column to table, attribute is column name
@@ -77,10 +77,44 @@ public class TableManager {
 
     }
 
+    public void updateView(ObservableList<TableDataModel> newItems){
+
+        ObservableList<TableDataModel> data_selection = FXCollections.observableArrayList();
+        for(TableDataModel item : newItems){
+            data_selection.add(item);
+        }
+
+        data.removeAll(data);
+        for(TableDataModel item : data_selection){
+            data.add(item);
+        }
+
+        table.refresh();
+//        data_copy.setAll(newItems);
+//        FXCollections.copy(data_copy, this.data);
+//        this.data.removeAll(this.data);
+//        this.addEntryList(newItems);
+    }
+
+
+    public void resetTable() {
+        data.removeAll(data);
+        for(TableDataModel item : data_copy){
+            data.add(item);
+        }
+    }
+
+    public void copyData(){
+        if(data_copy.size()==0){
+            for(TableDataModel item : data){
+                data_copy.add(item);
+            }
+        }
+    }
+
     public TableView getTable() {
         return table;
     }
-
 
     public Label getLabel() {
         return label;
@@ -88,6 +122,9 @@ public class TableManager {
 
     public ObservableList<TableDataModel> getData() {
         return data;
+    }
+    public ObservableList<TableDataModel> getDataCopy() {
+        return data_copy;
     }
 
     public List<String> getCol_names() {

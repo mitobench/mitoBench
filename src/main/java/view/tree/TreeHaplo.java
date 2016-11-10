@@ -27,12 +27,12 @@ public class TreeHaplo{
         }
 
         for (int i = 1; i < 3; i++) {
-            TreeItem<String> item = new TreeItem<String> ("Message_child" + i);
+            TreeItem<String> item = new TreeItem<String> ("H");
             rootItem.getChildren().get(0).getChildren().add(item);
         }
 
         for (int i = 1; i < 3; i++) {
-            TreeItem<String> item = new TreeItem<String> ("Message_child" + i);
+            TreeItem<String> item = new TreeItem<String> ("N");
             rootItem.getChildren().get(3).getChildren().add(item);
         }
 
