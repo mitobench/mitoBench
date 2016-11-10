@@ -3,7 +3,6 @@ package view.charts;
 import javafx.scene.chart.XYChart;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by neukamm on 03.11.16.
@@ -28,7 +27,9 @@ public class BarPlotHaplo extends ABarPlot {
             series.getData().add(new XYChart.Data(haplo, data.get(haplo)));
         }
 
+        this.bc.getData().clear();
         this.bc.getData().add(series);
+
     }
 
 
