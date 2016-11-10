@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import view.charts.BarPlotTest;
+import view.charts.BarPlotHaplo;
 import view.table.*;
 import view.tree.TreeHaploChooser;
 
@@ -24,6 +24,7 @@ public class MitoBenchWindow extends Application{
 
     private BorderPane root;
     private TableManager tableManager;
+    private BarPlotHaplo barPlotHaplo;
 
 
 
@@ -36,10 +37,6 @@ public class MitoBenchWindow extends Application{
         root.setTop(getMenu());
         root.setRight(getRightHBox());
         root.setCenter(getCenterPane());
-
-
-
-
 
         Scene scene = new Scene(root, 1200, 600);
         primaryStage.setTitle("Mito Bench");
@@ -60,6 +57,8 @@ public class MitoBenchWindow extends Application{
         Menu menuHelp = new Menu("Help");
         menuBar.getMenus().addAll(menuFile, menuEdit, menuStatistics, menuHelp);
 
+
+
         /*
                         IMPORT DIALOGUE
 
@@ -76,7 +75,6 @@ public class MitoBenchWindow extends Application{
 
             }
         });
-
 
 
 
@@ -108,6 +106,7 @@ public class MitoBenchWindow extends Application{
 
 
          */
+
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -122,7 +121,10 @@ public class MitoBenchWindow extends Application{
 
 
     /**
+     *
      *              Plotting and Statistics part
+     *
+     *
      * @return
      */
     private HBox getRightHBox()
@@ -134,17 +136,16 @@ public class MitoBenchWindow extends Application{
         vbox.setAlignment(Pos.CENTER);
 
         Pane plot = new Pane();
-        BarPlotTest barchart = new BarPlotTest("Country Summary", "Country", "Value");
+        barPlotHaplo = new BarPlotHaplo("Haplogroups Summary \n(Own dataset)", "Haplogroup", "Count");
 
-        barchart.addData("data1", Arrays.asList( new double[][]{{1, 45263.37}, {2, 117320.16}, {3, 14845.27}}));
+        //barPlotHaplo.addData("data1", Arrays.asList( new double[][]{{1, 45263.37}, {2, 117320.16}, {3, 14845.27}}));
 
-        plot.getChildren().addAll(barchart.getBarChart());
+        plot.getChildren().addAll(barPlotHaplo.getBarChart());
         vbox.getChildren().addAll(plot,new Label("Place for some statistics"));
 
         Separator separator1 = new Separator();
         vbox.getChildren().add(1, separator1);
         hbox.getChildren().addAll(new Separator(Orientation.VERTICAL), vbox);
-
 
         return hbox;
     }
@@ -153,7 +154,10 @@ public class MitoBenchWindow extends Application{
 
 
     /**
+     *
      *              TABLE with Tree view
+     *
+     *
      * @return
      */
     private StackPane getCenterPane()
@@ -161,20 +165,13 @@ public class MitoBenchWindow extends Application{
         StackPane stackPane = new StackPane();
         stackPane.setAlignment(Pos.BASELINE_LEFT);
 
+        // initialize columns
         tableManager = new TableManager(new Label("\nOwn Mt database"));
         tableManager.addColumn("ID");
         tableManager.addColumn("MTsequence");
         tableManager.addColumn("Dating");
         tableManager.addColumn("Haplogroup");
 
-
-        // fill table with content
-        tableManager.addEntry(new TableDataModel(new String[]{"1", "AAGGC...", "1804", "N"}));
-        tableManager.addEntry(new TableDataModel(new String[]{"2", "AAGGC...", "1804", "N"}));
-        tableManager.addEntry(new TableDataModel(new String[]{"3", "AAGGC...", "1804", "H"}));
-        tableManager.addEntry(new TableDataModel(new String[]{"4", "AAGGC...", "1804", "H"}));
-
-        tableManager.copyData();
 
         final VBox vbox = new VBox();
         vbox.setSpacing(10);
@@ -183,7 +180,7 @@ public class MitoBenchWindow extends Application{
 
         stackPane.getChildren().addAll(vbox);
 
-        TreeHaploChooser treeHaploChooser = new TreeHaploChooser(stackPane, tableManager);
+        TreeHaploChooser treeHaploChooser = new TreeHaploChooser(stackPane, tableManager, barPlotHaplo);
 
         // add reset table button
         Button reset = new Button("Reset table");

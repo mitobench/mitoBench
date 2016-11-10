@@ -4,6 +4,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public abstract class ABarPlot {
     }
 
 
-    public abstract void addData(String name, List<double[]> data);
+    public abstract void addData(String name, HashMap<String, Integer> dataNew);
 
 
     public BarChart<String,Number> getBarChart() {

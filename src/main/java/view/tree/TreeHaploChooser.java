@@ -22,7 +22,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import view.table.MyTableFilter;
+import view.charts.BarPlotHaplo;
+import view.table.TableSelectionFilter;
 import view.table.TableManager;
 
 
@@ -40,10 +41,12 @@ public class TreeHaploChooser {
     private Timeline timelineDown;
     private String[] seletcion_haplogroups;
     private TableManager tableManager;
+    private BarPlotHaplo barPlotHaplo;
 
-    public TreeHaploChooser(StackPane root, TableManager tableManager){
+    public TreeHaploChooser(StackPane root, TableManager tableManager, BarPlotHaplo barPlotHaplo){
 
         this.tableManager = tableManager;
+        this.barPlotHaplo = barPlotHaplo;
         configureSearch(root);
         setAnimation();
 
@@ -105,13 +108,16 @@ public class TreeHaploChooser {
 
 
                 // parse selection to tablefilter
-                MyTableFilter tableFilter = new MyTableFilter();
+                TableSelectionFilter tableFilter = new TableSelectionFilter();
                 tableFilter.filter(tableManager, seletcion_haplogroups);
+
+                barPlotHaplo.addData("data selection", tableManager.getDataHist());
+
 
             }
         });
 
-        VBox hb2 = VBoxBuilder.create().children(tree.getTree(),applyBtn).build();//.maxHeight(24).spacing(10).translateY(100).build();
+        VBox hb2 = VBoxBuilder.create().children(tree.getTree(),applyBtn).build();
         sp1.getChildren().addAll(hb2);
 
         StackPane sp2 = new StackPane();

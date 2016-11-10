@@ -13,9 +13,7 @@ import javafx.scene.control.TableView;
 public class CSVReader {
 
 
-    public void populateTable(
-            final TableManager tableManager,
-            final File input, final boolean hasHeader) {
+    public void populateTable(final TableManager tableManager, final File input, final boolean hasHeader) {
 
         TableView<ObservableList<StringProperty>> table = tableManager.getTable();
         // todo: check if table should be cleaned before adding new entries
@@ -52,20 +50,21 @@ public class CSVReader {
                                 tableManager.addColumn(tableManager.getCol_names().get(columnIndex));
                             }
                             // Add data to table:
-                            String[] vals = new String[1];
-                            vals[0] = tableManager.getId_intern()+"";
-                            String[] both = Stream.of(vals, dataValues).flatMap(Stream::of)
-                                    .toArray(String[]::new);
-                            TableDataModel entry = new TableDataModel(both); // data values
+                            TableDataModel entry = new TableDataModel(dataValues); // data values
                             tableManager.addEntry(entry);
 
 
                         }
                     });
                 }
+                tableManager.copyData();
                 return null;
             }
+
+
         };
+
+
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();

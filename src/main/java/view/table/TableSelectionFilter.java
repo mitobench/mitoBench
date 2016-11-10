@@ -11,10 +11,10 @@ import java.util.function.Predicate;
 /**
  * Created by neukamm on 09.11.16.
  */
-public class MyTableFilter {
+public class TableSelectionFilter {
 
 
-    public MyTableFilter(){
+    public TableSelectionFilter(){
 
     }
 

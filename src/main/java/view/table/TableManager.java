@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,7 +21,6 @@ public class TableManager {
     private TableView table;
     private Label label;
     private List<String> col_names;
-    private int id_intern;
 
     private ObservableList<TableDataModel> data;
     private ObservableList<TableDataModel> data_copy;
@@ -33,12 +33,13 @@ public class TableManager {
 
         table = new TableView();
         table.setEditable(false);
+
+        // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         data = FXCollections.observableArrayList();
         data_copy = FXCollections.observableArrayList();
         col_names = new ArrayList<>();
-        id_intern = 1;
 
     }
 
@@ -77,6 +78,10 @@ public class TableManager {
 
     }
 
+    /**
+     * update table if some selections were done in tableView
+     * @param newItems
+     */
     public void updateView(ObservableList<TableDataModel> newItems){
 
         ObservableList<TableDataModel> data_selection = FXCollections.observableArrayList();
@@ -90,13 +95,25 @@ public class TableManager {
         }
 
         table.refresh();
-//        data_copy.setAll(newItems);
-//        FXCollections.copy(data_copy, this.data);
-//        this.data.removeAll(this.data);
-//        this.addEntryList(newItems);
     }
 
 
+    /**
+     * copy data to always allow resetting of table
+     * to old/initial state
+     */
+    public void copyData(){
+        if(data_copy.size()==0){
+            for(TableDataModel item : data){
+                data_copy.add(item);
+            }
+        }
+    }
+
+    /**
+     * set table to old/initial state
+     *
+     */
     public void resetTable() {
         data.removeAll(data);
         for(TableDataModel item : data_copy){
@@ -104,12 +121,27 @@ public class TableManager {
         }
     }
 
-    public void copyData(){
-        if(data_copy.size()==0){
-            for(TableDataModel item : data){
-                data_copy.add(item);
+
+    /**
+     * count occurrences of haplotypes within selected data
+     * return as hash map to plot it easily
+     *
+     * @return
+     */
+    public HashMap<String, Integer> getDataHist(){
+
+        HashMap<String, Integer> haplo_to_count = new HashMap<>();
+        for(TableDataModel item : this.data){
+            String haplogroup = item.getHaplogroup();
+
+            if(haplo_to_count.containsKey(haplogroup)){
+                haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
+            } else {
+                haplo_to_count.put(haplogroup,1);
             }
         }
+
+        return  haplo_to_count;
     }
 
     public TableView getTable() {
@@ -123,17 +155,9 @@ public class TableManager {
     public ObservableList<TableDataModel> getData() {
         return data;
     }
-    public ObservableList<TableDataModel> getDataCopy() {
-        return data_copy;
-    }
 
     public List<String> getCol_names() {
         return col_names;
     }
 
-    public int getId_intern() {
-        id_intern++;
-        return id_intern-1;
-
-    }
 }
