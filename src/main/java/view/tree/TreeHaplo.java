@@ -4,51 +4,38 @@ import javafx.application.Platform;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import org.xml.sax.SAXException;
+import phyloTreeParser.PhyloTreeParser;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 /**
  * Created by neukamm on 09.11.16.
  */
 public class TreeHaplo{
 
-    private TreeItem<String> rootItem;
+    private TreeItem<String> finalTree;
     private TreeView<String> tree;
 
     public TreeHaplo(String root){
 
-        rootItem = new TreeItem<String> (root);
-        rootItem.setExpanded(true);
+        finalTree = new TreeItem<String> (root);
+        finalTree.setExpanded(true);
 
     }
 
-    public void addStructure(){
-        for (int i = 1; i < 6; i++) {
-            TreeItem<String> item = new TreeItem<String> ("Message" + i);
-            rootItem.getChildren().add(item);
-        }
+    public void addStructure() throws IOException, SAXException, ParserConfigurationException {
 
-        for (int i = 1; i < 3; i++) {
-            TreeItem<String> item = new TreeItem<String> ("H");
-            rootItem.getChildren().get(0).getChildren().add(item);
-        }
+        finalTree = PhyloTreeParser.getFinalTree();
 
-        for (int i = 1; i < 3; i++) {
-            TreeItem<String> item = new TreeItem<String> ("N");
-            rootItem.getChildren().get(3).getChildren().add(item);
-        }
-
-        tree = new TreeView<String> (rootItem);
+        tree = new TreeView<String> (finalTree);
         tree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        // Krass: Selection wird gelöscht, wenn auf falsches Item (Nicht leaf) geklickt wird
-        // todo: make it more user-friedly if possible
-        tree.getSelectionModel().selectedItemProperty().addListener((c, oldValue, newValue) -> {
-            if (newValue != null && !newValue.isLeaf()) {
-                Platform.runLater(() -> tree.getSelectionModel().clearSelection());
-            }
-        });
+
     }
 
     public TreeItem<String> getRootItem() {
-        return rootItem;
+        return finalTree;
     }
 
     public TreeView<String> getTree() {

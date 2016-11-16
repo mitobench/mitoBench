@@ -22,9 +22,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.xml.sax.SAXException;
 import view.charts.BarPlotHaplo;
 import view.table.TableSelectionFilter;
 import view.table.TableManager;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 
 public class TreeHaploChooser {
@@ -43,7 +47,7 @@ public class TreeHaploChooser {
     private TableManager tableManager;
     private BarPlotHaplo barPlotHaplo;
 
-    public TreeHaploChooser(StackPane root, TableManager tableManager, BarPlotHaplo barPlotHaplo){
+    public TreeHaploChooser(StackPane root, TableManager tableManager, BarPlotHaplo barPlotHaplo) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
         this.barPlotHaplo = barPlotHaplo;
@@ -75,7 +79,7 @@ public class TreeHaploChooser {
      * Method to configure the search pane.
      * @param
      */
-    private void configureSearch(StackPane root) {
+    private void configureSearch(StackPane root) throws IOException, SAXException, ParserConfigurationException{
         searchPane = new VBox();
         searchPane.autosize();
         searchPane.setAlignment(Pos.TOP_LEFT);

@@ -10,11 +10,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
 import view.charts.BarPlotHaplo;
+import view.menus.EditMenu;
+import view.menus.FileMenu;
+import view.menus.HelpMenu;
+import view.menus.ToolsMenu;
 import view.table.*;
 import view.tree.TreeHaploChooser;
 
-import java.util.Arrays;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 
 /**
@@ -34,9 +40,10 @@ public class MitoBenchWindow extends Application{
         root = new BorderPane();
         root.autosize();
 
-        root.setTop(getMenu());
+
         root.setRight(getRightHBox());
         root.setCenter(getCenterPane());
+        root.setTop(getMenu());
 
         Scene scene = new Scene(root, 1200, 600);
         primaryStage.setTitle("Mito Bench");
@@ -51,70 +58,15 @@ public class MitoBenchWindow extends Application{
     {
         MenuBar menuBar = new MenuBar();
 
-        Menu menuFile = new Menu("File");
-        Menu menuEdit = new Menu("Edit");
-        Menu menuStatistics = new Menu("Statistics");
-        Menu menuHelp = new Menu("Help");
-        menuBar.getMenus().addAll(menuFile, menuEdit, menuStatistics, menuHelp);
+        FileMenu fileMenu = new FileMenu(tableManager);
+        EditMenu editMenu = new EditMenu();
+        ToolsMenu menuTools = new ToolsMenu();
+        HelpMenu helpMenu = new HelpMenu();
 
-
-
-        /*
-                        IMPORT DIALOGUE
-
-         */
-
-        MenuItem importFile = new MenuItem("Import file");
-        importFile.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                ImportDialogue importDialogue = new ImportDialogue();
-                importDialogue.start(new Stage());
-                // read file, parse to table
-                CSVReader csvReader = new CSVReader();
-                csvReader.populateTable(tableManager, importDialogue.getInputCSVFile(), false);
-
-            }
-        });
-
-
-
-        /*
-                        EXPORT DIALOGUE
-
-         */
-
-        MenuItem exportFile = new MenuItem("Export DB file");
-        exportFile.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue();
-                exportDialogue.start(new Stage());
-                String outFileDB = exportDialogue.getOutFile();
-
-                try{
-                    CSVWriter csvWriter = new CSVWriter(tableManager.getData());
-                    csvWriter.writeExcel(outFileDB);
-                } catch (Exception e) {
-                    System.err.println("Caught Exception: " + e.getMessage());
-                }
-            }
-        });
-
-
-        /*
-
-                EXIT OPTION
-
-
-         */
-
-        MenuItem exit = new MenuItem("Exit");
-        exit.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                System.exit(0);
-            }
-        });
-
-        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exit);
+        menuBar.getMenus().addAll(fileMenu.getMenuFile(),
+                                  editMenu.getMenuEdit() ,
+                                  menuTools.getMenuTools(),
+                                  helpMenu.getMenuHelp());
 
         return menuBar;
     }
@@ -138,8 +90,6 @@ public class MitoBenchWindow extends Application{
         Pane plot = new Pane();
         barPlotHaplo = new BarPlotHaplo("Haplogroups Summary \n(Own dataset)", "Haplogroup", "Count");
 
-        //barPlotHaplo.addData("data1", Arrays.asList( new double[][]{{1, 45263.37}, {2, 117320.16}, {3, 14845.27}}));
-
         plot.getChildren().addAll(barPlotHaplo.getBarChart());
         vbox.getChildren().addAll(plot,new Label("Place for some statistics"));
 
@@ -160,7 +110,7 @@ public class MitoBenchWindow extends Application{
      *
      * @return
      */
-    private StackPane getCenterPane()
+    private StackPane getCenterPane()throws IOException, SAXException, ParserConfigurationException
     {
         StackPane stackPane = new StackPane();
         stackPane.setAlignment(Pos.BASELINE_LEFT);
@@ -195,6 +145,8 @@ public class MitoBenchWindow extends Application{
         stackPane.getChildren().add(reset);
         stackPane.setAlignment(Pos.TOP_RIGHT);
         StackPane.setMargin(reset, new Insets(10, 10, 0, 0));
+
+
 
         return stackPane;
     }
