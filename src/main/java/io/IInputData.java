@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Created by peltzer on 17/11/2016.
  */
-public interface IInputData {
+public interface IInputData<T> {
     public HashMap<String, List<Entry>> getCorrespondingData();
+
 }
