@@ -25,7 +25,7 @@ public class CSVReader {
             // Header line
             if (hasHeader) {
                 final String headerLine = in.readLine();
-                final String[] headerValues = headerLine.split(";");
+                final String[] headerValues = headerLine.split(",");
                 for (int column = 0; column < headerValues.length; column++) {
                     tableManager.addColumn(tableManager.getCol_names().get(column));
 
@@ -35,7 +35,7 @@ public class CSVReader {
             // Data:
             String dataLine;
             while ((dataLine = in.readLine()) != null) {
-                final String[] dataValues = dataLine.split(";");
+                final String[] dataValues = dataLine.split(",");
                 // Add additional columns if necessary:
                 for (int columnIndex = table.getColumns().size(); columnIndex < dataValues.length; columnIndex++) {
                     tableManager.addColumn(tableManager.getCol_names().get(columnIndex));

@@ -44,7 +44,7 @@ public class PhyloTreeParser extends DefaultHandler {
 
 
     private static TreeItem<String> readData() throws SAXException, ParserConfigurationException, IOException {
-        File file = new File("src/main/resources/phylotree17.xml");
+        File file = new File("src/phylotree17.xml");
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         SAXParser parser = parserFactory.newSAXParser();
         XMLReader reader = parser.getXMLReader();

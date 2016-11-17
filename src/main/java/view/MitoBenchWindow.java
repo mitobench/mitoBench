@@ -142,9 +142,11 @@ public class MitoBenchWindow extends Application{
                 tableManager.resetTable();
             }
         });
+
         stackPane.getChildren().add(reset);
+        StackPane.setAlignment(reset, Pos.BOTTOM_LEFT);
         stackPane.setAlignment(Pos.TOP_RIGHT);
-        StackPane.setMargin(reset, new Insets(10, 10, 0, 0));
+        StackPane.setMargin(reset, new Insets(20, 20, 0, 0));
 
 
 
