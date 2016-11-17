@@ -38,7 +38,7 @@ import java.util.List;
 public class TreeHaploChooser {
 
     private VBox searchPane;
-    private Rectangle2D boxBounds = new Rectangle2D(500, 500, 800, 680);
+    private Rectangle2D boxBounds = new Rectangle2D(500, 300, 600, 480);
     private double ACTION_BOX_HGT = 30;
     private StackPane downArrow = StackPaneBuilder.create().style("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";").maxHeight(10).maxWidth(15).build();
     private StackPane upArrow = StackPaneBuilder.create().style("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";").maxHeight(10).maxWidth(15).build();
@@ -132,10 +132,11 @@ public class TreeHaploChooser {
 
                 // parse selection to tablefilter
                 TableSelectionFilter tableFilter = new TableSelectionFilter();
-                //tableFilter.initialize(tableManager);
-                tableFilter.filter(tableManager, seletcion_haplogroups);
 
-                barPlotHaplo.addData("data selection", tableManager.getDataHist());
+                if (seletcion_haplogroups.length !=0) {
+                    tableFilter.filter(tableManager, seletcion_haplogroups);
+                    barPlotHaplo.addData("data selection", tableManager.getDataHist());
+                }
             }
         });
 

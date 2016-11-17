@@ -40,7 +40,7 @@ public class PhylotreeParserCSV {
 
 
     private static void parseFile() throws IOException {
-        File file = new File("/home/neukamm/Downloads/mtdnacsv.csv");
+        File file = new File("src/mtdnacsv.csv");
         //We require a CSV file as input, get this by storign the HTML table (single file), open it in Excel as HTML -> save as CSV and you're done!
         //The ";" array size determines where to place a file correctly in our Tree
         fr = new FileReader(file);
@@ -75,6 +75,7 @@ public class PhylotreeParserCSV {
         TreeItem rootItem = new TreeItem("RSRS");
         rootItem.setExpanded(true);
         List<TreeItem> tree_items = new ArrayList<TreeItem>();
+        tree_items.add(rootItem);
 
 
         // iterate post-order through tree
@@ -85,13 +86,16 @@ public class PhylotreeParserCSV {
             if(array.length()!=0){
                 currIndex = getLevel(array);
                 String haplogroup = getHaplogroup(array);
-                if(haplogroup.equals("L1b1a6")){
+                if(haplogroup.equals("L0d")){
                     System.out.println("");
                 }
                 TreeItem<String> item = new TreeItem<>(haplogroup);
 
                 if(currIndex == 0) { // can only happen in the initialization phase (for L0, and L1'2'3'4'5'6')
                     rootItem.getChildren().add(item);
+                    // update tree_item, set only rootItem
+                    List<TreeItem> back_me_up = tree_items;
+                    tree_items = updateIndices(back_me_up,1); // Update our "pointer" list
                     tree_items.add(item);
                     formerIndex = currIndex;
                     continue;
@@ -109,7 +113,9 @@ public class PhylotreeParserCSV {
                 } else if (currIndex < formerIndex) { // then we are done traversing and have to go one level up again
                     formerIndex = currIndex;
                     List<TreeItem> back_me_up = tree_items;
-                    tree_items = updateIndices(back_me_up,currIndex); // Update our "pointer" list
+                    tree_items = updateIndices(back_me_up,currIndex+1); // Update our "pointer" list
+                    tree_items.get(tree_items.size()-1).getChildren().add(item);
+                    tree_items.add(item);
                 }
 
 
@@ -165,7 +171,7 @@ public class PhylotreeParserCSV {
      * @return
      */
     public static List<TreeItem> updateIndices(List<TreeItem> index_array, int level){
-        return index_array.subList(0,level+1); //sublist is (inclusive, exclusive)
+        return index_array.subList(0,level); //sublist is (inclusive, exclusive)
 
     }
 
