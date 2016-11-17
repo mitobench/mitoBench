@@ -29,14 +29,14 @@ import java.io.IOException;
 public class MitoBenchWindow extends Application{
 
     private BorderPane root;
-    private TableManager tableManager;
+    private TableController tableManager;
     private BarPlotHaplo barPlotHaplo;
-
 
 
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+
         root = new BorderPane();
         root.autosize();
 
@@ -116,11 +116,11 @@ public class MitoBenchWindow extends Application{
         stackPane.setAlignment(Pos.BASELINE_LEFT);
 
         // initialize columns
-        tableManager = new TableManager(new Label("\nOwn Mt database"));
+        tableManager = new TableController(new Label("\nOwn Mt database"));
         tableManager.addColumn("ID");
-        tableManager.addColumn("MTsequence");
-        tableManager.addColumn("Dating");
-        tableManager.addColumn("Haplogroup");
+//        tableManager.addColumn("MTsequence");
+//        tableManager.addColumn("Dating");
+//        tableManager.addColumn("Haplogroup");
 
 
         final VBox vbox = new VBox();

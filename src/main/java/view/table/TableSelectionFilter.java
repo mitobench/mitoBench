@@ -17,7 +17,7 @@ public class TableSelectionFilter {
 
     }
 
-    public void filter(TableManager tablemanager, String[] haplogroups){
+    public void filter(TableController tablemanager, String[] haplogroups){
 
         // get table
         TableView tableView = tablemanager.getTable();

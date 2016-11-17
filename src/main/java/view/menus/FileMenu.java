@@ -1,5 +1,7 @@
 package view.menus;
 
+import io.datastructure.Entry;
+import io.reader.MultiFastAInput;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -8,15 +10,19 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.Stage;
 import view.table.*;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by neukamm on 16.11.16.
  */
-public class FileMenu {
+public class FileMenu{
 
     private Menu menuFile;
-    private TableManager tableManager;
+    private TableController tableManager;
 
-    public FileMenu(TableManager tableManager){
+    public FileMenu(TableController tableManager)throws IOException{
         this.menuFile = new Menu("File");
         this.tableManager = tableManager;
         addSubMenus();
@@ -24,7 +30,7 @@ public class FileMenu {
     }
 
 
-    private void addSubMenus(){
+    private void addSubMenus() throws IOException{
 
 
 
@@ -45,6 +51,25 @@ public class FileMenu {
             }
         });
 
+
+
+        MenuItem importMultiFasta = new MenuItem("Import MultiFastA file");
+        importMultiFasta.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+
+                try {
+                    ImportDialogue importDialogue = new ImportDialogue();
+                    importDialogue.start(new Stage());
+                    // read file, parse to table
+                    MultiFastAInput multiFastAInput = new MultiFastAInput(importDialogue.getInputCSVFile().getPath());
+                    HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
+                    tableManager.updateTable(input_multifasta);
+                } catch (IOException e){
+                    System.out.println("IOException " + e.getMessage());
+                }
+
+            }
+        });
 
 
         /*
@@ -83,9 +108,10 @@ public class FileMenu {
             }
         });
 
-        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile,importMultiFasta, exportFile, new SeparatorMenuItem(), exit);
 
     }
+
 
 
     public Menu getMenuFile() {

@@ -1,19 +1,16 @@
 package view.table;
 
 import java.io.*;
-import java.util.stream.Stream;
 
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 
 public class CSVReader {
 
 
-    public void populateTable(TableManager tableManager, final File input, final boolean hasHeader) {
+    public void populateTable(TableController tableManager, final File input, final boolean hasHeader) {
         try{
             TableView<ObservableList<StringProperty>> table = tableManager.getTable();
             // todo: check if table should be cleaned before adding new entries
@@ -52,21 +49,6 @@ public class CSVReader {
             System.err.println("IOException: " + e.getMessage());
         }
 
-
-
-//        Task<Void> task = new Task<Void>() {
-//            @Override
-//            protected Void call() throws Exception {
-//
-//
-//                return null;
-//            }
-//        };
-//
-//
-//        Thread thread = new Thread(task);
-//        thread.setDaemon(true);
-//        thread.start();
     }
 
 

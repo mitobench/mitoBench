@@ -1,5 +1,6 @@
 package view.table;
 
+import io.datastructure.Entry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -13,12 +14,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static javafx.scene.input.KeyCode.T;
+
 /**
  * Created by neukamm on 07.11.16.
  */
-public class TableManager {
+public class TableController {
 
-    private TableView table;
+    private TableView<TableDataModel> table;
     private Label label;
     private List<String> col_names;
 
@@ -26,7 +29,7 @@ public class TableManager {
     private ObservableList<TableDataModel> data_copy;
 
 
-    public TableManager(Label label){
+    public TableController(Label label){
 
         this.label = label;
         this.label.setFont(new Font("Arial", 20));
@@ -57,6 +60,7 @@ public class TableManager {
         col_names.add(attribute);
     }
 
+
     /**
      * add single table entry
      * @param entry
@@ -65,6 +69,38 @@ public class TableManager {
         data.add(entry);
         table.setItems(data);
     }
+
+
+    /**
+     * add entry based on file input
+     * @param entry
+     */
+    public void addEntry( Entry entry, String id){
+
+        String colname = entry.getIdentifier();
+        String type = entry.getType();
+        Object data = entry.getData();
+
+        TableColumn col = getTableColumnByName(table, colname);
+        if(col!=null){
+            // just update
+        } else { // create new column
+            TableColumn newCOl = new TableColumn<>(colname);
+            addColumn(colname);
+
+            // add entry ID
+
+            //table.getColumns().add(0, newCOl);
+
+        }
+
+
+
+
+
+    }
+
+
 
     /**
      * add list of table entries
@@ -142,6 +178,49 @@ public class TableManager {
         }
 
         return  haplo_to_count;
+    }
+
+
+
+    public void updateTable(HashMap<String, List<Entry>> input){
+
+        // check if entry exists
+        for(String id : input.keySet()){
+            if(idExists(id, table)){
+                // todo: update row
+            } else { // create new row
+                for(int i = 0; i < input.get(id).size(); i++){
+                    addEntry(input.get(id).get(i), id);
+                }
+
+            }
+
+        }
+
+        System.out.println("table updated ...");
+    }
+
+
+    private boolean idExists(String id, TableView<TableDataModel> table){
+        boolean tmp = false;
+
+        for (Object r : table.getItems()) {
+            for (Object c : table.getColumns()) {
+                javafx.scene.control.TableColumn column = (javafx.scene.control.TableColumn) c;
+
+                if (column.getCellData(r) != null && column.getCellData(r).equals(id)) {
+                     tmp = true;
+                }
+            }
+        }
+        return tmp;
+    }
+
+
+    private <T> TableColumn<T, ?> getTableColumnByName(TableView<T> tableView, String name) {
+        for (TableColumn<T, ?> col : tableView.getColumns())
+            if (col.getText().equals(name)) return col ;
+        return null ;
     }
 
     public TableView getTable() {

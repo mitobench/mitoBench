@@ -27,7 +27,7 @@ import javafx.util.Duration;
 import org.xml.sax.SAXException;
 import view.charts.BarPlotHaplo;
 import view.table.TableSelectionFilter;
-import view.table.TableManager;
+import view.table.TableController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -48,12 +48,12 @@ public class TreeHaploChooser {
     private Timeline timelineUp;
     private Timeline timelineDown;
     private String[] seletcion_haplogroups;
-    private TableManager tableManager;
+    private TableController tableManager;
     private BarPlotHaplo barPlotHaplo;
     private List<TreeItem<String>> foundItem;
     private TextField searchFieldListHaplogroup;
 
-    public TreeHaploChooser(StackPane root, TableManager tableManager, BarPlotHaplo barPlotHaplo) throws IOException, SAXException, ParserConfigurationException {
+    public TreeHaploChooser(StackPane root, TableController tableManager, BarPlotHaplo barPlotHaplo) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
         this.barPlotHaplo = barPlotHaplo;

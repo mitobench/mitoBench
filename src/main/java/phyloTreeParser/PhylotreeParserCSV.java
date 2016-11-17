@@ -40,7 +40,7 @@ public class PhylotreeParserCSV {
 
 
     private static void parseFile() throws IOException {
-        File file = new File("src/mtdnacsv.csv");
+        File file = new File("src/main/resources/mtdnacsv.csv");
         //We require a CSV file as input, get this by storign the HTML table (single file), open it in Excel as HTML -> save as CSV and you're done!
         //The ";" array size determines where to place a file correctly in our Tree
         fr = new FileReader(file);
