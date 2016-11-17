@@ -3,7 +3,7 @@ version '0.1'
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'jacocoTest'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.8
 
