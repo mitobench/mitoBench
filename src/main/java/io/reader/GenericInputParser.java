@@ -2,10 +2,7 @@ package io.reader;
 
 import io.IInputData;
 import io.datastructure.Entry;
-import javafx.scene.control.TreeItem;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,7 +13,7 @@ import java.util.List;
 /**
  * Created by peltzer on 17/11/2016.
  */
-public class GenericInputParser implements IInputData{
+public class GenericInputParser implements IInputData {
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
 
@@ -29,20 +26,20 @@ public class GenericInputParser implements IInputData{
         String currline = "";
         int count = 0;
 
-        while((currline = bfr.readLine()) != null) {
+        while ((currline = bfr.readLine()) != null) {
             //Parse header, two line header !!
-            if(currline.startsWith("##")) {
-                if(count == 0){
-                    headergroup = currline.split("\t");
-                } else {
-                    headertype = currline.split("\t");
-                }
+            if (currline.startsWith("##\t")) {
+                headergroup = currline.split("\t");
+                continue;
+            } else if (currline.startsWith("#\t")) {
+                headertype = currline.split("\t");
+                continue;
             } else {
                 String[] splitLine = currline.split("\t");
                 //Assume ID is always first! -> requirement
                 List<Entry> entries = new ArrayList<>();
 
-                for (int i = 1; i <  splitLine.length; i++){
+                for (int i = 1; i < splitLine.length; i++) {
                     Entry e = new Entry(headergroup[i], headertype[i], splitLine[i]);
                     entries.add(e);
                 }
@@ -53,15 +50,11 @@ public class GenericInputParser implements IInputData{
                 //##String  Integer Integer Integer
                 //JK2188 < entry 1 > < entry 2 > < entry 3> < entry 4> < entry 5>
 
-
             }
         }
-    }
 
 
-
-
-
+}
 
 
     @Override
