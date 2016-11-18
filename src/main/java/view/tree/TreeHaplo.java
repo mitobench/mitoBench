@@ -1,12 +1,9 @@
 package view.tree;
 
-import javafx.application.Platform;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.xml.sax.SAXException;
-import phyloTreeParser.PhyloTreeParser;
-import phyloTreeParser.PhylotreeParserCSV;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -29,7 +26,9 @@ public class TreeHaplo{
     public void addStructure() throws IOException, SAXException, ParserConfigurationException {
 
         //finalTree = PhyloTreeParser.getFinalTree();
-        finalTree = PhylotreeParserCSV.getFinalTree();
+        PhyloTreeParser p = new PhyloTreeParser();
+        finalTree = PhyloTreeParser.getFinalTree();
+        finalTree = PhylotreeParser.getFinalTree();
 
         tree = new TreeView<String> (finalTree);
         tree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

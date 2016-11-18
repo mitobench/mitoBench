@@ -50,6 +50,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
+        classpath 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:+'
+
     }
 }
 
