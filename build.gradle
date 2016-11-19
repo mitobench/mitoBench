@@ -9,6 +9,9 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url  "http://dl.bintray.com/apeltzer/Mitobench"
+    }
 }
 
 sourceSets {
@@ -44,6 +47,7 @@ jar {
     }
 }
 
+
 buildscript {
     repositories {
         jcenter()
@@ -51,13 +55,16 @@ buildscript {
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
         classpath 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:+'
-
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/apeltzer/Mitobench"
+        }
+
     }
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
