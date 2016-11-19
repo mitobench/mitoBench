@@ -51,6 +51,9 @@ jar {
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url  "http://dl.bintray.com/apeltzer/Mitobench"
+        }
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
@@ -60,10 +63,7 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        maven {
-            url  "http://dl.bintray.com/apeltzer/Mitobench"
-        }
+
 
     }
     apply plugin: 'maven'

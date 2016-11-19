@@ -26,9 +26,11 @@ public class TreeHaplo{
     public void addStructure() throws IOException, SAXException, ParserConfigurationException {
 
         //finalTree = PhyloTreeParser.getFinalTree();
-        PhyloTreeParser p = new PhyloTreeParser();
-        finalTree = PhyloTreeParser.getFinalTree();
-        finalTree = PhylotreeParser.getFinalTree();
+       // phylotreeparser p = new Phylotreeparser();
+      //  Phylotreeparser phyp = new Phylotreeparser();
+     //   PhyloTreeParser p = new PhyloTreeParser();
+     //   finalTree = PhyloTreeParser.getFinalTree();
+        finalTree = new TreeItem<>();
 
         tree = new TreeView<String> (finalTree);
         tree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
