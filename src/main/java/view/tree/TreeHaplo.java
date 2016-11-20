@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
+
 /**
  * Created by neukamm on 09.11.16.
  */
@@ -24,6 +25,7 @@ public class TreeHaplo{
     }
 
     public void addStructure() throws IOException, SAXException, ParserConfigurationException {
+
 
         //finalTree = PhyloTreeParser.getFinalTree();
        // phylotreeparser p = new Phylotreeparser();
