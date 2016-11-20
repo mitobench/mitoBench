@@ -1,6 +1,8 @@
 package view.table;
 
 import io.datastructure.Entry;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -10,6 +12,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,20 +27,20 @@ import static javafx.scene.input.KeyCode.T;
  */
 public class TableController {
 
-    private TableView<TableDataModel> table;
+    private GenericTable<TableDataModel> table;
     private Label label;
     private List<String> col_names;
 
     private ObservableList<TableDataModel> data;
     private ObservableList<TableDataModel> data_copy;
 
+    private HashMap<String, List<Entry>> data_map;
+
 
     public TableController(Label label){
 
         this.label = label;
         this.label.setFont(new Font("Arial", 20));
-
-        table = new TableView();
         table.setEditable(false);
 
         // allow multiple selection of rows in tableView
@@ -43,6 +49,8 @@ public class TableController {
         data = FXCollections.observableArrayList();
         data_copy = FXCollections.observableArrayList();
         col_names = new ArrayList<>();
+
+        table = new GenericTable<>(data, "ID");
 
     }
 
@@ -164,21 +172,21 @@ public class TableController {
      *
      * @return
      */
-    public HashMap<String, Integer> getDataHist(){
-
-        HashMap<String, Integer> haplo_to_count = new HashMap<>();
-        for(TableDataModel item : this.data){
-            String haplogroup = item.getHaplogroup();
-
-            if(haplo_to_count.containsKey(haplogroup)){
-                haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
-            } else {
-                haplo_to_count.put(haplogroup,1);
-            }
-        }
-
-        return  haplo_to_count;
-    }
+//    public HashMap<String, Integer> getDataHist(){
+//
+//        HashMap<String, Integer> haplo_to_count = new HashMap<>();
+//        for(TableDataModel item : this.data){
+//            String haplogroup = item.getHaplogroup();
+//
+//            if(haplo_to_count.containsKey(haplogroup)){
+//                haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
+//            } else {
+//                haplo_to_count.put(haplogroup,1);
+//            }
+//        }
+//
+//        return  haplo_to_count;
+//    }
 
 
 
@@ -217,6 +225,73 @@ public class TableController {
     }
 
 
+
+//    public void populateTable(Class<?> T) {
+//
+//
+//        int num_of_cols = getNUmberOfColumns();
+//        try{
+//
+//            for(String s : data_map.keySet()){
+//
+//                for(int i = 0; i < data_map.get(s).size(); i++){
+//                    Entry e = data_map.get(s).get(i);
+//                    Object data = e.getData();
+//                    String colname = (String)e.getIdentifier();
+//                    TableColumn col = new TableColumn (colname.toUpperCase());
+//                    col.prefWidthProperty().bind(table.widthProperty().divide(num_of_cols));
+//                    col.setCellValueFactory(new PropertyValueFactory<**T,Integer**>(colname));
+//                    table.getColumns().add(col);
+//
+//                }
+//
+//                // add ID value
+//                TableDataModel tableDataModel = new TableDataModel();
+//
+//            }
+//
+//            table.setPlaceholder(new Label("Loading..."));
+//            for (int column = 0; column < headerValues.length; column++) {
+//                addColumn(tableManager.getCol_names().get(column));
+//
+//            }
+//
+//
+//            // Data:
+//            String dataLine;
+//            while ((dataLine = in.readLine()) != null) {
+//                final String[] dataValues = dataLine.split(",");
+//                // Add additional columns if necessary:
+//                for (int columnIndex = table.getColumns().size(); columnIndex < dataValues.length; columnIndex++) {
+//                    tableManager.addColumn(tableManager.getCol_names().get(columnIndex));
+//                }
+//                // Add data to table:
+//                TableDataModel entry = new TableDataModel(dataValues); // data values
+//                tableManager.addEntry(entry);
+//            }
+//
+//            tableManager.copyData();
+//
+//
+//        } catch (IOException e){
+//            System.err.println("IOException: " + e.getMessage());
+//        }
+//
+//    }
+
+
+    private int getNUmberOfColumns(){
+
+        int size_pre = table.getColumns().size();
+
+        for(String s : data_map.keySet()){
+            for(int i = 0; i < data_map.get(s).size(); i++){
+                size_pre++;
+            }
+        }
+        return size_pre;
+    }
+
     private <T> TableColumn<T, ?> getTableColumnByName(TableView<T> tableView, String name) {
         for (TableColumn<T, ?> col : tableView.getColumns())
             if (col.getText().equals(name)) return col ;
@@ -239,4 +314,11 @@ public class TableController {
         return col_names;
     }
 
+    public HashMap<String, List<Entry>> getData_map() {
+        return data_map;
+    }
+
+    public void setData_map(HashMap<String, List<Entry>> data_map) {
+        this.data_map = data_map;
+    }
 }

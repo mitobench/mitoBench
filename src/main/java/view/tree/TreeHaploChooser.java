@@ -135,7 +135,7 @@ public class TreeHaploChooser {
 
                 if (seletcion_haplogroups.length !=0) {
                     tableFilter.filter(tableManager, seletcion_haplogroups);
-                    barPlotHaplo.addData("data selection", tableManager.getDataHist());
+                    //barPlotHaplo.addData("data selection", tableManager.getDataHist());
                 }
             }
         });

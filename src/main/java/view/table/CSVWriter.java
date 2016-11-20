@@ -20,23 +20,23 @@ public class CSVWriter {
 
 
     public void writeExcel(String file) throws Exception {
-        Writer writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(new File(file+".csv")));
-            for (TableDataModel entry : data) {
-                // todo: should be changed ! Iterating over attributes instead....
-                String text = entry.getID() + ";" + entry.getMTsequence() + ";"
-                        + entry.getDating() + entry.getHaplogroup() + "\n";
-                writer.write(text);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        finally {
-
-            writer.flush();
-            writer.close();
-        }
+//        Writer writer = null;
+//        try {
+//            writer = new BufferedWriter(new FileWriter(new File(file+".csv")));
+//            for (TableDataModel entry : data) {
+//                // todo: should be changed ! Iterating over attributes instead....
+//                String text = entry.getID() + ";" + entry.getMTsequence() + ";"
+//                        + entry.getDating() + entry.getHaplogroup() + "\n";
+//                writer.write(text);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        finally {
+//
+//            writer.flush();
+//            writer.close();
+//        }
     }
 
 

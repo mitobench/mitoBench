@@ -4,41 +4,28 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by neukamm on 07.11.16.
  */
-public class TableDataModel {
+public class TableDataModel<T> {
 
-    private final SimpleStringProperty ID;
-    private final SimpleStringProperty MTsequence;
-    private final SimpleStringProperty dating;
-    private final SimpleStringProperty haplogroup;
-    private int id_intern;
+    private SimpleStringProperty ID;
+    private ArrayList<T> data;
 
-    public TableDataModel(String[] entry) {
-        // todo: make this better !! just messie to change it here everytime!
-        this.id_intern++;
-        this.ID = new SimpleStringProperty(entry[0]);
-        this.MTsequence = new SimpleStringProperty(entry[1]);
-        this.dating = new SimpleStringProperty(entry[2]);
-        this.haplogroup = new SimpleStringProperty(entry[3]);
 
+    public TableDataModel(List<T> args) {
+        this.ID = new SimpleStringProperty((String)args.get(0));
+        data = new ArrayList<T>(args.subList(1,args.size()));
     }
 
     public String getID() {
         return ID.get();
     }
 
-    public String getMTsequence() {
-        return MTsequence.get();
-    }
+    public void setID(String ID) { this.ID = new SimpleStringProperty(ID); }
 
-    public String getDating() {
-        return dating.get();
-    }
-
-    public String getHaplogroup() {
-        return haplogroup.get();
-    }
 
 }

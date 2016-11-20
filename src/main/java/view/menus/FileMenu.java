@@ -1,6 +1,7 @@
 package view.menus;
 
 import io.datastructure.Entry;
+import io.reader.GenericInputParser;
 import io.reader.MultiFastAInput;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -44,9 +45,19 @@ public class FileMenu{
             public void handle(ActionEvent t) {
                 ImportDialogue importDialogue = new ImportDialogue();
                 importDialogue.start(new Stage());
-                // read file, parse to table
-                CSVReader csvReader = new CSVReader();
-                csvReader.populateTable(tableManager, importDialogue.getInputCSVFile(), false);
+                try{
+                    // read file, parse to table
+                    GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputCSVFile().getPath());
+                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
+                    tableManager.setData_map(data_map);
+                    //tableManager.populateTable();
+                    // populateTable(tableManager, importDialogue.getInputCSVFile(), false);
+
+
+
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -58,6 +69,7 @@ public class FileMenu{
             public void handle(ActionEvent t) {
 
                 try {
+
                     ImportDialogue importDialogue = new ImportDialogue();
                     importDialogue.start(new Stage());
                     // read file, parse to table

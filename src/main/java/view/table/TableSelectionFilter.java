@@ -19,35 +19,35 @@ public class TableSelectionFilter {
 
     public void filter(TableController tablemanager, String[] haplogroups){
 
-        // get table
-        TableView tableView = tablemanager.getTable();
-        ObservableList<TableDataModel> masterData_selection;
-        if(tableView.getSelectionModel().getSelectedItems().size()==0){
-            masterData_selection = tableView.getItems();
-        } else {
-            masterData_selection = tableView.getSelectionModel().getSelectedItems();
-        }
-
-
-
-        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
-        FilteredList<TableDataModel> filteredData = new FilteredList<>(masterData_selection, p -> true);
-
-        // 2. Set the filter Predicate whenever the filter changes.
-        filteredData.setPredicate(new Predicate<TableDataModel>(){
-            public boolean test(TableDataModel t){
-                return Arrays.stream(haplogroups).anyMatch(t.getHaplogroup()::equals);
-            }
-        });
-
-        // 3. Wrap the FilteredList in a SortedList.
-        SortedList<TableDataModel> sortedData = new SortedList<>(filteredData);
-
-        // 4. Bind the SortedList comparator to the TableView comparator.
-        sortedData.comparatorProperty().bind(tableView.comparatorProperty());
-
-        // 5. Add sorted (and filtered) data to the table.
-        tablemanager.updateView(sortedData);
+//        // get table
+//        TableView tableView = tablemanager.getTable();
+//        ObservableList<TableDataModel> masterData_selection;
+//        if(tableView.getSelectionModel().getSelectedItems().size()==0){
+//            masterData_selection = tableView.getItems();
+//        } else {
+//            masterData_selection = tableView.getSelectionModel().getSelectedItems();
+//        }
+//
+//
+//
+//        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+//        FilteredList<TableDataModel> filteredData = new FilteredList<>(masterData_selection, p -> true);
+//
+//        // 2. Set the filter Predicate whenever the filter changes.
+//        filteredData.setPredicate(new Predicate<TableDataModel>(){
+//            public boolean test(TableDataModel t){
+//                return Arrays.stream(haplogroups).anyMatch(t.getHaplogroup()::equals);
+//            }
+//        });
+//
+//        // 3. Wrap the FilteredList in a SortedList.
+//        SortedList<TableDataModel> sortedData = new SortedList<>(filteredData);
+//
+//        // 4. Bind the SortedList comparator to the TableView comparator.
+//        sortedData.comparatorProperty().bind(tableView.comparatorProperty());
+//
+//        // 5. Add sorted (and filtered) data to the table.
+//        tablemanager.updateView(sortedData);
 
 
     }
