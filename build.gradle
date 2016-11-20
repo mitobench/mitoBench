@@ -4,6 +4,9 @@ version '0.1'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
 
 sourceCompatibility = 1.8
 
@@ -24,17 +27,17 @@ sourceSets {
         java {
             srcDir 'test'
         }
+        resources {
+            srcDir 'io'
+        }
     }
 }
 
-
 dependencies {
-    // https://mvnrepository.com/artifact/org.javafxdata/datafx-flow
     compile group: 'org.javafxdata', name: 'datafx-flow', version: '8.0b5'
     compile 'junit:junit:4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:0.2'
-
+    compile 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:+'
 }
 
 
@@ -63,17 +66,6 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-
-
-    }
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
-    apply plugin: 'java'
-    apply plugin: 'idea'
-
-}
 
 jacocoTestReport {
     reports {
