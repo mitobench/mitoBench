@@ -75,7 +75,7 @@ public class IOTests {
         Entry entry_moonphase = (Entry) cast.get(2);
 
         assertEquals("String", entry_c14.getType());
-        assertEquals("ID", entry_c14.getIdentifier());
+        assertEquals("C14-Date", entry_c14.getIdentifier());
         assertEquals("-3400", entry_c14.getData());
 
 
