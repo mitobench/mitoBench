@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class DataTable {
 
-    // key = colname
+    // key = column name
     // Array = data od this col     --> has to be array to ensure the order of the entries
     HashMap<String, String[]> data;
 

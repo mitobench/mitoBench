@@ -101,7 +101,7 @@ public class FileMenu{
                 String outFileDB = exportDialogue.getOutFile();
 
                 try{
-                    CSVWriter csvWriter = new CSVWriter(tableManager.getData());
+                    CSVWriter csvWriter = new CSVWriter(tableManager);
                     csvWriter.writeExcel(outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
