@@ -19,6 +19,7 @@ public class HSDInput implements IInputData {
     public HSDInput(String filetoParse) throws IOException {
         FileReader fr = new FileReader(new File(filetoParse));
         BufferedReader bfr = new BufferedReader(fr);
+        map = new HashMap<>();
 
         String currline = "";
         while ((currline = bfr.readLine()) != null) {

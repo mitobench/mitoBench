@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static junit.framework.TestCase.assertEquals;
@@ -75,12 +76,16 @@ public class IOTests {
 
         //Data from our own publication... to be cited here!
         assertEquals(5, output.size());
-        Entry e = (Entry) output.get("ID1"); //needs cast here
-        assertEquals(e.getType(), "String");
-        assertEquals(e.getIdentifier(), "ID1");
-        assertEquals(e.getData(), "R0a2f");
+
+        ArrayList cast = (ArrayList) output.get("ID1"); //needs cast here
+        Entry entry = (Entry) cast.get(0);
+
+        assertEquals(entry.getType(), "String");
+        assertEquals(entry.getIdentifier(), "Haplogroup");
+        assertEquals(entry.getData(), "R0a2f");
 
 
+        
     }
 
 
