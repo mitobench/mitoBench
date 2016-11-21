@@ -116,12 +116,7 @@ public class MitoBenchWindow extends Application{
         stackPane.setAlignment(Pos.BASELINE_LEFT);
 
         // initialize columns
-        tableManager = new TableController(new Label("\nOwn Mt database"));
-        tableManager.addColumn("ID");
-//        tableManager.addColumn("MTsequence");
-//        tableManager.addColumn("Dating");
-//        tableManager.addColumn("Haplogroup");
-
+        tableManager = new TableController(new Label("\nInput MT data"));
 
         final VBox vbox = new VBox();
         vbox.setSpacing(10);

@@ -49,7 +49,7 @@ public class FileMenu{
                     // read file, parse to table
                     GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputCSVFile().getPath());
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                    tableManager.setData_map(data_map);
+                    //tableManager.setData_map(data_map);
                     //tableManager.populateTable();
                     // populateTable(tableManager, importDialogue.getInputCSVFile(), false);
 
@@ -73,9 +73,13 @@ public class FileMenu{
                     ImportDialogue importDialogue = new ImportDialogue();
                     importDialogue.start(new Stage());
                     // read file, parse to table
-                    MultiFastAInput multiFastAInput = new MultiFastAInput(importDialogue.getInputCSVFile().getPath());
-                    HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
-                    tableManager.updateTable(input_multifasta);
+
+                    if(importDialogue.getInputCSVFile().getPath() != null){
+                        MultiFastAInput multiFastAInput = new MultiFastAInput(importDialogue.getInputCSVFile().getPath());
+                        HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
+                        tableManager.updateTable(input_multifasta);
+                    }
+
                 } catch (IOException e){
                     System.out.println("IOException " + e.getMessage());
                 }

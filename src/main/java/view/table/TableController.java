@@ -2,45 +2,44 @@ package view.table;
 
 import io.datastructure.Entry;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
+import javafx.util.Callback;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static javafx.scene.input.KeyCode.T;
 
 /**
  * Created by neukamm on 07.11.16.
  */
 public class TableController {
 
-    private GenericTable<TableDataModel> table;
+    private TableView<ObservableList> table;
     private Label label;
     private List<String> col_names;
 
-    private ObservableList<TableDataModel> data;
-    private ObservableList<TableDataModel> data_copy;
+    private ObservableList<ObservableList> data;
+    private ObservableList<ObservableList> data_copy;
 
-    private HashMap<String, List<Entry>> data_map;
+    private DataTable dataTable;
+
 
 
     public TableController(Label label){
 
         this.label = label;
         this.label.setFont(new Font("Arial", 20));
+
+        table = new TableView();
         table.setEditable(false);
 
         // allow multiple selection of rows in tableView
@@ -50,109 +49,83 @@ public class TableController {
         data_copy = FXCollections.observableArrayList();
         col_names = new ArrayList<>();
 
-        table = new GenericTable<>(data, "ID");
+        dataTable = new DataTable();
 
     }
 
 
-    /**
-     * add column to table, attribute is column name
-     * @param attribute
-     */
-    public void addColumn(String attribute){
 
-        TableColumn column = new TableColumn(attribute);
-        column.setCellValueFactory(new PropertyValueFactory<TableDataModel, String>(attribute));
-        column.setSortType(TableColumn.SortType.DESCENDING);
-        table.getColumns().add(column);
-        col_names.add(attribute);
-    }
+    public void updateTable(HashMap<String, List<Entry>> input) {
 
+        // add new values to existing one
+        // (DataTable)
+        dataTable.update(input);
 
-    /**
-     * add single table entry
-     * @param entry
-     */
-    public void addEntry(TableDataModel entry){
-        data.add(entry);
+        // clean whole table
+        data.clear();
+        table.getColumns().removeAll(table.getColumns());
+
+        // display updated table
+        data = parseDataTableToObservableList(dataTable);
+
+        // add columns
+        int i = 0;
+        for(String colName : dataTable.getDataTable().keySet()){
+            int j = i;
+            TableColumn col = new TableColumn(colName);
+            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                    return new SimpleStringProperty(param.getValue().get(j).toString());
+                }
+            });
+
+            table.getColumns().addAll(col);
+            i++;
+
+        }
+        // clear Items in table
+        table.getItems().removeAll(table.getItems());
+        //FINALLY ADDED TO TableView
         table.setItems(data);
     }
 
 
-    /**
-     * add entry based on file input
-     * @param entry
-     */
-    public void addEntry( Entry entry, String id){
 
-        String colname = entry.getIdentifier();
-        String type = entry.getType();
-        Object data = entry.getData();
+    private ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable){
 
-        TableColumn col = getTableColumnByName(table, colname);
-        if(col!=null){
-            // just update
-        } else { // create new column
-            TableColumn newCOl = new TableColumn<>(colname);
-            addColumn(colname);
+        ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
+        HashMap<String, String[]> data_hash = dataTable.getDataTable();
 
-            // add entry ID
+        String[][] data_tmp = new String[data_hash.get("ID").length][data_hash.size()];
 
-            //table.getColumns().add(0, newCOl);
-
-        }
-
-
-
-
-
-    }
-
-
-
-    /**
-     * add list of table entries
-     * @param entryList
-     */
-    public void addEntryList(List<TableDataModel> entryList){
-        for(TableDataModel entry : entryList){
-            data.add(entry);
-        }
-        table.setItems(data);
-
-    }
-
-    /**
-     * update table if some selections were done in tableView
-     * @param newItems
-     */
-    public void updateView(ObservableList<TableDataModel> newItems){
-
-        ObservableList<TableDataModel> data_selection = FXCollections.observableArrayList();
-        for(TableDataModel item : newItems){
-            data_selection.add(item);
-        }
-
-        data.removeAll(data);
-        for(TableDataModel item : data_selection){
-            data.add(item);
-        }
-
-        table.refresh();
-    }
-
-
-    /**
-     * copy data to always allow resetting of table
-     * to old/initial state
-     */
-    public void copyData(){
-        if(data_copy.size()==0){
-            for(TableDataModel item : data){
-                data_copy.add(item);
+        //for(int i = 0; i < data_hash.get("ID").length; i++){
+        int m = 0;
+        for(String col : data_hash.keySet()){
+            String[] col_entry = data_hash.get(col);
+            for(int j = 0; j < col_entry.length; j++){
+                data_tmp[j][m] = col_entry[j];
             }
+            m++;
         }
+
+
+        for(int i = 0 ; i < data_tmp.length; i++){
+            ObservableList row = FXCollections.observableArrayList();
+            for(int j = 0 ; j < data_tmp[i].length; j++){
+                String value = data_tmp[i][j];
+                row.add(value);
+            }
+            parsedData.add(row);
+        }
+
+
+
+        return parsedData;
     }
+
+
+
+
 
     /**
      * set table to old/initial state
@@ -160,142 +133,58 @@ public class TableController {
      */
     public void resetTable() {
         data.removeAll(data);
-        for(TableDataModel item : data_copy){
+        for(ObservableList item : data_copy){
             data.add(item);
         }
     }
 
-
     /**
-     * count occurrences of haplotypes within selected data
-     * return as hash map to plot it easily
-     *
+     * This method iterates over all columns and returns true,
+     * if column 'col' exists.
+     * @param col
      * @return
      */
-//    public HashMap<String, Integer> getDataHist(){
-//
-//        HashMap<String, Integer> haplo_to_count = new HashMap<>();
-//        for(TableDataModel item : this.data){
-//            String haplogroup = item.getHaplogroup();
-//
-//            if(haplo_to_count.containsKey(haplogroup)){
-//                haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
-//            } else {
-//                haplo_to_count.put(haplogroup,1);
-//            }
-//        }
-//
-//        return  haplo_to_count;
-//    }
+    private boolean colExists(TableColumn col){
 
-
-
-    public void updateTable(HashMap<String, List<Entry>> input){
-
-        // check if entry exists
-        for(String id : input.keySet()){
-            if(idExists(id, table)){
-                // todo: update row
-            } else { // create new row
-                for(int i = 0; i < input.get(id).size(); i++){
-                    addEntry(input.get(id).get(i), id);
-                }
-
+        for(int i = 0; i < table.getColumns().size(); i++){
+            TableColumn c = (TableColumn) table.getColumns().get(i);
+            String col_old = c.getText();
+            String col_new = col.getText();
+            if(c.getText().equals(col.getText())){
+                return true;
             }
-
         }
-
-        System.out.println("table updated ...");
+        return false;
     }
 
 
-    private boolean idExists(String id, TableView<TableDataModel> table){
-        boolean tmp = false;
-
-        for (Object r : table.getItems()) {
-            for (Object c : table.getColumns()) {
-                javafx.scene.control.TableColumn column = (javafx.scene.control.TableColumn) c;
-
-                if (column.getCellData(r) != null && column.getCellData(r).equals(id)) {
-                     tmp = true;
-                }
+    /**
+     * This method returns true, if row with id 's' exists
+     *
+     * @param s
+     * @return
+     */
+    private boolean rowExists(String s){
+        for(int i = 0; i < data.size(); i++){
+            ObservableList row = data.get(i);
+            if(row.get(0).equals(s)){
+                return true;
             }
         }
-        return tmp;
+        return false;
     }
 
 
-
-//    public void populateTable(Class<?> T) {
-//
-//
-//        int num_of_cols = getNUmberOfColumns();
-//        try{
-//
-//            for(String s : data_map.keySet()){
-//
-//                for(int i = 0; i < data_map.get(s).size(); i++){
-//                    Entry e = data_map.get(s).get(i);
-//                    Object data = e.getData();
-//                    String colname = (String)e.getIdentifier();
-//                    TableColumn col = new TableColumn (colname.toUpperCase());
-//                    col.prefWidthProperty().bind(table.widthProperty().divide(num_of_cols));
-//                    col.setCellValueFactory(new PropertyValueFactory<**T,Integer**>(colname));
-//                    table.getColumns().add(col);
-//
-//                }
-//
-//                // add ID value
-//                TableDataModel tableDataModel = new TableDataModel();
-//
-//            }
-//
-//            table.setPlaceholder(new Label("Loading..."));
-//            for (int column = 0; column < headerValues.length; column++) {
-//                addColumn(tableManager.getCol_names().get(column));
-//
-//            }
-//
-//
-//            // Data:
-//            String dataLine;
-//            while ((dataLine = in.readLine()) != null) {
-//                final String[] dataValues = dataLine.split(",");
-//                // Add additional columns if necessary:
-//                for (int columnIndex = table.getColumns().size(); columnIndex < dataValues.length; columnIndex++) {
-//                    tableManager.addColumn(tableManager.getCol_names().get(columnIndex));
-//                }
-//                // Add data to table:
-//                TableDataModel entry = new TableDataModel(dataValues); // data values
-//                tableManager.addEntry(entry);
-//            }
-//
-//            tableManager.copyData();
-//
-//
-//        } catch (IOException e){
-//            System.err.println("IOException: " + e.getMessage());
-//        }
-//
-//    }
+    private void updateCell(String rowID, Entry entry){
 
 
-    private int getNUmberOfColumns(){
-
-        int size_pre = table.getColumns().size();
-
-        for(String s : data_map.keySet()){
-            for(int i = 0; i < data_map.get(s).size(); i++){
-                size_pre++;
+        for (Node r: table.lookupAll(".table-row-cell")){
+            for (Node c: r.lookupAll(".table-cell")){
+                System.out.println(c);
             }
         }
-        return size_pre;
-    }
 
-    private <T> TableColumn<T, ?> getTableColumnByName(TableView<T> tableView, String name) {
-        for (TableColumn<T, ?> col : tableView.getColumns())
-            if (col.getText().equals(name)) return col ;
-        return null ;
+
     }
 
     public TableView getTable() {
@@ -306,19 +195,8 @@ public class TableController {
         return label;
     }
 
-    public ObservableList<TableDataModel> getData() {
+    public ObservableList<ObservableList> getData() {
         return data;
     }
 
-    public List<String> getCol_names() {
-        return col_names;
-    }
-
-    public HashMap<String, List<Entry>> getData_map() {
-        return data_map;
-    }
-
-    public void setData_map(HashMap<String, List<Entry>> data_map) {
-        this.data_map = data_map;
-    }
 }

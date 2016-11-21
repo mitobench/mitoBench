@@ -12,9 +12,9 @@ import java.io.Writer;
  */
 public class CSVWriter {
 
-    private ObservableList<TableDataModel> data;
+    private ObservableList<ObservableList> data;
 
-    public CSVWriter(ObservableList<TableDataModel> data){
+    public CSVWriter(ObservableList<ObservableList> data){
         this.data = data;
     }
 
