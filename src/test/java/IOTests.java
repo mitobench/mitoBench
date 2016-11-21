@@ -1,3 +1,5 @@
+import io.datastructure.Entry;
+import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
 import org.junit.Test;
 
@@ -46,9 +48,6 @@ public class IOTests {
         //Data from Pagani et al 2016, 100 Mitochondrial genomes from Modern Egyptians
         assertEquals(output.size(), 100);
         assertEquals(output.containsKey(">egypt.14AJ129"), true);
-
-
-
     }
 
     @Test
@@ -56,11 +55,31 @@ public class IOTests {
        // setUp("/generic_test_input.tsv");
 
 
+
     }
 
     @Test
     public void io_test_hsd(){
-       // setUp("/test_input_hsd.tsv");
+        String path = "./haplotest.hsd";
+        setUp(path);
+
+        HashMap output = null;
+
+        try {
+            System.out.println(getClass().getResource(path));
+            HSDInput hsdInput = new HSDInput(getClass().getResource(path).getPath());
+            output = hsdInput.getCorrespondingData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Data from our own publication... to be cited here!
+        assertEquals(5, output.size());
+        Entry e = (Entry) output.get("ID1"); //needs cast here
+        assertEquals(e.getType(), "String");
+        assertEquals(e.getIdentifier(), "ID1");
+        assertEquals(e.getData(), "R0a2f");
+
 
     }
 
