@@ -70,9 +70,9 @@ public class IOTests {
         assertEquals(2, output.size());
 
         ArrayList cast = (ArrayList) output.get("Test1");
-        Entry entry_c14 = (Entry) cast.get(0);
-        Entry entry_bone = (Entry) cast.get(1);
-        Entry entry_moonphase = (Entry) cast.get(2);
+        Entry entry_c14 = (Entry) cast.get(1);
+        Entry entry_bone = (Entry) cast.get(2);
+        Entry entry_moonphase = (Entry) cast.get(3);
 
         assertEquals("String", entry_c14.getType());
         assertEquals("C14-Date", entry_c14.getIdentifier());
