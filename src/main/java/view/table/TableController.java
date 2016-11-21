@@ -13,7 +13,6 @@ import javafx.scene.text.Font;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,8 +65,7 @@ public class TableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
-        // add new values to existing one
-        // (DataTable)
+        // add new values to existing one (DataTable)
         dataTable.update(input);
 
         // clean whole table
@@ -117,7 +115,12 @@ public class TableController {
         for(String col : data_hash.keySet()){
             String[] col_entry = data_hash.get(col);
             for(int j = 0; j < col_entry.length; j++){
-                data_tmp[j][m] = col_entry[j];
+                String e = col_entry[j];
+                if(e != null){
+                    data_tmp[j][m] = col_entry[j];
+                } else {
+                    data_tmp[j][m] = "NA";
+                }
             }
             m++;
         }

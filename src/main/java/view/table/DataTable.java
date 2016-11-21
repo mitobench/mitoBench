@@ -132,7 +132,7 @@ public class DataTable {
             for(String key : data.keySet()){
                 if(!key.equals("ID")){
                     String[] d = data.get(key);
-                    data.put(key, append(d, "placeholder"));
+                    data.put(key, append(d, "NA"));
                 }
             }
         } else {
