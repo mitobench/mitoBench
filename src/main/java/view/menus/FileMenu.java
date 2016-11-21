@@ -2,6 +2,7 @@ package view.menus;
 
 import io.datastructure.Entry;
 import io.reader.GenericInputParser;
+import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
 import io.writer.CSVWriter;
 import javafx.event.ActionEvent;
@@ -84,6 +85,25 @@ public class FileMenu{
                 } catch (IOException e){
                     System.out.println("IOException " + e.getMessage());
                 }
+            }
+        });
+
+
+
+        MenuItem hsdImport = new MenuItem("Import HSD file");
+        hsdImport.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                ImportDialogue importDialogue = new ImportDialogue();
+                importDialogue.start(new Stage());
+                try{
+                    // read file, parse to table
+                    HSDInput hsdInputParser = new HSDInput(importDialogue.getInputCSVFile().getPath());
+                    HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
+                    tableManager.updateTable(data_map);
+
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -125,10 +145,8 @@ public class FileMenu{
             }
         });
 
-        menuFile.getItems().addAll(importFile,importMultiFasta, exportFile, new SeparatorMenuItem(), exit);
-
+        menuFile.getItems().addAll(importFile,importMultiFasta, hsdImport, exportFile, new SeparatorMenuItem(), exit);
     }
-
 
 
     public Menu getMenuFile() {

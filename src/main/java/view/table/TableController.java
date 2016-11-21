@@ -95,7 +95,7 @@ public class TableController {
         // clear Items in table
         table.getItems().removeAll(table.getItems());
         //FINALLY ADDED TO TableView
-        table.setItems(data);
+        table.getItems().addAll(data);
     }
 
 
@@ -166,7 +166,9 @@ public class TableController {
             data.add(item);
         }
 
-        table.refresh();
+        this.table.setItems(data);
+
+//        table.refresh();
     }
 
 

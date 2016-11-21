@@ -139,7 +139,9 @@ public class DataTable {
             data.put("ID", new String[]{rowID});
             for(String key : data.keySet()){
                 if(!key.equals("ID")){
-                    data.put(key, new String[data.size()]);
+                    String[] newCol = new String[data.size()];
+                    Arrays.fill(newCol, "");
+                    data.put(key,  newCol);
                 }
             }
         }
