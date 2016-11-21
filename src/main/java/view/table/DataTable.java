@@ -37,7 +37,8 @@ public class DataTable {
             } else {
                 // create new Row with dummy entries
                 addRow(key);
-                updateRow(getRowPosition(key), input.get(key), key);
+                int rpos = getRowPosition(key);
+                updateRow(rpos, input.get(key), key);
             }
         }
     }
@@ -54,6 +55,7 @@ public class DataTable {
         for(Entry entry : input){
 
             String columnName = entry.getIdentifier();
+
             // if column exists:
             if(columnExists(columnName)){
                 String[] columnEntries = data.get(columnName);
@@ -63,8 +65,10 @@ public class DataTable {
                     columnEntries[rowPosition] = (String)entry.getData();
                 }
 
-            } else {
-                addColumn(entry.getIdentifier(), new String[data.size()]);
+            } else {  // if column does NOT exist
+
+                int rpos = getRowPosition(key);
+                addColumn(entry.getIdentifier(), rpos);
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
@@ -127,7 +131,8 @@ public class DataTable {
 
             for(String key : data.keySet()){
                 if(!key.equals("ID")){
-                    data.put(key, append(data.get(key), ""));
+                    String[] d = data.get(key);
+                    data.put(key, append(d, "placeholder"));
                 }
             }
         } else {
@@ -152,14 +157,14 @@ public class DataTable {
      */
     static <T> T[] append(T[] arr, T element) {
         final int N = arr.length;
-        arr = Arrays.copyOf(arr, N + 1);
+        arr = Arrays.copyOf(arr, N+1);
         arr[N] = element;
         return arr;
     }
 
 
-    public void addColumn(String key , String[] data_col){
-        data.put(key, data_col);
+    public void addColumn(String key, int size){
+        data.put(key, new String[size+1]);
     }
 
     public HashMap<String, String[]> getDataTable() {

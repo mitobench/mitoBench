@@ -39,8 +39,8 @@ public class GenericInputParser implements IInputData {
                 //Assume ID is always first! -> requirement
                 List<Entry> entries = new ArrayList<>();
 
-                for (int i = 1; i < splitLine.length; i++) {
-                    Entry e = new Entry(headergroup[i], headertype[i], splitLine[i]);
+                for (int i = 0; i < splitLine.length; i++) {
+                    Entry e = new Entry(headergroup[i+1], headertype[i+1], splitLine[i]);
                     entries.add(e);
                 }
                 //Now add with ID to hashmap
@@ -54,7 +54,7 @@ public class GenericInputParser implements IInputData {
         }
 
 
-}
+    }
 
 
     @Override

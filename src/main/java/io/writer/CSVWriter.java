@@ -1,6 +1,8 @@
-package view.table;
+package io.writer;
 
 import javafx.collections.ObservableList;
+import view.table.TableController;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

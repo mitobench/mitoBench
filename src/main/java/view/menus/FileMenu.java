@@ -3,6 +3,7 @@ package view.menus;
 import io.datastructure.Entry;
 import io.reader.GenericInputParser;
 import io.reader.MultiFastAInput;
+import io.writer.CSVWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -49,7 +50,7 @@ public class FileMenu{
                     // read file, parse to table
                     GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputCSVFile().getPath());
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                    //tableManager.setData_map(data_map);
+                    tableManager.updateTable(data_map);
                     //tableManager.populateTable();
                     // populateTable(tableManager, importDialogue.getInputCSVFile(), false);
 

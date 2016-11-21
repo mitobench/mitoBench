@@ -53,7 +53,7 @@ public class TreeHaploChooser {
     private List<TreeItem<String>> foundItem;
     private TextField searchFieldListHaplogroup;
 
-    public TreeHaploChooser(StackPane root, TableController tableManager, BarPlotHaplo barPlotHaplo) throws IOException, SAXException, ParserConfigurationException {
+    public TreeHaploChooser(BorderPane root, TableController tableManager, BarPlotHaplo barPlotHaplo) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
         this.barPlotHaplo = barPlotHaplo;
@@ -87,7 +87,7 @@ public class TreeHaploChooser {
      * Method to configure the search pane.
      * @param
      */
-    private void configureSearch(StackPane root) throws IOException, SAXException, ParserConfigurationException{
+    private void configureSearch(BorderPane root) throws IOException, SAXException, ParserConfigurationException{
         searchPane = new VBox();
         //searchPane.autosize();
         searchPane.setAlignment(Pos.TOP_LEFT);
@@ -134,7 +134,7 @@ public class TreeHaploChooser {
                 TableSelectionFilter tableFilter = new TableSelectionFilter();
 
                 if (seletcion_haplogroups.length !=0) {
-                    tableFilter.filter(tableManager, seletcion_haplogroups);
+                    tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getHaploColIndex());
                     //barPlotHaplo.addData("data selection", tableManager.getDataHist());
                 }
             }
@@ -145,7 +145,7 @@ public class TreeHaploChooser {
 
         /*
 
-                       search field filter
+                       search field haplogroupFilter
 
 
          */
@@ -179,7 +179,7 @@ public class TreeHaploChooser {
 //        });
 
         Label infolabel = new Label("Please select haplogroups either in the tree \nor specify a list:");
-        infolabel.setMinSize(30, 50);
+        infolabel.setMinSize(50, 60);
 
         Label haploLabel = new Label("Comma separated list of haplogroups:");
         infolabel.setMinSize(20, 30);

@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -14,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,11 +51,15 @@ public class TableController {
 
         dataTable = new DataTable();
 
+
+
+
+
     }
 
 
     /**
-     * This method gets a hashmap of new input entries, updates the data table and prepares the tableview for updating.
+     * This method gets a hash map of new input entries, updates the data table and prepares the table view for updating.
      * The columns are created based on new data table.
      *
      * @param input
@@ -105,9 +109,9 @@ public class TableController {
     private ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable){
 
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
-        HashMap<String, String[]> data_hash = dataTable.getDataTable();
 
-        String[][] data_tmp = new String[data_hash.get("ID").length][data_hash.size()];
+        HashMap<String, String[]> data_hash = dataTable.getDataTable();
+        String[][] data_tmp = new String[dataTable.getDataTable().get("ID").length][dataTable.getDataTable().keySet().size()];
 
         int m = 0;
         for(String col : data_hash.keySet()){
@@ -128,12 +132,8 @@ public class TableController {
             parsedData.add(row);
         }
 
-
-
         return parsedData;
     }
-
-
 
 
 
@@ -145,6 +145,40 @@ public class TableController {
         data.removeAll(data);
         for(ObservableList item : data_copy){
             data.add(item);
+        }
+    }
+
+
+    /**
+     * update table if some selections were done in tableView
+     * @param newItems
+     */
+    public void updateView(ObservableList<ObservableList> newItems){
+        copyData();
+
+        ObservableList<ObservableList> data_selection = FXCollections.observableArrayList();
+        for(ObservableList item : newItems){
+            data_selection.add(item);
+        }
+
+        data.removeAll(data);
+        for(ObservableList item : data_selection){
+            data.add(item);
+        }
+
+        table.refresh();
+    }
+
+
+    /**
+     * copy data to always allow resetting of table
+     * to old/initial state
+     */
+    public void copyData(){
+        if(data_copy.size()==0){
+            for(ObservableList item : data){
+                data_copy.add(item);
+            }
         }
     }
 
@@ -163,5 +197,15 @@ public class TableController {
 
     public List<String> getCol_names() {
         return col_names;
+    }
+
+    public int getHaploColIndex(){
+        for(int i = 0; i < col_names.size(); i++){
+            if (col_names.equals("Haplogroup")){
+                return i;
+            }
+        }
+        return -1;
+
     }
 }

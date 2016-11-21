@@ -110,20 +110,22 @@ public class MitoBenchWindow extends Application{
      *
      * @return
      */
-    private StackPane getCenterPane()throws IOException, SAXException, ParserConfigurationException
+    private BorderPane getCenterPane()throws IOException, SAXException, ParserConfigurationException
     {
-        StackPane stackPane = new StackPane();
-        stackPane.setAlignment(Pos.BASELINE_LEFT);
+        BorderPane stackPane = new BorderPane();
+        //stackPane.setAlignment(Pos.BASELINE_LEFT);
 
         // initialize columns
         tableManager = new TableController(new Label("\nInput MT data"));
 
-        final VBox vbox = new VBox();
+        VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(tableManager.getLabel(), tableManager.getTable());
 
-        stackPane.getChildren().addAll(vbox);
+
+
+        stackPane.setCenter(vbox);
 
         TreeHaploChooser treeHaploChooser = new TreeHaploChooser(stackPane, tableManager, barPlotHaplo);
 
@@ -138,11 +140,22 @@ public class MitoBenchWindow extends Application{
             }
         });
 
-        stackPane.getChildren().add(reset);
-        StackPane.setAlignment(reset, Pos.BOTTOM_LEFT);
-        stackPane.setAlignment(Pos.TOP_RIGHT);
-        StackPane.setMargin(reset, new Insets(20, 20, 0, 0));
 
+        // add 'get selected rows' button
+        Button getSelectedRowsButton = new Button("Get selected rows");
+        getSelectedRowsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent paramT) {
+                tableManager.updateView(tableManager.getTable().getSelectionModel().getSelectedItems());
+            }
+        });
+
+
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(reset,getSelectedRowsButton);
+        buttons.setMargin(reset, new Insets(20, 20, 20, 20));
+        buttons.setMargin(getSelectedRowsButton, new Insets(20, 20, 20, 20));
+        stackPane.setBottom(buttons);
 
 
         return stackPane;
