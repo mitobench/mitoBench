@@ -1,4 +1,6 @@
-package view.table;/**
+package view.table;
+
+/**
  * Created by neukamm on 07.11.16.
  */
 

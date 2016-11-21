@@ -1,7 +1,6 @@
 package view.table;
 
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -23,6 +22,13 @@ public class CSVWriter {
     }
 
 
+    /**
+     * This method write the current content of the tableview to a csv file incl. header line
+     * (comma separated)
+     *
+     * @param file
+     * @throws Exception
+     */
     public void writeExcel(String file) throws Exception {
         Writer writer = null;
         try {
@@ -30,13 +36,12 @@ public class CSVWriter {
 
             // write header
             String header = "";
-            List<Object> columns = tableController.getTable().getColumns();
+            List<String> columns = tableController.getCol_names();
             for (int i = 0; i < columns.size(); i++){
-                TableColumn c = (TableColumn) columns.get(i);
                 if(i == columns.size()-1){
-                    header += c.getText() + "\n";
+                    header += columns.get(i) + "\n";
                 } else {
-                    header += c.getText() + separator;
+                    header += columns.get(i) + separator;
                 }
             }
             writer.write(header);

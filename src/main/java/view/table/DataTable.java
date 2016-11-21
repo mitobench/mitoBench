@@ -20,6 +20,11 @@ public class DataTable {
     }
 
 
+    /**
+     * This method gets a hashmap of new input entries and updates the current table view.
+     *
+     * @param input
+     */
     public void update(HashMap<String, List<Entry>> input){
 
         for(String key : input.keySet()){
@@ -34,12 +39,16 @@ public class DataTable {
                 addRow(key);
                 updateRow(getRowPosition(key), input.get(key), key);
             }
-
         }
-
-
     }
 
+    /**
+     * This method updates a single row.
+     *
+     * @param rowPosition
+     * @param input
+     * @param key
+     */
     private void updateRow(int rowPosition, List<Entry> input, String key){
 
         for(Entry entry : input){
@@ -68,6 +77,12 @@ public class DataTable {
         }
     }
 
+    /**
+     * This method returns true, if a certain column 'col' already exists.
+     *
+     * @param col
+     * @return
+     */
     private boolean columnExists(String col){
         if(data.get(col)!=null){
             return true;
@@ -77,6 +92,12 @@ public class DataTable {
 
     }
 
+    /**
+     * This method returns the line number of a certain row.
+     *
+     * @param rowID
+     * @return
+     */
     private int getRowPosition(String rowID){
 
         if(data.get("ID")!=null){
@@ -94,7 +115,7 @@ public class DataTable {
 
     /**
      * add new row identifier to data table
-     * fill all columns with dummy string value
+     * fill all columns with dummy string value.
      *
      * @param rowID
      */
@@ -121,6 +142,14 @@ public class DataTable {
     }
 
 
+    /**
+     * This method appends an element to an array.
+     *
+     * @param arr
+     * @param element
+     * @param <T>
+     * @return
+     */
     static <T> T[] append(T[] arr, T element) {
         final int N = arr.length;
         arr = Arrays.copyOf(arr, N + 1);

@@ -54,7 +54,12 @@ public class TableController {
     }
 
 
-
+    /**
+     * This method gets a hashmap of new input entries, updates the data table and prepares the tableview for updating.
+     * The columns are created based on new data table.
+     *
+     * @param input
+     */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
         // add new values to existing one
@@ -78,7 +83,7 @@ public class TableController {
                     return new SimpleStringProperty(param.getValue().get(j).toString());
                 }
             });
-
+            col_names.add(colName);
             table.getColumns().addAll(col);
             i++;
 
@@ -90,7 +95,13 @@ public class TableController {
     }
 
 
-
+    /**
+     * This method parses the data table to a representation that can be displayed from the table view
+     * (ObservableList<ObservableList> )
+     *
+     * @param dataTable
+     * @return
+     */
     private ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable){
 
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
@@ -98,7 +109,6 @@ public class TableController {
 
         String[][] data_tmp = new String[data_hash.get("ID").length][data_hash.size()];
 
-        //for(int i = 0; i < data_hash.get("ID").length; i++){
         int m = 0;
         for(String col : data_hash.keySet()){
             String[] col_entry = data_hash.get(col);
@@ -138,54 +148,6 @@ public class TableController {
         }
     }
 
-    /**
-     * This method iterates over all columns and returns true,
-     * if column 'col' exists.
-     * @param col
-     * @return
-     */
-    private boolean colExists(TableColumn col){
-
-        for(int i = 0; i < table.getColumns().size(); i++){
-            TableColumn c = (TableColumn) table.getColumns().get(i);
-            String col_old = c.getText();
-            String col_new = col.getText();
-            if(c.getText().equals(col.getText())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * This method returns true, if row with id 's' exists
-     *
-     * @param s
-     * @return
-     */
-    private boolean rowExists(String s){
-        for(int i = 0; i < data.size(); i++){
-            ObservableList row = data.get(i);
-            if(row.get(0).equals(s)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    private void updateCell(String rowID, Entry entry){
-
-
-        for (Node r: table.lookupAll(".table-row-cell")){
-            for (Node c: r.lookupAll(".table-cell")){
-                System.out.println(c);
-            }
-        }
-
-
-    }
 
     public TableView getTable() {
         return table;
@@ -199,4 +161,7 @@ public class TableController {
         return data;
     }
 
+    public List<String> getCol_names() {
+        return col_names;
+    }
 }

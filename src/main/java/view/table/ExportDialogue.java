@@ -41,16 +41,6 @@ public class ExportDialogue extends Application {
             }
         }
 
-
-//        DirectoryChooser directoryChooser = new DirectoryChooser();
-//        File selectedDirectory = directoryChooser.showDialog(stage);
-//
-//        if(selectedDirectory == null){
-//            outFile = "No Directory selected";
-//        }else{
-//            outFile = selectedDirectory.getAbsolutePath();
-//        }
-
     }
 
     public String getOutFile() {
