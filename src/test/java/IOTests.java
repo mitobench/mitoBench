@@ -1,4 +1,5 @@
 import io.datastructure.Entry;
+import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
 import org.junit.Test;
@@ -53,7 +54,30 @@ public class IOTests {
 
     @Test
     public void io_test_genericInput(){
-       // setUp("/generic_test_input.tsv");
+        String path = "./genericinput.tsv";
+        setUp(path);
+
+        HashMap output = null;
+
+        try {
+            GenericInputParser gi = new GenericInputParser(getClass().getResource(path).getPath());
+            output = gi.getCorrespondingData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Testing data input here...
+        assertEquals(2, output.size());
+
+        ArrayList cast = (ArrayList) output.get("Test1");
+        Entry entry_c14 = (Entry) cast.get(0);
+        Entry entry_bone = (Entry) cast.get(1);
+        Entry entry_moonphase = (Entry) cast.get(2);
+
+        assertEquals("String", entry_c14.getType());
+        assertEquals("ID", entry_c14.getIdentifier());
+        assertEquals("-3400", entry_c14.getData());
+
 
 
 
@@ -67,7 +91,6 @@ public class IOTests {
         HashMap output = null;
 
         try {
-            System.out.println(getClass().getResource(path));
             HSDInput hsdInput = new HSDInput(getClass().getResource(path).getPath());
             output = hsdInput.getCorrespondingData();
         } catch (IOException e) {
@@ -85,7 +108,7 @@ public class IOTests {
         assertEquals(entry.getData(), "R0a2f");
 
 
-        
+
     }
 
 
