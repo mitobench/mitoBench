@@ -123,7 +123,7 @@ public class FileMenu{
 
                 try{
                     CSVWriter csvWriter = new CSVWriter(tableManager);
-                    csvWriter.writeExcel(outFileDB);
+                    csvWriter.writeCSV(outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }

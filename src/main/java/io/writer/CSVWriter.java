@@ -25,13 +25,13 @@ public class CSVWriter {
 
 
     /**
-     * This method write the current content of the tableview to a csv file incl. header line
+     * This method writes the current content of the tableview to a csv file incl. header line
      * (comma separated)
      *
      * @param file
      * @throws Exception
      */
-    public void writeExcel(String file) throws Exception {
+    public void writeCSV(String file) throws Exception {
         Writer writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(new File(file+".csv")));
