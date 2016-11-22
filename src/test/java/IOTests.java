@@ -49,7 +49,7 @@ public class IOTests {
 
         //Data from Pagani et al 2016, 100 Mitochondrial genomes from Modern Egyptians
         assertEquals(output.size(), 100);
-        assertEquals(output.containsKey(">egypt.14AJ129"), true);
+        assertEquals(output.containsKey("egypt.14AJ129"), true);
     }
 
     @Test
