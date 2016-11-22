@@ -46,12 +46,12 @@ public class MultiFastAInput implements IInputData {
                 fastaEntrys.add(faentry);
                 //And reset everything
                 currSeq = "";
-                currHeader = currentLine;
+                currHeader = currentLine.replace(">","");
                 continue;
             }
 
             if (currentLine.startsWith(">")) { //then we have a header
-                currHeader = currentLine;
+                currHeader = currentLine.replace(">","");
                 continue;
             } else { // we have sequence
                 currSeq += currentLine;
