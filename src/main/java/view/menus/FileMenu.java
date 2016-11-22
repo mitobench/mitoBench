@@ -5,6 +5,7 @@ import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
 import io.writer.CSVWriter;
+import io.writer.ExcelWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -130,6 +131,23 @@ public class FileMenu{
             }
         });
 
+        MenuItem exporttoXLS = new MenuItem("Export XLSX File");
+        exporttoXLS.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ExportDialogue exportDialogue = new ExportDialogue();
+                exportDialogue.start(new Stage());
+                String outFileDB = exportDialogue.getOutFile();
+
+                try{
+                    ExcelWriter excelwriter = new ExcelWriter(tableManager);
+                    excelwriter.writeData(outFileDB);
+                } catch (Exception e) {
+                    System.err.println("Caught Exception: " + e.getMessage());
+                }
+            }
+        });
+
 
         /*
 
@@ -145,7 +163,7 @@ public class FileMenu{
             }
         });
 
-        menuFile.getItems().addAll(importFile,importMultiFasta, hsdImport, exportFile, new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile,importMultiFasta, hsdImport, exportFile, exporttoXLS, new SeparatorMenuItem(), exit);
     }
 
 
