@@ -17,10 +17,12 @@ import view.menus.FileMenu;
 import view.menus.HelpMenu;
 import view.menus.ToolsMenu;
 import view.table.*;
-import view.tree.TreeHaploChooser;
+import view.tree.TreeHaploController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -113,7 +115,6 @@ public class MitoBenchWindow extends Application{
     private BorderPane getCenterPane()throws IOException, SAXException, ParserConfigurationException
     {
         BorderPane stackPane = new BorderPane();
-        //stackPane.setAlignment(Pos.BASELINE_LEFT);
 
         // initialize columns
         tableManager = new TableController(new Label("\nInput MT data"));
@@ -127,7 +128,7 @@ public class MitoBenchWindow extends Application{
 
         stackPane.setCenter(vbox);
 
-        TreeHaploChooser treeHaploChooser = new TreeHaploChooser(stackPane, tableManager, barPlotHaplo);
+        TreeHaploController treeHaploChooser = new TreeHaploController(stackPane, tableManager);
 
         // add reset table button
         Button reset = new Button("Reset table");
@@ -150,11 +151,61 @@ public class MitoBenchWindow extends Application{
             }
         });
 
+        // add 'select all' button
+        Button selectAllButton = new Button("Select all");
+        selectAllButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent paramT) {
+                tableManager.getTable().getSelectionModel().selectAll();
+            }
+        });
 
-        HBox buttons = new HBox();
-        buttons.getChildren().addAll(reset,getSelectedRowsButton);
-        buttons.setMargin(reset, new Insets(20, 20, 20, 20));
-        buttons.setMargin(getSelectedRowsButton, new Insets(20, 20, 20, 20));
+
+
+
+        // add 'select all' button
+        Button createHaploHistButton = new Button("Plot haplogroup frequency");
+        createHaploHistButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent paramT) {
+
+
+                TableColumn haplo_col = tableManager.getTableColumnByName(tableManager.getTable(), "Haplogroup");
+                    List<String> columnData = new ArrayList<>();
+                    for (Object item : tableManager.getTable().getItems()) {
+                        columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
+                    }
+                String[] seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
+
+
+                // parse selection to tablefilter
+                TableSelectionFilter tableFilter = new TableSelectionFilter();
+
+                if (seletcion_haplogroups.length !=0) {
+                    tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getHaploColIndex());
+                    barPlotHaplo.addData("data selection", tableManager.getDataHist());
+
+                }
+            }
+
+        });
+
+
+        VBox buttons = new VBox();
+
+
+        HBox plotting = new HBox();
+        plotting.getChildren().addAll(createHaploHistButton);
+        plotting.setMargin(createHaploHistButton, new Insets(20, 20, 20, 20));
+
+        HBox selectButtons = new HBox();
+        selectButtons.getChildren().addAll(reset, selectAllButton, getSelectedRowsButton);
+        selectButtons.setMargin(reset, new Insets(20, 20, 20, 20));
+        selectButtons.setMargin(getSelectedRowsButton, new Insets(20, 20, 20, 20));
+        selectButtons.setMargin(selectAllButton, new Insets(20, 20, 20, 20));
+
+        buttons.getChildren().addAll(plotting, selectButtons);
+
         stackPane.setBottom(buttons);
 
 
