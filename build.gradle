@@ -39,6 +39,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:+'
     compile 'org.apache.poi:poi:3.15'
+    compile 'org.apache.poi:poi-ooxml:3.15'
 }
 
 task copyTestResources(type: Copy) {
