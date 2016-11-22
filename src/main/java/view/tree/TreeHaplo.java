@@ -26,10 +26,8 @@ public class TreeHaplo{
 
     public void addStructure() throws IOException, SAXException, ParserConfigurationException {
 
-
         PhyloTreeParser p = new PhyloTreeParser();
         finalTree = p.getFinalTree();
-
 
         tree = new TreeView<String> (finalTree);
         tree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -43,4 +41,5 @@ public class TreeHaplo{
     public TreeView<String> getTree() {
         return tree;
     }
+
 }

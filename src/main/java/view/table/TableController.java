@@ -30,6 +30,7 @@ public class TableController {
     private ObservableList<ObservableList> data_copy;
 
     private DataTable dataTable;
+    private HashMap<String, Integer> column_to_index;
 
 
 
@@ -49,10 +50,7 @@ public class TableController {
         col_names = new ArrayList<>();
 
         dataTable = new DataTable();
-
-
-
-
+        column_to_index = new HashMap<String, Integer>();
 
     }
 
@@ -94,17 +92,20 @@ public class TableController {
         table.getItems().removeAll(table.getItems());
         //FINALLY ADDED TO TableView
         table.getItems().addAll(data);
+
+        setColumns_to_index();
     }
 
 
     /**
-     * This method parses the data table to a representation that can be displayed from the table view
+     * This method parses the data table to a representation that can be displayed by the table view
      * (ObservableList<ObservableList> )
      *
      * @param dataTable
      * @return
      */
     private ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable){
+
 
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
 
@@ -188,6 +189,39 @@ public class TableController {
     }
 
 
+
+    /**
+     * count occurrences of haplotypes within selected data
+     * return as hash map to plot it easily
+     *
+     * @return
+     */
+    public HashMap<String, Integer> getDataHist(){
+
+        HashMap<String, Integer> haplo_to_count = new HashMap<>();
+        for(ObservableList item : this.data){
+
+
+            String haplogroup = (String)item.get(column_to_index.get("Haplogroup"));
+
+            if(haplo_to_count.containsKey(haplogroup)){
+                haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
+            } else {
+                haplo_to_count.put(haplogroup,1);
+            }
+        }
+
+        return  haplo_to_count;
+    }
+
+
+
+    public TableColumn getTableColumnByName(TableView<ObservableList> tableView, String name) {
+        for (TableColumn col : tableView.getColumns())
+            if (col.getText().equals(name)) return col ;
+        return null ;
+    }
+
     public TableView getTable() {
         return table;
     }
@@ -204,13 +238,22 @@ public class TableController {
         return col_names;
     }
 
-    public int getHaploColIndex(){
-        for(int i = 0; i < col_names.size(); i++){
-            if (col_names.equals("Haplogroup")){
-                return i;
-            }
+    private void setColumns_to_index(){
+        int i = 0;
+        for(TableColumn col : this.table.getColumns()){
+            column_to_index.put(col.getText(),i);
+            i++;
         }
-        return -1;
+    }
 
+    public int getHaploColIndex(){
+
+        return column_to_index.get("Haplogroup");
+//        for(int i = 0; i < col_names.size(); i++){
+//            if (col_names.equals("Haplogroup")){
+//                return i;
+//            }
+//        }
+//        return -1;
     }
 }

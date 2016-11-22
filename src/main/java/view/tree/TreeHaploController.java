@@ -25,17 +25,19 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
+import sun.reflect.generics.tree.Tree;
 import view.charts.BarPlotHaplo;
-import view.table.TableSelectionFilter;
 import view.table.TableController;
+import view.table.TableSelectionFilter;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
-public class TreeHaploChooser {
+public class TreeHaploController {
 
     private VBox searchPane;
     private Rectangle2D boxBounds = new Rectangle2D(500, 300, 600, 480);
@@ -49,14 +51,17 @@ public class TreeHaploChooser {
     private Timeline timelineDown;
     private String[] seletcion_haplogroups;
     private TableController tableManager;
-    private BarPlotHaplo barPlotHaplo;
+
     private List<TreeItem<String>> foundItem;
     private TextField searchFieldListHaplogroup;
+    private TreeHaplo tree;
+    private HashMap<String, List<String>> treeMap;
 
-    public TreeHaploChooser(BorderPane root, TableController tableManager, BarPlotHaplo barPlotHaplo) throws IOException, SAXException, ParserConfigurationException {
+    public TreeHaploController(BorderPane root, TableController tableManager) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
-        this.barPlotHaplo = barPlotHaplo;
+
+        treeMap = new HashMap<String, List<String>>();
 
         configureSearch(root);
         setAnimation();
@@ -99,14 +104,15 @@ public class TreeHaploChooser {
         sp1.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()-ACTION_BOX_HGT);
         //sp1.autosize();
 
-        Button applyBtn = new Button("Display selection");
+        Button applyBtn = new Button("Apply filter");
         //TextField search = new TextField("Enter haplogroup");
         searchFieldListHaplogroup = new TextField();
         searchFieldListHaplogroup.setPrefSize(50,10);
 
 
-        TreeHaplo tree = new TreeHaplo("Haplo tree");
+        tree = new TreeHaplo("Haplo tree");
         tree.addStructure();
+        createTreeMap(tree.getRootItem());
 
 
         /*
@@ -123,20 +129,29 @@ public class TreeHaploChooser {
                 for(int i = 0; i < itemSelection.size(); i++){
                     seletcion_haplogroups[i] = itemSelection.get(i).getValue();
                 }
+                // if selection has size zero --> take all haplogroups
+                if(seletcion_haplogroups.length == 0){
+                    TableColumn haplo_col = tableManager.getTableColumnByName(tableManager.getTable(), "Haplogroup");
+                    List<String> columnData = new ArrayList<>();
+                    for (Object item : tableManager.getTable().getItems()) {
+                        columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
+                    }
+                    seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
+                }
+
                 // close tree view
                 timelineUp.play();
                 searchLbl.setGraphic(downArrow);
                 togglePaneVisibility();
                 tree.getTree().getSelectionModel().clearSelection();
 
-
                 // parse selection to tablefilter
                 TableSelectionFilter tableFilter = new TableSelectionFilter();
 
                 if (seletcion_haplogroups.length !=0) {
                     tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getHaploColIndex());
-                    //barPlotHaplo.addData("data selection", tableManager.getDataHist());
                 }
+
             }
         });
 
@@ -159,33 +174,37 @@ public class TreeHaploChooser {
                 {
                     // parse haplogroup list, get all corresponding table entries (subgroups included)
                     // and show results in table
-                    getAllSubgroups(searchFieldListHaplogroup.getText().split(","));
+                    List<String> allHaplogroups = getAllSubgroups(searchFieldListHaplogroup.getText().split(","));
+                    seletcion_haplogroups = allHaplogroups.toArray(new String[allHaplogroups.size()]);
+
+
+                    // close tree view
+                    timelineUp.play();
+                    searchLbl.setGraphic(downArrow);
+                    togglePaneVisibility();
+                    tree.getTree().getSelectionModel().clearSelection();
+
+
+                    // parse selection to tablefilter
+                    TableSelectionFilter tableFilter = new TableSelectionFilter();
+
+                    if (seletcion_haplogroups.length !=0) {
+                        tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getHaploColIndex());
+                        //barPlotHaplo.addData("data selection", tableManager.getDataHist());
+                    }
                 }
             }
         });
 
-
-//        search.textProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observable,
-//                                String oldValue, String newValue) {
-//
-//
-//
-//                foundItem = new ArrayList<TreeItem<String>>();
-//
-//                //searchAndUpdateTreeItem(tree.getRootItem(), newValue, foundItem, tree.getTree());
-//            }
-//        });
-
-        Label infolabel = new Label("Please select haplogroups either in the tree \nor specify a list:");
-        infolabel.setMinSize(50, 60);
+        Label infolabel = new Label("Please select haplogroups either in the tree or specify a list:");
+        infolabel.setMinSize(80, 80);
 
         Label haploLabel = new Label("Comma separated list of haplogroups:");
         infolabel.setMinSize(20, 30);
 
 
-        VBox hb2 = VBoxBuilder.create().children(infolabel, tree.getTree(),applyBtn, haploLabel,searchFieldListHaplogroup).build();
+        VBox hb2 = VBoxBuilder.create().children(infolabel, tree.getTree(), haploLabel, searchFieldListHaplogroup , applyBtn).build();
+        hb2.setSpacing(10);
         sp1.getChildren().addAll(hb2);
 
         StackPane sp2 = new StackPane();
@@ -268,63 +287,56 @@ public class TreeHaploChooser {
     }
 
 
-//    /**
-//     * search in tree for specific tree item and return it
-//     * @param item
-//     * @param name
-//     * @return
-//     */
-//    private void searchAndUpdateTreeItem(TreeItem<String> item, String name, List<TreeItem<String>> treeItemSelection, TreeView tree) {
-//
-//        if(item.getValue().startsWith(name)){
-//            //treeItemSelection.add(item);
-//            item.setExpanded(true);
-//            // This line is the not-so-clearly documented magic.
-//            int row = tree.getRow( item );
-//
-//            // Now the row can be selected.
-//            tree.getSelectionModel().select( row );
-//            //return item; // hit!
-//        }
-//
-//        // continue on the children:
-//        TreeItem<String> result = null;
-//        for(TreeItem<String> child : item.getChildren()){
-//            searchAndUpdateTreeItem(child, name, treeItemSelection, tree);
-//            //item.setExpanded(true);
-//            /*if(result != null)
-//                treeItemSelection.add(item);
-//                //return result; // hit!
-//                */
-//        }
-//
-//        //no hit:
-//        //item.getParent().getChildren().removeAll();
-//
-//    }
-
 
     /**
      * get all sub-groups of haplo
      * @param haplo_list
      */
-    private void getAllSubgroups(String[] haplo_list){
+    private List<String> getAllSubgroups(String[] haplo_list){
         List<String> haplo_list_extended = new ArrayList<String>();
+
+        // iterate over all specified haplogroups
+        // get subtree of each
         for(String haplo : haplo_list){
-            getSingleSubgroups(haplo);
+            // get sub-haplogroups of 'haplo'
+            List<String> path = treeMap.get(haplo.toString().toLowerCase());
+
+            // add them to list
+            haplo_list_extended.addAll(path);
         }
 
-    }
-
-    private List<String> getSingleSubgroups(String haplo){
-        List<String> haplo_list = new ArrayList<String>();
-
-
-
-        return haplo_list;
-
+        return haplo_list_extended;
 
     }
+
+
+
+    private void createTreeMap(TreeItem item){
+
+        TreeIterator<String> iterator = new TreeIterator<>(item);
+        TreeItem it = item;
+        while (iterator.hasNext()) {
+            treeMap.put(it.getValue().toString().toLowerCase(), getSubtree(it, new ArrayList<String>()));
+            it = iterator.next();
+        }
+    }
+
+
+    private List<String> getSubtree(TreeItem root, List<String> path){
+
+
+        TreeIterator<String> iterator = new TreeIterator<>(root);
+        TreeItem it = iterator.next();
+        while (iterator.hasNext()) {
+            path.add(it.getValue().toString());
+            it = iterator.next();
+
+        }
+
+        return path;
+
+    }
+
 
 
 }
