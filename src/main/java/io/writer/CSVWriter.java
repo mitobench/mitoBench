@@ -1,18 +1,16 @@
 package io.writer;
 
+import io.IOutputData;
 import javafx.collections.ObservableList;
 import view.table.TableController;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.List;
 
 /**
  * Created by neukamm on 07.11.16.
  */
-public class CSVWriter {
+public class CSVWriter implements IOutputData {
 
     private ObservableList<ObservableList> data;
     private TableController tableController;
@@ -31,7 +29,7 @@ public class CSVWriter {
      * @param file
      * @throws Exception
      */
-    public void writeCSV(String file) throws Exception {
+    public void writeData(String file) throws IOException {
         Writer writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(new File(file+".csv")));
