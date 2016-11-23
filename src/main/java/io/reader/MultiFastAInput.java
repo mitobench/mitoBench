@@ -68,12 +68,12 @@ public class MultiFastAInput implements IInputData {
                 //Checking string for consistency properly with a regular expression
 
                 line_index++;
-                Pattern p = Pattern.compile("[ACTGNactgn]*\n*");
+                Pattern p = Pattern.compile("[ACTGNactgn-]*\n*");
                 Matcher m = p.matcher(currentLine);
                 if(m.matches()){
                     currSeq += currentLine;
                 } else {
-                    throw new FastAException("Your FastA entry in line" + line_index + " is incorrect. Please check your input file for correctness.");
+                    throw new FastAException("Your FastA entry in line " + line_index + " is incorrect. Please check your input file for correctness.");
                 }
             }
         }
