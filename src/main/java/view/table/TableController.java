@@ -5,10 +5,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 
@@ -34,13 +32,18 @@ public class TableController {
 
 
 
-    public TableController(Label label){
+    public TableController(Label label, Scene scene){
 
         this.label = label;
         this.label.setFont(new Font("Arial", 20));
 
         table = new TableView();
         table.setEditable(false);
+        //table.setColumnResizePolicy((param) -> true );
+
+        table.prefHeightProperty().bind(scene.heightProperty());
+        table.prefWidthProperty().bind(scene.widthProperty());
+
 
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

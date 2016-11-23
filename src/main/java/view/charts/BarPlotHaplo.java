@@ -7,14 +7,17 @@ import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import org.apache.xmlbeans.impl.xb.xsdschema.WhiteSpaceDocument;
 
 import java.util.HashMap;
 
@@ -28,8 +31,8 @@ public class BarPlotHaplo extends ABarPlot {
     double orgTranslateX, orgTranslateY;
 
 
-    public BarPlotHaplo(String title, String xlabel, String ylabel) {
-        super(title, xlabel, ylabel);
+    public BarPlotHaplo(String title, String xlabel, String ylabel, VBox scene) {
+        super(title, xlabel, ylabel, scene);
 
     }
 
@@ -58,7 +61,7 @@ public class BarPlotHaplo extends ABarPlot {
     }
 
 
-    public Parent createZoomPane(final Pane group) {
+    public StackPane createZoomPane(final Pane group) {
         final double SCALE_DELTA = 1.1;
         final StackPane zoomPane = new StackPane();
 
