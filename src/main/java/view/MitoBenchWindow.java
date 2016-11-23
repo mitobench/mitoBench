@@ -6,6 +6,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -89,15 +91,18 @@ public class MitoBenchWindow extends Application{
         vbox.setPadding(new Insets(0, 20, 0, 20));
         vbox.setAlignment(Pos.CENTER);
 
-        Pane plot = new Pane();
         barPlotHaplo = new BarPlotHaplo("Haplogroups Summary \n(Own dataset)", "Haplogroup", "Count");
+        barPlotHaplo.setDragAndMove();
 
-        plot.getChildren().addAll(barPlotHaplo.getBarChart());
-        vbox.getChildren().addAll(plot,new Label("Place for some statistics"));
+        final Pane group = new Pane(barPlotHaplo.getBarChart());
+        Parent zoomPane = barPlotHaplo.createZoomPane(group);
+
+        vbox.getChildren().addAll(zoomPane, new Label("Place for some statistics"));
+        VBox.setVgrow(zoomPane, Priority.ALWAYS);
 
         Separator separator1 = new Separator();
         vbox.getChildren().add(1, separator1);
-        hbox.getChildren().addAll(new Separator(Orientation.VERTICAL), vbox);
+        hbox.getChildren().addAll(vbox);
 
         return hbox;
     }
