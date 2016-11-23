@@ -2,6 +2,7 @@ package io.writer;
 
 import io.IOutputData;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -19,11 +20,10 @@ import java.util.List;
  * Created by peltzer on 22/11/2016.
  */
 public class ExcelWriter implements IOutputData {
-    private ObservableList<ObservableList> data;
     private TableController tableController;
 
     public ExcelWriter(TableController tableController) {
-        this.data = tableController.getData();
+
         this.tableController = tableController;
     }
 
@@ -44,14 +44,16 @@ public class ExcelWriter implements IOutputData {
 
         // write header
         String header = "";
-        List<String> columns = tableController.getCol_names();
+        List<String> columns = tableController.getCurrentColumnNames();
         for (int i = 0; i < columns.size(); i++) {
             Cell c = row.createCell(i);
             c.setCellValue(columns.get(i));
         }
 
+
+
         int rowcounter = 1; //Else, we loose our header here!
-        for (ObservableList list_entry : data) {
+        for (ObservableList list_entry : tableController.getData()) {
             Row row_to_add = sheet1.createRow(rowcounter);
             rowcounter++;
             for (int i = 0; i < list_entry.size(); i++) {

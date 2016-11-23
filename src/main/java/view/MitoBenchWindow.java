@@ -2,13 +2,9 @@ package view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
@@ -39,12 +35,12 @@ public class MitoBenchWindow extends Application{
 
         root = new BorderPane();
         scene = new Scene(root, 1200, 600);
+
+        // bind width and height to scene to enable resizing
         root.prefHeightProperty().bind(scene.heightProperty());
         root.prefWidthProperty().bind(scene.widthProperty());
 
-        //root.setLeft(getTablePane());
         root.setCenter(getCenterPane());
-        //root.setCenter(getPlotPane());
         root.setTop(getMenuPane());
 
 
@@ -83,8 +79,10 @@ public class MitoBenchWindow extends Application{
     public HBox  getCenterPane() throws ParserConfigurationException, SAXException, IOException {
 
 
-
         HBox center = new HBox(getTablePane(), getPlotPane());
+
+
+        // bind center to scene --> resizing
         center.prefHeightProperty().bind(scene.heightProperty());
         center.prefWidthProperty().bind(scene.widthProperty());
 

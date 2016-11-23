@@ -259,4 +259,14 @@ public class TableController {
 //        }
 //        return -1;
     }
+
+
+
+    public List<String> getCurrentColumnNames(){
+        List<String> names = new ArrayList<String>();
+
+        for (TableColumn col : table.getColumns())
+            names.add(col.getText());
+        return names;
+    }
 }

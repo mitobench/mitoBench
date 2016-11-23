@@ -36,7 +36,7 @@ public class CSVWriter implements IOutputData {
 
             // write header
             String header = "";
-            List<String> columns = tableController.getCol_names();
+            List<String> columns = tableController.getCurrentColumnNames();
             for (int i = 0; i < columns.size(); i++){
                 if(i == columns.size()-1){
                     header += columns.get(i) + "\n";
