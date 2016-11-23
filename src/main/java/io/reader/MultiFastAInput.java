@@ -68,7 +68,7 @@ public class MultiFastAInput implements IInputData {
                 //Checking string for consistency properly with a regular expression
 
                 line_index++;
-                Pattern p = Pattern.compile("[ACTGNactgn-]*\n*");
+                Pattern p = Pattern.compile("[ACTGRYSWKMVDHVNactgryswkmvdhv-]*\n*");
                 Matcher m = p.matcher(currentLine);
                 if(m.matches()){
                     currSeq += currentLine;
