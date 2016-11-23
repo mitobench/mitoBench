@@ -33,12 +33,10 @@ public class ExcelWriter implements IOutputData {
         Workbook wb = new XSSFWorkbook();
 
         //Create file extension if its not there already...
-        String safe_sheetname = "";
-        if(file.endsWith(".xlsx")){
-            safe_sheetname = WorkbookUtil.createSafeSheetName(file);
-        } else {
-           safe_sheetname = WorkbookUtil.createSafeSheetName(file+".xlsx");
-        }
+
+
+        String safe_sheetname = WorkbookUtil.createSafeSheetName(file);
+
         Sheet sheet1 = wb.createSheet(safe_sheetname);
         Row row = sheet1.createRow(0);
 

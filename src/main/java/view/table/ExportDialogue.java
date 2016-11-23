@@ -1,18 +1,10 @@
 package view.table;
 
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * Created by neukamm on 07.11.16.
@@ -31,7 +23,8 @@ public class ExportDialogue extends Application {
 
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save table content");
+        configureFileChooser(fileChooser);
+
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
@@ -41,6 +34,16 @@ public class ExportDialogue extends Application {
             }
         }
 
+    }
+
+
+
+    private static void configureFileChooser(final FileChooser fileChooser) {
+        fileChooser.setTitle("Save table content");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Microsoft Excel (*.xlsx)", "*.xlsx"),
+                new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv")
+        );
     }
 
     public String getOutFile() {

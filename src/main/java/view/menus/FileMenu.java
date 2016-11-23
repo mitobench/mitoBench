@@ -89,7 +89,7 @@ public class FileMenu {
 
                     //Input is Generic Format
 
-                    if (absolutePath.endsWith("*.tsv")) {
+                    if (absolutePath.endsWith(".tsv")) {
                         try {
                             GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputFile().getPath());
                             HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
@@ -103,52 +103,42 @@ public class FileMenu {
             }
         });
 
-        
+
 
         /*
                         EXPORT DIALOGUE
 
          */
 
-        MenuItem exportFile = new MenuItem("Export DB file");
+        MenuItem exportFile = new MenuItem("Export Table file");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 ExportDialogue exportDialogue = new ExportDialogue();
                 exportDialogue.start(new Stage());
-                String outFileDB = exportDialogue.getOutFile();
 
-                try {
-                    CSVWriter csvWriter = new CSVWriter(tableManager);
-                    csvWriter.writeData(outFileDB);
-                } catch (Exception e) {
-                    System.err.println("Caught Exception: " + e.getMessage());
+                if (exportDialogue.getOutFile() != null) {
+                    String outFileDB = exportDialogue.getOutFile();
+                    if (outFileDB.endsWith(".csv")) {
+                        try {
+                            CSVWriter csvWriter = new CSVWriter(tableManager);
+                            csvWriter.writeData(outFileDB);
+                        } catch (Exception e) {
+                            System.err.println("Caught Exception: " + e.getMessage());
+                        }
+                    } else if (outFileDB.endsWith(".xlsx")) {
+                        try {
+                            ExcelWriter excelwriter = new ExcelWriter(tableManager);
+                            excelwriter.writeData(outFileDB);
+                        } catch (Exception e) {
+                            System.err.println("Caught Exception: " + e.getMessage());
+                        }
+                    }
                 }
             }
         });
-
-        MenuItem exporttoXLS = new MenuItem("Export XLSX File");
-        exporttoXLS.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                ExportDialogue exportDialogue = new ExportDialogue();
-                exportDialogue.start(new Stage());
-                String outFileDB = exportDialogue.getOutFile();
-
-                try {
-                    ExcelWriter excelwriter = new ExcelWriter(tableManager);
-                    excelwriter.writeData(outFileDB);
-                } catch (Exception e) {
-                    System.err.println("Caught Exception: " + e.getMessage());
-                }
-            }
-        });
-
 
         /*
-
                 EXIT OPTION
-
-
          */
 
         MenuItem exit = new MenuItem("Exit");
@@ -158,7 +148,7 @@ public class FileMenu {
             }
         });
 
-        menuFile.getItems().addAll(importFile, exportFile, exporttoXLS, new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exit);
     }
 
 
