@@ -1,8 +1,10 @@
 package view.charts;
 
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +17,7 @@ public abstract class ABarPlot {
     protected BarChart<String, Number> bc;
 
 
-    public ABarPlot(String title, String xlabel, String ylabel){
+    public ABarPlot(String title, String xlabel, String ylabel, VBox scene){
 
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -23,6 +25,11 @@ public abstract class ABarPlot {
         bc.setTitle(title);
         xAxis.setLabel(xlabel);
         yAxis.setLabel(ylabel);
+
+        bc.prefWidthProperty().bind(scene.widthProperty());
+        //bc.prefHeightProperty().bind(scene.heightProperty());
+
+
     }
 
 

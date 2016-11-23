@@ -105,7 +105,6 @@ public class TreeHaploController {
         //sp1.autosize();
 
         Button applyBtn = new Button("Apply filter");
-        //TextField search = new TextField("Enter haplogroup");
         searchFieldListHaplogroup = new TextField();
         searchFieldListHaplogroup.setPrefSize(50,10);
 
@@ -137,6 +136,9 @@ public class TreeHaploController {
                         columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
                     }
                     seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
+                } else { // get all sub-haplo-groups of selected HG's
+                    List<String> HGs = getAllSubgroups(seletcion_haplogroups);
+                    seletcion_haplogroups = HGs.toArray(new String[HGs.size()]);
                 }
 
                 // close tree view
@@ -177,24 +179,22 @@ public class TreeHaploController {
                     List<String> allHaplogroups = getAllSubgroups(searchFieldListHaplogroup.getText().split(","));
                     seletcion_haplogroups = allHaplogroups.toArray(new String[allHaplogroups.size()]);
 
-
                     // close tree view
                     timelineUp.play();
                     searchLbl.setGraphic(downArrow);
                     togglePaneVisibility();
                     tree.getTree().getSelectionModel().clearSelection();
 
-
                     // parse selection to tablefilter
                     TableSelectionFilter tableFilter = new TableSelectionFilter();
 
                     if (seletcion_haplogroups.length !=0) {
                         tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getHaploColIndex());
-                        //barPlotHaplo.addData("data selection", tableManager.getDataHist());
                     }
                 }
             }
         });
+
 
         Label infolabel = new Label("Please select haplogroups either in the tree or specify a list:");
         infolabel.setMinSize(80, 80);
