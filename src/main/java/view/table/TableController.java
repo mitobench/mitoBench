@@ -175,7 +175,6 @@ public class TableController {
 
         this.table.setItems(data);
 
-//        table.refresh();
     }
 
 
@@ -237,10 +236,6 @@ public class TableController {
         return data;
     }
 
-    public List<String> getCol_names() {
-        return col_names;
-    }
-
     private void setColumns_to_index(){
         int i = 0;
         for(TableColumn col : this.table.getColumns()){
@@ -250,14 +245,7 @@ public class TableController {
     }
 
     public int getHaploColIndex(){
-
         return column_to_index.get("Haplogroup");
-//        for(int i = 0; i < col_names.size(); i++){
-//            if (col_names.equals("Haplogroup")){
-//                return i;
-//            }
-//        }
-//        return -1;
     }
 
 
@@ -268,5 +256,28 @@ public class TableController {
         for (TableColumn col : table.getColumns())
             names.add(col.getText());
         return names;
+    }
+
+    public ObservableList<ObservableList<String>> getViewDataCurrent() {
+
+        TableView tableView = this.getTable();
+
+        ObservableList<ObservableList<String>> all = FXCollections.observableArrayList();
+        ObservableList<TableColumn> columns = tableView.getColumns();
+
+        for (Object row : tableView.getItems()) {
+            ObservableList<String> values = FXCollections.observableArrayList();
+            for (TableColumn column : columns) {
+                values.add(
+                        (String) column.
+                                getCellObservableValue(row).
+                                getValue());
+            }
+            all.add(values);
+        }
+
+        return all;
+
+
     }
 }

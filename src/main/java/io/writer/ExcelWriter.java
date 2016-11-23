@@ -3,6 +3,7 @@ package io.writer;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import org.apache.poi.sl.draw.binding.ObjectFactory;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -51,12 +52,13 @@ public class ExcelWriter implements IOutputData {
 
 
         int rowcounter = 1; //Else, we loose our header here!
-        for (ObservableList list_entry : tableController.getData()) {
+        for (Object list_entry : tableController.getViewDataCurrent()) {
+            ObservableList e = (ObservableList) list_entry;
             Row row_to_add = sheet1.createRow(rowcounter);
             rowcounter++;
-            for (int i = 0; i < list_entry.size(); i++) {
+            for (int i = 0; i < e.size(); i++) {
                 Cell c = row_to_add.createCell(i);
-                c.setCellValue((String) list_entry.get(i));
+                c.setCellValue((String) e.get(i));
             }
         }
 

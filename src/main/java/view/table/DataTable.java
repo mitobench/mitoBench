@@ -182,8 +182,4 @@ public class DataTable {
         return data;
     }
 
-    public int getNumberOfColumns(){
-        return data.size();
-    }
-
 }
