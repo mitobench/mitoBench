@@ -2,6 +2,7 @@ package view.table;
 
 import io.datastructure.Entry;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -59,16 +60,22 @@ public class DataTable {
             // if column exists:
             if(columnExists(columnName)){
                 String[] columnEntries = data.get(columnName);
+
                 if(columnName.equals("MTSequence")){
+
                     columnEntries[rowPosition] = (String)entry.getData().toString().substring(0,5)+"...";
                 } else {
                     columnEntries[rowPosition] = (String)entry.getData();
                 }
 
-            } else {  // if column does NOT exist
+            } else {
 
-                int rpos = getRowPosition(key);
-                addColumn(entry.getIdentifier(), rpos);
+                if(rowPosition <= data.get("ID").length){ // extend length of column
+                    addColumn(entry.getIdentifier(), data.get("ID").length-1);
+                } else {
+                    addColumn(entry.getIdentifier(), getRowPosition(key));
+                }
+
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
@@ -166,7 +173,9 @@ public class DataTable {
 
 
     public void addColumn(String key, int size){
-        data.put(key, new String[size+1]);
+        String[] a = new String[size+1];
+        Arrays.fill(a, "NA");
+        data.put(key, a);
     }
 
     public HashMap<String, String[]> getDataTable() {
@@ -176,4 +185,5 @@ public class DataTable {
     public int getNumberOfColumns(){
         return data.size();
     }
+
 }
