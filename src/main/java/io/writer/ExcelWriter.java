@@ -31,7 +31,14 @@ public class ExcelWriter implements IOutputData {
     public void writeData(String file) throws IOException {
         Writer writer = null;
         Workbook wb = new XSSFWorkbook();
-        String safe_sheetname = WorkbookUtil.createSafeSheetName(file);
+
+        //Create file extension if its not there already...
+        String safe_sheetname = "";
+        if(file.endsWith(".xlsx")){
+            safe_sheetname = WorkbookUtil.createSafeSheetName(file);
+        } else {
+           safe_sheetname = WorkbookUtil.createSafeSheetName(file+".xlsx");
+        }
         Sheet sheet1 = wb.createSheet(safe_sheetname);
         Row row = sheet1.createRow(0);
 
@@ -43,7 +50,7 @@ public class ExcelWriter implements IOutputData {
             c.setCellValue(columns.get(i));
         }
 
-        int rowcounter = 0;
+        int rowcounter = 1; //Else, we loose our header here!
         for (ObservableList list_entry : data) {
             Row row_to_add = sheet1.createRow(rowcounter);
             rowcounter++;
