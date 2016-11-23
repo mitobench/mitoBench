@@ -22,12 +22,12 @@ import java.util.List;
 /**
  * Created by neukamm on 16.11.16.
  */
-public class FileMenu{
+public class FileMenu {
 
     private Menu menuFile;
     private TableController tableManager;
 
-    public FileMenu(TableController tableManager)throws IOException{
+    public FileMenu(TableController tableManager) throws IOException {
         this.menuFile = new Menu("File");
         this.tableManager = tableManager;
         addSubMenus();
@@ -35,7 +35,7 @@ public class FileMenu{
     }
 
 
-    private void addSubMenus() throws IOException{
+    private void addSubMenus() throws IOException {
 
 
 
@@ -49,72 +49,61 @@ public class FileMenu{
             public void handle(ActionEvent t) {
                 ImportDialogue importDialogue = new ImportDialogue();
                 importDialogue.start(new Stage());
-                try{
-                    // read file, parse to table
-                    GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputCSVFile().getPath());
-                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                    tableManager.updateTable(data_map);
-                    //tableManager.populateTable();
-                    // populateTable(tableManager, importDialogue.getInputCSVFile(), false);
 
 
-
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-
-            }
-        });
+                if (importDialogue.getInputFile().getPath() != null) {
+                    String absolutePath = importDialogue.getInputFile().getAbsolutePath();
 
 
+                    //Input is FastA
+                    if (absolutePath.endsWith(".fasta") | absolutePath.endsWith("*.fas") | absolutePath.endsWith("*.fa")) {
 
-        MenuItem importMultiFasta = new MenuItem("Import MultiFastA file");
-        importMultiFasta.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
 
-                try {
-
-                    ImportDialogue importDialogue = new ImportDialogue();
-                    importDialogue.start(new Stage());
-                    // read file, parse to table
-
-                    if(importDialogue.getInputCSVFile().getPath() != null){
                         MultiFastAInput multiFastAInput = null;
                         try {
-                            multiFastAInput = new MultiFastAInput(importDialogue.getInputCSVFile().getPath());
+                            try {
+                                multiFastAInput = new MultiFastAInput(importDialogue.getInputFile().getPath());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } catch (FastAException e) {
                             e.printStackTrace();
                         }
                         HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
                         tableManager.updateTable(input_multifasta);
+
+
                     }
 
-                } catch (IOException e){
-                    System.out.println("IOException " + e.getMessage());
+                    //Input is HSD Format
+                    if (absolutePath.endsWith(".hsd")) {
+                        try {
+                            HSDInput hsdInputParser = new HSDInput(importDialogue.getInputFile().getPath());
+                            HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
+                            tableManager.updateTable(data_map);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //Input is Generic Format
+
+                    if (absolutePath.endsWith("*.tsv")) {
+                        try {
+                            GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputFile().getPath());
+                            HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
+                            tableManager.updateTable(data_map);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
                 }
             }
         });
 
-
-
-        MenuItem hsdImport = new MenuItem("Import HSD file");
-        hsdImport.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                ImportDialogue importDialogue = new ImportDialogue();
-                importDialogue.start(new Stage());
-                try{
-                    // read file, parse to table
-                    HSDInput hsdInputParser = new HSDInput(importDialogue.getInputCSVFile().getPath());
-                    HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
-                    tableManager.updateTable(data_map);
-
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
+        
 
         /*
                         EXPORT DIALOGUE
@@ -128,7 +117,7 @@ public class FileMenu{
                 exportDialogue.start(new Stage());
                 String outFileDB = exportDialogue.getOutFile();
 
-                try{
+                try {
                     CSVWriter csvWriter = new CSVWriter(tableManager);
                     csvWriter.writeData(outFileDB);
                 } catch (Exception e) {
@@ -145,7 +134,7 @@ public class FileMenu{
                 exportDialogue.start(new Stage());
                 String outFileDB = exportDialogue.getOutFile();
 
-                try{
+                try {
                     ExcelWriter excelwriter = new ExcelWriter(tableManager);
                     excelwriter.writeData(outFileDB);
                 } catch (Exception e) {
@@ -169,11 +158,13 @@ public class FileMenu{
             }
         });
 
-        menuFile.getItems().addAll(importFile,importMultiFasta, hsdImport, exportFile, exporttoXLS, new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, exportFile, exporttoXLS, new SeparatorMenuItem(), exit);
     }
 
 
     public Menu getMenuFile() {
         return menuFile;
     }
+
+
 }

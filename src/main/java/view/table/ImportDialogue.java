@@ -16,7 +16,7 @@ public class ImportDialogue extends Application {
 
     private FileChooser fileChooser;
     private Stage primaryStage;
-    private File inputCSVFile;
+    private File inputFile;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -28,17 +28,23 @@ public class ImportDialogue extends Application {
         this.primaryStage = stage;
 
         fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
+        configureFileChooser(fileChooser);
         File file = fileChooser.showOpenDialog(primaryStage);
         if (file != null) {
-            inputCSVFile = file;
+            inputFile = file;
         }
-
-
-
     }
 
-    public File getInputCSVFile() {
-        return inputCSVFile;
+    private static void configureFileChooser(final FileChooser fileChooser) {
+        fileChooser.setTitle("Import your file");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Multi-FastA Input (*.fa, *.fasta, *.fas)", "*.fasta", "*.fa", "*.fas"),
+                new FileChooser.ExtensionFilter("Haplogrep 2 HSD Format (*.hsd)", "*.hsd"),
+                new FileChooser.ExtensionFilter("Generic Input Format (*.tsv)", "*.tsv")
+        );
+    }
+
+    public File getInputFile() {
+        return inputFile;
     }
 }
