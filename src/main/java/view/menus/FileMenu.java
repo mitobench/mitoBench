@@ -1,5 +1,6 @@
 package view.menus;
 
+import io.Exceptions.FastAException;
 import io.datastructure.Entry;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
@@ -78,7 +79,12 @@ public class FileMenu{
                     // read file, parse to table
 
                     if(importDialogue.getInputCSVFile().getPath() != null){
-                        MultiFastAInput multiFastAInput = new MultiFastAInput(importDialogue.getInputCSVFile().getPath());
+                        MultiFastAInput multiFastAInput = null;
+                        try {
+                            multiFastAInput = new MultiFastAInput(importDialogue.getInputCSVFile().getPath());
+                        } catch (FastAException e) {
+                            e.printStackTrace();
+                        }
                         HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
                         tableManager.updateTable(input_multifasta);
                     }

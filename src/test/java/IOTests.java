@@ -1,3 +1,4 @@
+import io.Exceptions.FastAException;
 import io.datastructure.Entry;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
@@ -36,7 +37,7 @@ public class IOTests {
 
 
     @Test
-    public void io_test_fasta(){
+    public void io_test_fasta() throws FastAException{
         String path = "./mFasta.fasta";
         setUp(path);
         HashMap output = null;

@@ -1,5 +1,6 @@
 package io.reader;
 
+import io.Exceptions.FastAException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.inputTypes.FastaEntry;
@@ -8,7 +9,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by peltzer on 17/11/2016.
@@ -29,7 +34,7 @@ public class MultiFastAInput implements IInputData {
      * @param fileToParse
      * @throws IOException
      */
-    public MultiFastAInput(String fileToParse) throws IOException {
+    public MultiFastAInput(String fileToParse) throws IOException, FastAException {
         fastaEntrys = new ArrayList<FastaEntry>();
         File f = new File(fileToParse);
         fr = new FileReader(f);
@@ -39,22 +44,37 @@ public class MultiFastAInput implements IInputData {
         String currHeader = "";
         String currSeq = "";
 
+        int init = 0;
+        int line_index = 0;
+
         while ((currentLine = bfr.readLine()) != null) {
             if (!currHeader.equals("") && currentLine.startsWith(">")) {
-                //we have our first entry then...
+                //we have finished our first entry then
                 FastaEntry faentry = new FastaEntry(currSeq, currHeader);
                 fastaEntrys.add(faentry);
                 //And reset everything
                 currSeq = "";
                 currHeader = currentLine.replace(">","");
+                line_index++;
                 continue;
             }
 
-            if (currentLine.startsWith(">")) { //then we have a header
+            if (currentLine.startsWith(">") && (init == 0)) { //then we have a header (first header)
                 currHeader = currentLine.replace(">","");
+                init = -1;
+                line_index++;
                 continue;
             } else { // we have sequence
-                currSeq += currentLine;
+                //Checking string for consistency properly with a regular expression
+
+                line_index++;
+                Pattern p = Pattern.compile("[ACTGNactgn]*\n*");
+                Matcher m = p.matcher(currentLine);
+                if(m.matches()){
+                    currSeq += currentLine;
+                } else {
+                    throw new FastAException("Your FastA entry in line" + line_index + " is incorrect. Please check your input file for correctness.");
+                }
             }
         }
 
