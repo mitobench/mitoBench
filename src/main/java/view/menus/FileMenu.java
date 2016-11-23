@@ -1,5 +1,6 @@
 package view.menus;
 
+import io.ErrorDialogues.FastAErrorDialogue;
 import io.Exceptions.FastAException;
 import io.datastructure.Entry;
 import io.reader.GenericInputParser;
@@ -13,7 +14,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.Stage;
-import view.table.*;
+import view.table.ExportDialogue;
+import view.table.ImportDialogue;
+import view.table.TableController;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -67,7 +70,7 @@ public class FileMenu {
                                 e.printStackTrace();
                             }
                         } catch (FastAException e) {
-                            e.printStackTrace();
+                            FastAErrorDialogue fastAErrorDialogue = new FastAErrorDialogue(e);
                         }
                         HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
                         tableManager.updateTable(input_multifasta);
