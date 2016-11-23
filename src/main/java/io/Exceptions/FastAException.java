@@ -7,7 +7,7 @@ package io.Exceptions;
 /**
  * Created by peltzer on 22/11/2016.
  */
-public class FastAException extends Exception {
+public class FastAException extends Exception implements IMitoException {
     public FastAException() {
         super();
     }
@@ -22,6 +22,10 @@ public class FastAException extends Exception {
 
     public FastAException(Throwable cause) {
         super(cause);
+    }
 
+    @Override
+    public String getType() {
+        return "FastA";
     }
 }
