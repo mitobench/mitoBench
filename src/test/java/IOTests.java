@@ -1,4 +1,5 @@
 import io.Exceptions.FastAException;
+import io.Exceptions.HSDException;
 import io.datastructure.Entry;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
@@ -24,7 +25,7 @@ public class IOTests {
     private BufferedReader bfr;
 
 
-    private void setUp(String path){
+    private void setUp(String path) {
         URL url = getClass().getResource(path);
         try {
             is = url.openStream();
@@ -36,8 +37,13 @@ public class IOTests {
     }
 
 
+    /**
+     * FastA reader tests
+     * @throws FastAException
+     */
+
     @Test
-    public void io_test_fasta() throws FastAException{
+    public void io_test_fasta() throws FastAException {
         String path = "./mFasta.fasta";
         setUp(path);
         HashMap output = null;
@@ -48,13 +54,44 @@ public class IOTests {
             e.printStackTrace();
         }
 
-        //Data from Pagani et al 2016, 100 Mitochondrial genomes from Modern Egyptians
-        assertEquals(output.size(), 100);
-        assertEquals(output.containsKey("egypt.14AJ129"), true);
+        //Data from Pagani et al 2016, 100 Mitochondrial genomes from Modern Egyptians (we just use 2 for testing here...)
+        assertEquals(output.size(), 2);
+        assertEquals(output.containsKey("egypt.10AJ137"), true);
     }
 
+    @Test(expected = FastAException.class)
+    public void io_test_fasta_lengths() throws FastAException {
+        String path = "./fasta_incorrect_sequence_lengths.fasta";
+        setUp(path);
+        HashMap output = null;
+        try {
+            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath());
+            output = multiFastAInput.getCorrespondingData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test(expected = FastAException.class)
+    public void io_test_fasta_incorrect() throws FastAException {
+        String path = "./fasta_incorrect_letters.fasta";
+        setUp(path);
+        HashMap output = null;
+        try {
+            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath());
+            output = multiFastAInput.getCorrespondingData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Generic Input tests
+     */
+
     @Test
-    public void io_test_genericInput(){
+    public void io_test_genericInput() {
         String path = "./genericinput.tsv";
         setUp(path);
 
@@ -80,19 +117,27 @@ public class IOTests {
         assertEquals("-3400", entry_c14.getData());
 
 
-
-
     }
 
+    /**
+     * Haplogrep 2 Format reader Tests
+     *
+     */
+
     @Test
-    public void io_test_hsd(){
+    public void io_test_hsd() {
         String path = "./haplotest.hsd";
         setUp(path);
 
         HashMap output = null;
 
         try {
-            HSDInput hsdInput = new HSDInput(getClass().getResource(path).getPath());
+            HSDInput hsdInput = null;
+            try {
+                hsdInput = new HSDInput(getClass().getResource(path).getPath());
+            } catch (HSDException e) {
+                e.printStackTrace();
+            }
             output = hsdInput.getCorrespondingData();
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,13 +152,18 @@ public class IOTests {
         assertEquals(entry.getType(), "String");
         assertEquals(entry.getIdentifier(), "Haplogroup");
         assertEquals(entry.getData(), "R0a2f");
-
-
-
     }
 
+    @Test(expected = HSDException.class)
+    public void io_test_hsd_incorrect() throws HSDException{
+        String path = "./hsd_incorrect.hsd";
+        setUp(path);
 
-
-
-
+        HashMap output = null;
+        try {
+            HSDInput hsdInput = new HSDInput(getClass().getResource(path).getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

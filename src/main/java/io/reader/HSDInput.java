@@ -1,5 +1,6 @@
 package io.reader;
 
+import io.Exceptions.HSDException;
 import io.IInputData;
 import io.datastructure.Entry;
 
@@ -16,17 +17,26 @@ import java.util.List;
 public class HSDInput implements IInputData {
     private HashMap<String, List<Entry>> map;
 
-    public HSDInput(String filetoParse) throws IOException {
+    public HSDInput(String filetoParse) throws IOException, HSDException {
         FileReader fr = new FileReader(new File(filetoParse));
         BufferedReader bfr = new BufferedReader(fr);
         map = new HashMap<>();
 
         String currline = "";
+        int line_counter = 0;
+        boolean init = true;
+
         while ((currline = bfr.readLine()) != null) {
-            if(currline.startsWith("SampleID")){
+            line_counter++;
+            if(currline.startsWith("SampleID") && init){
+                init = false;
                 continue; //Skip header
             } else {
+                if(init){
+                    throw new HSDException("This is probably not a HSD input format file, as the header is missing.");
+                }
                 String[] splitGroup = currline.split("\t");
+
                 String id = splitGroup[0];
                 String group = splitGroup[2];
                 Entry entry =  new Entry("Haplogroup", "String", group);

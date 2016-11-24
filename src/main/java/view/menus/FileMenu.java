@@ -1,7 +1,9 @@
 package view.menus;
 
 import io.ErrorDialogues.FastAErrorDialogue;
+import io.ErrorDialogues.HSDErrorDialogue;
 import io.Exceptions.FastAException;
+import io.Exceptions.HSDException;
 import io.datastructure.Entry;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
@@ -81,7 +83,12 @@ public class FileMenu {
                     //Input is HSD Format
                     if (absolutePath.endsWith(".hsd")) {
                         try {
-                            HSDInput hsdInputParser = new HSDInput(importDialogue.getInputFile().getPath());
+                            HSDInput hsdInputParser = null;
+                            try {
+                                hsdInputParser = new HSDInput(importDialogue.getInputFile().getPath());
+                            } catch (HSDException e) {
+                                HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
+                            }
                             HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
                             tableManager.updateTable(data_map);
 
