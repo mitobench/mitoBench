@@ -85,6 +85,19 @@ public class IOTests {
         }
     }
 
+    @Test(expected = FastAException.class)
+    public void io_test_fasta_incorrect_lenghts_second_case() throws FastAException {
+        String path = "./fasta_incorrect_sequence_lengths_multiple.fasta";
+        setUp(path);
+        HashMap output = null;
+        try {
+            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath());
+            output = multiFastAInput.getCorrespondingData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Generic Input tests
