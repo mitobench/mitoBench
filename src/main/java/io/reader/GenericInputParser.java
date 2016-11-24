@@ -28,11 +28,11 @@ public class GenericInputParser implements IInputData {
 
         while ((currline = bfr.readLine()) != null) {
             //Parse header, two line header !!
-            if (currline.startsWith("##\t")) {
-                headergroup = currline.split("\t");
+            if (currline.startsWith("##")) {
+                headergroup = currline.replace("##","").split("\t");
                 continue;
-            } else if (currline.startsWith("#\t")) {
-                headertype = currline.split("\t");
+            } else if (currline.startsWith("#")) {
+                headertype = currline.replace("#","").split("\t");
                 continue;
             } else {
                 String[] splitLine = currline.split("\t");
@@ -40,7 +40,7 @@ public class GenericInputParser implements IInputData {
                 List<Entry> entries = new ArrayList<>();
 
                 for (int i = 0; i < splitLine.length; i++) {
-                    Entry e = new Entry(headergroup[i+1], headertype[i+1], splitLine[i]);
+                    Entry e = new Entry(headergroup[i], headertype[i], splitLine[i]);
                     entries.add(e);
                 }
                 //Now add with ID to hashmap
