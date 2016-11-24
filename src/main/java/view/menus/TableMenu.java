@@ -93,6 +93,7 @@ public class TableMenu {
                     tableController.getData().removeAll(tableController.getData());
                     // clean table view
                     tableController.getTable().getItems().removeAll(tableController.getTable().getItems());
+                    tableController.getDataTable().getMtStorage().getData().clear();
 
                 } catch (Exception e){
                     e.printStackTrace();

@@ -1,15 +1,18 @@
 package view.table;
 
 import io.datastructure.Entry;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -244,8 +247,8 @@ public class TableController {
         }
     }
 
-    public int getHaploColIndex(){
-        return column_to_index.get("Haplogroup");
+    public int getColIndex(String key){
+        return column_to_index.get(key);
     }
 
 
@@ -268,10 +271,15 @@ public class TableController {
         for (Object row : tableView.getItems()) {
             ObservableList<String> values = FXCollections.observableArrayList();
             for (TableColumn column : columns) {
-                values.add(
-                        (String) column.
-                                getCellObservableValue(row).
-                                getValue());
+                String val = (String) column.getCellObservableValue(row).getValue();
+                if(column.getText().equals("MTSequence")){
+                    values.add(
+                            dataTable.getMtStorage().getData().get(val).get(0));
+                } else {
+                    values.add(
+                            (String) column.getCellObservableValue(row).getValue());
+                }
+
             }
             all.add(values);
         }
@@ -279,5 +287,11 @@ public class TableController {
         return all;
 
 
+    }
+
+
+
+    public DataTable getDataTable() {
+        return dataTable;
     }
 }

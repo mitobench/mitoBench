@@ -47,7 +47,7 @@ public class CSVWriter implements IOutputData {
             writer.write(header);
 
             // write data
-            for (ObservableList entry : data) {
+            for (ObservableList entry :  tableController.getViewDataCurrent()) {
                 String text = "";
                 for(int i = 0; i < entry.size(); i++){
                     if(i == entry.size()-1){

@@ -1,8 +1,7 @@
 package view.table;
 
 import io.datastructure.Entry;
-
-import java.lang.reflect.Array;
+import static java.util.Arrays.asList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -15,9 +14,11 @@ public class DataTable {
     // key = column name
     // Array = data od this col     --> has to be array to ensure the order of the entries
     HashMap<String, String[]> data;
-
+    MTStorage mtStorage;
     public DataTable(){
+
         data = new HashMap<>();
+        mtStorage = new MTStorage();
     }
 
 
@@ -62,8 +63,10 @@ public class DataTable {
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
-
-                    columnEntries[rowPosition] = (String)entry.getData().toString().substring(0,5)+"...";
+                    String mtSeq = (String)entry.getData().toString();
+                    String mtseq_short = mtSeq.substring(0,5)+"...";
+                    columnEntries[getRowPosition(key)] = mtseq_short;
+                    mtStorage.addData(mtseq_short, asList(mtSeq));
                 } else {
                     columnEntries[rowPosition] = (String)entry.getData();
                 }
@@ -79,7 +82,10 @@ public class DataTable {
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
-                    columnEntries[getRowPosition(key)] = (String)entry.getData().toString().substring(0,5)+"...";
+                    String mtSeq = (String)entry.getData().toString();
+                    String mtseq_short = mtSeq.substring(0,5)+"...";
+                    columnEntries[getRowPosition(key)] = mtseq_short;
+                    mtStorage.addData(mtseq_short, asList(mtSeq));
                 } else {
                     columnEntries[getRowPosition(key)] = (String)entry.getData();
                 }
@@ -94,7 +100,7 @@ public class DataTable {
      * @param col
      * @return
      */
-    private boolean columnExists(String col){
+    public boolean columnExists(String col){
         if(data.get(col)!=null){
             return true;
         } else {
@@ -182,4 +188,7 @@ public class DataTable {
         return data;
     }
 
+    public MTStorage getMtStorage() {
+        return mtStorage;
+    }
 }

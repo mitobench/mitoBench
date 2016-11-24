@@ -55,7 +55,7 @@ public class GraphicsMenu {
                     TableSelectionFilter tableFilter = new TableSelectionFilter();
 
                     if (seletcion_haplogroups.length !=0) {
-                        tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getHaploColIndex());
+                        tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
                         barPlotHaplo.addData("data selection", tableController.getDataHist());
 
                     }

@@ -25,8 +25,6 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
-import sun.reflect.generics.tree.Tree;
-import view.charts.BarPlotHaplo;
 import view.table.TableController;
 import view.table.TableSelectionFilter;
 
@@ -151,7 +149,7 @@ public class TreeHaploController {
                 TableSelectionFilter tableFilter = new TableSelectionFilter();
 
                 if (seletcion_haplogroups.length !=0) {
-                    tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getHaploColIndex());
+                    tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
                 }
 
             }
@@ -189,7 +187,7 @@ public class TreeHaploController {
                     TableSelectionFilter tableFilter = new TableSelectionFilter();
 
                     if (seletcion_haplogroups.length !=0) {
-                        tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getHaploColIndex());
+                        tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
                     }
                 }
             }
