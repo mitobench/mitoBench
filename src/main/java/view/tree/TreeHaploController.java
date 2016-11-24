@@ -128,7 +128,7 @@ public class TreeHaploController {
                 }
                 // if selection has size zero --> take all haplogroups
                 if(seletcion_haplogroups.length == 0){
-                    TableColumn haplo_col = tableManager.getTableColumnByName(tableManager.getTable(), "Haplogroup");
+                    TableColumn haplo_col = tableManager.getTableColumnByName("Haplogroup");
                     List<String> columnData = new ArrayList<>();
                     for (Object item : tableManager.getTable().getItems()) {
                         columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
