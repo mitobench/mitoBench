@@ -2,6 +2,7 @@ package view.charts;
 
 import javafx.scene.chart.*;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
 import java.util.HashMap;
 
@@ -24,12 +25,28 @@ public abstract class ABarPlot {
         bc.setTitle(title);
         xAxis.setLabel(xlabel);
         yAxis.setLabel(ylabel);
-        yAxis.setTickUnit(3);
+        //yAxis.setTickUnit(3);
+        yAxis.setTickLabelFormatter(new StringConverter<Number>() {
+            @Override public String toString(Number object) {
+                if(object.intValue()!=object.doubleValue())
+                    return "";
+
+                return ""+(object.intValue());
+            }
+
+            @Override public Number fromString(String string) {
+                Number val = Double.parseDouble(string);
+                return val.intValue();
+            }
+        });
+
+
         yAxis.setMinorTickVisible(false);
 
         bc.prefWidthProperty().bind(scene.widthProperty());
 
     }
+
 
 
     public abstract void addData(HashMap<String, Integer> dataNew);
