@@ -1,19 +1,10 @@
 package view.charts;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Bounds;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.util.StringConverter;
 
 import java.util.HashMap;
-import java.util.List;
+
 
 /**
  * Created by neukamm on 09.11.16.

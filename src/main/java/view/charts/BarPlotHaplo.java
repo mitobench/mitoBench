@@ -42,24 +42,19 @@ public class BarPlotHaplo extends ABarPlot {
         series.setName("");
 
         for (String haplo : data.keySet()) {
-            series.getData().add(new XYChart.Data(haplo, data.get(haplo)));
+            final XYChart.Data<String, Number> d = new XYChart.Data(haplo, data.get(haplo));
+            d.nodeProperty().addListener(new ChangeListener<Node>() {
+                @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+                    if (node != null) {
+                        //setNodeStyle(data);
+                        displayLabelForData(d);
+                    }
+                }
+            });
+            series.getData().add(d);
         }
 
         this.bc.getData().clear();
-
-//        for (String haplo : data.keySet()) {
-//            XYChart.Data<String, Integer> d = new XYChart.Data(haplo, data.get(haplo));
-//            d.nodeProperty().addListener(new ChangeListener<Node>() {
-//                @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-//                    if (node != null) {
-//                        displayLabelForData(d);
-//                    }
-//                }
-//            });
-//
-//            series.getData().add(d);
-//        }
-
         this.bc.getData().add(series);
 
     }
@@ -156,9 +151,8 @@ public class BarPlotHaplo extends ABarPlot {
             };
 
 
-
     /** places a text label with a bar's value above a bar node for a given XYChart.Data */
-    private void displayLabelForData(XYChart.Data<String, Integer> data) {
+    private void displayLabelForData(XYChart.Data<String, Number> data) {
         final Node node = data.getNode();
         final Text dataText = new Text(data.getYValue() + "");
         node.parentProperty().addListener(new ChangeListener<Parent>() {
@@ -168,7 +162,22 @@ public class BarPlotHaplo extends ABarPlot {
             }
         });
 
+        node.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
+            @Override public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+                dataText.setLayoutX(
+                        Math.round(
+                                bounds.getMinX() + bounds.getWidth() / 2 - dataText.prefWidth(-1) / 2
+                        )
+                );
+                dataText.setLayoutY(
+                        Math.round(
+                                bounds.getMinY() - dataText.prefHeight(-1) * 0.5
+                        )
+                );
+            }
+        });
     }
+
 
 }
 
