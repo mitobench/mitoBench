@@ -5,6 +5,10 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import view.charts.BarPlotHaplo;
 import view.table.TableController;
 import view.table.TableSelectionFilter;
@@ -43,7 +47,7 @@ public class GraphicsMenu {
             public void handle(ActionEvent t) {
                 try {
 
-                    TableColumn haplo_col = tableController.getTableColumnByName(tableController.getTable(), "Haplogroup");
+                    TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
                     List<String> columnData = new ArrayList<>();
                     for (Object item : tableController.getTable().getItems()) {
                         columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
@@ -54,14 +58,13 @@ public class GraphicsMenu {
                     // parse selection to tablefilter
                     TableSelectionFilter tableFilter = new TableSelectionFilter();
 
+                    barPlotHaplo.clearData();
+
                     if (seletcion_haplogroups.length !=0) {
                         tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
-                        barPlotHaplo.addData("data selection", tableController.getDataHist());
+                        barPlotHaplo.addData(tableController.getDataHist());
 
                     }
-
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

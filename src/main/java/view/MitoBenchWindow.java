@@ -107,10 +107,10 @@ public class MitoBenchWindow extends Application{
         vbox.prefHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty());
 
-        barPlotHaplo = new BarPlotHaplo("Haplogroups Summary \n(Own dataset)", "Haplogroup", "Count", vbox);
+        barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Haplogroup", "Frequency", vbox);
         barPlotHaplo.setDragAndMove();
 
-        final Pane group = new Pane(barPlotHaplo.getBarChart());
+        Pane group = new Pane(barPlotHaplo.getBarChart());
         StackPane zoomPane = barPlotHaplo.createZoomPane(group);
 
         zoomPane.prefHeightProperty().bind(scene.heightProperty());

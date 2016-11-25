@@ -195,8 +195,19 @@ public class TableController {
 
 
 
+
+    /*
+
+
+                Getter
+
+
+
+     */
+
+
     /**
-     * count occurrences of haplotypes within selected data
+     * This method counts occurrences of haplotypes within selected data
      * return as hash map to plot it easily
      *
      * @return
@@ -220,39 +231,23 @@ public class TableController {
     }
 
 
-
-    public TableColumn getTableColumnByName(TableView<ObservableList> tableView, String name) {
-        for (TableColumn col : tableView.getColumns())
+    /**
+     * This method returns a table column of specific column name
+     *
+     * @param name
+     * @return
+     */
+    public TableColumn getTableColumnByName(String name) {
+        for (TableColumn col : table.getColumns())
             if (col.getText().equals(name)) return col ;
         return null ;
     }
 
-    public TableView getTable() {
-        return table;
-    }
 
-    public Label getLabel() {
-        return label;
-    }
-
-    public ObservableList<ObservableList> getData() {
-        return data;
-    }
-
-    private void setColumns_to_index(){
-        int i = 0;
-        for(TableColumn col : this.table.getColumns()){
-            column_to_index.put(col.getText(),i);
-            i++;
-        }
-    }
-
-    public int getColIndex(String key){
-        return column_to_index.get(key);
-    }
-
-
-
+    /**
+     * This method returns all column names displayed in current table view
+     * @return
+     */
     public List<String> getCurrentColumnNames(){
         List<String> names = new ArrayList<String>();
 
@@ -261,6 +256,13 @@ public class TableController {
         return names;
     }
 
+    /**
+     *
+     * This method parses the current table view to a data - table representation (ObservableList<ObservableList<String>>)
+     * which can be used for output purposes for example
+     *
+     * @return
+     */
     public ObservableList<ObservableList<String>> getViewDataCurrent() {
 
         TableView tableView = this.getTable();
@@ -289,9 +291,56 @@ public class TableController {
 
     }
 
+    /**
+     * get column index of column based on column header
+     *
+     * @param key
+     * @return
+     */
 
 
-    public DataTable getDataTable() {
-        return dataTable;
+    public int getColIndex(String key){
+        return column_to_index.get(key);
     }
+
+    public TableView getTable() {
+        return table;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    public ObservableList<ObservableList> getData() {
+        return data;
+    }
+
+    public DataTable getDataTable() { return dataTable; }
+
+
+
+
+    /*
+
+
+                Setter
+
+
+
+     */
+
+
+    /**
+     *  save to each column the index (column number)
+     */
+
+    private void setColumns_to_index(){
+        int i = 0;
+        for(TableColumn col : this.table.getColumns()){
+            column_to_index.put(col.getText(),i);
+            i++;
+        }
+    }
+
+
 }
