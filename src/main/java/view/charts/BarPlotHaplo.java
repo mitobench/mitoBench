@@ -37,7 +37,6 @@ public class BarPlotHaplo extends ABarPlot {
     @Override
     public void addData(HashMap<String, Integer> data) {
 
-
         series = new XYChart.Series();
         series.setName("");
 
@@ -53,6 +52,7 @@ public class BarPlotHaplo extends ABarPlot {
             });
             series.getData().add(d);
         }
+
 
         this.bc.getData().clear();
         this.bc.getData().add(series);
@@ -154,11 +154,14 @@ public class BarPlotHaplo extends ABarPlot {
     /** places a text label with a bar's value above a bar node for a given XYChart.Data */
     private void displayLabelForData(XYChart.Data<String, Number> data) {
         final Node node = data.getNode();
-        final Text dataText = new Text(data.getYValue() + "");
+        final Text dataText = new Text(String.valueOf(data.getYValue()));
         node.parentProperty().addListener(new ChangeListener<Parent>() {
             @Override public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
                 Group parentGroup = (Group) parent;
-                parentGroup.getChildren().add(dataText);
+                if(parent!=null){
+                    parentGroup.getChildren().add(dataText);
+                }
+
             }
         });
 
