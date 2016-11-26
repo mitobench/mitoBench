@@ -46,9 +46,6 @@ public class GenericInputParser implements IInputData {
                 //Now add with ID to hashmap
                 map.put(splitLine[0], entries);
 
-                //##ID  C14 C14low  C14high
-                //##String  Integer Integer Integer
-                //JK2188 < entry 1 > < entry 2 > < entry 3> < entry 4> < entry 5>
 
             }
         }
