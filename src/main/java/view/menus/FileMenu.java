@@ -1,10 +1,13 @@
 package view.menus;
 
+import io.ErrorDialogues.ARPErrorDialogue;
 import io.ErrorDialogues.FastAErrorDialogue;
 import io.ErrorDialogues.HSDErrorDialogue;
+import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
 import io.datastructure.Entry;
+import io.reader.ARPReader;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
@@ -107,7 +110,21 @@ public class FileMenu {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    }
 
+                    //Input is in ARP Format
+
+                    if(absolutePath.endsWith(".arp")){
+                        ARPReader arpreader = null;
+                        try {
+                            arpreader = new ARPReader(importDialogue.getInputFile().getPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ARPException e) {
+                            ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
+                        }
+                        HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
+                        tableManager.updateTable(data_map);
                     }
                 }
             }
