@@ -1,6 +1,8 @@
+import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
 import io.datastructure.Entry;
+import io.reader.ARPReader;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
@@ -175,6 +177,53 @@ public class IOTests {
         HashMap output = null;
         try {
             HSDInput hsdInput = new HSDInput(getClass().getResource(path).getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * ARP Format reader test
+     */
+
+    @Test
+    public void io_test_arp(){
+        String path = "./arp_test_correct.arp";
+        setUp(path);
+
+        HashMap output = null;
+
+        try {
+            ARPReader arpinput = null;
+            try {
+                arpinput = new ARPReader(getClass().getResource(path).getPath());
+            } catch (ARPException e) {
+                e.printStackTrace();
+            }
+            output = arpinput.getCorrespondingData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Data from our own publication... to be cited here!
+        assertEquals(5, output.size());
+
+        ArrayList cast = (ArrayList) output.get("test1"); //needs cast here
+        Entry entry = (Entry) cast.get(0);
+
+        assertEquals(entry.getType(), "String");
+        assertEquals(entry.getIdentifier(), "MTSequence");
+    }
+
+    @Test(expected = ARPException.class)
+    public void io_test_arp_incorrect() throws ARPException{
+        String path = "./arp_test_incorrect.arp";
+        setUp(path);
+
+        HashMap output = null;
+        try {
+            ARPReader arpReader = new ARPReader(getClass().getResource(path).getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }

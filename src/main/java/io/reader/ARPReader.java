@@ -28,7 +28,7 @@ public class ARPReader implements IInputData {
             if(init){
                 init = false;
                 //check if format is indeed ARP format
-                if(currline.contains("[Profile]")){
+                if(currline.startsWith("[Profile]")){
                     continue;
                 } else {
                     throw new ARPException("This is not in ARP Format!");
