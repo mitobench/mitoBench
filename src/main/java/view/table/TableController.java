@@ -35,6 +35,7 @@ public class TableController {
     private DataTable dataTable;
     private HashMap<String, Integer> column_to_index;
     private TableController controller;
+    private GroupController groupController;
 
 
 
@@ -62,6 +63,8 @@ public class TableController {
         column_to_index = new HashMap<String, Integer>();
 
         this.controller = this;
+
+        groupController = new GroupController();
 
     }
 
@@ -372,7 +375,6 @@ public class TableController {
 
     private void setContextMenu(){
 
-        GroupController groupController = new GroupController();
         final ContextMenu menu = new ContextMenu();
 
         final MenuItem addNewGropuItem = new MenuItem("Create new group");
