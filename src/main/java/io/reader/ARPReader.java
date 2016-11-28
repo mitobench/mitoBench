@@ -55,7 +55,9 @@ public class ARPReader implements IInputData {
                     String mtseq = dataSplit[2];
                     List<Entry> entries = new ArrayList<>();
                     Entry e = new Entry("MTSequence", "String", mtseq);
+                    Entry e_group = new Entry("Grouping", "String", currGroup);
                     entries.add(e);
+                    entries.add(e_group);
                     map.put(id, entries);
                 }
             }
