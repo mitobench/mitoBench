@@ -40,6 +40,7 @@ public class ImportDialogue extends Application {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Multi-FastA Input (*.fa, *.fasta, *.fas)", "*.fasta", "*.fa", "*.fas"),
                 new FileChooser.ExtensionFilter("Haplogrep 2 HSD Format (*.hsd)", "*.hsd"),
+                new FileChooser.ExtensionFilter("ARP Arlequin Input Format (*.arp)", "*.arp"),
                 new FileChooser.ExtensionFilter("Generic Input Format (*.tsv)", "*.tsv")
         );
     }
