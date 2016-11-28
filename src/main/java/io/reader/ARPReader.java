@@ -66,6 +66,6 @@ public class ARPReader implements IInputData {
 
     @Override
     public HashMap<String, List<Entry>> getCorrespondingData() {
-        return null;
+        return this.map;
     }
 }
