@@ -7,11 +7,11 @@ import java.util.Set;
 /**
  * Created by neukamm on 25.11.2016.
  */
-public class GroupHandler {
+public class GroupController {
 
     HashMap<String, Group> allGroups = new HashMap<>();
 
-    public GroupHandler(){
+    public GroupController(){
 
     }
 
@@ -33,10 +33,19 @@ public class GroupHandler {
         allGroups.get(groupname).removeElement(element);
     }
 
-    public void removeElements(ObservableList<ObservableList> elements, String groupname){
-        allGroups.get(groupname).removeElements(elements);
+    public void removeElements(ObservableList<ObservableList> elements, int groupingColIndex){
+
+        for(int i = 0; i < elements.size(); i++){
+            allGroups.get(elements.get(i).get(groupingColIndex)).removeElement(elements.get(i));
+        }
+
     }
+
+
     public Set<String> getGroupnames(){
+
         return allGroups.keySet();
     }
+
+
 }

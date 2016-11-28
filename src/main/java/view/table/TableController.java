@@ -1,18 +1,20 @@
 package view.table;
 
 import io.datastructure.Entry;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
+import view.groups.AddToGroupDialog;
+import view.groups.CreateGroupDialog;
+import view.groups.GroupController;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,7 @@ public class TableController {
 
     private DataTable dataTable;
     private HashMap<String, Integer> column_to_index;
+    private TableController controller;
 
 
 
@@ -57,6 +60,8 @@ public class TableController {
 
         dataTable = new DataTable();
         column_to_index = new HashMap<String, Integer>();
+
+        this.controller = this;
 
     }
 
@@ -100,6 +105,10 @@ public class TableController {
         table.getItems().addAll(data);
 
         setColumns_to_index();
+        setContextMenu();
+
+
+
     }
 
 
@@ -194,6 +203,25 @@ public class TableController {
     }
 
 
+
+    /**
+     * create new table entry for each selected item to easily update tableview
+     * @return
+     */
+    public HashMap<String, List<Entry>> createNewEntryList(String gName){
+
+        HashMap<String, List<Entry>> entries = new HashMap<>();
+
+        for(int i = 0; i < table.getSelectionModel().getSelectedItems().size(); i++){
+            String rowName = table.getSelectionModel().getSelectedItems().get(i).get(getColIndex("ID")).toString();
+            List<Entry> eList = new ArrayList<>();
+            Entry e = new Entry("Grouping", "String", gName);
+            eList.add(e);
+            entries.put(rowName, eList);
+        }
+
+        return entries;
+    }
 
 
     /*
@@ -340,6 +368,45 @@ public class TableController {
             column_to_index.put(col.getText(),i);
             i++;
         }
+    }
+
+    private void setContextMenu(){
+
+        GroupController groupController = new GroupController();
+        final ContextMenu menu = new ContextMenu();
+
+        final MenuItem addNewGropuItem = new MenuItem("Create new group");
+        addNewGropuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                CreateGroupDialog createGroupDialog =
+                        new CreateGroupDialog(groupController, table, controller);
+            }
+        });
+
+        final MenuItem addAllSelectedItem
+                = new MenuItem("Add to group");
+        addAllSelectedItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                AddToGroupDialog addToGroupDialog =
+                        new AddToGroupDialog(groupController, table.getSelectionModel().getSelectedItems(), controller);
+            }
+        });
+
+
+//        final MenuItem deleteAllSelectedItem
+//                = new MenuItem("Remove selected item(s)");
+//        deleteAllSelectedItem.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                groupController.removeElements(table.getSelectionModel().getSelectedItems(), getColIndex("Grouping"));
+//            }
+//        });
+//
+//        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, deleteAllSelectedItem);
+        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
+        table.setContextMenu(menu);
     }
 
 
