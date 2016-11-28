@@ -7,9 +7,7 @@ import io.datastructure.Entry;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by peltzer on 24/11/2016.
@@ -26,9 +24,7 @@ public class ARPReader implements IInputData {
         int count = 0;
         boolean init = true;
         String currGroup = "";
-
-
-        while ((currline = bfr.readLine()) != null) {
+            while ((currline = bfr.readLine()) != null) {
             if(init){
                 init = false;
                 //check if format is indeed ARP format
@@ -48,7 +44,10 @@ public class ARPReader implements IInputData {
                 if(currline.contains("[[Structure]]")){
                     break; //Then we are done with actual data, grouping is parsed differently by us...
                 }
-                if(currline.contains("SampleSize=") | currline.contains("SampleData") | currline.isEmpty() | currline.startsWith("}")) {
+                if(currline.isEmpty() | currline.startsWith("}") |  currline.startsWith("SampleSize=") |
+                   currline.startsWith("SampleData") | currline.startsWith("Title") | currline.startsWith("NbSamples") |
+                   currline.startsWith("DataType") | currline.startsWith("LocusSeparator") | currline.startsWith("MissingData") |
+                   currline.startsWith("GenotypicData") | currline.startsWith("[Data]") | currline.startsWith("[[Samples]]")) {
                     continue;
                 } else {
                     String[] dataSplit = currline.split("\t");
