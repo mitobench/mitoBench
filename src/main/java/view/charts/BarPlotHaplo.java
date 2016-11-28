@@ -12,10 +12,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import org.apache.xmlbeans.impl.xb.xsdschema.WhiteSpaceDocument;
 
 import java.util.HashMap;
 
@@ -25,14 +23,16 @@ import java.util.HashMap;
 public class BarPlotHaplo extends ABarPlot {
 
     private XYChart.Series series;
-    double orgSceneX, orgSceneY;
-    double orgTranslateX, orgTranslateY;
+    private double orgSceneX, orgSceneY;
+    private double orgTranslateX, orgTranslateY;
 
 
     public BarPlotHaplo(String title, String xlabel, String ylabel, VBox scene) {
         super(title, xlabel, ylabel, scene);
         this.bc.setLegendVisible(false);
     }
+
+
 
     @Override
     public void addData(HashMap<String, Integer> data) {
@@ -42,14 +42,14 @@ public class BarPlotHaplo extends ABarPlot {
 
         for (String haplo : data.keySet()) {
             final XYChart.Data<String, Number> d = new XYChart.Data(haplo, data.get(haplo));
-            d.nodeProperty().addListener(new ChangeListener<Node>() {
-                @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-                    if (node != null) {
-                        //setNodeStyle(data);
-                        displayLabelForData(d);
-                    }
-                }
-            });
+//            d.nodeProperty().addListener(new ChangeListener<Node>() {
+//                @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+//                    if (node != null) {
+//                        //setNodeStyle(data);
+//                        displayLabelForData(d);
+//                    }
+//                }
+//            });
             series.getData().add(d);
         }
 

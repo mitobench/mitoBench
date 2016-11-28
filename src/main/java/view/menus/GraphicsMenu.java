@@ -52,6 +52,46 @@ public class GraphicsMenu {
 
 
                     // parse selection to tablefilter
+                    //TableSelectionFilter tableFilter = new TableSelectionFilter();
+
+                    barPlotHaplo.clearData();
+
+                    if (seletcion_haplogroups.length !=0) {
+                        //tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
+                        barPlotHaplo.addData(tableController.getDataHist());
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        /*
+
+                    Plot Hg frequency for each group
+
+         */
+
+        MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group");
+        plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+
+                    TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
+                    TableColumn grouping_col = tableController.getTableColumnByName("Grouping");
+
+                    List<String> columnDataHG = new ArrayList<>();
+                    List<String> columnDataGroup = new ArrayList<>();
+                    for (Object item : tableController.getTable().getItems()) {
+                        columnDataHG.add((String)haplo_col.getCellObservableValue(item).getValue());
+                        columnDataGroup.add((String)grouping_col.getCellObservableValue(item).getValue());
+                    }
+                    String[] seletcion_haplogroups = columnDataHG.toArray(new String[columnDataHG.size()]);
+                    String[] seletcion_groups = columnDataGroup.toArray(new String[columnDataHG.size()]);
+
+
+                    // parse selection to tablefilter
                     TableSelectionFilter tableFilter = new TableSelectionFilter();
 
                     barPlotHaplo.clearData();
@@ -66,6 +106,7 @@ public class GraphicsMenu {
                 }
             }
         });
+
 
         menuGraphics.getItems().addAll(plotHGfreq);
     }

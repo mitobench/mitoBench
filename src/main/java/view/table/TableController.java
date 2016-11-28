@@ -244,9 +244,15 @@ public class TableController {
      */
     public HashMap<String, Integer> getDataHist(){
 
+        ObservableList<ObservableList> data_to_plot;
         HashMap<String, Integer> haplo_to_count = new HashMap<>();
-        for(ObservableList item : this.data){
 
+        if(table.getSelectionModel().getSelectedItems().size() == 0 || table.getSelectionModel().getSelectedItems() == null){
+            data_to_plot = this.data;
+        } else {
+            data_to_plot = table.getSelectionModel().getSelectedItems();
+        }
+        for(ObservableList item : data_to_plot){
 
             String haplogroup = (String)item.get(column_to_index.get("Haplogroup"));
 

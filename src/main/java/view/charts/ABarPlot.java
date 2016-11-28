@@ -1,5 +1,8 @@
 package view.charts;
 
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.chart.*;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
@@ -12,7 +15,7 @@ import java.util.HashMap;
  */
 public abstract class ABarPlot {
 
-    protected BarChart<String, Number> bc;
+    protected BarChartExt<String, Number> bc;
 
 
 
@@ -21,7 +24,8 @@ public abstract class ABarPlot {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         //bc = new BarChart<String, Number>(xAxis, yAxis);
-        bc = new BarChart(xAxis,yAxis);
+        //bc = new BarChart(xAxis,yAxis);
+        bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setTitle(title);
         xAxis.setLabel(xlabel);
         yAxis.setLabel(ylabel);
@@ -56,7 +60,20 @@ public abstract class ABarPlot {
         return bc;
     }
 
-    public void clearData(){this.bc.getData().clear();}
+    public void clearData(){
+
+        this.bc.getData().clear();
+
+        for (XYChart.Series<String, Number> series : bc.getData()) {
+            for (XYChart.Data<String, Number> data : series.getData()) {
+                Node node = data.getNode();
+                Parent parent = node.parentProperty().get();
+                if (parent != null && parent instanceof Group) {
+                    Group group = (Group) parent;
+                    group.getChildren().clear();
+                }
+            }
+        }}
 
 
 
