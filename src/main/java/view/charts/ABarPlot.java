@@ -44,6 +44,7 @@ public abstract class ABarPlot {
         yAxis.setMinorTickVisible(false);
 
         bc.prefWidthProperty().bind(scene.widthProperty());
+        bc.autosize();
 
     }
 

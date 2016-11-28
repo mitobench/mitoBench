@@ -5,10 +5,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import view.charts.BarPlotHaplo;
 import view.table.TableController;
 import view.table.TableSelectionFilter;
@@ -70,8 +66,6 @@ public class GraphicsMenu {
                 }
             }
         });
-
-
 
         menuGraphics.getItems().addAll(plotHGfreq);
     }

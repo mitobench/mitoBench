@@ -43,8 +43,14 @@ public class GroupController {
 
 
     public Set<String> getGroupnames(){
-
         return allGroups.keySet();
+    }
+
+    public void clear(){
+        for(String key : allGroups.keySet()){
+            allGroups.remove(key);
+        }
+        //allGroups.clear();
     }
 
 

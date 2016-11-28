@@ -63,7 +63,6 @@ public class TableController {
         column_to_index = new HashMap<String, Integer>();
 
         this.controller = this;
-
         groupController = new GroupController();
 
     }
@@ -160,18 +159,6 @@ public class TableController {
 
 
     /**
-     * set table to old/initial state
-     *
-     */
-    public void resetTable() {
-        data.removeAll(data);
-        for(ObservableList item : data_copy){
-            data.add(item);
-        }
-    }
-
-
-    /**
      * update table if some selections were done in tableView
      * @param newItems
      */
@@ -224,6 +211,18 @@ public class TableController {
         }
 
         return entries;
+    }
+
+
+    /**
+     * set table to old/initial state
+     *
+     */
+    public void resetTable() {
+        data.removeAll(data);
+        for(ObservableList item : data_copy){
+            data.add(item);
+        }
     }
 
 
@@ -348,9 +347,9 @@ public class TableController {
 
     public DataTable getDataTable() { return dataTable; }
 
-
-
-
+    public GroupController getGroupController() {
+        return groupController;
+    }
     /*
 
 
@@ -360,6 +359,9 @@ public class TableController {
 
      */
 
+    public void setTable(TableView<ObservableList> table) {
+        this.table = table;
+    }
 
     /**
      *  save to each column the index (column number)
@@ -410,6 +412,7 @@ public class TableController {
         menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
         table.setContextMenu(menu);
     }
+
 
 
 }

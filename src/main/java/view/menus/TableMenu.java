@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
 import view.table.TableController;
 
 
@@ -89,12 +90,14 @@ public class TableMenu {
         cleanTable.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try{
+
                     // clean data model
                     tableController.getData().removeAll(tableController.getData());
                     // clean table view
                     tableController.getTable().getItems().removeAll(tableController.getTable().getItems());
                     tableController.getDataTable().getMtStorage().getData().clear();
-
+                    tableController.getDataTable().getDataTable().clear();
+                    tableController.getGroupController().clear();
                 } catch (Exception e){
                     e.printStackTrace();
                 }
