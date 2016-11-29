@@ -26,7 +26,15 @@ public class ExportDialogue extends Application {
         configureFileChooser(fileChooser);
 
         File file = fileChooser.showSaveDialog(stage);
-        if (file != null) {
+        if (file == null) {
+            try {
+                //Dont do anything here...
+            }
+            catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+
+        } else {
             try {
                 outFile = file.getAbsolutePath();
             } catch (Exception ex) {

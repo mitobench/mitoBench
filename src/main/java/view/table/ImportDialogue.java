@@ -30,7 +30,14 @@ public class ImportDialogue extends Application {
         fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         File file = fileChooser.showOpenDialog(primaryStage);
-        if (file != null) {
+        if (file == null) {
+            try {
+                //Dont do anything here...
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+
+        } else {
             inputFile = file;
         }
     }

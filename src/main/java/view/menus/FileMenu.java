@@ -59,7 +59,7 @@ public class FileMenu {
                 importDialogue.start(new Stage());
 
 
-                if (importDialogue.getInputFile().getPath() != null) {
+                if (importDialogue.getInputFile() != null) {
                     String absolutePath = importDialogue.getInputFile().getAbsolutePath();
 
 
@@ -125,6 +125,12 @@ public class FileMenu {
                         }
                         HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
                         tableManager.updateTable(data_map);
+                    }
+                } else {
+                    try {
+                        //Didndonuffin
+                    }catch (Exception e ) {
+                        System.out.println(e.getMessage());
                     }
                 }
             }
