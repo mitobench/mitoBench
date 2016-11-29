@@ -2,15 +2,21 @@ package view.menus;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.layout.VBox;
 import view.charts.BarPlotHaplo;
+import view.charts.StackedBar;
 import view.table.TableController;
 import view.table.TableSelectionFilter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by neukamm on 23.11.16.
@@ -21,16 +27,20 @@ public class GraphicsMenu {
     private Menu menuGraphics;
     private TableController tableController;
     private BarPlotHaplo barPlotHaplo;
+    private StackedBar stackedBar;
 
-    public GraphicsMenu(TableController tableController, BarPlotHaplo barPlotHaplo){
+    public GraphicsMenu(TableController tableController, VBox vBox){
         menuGraphics = new Menu("Graphics");
         this.tableController = tableController;
-        this.barPlotHaplo = barPlotHaplo;
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", vBox);
+        this.stackedBar = new StackedBar("Haplogroup frequency per group", vBox);
         addSubMenus();
     }
 
 
     private void addSubMenus() {
+
+        Menu barchart = new Menu("Barchart");
 
 
         /*
@@ -73,13 +83,14 @@ public class GraphicsMenu {
 
          */
 
-        MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group");
+        MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group(StackedBarchart)");
         plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
 
                     TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
                     TableColumn grouping_col = tableController.getTableColumnByName("Grouping");
+
 
                     List<String> columnDataHG = new ArrayList<>();
                     List<String> columnDataGroup = new ArrayList<>();
@@ -94,11 +105,18 @@ public class GraphicsMenu {
                     // parse selection to tablefilter
                     TableSelectionFilter tableFilter = new TableSelectionFilter();
 
-                    barPlotHaplo.clearData();
+                    stackedBar.clearData();
 
-                    if (seletcion_haplogroups.length !=0) {
+                    stackedBar.setCategories(new HashSet<String>(Arrays.asList(seletcion_groups)));
+
+                    if (seletcion_haplogroups.length != 0) {
                         tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
-                        barPlotHaplo.addData(tableController.getDataHist());
+                        for(int i = 0; i < seletcion_haplogroups.length; i++){
+                            List< XYChart.Data<String, Number> > data_list = new ArrayList<XYChart.Data<String, Number>>();
+                            XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(seletcion_groups[i], 5);
+                            data_list.add(data);
+                            stackedBar.addSerie(data_list, seletcion_haplogroups[i]);
+                        }
 
                     }
                 } catch (Exception e) {
@@ -107,8 +125,9 @@ public class GraphicsMenu {
             }
         });
 
+        barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
 
-        menuGraphics.getItems().addAll(plotHGfreq);
+        menuGraphics.getItems().add(barchart);
     }
 
     public Menu getMenuGraphics() {

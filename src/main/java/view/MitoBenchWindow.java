@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import view.charts.BarPlotHaplo;
+import view.charts.StackedBar;
 import view.menus.*;
 import view.table.*;
 import view.tree.TreeHaploController;
@@ -24,8 +25,8 @@ public class MitoBenchWindow extends Application{
 
     private BorderPane root;
     private TableController tableController;
-    private BarPlotHaplo barPlotHaplo;
     private Scene scene;
+    private VBox vBox;
 
 
     @Override
@@ -61,7 +62,7 @@ public class MitoBenchWindow extends Application{
         EditMenu editMenu = new EditMenu();
         ToolsMenu toolsMenu = new ToolsMenu();
         TableMenu tableMenu = new TableMenu(tableController);
-        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, barPlotHaplo);
+        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, vBox);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
@@ -76,10 +77,12 @@ public class MitoBenchWindow extends Application{
 
 
 
-    public HBox  getCenterPane() throws ParserConfigurationException, SAXException, IOException {
+    public SplitPane  getCenterPane() throws ParserConfigurationException, SAXException, IOException {
 
 
-        HBox center = new HBox(getTablePane(), getPlotPane());
+        //HBox center = new HBox(getTablePane(), getPlotPane());
+        SplitPane center = new SplitPane();
+        center.getItems().addAll(getTablePane(), getPlotPane());
 
 
         // bind center to scene --> resizing
@@ -100,30 +103,38 @@ public class MitoBenchWindow extends Application{
     private HBox getPlotPane()
     {
         HBox hbox = new HBox();
+        vBox = new VBox();
+        vBox.setPadding(new Insets(0, 20, 0, 20));
 
-        VBox vbox = new VBox();
-        vbox.setPadding(new Insets(0, 20, 0, 20));
+        vBox.prefHeightProperty().bind(scene.heightProperty());
+        vBox.prefWidthProperty().bind(scene.widthProperty());
 
-        vbox.prefHeightProperty().bind(scene.heightProperty());
-        vbox.prefWidthProperty().bind(scene.widthProperty());
+//        barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", vbox);
+//        barPlotHaplo.setDragAndMove();
+//
+//        Pane group = new Pane(barPlotHaplo.getBarChart());
+//        StackPane zoomPane = barPlotHaplo.createZoomPane(group);
 
-        barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Haplogroup", "Frequency", vbox);
-        barPlotHaplo.setDragAndMove();
 
-        Pane group = new Pane(barPlotHaplo.getBarChart());
-        StackPane zoomPane = barPlotHaplo.createZoomPane(group);
+        //stackedBarPlot = new StackedBar("Haplogroup frequency per group");
+        //stackedBarPlot.setDragAndMove();
 
-        zoomPane.prefHeightProperty().bind(scene.heightProperty());
-        zoomPane.prefWidthProperty().bind(scene.widthProperty());
+        //Pane group = new Pane(barPlotHaplo.getBarChart());
+        //StackPane zoomPane = barPlotHaplo.createZoomPane(group);
 
-        vbox.getChildren().addAll(zoomPane);
-        VBox.setVgrow(zoomPane, Priority.ALWAYS);
+        //zoomPane.prefHeightProperty().bind(scene.heightProperty());
+        //zoomPane.prefWidthProperty().bind(scene.widthProperty());
 
-        vbox.setAlignment(Pos.CENTER);
+        //vbox.getChildren().addAll(zoomPane);
+        //vbox.getChildren().addAll(stackedBarPlot.getSbc());
+        //VBox.setVgrow(zoomPane, Priority.ALWAYS);
+        //VBox.setVgrow(stackedBarPlot.getSbc(), Priority.ALWAYS);
+
+        vBox.setAlignment(Pos.CENTER);
 
         Separator separator1 = new Separator();
         //vbox.getChildren().add(1, separator1);
-        hbox.getChildren().addAll(vbox);
+        hbox.getChildren().addAll(vBox);
 
         return hbox;
     }
@@ -141,15 +152,15 @@ public class MitoBenchWindow extends Application{
         BorderPane stackPane = new BorderPane();
 
         // initialize columns
-        tableController = new TableController(new Label("\nInput MT data"), scene);
+        tableController = new TableController(scene);
 
         VBox vbox = new VBox();
         vbox.setSpacing(10);
-        vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.getChildren().addAll(tableController.getLabel(), tableController.getTable());
-
+        vbox.setPadding(new Insets(40, 10, 10, 10));
         vbox.prefHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty());
+        vbox.getChildren().addAll(tableController.getTable());
+
 
         stackPane.setCenter(vbox);
         TreeHaploController treeHaploChooser = new TreeHaploController(stackPane, tableController);

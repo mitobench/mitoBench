@@ -27,8 +27,8 @@ public class BarPlotHaplo extends ABarPlot {
     private double orgTranslateX, orgTranslateY;
 
 
-    public BarPlotHaplo(String title, String xlabel, String ylabel, VBox scene) {
-        super(title, xlabel, ylabel, scene);
+    public BarPlotHaplo(String title, String ylabel, VBox scene) {
+        super(title, ylabel, scene);
         this.bc.setLegendVisible(false);
     }
 

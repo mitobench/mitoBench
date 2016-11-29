@@ -7,8 +7,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
@@ -26,7 +29,6 @@ import java.util.List;
 public class TableController {
 
     private TableView<ObservableList> table;
-    private Label label;
     private List<String> col_names;
 
     private ObservableList<ObservableList> data;
@@ -36,13 +38,13 @@ public class TableController {
     private HashMap<String, Integer> column_to_index;
     private TableController controller;
     private GroupController groupController;
+    private TableMover tableMover;
 
 
 
-    public TableController(Label label, Scene scene){
 
-        this.label = label;
-        this.label.setFont(new Font("Arial", 20));
+
+    public TableController(Scene scene){
 
         table = new TableView();
         table.setEditable(false);
@@ -55,6 +57,15 @@ public class TableController {
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+
+        // table mover
+//        tableMover = new TableMover(table);
+//        tableMover.setMoving();
+//        tableMover.setZooming();
+
+
+
+
         data = FXCollections.observableArrayList();
         data_copy = FXCollections.observableArrayList();
         col_names = new ArrayList<>();
@@ -66,6 +77,9 @@ public class TableController {
         groupController = new GroupController();
 
     }
+
+
+
 
 
     /**
@@ -343,10 +357,6 @@ public class TableController {
         return table;
     }
 
-    public Label getLabel() {
-        return label;
-    }
-
     public ObservableList<ObservableList> getData() {
         return data;
     }
@@ -356,6 +366,11 @@ public class TableController {
     public GroupController getGroupController() {
         return groupController;
     }
+
+    public TableMover getTableMover() {
+        return tableMover;
+    }
+
     /*
 
 

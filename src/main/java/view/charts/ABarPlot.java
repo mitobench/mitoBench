@@ -19,7 +19,7 @@ public abstract class ABarPlot {
 
 
 
-    public ABarPlot(String title, String xlabel, String ylabel, VBox scene){
+    public ABarPlot(String title, String ylabel, VBox scene){
 
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
@@ -27,7 +27,6 @@ public abstract class ABarPlot {
         //bc = new BarChart(xAxis,yAxis);
         bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setTitle(title);
-        xAxis.setLabel(xlabel);
         yAxis.setLabel(ylabel);
         yAxis.setTickUnit(1);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {
