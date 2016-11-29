@@ -29,7 +29,7 @@ public abstract class ABarPlot {
         bc.setTitle(title);
         xAxis.setLabel(xlabel);
         yAxis.setLabel(ylabel);
-        //yAxis.setTickUnit(3);
+        yAxis.setTickUnit(1);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override public String toString(Number object) {
                 if(object.intValue()!=object.doubleValue())

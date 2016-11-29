@@ -20,6 +20,7 @@ public class BarChartExt<X, Y> extends BarChart<X, Y> {
     Map<Node, Node> nodeMap = new HashMap<>();
 
     public BarChartExt(Axis xAxis, Axis yAxis) {
+
         super(xAxis, yAxis);
     }
 
@@ -34,8 +35,9 @@ public class BarChartExt<X, Y> extends BarChart<X, Y> {
         for (int j = 0; j < series.getData().size(); j++) {
 
             Data<X, Y> item = series.getData().get(j);
-
-            Node text = new Text(String.valueOf(item.getYValue()));
+            String val = String.valueOf(item.getYValue());
+            String[] val_spli = val.split("\\.");
+            Node text = new Text(String.valueOf(val_spli[0]));
             nodeMap.put(item.getNode(), text);
             getPlotChildren().add(text);
 
@@ -73,7 +75,7 @@ public class BarChartExt<X, Y> extends BarChart<X, Y> {
 
             Node text = nodeMap.get(bar);
 
-            text.relocate(bar.getBoundsInParent().getMinX(), bar.getBoundsInParent().getMinY() - 30);
+            text.relocate(bar.getBoundsInParent().getMinX(), bar.getBoundsInParent().getMinY()-15);
 
         }
 
