@@ -7,6 +7,6 @@ import java.io.IOException;
  */
 public interface IOutputData {
     public void writeData(String file) throws IOException;
-
+    public void setGroups(String groupID);
 
 }

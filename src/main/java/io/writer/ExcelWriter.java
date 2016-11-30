@@ -2,8 +2,6 @@ package io.writer;
 
 import io.IOutputData;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import org.apache.poi.sl.draw.binding.ObjectFactory;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -35,8 +33,12 @@ public class ExcelWriter implements IOutputData {
 
         //Create file extension if its not there already...
 
+        if(!file.endsWith("xlsx")) {
+            file = file + ".xlsx";
+        }
 
         String safe_sheetname = WorkbookUtil.createSafeSheetName(file);
+
 
         Sheet sheet1 = wb.createSheet(safe_sheetname);
         Row row = sheet1.createRow(0);
@@ -66,6 +68,11 @@ public class ExcelWriter implements IOutputData {
         wb.write(fileOutputStream);
         fileOutputStream.close();
 
+    }
+
+    @Override
+    public void setGroups(String groupID) {
+        //Do nothing here, not required for this format at all
     }
 
 }

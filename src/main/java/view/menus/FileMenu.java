@@ -11,17 +11,15 @@ import io.reader.ARPReader;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
-import io.writer.CSVWriter;
-import io.writer.ExcelWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.Stage;
-import view.table.ExportDialogue;
 import view.table.ImportDialogue;
 import view.table.TableController;
+import view.table.exportdialogue.ExportDialogue;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -143,29 +141,14 @@ public class FileMenu {
 
          */
 
-        MenuItem exportFile = new MenuItem("Export Table file");
+        MenuItem exportFile = new MenuItem("Export Data");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue();
-                exportDialogue.start(new Stage());
-
-                if (exportDialogue.getOutFile() != null) {
-                    String outFileDB = exportDialogue.getOutFile();
-                    if (outFileDB.endsWith(".csv")) {
-                        try {
-                            CSVWriter csvWriter = new CSVWriter(tableManager);
-                            csvWriter.writeData(outFileDB);
-                        } catch (Exception e) {
-                            System.err.println("Caught Exception: " + e.getMessage());
-                        }
-                    } else if (outFileDB.endsWith(".xlsx")) {
-                        try {
-                            ExcelWriter excelwriter = new ExcelWriter(tableManager);
-                            excelwriter.writeData(outFileDB);
-                        } catch (Exception e) {
-                            System.err.println("Caught Exception: " + e.getMessage());
-                        }
-                    }
+                ExportDialogue exportDialogue = new ExportDialogue(tableManager);
+                try {
+                    exportDialogue.start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

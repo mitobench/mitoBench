@@ -69,7 +69,10 @@ public class CSVWriter implements IOutputData {
         }
     }
 
-
+    @Override
+    public void setGroups(String groupID) {
+        //Do nothing here, we dont care for CSV files atalll
+    }
 
 
 }

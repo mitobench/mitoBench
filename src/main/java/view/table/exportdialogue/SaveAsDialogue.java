@@ -1,4 +1,4 @@
-package view.table;
+package view.table.exportdialogue;
 
 import javafx.application.Application;
 import javafx.stage.FileChooser;
@@ -9,21 +9,26 @@ import java.io.File;
 /**
  * Created by neukamm on 07.11.16.
  */
-public class ExportDialogue extends Application {
+public class SaveAsDialogue extends Application {
 
     private String outFile;
+    private FileChooser fileChooser = new FileChooser();
+    private FileChooser.ExtensionFilter extensionFilter;
 
     public static void main(String[] args) {
         Application.launch(args);
     }
 
+    public SaveAsDialogue(FileChooser.ExtensionFilter fex){
+        this.extensionFilter = fex;
+        fileChooser.getExtensionFilters().add(this.extensionFilter);
+    }
+
 
     @Override
     public void start(Stage stage) {
-
-
-        FileChooser fileChooser = new FileChooser();
-        configureFileChooser(fileChooser);
+        fileChooser = new FileChooser();
+        fileChooser.setTitle("Save table content");
 
         File file = fileChooser.showSaveDialog(stage);
         if (file == null) {
@@ -44,17 +49,21 @@ public class ExportDialogue extends Application {
 
     }
 
-
-
-    private static void configureFileChooser(final FileChooser fileChooser) {
-        fileChooser.setTitle("Save table content");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Microsoft Excel (*.xlsx)", "*.xlsx"),
-                new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv")
-        );
-    }
+    /*+
+    Returns the output file to write to!
+     */
 
     public String getOutFile() {
         return outFile;
+    }
+
+
+    /**
+     * This method sets the selected extension filter based on the users selection from a dialogue class.
+     *
+     * @param selectmeFirst
+     */
+    public void setPreselectedExport(FileChooser.ExtensionFilter selectmeFirst) {
+        fileChooser.setSelectedExtensionFilter(selectmeFirst);
     }
 }
