@@ -74,8 +74,6 @@ public class ExportDialogue extends Application {
             //TODO
             //CSV Output
         } else if (result.get() == csv_button) {
-            DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(options);
-            String selection = dataChoiceDialogue.getSelected();
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
@@ -83,7 +81,6 @@ public class ExportDialogue extends Application {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
                     CSVWriter csvWriter = new CSVWriter(tableManager);
-                    csvWriter.setGroups(selection);
                     csvWriter.writeData(outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
@@ -91,8 +88,6 @@ public class ExportDialogue extends Application {
             }
             //XLSX output
         } else if (result.get() == xlsx_button) {
-            DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(options);
-            String selection = dataChoiceDialogue.getSelected();
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Microsoft Excel (*.xlsx)", "*.xlsx");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
