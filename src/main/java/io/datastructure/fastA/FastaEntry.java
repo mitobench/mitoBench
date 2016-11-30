@@ -1,4 +1,4 @@
-package io.datastructure.inputTypes;
+package io.datastructure.fastA;
 
 /**
  * Created by peltzer on 17/11/2016.

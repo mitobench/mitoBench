@@ -3,7 +3,7 @@ package io.reader;
 import io.Exceptions.FastAException;
 import io.IInputData;
 import io.datastructure.Entry;
-import io.datastructure.inputTypes.FastaEntry;
+import io.datastructure.fastA.FastaEntry;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,5 +1,6 @@
 package view.table.exportdialogue;
 
+import io.writer.ARPWriter;
 import io.writer.CSVWriter;
 import io.writer.ExcelWriter;
 import javafx.application.Application;
@@ -63,7 +64,12 @@ public class ExportDialogue extends Application {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
-            //TODO
+            if(saveAsDialogue.getOutFile() != null) {
+                String outfileDB = saveAsDialogue.getOutFile();
+                ARPWriter arpwriter = new ARPWriter();
+                arpwriter.writeData(outfileDB);
+                arpwriter.setGroups(selection);
+            }
             //Beast output
         } else if (result.get() == beast_button) {
             DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(options);
