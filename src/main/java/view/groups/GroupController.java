@@ -11,6 +11,7 @@ public class GroupController {
 
     HashMap<String, Group> allGroups = new HashMap<>();
 
+
     public GroupController(){
 
     }

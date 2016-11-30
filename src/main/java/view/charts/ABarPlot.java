@@ -23,10 +23,9 @@ public abstract class ABarPlot {
 
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
-        //bc = new BarChart<String, Number>(xAxis, yAxis);
-        //bc = new BarChart(xAxis,yAxis);
         bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setTitle(title);
+        bc.setAnimated(false);
         yAxis.setLabel(ylabel);
         yAxis.setTickUnit(1);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {

@@ -106,34 +106,11 @@ public class MitoBenchWindow extends Application{
         vBox = new VBox();
         vBox.setPadding(new Insets(0, 20, 0, 20));
 
+
         vBox.prefHeightProperty().bind(scene.heightProperty());
         vBox.prefWidthProperty().bind(scene.widthProperty());
-
-//        barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", vbox);
-//        barPlotHaplo.setDragAndMove();
-//
-//        Pane group = new Pane(barPlotHaplo.getBarChart());
-//        StackPane zoomPane = barPlotHaplo.createZoomPane(group);
-
-
-        //stackedBarPlot = new StackedBar("Haplogroup frequency per group");
-        //stackedBarPlot.setDragAndMove();
-
-        //Pane group = new Pane(barPlotHaplo.getBarChart());
-        //StackPane zoomPane = barPlotHaplo.createZoomPane(group);
-
-        //zoomPane.prefHeightProperty().bind(scene.heightProperty());
-        //zoomPane.prefWidthProperty().bind(scene.widthProperty());
-
-        //vbox.getChildren().addAll(zoomPane);
-        //vbox.getChildren().addAll(stackedBarPlot.getSbc());
-        //VBox.setVgrow(zoomPane, Priority.ALWAYS);
-        //VBox.setVgrow(stackedBarPlot.getSbc(), Priority.ALWAYS);
-
         vBox.setAlignment(Pos.CENTER);
 
-        Separator separator1 = new Separator();
-        //vbox.getChildren().add(1, separator1);
         hbox.getChildren().addAll(vBox);
 
         return hbox;
@@ -161,10 +138,8 @@ public class MitoBenchWindow extends Application{
         vbox.prefWidthProperty().bind(scene.widthProperty());
         vbox.getChildren().addAll(tableController.getTable());
 
-
         stackPane.setCenter(vbox);
         TreeHaploController treeHaploChooser = new TreeHaploController(stackPane, tableController);
-
 
         return stackPane;
     }

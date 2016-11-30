@@ -18,9 +18,7 @@ import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
 import view.groups.GroupController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -348,7 +346,6 @@ public class TableController {
      * @return
      */
 
-
     public int getColIndex(String key){
         return column_to_index.get(key);
     }
@@ -367,8 +364,17 @@ public class TableController {
         return groupController;
     }
 
-    public TableMover getTableMover() {
-        return tableMover;
+    public int getCountPerHG(String hg, String group, int colIndexHG, int colIndexGroup){
+
+        int count = 0;
+        ObservableList<ObservableList> selection = table.getItems();
+        for(int i = 0; i < selection.size(); i++){
+            ObservableList list = selection.get(i);
+            if(list.get(colIndexGroup).equals(group) && list.get(colIndexHG).equals(hg)){
+                count++;
+            }
+        }
+        return count;
     }
 
     /*
@@ -432,6 +438,11 @@ public class TableController {
 //        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, deleteAllSelectedItem);
         menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
         table.setContextMenu(menu);
+    }
+
+
+    public String[] removeDuplicates(String[] arr) {
+        return new HashSet<String>(Arrays.asList(arr)).toArray(new String[0]);
     }
 
 

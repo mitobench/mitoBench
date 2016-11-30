@@ -30,6 +30,7 @@ public class BarPlotHaplo extends ABarPlot {
     public BarPlotHaplo(String title, String ylabel, VBox scene) {
         super(title, ylabel, scene);
         this.bc.setLegendVisible(false);
+        setDragAndMove();
     }
 
 
@@ -41,18 +42,8 @@ public class BarPlotHaplo extends ABarPlot {
         series.setName("");
 
         for (String haplo : data.keySet()) {
-            final XYChart.Data<String, Number> d = new XYChart.Data(haplo, data.get(haplo));
-//            d.nodeProperty().addListener(new ChangeListener<Node>() {
-//                @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-//                    if (node != null) {
-//                        //setNodeStyle(data);
-//                        displayLabelForData(d);
-//                    }
-//                }
-//            });
-            series.getData().add(d);
+            series.getData().add(new XYChart.Data(haplo, data.get(haplo)));
         }
-
 
         this.bc.getData().clear();
         this.bc.getData().add(series);
