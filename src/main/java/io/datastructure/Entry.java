@@ -1,7 +1,7 @@
 package io.datastructure;
 
 /**
- * This class is intended to provide a generic data type resource of the form <ID + data>. Data can be whatever we want to have, we just need to define it once as String, integer, double.
+ * This class is intended to provide a generic view.data type resource of the form <ID + view.data>. Data can be whatever we want to have, we just need to define it once as String, integer, double.
  * Created by peltzer on 17/11/2016.
  */
 public class Entry<T> {

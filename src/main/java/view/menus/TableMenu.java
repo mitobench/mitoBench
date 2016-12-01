@@ -91,7 +91,7 @@ public class TableMenu {
             public void handle(ActionEvent t) {
                 try{
 
-                    // clean data model
+                    // clean view.data model
                     tableController.getData().removeAll(tableController.getData());
                     // clean table view
                     tableController.getTable().getItems().removeAll(tableController.getTable().getItems());

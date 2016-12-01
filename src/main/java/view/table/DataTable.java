@@ -12,7 +12,7 @@ import java.util.List;
 public class DataTable {
 
     // key = column name
-    // Array = data od this col     --> has to be array to ensure the order of the entries
+    // Array = view.data od this col     --> has to be array to ensure the order of the entries
     HashMap<String, String[]> data;
     MTStorage mtStorage;
     public DataTable(){
@@ -131,7 +131,7 @@ public class DataTable {
 
 
     /**
-     * add new row identifier to data table
+     * add new row identifier to view.data table
      * fill all columns with dummy string value.
      *
      * @param rowID

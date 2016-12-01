@@ -1,7 +1,7 @@
 package view.charts;
-import controls.sunburst.*;
-import data.ISourceStrategy;
-import data.SourceStrategyHaplogroups;
+import view.controls.sunburst.*;
+import view.data.ISourceStrategy;
+import view.data.SourceStrategyHaplogroups;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,7 +23,8 @@ public class SunburstChart {
     private BorderPane sunburstBorderPane;
     private WeightedTreeItem<String> rootData;
 
-    public SunburstChart(BorderPane borderPane, HashMap<String, List<String>> hg_to_group){
+    public SunburstChart(BorderPane borderPane, HashMap<String, List<String>> hg_to_group,
+                         HashMap<String, HashMap<String, Integer>> weights){
 
         sunburstBorderPane = borderPane;
 
@@ -35,7 +36,7 @@ public class SunburstChart {
         ColorStrategySectorShades colorStrategyShades = new ColorStrategySectorShades();
 
 
-        addData(hg_to_group);
+        addData(hg_to_group, weights);
 
 //        System.out.println("root children: ");
 //        for (WeightedTreeItem<String> eatable : rootData.getChildrenWeighted()){
@@ -43,7 +44,7 @@ public class SunburstChart {
 //        }
 
 
-        // Set the data as root item
+        // Set the view.data as root item
         sunburstView.setRootItem(rootData);
         sunburstView.setColorStrategy(colorStrategyShades);
 
@@ -121,13 +122,13 @@ public class SunburstChart {
     }
 
 
-    public void addData(HashMap<String, List<String>> hg_to_group) {
+    public void addData(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights) {
 
         clear();
 
-        // Define a strategy by which the data should be received.
+        // Define a strategy by which the view.data should be received.
         ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
-        rootData = sourceStrategy.getData(hg_to_group);
+        rootData = sourceStrategy.getData(hg_to_group, weights);
 
 
     }

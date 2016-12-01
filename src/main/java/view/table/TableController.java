@@ -81,8 +81,8 @@ public class TableController {
 
 
     /**
-     * This method gets a hash map of new input entries, updates the data table and prepares the table view for updating.
-     * The columns are created based on new data table.
+     * This method gets a hash map of new input entries, updates the view.data table and prepares the table view for updating.
+     * The columns are created based on new view.data table.
      *
      * @param input
      */
@@ -127,7 +127,7 @@ public class TableController {
 
 
     /**
-     * This method parses the data table to a representation that can be displayed by the table view
+     * This method parses the view.data table to a representation that can be displayed by the table view
      * (ObservableList<ObservableList> )
      *
      * @param dataTable
@@ -193,7 +193,7 @@ public class TableController {
 
 
     /**
-     * copy data to always allow resetting of table
+     * copy view.data to always allow resetting of table
      * to old/initial state
      */
     public void copyData(){
@@ -249,7 +249,7 @@ public class TableController {
 
 
     /**
-     * This method counts occurrences of haplotypes within selected data
+     * This method counts occurrences of haplotypes within selected view.data
      * return as hash map to plot it easily
      *
      * @return
@@ -306,7 +306,7 @@ public class TableController {
 
     /**
      *
-     * This method parses the current table view to a data - table representation (ObservableList<ObservableList<String>>)
+     * This method parses the current table view to a view.data - table representation (ObservableList<ObservableList<String>>)
      * which can be used for output purposes for example
      *
      * @return

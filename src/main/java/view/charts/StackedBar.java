@@ -81,8 +81,8 @@ public class StackedBar{
         xAxis.getCategories().clear();
 
 //        for (XYChart.Series<String, Number> series : sbc.getData()) {
-//            for (XYChart.Data<String, Number> data : series.getData()) {
-//                Node node = data.getNode();
+//            for (XYChart.Data<String, Number> view.data : series.getData()) {
+//                Node node = view.data.getNode();
 //                Parent parent = node.parentProperty().get();
 //                if (parent != null && parent instanceof Group) {
 //                    Group group = (Group) parent;

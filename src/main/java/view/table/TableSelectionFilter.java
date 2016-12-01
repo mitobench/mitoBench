@@ -31,7 +31,7 @@ public class TableSelectionFilter {
                 masterData_selection = tableView.getSelectionModel().getSelectedItems();
             }
 
-            // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+            // 1. Wrap the ObservableList in a FilteredList (initially display all view.data).
             FilteredList<ObservableList> filteredData = new FilteredList<>(masterData_selection, p -> true);
 
             // 2. Set the haplogroupFilter Predicate whenever the haplogroupFilter changes.
@@ -47,7 +47,7 @@ public class TableSelectionFilter {
             // 4. Bind the SortedList comparator to the TableView comparator.
             sortedData.comparatorProperty().bind(tableView.comparatorProperty());
 
-            // 5. Add sorted (and filtered) data to the table.
+            // 5. Add sorted (and filtered) view.data to the table.
             tableController.updateView(sortedData);
 
         } else {

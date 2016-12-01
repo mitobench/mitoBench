@@ -36,13 +36,13 @@ public class ARPReader implements IInputData {
 
             } else {
                 if(currline.contains("SampleName=")){
-                    //then we are inside the data block
+                    //then we are inside the view.data block
                     String[] split = currline.split("\"");
                     currGroup = split[1];
                     continue;
                 }
                 if(currline.contains("[[Structure]]")){
-                    break; //Then we are done with actual data, grouping is parsed differently by us...
+                    break; //Then we are done with actual view.data, grouping is parsed differently by us...
                 }
                 if(currline.isEmpty() | currline.startsWith("}") |  currline.startsWith("SampleSize=") |
                    currline.startsWith("SampleData") | currline.startsWith("Title") | currline.startsWith("NbSamples") |

@@ -34,6 +34,7 @@ public class GraphicsMenu {
     private SunburstChart sunburstChart;
     private VBox chartbox;
     private BorderPane sunburstBorderPane;
+    private HashMap<String, HashMap<String, Integer>> weights;
 
     public GraphicsMenu(TableController tableController, VBox vBox){
         menuGraphics = new Menu("Graphics");
@@ -55,8 +56,8 @@ public class GraphicsMenu {
 
     }
 
-    private void initSunburst(HashMap<String, List<String>> hg_to_group){
-        this.sunburstChart = new SunburstChart(sunburstBorderPane, hg_to_group);
+    private void initSunburst(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights){
+        this.sunburstChart = new SunburstChart(sunburstBorderPane, hg_to_group, weights);
         chartbox.getChildren().add(sunburstChart.getBorderPane());
 
     }
@@ -149,6 +150,7 @@ public class GraphicsMenu {
 
                     if (seletcion_haplogroups.length != 0) {
                         tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
+
                         for(int i = 0; i < seletcion_haplogroups.length; i++){
 
                             List< XYChart.Data<String, Number> > data_list = new ArrayList<XYChart.Data<String, Number>>();
@@ -156,7 +158,7 @@ public class GraphicsMenu {
                             for(int j = 0; j < seletcion_groups.length; j++){
 
                                 int count_per_HG = tableController.getCountPerHG(seletcion_haplogroups[i], seletcion_groups[j], tableController.getColIndex("Haplogroup"),
-                                                                 tableController.getColIndex("Grouping"));
+                                        tableController.getColIndex("Grouping"));
                                 XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(seletcion_groups[j], count_per_HG);
                                 data_list.add(data);
 
@@ -190,7 +192,7 @@ public class GraphicsMenu {
             public void handle(ActionEvent t) {
                 try {
                     HashMap<String, List<String>> hg_to_group = getHG_to_group();
-                    initSunburst(hg_to_group);
+                    initSunburst(hg_to_group, weights);
 
                     //sunburstChart.clear();
                     //sunburstChart.addData();
@@ -258,6 +260,8 @@ public class GraphicsMenu {
 
             tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
 
+            getWeights(seletcion_haplogroups, seletcion_groups);
+
 
             // iteration over grouping
             for(int i = 0; i < seletcion_groups.length; i++){
@@ -284,18 +288,48 @@ public class GraphicsMenu {
 
                 }
             }
-
-
-
-
-//                for(int j = 0; j < seletcion_haplogroups.length; j++){
-//                    List<String> tmp = hg_to_group.get(seletcion_groups[i]);
-//                    tmp.add(seletcion_haplogroups[j]);
-//                    hg_to_group.put(seletcion_groups[i], tmp);
-//
-//                }
-            }
+        }
 
         return hg_to_group;
+    }
+
+
+    public void getWeights(String[] seletcion_haplogroups, String[] seletcion_groups){
+
+        // hash map with:
+        // Group : <HG : count>
+        weights = new HashMap<>();
+
+        // get weights
+        for(int i = 0; i < seletcion_groups.length; i++) {
+            String group = seletcion_groups[i];
+            if (!weights.containsKey(group)) {
+                weights.put(group, new HashMap<String, Integer>());
+            }
+            HashMap<String, Integer> hash_tmp = weights.get(group);
+
+            for (int j = 0; j < seletcion_haplogroups.length; j++) {
+                String hg = seletcion_haplogroups[j];
+
+                // get number of occurrences of this hg within this group
+                int count_per_HG = tableController.getCountPerHG(
+                        hg,
+                        group,
+                        tableController.getColIndex("Haplogroup"),
+                        tableController.getColIndex("Grouping")
+                );
+
+                if (!hash_tmp.containsKey(hg)) {
+                    hash_tmp.put(hg, count_per_HG);
+                } else {
+                    hash_tmp.put(hg, hash_tmp.get(hg) + 1);
+                }
+            }
+
+        }
+    }
+
+    public HashMap<String, HashMap<String, Integer>> getWeights() {
+        return weights;
     }
 }

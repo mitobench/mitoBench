@@ -119,7 +119,7 @@ public class IOTests {
             e.printStackTrace();
         }
 
-        //Testing data input here...
+        //Testing view.data input here...
         assertEquals(2, output.size());
 
         ArrayList cast = (ArrayList) output.get("Test1");
