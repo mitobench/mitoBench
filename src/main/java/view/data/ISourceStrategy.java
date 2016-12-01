@@ -1,5 +1,6 @@
 package view.data;
 
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import view.controls.sunburst.WeightedTreeItem;
 
@@ -20,6 +21,6 @@ public interface ISourceStrategy {
     WeightedTreeItem<String> getData(HashMap<String, List<String>> hg_to_group,
                                      HashMap<String, HashMap<String, Integer>> weights,
                                      HashMap<String, List<String>> treeMap,
-                                     TreeView tree);
+                                     TreeItem<String> tree);
 
 }

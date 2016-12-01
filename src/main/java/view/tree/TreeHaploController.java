@@ -335,6 +335,19 @@ public class TreeHaploController {
 
     }
 
+    /**
+     * get copy of tree
+     * @param item
+     * @return
+     */
+    public TreeItem<String> deepcopy(TreeItem<String> item) {
+        TreeItem<String> copy = new TreeItem<String>(item.getValue());
+        for (TreeItem<String> child : item.getChildren()) {
+            copy.getChildren().add(deepcopy(child));
+        }
+        return copy;
+    }
+
 
     public HashMap<String, List<String>> getTreeMap() {
         return treeMap;

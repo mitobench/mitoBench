@@ -1,4 +1,5 @@
 package view.charts;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import view.controls.sunburst.*;
 import view.data.ISourceStrategy;
@@ -42,7 +43,7 @@ public class SunburstChart {
     public void create(HashMap<String, List<String>> hg_to_group,
                        HashMap<String, HashMap<String, Integer>> weights,
                        HashMap<String, List<String>> treeMap,
-                       TreeView tree){
+                       TreeItem<String> tree){
 
         loadData(hg_to_group, weights, treeMap, tree);
         addButtons();
@@ -52,7 +53,7 @@ public class SunburstChart {
     private void loadData( HashMap<String, List<String>> hg_to_group,
                            HashMap<String, HashMap<String, Integer>> weights,
                            HashMap<String, List<String>> treeMap,
-                           TreeView tree){
+                           TreeItem<String> tree){
         // load data
         addData(hg_to_group, weights, treeMap, tree);
 
@@ -141,7 +142,7 @@ public class SunburstChart {
     public void addData(HashMap<String, List<String>> hg_to_group,
                         HashMap<String, HashMap<String, Integer>> weights,
                         HashMap<String, List<String>> treeMap,
-                        TreeView tree) {
+                        TreeItem<String> tree) {
 
         // Define a strategy by which the view.data should be received.
         ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();

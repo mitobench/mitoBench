@@ -40,7 +40,7 @@ public class SunburstLegend extends VBox {
 
         sunburstView.setOnVisualChanged(x -> updateLegend());
 
-        setLegendItemMax(20);
+        setLegendItemMax(30);
     }
 
 
@@ -97,9 +97,9 @@ public class SunburstLegend extends VBox {
 
             String value = innerChild.getValue().toString(); // TODO better string / description handling
             Color color = sunburstView.getItemColor(innerChild);
-            System.out.println("Color for " + innerChild + " is: " + color);
+            //System.out.println("Color for " + innerChild + " is: " + color);
 
-            LegendItem item = new LegendItem(color, value);;
+            LegendItem item = new LegendItem(color, value);
 
             this.getChildren().add(item);
             count++;
