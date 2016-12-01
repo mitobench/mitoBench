@@ -336,5 +336,11 @@ public class TreeHaploController {
     }
 
 
+    public HashMap<String, List<String>> getTreeMap() {
+        return treeMap;
+    }
 
+    public TreeHaplo getTree() {
+        return tree;
+    }
 }

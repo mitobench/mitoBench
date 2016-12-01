@@ -2,14 +2,11 @@ package view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
-import view.charts.BarPlotHaplo;
-import view.charts.StackedBar;
 import view.menus.*;
 import view.table.*;
 import view.tree.TreeHaploController;
@@ -26,8 +23,9 @@ public class MitoBenchWindow extends Application{
     private BorderPane root;
     private TableController tableController;
     private Scene scene;
-    private VBox vBox;
+    private TreeHaploController treeController;
     private TabPane tabPane;
+
 
 
     @Override
@@ -64,7 +62,7 @@ public class MitoBenchWindow extends Application{
         ToolsMenu toolsMenu = new ToolsMenu();
         TableMenu tableMenu = new TableMenu(tableController);
         //GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, vBox);
-        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane);
+        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
@@ -146,7 +144,7 @@ public class MitoBenchWindow extends Application{
         vbox.getChildren().addAll(tableController.getTable());
 
         stackPane.setCenter(vbox);
-        TreeHaploController treeHaploChooser = new TreeHaploController(stackPane, tableController);
+        treeController = new TreeHaploController(stackPane, tableController);
 
         return stackPane;
     }

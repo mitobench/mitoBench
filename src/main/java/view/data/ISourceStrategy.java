@@ -1,5 +1,6 @@
 package view.data;
 
+import javafx.scene.control.TreeView;
 import view.controls.sunburst.WeightedTreeItem;
 
 import java.util.HashMap;
@@ -16,6 +17,9 @@ public interface ISourceStrategy {
      * We expect the model to be a tree model.
      * @return
      */
-    WeightedTreeItem<String> getData(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights);
+    WeightedTreeItem<String> getData(HashMap<String, List<String>> hg_to_group,
+                                     HashMap<String, HashMap<String, Integer>> weights,
+                                     HashMap<String, List<String>> treeMap,
+                                     TreeView tree);
 
 }

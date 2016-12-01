@@ -1,6 +1,5 @@
 package view.menus;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,7 +10,7 @@ import view.charts.BarPlotHaplo;
 import view.charts.StackedBar;
 import view.charts.SunburstChart;
 import view.table.TableController;
-import view.table.TableSelectionFilter;
+import view.tree.TreeHaploController;
 
 import java.util.*;
 
@@ -27,16 +26,18 @@ public class GraphicsMenu {
     private BarPlotHaplo barPlotHaplo;
     private StackedBar stackedBar;
     private SunburstChart sunburstChart;
-    private BorderPane sunburstBorderPane;
     private HashMap<String, HashMap<String, Integer>> weights;
     private TabPane tabPane;
+    private HashMap<String, List<String>> treeMap;
+    private TreeView<String> tree;
 
 
-    public GraphicsMenu(TableController tableController, TabPane vBox){
+    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController){
         menuGraphics = new Menu("Graphics");
         this.tableController = tableController;
-        sunburstBorderPane = new BorderPane();
         tabPane = vBox;
+        treeMap = treeController.getTreeMap();
+        tree = treeController.getTree().getTree();
         addSubMenus();
     }
 
@@ -60,8 +61,8 @@ public class GraphicsMenu {
 
     }
 
-    private void initSunburst(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights){
-        this.sunburstChart = new SunburstChart(sunburstBorderPane, hg_to_group, weights);
+    private void initSunburst(){
+        sunburstChart = new SunburstChart(new BorderPane());
         Tab tab = new Tab();
         tab.setText("Sunburst Chart");
         tab.setContent(sunburstChart.getBorderPane());
@@ -93,9 +94,7 @@ public class GraphicsMenu {
             public void handle(ActionEvent t) {
                 try {
 
-
-                    if(barPlotHaplo==null)
-                        initBarchart();
+                    initBarchart();
 
                     TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
                     List<String> columnData = new ArrayList<>();
@@ -132,34 +131,16 @@ public class GraphicsMenu {
         plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
-                    if(stackedBar==null)
-                        initStackedBarchart();
+                    initStackedBarchart();
 
-                    TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
-                    TableColumn grouping_col = tableController.getTableColumnByName("Grouping");
-
-
-                    List<String> columnDataHG = new ArrayList<>();
-                    List<String> columnDataGroup = new ArrayList<>();
-
-                    for (Object item : tableController.getTable().getItems()) {
-                        columnDataHG.add((String)haplo_col.getCellObservableValue(item).getValue());
-                        columnDataGroup.add((String)grouping_col.getCellObservableValue(item).getValue());
-                    }
-                    String[] seletcion_haplogroups = tableController.removeDuplicates(columnDataHG.toArray(new String[columnDataHG.size()]));
-                    String[] seletcion_groups = tableController.removeDuplicates(columnDataGroup.toArray(new String[columnDataGroup.size()]));
-
-
-                    // parse selection to tablefilter
-                    TableSelectionFilter tableFilter = new TableSelectionFilter();
+                    String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, getSelectedRows());
+                    String[] seletcion_haplogroups = cols[0];
+                    String[] seletcion_groups = cols[1];
 
                     stackedBar.clearData();
-
                     stackedBar.setCategories(seletcion_groups);
 
                     if (seletcion_haplogroups.length != 0) {
-                        tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
-
                         for(int i = 0; i < seletcion_haplogroups.length; i++){
 
                             List< XYChart.Data<String, Number> > data_list = new ArrayList<XYChart.Data<String, Number>>();
@@ -170,17 +151,11 @@ public class GraphicsMenu {
                                         tableController.getColIndex("Grouping"));
                                 XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(seletcion_groups[j], count_per_HG);
                                 data_list.add(data);
-
                             }
-
                             stackedBar.addSerie(data_list, seletcion_haplogroups[i]);
                         }
-
                     }
-
                     stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
-
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -196,22 +171,18 @@ public class GraphicsMenu {
 
          */
 
-        MenuItem sunburstShartItem = new MenuItem("Create Sunburst chart");
-        sunburstShartItem.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem sunburstChartItem = new MenuItem("Create Sunburst chart");
+        sunburstChartItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
-                    // work only on selected table items
-                    // no selection --> take all items
-                    ObservableList<ObservableList> selectedTableItems = FXCollections.observableArrayList();
-                    if(tableController.getTable().getSelectionModel().getSelectedItems().size() != 0){
-                        selectedTableItems = tableController.getTable().getSelectionModel().getSelectedItems();
-                    } else {
-                        selectedTableItems = tableController.getTable().getItems();
-                    }
 
-
+                    initSunburst();
+                    // get selected rows
+                    ObservableList<ObservableList> selectedTableItems = getSelectedRows();
                     HashMap<String, List<String>> hg_to_group = getHG_to_group(selectedTableItems);
-                    initSunburst(hg_to_group, weights);
+
+                    sunburstChart.create(hg_to_group, weights, treeMap, tree);
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -240,7 +211,7 @@ public class GraphicsMenu {
 
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
 
-        menuGraphics.getItems().addAll(barchart, sunburstShartItem, new SeparatorMenuItem(), clearPlotBox);
+        menuGraphics.getItems().addAll(barchart, sunburstChartItem, new SeparatorMenuItem(), clearPlotBox);
     }
 
     public Menu getMenuGraphics() {
@@ -254,20 +225,9 @@ public class GraphicsMenu {
      */
     public HashMap<String, List<String>> getHG_to_group(ObservableList<ObservableList> selectedTableItems ){
 
-        TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
-        TableColumn grouping_col = tableController.getTableColumnByName("Grouping");
-
-
-        List<String> columnDataHG = new ArrayList<>();
-        selectedTableItems.stream().forEach((o)
-                -> columnDataHG.add((String)haplo_col.getCellData(o)));
-
-        Set<String> columnDataGroup = new HashSet<>();
-        selectedTableItems.stream().forEach((o)
-                -> columnDataGroup.add((String)grouping_col.getCellData(o)));
-
-        String[] seletcion_haplogroups = columnDataHG.toArray(new String[columnDataHG.size()]);
-        String[] seletcion_groups = columnDataGroup.toArray(new String[columnDataGroup.size()]);
+        String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, getSelectedRows());
+        String[] seletcion_haplogroups = cols[0];
+        String[] seletcion_groups = cols[1];
 
 
         // parse selection to tablefilter
@@ -306,6 +266,13 @@ public class GraphicsMenu {
     }
 
 
+    /**
+     * This method iterates over groups and their corresponding haplogroups and counts the occurrences per haplogroup
+     * per group. Counts are later used as weights for sunburst
+     *
+     * @param seletcion_haplogroups unique list of haplogroups
+     * @param seletcion_groups  unique list of groups
+     */
     public void getWeights(String[] seletcion_haplogroups, String[] seletcion_groups){
 
         // hash map
@@ -342,6 +309,43 @@ public class GraphicsMenu {
             }
 
         }
+    }
+
+    /**
+     * This method returns all selected rows. If no row is selected, all rows are returned.
+     * @return
+     */
+    private ObservableList<ObservableList> getSelectedRows(){
+
+        ObservableList<ObservableList> selectedTableItems;
+        if(tableController.getTable().getSelectionModel().getSelectedItems().size() != 0){
+            selectedTableItems = tableController.getTable().getSelectionModel().getSelectedItems();
+        } else {
+            selectedTableItems = tableController.getTable().getItems();
+        }
+
+        return selectedTableItems;
+
+    }
+
+    public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems){
+
+
+        TableColumn haplo_col = tableController.getTableColumnByName(names[0]);
+        TableColumn grouping_col = tableController.getTableColumnByName(names[1]);
+
+
+
+        List<String> columnDataHG = new ArrayList<>();
+        selectedTableItems.stream().forEach((o)
+                -> columnDataHG.add((String)haplo_col.getCellData(o)));
+
+        Set<String> columnDataGroup = new HashSet<>();
+        selectedTableItems.stream().forEach((o)
+                -> columnDataGroup.add((String)grouping_col.getCellData(o)));
+
+        return new String[][]{columnDataHG.toArray(new String[columnDataHG.size()]),
+                              columnDataGroup.toArray(new String[columnDataGroup.size()])};
     }
 
     public HashMap<String, HashMap<String, Integer>> getWeights() {

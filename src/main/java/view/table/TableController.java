@@ -36,9 +36,6 @@ public class TableController {
     private HashMap<String, Integer> column_to_index;
     private TableController controller;
     private GroupController groupController;
-    private TableMover tableMover;
-
-
 
 
 
@@ -46,30 +43,19 @@ public class TableController {
 
         table = new TableView();
         table.setEditable(false);
-        //table.setColumnResizePolicy((param) -> true );
 
         table.prefHeightProperty().bind(scene.heightProperty());
         table.prefWidthProperty().bind(scene.widthProperty());
 
-
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-
-        // table mover
-//        tableMover = new TableMover(table);
-//        tableMover.setMoving();
-//        tableMover.setZooming();
-
-
-
 
         data = FXCollections.observableArrayList();
         data_copy = FXCollections.observableArrayList();
         col_names = new ArrayList<>();
 
         dataTable = new DataTable();
-        column_to_index = new HashMap<String, Integer>();
+        column_to_index = new HashMap<>();
 
         this.controller = this;
         groupController = new GroupController();

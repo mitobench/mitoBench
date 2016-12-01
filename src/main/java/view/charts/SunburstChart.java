@@ -1,4 +1,5 @@
 package view.charts;
+import javafx.scene.control.TreeView;
 import view.controls.sunburst.*;
 import view.data.ISourceStrategy;
 import view.data.SourceStrategyHaplogroups;
@@ -22,9 +23,10 @@ public class SunburstChart {
     private SunburstView sunburstView;
     private BorderPane sunburstBorderPane;
     private WeightedTreeItem<String> rootData;
+    private ColorStrategyRandom colorStrategyRandom;
+    private ColorStrategySectorShades colorStrategyShades;
 
-    public SunburstChart(BorderPane borderPane, HashMap<String, List<String>> hg_to_group,
-                         HashMap<String, HashMap<String, Integer>> weights){
+    public SunburstChart(BorderPane borderPane){
 
         sunburstBorderPane = borderPane;
 
@@ -32,25 +34,49 @@ public class SunburstChart {
         sunburstView = new SunburstView();
 
         // Create all the available color strategies once to be able to use them at runtime.
-        ColorStrategyRandom colorStrategyRandom = new ColorStrategyRandom();
-        ColorStrategySectorShades colorStrategyShades = new ColorStrategySectorShades();
+        colorStrategyRandom = new ColorStrategyRandom();
+        colorStrategyShades = new ColorStrategySectorShades();
 
+    }
+
+    public void create(HashMap<String, List<String>> hg_to_group,
+                       HashMap<String, HashMap<String, Integer>> weights,
+                       HashMap<String, List<String>> treeMap,
+                       TreeView tree){
+
+        loadData(hg_to_group, weights, treeMap, tree);
+        addButtons();
+        finishSetup();
+    }
+
+    private void loadData( HashMap<String, List<String>> hg_to_group,
+                           HashMap<String, HashMap<String, Integer>> weights,
+                           HashMap<String, List<String>> treeMap,
+                           TreeView tree){
         // load data
-        addData(hg_to_group, weights);
+        addData(hg_to_group, weights, treeMap, tree);
 
         // Set the view.data as root item
         sunburstView.setRootItem(rootData);
         sunburstView.setColorStrategy(colorStrategyShades);
+    }
+
+    private void addButtons(){
 
         ToggleButton btnCSShades = new ToggleButton("Shades Color Strategy");
+        ToggleButton btnCSRandom = new ToggleButton("Random Color Strategy");
+
         btnCSShades.setOnAction(event -> {
+            btnCSRandom.setSelected(false);
             sunburstView.setColorStrategy(colorStrategyShades);
         });
 
-        ToggleButton btnCSRandom = new ToggleButton("Random Color Strategy");
+
         btnCSRandom.setOnAction(event -> {
+            btnCSShades.setSelected(false);
             sunburstView.setColorStrategy(colorStrategyRandom);
         });
+
 
         IColorStrategy colorStrategy = sunburstView.getColorStrategy();
         if(colorStrategy instanceof ColorStrategyRandom){
@@ -59,51 +85,14 @@ public class SunburstChart {
             btnCSShades.setSelected(true);
         }
 
-
-//        ToggleButton btnShowLegend = new ToggleButton("Show Legend");
-//        btnShowLegend.setSelected(true);
-//        btnShowLegend.setOnAction(event -> {
-//            //sunburstView.setLegendVisibility(true);
-//        });
-//
-//        ToggleButton btnHideLegend = new ToggleButton("Hide Legend");
-//        btnHideLegend.setOnAction(event -> {
-//            //sunburstView.setLegendVisibility(false);
-//        });
-
-
-
-       finishSetup();
-
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(btnCSShades, btnCSRandom);
+        sunburstBorderPane.setBottom(buttons);
 
 
     }
 
-
-    public void addData(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights) {
-
-        clear();
-
-        // Define a strategy by which the view.data should be received.
-        ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
-        rootData = sourceStrategy.getData(hg_to_group, weights);
-
-
-    }
-
-
-
-    public BorderPane getBorderPane(){
-        return sunburstBorderPane;
-    }
-
-
-    public void clear(){
-        this.rootData = null;
-    }
-
-
-    public void finishSetup(){
+    private void finishSetup(){
 
         // Zoom level
 
@@ -143,4 +132,33 @@ public class SunburstChart {
 
 
     }
+
+    /**
+     * This method parses data to class where data are added to chart
+     * @param hg_to_group
+     * @param weights
+     */
+    public void addData(HashMap<String, List<String>> hg_to_group,
+                        HashMap<String, HashMap<String, Integer>> weights,
+                        HashMap<String, List<String>> treeMap,
+                        TreeView tree) {
+
+        // Define a strategy by which the view.data should be received.
+        ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
+        rootData = sourceStrategy.getData(hg_to_group, weights, treeMap, tree);
+
+    }
+
+
+    public BorderPane getBorderPane(){
+        return sunburstBorderPane;
+    }
+
+    public void clear(){
+        if(rootData.getChildren()==null)
+            this.rootData.getChildren().clear();
+    }
+
+
+
 }
