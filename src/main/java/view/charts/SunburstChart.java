@@ -35,14 +35,8 @@ public class SunburstChart {
         ColorStrategyRandom colorStrategyRandom = new ColorStrategyRandom();
         ColorStrategySectorShades colorStrategyShades = new ColorStrategySectorShades();
 
-
+        // load data
         addData(hg_to_group, weights);
-
-//        System.out.println("root children: ");
-//        for (WeightedTreeItem<String> eatable : rootData.getChildrenWeighted()){
-//            System.out.println(eatable.getValue() + ": " + eatable.getRelativeWeight());
-//        }
-
 
         // Set the view.data as root item
         sunburstView.setRootItem(rootData);
@@ -66,18 +60,50 @@ public class SunburstChart {
         }
 
 
-        ToggleButton btnShowLegend = new ToggleButton("Show Legend");
-        btnShowLegend.setSelected(true);
-        btnShowLegend.setOnAction(event -> {
-            //sunburstView.setLegendVisibility(true);
-        });
+//        ToggleButton btnShowLegend = new ToggleButton("Show Legend");
+//        btnShowLegend.setSelected(true);
+//        btnShowLegend.setOnAction(event -> {
+//            //sunburstView.setLegendVisibility(true);
+//        });
+//
+//        ToggleButton btnHideLegend = new ToggleButton("Hide Legend");
+//        btnHideLegend.setOnAction(event -> {
+//            //sunburstView.setLegendVisibility(false);
+//        });
 
-        ToggleButton btnHideLegend = new ToggleButton("Hide Legend");
-        btnHideLegend.setOnAction(event -> {
-            //sunburstView.setLegendVisibility(false);
-        });
 
 
+       finishSetup();
+
+
+
+    }
+
+
+    public void addData(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights) {
+
+        clear();
+
+        // Define a strategy by which the view.data should be received.
+        ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
+        rootData = sourceStrategy.getData(hg_to_group, weights);
+
+
+    }
+
+
+
+    public BorderPane getBorderPane(){
+        return sunburstBorderPane;
+    }
+
+
+    public void clear(){
+        this.rootData = null;
+    }
+
+
+    public void finishSetup(){
 
         // Zoom level
 
@@ -113,91 +139,8 @@ public class SunburstChart {
         BorderPane.setMargin(myLegend, new Insets(20));
         BorderPane.setAlignment(myLegend, Pos.CENTER_LEFT);
 
-
         Event.fireEvent(sunburstView, new SunburstView.VisualChangedEvent());
 
-
-
-
-    }
-
-
-    public void addData(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights) {
-
-        clear();
-
-        // Define a strategy by which the view.data should be received.
-        ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
-        rootData = sourceStrategy.getData(hg_to_group, weights);
-
-
-    }
-
-
-
-    public BorderPane getBorderPane(){
-        return sunburstBorderPane;
-    }
-
-
-    public void clear(){
-        this.rootData = null;
-    }
-
-
-    public void finishSetup(){
-
-
-        // Max Level drawn
-
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(10);
-        slider.setValue(sunburstView.getMaxDeepness());
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(5);
-        slider.setMinorTickCount(1);
-        slider.setBlockIncrement(1);
-
-        slider.valueProperty().addListener(x -> sunburstView.setMaxDeepness((int)slider.getValue()));
-
-        // Zoom level
-
-        Slider zoomSlider = new Slider();
-        zoomSlider.setMin(0.1);
-        zoomSlider.setMax(3);
-        zoomSlider.setValue(sunburstView.getScaleX());
-        zoomSlider.setShowTickLabels(true);
-        zoomSlider.setShowTickMarks(true);
-        zoomSlider.setMajorTickUnit(0.5);
-        zoomSlider.setMinorTickCount(1);
-        zoomSlider.setBlockIncrement(0.1);
-
-        zoomSlider.valueProperty().addListener(x -> {
-            double scale = zoomSlider.getValue();
-            sunburstView.setScaleX(scale);
-            sunburstView.setScaleY(scale);
-        });
-
-
-        HBox toolbar = new HBox(20);
-        BorderPane.setMargin(toolbar, new Insets(10));
-
-
-        toolbar.getChildren().addAll(slider, zoomSlider);
-
-        sunburstBorderPane.setTop(toolbar);
-
-        sunburstBorderPane.setCenter(sunburstView);
-        BorderPane.setAlignment(sunburstView, Pos.CENTER);
-        SunburstLegend myLegend = new SunburstLegend(sunburstView);
-        sunburstBorderPane.setRight(myLegend);
-        BorderPane.setMargin(myLegend, new Insets(20));
-        BorderPane.setAlignment(myLegend, Pos.CENTER_LEFT);
-
-
-        Event.fireEvent(sunburstView, new SunburstView.VisualChangedEvent());
 
     }
 }

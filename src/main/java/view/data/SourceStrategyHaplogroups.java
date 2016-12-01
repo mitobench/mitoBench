@@ -2,9 +2,7 @@ package view.data;
 
 import view.controls.sunburst.WeightedTreeItem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * A dummy implementation of mockup view.data.
@@ -24,13 +22,16 @@ public class SourceStrategyHaplogroups implements ISourceStrategy {
     private WeightedTreeItem<String> getHaploDataWeightedTree(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights){
         WeightedTreeItem<String> root = new WeightedTreeItem(1, "Haplogroups");
 
+
         List<WeightedTreeItem<String>> rootItems = new ArrayList<>();
         for(String group : hg_to_group.keySet()){
             // weight == number of haplogroups per group
-            WeightedTreeItem<String> item = new WeightedTreeItem(hg_to_group.get(group).size(), group);
+            int weightGroup = new HashSet<String>(hg_to_group.get(group)).size();
+            WeightedTreeItem<String> item = new WeightedTreeItem(weightGroup, group);
             rootItems.add(item);
 
-            for(String hg : hg_to_group.get(group)){
+            Set<String> uniqueHGs = new HashSet<>(hg_to_group.get(group));
+            for(String hg : uniqueHGs){
                 int weight = weights.get(group).get(hg);
 
                 WeightedTreeItem<String> subItem = new WeightedTreeItem(weight, hg);

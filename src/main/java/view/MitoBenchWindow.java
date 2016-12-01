@@ -27,6 +27,7 @@ public class MitoBenchWindow extends Application{
     private TableController tableController;
     private Scene scene;
     private VBox vBox;
+    private TabPane tabPane;
 
 
     @Override
@@ -62,7 +63,8 @@ public class MitoBenchWindow extends Application{
         EditMenu editMenu = new EditMenu();
         ToolsMenu toolsMenu = new ToolsMenu();
         TableMenu tableMenu = new TableMenu(tableController);
-        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, vBox);
+        //GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, vBox);
+        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
@@ -100,20 +102,25 @@ public class MitoBenchWindow extends Application{
      *
      * @return
      */
-    private HBox getPlotPane()
+    private TabPane getPlotPane()
     {
-        HBox hbox = new HBox();
-        vBox = new VBox();
-        vBox.setPadding(new Insets(0, 20, 0, 20));
+        tabPane = new TabPane();
+        tabPane.prefHeightProperty().bind(scene.heightProperty());
+        tabPane.prefWidthProperty().bind(scene.widthProperty());
+        tabPane.setPadding(new Insets(10, 10, 10,10));
+
+        //HBox hbox = new HBox();
+        //vBox = new VBox();
+        //vBox.setPadding(new Insets(0, 20, 0, 20));
 
 
-        vBox.prefHeightProperty().bind(scene.heightProperty());
-        vBox.prefWidthProperty().bind(scene.widthProperty());
-        vBox.setAlignment(Pos.CENTER);
+        //vBox.prefHeightProperty().bind(scene.heightProperty());
+        //vBox.prefWidthProperty().bind(scene.widthProperty());
+        //vBox.setAlignment(Pos.CENTER);
 
-        hbox.getChildren().addAll(vBox);
+        //hbox.getChildren().addAll(vBox);
 
-        return hbox;
+        return tabPane;
     }
 
 

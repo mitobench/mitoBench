@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import view.helpers.ColorHelper;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -265,6 +266,7 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
     private void addUnitView(SunburstDonutUnit donutView, int sector, int level){
         IColorStrategy colorStrategy = getSkinnable().getColorStrategy();
         Color color = colorStrategy.colorFor(donutView.getItem(), sector, level);
+        //Color color = ColorHelper.generateRandomColor();//generateMixedRandomColor(Color.BLUE);
         donutView.setFill(color);
         sunburst.getChildren().add(donutView);
     }

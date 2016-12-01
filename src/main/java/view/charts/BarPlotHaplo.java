@@ -7,6 +7,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.*;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -27,10 +28,10 @@ public class BarPlotHaplo extends ABarPlot {
     private double orgTranslateX, orgTranslateY;
 
 
-    public BarPlotHaplo(String title, String ylabel, VBox scene) {
+    public BarPlotHaplo(String title, String ylabel, TabPane scene) {
         super(title, ylabel, scene);
         this.bc.setLegendVisible(false);
-        setDragAndMove();
+        //setDragAndMove();
     }
 
 

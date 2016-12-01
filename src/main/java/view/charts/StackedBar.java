@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.*;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
@@ -26,18 +27,18 @@ public class StackedBar{
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
 
-    public StackedBar(String title, VBox vBox) {
+    public StackedBar(String title, TabPane vBox) {
         xAxis = new CategoryAxis();
         yAxis = new NumberAxis();
         sbc = new StackedBarChart<String, Number>(xAxis, yAxis);
 
         sbc.setTitle(title);
-        //sbc.prefWidthProperty().bind(vBox.widthProperty());
+        sbc.prefWidthProperty().bind(vBox.widthProperty());
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
         //sbc.setLegendVisible(true);
 
-        setDragAndMove();
+        //setDragAndMove();
 
         yAxis.setTickUnit(1);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {

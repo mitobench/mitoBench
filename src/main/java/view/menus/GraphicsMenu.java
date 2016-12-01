@@ -1,24 +1,19 @@
 package view.menus;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import view.charts.BarPlotHaplo;
 import view.charts.StackedBar;
 import view.charts.SunburstChart;
 import view.table.TableController;
 import view.table.TableSelectionFilter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -32,40 +27,54 @@ public class GraphicsMenu {
     private BarPlotHaplo barPlotHaplo;
     private StackedBar stackedBar;
     private SunburstChart sunburstChart;
-    private VBox chartbox;
     private BorderPane sunburstBorderPane;
     private HashMap<String, HashMap<String, Integer>> weights;
+    private TabPane tabPane;
 
-    public GraphicsMenu(TableController tableController, VBox vBox){
+
+    public GraphicsMenu(TableController tableController, TabPane vBox){
         menuGraphics = new Menu("Graphics");
         this.tableController = tableController;
-        chartbox = vBox;
         sunburstBorderPane = new BorderPane();
-
+        tabPane = vBox;
         addSubMenus();
     }
 
     private void initBarchart(){
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", chartbox);
-        chartbox.getChildren().add(barPlotHaplo.getBarChart());
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", tabPane);
+        Tab tab = new Tab();
+        tab.setText("Bar Chart");
+        tab.setContent(barPlotHaplo.getBarChart());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
+
     }
 
     private void initStackedBarchart(){
-        this.stackedBar = new StackedBar("Haplogroup frequency per group", chartbox);
-        chartbox.getChildren().add(stackedBar.getSbc());
+        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane);
+        Tab tab = new Tab();
+        tab.setText("Bar Chart per group");
+        tab.setContent(stackedBar.getSbc());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
 
     }
 
     private void initSunburst(HashMap<String, List<String>> hg_to_group, HashMap<String, HashMap<String, Integer>> weights){
         this.sunburstChart = new SunburstChart(sunburstBorderPane, hg_to_group, weights);
-        chartbox.getChildren().add(sunburstChart.getBorderPane());
+        Tab tab = new Tab();
+        tab.setText("Sunburst Chart");
+        tab.setContent(sunburstChart.getBorderPane());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
+
 
     }
 
     public void clearCharts(){
         stackedBar = null;
         barPlotHaplo = null;
-        chartbox.getChildren().clear();
+        tabPane.getTabs().clear();
     }
 
 
@@ -191,12 +200,18 @@ public class GraphicsMenu {
         sunburstShartItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
-                    HashMap<String, List<String>> hg_to_group = getHG_to_group();
-                    initSunburst(hg_to_group, weights);
+                    // work only on selected table items
+                    // no selection --> take all items
+                    ObservableList<ObservableList> selectedTableItems = FXCollections.observableArrayList();
+                    if(tableController.getTable().getSelectionModel().getSelectedItems().size() != 0){
+                        selectedTableItems = tableController.getTable().getSelectionModel().getSelectedItems();
+                    } else {
+                        selectedTableItems = tableController.getTable().getItems();
+                    }
 
-                    //sunburstChart.clear();
-                    //sunburstChart.addData();
-                    //sunburstChart.finishSetup();
+
+                    HashMap<String, List<String>> hg_to_group = getHG_to_group(selectedTableItems);
+                    initSunburst(hg_to_group, weights);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -233,72 +248,70 @@ public class GraphicsMenu {
     }
 
 
-
-    public HashMap<String, List<String>> getHG_to_group(){
+    /**
+     * This method assigns to each group the haplogroups which occurs within this group
+     * @return
+     */
+    public HashMap<String, List<String>> getHG_to_group(ObservableList<ObservableList> selectedTableItems ){
 
         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
         TableColumn grouping_col = tableController.getTableColumnByName("Grouping");
 
 
         List<String> columnDataHG = new ArrayList<>();
-        List<String> columnDataGroup = new ArrayList<>();
+        selectedTableItems.stream().forEach((o)
+                -> columnDataHG.add((String)haplo_col.getCellData(o)));
 
-        for (Object item : tableController.getTable().getItems()) {
-            columnDataHG.add((String)haplo_col.getCellObservableValue(item).getValue());
-            columnDataGroup.add((String)grouping_col.getCellObservableValue(item).getValue());
-        }
-        String[] seletcion_haplogroups = tableController.removeDuplicates(columnDataHG.toArray(new String[columnDataHG.size()]));
-        String[] seletcion_groups = tableController.removeDuplicates(columnDataGroup.toArray(new String[columnDataGroup.size()]));
+        Set<String> columnDataGroup = new HashSet<>();
+        selectedTableItems.stream().forEach((o)
+                -> columnDataGroup.add((String)grouping_col.getCellData(o)));
+
+        String[] seletcion_haplogroups = columnDataHG.toArray(new String[columnDataHG.size()]);
+        String[] seletcion_groups = columnDataGroup.toArray(new String[columnDataGroup.size()]);
 
 
         // parse selection to tablefilter
-        TableSelectionFilter tableFilter = new TableSelectionFilter();
         HashMap<String, List<String>> hg_to_group = new HashMap<>();
 
 
         if (seletcion_haplogroups.length != 0) {
 
-            tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
-
-            getWeights(seletcion_haplogroups, seletcion_groups);
-
-
             // iteration over grouping
             for(int i = 0; i < seletcion_groups.length; i++){
+                String group = seletcion_groups[i];
 
                 // create new hash entry for each group
-                if(!hg_to_group.containsKey(seletcion_groups[i])){
-                    hg_to_group.put(seletcion_groups[i], new ArrayList<>());
+                if(!hg_to_group.containsKey(group)){
+                    hg_to_group.put(group, new ArrayList<>());
                 }
 
-                // add each haplogroup which occurs within this group
-                ObservableList<ObservableList> selection = tableController.getTable().getItems();
 
                 // iterate over all table view rows
-                for(int k = 0; k < selection.size(); k++){
+                for(int k = 0; k < selectedTableItems.size(); k++){
+                    ObservableList list = selectedTableItems.get(k);
 
-                    ObservableList list = selection.get(k);
+                    if(list.get( tableController.getColIndex("Grouping")).equals(group)){
 
-                    if(list.get( tableController.getColIndex("Grouping")).equals(seletcion_groups[i])){
-                        List<String> tmp = hg_to_group.get(seletcion_groups[i]);
+                        List<String> tmp = hg_to_group.get(group);
                         tmp.add((String)list.get(tableController.getColIndex("Haplogroup")));
-                        hg_to_group.put(seletcion_groups[i], tmp);
+                        hg_to_group.put(group, tmp);
 
                     }
 
                 }
             }
         }
-
+        getWeights(seletcion_haplogroups, seletcion_groups);
         return hg_to_group;
     }
 
 
     public void getWeights(String[] seletcion_haplogroups, String[] seletcion_groups){
 
-        // hash map with:
+        // hash map
         // Group : <HG : count>
         weights = new HashMap<>();
+        Set<String> haplogroups = new HashSet<String>(Arrays.asList(seletcion_haplogroups));
 
         // get weights
         for(int i = 0; i < seletcion_groups.length; i++) {
@@ -308,8 +321,7 @@ public class GraphicsMenu {
             }
             HashMap<String, Integer> hash_tmp = weights.get(group);
 
-            for (int j = 0; j < seletcion_haplogroups.length; j++) {
-                String hg = seletcion_haplogroups[j];
+            for(String hg : haplogroups){
 
                 // get number of occurrences of this hg within this group
                 int count_per_HG = tableController.getCountPerHG(
@@ -319,11 +331,14 @@ public class GraphicsMenu {
                         tableController.getColIndex("Grouping")
                 );
 
-                if (!hash_tmp.containsKey(hg)) {
-                    hash_tmp.put(hg, count_per_HG);
-                } else {
-                    hash_tmp.put(hg, hash_tmp.get(hg) + 1);
+                if(count_per_HG!=0){
+                    if (!hash_tmp.containsKey(hg)) {
+                        hash_tmp.put(hg, count_per_HG);
+                    } else {
+                        hash_tmp.put(hg, hash_tmp.get(hg) + 1);
+                    }
                 }
+
             }
 
         }

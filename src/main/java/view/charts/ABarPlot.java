@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.*;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
@@ -19,7 +20,7 @@ public abstract class ABarPlot {
 
 
 
-    public ABarPlot(String title, String ylabel, VBox scene){
+    public ABarPlot(String title, String ylabel, TabPane scene){
 
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
