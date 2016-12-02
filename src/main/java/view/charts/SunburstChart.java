@@ -26,6 +26,7 @@ public class SunburstChart {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
+    private HashMap<String, List<String>> node_to_children;
 
     public SunburstChart(BorderPane borderPane){
 
@@ -43,9 +44,12 @@ public class SunburstChart {
     public void create(HashMap<String, List<String>> hg_to_group,
                        HashMap<String, HashMap<String, Integer>> weights,
                        HashMap<String, List<String>> treeMap,
-                       TreeItem<String> tree){
+                       TreeItem<String> tree,
+                       HashMap<String, List<String>> node_to_children,
+                       TreeView treeView){
 
-        loadData(hg_to_group, weights, treeMap, tree);
+        this.node_to_children = node_to_children;
+        loadData(hg_to_group, weights, treeMap, tree, treeView);
         addButtons();
         finishSetup();
     }
@@ -53,9 +57,9 @@ public class SunburstChart {
     private void loadData( HashMap<String, List<String>> hg_to_group,
                            HashMap<String, HashMap<String, Integer>> weights,
                            HashMap<String, List<String>> treeMap,
-                           TreeItem<String> tree){
+                           TreeItem<String> tree, TreeView treeView){
         // load data
-        addData(hg_to_group, weights, treeMap, tree);
+        addData(hg_to_group, weights, treeMap, tree, treeView);
 
         // Set the view.data as root item
         sunburstView.setRootItem(rootData);
@@ -142,11 +146,12 @@ public class SunburstChart {
     public void addData(HashMap<String, List<String>> hg_to_group,
                         HashMap<String, HashMap<String, Integer>> weights,
                         HashMap<String, List<String>> treeMap,
-                        TreeItem<String> tree) {
+                        TreeItem<String> tree,
+                        TreeView treeView) {
 
         // Define a strategy by which the view.data should be received.
         ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
-        rootData = sourceStrategy.getData(hg_to_group, weights, treeMap, tree);
+        rootData = sourceStrategy.getData(hg_to_group, weights, treeMap, tree, node_to_children, treeView);
 
     }
 

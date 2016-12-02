@@ -54,12 +54,16 @@ public class TreeHaploController {
     private TextField searchFieldListHaplogroup;
     private TreeHaplo tree;
     private HashMap<String, List<String>> treeMap;
+    private HashMap<String, List<String>> treeMap_leaf_to_root;
+    private HashMap<String, List<String>> node_to_children;
 
     public TreeHaploController(BorderPane root, TableController tableManager) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
 
         treeMap = new HashMap<String, List<String>>();
+        treeMap_leaf_to_root = new HashMap<String, List<String>>();
+        node_to_children = new HashMap<>();
 
         configureSearch(root);
         setAnimation();
@@ -297,7 +301,7 @@ public class TreeHaploController {
         // get subtree of each
         for(String haplo : haplo_list){
             // get sub-haplogroups of 'haplo'
-            List<String> path = treeMap.get(haplo.toString().toLowerCase());
+            List<String> path = treeMap.get(haplo.toString());
 
             // add them to list
             haplo_list_extended.addAll(path);
@@ -314,11 +318,26 @@ public class TreeHaploController {
         TreeIterator<String> iterator = new TreeIterator<>(item);
         TreeItem it = item;
         while (iterator.hasNext()) {
-            treeMap.put(it.getValue().toString().toLowerCase(), getSubtree(it, new ArrayList<String>()));
+            treeMap.put(it.getValue().toString(), getSubtree(it, new ArrayList<String>()));
+            treeMap_leaf_to_root.put(it.getValue().toString(), getPathToRoot(it));
+            node_to_children.put(it.getValue().toString(), it.getChildren());
             it = iterator.next();
         }
     }
 
+
+    private List<String> getPathToRoot(TreeItem it){
+
+        List<String> path_to_root = new ArrayList<>();
+        while(it.getParent()!=null){
+            path_to_root.add(it.getParent().getValue().toString());
+            it = it.getParent();
+        }
+
+
+        return path_to_root;
+
+    }
 
     private List<String> getSubtree(TreeItem root, List<String> path){
 
@@ -355,5 +374,13 @@ public class TreeHaploController {
 
     public TreeHaplo getTree() {
         return tree;
+    }
+
+    public HashMap<String, List<String>> getNode_to_children() {
+        return node_to_children;
+    }
+
+    public HashMap<String, List<String>> getTreeMap_leaf_to_root() {
+        return treeMap_leaf_to_root;
     }
 }

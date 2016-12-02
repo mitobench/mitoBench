@@ -29,7 +29,10 @@ public class GraphicsMenu {
     private HashMap<String, HashMap<String, Integer>> weights;
     private TabPane tabPane;
     private HashMap<String, List<String>> treeMap;
+    private HashMap<String, List<String>> treeMap_path_to_root;
     private TreeItem<String> tree_root;
+    private HashMap<String, List<String>> node_to_children;
+    private TreeView treeView;
 
 
     public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController){
@@ -37,7 +40,10 @@ public class GraphicsMenu {
         this.tableController = tableController;
         tabPane = vBox;
         treeMap = treeController.getTreeMap();
+        treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();
         tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
+        node_to_children = treeController.getNode_to_children();
+        treeView = treeController.getTree().getTree();
         addSubMenus();
     }
 
@@ -185,7 +191,7 @@ public class GraphicsMenu {
                     ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
                     HashMap<String, List<String>> hg_to_group = getHG_to_group(selectedTableItems);
 
-                    sunburstChart.create(hg_to_group, weights, treeMap, tree_root);
+                    sunburstChart.create(hg_to_group, weights, treeMap_path_to_root, tree_root, node_to_children, treeView);
 
 
                 } catch (Exception e) {

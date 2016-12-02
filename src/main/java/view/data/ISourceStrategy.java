@@ -21,6 +21,8 @@ public interface ISourceStrategy {
     WeightedTreeItem<String> getData(HashMap<String, List<String>> hg_to_group,
                                      HashMap<String, HashMap<String, Integer>> weights,
                                      HashMap<String, List<String>> treeMap,
-                                     TreeItem<String> tree);
+                                     TreeItem<String> tree,
+                                     HashMap<String, List<String>> note_to_children,
+                                     TreeView treeView);
 
 }
