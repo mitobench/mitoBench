@@ -1,10 +1,8 @@
 package view.menus;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-
+import view.dialogues.information.AboutDialogue;
 
 
 /**
@@ -29,11 +27,8 @@ public class HelpMenu {
          */
 
         MenuItem helpItem = new MenuItem("Show help");
-        helpItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        helpItem.setOnAction(t -> {
 
-
-           }
         });
 
 
@@ -43,11 +38,11 @@ public class HelpMenu {
          */
 
         MenuItem aboutItem = new MenuItem("About MitoBench");
-        helpItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        helpItem.setOnAction(t -> {
+            AboutDialogue aboutDialogue = new AboutDialogue("About MitoBench", "See your fancy new homepage here!");
+            //TODO add logo here once we have one, add information on homepage once we have one!
 
 
-            }
         });
 
 
