@@ -1,4 +1,4 @@
-package view.ErrorDialogues;
+package view.dialogues.error;
 
 import io.Exceptions.FastAException;
 
