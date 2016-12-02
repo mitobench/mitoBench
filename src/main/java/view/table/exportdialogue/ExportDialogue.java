@@ -66,9 +66,9 @@ public class ExportDialogue extends Application {
             saveAsDialogue.start(new Stage());
             if(saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
-                ARPWriter arpwriter = new ARPWriter();
-                arpwriter.writeData(outfileDB);
+                ARPWriter arpwriter = new ARPWriter(tableManager);
                 arpwriter.setGroups(selection);
+                arpwriter.writeData(outfileDB);
             }
             //Beast output
         } else if (result.get() == beast_button) {

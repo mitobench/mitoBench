@@ -39,7 +39,7 @@ public class ArpSample {
 
 
         for (FastaEntry fa: data){
-            String head = fa.getHeader().substring(1);
+            String head = fa.getHeader();
             String seq = fa.getSequence();
             if(regions.containsKey(head)){
                 String groupID = regions.get(head);
