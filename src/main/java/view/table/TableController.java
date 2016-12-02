@@ -353,7 +353,7 @@ public class TableController {
     public int getCountPerHG(String hg, String group, int colIndexHG, int colIndexGroup){
 
         int count = 0;
-        ObservableList<ObservableList> selection = table.getItems();
+        ObservableList<ObservableList> selection = getSelectedRows();
         for(int i = 0; i < selection.size(); i++){
             ObservableList list = selection.get(i);
             if(list.get(colIndexGroup).equals(group) && list.get(colIndexHG).equals(hg)){
@@ -431,5 +431,22 @@ public class TableController {
         return new HashSet<String>(Arrays.asList(arr)).toArray(new String[0]);
     }
 
+
+    /**
+     * This method returns all selected rows. If no row is selected, all rows are returned.
+     * @return
+     */
+    public ObservableList<ObservableList> getSelectedRows(){
+
+        ObservableList<ObservableList> selectedTableItems;
+        if(table.getSelectionModel().getSelectedItems().size() != 0){
+            selectedTableItems = table.getSelectionModel().getSelectedItems();
+        } else {
+            selectedTableItems = table.getItems();
+        }
+
+        return selectedTableItems;
+
+    }
 
 }

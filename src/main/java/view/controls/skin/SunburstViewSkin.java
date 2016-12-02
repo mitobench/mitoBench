@@ -510,7 +510,7 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
 
         public SunburstDonutUnit(WeightedTreeItem<T> item){
             this.item = item;
-            Tooltip t = new Tooltip(item.getValue().toString());
+            Tooltip t = new Tooltip(item.getValue().toString() +" | " + item.getWeight());
             Tooltip.install(this, t);
 
             setOnMouseClicked(event -> {

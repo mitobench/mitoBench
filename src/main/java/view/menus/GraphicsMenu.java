@@ -29,7 +29,7 @@ public class GraphicsMenu {
     private HashMap<String, HashMap<String, Integer>> weights;
     private TabPane tabPane;
     private HashMap<String, List<String>> treeMap;
-    private TreeView<String> tree;
+    private TreeItem<String> tree_root;
 
 
     public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController){
@@ -37,7 +37,7 @@ public class GraphicsMenu {
         this.tableController = tableController;
         tabPane = vBox;
         treeMap = treeController.getTreeMap();
-        tree = treeController.getTree().getTree();
+        tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
         addSubMenus();
     }
 
@@ -133,7 +133,7 @@ public class GraphicsMenu {
                 try {
                     initStackedBarchart();
 
-                    String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, getSelectedRows());
+                    String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
                     String[] seletcion_haplogroups = cols[0];
                     String[] seletcion_groups = cols[1];
 
@@ -178,10 +178,10 @@ public class GraphicsMenu {
 
                     initSunburst();
                     // get selected rows
-                    ObservableList<ObservableList> selectedTableItems = getSelectedRows();
+                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
                     HashMap<String, List<String>> hg_to_group = getHG_to_group(selectedTableItems);
 
-                    sunburstChart.create(hg_to_group, weights, treeMap, tree);
+                    sunburstChart.create(hg_to_group, weights, treeMap, tree_root);
 
 
                 } catch (Exception e) {
@@ -225,7 +225,7 @@ public class GraphicsMenu {
      */
     public HashMap<String, List<String>> getHG_to_group(ObservableList<ObservableList> selectedTableItems ){
 
-        String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, getSelectedRows());
+        String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] seletcion_haplogroups = cols[0];
         String[] seletcion_groups = cols[1];
 
@@ -311,22 +311,7 @@ public class GraphicsMenu {
         }
     }
 
-    /**
-     * This method returns all selected rows. If no row is selected, all rows are returned.
-     * @return
-     */
-    private ObservableList<ObservableList> getSelectedRows(){
 
-        ObservableList<ObservableList> selectedTableItems;
-        if(tableController.getTable().getSelectionModel().getSelectedItems().size() != 0){
-            selectedTableItems = tableController.getTable().getSelectionModel().getSelectedItems();
-        } else {
-            selectedTableItems = tableController.getTable().getItems();
-        }
-
-        return selectedTableItems;
-
-    }
 
     public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems){
 
