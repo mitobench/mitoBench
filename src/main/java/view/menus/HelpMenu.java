@@ -38,7 +38,7 @@ public class HelpMenu {
          */
 
         MenuItem aboutItem = new MenuItem("About MitoBench");
-        helpItem.setOnAction(t -> {
+        aboutItem.setOnAction(t -> {
             AboutDialogue aboutDialogue = new AboutDialogue("About MitoBench", "See your fancy new homepage here!");
             //TODO add logo here once we have one, add information on homepage once we have one!
 
