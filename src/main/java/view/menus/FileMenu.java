@@ -1,8 +1,5 @@
 package view.menus;
 
-import io.ErrorDialogues.ARPErrorDialogue;
-import io.ErrorDialogues.FastAErrorDialogue;
-import io.ErrorDialogues.HSDErrorDialogue;
 import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
@@ -17,6 +14,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.Stage;
+import view.ErrorDialogues.ARPErrorDialogue;
+import view.ErrorDialogues.FastAErrorDialogue;
+import view.ErrorDialogues.HSDErrorDialogue;
 import view.table.ImportDialogue;
 import view.table.TableController;
 import view.table.exportdialogue.ExportDialogue;
