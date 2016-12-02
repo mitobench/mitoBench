@@ -1,14 +1,13 @@
 package view.table;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by neukamm on 11/24/16.
  */
 public class MTStorage implements IDataStorage {
 
-    HashMap<String, List<String>> mtSequences;
+    HashMap<String, String> mtSequences;
 
     public MTStorage(){
         mtSequences = new HashMap<>();
@@ -18,12 +17,30 @@ public class MTStorage implements IDataStorage {
 
 
     @Override
-    public HashMap<String, List<String>> getData() {
+    public HashMap<String, String> getData() {
         return mtSequences;
     }
 
     @Override
-    public void addData(String key, List<String> data) {
+    public void addData(String key, String data) {
         mtSequences.put(key, data);
+    }
+
+    public void setMTStorage(DataTable table){
+
+        // iterate over rows
+        // get ID and
+
+        String[] ids = table.getDataTable().get("ID");
+        String[] seqs = table.getDataTable().get("MTSequence");
+
+        for(int i = 0; i < ids.length; i++){
+            String seq = seqs[i];
+            if(!mtSequences.containsKey(ids[i]))
+                mtSequences.put(ids[i], seq);
+        }
+
+
+
     }
 }

@@ -140,6 +140,9 @@ public class GraphicsMenu {
                     stackedBar.clearData();
                     stackedBar.setCategories(seletcion_groups);
 
+                    // consider Hgs only once per group
+                    //Set<String> haplogroups = new HashSet<String>(Arrays.asList(seletcion_haplogroups));
+
                     if (seletcion_haplogroups.length != 0) {
                         for(int i = 0; i < seletcion_haplogroups.length; i++){
 
@@ -156,6 +159,7 @@ public class GraphicsMenu {
                         }
                     }
                     stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+                    stackedBar.addTooltip();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -245,7 +249,6 @@ public class GraphicsMenu {
                     hg_to_group.put(group, new ArrayList<>());
                 }
 
-
                 // iterate over all table view rows
                 for(int k = 0; k < selectedTableItems.size(); k++){
                     ObservableList list = selectedTableItems.get(k);
@@ -320,8 +323,7 @@ public class GraphicsMenu {
         TableColumn grouping_col = tableController.getTableColumnByName(names[1]);
 
 
-
-        List<String> columnDataHG = new ArrayList<>();
+        Set<String> columnDataHG = new HashSet<>();
         selectedTableItems.stream().forEach((o)
                 -> columnDataHG.add((String)haplo_col.getCellData(o)));
 

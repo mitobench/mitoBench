@@ -36,6 +36,7 @@ public class TableController {
     private HashMap<String, Integer> column_to_index;
     private TableController controller;
     private GroupController groupController;
+    private MTStorage mtStorage;
 
 
 
@@ -59,6 +60,7 @@ public class TableController {
 
         this.controller = this;
         groupController = new GroupController();
+        mtStorage = new MTStorage();
 
     }
 
@@ -106,9 +108,6 @@ public class TableController {
 
         setColumns_to_index();
         setContextMenu();
-
-
-
     }
 
 
@@ -125,7 +124,15 @@ public class TableController {
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
 
         HashMap<String, String[]> data_hash = dataTable.getDataTable();
+
         String[][] data_tmp = new String[dataTable.getDataTable().get("ID").length][dataTable.getDataTable().keySet().size()];
+
+//        String[] seqs_short = new String[dataTable.getDataTable().get("MTSequence").length];
+//        for(int i = 0; i < dataTable.getDataTable().get("MTSequence").length; i++){
+//            seqs_short[i] = dataTable.getDataTable().get("MTSequence")[i].substring(0,5)+"...";
+//        }
+//
+//        dataTable.getDataTable().put("MTSequence", seqs_short);
 
         int m = 0;
         for(String col : data_hash.keySet()){
@@ -310,7 +317,7 @@ public class TableController {
                 String val = (String) column.getCellObservableValue(row).getValue();
                 if(column.getText().equals("MTSequence")){
                     values.add(
-                            dataTable.getMtStorage().getData().get(val).get(0));
+                            mtStorage.getData().get(val));
                 } else {
                     values.add(
                             (String) column.getCellObservableValue(row).getValue());

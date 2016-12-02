@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.*;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
@@ -58,7 +59,10 @@ public class StackedBar{
         yAxis.setMinorTickVisible(false);
         xAxis.setTickMarkVisible(false);
 
+
     }
+
+
 
     public void addSerie( List<XYChart.Data<String, Number>> data, String name){
         XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
@@ -157,6 +161,17 @@ public class StackedBar{
 
     public CategoryAxis getxAxis() {
         return xAxis;
+    }
+
+    public void addTooltip(){
+
+        for (final XYChart.Series<String, Number> series : sbc.getData()) {
+            for (final XYChart.Data<String, Number> data : series.getData()) {
+                Tooltip tooltip = new Tooltip();
+                tooltip.setText(series.getName() + " | " + data.getYValue().toString());
+                Tooltip.install(data.getNode(), tooltip);
+            }
+        }
     }
 
 }

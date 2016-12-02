@@ -8,7 +8,7 @@ import java.util.List;
  */
 public interface IDataStorage {
 
-    HashMap<String, List<String>> getData();
-    void addData(String key, List<String> data);
+    HashMap<String, String> getData();
+    void addData(String key, String data);
 
 }

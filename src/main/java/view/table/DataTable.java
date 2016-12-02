@@ -1,10 +1,10 @@
 package view.table;
 
 import io.datastructure.Entry;
-import static java.util.Arrays.asList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * Created by neukamm on 20.11.2016.
@@ -15,6 +15,8 @@ public class DataTable {
     // Array = view.data od this col     --> has to be array to ensure the order of the entries
     HashMap<String, String[]> data;
     MTStorage mtStorage;
+
+
     public DataTable(){
 
         data = new HashMap<>();
@@ -65,8 +67,11 @@ public class DataTable {
                 if(columnName.equals("MTSequence")){
                     String mtSeq = (String)entry.getData().toString();
                     String mtseq_short = mtSeq.substring(0,5)+"...";
+                    // store original mt seq
+                    columnEntries[getRowPosition(key)] = mtSeq;
+                    mtStorage.setMTStorage(this);
                     columnEntries[getRowPosition(key)] = mtseq_short;
-                    mtStorage.addData(mtseq_short, asList(mtSeq));
+
                 } else {
                     columnEntries[rowPosition] = (String)entry.getData();
                 }
@@ -84,8 +89,9 @@ public class DataTable {
                 if(columnName.equals("MTSequence")){
                     String mtSeq = (String)entry.getData().toString();
                     String mtseq_short = mtSeq.substring(0,5)+"...";
+                    columnEntries[getRowPosition(key)] = mtSeq;
+                    mtStorage.setMTStorage(this);
                     columnEntries[getRowPosition(key)] = mtseq_short;
-                    mtStorage.addData(mtseq_short, asList(mtSeq));
                 } else {
                     columnEntries[getRowPosition(key)] = (String)entry.getData();
                 }

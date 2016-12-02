@@ -75,13 +75,12 @@ public class ARPWriter implements IOutputData {
 
     private ArrayList<FastaEntry> getSequenceData() {
         ArrayList<FastaEntry> list = new ArrayList<>();
-        TableColumn tbclm_seq = tableController.getTableColumnByName("MTSequence");
+        //TableColumn tbclm_seq = tableController.getTableColumnByName("MTSequence");
         TableColumn tbclm_id = tableController.getTableColumnByName("ID");
         // write view.data
 
-        //TODO this currently exports not the entire FastA sequence properly, @Judith - update this once you have figured out where this is :_)
         tableController.getTable().getItems().stream().forEach((o)
-                -> list.add(new FastaEntry((String) tbclm_seq.getCellData(o), (String) tbclm_id.getCellData(o)))
+                -> list.add(new FastaEntry(tableController.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)))
         );
 
         return list;
