@@ -26,7 +26,6 @@ public class SunburstChart {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
-    private HashMap<String, List<String>> node_to_children;
 
     public SunburstChart(BorderPane borderPane){
 
@@ -45,10 +44,8 @@ public class SunburstChart {
                        HashMap<String, HashMap<String, Integer>> weights,
                        HashMap<String, List<String>> treeMap,
                        TreeItem<String> tree,
-                       HashMap<String, List<String>> node_to_children,
                        TreeView treeView){
 
-        this.node_to_children = node_to_children;
         loadData(hg_to_group, weights, treeMap, tree, treeView);
         addButtons();
         finishSetup();
@@ -151,7 +148,7 @@ public class SunburstChart {
 
         // Define a strategy by which the view.data should be received.
         ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
-        rootData = sourceStrategy.getData(hg_to_group, weights, treeMap, tree, node_to_children, treeView);
+        rootData = sourceStrategy.getData(hg_to_group, weights, treeMap, tree, treeView);
 
     }
 

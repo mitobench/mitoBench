@@ -191,7 +191,7 @@ public class GraphicsMenu {
                     ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
                     HashMap<String, List<String>> hg_to_group = getHG_to_group(selectedTableItems);
 
-                    sunburstChart.create(hg_to_group, weights, treeMap_path_to_root, tree_root, node_to_children, treeView);
+                    sunburstChart.create(hg_to_group, weights, treeMap_path_to_root, tree_root, treeView);
 
 
                 } catch (Exception e) {

@@ -22,7 +22,6 @@ public interface ISourceStrategy {
                                      HashMap<String, HashMap<String, Integer>> weights,
                                      HashMap<String, List<String>> treeMap,
                                      TreeItem<String> tree,
-                                     HashMap<String, List<String>> note_to_children,
                                      TreeView treeView);
 
 }
