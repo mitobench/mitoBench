@@ -21,7 +21,4 @@ public class FastaEntry {
         return sequence;
     }
 
-    public void setSequence(String seq) {
-        this.sequence = seq;
-    }
 }

@@ -24,7 +24,6 @@ public class GenericInputParser implements IInputData {
         String[] headertype = null;
 
         String currline = "";
-        int count = 0;
 
         while ((currline = bfr.readLine()) != null) {
             //Parse header, two line header !!
