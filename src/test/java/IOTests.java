@@ -2,6 +2,7 @@ import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
 import io.datastructure.Entry;
+import io.datastructure.dating.C14Date;
 import io.reader.ARPReader;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
@@ -228,4 +229,48 @@ public class IOTests {
             e.printStackTrace();
         }
     }
+
+    /**
+     * C14 Dating Test
+     */
+
+    @Test
+    public void io_test_c14_ad() {
+        //Have some test strings that need to be tested.
+        // cal AD 235-336
+        // cal BC 1304-1136
+        // cal BC 44-cal AD 16
+        String test1 = "cal AD 235-336";
+        String test2 = "cal BC 1304-1136";
+        String test3 = "cal BC 44-cal AD 16";
+
+        C14Date c14date = new C14Date(test1, C14Date.PARSE_C14_DATE_INFORMATION);
+
+        assertEquals(235, c14date.getLower_limit());
+        assertEquals(336, c14date.getUpper_limit());
+        assertEquals(235.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
+    }
+
+    @Test
+    public void io_test_c14_bc() {
+        String test2 = "cal BC 1304-1136";
+        C14Date c14date = new C14Date(test2, C14Date.PARSE_C14_DATE_INFORMATION);
+
+        assertEquals(235, c14date.getLower_limit());
+        assertEquals(336, c14date.getUpper_limit());
+        assertEquals(235.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
+    }
+
+    @Test
+    public void io_test_c14_adbc_mixed() {
+        String test3 = "cal BC 44-cal AD 16";
+        C14Date c14date = new C14Date(test3, C14Date.PARSE_C14_DATE_INFORMATION);
+
+        assertEquals(235, c14date.getLower_limit());
+        assertEquals(336, c14date.getUpper_limit());
+        assertEquals(235.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
+    }
+
+
+
 }
