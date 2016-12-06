@@ -16,9 +16,6 @@ public class Entry<T> {
         this.data = data;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
     public String getType() {
         return type;
     }
@@ -27,15 +24,8 @@ public class Entry<T> {
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
     public T getData() {
         return data;
     }
 
-    public void setData(T data) {
-        this.data = data;
-    }
 }
