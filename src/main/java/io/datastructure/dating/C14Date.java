@@ -27,9 +27,15 @@ public class C14Date {
 
     private void parseC14Information(String toParseThis) {
         //ignore anything called "cal", "CAL" or similar
-        String removed_cal = toParseThis.replaceAll("cal|CAL", "");
+        String removed_cal = toParseThis.replaceAll("cal|CAL", "").trim();
         //check for AD/BC information
-        if (removed_cal.contains("AD") | removed_cal.contains("ad")) {
+        if ((removed_cal.contains("BC") && removed_cal.contains("AD")) | (removed_cal.contains("ad") && removed_cal.contains("bc"))) { //Special case, we have -BC and +AD dates here
+            String removed_adbc = removed_cal.replace("AD", "").replace("ad", "").replace("BC", "").replace("bc", "").trim().replaceAll(" ", "");
+            String[] split = removed_adbc.split("-");//cal BC 44-cal AD 16
+            lower_limit = -Integer.parseInt(split[0]);
+            upper_limit = Integer.parseInt(split[1]);
+            this.average = Math.abs(lower_limit - upper_limit) / 2 + lower_limit;
+        } else if (removed_cal.contains("AD") | removed_cal.contains("ad")) {
             String removed_ad = removed_cal.replace("AD", "").replace("ad", "").trim();
             String[] split = removed_ad.split("-");
             try {

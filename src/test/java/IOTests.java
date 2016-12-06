@@ -231,18 +231,13 @@ public class IOTests {
     }
 
     /**
-     * C14 Dating Test
+     * C14 Dating Test - we need to be able to parse quite some formats here, to make sure that things are handled properly, some tests here :-)
      */
 
     @Test
     public void io_test_c14_ad() {
-        //Have some test strings that need to be tested.
-        // cal AD 235-336
-        // cal BC 1304-1136
-        // cal BC 44-cal AD 16
+
         String test1 = "cal AD 235-336";
-        String test2 = "cal BC 1304-1136";
-        String test3 = "cal BC 44-cal AD 16";
 
         C14Date c14date = new C14Date(test1, C14Date.PARSE_C14_DATE_INFORMATION);
 
@@ -256,9 +251,9 @@ public class IOTests {
         String test2 = "cal BC 1304-1136";
         C14Date c14date = new C14Date(test2, C14Date.PARSE_C14_DATE_INFORMATION);
 
-        assertEquals(235, c14date.getLower_limit());
-        assertEquals(336, c14date.getUpper_limit());
-        assertEquals(235.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
+        assertEquals(-1304, c14date.getLower_limit());
+        assertEquals(-1136, c14date.getUpper_limit());
+        assertEquals(-1304.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
     }
 
     @Test
@@ -266,9 +261,9 @@ public class IOTests {
         String test3 = "cal BC 44-cal AD 16";
         C14Date c14date = new C14Date(test3, C14Date.PARSE_C14_DATE_INFORMATION);
 
-        assertEquals(235, c14date.getLower_limit());
-        assertEquals(336, c14date.getUpper_limit());
-        assertEquals(235.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
+        assertEquals(-44, c14date.getLower_limit());
+        assertEquals(16, c14date.getUpper_limit());
+        assertEquals(-44.0 + Math.abs(c14date.getLower_limit() - c14date.getUpper_limit()) / 2, c14date.getAverage());
     }
 
 
