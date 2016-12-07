@@ -1,6 +1,7 @@
 package view.table.exportdialogue;
 
 import io.writer.ARPWriter;
+import io.writer.BEASTWriter;
 import io.writer.CSVWriter;
 import io.writer.ExcelWriter;
 import javafx.application.Application;
@@ -72,12 +73,14 @@ public class ExportDialogue extends Application {
             }
             //Beast output
         } else if (result.get() == beast_button) {
-            DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(options);
-            String selection = dataChoiceDialogue.getSelected();
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("BEAST FastA format (*.fasta)", "*.fasta");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
-            //TODO
+            if (saveAsDialogue.getOutFile() != null) {
+                String outfileDB = saveAsDialogue.getOutFile();
+                BEASTWriter beastwriter = new BEASTWriter(tableManager);
+                beastwriter.writeData(outfileDB);
+            }
             //CSV Output
         } else if (result.get() == csv_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv");
