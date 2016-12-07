@@ -1,4 +1,4 @@
 ##ID	C14-Date	Bone-Type	Moonphase
-#String	String	String	String
-Test1	-3400	Tibia	Fullmoon
+#String	C14	String	String
+Test1	cal BC 338-256	Tibia	Fullmoon
 Test2	1944	Femur	NA

@@ -12,4 +12,8 @@ public class RadioCarbonInputType implements IInputType {
         this.type = data;
     }
 
+    @Override
+    public String getTypeInformation() {
+        return this.type;
+    }
 }
