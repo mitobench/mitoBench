@@ -4,6 +4,7 @@ import io.Exceptions.HSDException;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.datastructure.radiocarbon.RadioCarbonData;
+import io.inputtypes.CategoricInputType;
 import io.reader.ARPReader;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
@@ -166,9 +167,9 @@ public class IOTests {
         ArrayList cast = (ArrayList) output.get("ID1"); //needs cast here
         Entry entry = (Entry) cast.get(0);
 
-        assertEquals(entry.getType(), new GenericInputData("String"));
+        assertEquals(entry.getType(), new CategoricInputType("String"));
         assertEquals(entry.getIdentifier(), "Haplogroup");
-        assertEquals(entry.getData(), "R0a2f");
+        assertEquals(entry.getData(), new GenericInputData( "R0a2f"));
     }
 
     @Test(expected = HSDException.class)
@@ -214,7 +215,7 @@ public class IOTests {
         ArrayList cast = (ArrayList) output.get("test1"); //needs cast here
         Entry entry = (Entry) cast.get(0);
 
-        assertEquals(entry.getType(), new GenericInputData("String"));
+        assertEquals(entry.getType(), new CategoricInputType("String"));
         assertEquals(entry.getIdentifier(), "MTSequence");
     }
 
