@@ -1,18 +1,15 @@
 package view.table;
 
 import io.datastructure.Entry;
+import io.inputtypes.CategoricInputType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
@@ -210,7 +207,7 @@ public class TableController {
         for(int i = 0; i < table.getSelectionModel().getSelectedItems().size(); i++){
             String rowName = table.getSelectionModel().getSelectedItems().get(i).get(getColIndex("ID")).toString();
             List<Entry> eList = new ArrayList<>();
-            Entry e = new Entry("Grouping", "String", gName);
+            Entry e = new Entry("Grouping", new CategoricInputType("String"), gName);
             eList.add(e);
             entries.put(rowName, eList);
         }

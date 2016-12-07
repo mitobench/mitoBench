@@ -2,7 +2,7 @@ import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
 import io.datastructure.Entry;
-import io.datastructure.dating.C14Date;
+import io.datastructure.radiocarbon.RadioCarbonData;
 import io.reader.ARPReader;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
@@ -239,31 +239,31 @@ public class IOTests {
 
         String test1 = "cal AD 235-336";
 
-        C14Date c14date = new C14Date(test1, C14Date.PARSE_C14_DATE_INFORMATION);
+        RadioCarbonData radioCarbonData = new RadioCarbonData(test1, RadioCarbonData.PARSE_C14_DATE_INFORMATION);
 
-        assertEquals(235, c14date.getLower_limit());
-        assertEquals(336, c14date.getUpper_limit());
-        assertEquals(235.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
+        assertEquals(235, radioCarbonData.getLower_limit());
+        assertEquals(336, radioCarbonData.getUpper_limit());
+        assertEquals(235.0 + Math.abs(radioCarbonData.getUpper_limit() - radioCarbonData.getLower_limit()) / 2, radioCarbonData.getAverage());
     }
 
     @Test
     public void io_test_c14_bc() {
         String test2 = "cal BC 1304-1136";
-        C14Date c14date = new C14Date(test2, C14Date.PARSE_C14_DATE_INFORMATION);
+        RadioCarbonData radioCarbonData = new RadioCarbonData(test2, RadioCarbonData.PARSE_C14_DATE_INFORMATION);
 
-        assertEquals(-1304, c14date.getLower_limit());
-        assertEquals(-1136, c14date.getUpper_limit());
-        assertEquals(-1304.0 + Math.abs(c14date.getUpper_limit() - c14date.getLower_limit()) / 2, c14date.getAverage());
+        assertEquals(-1304, radioCarbonData.getLower_limit());
+        assertEquals(-1136, radioCarbonData.getUpper_limit());
+        assertEquals(-1304.0 + Math.abs(radioCarbonData.getUpper_limit() - radioCarbonData.getLower_limit()) / 2, radioCarbonData.getAverage());
     }
 
     @Test
     public void io_test_c14_adbc_mixed() {
         String test3 = "cal BC 44-cal AD 16";
-        C14Date c14date = new C14Date(test3, C14Date.PARSE_C14_DATE_INFORMATION);
+        RadioCarbonData radioCarbonData = new RadioCarbonData(test3, RadioCarbonData.PARSE_C14_DATE_INFORMATION);
 
-        assertEquals(-44, c14date.getLower_limit());
-        assertEquals(16, c14date.getUpper_limit());
-        assertEquals(-44.0 + Math.abs(c14date.getLower_limit() - c14date.getUpper_limit()) / 2, c14date.getAverage());
+        assertEquals(-44, radioCarbonData.getLower_limit());
+        assertEquals(16, radioCarbonData.getUpper_limit());
+        assertEquals(-44.0 + Math.abs(radioCarbonData.getLower_limit() - radioCarbonData.getUpper_limit()) / 2, radioCarbonData.getAverage());
     }
 
 

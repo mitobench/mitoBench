@@ -2,6 +2,9 @@ package io.reader;
 
 import io.IInputData;
 import io.datastructure.Entry;
+import io.datastructure.radiocarbon.RadioCarbonData;
+import io.inputtypes.CategoricInputType;
+import io.inputtypes.RadioCarbonInputType;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -37,9 +40,16 @@ public class GenericInputParser implements IInputData {
                 String[] splitLine = currline.split("\t");
                 //Assume ID is always first! -> requirement
                 List<Entry> entries = new ArrayList<>();
-
+//we need to take care of our different types here now, too
                 for (int i = 0; i < splitLine.length; i++) {
-                    Entry e = new Entry(headergroup[i], headertype[i], splitLine[i]);
+                    String headerType = headertype[i];
+                    Entry e = null;
+                    if (headerType.equals("C14")) {
+                        e = new Entry(headergroup[i], new RadioCarbonInputType(headerType), new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION));
+                    } else {
+                        e = new Entry(headergroup[i], new CategoricInputType(headerType), splitLine[i]);
+                    }
+
                     entries.add(e);
                 }
                 //Now add with ID to hashmap

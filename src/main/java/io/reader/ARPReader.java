@@ -3,11 +3,14 @@ package io.reader;
 import io.Exceptions.ARPException;
 import io.IInputData;
 import io.datastructure.Entry;
+import io.inputtypes.CategoricInputType;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by peltzer on 24/11/2016.
@@ -54,8 +57,8 @@ public class ARPReader implements IInputData {
                     String id = dataSplit[0];
                     String mtseq = dataSplit[2];
                     List<Entry> entries = new ArrayList<>();
-                    Entry e = new Entry("MTSequence", "String", mtseq);
-                    Entry e_group = new Entry("Grouping", "String", currGroup);
+                    Entry e = new Entry("MTSequence", new CategoricInputType("String"), mtseq);
+                    Entry e_group = new Entry("Grouping", new CategoricInputType("String"), currGroup);
                     entries.add(e);
                     entries.add(e_group);
                     map.put(id, entries);
