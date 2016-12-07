@@ -3,6 +3,9 @@ package view.controls.skin;
 import com.sun.javafx.scene.control.behavior.BehaviorBase;
 import com.sun.javafx.scene.control.behavior.KeyBinding;
 import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import view.controls.sunburst.DonutUnit;
 import view.controls.sunburst.IColorStrategy;
 import view.controls.sunburst.SunburstView;
@@ -17,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import view.helpers.ColorHelper;
 
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -510,9 +514,8 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
 
         public SunburstDonutUnit(WeightedTreeItem<T> item){
             this.item = item;
-            Tooltip t = new Tooltip(item.getValue().toString() +" | " + item.getWeight());
-            Tooltip.install(this, t);
-
+            Tooltip tooltip = new Tooltip(item.getValue().toString() +" | " + item.getWeight());
+            hackTooltipStartTiming(tooltip);
             setOnMouseClicked(event -> {
                 // Check if leaf node was clicked. If so there are no more children to display.
                 if(!item.getChildren().isEmpty()){
@@ -521,6 +524,8 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
                     System.out.println("Error: Can't zoom in; There are no children for this DonutUnit");
                 }
             });
+
+            Tooltip.install(this, tooltip);
         }
 
         public WeightedTreeItem<T> getItem(){
@@ -559,4 +564,21 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
         }
     }
 
+
+    public static void hackTooltipStartTiming(Tooltip tooltip) {
+        try {
+            Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
+            fieldBehavior.setAccessible(true);
+            Object objBehavior = fieldBehavior.get(tooltip);
+
+            Field fieldTimer = objBehavior.getClass().getDeclaredField("activationTimer");
+            fieldTimer.setAccessible(true);
+            Timeline objTimer = (Timeline) fieldTimer.get(objBehavior);
+
+            objTimer.getKeyFrames().clear();
+            objTimer.getKeyFrames().add(new KeyFrame(new Duration(0)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
