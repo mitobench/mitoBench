@@ -98,7 +98,7 @@ public class DonutUnit extends Path {
         if(checkAngle(degreeStart, getDegreeEnd()))
             this.degreeStart = degreeStart;
         else {
-            throw new IllegalArgumentException("Error setting DegreeStart: ArcAngle would be bigger than 360°, current ArcAngle: " + getArcAngle() + " given DegreeStart: " + degreeStart);
+            throw new IllegalArgumentException("Error setting DegreeStart: ArcAngle would be bigger than 360, current ArcAngle: " + getArcAngle() + " given DegreeStart: " + degreeStart);
         }
     }
 
@@ -110,7 +110,7 @@ public class DonutUnit extends Path {
         if(checkAngle(getDegreeStart(), degreeEnd))
             this.degreeEnd = degreeEnd;
         else {
-            throw new IllegalArgumentException("Error setting DegreeEnd: ArcAngle would be bigger than 360°, current ArcAngle: " + getArcAngle() + " given DegreeEnd: " + degreeEnd);
+            throw new IllegalArgumentException("Error setting DegreeEnd: ArcAngle would be bigger than 360, current ArcAngle: " + getArcAngle() + " given DegreeEnd: " + degreeEnd);
         }
     }
 
@@ -243,7 +243,7 @@ public class DonutUnit extends Path {
 
 
     /**
-     * Checks if the ArcAngle would be greater than 360° which is not allowed.
+     * Checks if the ArcAngle would be greater than 360 which is not allowed.
      * @param startAngle
      * @param endAngle
      * @return
