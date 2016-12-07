@@ -527,9 +527,9 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
             return item;
         }
 
-        public String toString(){
-            return "[" + getItem() + "; " + getArcAngle() + "°]";
-        }
+//        public String toString(){
+//            return "[" + getItem() + "; " + getArcAngle() + "]";
+//        }
     }
 
     /**
