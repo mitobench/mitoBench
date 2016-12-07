@@ -1,6 +1,7 @@
 package view.table;
 
 import io.datastructure.Entry;
+import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -124,13 +125,6 @@ public class TableController {
 
         String[][] data_tmp = new String[dataTable.getDataTable().get("ID").length][dataTable.getDataTable().keySet().size()];
 
-//        String[] seqs_short = new String[dataTable.getDataTable().get("MTSequence").length];
-//        for(int i = 0; i < dataTable.getDataTable().get("MTSequence").length; i++){
-//            seqs_short[i] = dataTable.getDataTable().get("MTSequence")[i].substring(0,5)+"...";
-//        }
-//
-//        dataTable.getDataTable().put("MTSequence", seqs_short);
-
         int m = 0;
         for(String col : data_hash.keySet()){
             String[] col_entry = data_hash.get(col);
@@ -207,7 +201,7 @@ public class TableController {
         for(int i = 0; i < table.getSelectionModel().getSelectedItems().size(); i++){
             String rowName = table.getSelectionModel().getSelectedItems().get(i).get(getColIndex("ID")).toString();
             List<Entry> eList = new ArrayList<>();
-            Entry e = new Entry("Grouping", new CategoricInputType("String"), gName);
+            Entry e = new Entry("Grouping", new CategoricInputType("String"), new GenericInputData(gName));
             eList.add(e);
             entries.put(rowName, eList);
         }
@@ -452,5 +446,6 @@ public class TableController {
         return selectedTableItems;
 
     }
+
 
 }

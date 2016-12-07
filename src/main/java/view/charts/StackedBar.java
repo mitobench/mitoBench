@@ -1,20 +1,16 @@
 package view.charts;
 
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.chart.*;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by neukamm on 29.11.16.
@@ -27,19 +23,24 @@ public class StackedBar{
     private NumberAxis yAxis;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
+    private TabPane tabPane;
 
     public StackedBar(String title, TabPane vBox) {
+        tabPane = vBox;
+
         xAxis = new CategoryAxis();
         yAxis = new NumberAxis();
         sbc = new StackedBarChart<String, Number>(xAxis, yAxis);
 
         sbc.setTitle(title);
-        sbc.prefWidthProperty().bind(vBox.widthProperty());
+        sbc.prefWidthProperty().bind(tabPane.widthProperty());
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
         //sbc.setLegendVisible(true);
 
         //setDragAndMove();
+
+
 
         yAxis.setTickUnit(1);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {
@@ -66,9 +67,6 @@ public class StackedBar{
 
     public void addSerie( List<XYChart.Data<String, Number>> data, String name){
         XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
-//        if(name.equals("NA"))
-//            series.setName("Others");
-//        else
         series.setName(name);
 
         for(int i = 0; i < data.size(); i++){
@@ -145,7 +143,6 @@ public class StackedBar{
             };
 
 
-
     public void setCategories(String[] groups){
         xAxis.setCategories(FXCollections.observableArrayList(groups));
     }
@@ -163,13 +160,35 @@ public class StackedBar{
         return xAxis;
     }
 
-    public void addTooltip(){
+    public void addTooltip(Event t){
 
         for (final XYChart.Series<String, Number> series : sbc.getData()) {
             for (final XYChart.Data<String, Number> data : series.getData()) {
                 Tooltip tooltip = new Tooltip();
-                tooltip.setText(series.getName() + " | " + data.getYValue().toString());
-                Tooltip.install(data.getNode(), tooltip);
+                data.getNode().setOnMouseMoved(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        // +15 moves the tooltip 15 pixels below the mouse cursor;
+                        // if you don't change the y coordinate of the tooltip, you
+                        // will see constant screen flicker
+                        tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
+                        tooltip.setText(series.getName() + " | " + data.getYValue().toString());
+                    }
+                });
+                data.getNode().setOnMouseExited(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event){
+                        tooltip.hide();
+                    }
+                });
+
+
+
+
+//
+//
+//                tooltip.show(data.getNode(), t.getScreenX(), t.getScreenY() + 15);
+//                Tooltip.install(data.getNode(), tooltip);
             }
         }
     }

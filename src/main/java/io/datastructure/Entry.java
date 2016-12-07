@@ -1,18 +1,19 @@
 package io.datastructure;
 
 import io.IInputType;
+import view.table.datatypes.IData;
 
 /**
  * This class is intended to provide a generic view.data type resource of the form <ID + view.data>. Data can be whatever we want to have, we just need to define it once as String, integer, double.
  * Created by peltzer on 17/11/2016.
  */
-public class Entry<T> {
+public class Entry {
     private String identifier;
     private IInputType type;
-    private T data;
+    private IData data;
 
 
-    public Entry(String identifier, IInputType type, T data) {
+    public Entry(String identifier, IInputType type, IData data) {
         this.identifier = identifier;
         this.type = type;
         this.data = data;
@@ -26,7 +27,7 @@ public class Entry<T> {
         return identifier;
     }
 
-    public T getData() {
+    public IData getData() {
         return data;
     }
 

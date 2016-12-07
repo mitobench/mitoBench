@@ -4,6 +4,7 @@ import io.Exceptions.FastAException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.fastA.FastaEntry;
+import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 
 import java.io.BufferedReader;
@@ -107,7 +108,7 @@ public class MultiFastAInput implements IInputData {
         HashMap<String, List<Entry>> output = new HashMap<>();
 
         for(FastaEntry fa : fastaEntrys){
-            Entry entry = new Entry("MTSequence", new CategoricInputType("String"), fa.getSequence());
+            Entry entry = new Entry("MTSequence", new CategoricInputType("String"), new GenericInputData(fa.getSequence()));
             List<Entry> sequence = new ArrayList<>();
             sequence.add(entry);
             output.put(fa.getHeader(), sequence);

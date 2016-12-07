@@ -1,9 +1,11 @@
 package io.datastructure.radiocarbon;
 
+import view.table.datatypes.IData;
+
 /**
  * Created by peltzer on 05/12/2016.
  */
-public class RadioCarbonData {
+public class RadioCarbonData implements IData {
     private int upper_limit;
     private int lower_limit;
     private double average;
@@ -66,5 +68,10 @@ public class RadioCarbonData {
 
     public double getAverage() {
         return average;
+    }
+
+    @Override
+    public String getTableInformation() {
+        return String.valueOf(average);
     }
 }

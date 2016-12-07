@@ -2,6 +2,7 @@ package io.reader;
 
 import io.IInputData;
 import io.datastructure.Entry;
+import io.datastructure.generic.GenericInputData;
 import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
 import io.inputtypes.RadioCarbonInputType;
@@ -47,7 +48,7 @@ public class GenericInputParser implements IInputData {
                     if (headerType.equals("C14")) {
                         e = new Entry(headergroup[i], new RadioCarbonInputType(headerType), new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION));
                     } else {
-                        e = new Entry(headergroup[i], new CategoricInputType(headerType), splitLine[i]);
+                        e = new Entry(headergroup[i], new CategoricInputType(headerType), new GenericInputData(splitLine[i]));
                     }
 
                     entries.add(e);

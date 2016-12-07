@@ -3,6 +3,7 @@ package io.reader;
 import io.Exceptions.HSDException;
 import io.IInputData;
 import io.datastructure.Entry;
+import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 
 import java.io.BufferedReader;
@@ -43,7 +44,7 @@ public class HSDInput implements IInputData {
 
                 String id = splitGroup[0];
                 String group = splitGroup[2];
-                Entry entry = new Entry("Haplogroup", new CategoricInputType("String"), group);
+                Entry entry = new Entry("Haplogroup", new CategoricInputType("String"), new GenericInputData(group));
                 List<Entry> entries = new ArrayList<>();
                 entries.add(entry);
                 map.put(id, entries);

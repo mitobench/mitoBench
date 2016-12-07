@@ -66,7 +66,7 @@ public class DataTable {
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
-                    String mtSeq = (String)entry.getData().toString();
+                    String mtSeq = (String)entry.getData().getTableInformation();
                     String mtseq_short = mtSeq.substring(0,5)+"...";
                     // store original mt seq
                     columnEntries[getRowPosition(key)] = mtSeq;
@@ -74,7 +74,7 @@ public class DataTable {
                     columnEntries[getRowPosition(key)] = mtseq_short;
 
                 } else {
-                    columnEntries[rowPosition] = (String)entry.getData();
+                    columnEntries[rowPosition] = entry.getData().getTableInformation();
                 }
 
             } else {
@@ -88,13 +88,13 @@ public class DataTable {
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
-                    String mtSeq = (String)entry.getData().toString();
+                    String mtSeq = (String)entry.getData().getTableInformation();
                     String mtseq_short = mtSeq.substring(0,5)+"...";
                     columnEntries[getRowPosition(key)] = mtSeq;
                     mtStorage.setMTStorage(this);
                     columnEntries[getRowPosition(key)] = mtseq_short;
                 } else {
-                    columnEntries[getRowPosition(key)] = (String) entry.getData();
+                    columnEntries[getRowPosition(key)] = entry.getData().getTableInformation();
                 }
 
             }
