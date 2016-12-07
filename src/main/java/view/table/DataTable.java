@@ -1,6 +1,7 @@
 package view.table;
 
 import io.datastructure.Entry;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +94,7 @@ public class DataTable {
                     mtStorage.setMTStorage(this);
                     columnEntries[getRowPosition(key)] = mtseq_short;
                 } else {
-                    columnEntries[getRowPosition(key)] = (String)entry.getData();
+                    columnEntries[getRowPosition(key)] = (String) entry.getData();
                 }
 
             }
