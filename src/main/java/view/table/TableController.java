@@ -1,5 +1,6 @@
 package view.table;
 
+import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
@@ -7,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -16,7 +18,12 @@ import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
 import view.groups.GroupController;
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.*;
+
+import static java.rmi.Naming.lookup;
 
 
 /**
@@ -38,7 +45,7 @@ public class TableController {
 
 
 
-    public TableController(Scene scene){
+    public TableController(Scene scene) {
 
         table = new TableView();
         table.setEditable(false);
@@ -79,26 +86,40 @@ public class TableController {
 
         // clean whole table
         data.clear();
+
+        // get current col names
+        List<String> curr_colnames = getCurrentColumnNames();
+
         table.getColumns().removeAll(table.getColumns());
 
+        // define column order
+        Set<String> cols = dataTable.getDataTable().keySet();
+        for(String s : cols) {
+            if(!curr_colnames.contains(s))
+                curr_colnames.add(s);
+        }
+
         // display updated table
-        data = parseDataTableToObservableList(dataTable);
+        data = parseDataTableToObservableList(dataTable, curr_colnames);
+
 
         // add columns
         int i = 0;
-        for(String colName : dataTable.getDataTable().keySet()){
+        for(String colName : curr_colnames) {
             int j = i;
             TableColumn col = new TableColumn(colName);
-            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
+            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
                     return new SimpleStringProperty(param.getValue().get(j).toString());
                 }
             });
+
             col_names.add(colName);
             table.getColumns().addAll(col);
             i++;
 
         }
+
         // clear Items in table
         table.getItems().removeAll(table.getItems());
         //FINALLY ADDED TO TableView
@@ -116,7 +137,11 @@ public class TableController {
      * @param dataTable
      * @return
      */
-    private ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable){
+    private ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames){
+
+        if(curr_colnames.size()==0){
+            curr_colnames = new ArrayList<String>(dataTable.getDataTable().keySet());
+        }
 
 
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
@@ -126,7 +151,7 @@ public class TableController {
         String[][] data_tmp = new String[dataTable.getDataTable().get("ID").length][dataTable.getDataTable().keySet().size()];
 
         int m = 0;
-        for(String col : data_hash.keySet()){
+        for(String col : curr_colnames){
             String[] col_entry = data_hash.get(col);
             for(int j = 0; j < col_entry.length; j++){
                 String e = col_entry[j];
