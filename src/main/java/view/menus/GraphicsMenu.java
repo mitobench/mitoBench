@@ -6,7 +6,9 @@ import javafx.event.EventHandler;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import view.charts.BarPlotHaplo;
+import view.charts.ChartController;
 import view.charts.StackedBar;
 import view.charts.SunburstChart;
 import view.table.TableController;
@@ -31,24 +33,26 @@ public class GraphicsMenu {
     private HashMap<String, List<String>> treeMap;
     private HashMap<String, List<String>> treeMap_path_to_root;
     private TreeItem<String> tree_root;
-    private HashMap<String, List<String>> node_to_children;
     private TreeView treeView;
+    private ChartController chartController;
+    private Stage stage;
 
 
-    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController){
+    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage){
         menuGraphics = new Menu("Graphics");
         this.tableController = tableController;
         tabPane = vBox;
         treeMap = treeController.getTreeMap();
         treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();
         tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
-        node_to_children = treeController.getNode_to_children();
         treeView = treeController.getTree().getTree();
+        chartController = new ChartController();
+        this.stage = stage;
         addSubMenus();
     }
 
     private void initBarchart(){
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", tabPane);
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", tabPane, stage);
         Tab tab = new Tab();
         tab.setText("Bar Chart");
         tab.setContent(barPlotHaplo.getBarChart());

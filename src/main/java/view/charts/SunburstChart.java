@@ -1,6 +1,9 @@
 package view.charts;
+import javafx.event.EventHandler;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import view.controls.sunburst.*;
 import view.data.ISourceStrategy;
 import view.data.SourceStrategyHaplogroups;
@@ -34,6 +37,8 @@ public class SunburstChart {
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
 
+
+
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
@@ -46,9 +51,12 @@ public class SunburstChart {
                        TreeItem<String> tree,
                        TreeView treeView){
 
+
+
         loadData(hg_to_group, weights, treeMap, tree, treeView);
-        addButtons();
+        addEvents();
         finishSetup();
+
     }
 
     private void loadData( HashMap<String, List<String>> hg_to_group,
@@ -63,7 +71,7 @@ public class SunburstChart {
         sunburstView.setColorStrategy(colorStrategyShades);
     }
 
-    private void addButtons(){
+    private void addEvents(){
 
         ToggleButton btnCSShades = new ToggleButton("Shades Color Strategy");
         ToggleButton btnCSRandom = new ToggleButton("Random Color Strategy");
@@ -90,6 +98,18 @@ public class SunburstChart {
         HBox buttons = new HBox();
         buttons.getChildren().addAll(btnCSShades, btnCSRandom);
         sunburstBorderPane.setBottom(buttons);
+
+
+        sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                MouseButton button = event.getButton();
+                if(button==MouseButton.SECONDARY) {
+                    System.out.println("SECONDARY button clicked on button");
+                }
+
+            }
+        });
 
 
     }

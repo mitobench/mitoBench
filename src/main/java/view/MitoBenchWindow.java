@@ -25,6 +25,7 @@ public class MitoBenchWindow extends Application{
     private Scene scene;
     private TreeHaploController treeController;
     private TabPane tabPane;
+    private Stage primaryStage;
 
 
 
@@ -44,11 +45,12 @@ public class MitoBenchWindow extends Application{
         root.setTop(getMenuPane());
 
 
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Mito Bench");
+        this.primaryStage.setScene(scene);
+        this.primaryStage.setResizable(true);
+        this.primaryStage.show();
 
-        primaryStage.setTitle("Mito Bench");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(true);
-        primaryStage.show();
     }
 
 
@@ -61,8 +63,7 @@ public class MitoBenchWindow extends Application{
         EditMenu editMenu = new EditMenu();
         ToolsMenu toolsMenu = new ToolsMenu();
         TableMenu tableMenu = new TableMenu(tableController);
-        //GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, vBox);
-        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController);
+        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController, primaryStage);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
@@ -80,7 +81,6 @@ public class MitoBenchWindow extends Application{
     public SplitPane  getCenterPane() throws ParserConfigurationException, SAXException, IOException {
 
 
-        //HBox center = new HBox(getTablePane(), getPlotPane());
         SplitPane center = new SplitPane();
         center.getItems().addAll(getTablePane(), getPlotPane());
 
@@ -106,17 +106,6 @@ public class MitoBenchWindow extends Application{
         tabPane.prefHeightProperty().bind(scene.heightProperty());
         tabPane.prefWidthProperty().bind(scene.widthProperty());
         tabPane.setPadding(new Insets(10, 10, 10,10));
-
-        //HBox hbox = new HBox();
-        //vBox = new VBox();
-        //vBox.setPadding(new Insets(0, 20, 0, 20));
-
-
-        //vBox.prefHeightProperty().bind(scene.heightProperty());
-        //vBox.prefWidthProperty().bind(scene.widthProperty());
-        //vBox.setAlignment(Pos.CENTER);
-
-        //hbox.getChildren().addAll(vBox);
 
         return tabPane;
     }

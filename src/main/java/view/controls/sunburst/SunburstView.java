@@ -188,10 +188,8 @@ public class SunburstView<T> extends Control {
     public Color getItemColor(WeightedTreeItem<T> item) {
 
         Skin<?> skin = this.getSkin();
-        //System.out.println(skin);
         Color color = null;
         if(skin instanceof SunburstViewSkin){
-           //System.out.println("is SunburstViewSkin");
            color =((SunburstViewSkin) skin).getItemColor(item);
         }
 
@@ -234,10 +232,5 @@ public class SunburstView<T> extends Control {
         return new SunburstViewSkin<>(this);
     }
 
-    /** {@inheritDoc} */
-//    @Override public String getUserAgentStylesheet() {
-//        String css = SunburstView.class.getResource("sunburstview.css").toExternalForm(); //$NON-NLS-1$
-//        return css;
-//    }
 
 }

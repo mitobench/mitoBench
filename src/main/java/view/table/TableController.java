@@ -434,25 +434,10 @@ public class TableController {
             }
         });
 
-
-//        final MenuItem deleteAllSelectedItem
-//                = new MenuItem("Remove selected item(s)");
-//        deleteAllSelectedItem.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                groupController.removeElements(table.getSelectionModel().getSelectedItems(), getColIndex("Grouping"));
-//            }
-//        });
-//
-//        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, deleteAllSelectedItem);
         menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
         table.setContextMenu(menu);
     }
 
-
-    public String[] removeDuplicates(String[] arr) {
-        return new HashSet<String>(Arrays.asList(arr)).toArray(new String[0]);
-    }
 
 
     /**

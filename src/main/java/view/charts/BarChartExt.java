@@ -6,9 +6,12 @@ package view.charts;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.BarChart;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 
@@ -63,9 +66,10 @@ public class BarChartExt<X, Y> extends BarChart<X, Y> {
         super.seriesRemoved(series);
     }
 
-    /**
-     * Adjust text of bars, position them on top
-     */
+
+        /**
+         * Adjust text of bars, position them on top
+         */
     @Override
     protected void layoutPlotChildren() {
 

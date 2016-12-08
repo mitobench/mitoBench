@@ -7,6 +7,7 @@ import javafx.scene.Cursor;
 import javafx.scene.chart.*;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
@@ -36,11 +37,6 @@ public class StackedBar{
         sbc.prefWidthProperty().bind(tabPane.widthProperty());
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
-        //sbc.setLegendVisible(true);
-
-        //setDragAndMove();
-
-
 
         yAxis.setTickUnit(1);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {
@@ -59,8 +55,6 @@ public class StackedBar{
 
         yAxis.setMinorTickVisible(false);
         xAxis.setTickMarkVisible(false);
-
-
     }
 
 
@@ -77,23 +71,11 @@ public class StackedBar{
     }
 
     public void clearData(){
-        //sbc = new StackedBarChart<String, Number>(xAxis, yAxis);
-
         sbc.getData().clear();
         seriesList.clear();
         xAxis.getCategories().clear();
-
-//        for (XYChart.Series<String, Number> series : sbc.getData()) {
-//            for (XYChart.Data<String, Number> view.data : series.getData()) {
-//                Node node = view.data.getNode();
-//                Parent parent = node.parentProperty().get();
-//                if (parent != null && parent instanceof Group) {
-//                    Group group = (Group) parent;
-//                    group.getChildren().clear();
-//                }
-//            }
-//        }
     }
+
 
 
     /**
@@ -156,10 +138,6 @@ public class StackedBar{
         return sbc;
     }
 
-    public CategoryAxis getxAxis() {
-        return xAxis;
-    }
-
     public void addTooltip(Event t){
 
         for (final XYChart.Series<String, Number> series : sbc.getData()) {
@@ -182,13 +160,6 @@ public class StackedBar{
                     }
                 });
 
-
-
-
-//
-//
-//                tooltip.show(data.getNode(), t.getScreenX(), t.getScreenY() + 15);
-//                Tooltip.install(data.getNode(), tooltip);
             }
         }
     }
