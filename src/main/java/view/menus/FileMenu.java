@@ -153,6 +153,51 @@ public class FileMenu {
             }
         });
 
+
+
+        /*
+                        EXPORT DIALOGUE
+
+         */
+
+        MenuItem exportProject = new MenuItem("Export Project");
+        exportProject.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                //ExportDialogue exportDialogue = new ExportDialogue(tableManager);
+                try {
+                    //exportDialogue.start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+
+
+        /*
+                        EXPORT DIALOGUE
+
+         */
+
+        MenuItem importProject = new MenuItem("Import Project");
+        importProject.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                //ExportDialogue exportDialogue = new ExportDialogue(tableManager);
+                try {
+                    //exportDialogue.start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+
+
+
         /*
                 EXIT OPTION
          */
