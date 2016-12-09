@@ -1,20 +1,22 @@
 package view.charts;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import view.controls.sunburst.*;
 import view.data.ISourceStrategy;
 import view.data.SourceStrategyHaplogroups;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,9 +31,15 @@ public class SunburstChart {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
+    private ChartController chartController;
+    private Stage stage;
+    private TabPane tabPane;
 
-    public SunburstChart(BorderPane borderPane){
 
+    public SunburstChart(BorderPane borderPane, ChartController chartController, Stage stage, TabPane tabPane){
+
+        this.chartController = chartController;
+        this.stage = stage;
         sunburstBorderPane = borderPane;
 
         // Create the SunburstJ Control
@@ -42,6 +50,8 @@ public class SunburstChart {
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
+
+        this.tabPane = tabPane;
 
     }
 
@@ -56,6 +66,8 @@ public class SunburstChart {
         loadData(hg_to_group, weights, treeMap, tree, treeView);
         addEvents();
         finishSetup();
+        setContextMenu(stage);
+
 
     }
 
@@ -113,6 +125,42 @@ public class SunburstChart {
 
 
     }
+
+
+    private void setContextMenu(Stage stage){
+
+
+        //adding a context menu item to the chart
+        final MenuItem saveAsPDF = new MenuItem("Save as pdf");
+        saveAsPDF.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                FileChooser fileChooser = new FileChooser();
+                //Show save file dialog
+                File file = fileChooser.showSaveDialog(stage);
+
+                if(file != null){
+                    chartController.saveAsPng(tabPane.snapshot(new SnapshotParameters(), null), file);
+                }
+                //
+            }
+        });
+
+        final ContextMenu menu = new ContextMenu(
+                saveAsPDF
+        );
+
+        sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                if (MouseButton.SECONDARY.equals(event.getButton())) {
+                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
+                }
+            }
+        });
+
+
+
+    }
+
 
     private void finishSetup(){
 

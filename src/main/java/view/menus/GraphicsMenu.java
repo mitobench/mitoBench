@@ -62,7 +62,7 @@ public class GraphicsMenu {
     }
 
     private void initStackedBarchart(){
-        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane);
+        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, chartController, stage);
         Tab tab = new Tab();
         tab.setText("Bar Chart per group");
         tab.setContent(stackedBar.getSbc());
@@ -72,7 +72,7 @@ public class GraphicsMenu {
     }
 
     private void initSunburst(){
-        sunburstChart = new SunburstChart(new BorderPane());
+        sunburstChart = new SunburstChart(new BorderPane(), chartController, stage, tabPane);
         Tab tab = new Tab();
         tab.setText("Sunburst Chart");
         tab.setContent(sunburstChart.getBorderPane());

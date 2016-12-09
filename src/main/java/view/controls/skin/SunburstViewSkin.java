@@ -496,9 +496,10 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
             // Check if the root item is reached. If so, further zooming out is impossible.
             if(!selectedItem.equals(rootItem)){
                 getSkinnable().setSelectedItem((WeightedTreeItem)selectedItem.getParent());
-            } else{
-                System.out.println("Error: Can't zoom out; Root item reached.");
             }
+//            else{
+//                System.out.println("Error: Can't zoom out; Root item reached.");
+//            }
         }
 
 
@@ -520,9 +521,10 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
                 // Check if leaf node was clicked. If so there are no more children to display.
                 if(!item.getChildren().isEmpty()){
                     getSkinnable().setSelectedItem(item);
-                } else{
-                    System.out.println("Error: Can't zoom in; There are no children for this DonutUnit");
                 }
+//                else{
+//                    System.out.println("Error: Can't zoom in; There are no children for this DonutUnit");
+//                }
             });
 
             Tooltip.install(this, tooltip);
@@ -531,10 +533,6 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
         public WeightedTreeItem<T> getItem(){
             return item;
         }
-
-//        public String toString(){
-//            return "[" + getItem() + "; " + getArcAngle() + "]";
-//        }
     }
 
     /**

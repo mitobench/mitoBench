@@ -1,22 +1,29 @@
 package view.charts;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.io.File;
 import java.util.*;
 
 /**
  * Created by neukamm on 29.11.16.
  */
-public class StackedBar{
+public class StackedBar {
 
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;
@@ -25,9 +32,13 @@ public class StackedBar{
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
     private TabPane tabPane;
+    private ChartController chartController;
+    Stage stage;
 
-    public StackedBar(String title, TabPane vBox) {
+    public StackedBar(String title, TabPane vBox, ChartController chartController, Stage stage) {
         tabPane = vBox;
+        this.chartController = chartController;
+        this.stage = stage;
 
         xAxis = new CategoryAxis();
         yAxis = new NumberAxis();
@@ -55,6 +66,8 @@ public class StackedBar{
 
         yAxis.setMinorTickVisible(false);
         xAxis.setTickMarkVisible(false);
+        setContextMenu(stage);
+
     }
 
 
@@ -70,11 +83,50 @@ public class StackedBar{
         this.seriesList.add(series);
     }
 
+
     public void clearData(){
         sbc.getData().clear();
         seriesList.clear();
         xAxis.getCategories().clear();
     }
+
+
+
+    private void setContextMenu(Stage stage){
+
+
+        //adding a context menu item to the chart
+        final MenuItem saveAsPng = new MenuItem("Save as png");
+        saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                // todo: select location for png
+                FileChooser fileChooser = new FileChooser();
+                //Show save file dialog
+                File file = fileChooser.showSaveDialog(stage);
+
+                if(file != null){
+                    chartController.saveAsPng(sbc.snapshot(new SnapshotParameters(), null), file);
+                }
+                //
+            }
+        });
+
+        final ContextMenu menu = new ContextMenu(
+                saveAsPng
+        );
+
+        sbc.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                if (MouseButton.SECONDARY.equals(event.getButton())) {
+                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
+                }
+            }
+        });
+
+
+
+    }
+
 
 
 

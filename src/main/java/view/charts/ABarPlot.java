@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import org.apache.poi.ss.formula.functions.T;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
 import view.table.exportdialogue.ExportDialogue;
@@ -72,7 +73,7 @@ public abstract class ABarPlot {
 
 
 
-    public abstract void addData(HashMap<String, Integer> dataNew);
+    public abstract void addData(HashMap<String, Integer>  data);
 
     public BarChart<String,Number> getBarChart() {
         return bc;

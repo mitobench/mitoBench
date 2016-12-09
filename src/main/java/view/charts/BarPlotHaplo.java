@@ -1,11 +1,7 @@
 package view.charts;
 
-import javafx.event.EventHandler;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 
