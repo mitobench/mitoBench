@@ -123,7 +123,7 @@ public class DataTable {
      */
     private int getRowPosition(String rowID){
 
-        if(data.get("ID")!=null){
+        if(data.get("ID") != null){
             String[] id_col = data.get("ID");
             for(int i = 0; i < id_col.length; i++){
                 if(id_col[i].equals(rowID)){

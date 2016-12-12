@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
+import view.groups.Group;
 import view.groups.GroupController;
 
 import java.net.MalformedURLException;
@@ -43,6 +44,8 @@ public class TableController {
     private GroupController groupController;
     private MTStorage mtStorage;
 
+    private HashMap<String, List<Entry>> table_content;
+
 
 
     public TableController(Scene scene) {
@@ -67,6 +70,8 @@ public class TableController {
         groupController = new GroupController();
         mtStorage = new MTStorage();
 
+        table_content = new HashMap<>();
+
     }
 
 
@@ -80,6 +85,9 @@ public class TableController {
      * @param input
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
+
+        // update Enrty structure
+        updateEntryList(input);
 
         // add new values to existing one (DataTable)
         dataTable.update(input);
@@ -129,6 +137,39 @@ public class TableController {
         setContextMenu();
     }
 
+
+    private void updateEntryList(HashMap<String, List<Entry>> input_new) {
+
+        for(String key_new : input_new.keySet()){
+            if(table_content.containsKey(key_new)){
+                // update entry
+                List<Entry> entries = table_content.get(key_new);
+                List<Entry> entries_new = input_new.get(key_new);
+
+                boolean hit = false;
+                for (Entry e_new : entries_new){
+                    hit = false;
+                    for(Entry e : entries){
+                        if(e_new.getIdentifier().equals(e.getIdentifier())){
+                            e = e_new;
+                            hit=true;
+                        }
+                    }
+                    if(!hit)
+                        entries.add(e_new);
+
+
+                }
+
+
+            }  else {
+                //  create new Entry
+                table_content.put(key_new, input_new.get(key_new));
+            }
+
+        }
+
+    }
 
     /**
      * This method parses the view.data table to a representation that can be displayed by the table view
@@ -457,5 +498,27 @@ public class TableController {
 
     }
 
+    public void loadGroups(){
 
+        // if "grouping" exists, create groups
+        if (getCurrentColumnNames().contains("Grouping")){
+            String groupname = null;
+            //iterate over rows
+            for (Object row : table.getItems()) {
+                ObservableList row_parsed = (ObservableList) row;
+
+                groupname = (String) getTableColumnByName("Grouping").getCellObservableValue(row).getValue();
+
+                if(!groupController.getAllGroups().keySet().contains(groupname)) {
+                    groupController.createGroup(groupname);
+                }
+                groupController.addElement(row_parsed, groupname);
+            }
+        }
+    }
+
+
+    public HashMap<String, List<Entry>> getTable_content() {
+        return table_content;
+    }
 }

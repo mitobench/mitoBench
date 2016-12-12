@@ -97,6 +97,7 @@ public class TableMenu {
                     tableController.getTable().getItems().removeAll(tableController.getTable().getItems());
                     tableController.getDataTable().getMtStorage().getData().clear();
                     tableController.getDataTable().getDataTable().clear();
+                    tableController.getTable().getColumns().removeAll(tableController.getTable().getColumns());
                     tableController.getGroupController().clear();
                 } catch (Exception e){
                     e.printStackTrace();

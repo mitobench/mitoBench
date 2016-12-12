@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
  */
 public class Group {
     private String name = "";
-    private ObservableList entries = FXCollections.observableArrayList();
+    private ObservableList<ObservableList> entries = FXCollections.observableArrayList();
 
     public Group(String name){
         this.name = name;
@@ -16,19 +16,23 @@ public class Group {
 
 
     public void addElement(ObservableList element) {
-
+        entries.add(element);
 
     }
 
     public void addElements(ObservableList<ObservableList> elements) {
-
+        entries.addAll(elements);
     }
 
     public void removeElement(ObservableList element) {
-
+        entries.removeAll(element);
     }
 
     public void removeElements(ObservableList<ObservableList> elements) {
+        entries.removeAll(elements);
+    }
 
+    public ObservableList<ObservableList> getEntries() {
+        return entries;
     }
 }

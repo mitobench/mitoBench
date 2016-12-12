@@ -48,11 +48,14 @@ public class GroupController {
     }
 
     public void clear(){
-        for(String key : allGroups.keySet()){
-            allGroups.remove(key);
-        }
-        //allGroups.clear();
+        allGroups.clear();
+        //for(String key : allGroups.keySet()){
+        //    allGroups.remove(key);
+        //}
+
     }
 
-
+    public HashMap<String, Group> getAllGroups() {
+        return allGroups;
+    }
 }

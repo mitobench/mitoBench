@@ -3,24 +3,26 @@ package view.menus;
 import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
+import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
-import io.reader.ARPReader;
-import io.reader.GenericInputParser;
-import io.reader.HSDInput;
-import io.reader.MultiFastAInput;
+import io.reader.*;
+import io.writer.ProjectWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
+import view.dialogues.error.ProjectErrorDialogue;
 import view.table.ImportDialogue;
 import view.table.TableController;
 import view.table.exportdialogue.ExportDialogue;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -31,11 +33,11 @@ import java.util.List;
 public class FileMenu {
 
     private Menu menuFile;
-    private TableController tableManager;
+    private TableController tableController;
 
-    public FileMenu(TableController tableManager) throws IOException {
+    public FileMenu(TableController tableController) throws IOException {
         this.menuFile = new Menu("File");
-        this.tableManager = tableManager;
+        this.tableController = tableController;
         addSubMenus();
 
     }
@@ -76,7 +78,7 @@ public class FileMenu {
                             FastAErrorDialogue fastAErrorDialogue = new FastAErrorDialogue(e);
                         }
                         HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
-                        tableManager.updateTable(input_multifasta);
+                        tableController.updateTable(input_multifasta);
 
 
                     }
@@ -91,7 +93,7 @@ public class FileMenu {
                                 HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
                             }
                             HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
-                            tableManager.updateTable(data_map);
+                            tableController.updateTable(data_map);
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -104,7 +106,7 @@ public class FileMenu {
                         try {
                             GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputFile().getPath());
                             HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                            tableManager.updateTable(data_map);
+                            tableController.updateTable(data_map);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -122,7 +124,8 @@ public class FileMenu {
                             ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
                         }
                         HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
-                        tableManager.updateTable(data_map);
+                        tableController.updateTable(data_map);
+                        tableController.loadGroups();
                     }
                 } else {
                     try {
@@ -144,7 +147,7 @@ public class FileMenu {
         MenuItem exportFile = new MenuItem("Export Data");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue(tableManager);
+                ExportDialogue exportDialogue = new ExportDialogue(tableController);
                 try {
                     exportDialogue.start(new Stage());
                 } catch (Exception e) {
@@ -156,16 +159,32 @@ public class FileMenu {
 
 
         /*
-                        EXPORT DIALOGUE
+                        EXPORT Project
 
          */
 
         MenuItem exportProject = new MenuItem("Export Project");
         exportProject.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                //ExportDialogue exportDialogue = new ExportDialogue(tableManager);
+                FileChooser fileChooser = new FileChooser();
+                ProjectWriter projectWriter = new ProjectWriter();
+
                 try {
-                    //exportDialogue.start(new Stage());
+                    fileChooser.setTitle("Export your project");
+                    fileChooser.getExtensionFilters().addAll(
+                            new FileChooser.ExtensionFilter("MitoProject Export (*.proj)", "*.proj"));
+
+                    File file = fileChooser.showSaveDialog(new Stage());
+                    if(file!=null){
+                        projectWriter.write(file, tableController);
+                    }  else {
+                        try {
+                            //Didndonuffin
+                        }catch (Exception e ) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -177,16 +196,37 @@ public class FileMenu {
 
 
         /*
-                        EXPORT DIALOGUE
+                        IMPORT Project
 
          */
 
         MenuItem importProject = new MenuItem("Import Project");
         importProject.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                //ExportDialogue exportDialogue = new ExportDialogue(tableManager);
+
+                FileChooser fileChooser = new FileChooser();
+                ProjectReader projectReader = null; // new ProjectReader();
+
                 try {
-                    //exportDialogue.start(new Stage());
+                    projectReader = new ProjectReader();
+                    fileChooser.setTitle("Import your project file");
+                    fileChooser.getExtensionFilters().addAll(
+                            new FileChooser.ExtensionFilter("MitoProject Input (*.proj)", "*.proj"));
+                    File file = fileChooser.showOpenDialog(new Stage());
+                    if(file != null){
+                        projectReader.read(file);
+                        projectReader.loadData(tableController);
+                    } else {
+                        try {
+                            //Didndonuffin
+                        }catch (Exception e ) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+
+
+                } catch (ProjectException e){
+                    ProjectErrorDialogue projectErrorDialogue = new ProjectErrorDialogue(e);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -209,7 +249,7 @@ public class FileMenu {
             }
         });
 
-        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, exportFile, importProject, exportProject, new SeparatorMenuItem(), exit);
     }
 
 
