@@ -20,15 +20,6 @@ public class ChartController {
 
     }
 
-    public void saveAsPng(WritableImage image, File file) {
-
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-        } catch (IOException e) {
-            // TODO: handle exception here
-        }
-    }
-
 
     public void addMouseListener(BarChart chart){
         chart.setOnMouseClicked(new EventHandler<MouseEvent>() {

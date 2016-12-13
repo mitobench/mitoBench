@@ -1,5 +1,6 @@
 package view.charts;
 
+import io.writer.ImageWriter;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -13,11 +14,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-
-import java.io.File;
 import java.util.*;
 
 /**
@@ -33,7 +31,7 @@ public class StackedBar {
     private double orgTranslateX, orgTranslateY;
     private TabPane tabPane;
     private ChartController chartController;
-    Stage stage;
+    private Stage stage;
 
     public StackedBar(String title, TabPane vBox, ChartController chartController, Stage stage) {
         tabPane = vBox;
@@ -66,6 +64,7 @@ public class StackedBar {
 
         yAxis.setMinorTickVisible(false);
         xAxis.setTickMarkVisible(false);
+
         setContextMenu(stage);
 
     }
@@ -99,15 +98,8 @@ public class StackedBar {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
-                // todo: select location for png
-                FileChooser fileChooser = new FileChooser();
-                //Show save file dialog
-                File file = fileChooser.showSaveDialog(stage);
-
-                if(file != null){
-                    chartController.saveAsPng(sbc.snapshot(new SnapshotParameters(), null), file);
-                }
-                //
+                ImageWriter imageWriter = new ImageWriter();
+                imageWriter.saveImage(stage, sbc.snapshot(new SnapshotParameters(), null));
             }
         });
 

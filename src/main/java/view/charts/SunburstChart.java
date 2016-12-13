@@ -1,11 +1,12 @@
 package view.charts;
+import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.controls.sunburst.*;
 import view.data.ISourceStrategy;
@@ -16,7 +17,6 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -131,17 +131,11 @@ public class SunburstChart {
 
 
         //adding a context menu item to the chart
-        final MenuItem saveAsPDF = new MenuItem("Save as pdf");
+        final MenuItem saveAsPDF = new MenuItem("Save as png");
         saveAsPDF.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
-                FileChooser fileChooser = new FileChooser();
-                //Show save file dialog
-                File file = fileChooser.showSaveDialog(stage);
-
-                if(file != null){
-                    chartController.saveAsPng(tabPane.snapshot(new SnapshotParameters(), null), file);
-                }
-                //
+                ImageWriter imageWriter = new ImageWriter();
+                imageWriter.saveImage(stage, tabPane.snapshot(new SnapshotParameters(), null));
             }
         });
 

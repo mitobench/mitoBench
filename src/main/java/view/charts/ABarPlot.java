@@ -1,5 +1,6 @@
 package view.charts;
 
+import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -117,21 +118,12 @@ public abstract class ABarPlot {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
-                // todo: select location for png
-                FileChooser fileChooser = new FileChooser();
-                //Show save file dialog
-                File file = fileChooser.showSaveDialog(stage);
-
-                if(file != null){
-                    chartController.saveAsPng(bc.snapshot(new SnapshotParameters(), null), file);
-                }
-                //
+                ImageWriter imageWriter = new ImageWriter();
+                imageWriter.saveImage(stage, bc.snapshot(new SnapshotParameters(), null));
             }
         });
 
-        final ContextMenu menu = new ContextMenu(
-                saveAsPng
-        );
+        final ContextMenu menu = new ContextMenu(saveAsPng);
 
         bc.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent event) {
@@ -146,4 +138,4 @@ public abstract class ABarPlot {
     }
 
 
-    }
+}
