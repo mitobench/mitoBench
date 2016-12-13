@@ -178,7 +178,7 @@ public class FileMenu {
 
                     File file = fileChooser.showSaveDialog(new Stage());
                     if(file!=null){
-                        projectWriter.write(file, tableController, MITOBENCH_VERSION);
+                        projectWriter.write(file.getAbsolutePath(), tableController, MITOBENCH_VERSION);
                     }  else {
                         try {
                             //Didndonuffin

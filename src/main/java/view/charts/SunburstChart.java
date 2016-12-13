@@ -1,4 +1,5 @@
 package view.charts;
+import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -31,30 +32,35 @@ public class SunburstChart {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
-    private ChartController chartController;
     private Stage stage;
     private TabPane tabPane;
 
 
-    public SunburstChart(BorderPane borderPane, ChartController chartController, Stage stage, TabPane tabPane){
+    public SunburstChart(BorderPane borderPane, Stage stage, TabPane tabPane){
 
-        this.chartController = chartController;
         this.stage = stage;
+        this.tabPane = tabPane;
         sunburstBorderPane = borderPane;
 
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
 
-
-
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
 
-        this.tabPane = tabPane;
 
     }
 
+    /**
+     * This
+     *
+     * @param hg_to_group
+     * @param weights
+     * @param treeMap
+     * @param tree
+     * @param treeView
+     */
     public void create(HashMap<String, List<String>> hg_to_group,
                        HashMap<String, HashMap<String, Integer>> weights,
                        HashMap<String, List<String>> treeMap,
@@ -127,33 +133,6 @@ public class SunburstChart {
     }
 
 
-    private void setContextMenu(Stage stage){
-
-
-        //adding a context menu item to the chart
-        final MenuItem saveAsPDF = new MenuItem("Save as png");
-        saveAsPDF.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-                ImageWriter imageWriter = new ImageWriter();
-                imageWriter.saveImage(stage, tabPane.snapshot(new SnapshotParameters(), null));
-            }
-        });
-
-        final ContextMenu menu = new ContextMenu(
-                saveAsPDF
-        );
-
-        sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                if (MouseButton.SECONDARY.equals(event.getButton())) {
-                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
-                }
-            }
-        });
-
-
-
-    }
 
 
     private void finishSetup(){
@@ -215,14 +194,57 @@ public class SunburstChart {
     }
 
 
-    public BorderPane getBorderPane(){
-        return sunburstBorderPane;
-    }
 
     public void clear(){
         if(rootData.getChildren()==null)
             this.rootData.getChildren().clear();
     }
+
+
+
+    /*
+
+            GETTER and SETTER
+
+
+     */
+    public BorderPane getBorderPane(){
+        return sunburstBorderPane;
+    }
+
+    private void setContextMenu(Stage stage){
+
+
+        //adding a context menu item to the chart
+        final MenuItem saveAsPDF = new MenuItem("Save as png");
+        saveAsPDF.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                ImageWriter imageWriter = new ImageWriter();
+                try {
+                    imageWriter.saveImage(stage, tabPane.snapshot(new SnapshotParameters(), null));
+                } catch (ImageException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        final ContextMenu menu = new ContextMenu(
+                saveAsPDF
+        );
+
+        sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                if (MouseButton.SECONDARY.equals(event.getButton())) {
+                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
+                }
+            }
+        });
+
+
+
+    }
+
+
 
 
 

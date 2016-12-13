@@ -1,5 +1,6 @@
 package view.charts;
 
+import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,17 +14,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import org.apache.poi.ss.formula.functions.T;
-import view.groups.AddToGroupDialog;
-import view.groups.CreateGroupDialog;
-import view.table.exportdialogue.ExportDialogue;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.HashMap;
 
 
@@ -33,10 +26,16 @@ import java.util.HashMap;
 public abstract class ABarPlot {
 
     protected BarChartExt<String, Number> bc;
-    private ChartController chartController;
     private TabPane scene;
 
 
+    /**
+     * Constructor which sets axes, title and context menu
+     * @param title
+     * @param ylabel
+     * @param scene
+     * @param stage
+     */
 
     public ABarPlot(String title, String ylabel, TabPane scene, Stage stage){
         this.scene = scene;
@@ -46,7 +45,8 @@ public abstract class ABarPlot {
         bc.setTitle(title);
         bc.setAnimated(false);
         yAxis.setLabel(ylabel);
-        yAxis.setTickUnit(1);
+        //yAxis.setTickUnit(1);
+        //yAxis.setMinorTickVisible(false);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override public String toString(Number object) {
                 if(object.intValue()!=object.doubleValue())
@@ -61,28 +61,19 @@ public abstract class ABarPlot {
             }
         });
 
-
-        yAxis.setMinorTickVisible(false);
-
         bc.prefWidthProperty().bind(scene.widthProperty());
         bc.autosize();
-        //addMouseListener();
         setContextMenu(stage);
-        chartController = new ChartController();
 
     }
-
-
 
     public abstract void addData(HashMap<String, Integer>  data);
 
-    public BarChart<String,Number> getBarChart() {
-        return bc;
-    }
 
+    /**
+     * This method removes all data to generate a clean barplot.
+     */
     public void clearData(){
-
-        this.bc.getData().clear();
 
         for (XYChart.Series<String, Number> series : bc.getData()) {
             for (XYChart.Data<String, Number> data : series.getData()) {
@@ -93,33 +84,43 @@ public abstract class ABarPlot {
                     group.getChildren().clear();
                 }
             }
-        }}
-
-//
-//    public void addMouseListener() {
-//        bc.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                MouseButton button = event.getButton();
-//                if (button == MouseButton.SECONDARY) {
-//                    System.out.println("SECONDARY button clicked on button");
-//                    chartController.saveAsPng(bc.snapshot(new SnapshotParameters(), null, ));
-//                }
-//
-//            }
-//        });
-//    }
+        }
+    }
 
 
+
+    /*
+
+            GETTER AND SETTER
+
+     */
+
+
+    /**
+     * This method returns the BarChart object
+     * @return
+     */
+    public BarChart<String,Number> getBarChart() {
+        return bc;
+    }
+
+
+    /**
+     * This method initializes the context menu to save chart as image
+     * @param stage
+     */
     private void setContextMenu(Stage stage){
-
 
         //adding a context menu item to the chart
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 ImageWriter imageWriter = new ImageWriter();
-                imageWriter.saveImage(stage, bc.snapshot(new SnapshotParameters(), null));
+                try {
+                    imageWriter.saveImage(stage, bc.snapshot(new SnapshotParameters(), null));
+                } catch (ImageException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

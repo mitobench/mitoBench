@@ -20,16 +20,16 @@ public class ProjectReader {
 
     private HashMap<String, List<Entry>> datatable;
 
-    public ProjectReader(){};
+    public ProjectReader(){}
 
     public void read(File infile) throws IOException, ProjectException {
         FileReader fr = new FileReader(infile);
         BufferedReader bfr = new BufferedReader(fr);
         datatable = new HashMap<>();
-        String currline = "";
+        String currline;
         String[] headergroup = null;
         String[] headertype = null;
-        String[] entries = null;
+        String[] entries;
         String key = null;
         boolean init = true;
 

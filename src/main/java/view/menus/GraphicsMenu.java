@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.charts.BarPlotHaplo;
-import view.charts.ChartController;
 import view.charts.StackedBar;
 import view.charts.SunburstChart;
 import view.table.TableController;
@@ -34,7 +33,6 @@ public class GraphicsMenu {
     private HashMap<String, List<String>> treeMap_path_to_root;
     private TreeItem<String> tree_root;
     private TreeView treeView;
-    private ChartController chartController;
     private Stage stage;
 
 
@@ -46,7 +44,6 @@ public class GraphicsMenu {
         treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();
         tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
         treeView = treeController.getTree().getTree();
-        chartController = new ChartController();
         this.stage = stage;
         addSubMenus();
     }
@@ -62,7 +59,7 @@ public class GraphicsMenu {
     }
 
     private void initStackedBarchart(){
-        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, chartController, stage);
+        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, stage);
         Tab tab = new Tab();
         tab.setText("Bar Chart per group");
         tab.setContent(stackedBar.getSbc());
@@ -72,7 +69,7 @@ public class GraphicsMenu {
     }
 
     private void initSunburst(){
-        sunburstChart = new SunburstChart(new BorderPane(), chartController, stage, tabPane);
+        sunburstChart = new SunburstChart(new BorderPane(), stage, tabPane);
         Tab tab = new Tab();
         tab.setText("Sunburst Chart");
         tab.setContent(sunburstChart.getBorderPane());
@@ -166,7 +163,7 @@ public class GraphicsMenu {
                                     XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(seletcion_groups[j], count_per_HG);
                                     data_list.add(data);
                                 }
-                                stackedBar.addSerie(data_list, seletcion_haplogroups[i]);
+                                stackedBar.addSeries(data_list, seletcion_haplogroups[i]);
                             }
                         }
                         stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());

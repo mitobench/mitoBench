@@ -1,11 +1,11 @@
 package view.charts;
 
+import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.*;
 import javafx.scene.control.ContextMenu;
@@ -27,20 +27,16 @@ public class StackedBar {
     private StackedBarChart<String, Number> sbc;
     private CategoryAxis xAxis;
     private NumberAxis yAxis;
-    private double orgSceneX, orgSceneY;
-    private double orgTranslateX, orgTranslateY;
     private TabPane tabPane;
-    private ChartController chartController;
     private Stage stage;
 
-    public StackedBar(String title, TabPane vBox, ChartController chartController, Stage stage) {
+    public StackedBar(String title, TabPane vBox, Stage stage) {
         tabPane = vBox;
-        this.chartController = chartController;
         this.stage = stage;
 
         xAxis = new CategoryAxis();
         yAxis = new NumberAxis();
-        sbc = new StackedBarChart<String, Number>(xAxis, yAxis);
+        sbc = new StackedBarChart<>(xAxis, yAxis);
 
         sbc.setTitle(title);
         sbc.prefWidthProperty().bind(tabPane.widthProperty());
@@ -70,8 +66,13 @@ public class StackedBar {
     }
 
 
-
-    public void addSerie( List<XYChart.Data<String, Number>> data, String name){
+    /**
+     * This method adds data to the barplot as series
+     *
+     * @param data
+     * @param name  name of the data set
+     */
+    public void addSeries(List<XYChart.Data<String, Number>> data, String name){
         XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
         series.setName(name);
 
@@ -83,6 +84,9 @@ public class StackedBar {
     }
 
 
+    /**
+     * This method cleans up all data
+     */
     public void clearData(){
         sbc.getData().clear();
         seriesList.clear();
@@ -90,7 +94,49 @@ public class StackedBar {
     }
 
 
+    /**
+     * This method adds a tooltip to the chart, which provides information such as the name of the Haplogroup and their
+     * occurrences.
+     *
+     * @param t
+     */
+    public void addTooltip(Event t){
 
+        for (final XYChart.Series<String, Number> series : sbc.getData()) {
+            for (final XYChart.Data<String, Number> data : series.getData()) {
+                Tooltip tooltip = new Tooltip();
+                data.getNode().setOnMouseMoved(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        // +15 moves the tooltip 15 pixels below the mouse cursor;
+                        tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
+                        tooltip.setText(series.getName() + " | " + data.getYValue().toString());
+                    }
+                });
+                data.getNode().setOnMouseExited(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event){
+                        tooltip.hide();
+                    }
+                });
+
+            }
+        }
+    }
+
+
+
+    /*
+
+            GETTER and SETTER
+
+
+     */
+
+    /**
+     * This method initializes a context menu to save chart as image.
+     * @param stage
+     */
     private void setContextMenu(Stage stage){
 
 
@@ -99,7 +145,11 @@ public class StackedBar {
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 ImageWriter imageWriter = new ImageWriter();
-                imageWriter.saveImage(stage, sbc.snapshot(new SnapshotParameters(), null));
+                try {
+                    imageWriter.saveImage(stage, sbc.snapshot(new SnapshotParameters(), null));
+                } catch (ImageException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -119,60 +169,9 @@ public class StackedBar {
 
     }
 
-
-
-
-    /**
-     * This method cares about the drag and drop option of teh barplot
-     *
-     */
-
-    public void setDragAndMove(){
-        sbc.setCursor(Cursor.HAND);
-        sbc.setOnMousePressed(circleOnMousePressedEventHandler);
-        sbc.setOnMouseDragged(circleOnMouseDraggedEventHandler);
-
-    }
-
-
-    /**
-     *
-     * Definitions of mouse events
-     *
-     */
-
-    EventHandler<MouseEvent> circleOnMousePressedEventHandler =
-            new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent t) {
-                    orgSceneX = t.getSceneX();
-                    orgSceneY = t.getSceneY();
-                    orgTranslateX = ((StackedBarChart)(t.getSource())).getTranslateX();
-                    orgTranslateY = ((StackedBarChart)(t.getSource())).getTranslateY();
-                }
-            };
-
-    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
-            new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent t) {
-                    double offsetX = t.getSceneX() - orgSceneX;
-                    double offsetY = t.getSceneY() - orgSceneY;
-                    double newTranslateX = orgTranslateX + offsetX;
-                    double newTranslateY = orgTranslateY + offsetY;
-
-                    ((StackedBarChart)(t.getSource())).setTranslateX(newTranslateX);
-                    ((StackedBarChart)(t.getSource())).setTranslateY(newTranslateY);
-                }
-            };
-
-
     public void setCategories(String[] groups){
         xAxis.setCategories(FXCollections.observableArrayList(groups));
     }
-
 
     public List<XYChart.Series<String, Number>> getSeriesList() {
         return seriesList;
@@ -182,30 +181,6 @@ public class StackedBar {
         return sbc;
     }
 
-    public void addTooltip(Event t){
 
-        for (final XYChart.Series<String, Number> series : sbc.getData()) {
-            for (final XYChart.Data<String, Number> data : series.getData()) {
-                Tooltip tooltip = new Tooltip();
-                data.getNode().setOnMouseMoved(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        // +15 moves the tooltip 15 pixels below the mouse cursor;
-                        // if you don't change the y coordinate of the tooltip, you
-                        // will see constant screen flicker
-                        tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
-                        tooltip.setText(series.getName() + " | " + data.getYValue().toString());
-                    }
-                });
-                data.getNode().setOnMouseExited(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event){
-                        tooltip.hide();
-                    }
-                });
-
-            }
-        }
-    }
 
 }

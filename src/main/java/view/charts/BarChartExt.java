@@ -6,12 +6,9 @@ package view.charts;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.BarChart;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 

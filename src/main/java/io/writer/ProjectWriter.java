@@ -2,11 +2,6 @@ package io.writer;
 
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
-import io.datastructure.generic.GenericInputData;
-import io.inputtypes.CategoricInputType;
-import io.inputtypes.RadioCarbonInputType;
-import view.groups.Group;
-import view.groups.GroupController;
 import view.table.TableController;
 
 import java.io.*;
@@ -14,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.apache.poi.hssf.usermodel.HeaderFooter.date;
 
 /**
  * Created by neukamm on 09.12.2016.
@@ -22,11 +16,16 @@ import static org.apache.poi.hssf.usermodel.HeaderFooter.date;
 public class ProjectWriter {
 
 
-    public ProjectWriter(){};
+    public ProjectWriter(){}
 
 
-    public void write(File outfile, TableController tableController, String version) throws IOException, ProjectException {
-        GroupController groupController = tableController.getGroupController();
+    public void write(String outfile, TableController tableController, String version) throws IOException, ProjectException {
+
+        //Initialize properly
+        if (!outfile.endsWith("mitoproj")) {
+            outfile =outfile+ ".mitoproj";
+        }
+
         Date date = new Date();
         Writer writer = null;
         try {
@@ -37,8 +36,8 @@ public class ProjectWriter {
             String header = "# This file has been generated with MitoBench version " + version + "\n and contains all information of a MitoBench project\n Created on  "+ date.toString()
                     + "\n# Please do NOT edit manually unless you know what you are doing.\n\n";
             writer.write(header);
+
             // write all data table information as Entry List
-            //HashMap<String, String[]> dataTable = tableController.getDataTable().getDataTable();
             HashMap<String, List<Entry>> tableData = tableController.getTable_content();
 
             writer.write("<datatable\n");
@@ -62,16 +61,6 @@ public class ProjectWriter {
                 }
                 writer.write("\n");
 
-                // write data types
-               // writer.write("\t\t");
-               // writer.write("#String\t");
-                //for(Entry e : tableData.get(sample_id)){
-                //    if(!e.getIdentifier().equals("ID"))
-                //        writer.write(e.getData() + "\t" );
-                //}
-                //writer.write("\n");
-
-
                 // write data
                 writer.write("\t\t");
                 writer.write(sample_id + "\t");
@@ -83,25 +72,6 @@ public class ProjectWriter {
             }
 
             writer.write(">\n");
-
-
-
-            // write group information
-
-//            HashMap<String, Group> allGroups = groupController.getAllGroups();
-//            if(allGroups.size() != 0){
-//                writer.write("<grouping\n");
-//                for(String group_key : allGroups.keySet()){
-//                    writer.write("\t"+group_key+"\n");
-//                    for(Object member : allGroups.get(group_key).getEntries()){
-//                        writer.write("\t\t"+ member.toString() + "\n");
-//                    }
-//                }
-//
-//                writer.write(">");
-//            }
-
-
 
 
         } catch (Exception ex) {
