@@ -34,10 +34,12 @@ public class FileMenu {
 
     private Menu menuFile;
     private TableController tableController;
+    private String MITOBENCH_VERSION;
 
-    public FileMenu(TableController tableController) throws IOException {
+    public FileMenu(TableController tableController, String version) throws IOException {
         this.menuFile = new Menu("File");
         this.tableController = tableController;
+        MITOBENCH_VERSION = version;
         addSubMenus();
 
     }
@@ -172,11 +174,11 @@ public class FileMenu {
                 try {
                     fileChooser.setTitle("Export your project");
                     fileChooser.getExtensionFilters().addAll(
-                            new FileChooser.ExtensionFilter("MitoProject Export (*.proj)", "*.proj"));
+                            new FileChooser.ExtensionFilter("MitoProject Export (*.mitoproj)", "*.mitoproj"));
 
                     File file = fileChooser.showSaveDialog(new Stage());
                     if(file!=null){
-                        projectWriter.write(file, tableController);
+                        projectWriter.write(file, tableController, MITOBENCH_VERSION);
                     }  else {
                         try {
                             //Didndonuffin
@@ -211,7 +213,7 @@ public class FileMenu {
                     projectReader = new ProjectReader();
                     fileChooser.setTitle("Import your project file");
                     fileChooser.getExtensionFilters().addAll(
-                            new FileChooser.ExtensionFilter("MitoProject Input (*.proj)", "*.proj"));
+                            new FileChooser.ExtensionFilter("MitoProject Input (*.mitoproj)", "*.mitoproj"));
                     File file = fileChooser.showOpenDialog(new Stage());
                     if(file != null){
                         projectReader.read(file);

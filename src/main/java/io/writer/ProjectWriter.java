@@ -25,7 +25,7 @@ public class ProjectWriter {
     public ProjectWriter(){};
 
 
-    public void write(File outfile, TableController tableController) throws IOException, ProjectException {
+    public void write(File outfile, TableController tableController, String version) throws IOException, ProjectException {
         GroupController groupController = tableController.getGroupController();
         Date date = new Date();
         Writer writer = null;
@@ -33,8 +33,9 @@ public class ProjectWriter {
             writer = new BufferedWriter(new FileWriter(outfile));
 
             // write header
-            String header = "# This file contains all information of a MitoBench project and was created on  "+ date.toString()
-                    + "\n# Please do NOT change this file.\n\n";
+            // This has been generated with MitoBench version XYZ, do not edit manually unless you know what you are doing.
+            String header = "# This file has been generated with MitoBench version " + version + "\n and contains all information of a MitoBench project\n Created on  "+ date.toString()
+                    + "\n# Please do NOT edit manually unless you know what you are doing.\n\n";
             writer.write(header);
             // write all data table information as Entry List
             //HashMap<String, String[]> dataTable = tableController.getDataTable().getDataTable();

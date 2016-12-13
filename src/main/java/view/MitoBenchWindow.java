@@ -20,6 +20,8 @@ import java.io.IOException;
  */
 public class MitoBenchWindow extends Application{
 
+    private final String MITOBENCH_VERSION = "0.1";
+
     private BorderPane root;
     private TableController tableController;
     private Scene scene;
@@ -59,7 +61,7 @@ public class MitoBenchWindow extends Application{
     {
         MenuBar menuBar = new MenuBar();
 
-        FileMenu fileMenu = new FileMenu(tableController);
+        FileMenu fileMenu = new FileMenu(tableController, MITOBENCH_VERSION);
         EditMenu editMenu = new EditMenu();
         ToolsMenu toolsMenu = new ToolsMenu();
         TableMenu tableMenu = new TableMenu(tableController);

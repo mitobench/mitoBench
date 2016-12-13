@@ -1,6 +1,5 @@
 package io.reader;
 
-import io.Exceptions.ARPException;
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -41,7 +40,7 @@ public class ProjectReader {
                 if (currline.startsWith("#")) {
                     continue;
                 } else {
-                    throw new ProjectException("This is not in .proj Format!");
+                    throw new ProjectException("This is not in .mitoproj Format!");
                 }
 
             } else {
