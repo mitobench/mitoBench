@@ -85,7 +85,7 @@ public class SunburstLegend extends VBox {
      * There will be generated as many LegendItems as needed.
      * This method is called by the updateSelectedItem method.
      */
-    private void updateLegend() {
+    public void updateLegend() {
 
         clearLegend();
 
@@ -97,7 +97,6 @@ public class SunburstLegend extends VBox {
 
             String value = innerChild.getValue().toString(); // TODO better string / description handling
             Color color = sunburstView.getItemColor(innerChild);
-            //System.out.println("Color for " + innerChild + " is: " + color);
 
             LegendItem item = new LegendItem(color, value);
 

@@ -3,6 +3,7 @@ import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
@@ -34,6 +35,7 @@ public class SunburstChart {
     private ColorStrategySectorShades colorStrategyShades;
     private Stage stage;
     private TabPane tabPane;
+
 
 
     public SunburstChart(BorderPane borderPane, Stage stage, TabPane tabPane){
@@ -70,7 +72,6 @@ public class SunburstChart {
 
 
         loadData(hg_to_group, weights, treeMap, tree, treeView);
-        addEvents();
         finishSetup();
         setContextMenu(stage);
 
@@ -89,8 +90,13 @@ public class SunburstChart {
         sunburstView.setColorStrategy(colorStrategyShades);
     }
 
-    private void addEvents(){
+    private void finishSetup(){
 
+
+        // set legend
+        SunburstLegend myLegend = new SunburstLegend(sunburstView);
+
+        // set color buttons
         ToggleButton btnCSShades = new ToggleButton("Shades Color Strategy");
         ToggleButton btnCSRandom = new ToggleButton("Random Color Strategy");
 
@@ -113,29 +119,25 @@ public class SunburstChart {
             btnCSShades.setSelected(true);
         }
 
-        HBox buttons = new HBox();
-        buttons.getChildren().addAll(btnCSShades, btnCSRandom);
-        sunburstBorderPane.setBottom(buttons);
 
+        // set legend buttons
 
-        sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                MouseButton button = event.getButton();
-                if(button==MouseButton.SECONDARY) {
-                    System.out.println("SECONDARY button clicked on button");
-                }
+        ToggleButton btnShowLegend = new ToggleButton("Show Legend");
+        ToggleButton btnHideLegend = new ToggleButton("Hide Legend");
 
-            }
+        btnShowLegend.setSelected(true);
+        btnShowLegend.setOnAction(event -> {
+            btnHideLegend.setSelected(false);
+            myLegend.updateLegend();
         });
 
 
-    }
+        btnHideLegend.setOnAction(event ->{
+            btnShowLegend.setSelected(false);
+            myLegend.clearLegend();
+        });
 
 
-
-
-    private void finishSetup(){
 
         // Zoom level
 
@@ -160,13 +162,15 @@ public class SunburstChart {
         BorderPane.setMargin(toolbar, new Insets(10));
 
 
-        toolbar.getChildren().add(zoomSlider);
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.VERTICAL);
+
+        toolbar.getChildren().addAll(zoomSlider, btnCSShades, btnCSRandom, separator, btnShowLegend, btnHideLegend);
 
         sunburstBorderPane.setTop(toolbar);
 
         sunburstBorderPane.setCenter(sunburstView);
         BorderPane.setAlignment(sunburstView, Pos.CENTER);
-        SunburstLegend myLegend = new SunburstLegend(sunburstView);
         sunburstBorderPane.setRight(myLegend);
         BorderPane.setMargin(myLegend, new Insets(20));
         BorderPane.setAlignment(myLegend, Pos.CENTER_LEFT);

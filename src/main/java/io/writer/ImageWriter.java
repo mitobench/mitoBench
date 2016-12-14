@@ -15,7 +15,8 @@ import java.io.IOException;
  */
 public class ImageWriter {
 
-    public ImageWriter(){}
+    public ImageWriter(){
+    }
 
 
     /**
@@ -26,7 +27,14 @@ public class ImageWriter {
     public void saveImage(Stage stage, WritableImage image) throws ImageException {
         FileChooser fileChooser = new FileChooser();
         //Show save file dialog
-        File file = fileChooser.showSaveDialog(stage);
+        String outfile = fileChooser.showSaveDialog(stage).getAbsolutePath();
+
+        //Initialize properly
+        if (!outfile.endsWith("png")) {
+            outfile =outfile+ ".png";
+        }
+
+        File file  = new File(outfile);
 
         if(file != null){
             try {

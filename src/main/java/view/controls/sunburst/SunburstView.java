@@ -197,6 +197,7 @@ public class SunburstView<T> extends Control {
 
     }
 
+
     /***************************************************************************
      *                                                                         *
      * Properties                                                              *

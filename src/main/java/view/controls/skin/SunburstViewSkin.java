@@ -5,6 +5,7 @@ import com.sun.javafx.scene.control.behavior.KeyBinding;
 import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
 import view.controls.sunburst.DonutUnit;
 import view.controls.sunburst.IColorStrategy;
@@ -453,7 +454,12 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
             centerCircle.setFill(Color.ORANGE);
             // Set id in order to apply CSS styles.
             centerCircle.setId("centerCircle");
-            centerCircle.setOnMouseClicked(event -> onAction());
+            centerCircle.setOnMouseClicked(event -> {
+                // Do only expand / shrink sunburst view on left click
+                if(event.getButton()==MouseButton.PRIMARY) {
+                    onAction();
+                }
+            });
 
             description = new Text("<Root>");
             description.setBoundsType(TextBoundsType.VISUAL);
@@ -497,9 +503,6 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
             if(!selectedItem.equals(rootItem)){
                 getSkinnable().setSelectedItem((WeightedTreeItem)selectedItem.getParent());
             }
-//            else{
-//                System.out.println("Error: Can't zoom out; Root item reached.");
-//            }
         }
 
 
@@ -518,13 +521,12 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
             Tooltip tooltip = new Tooltip(item.getValue().toString() +" | " + item.getWeight());
             hackTooltipStartTiming(tooltip);
             setOnMouseClicked(event -> {
-                // Check if leaf node was clicked. If so there are no more children to display.
-                if(!item.getChildren().isEmpty()){
-                    getSkinnable().setSelectedItem(item);
+                // Do only expand / shrink sunburst view on left click
+                if(event.getButton()==MouseButton.PRIMARY) {
+                    if(!item.getChildren().isEmpty()){
+                        getSkinnable().setSelectedItem(item);
+                    }
                 }
-//                else{
-//                    System.out.println("Error: Can't zoom in; There are no children for this DonutUnit");
-//                }
             });
 
             Tooltip.install(this, tooltip);

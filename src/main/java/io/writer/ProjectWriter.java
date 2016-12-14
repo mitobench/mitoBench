@@ -33,7 +33,7 @@ public class ProjectWriter {
 
             // write header
             // This has been generated with MitoBench version XYZ, do not edit manually unless you know what you are doing.
-            String header = "# This file has been generated with MitoBench version " + version + "\n and contains all information of a MitoBench project\n Created on  "+ date.toString()
+            String header = "# This file has been generated with MitoBench version " + version + " and contains all information of a MitoBench project\n# Created on  "+ date.toString()
                     + "\n# Please do NOT edit manually unless you know what you are doing.\n\n";
             writer.write(header);
 

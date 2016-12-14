@@ -54,7 +54,7 @@ public class FileMenu {
 
          */
 
-        MenuItem importFile = new MenuItem("Import file");
+        MenuItem importFile = new MenuItem("Import Data");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 ImportDialogue importDialogue = new ImportDialogue();

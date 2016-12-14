@@ -101,26 +101,24 @@ public class GraphicsMenu {
             public void handle(ActionEvent t) {
                 try {
 
-                    initBarchart();
+                    if(tableController.getTable().getItems().size() != 0 ){
+                        initBarchart();
 
-                    TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
-                    List<String> columnData = new ArrayList<>();
-                    for (Object item : tableController.getTable().getItems()) {
-                        columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
+                        TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
+                        List<String> columnData = new ArrayList<>();
+                        for (Object item : tableController.getTable().getItems()) {
+                            columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
+                        }
+                        String[] seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
+
+                        barPlotHaplo.clearData();
+
+                        if (seletcion_haplogroups.length !=0) {
+                            barPlotHaplo.addData(tableController.getDataHist());
+
+                        }
                     }
-                    String[] seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
 
-
-                    // parse selection to tablefilter
-                    //TableSelectionFilter tableFilter = new TableSelectionFilter();
-
-                    barPlotHaplo.clearData();
-
-                    if (seletcion_haplogroups.length !=0) {
-                        //tableFilter.haplogroupFilter(tableController, seletcion_haplogroups, tableController.getColIndex("Haplogroup"));
-                        barPlotHaplo.addData(tableController.getDataHist());
-
-                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -138,7 +136,9 @@ public class GraphicsMenu {
         plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
-                    if(tableController.getTableColumnByName("Grouping") != null){
+                    if(tableController.getTableColumnByName("Grouping") != null
+                            && tableController.getTable().getItems().size()!=0){
+
                         initStackedBarchart();
 
                         String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
@@ -149,8 +149,6 @@ public class GraphicsMenu {
                         stackedBar.setCategories(seletcion_groups);
 
                         // consider Hgs only once per group
-                        //Set<String> haplogroups = new HashSet<String>(Arrays.asList(seletcion_haplogroups));
-
                         if (seletcion_haplogroups.length != 0) {
                             for(int i = 0; i < seletcion_haplogroups.length; i++){
 
@@ -190,7 +188,8 @@ public class GraphicsMenu {
                 try {
 
                     // makes only sense if grouping exists.
-                    if(tableController.getTableColumnByName("Grouping")!=null){
+                    if(tableController.getTableColumnByName("Grouping") != null
+                            && tableController.getTable().getItems().size() != 0 ){
                         initSunburst();
                         // get selected rows
                         ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
@@ -351,7 +350,4 @@ public class GraphicsMenu {
                               columnDataGroup.toArray(new String[columnDataGroup.size()])};
     }
 
-    public HashMap<String, HashMap<String, Integer>> getWeights() {
-        return weights;
-    }
 }

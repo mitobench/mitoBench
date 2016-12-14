@@ -46,7 +46,6 @@ public class MitoBenchWindow extends Application{
         root.setCenter(getCenterPane());
         root.setTop(getMenuPane());
 
-
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Mito Bench");
         this.primaryStage.setScene(scene);
