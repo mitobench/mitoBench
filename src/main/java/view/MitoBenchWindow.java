@@ -39,6 +39,11 @@ public class MitoBenchWindow extends Application{
         root = new BorderPane();
         scene = new Scene(root, 1200, 600);
 
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Mito Bench");
+        this.primaryStage.setScene(scene);
+        this.primaryStage.setResizable(true);
+
         // bind width and height to scene to enable resizing
         root.prefHeightProperty().bind(scene.heightProperty());
         root.prefWidthProperty().bind(scene.widthProperty());
@@ -46,10 +51,7 @@ public class MitoBenchWindow extends Application{
         root.setCenter(getCenterPane());
         root.setTop(getMenuPane());
 
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Mito Bench");
-        this.primaryStage.setScene(scene);
-        this.primaryStage.setResizable(true);
+
         this.primaryStage.show();
 
     }
@@ -83,7 +85,7 @@ public class MitoBenchWindow extends Application{
 
 
         SplitPane center = new SplitPane();
-        center.getItems().addAll(getTablePane(), getPlotPane());
+        center.getItems().addAll(getLeftSplitPane(), getPlotPane());
 
 
         // bind center to scene --> resizing
@@ -119,11 +121,11 @@ public class MitoBenchWindow extends Application{
      *
      * @return
      */
-    private BorderPane getTablePane()throws IOException, SAXException, ParserConfigurationException
+    private BorderPane getLeftSplitPane()throws IOException, SAXException, ParserConfigurationException
     {
-        BorderPane stackPane = new BorderPane();
+        BorderPane borderPane = new BorderPane();
 
-        // initialize columns
+        // initialize table
         tableController = new TableController(scene);
 
         VBox vbox = new VBox();
@@ -132,11 +134,16 @@ public class MitoBenchWindow extends Application{
         vbox.prefHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty());
         vbox.getChildren().addAll(tableController.getTable());
+        borderPane.setCenter(vbox);
 
-        stackPane.setCenter(vbox);
-        treeController = new TreeHaploController(stackPane, tableController);
+        // set haplotree - seach view
+        Pane treepane = new Pane();
 
-        return stackPane;
+        treeController = new TreeHaploController(treepane, tableController);
+
+        borderPane.setTop(treepane);
+
+        return borderPane;
     }
 
 }

@@ -3,17 +3,22 @@ package view.menus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.charts.BarPlotHaplo;
+import view.charts.ColorScheme;
 import view.charts.StackedBar;
 import view.charts.SunburstChart;
 import view.table.TableController;
 import view.tree.TreeHaploController;
 
+import java.io.File;
+import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -133,6 +138,7 @@ public class GraphicsMenu {
          */
 
         MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group(StackedBarchart)");
+
         plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -142,30 +148,42 @@ public class GraphicsMenu {
                         initStackedBarchart();
 
                         String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
-                        String[] seletcion_haplogroups = cols[0];
+                        String[] selection_haplogroups = cols[0];
                         String[] seletcion_groups = cols[1];
+
+
+                        // reduce haplogroups to maximum size of 20
+                        if(selection_haplogroups.length >= 20)
+                            selection_haplogroups = reduceHGs(selection_haplogroups);
+
 
                         stackedBar.clearData();
                         stackedBar.setCategories(seletcion_groups);
 
                         // consider Hgs only once per group
-                        if (seletcion_haplogroups.length != 0) {
-                            for(int i = 0; i < seletcion_haplogroups.length; i++){
+                        if (selection_haplogroups.length != 0) {
+                            for(int i = 0; i < selection_haplogroups.length; i++){
 
                                 List< XYChart.Data<String, Number> > data_list = new ArrayList<XYChart.Data<String, Number>>();
                                 // fill data_list : <group(i), countHG >
                                 for(int j = 0; j < seletcion_groups.length; j++){
 
-                                    int count_per_HG = tableController.getCountPerHG(seletcion_haplogroups[i], seletcion_groups[j], tableController.getColIndex("Haplogroup"),
+                                    int count_per_HG = tableController.getCountPerHG(selection_haplogroups[i], seletcion_groups[j], tableController.getColIndex("Haplogroup"),
                                             tableController.getColIndex("Grouping"));
+
                                     XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(seletcion_groups[j], count_per_HG);
                                     data_list.add(data);
                                 }
-                                stackedBar.addSeries(data_list, seletcion_haplogroups[i]);
+                                stackedBar.addSeries(data_list, selection_haplogroups[i]);
                             }
                         }
                         stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
                         stackedBar.addTooltip(t);
+
+                        ColorScheme colorScheme = new ColorScheme(stage);
+                        colorScheme.setNewColors(stackedBar, selection_haplogroups);
+
+
                     }
 
                 } catch (Exception e) {
@@ -228,6 +246,37 @@ public class GraphicsMenu {
         menuGraphics.getItems().addAll(barchart, sunburstChartItem, new SeparatorMenuItem(), clearPlotBox);
     }
 
+
+
+    private String[] reduceHGs(String[] hgs){
+
+        Set<String> hg_reduced = new HashSet<>();
+//        String[] hg_core_list = new String[]{"L0-156", "L1-99", "L2-131", "L3-5010", "L4-16", "M1-44", "N-3470",  "I-19",  "W-59", "X-88",
+//                                        "R-2954",  "R0-1171", "U-730" , "K-197" , "J-239" , "T-229" , "T1-51", "T2-175", "H-7", "HV-1132"};
+
+        //        String[] hg_core_list = new String[]{"L0-156", "L1-99", "L2-131", "L3-5010", "L4-16", "M1-44", "N-3470",  "I-19",  "W-59", "X-88",
+//                                        "R-2954",  "R0-1171", "U-730" , "K-197" , "J-239" , "T-229" , "T1-51", "T2-175", "H-7", "HV-1132"};
+
+
+        String[] hg_core_list = new String[]{"L0", "L1", "L2", "L3", "L4", "M1", "N",  "I",  "W", "X",
+                                             "R",  "R0", "U" , "K" , "J" , "T" , "T1", "T2", "H", "HV"};
+
+
+        HashMap<String, List<String>> hg_subs = new HashMap<>();
+
+        for (String hg : hgs) {
+            for(String hg_core : hg_core_list){
+                List<String> core_subs = treeMap.get(hg_core);
+                if(core_subs.contains(hg)){
+                    hg_reduced.add(hg);
+                }
+            }
+        }
+
+        return (String[])hg_reduced.toArray();
+
+    }
+
     public Menu getMenuGraphics() {
         return menuGraphics;
     }
@@ -286,7 +335,7 @@ public class GraphicsMenu {
 
     /**
      * This method iterates over groups and their corresponding haplogroups and counts the occurrences per haplogroup
-     * per group. Counts are later used as weights for sunburst
+     * per group. Counts are later used as weights for sunburst chart
      *
      * @param seletcion_haplogroups unique list of haplogroups
      * @param seletcion_groups  unique list of groups
@@ -330,7 +379,13 @@ public class GraphicsMenu {
     }
 
 
-
+    /**
+     * This method gets all entries of column "Haplogroups" and "Grouping" as set of unique entries.
+     *
+     * @param names
+     * @param selectedTableItems
+     * @return
+     */
     public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems){
 
 

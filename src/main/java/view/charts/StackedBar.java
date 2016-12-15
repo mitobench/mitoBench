@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Side;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.*;
 import javafx.scene.control.ContextMenu;
@@ -60,6 +61,9 @@ public class StackedBar {
 
         yAxis.setMinorTickVisible(false);
         xAxis.setTickMarkVisible(false);
+
+
+        sbc.setLegendSide(Side.RIGHT);
 
         setContextMenu(stage);
 

@@ -1,6 +1,5 @@
 package view.table;
 
-import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
@@ -8,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -16,15 +14,10 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
-import view.groups.Group;
 import view.groups.GroupController;
 
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.util.*;
 
-import static java.rmi.Naming.lookup;
 
 
 /**

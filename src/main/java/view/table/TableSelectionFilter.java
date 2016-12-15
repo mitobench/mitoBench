@@ -51,7 +51,7 @@ public class TableSelectionFilter {
             tableController.updateView(sortedData);
 
         } else {
-            throw new IllegalArgumentException("Column 'Haplogroup' does not exists.");
+            throw new IllegalArgumentException("Column 'Haplogroup' does not exist.");
         }
 
 

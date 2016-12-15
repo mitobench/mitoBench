@@ -50,19 +50,18 @@ public class TreeHaploController {
     private String[] seletcion_haplogroups;
     private TableController tableManager;
 
-    private List<TreeItem<String>> foundItem;
     private TextField searchFieldListHaplogroup;
     private TreeHaplo tree;
     private HashMap<String, List<String>> treeMap;
     private HashMap<String, List<String>> treeMap_leaf_to_root;
     private HashMap<String, List<String>> node_to_children;
 
-    public TreeHaploController(BorderPane root, TableController tableManager) throws IOException, SAXException, ParserConfigurationException {
+    public TreeHaploController(Pane root, TableController tableManager) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
 
-        treeMap = new HashMap<String, List<String>>();
-        treeMap_leaf_to_root = new HashMap<String, List<String>>();
+        treeMap = new HashMap<>();
+        treeMap_leaf_to_root = new HashMap<>();
         node_to_children = new HashMap<>();
 
         configureSearch(root);
@@ -94,9 +93,8 @@ public class TreeHaploController {
      * Method to configure the search pane.
      * @param
      */
-    private void configureSearch(BorderPane root) throws IOException, SAXException, ParserConfigurationException{
+    private void configureSearch(Pane root) throws IOException, SAXException, ParserConfigurationException{
         searchPane = new VBox();
-        //searchPane.autosize();
         searchPane.setAlignment(Pos.TOP_LEFT);
 
         StackPane sp1 = new StackPane();
@@ -118,48 +116,21 @@ public class TreeHaploController {
 
         /*
 
-                        get selection button
+                        configure "apply filter" button
 
 
          */
+
         applyBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent paramT) {
-                ObservableList<TreeItem<String>> itemSelection =  tree.getTree().getSelectionModel().getSelectedItems();
-                seletcion_haplogroups = new String[itemSelection.size()];
-                for(int i = 0; i < itemSelection.size(); i++){
-                    seletcion_haplogroups[i] = itemSelection.get(i).getValue();
-                }
-                // if selection has size zero --> take all haplogroups
-                if(seletcion_haplogroups.length == 0){
-                    TableColumn haplo_col = tableManager.getTableColumnByName("Haplogroup");
-                    List<String> columnData = new ArrayList<>();
-                    for (Object item : tableManager.getTable().getItems()) {
-                        columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
-                    }
-                    seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
-                } else { // get all sub-haplo-groups of selected HG's
-                    List<String> HGs = getAllSubgroups(seletcion_haplogroups);
-                    seletcion_haplogroups = HGs.toArray(new String[HGs.size()]);
-                }
-
-                // close tree view
-                timelineUp.play();
-                searchLbl.setGraphic(downArrow);
-                togglePaneVisibility();
-                tree.getTree().getSelectionModel().clearSelection();
-
-                // parse selection to tablefilter
-                TableSelectionFilter tableFilter = new TableSelectionFilter();
-
-                if (seletcion_haplogroups.length !=0) {
-                    tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
-                }
+                if(searchFieldListHaplogroup.getText().equals(""))
+                    applyFilterFunction();
+                else
+                    applyFilterFunctionList();
 
             }
         });
-
-
 
 
         /*
@@ -170,32 +141,27 @@ public class TreeHaploController {
          */
 
 
+        tree.getTree().setOnKeyPressed(new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent ke)
+            {
+                if (ke.getCode().equals(KeyCode.ENTER)) {
+                    applyFilterFunction();
+                }
+            }
+        });
+
         searchFieldListHaplogroup.setOnKeyPressed(new EventHandler<KeyEvent>(){
             @Override
             public void handle(KeyEvent ke)
             {
                 if (ke.getCode().equals(KeyCode.ENTER))
                 {
-                    // parse haplogroup list, get all corresponding table entries (subgroups included)
-                    // and show results in table
-                    List<String> allHaplogroups = getAllSubgroups(searchFieldListHaplogroup.getText().split(","));
-                    seletcion_haplogroups = allHaplogroups.toArray(new String[allHaplogroups.size()]);
-
-                    // close tree view
-                    timelineUp.play();
-                    searchLbl.setGraphic(downArrow);
-                    togglePaneVisibility();
-                    tree.getTree().getSelectionModel().clearSelection();
-
-                    // parse selection to tablefilter
-                    TableSelectionFilter tableFilter = new TableSelectionFilter();
-
-                    if (seletcion_haplogroups.length !=0) {
-                        tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
-                    }
+                    applyFilterFunctionList();
                 }
             }
         });
+
 
 
         Label infolabel = new Label("Please select haplogroups either in the tree or specify a list:");
@@ -226,6 +192,73 @@ public class TreeHaploController {
 
     }
 
+
+    private void applyFilterFunction(){
+
+        ObservableList<TreeItem<String>> itemSelection =  tree.getTree().getSelectionModel().getSelectedItems();
+
+        if(itemSelection.size() > 0){
+            seletcion_haplogroups = new String[itemSelection.size()];
+            for(int i = 0; i < itemSelection.size(); i++){
+                seletcion_haplogroups[i] = itemSelection.get(i).getValue();
+            }
+            // if selection has size zero --> take all haplogroups
+            if(seletcion_haplogroups.length == 0){
+                TableColumn haplo_col = tableManager.getTableColumnByName("Haplogroup");
+                List<String> columnData = new ArrayList<>();
+                for (Object item : tableManager.getTable().getItems()) {
+                    columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
+                }
+                seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
+            } else { // get all sub-haplo-groups of selected HG's
+                List<String> HGs = getAllSubgroups(seletcion_haplogroups);
+                seletcion_haplogroups = HGs.toArray(new String[HGs.size()]);
+            }
+
+            // close tree view
+            timelineUp.play();
+            searchLbl.setGraphic(downArrow);
+            togglePaneVisibility();
+            tree.getTree().getSelectionModel().clearSelection();
+
+            // parse selection to tablefilter
+            TableSelectionFilter tableFilter = new TableSelectionFilter();
+
+            if (seletcion_haplogroups.length !=0) {
+                tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
+            }
+
+        }
+
+    }
+
+
+    private void applyFilterFunctionList(){
+
+        // parse haplogroup list, get all corresponding table entries (subgroups included)
+        // and show results in table
+
+        if(!searchFieldListHaplogroup.getText().equals("")){
+            List<String> allHaplogroups = getAllSubgroups(searchFieldListHaplogroup.getText().split(","));
+
+            seletcion_haplogroups = allHaplogroups.toArray(new String[allHaplogroups.size()]);
+
+            // close tree view
+            timelineUp.play();
+            searchLbl.setGraphic(downArrow);
+            togglePaneVisibility();
+            tree.getTree().getSelectionModel().clearSelection();
+
+            // parse selection to tablefilter
+            TableSelectionFilter tableFilter = new TableSelectionFilter();
+
+            if (seletcion_haplogroups.length !=0) {
+                tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
+            }
+        }
+
+
+    }
 
     private void setAnimation(){
 		/* Initial position setting for Top Pane*/
@@ -318,7 +351,7 @@ public class TreeHaploController {
         TreeIterator<String> iterator = new TreeIterator<>(item);
         TreeItem it = item;
         while (iterator.hasNext()) {
-            treeMap.put(it.getValue().toString(), getSubtree(it, new ArrayList<String>()));
+            treeMap.put(it.getValue().toString(), getSubtree(it));
             treeMap_leaf_to_root.put(it.getValue().toString(), getPathToRoot(it));
             node_to_children.put(it.getValue().toString(), it.getChildren());
             it = iterator.next();
@@ -339,9 +372,13 @@ public class TreeHaploController {
 
     }
 
-    private List<String> getSubtree(TreeItem root, List<String> path){
+    private List<String> getSubtree(TreeItem root){
 
+        if(root.getValue().toString().equals("H")){
+            System.out.println("");
+        }
 
+        List<String> path = new ArrayList<String>();
         TreeIterator<String> iterator = new TreeIterator<>(root);
         TreeItem it = iterator.next();
         while (iterator.hasNext()) {
@@ -374,10 +411,6 @@ public class TreeHaploController {
 
     public TreeHaplo getTree() {
         return tree;
-    }
-
-    public HashMap<String, List<String>> getNode_to_children() {
-        return node_to_children;
     }
 
     public HashMap<String, List<String>> getTreeMap_leaf_to_root() {

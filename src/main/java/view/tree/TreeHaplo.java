@@ -22,6 +22,8 @@ public class TreeHaplo{
         finalTree = new TreeItem<String> (root);
         finalTree.setExpanded(true);
 
+
+
     }
 
     public void addStructure() throws IOException, SAXException, ParserConfigurationException {
