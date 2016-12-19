@@ -1,6 +1,7 @@
 package view.charts;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -18,6 +19,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import view.table.TableController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,14 +37,16 @@ public class SunburstChart {
     private ColorStrategySectorShades colorStrategyShades;
     private Stage stage;
     private TabPane tabPane;
+    private TableController tableController;
 
 
 
-    public SunburstChart(BorderPane borderPane, Stage stage, TabPane tabPane){
+    public SunburstChart(BorderPane borderPane, Stage stage, TabPane tabPane, TableController tableController){
 
         this.stage = stage;
         this.tabPane = tabPane;
-        sunburstBorderPane = borderPane;
+        this.sunburstBorderPane = borderPane;
+        this.tableController = tableController;
 
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
@@ -68,8 +72,6 @@ public class SunburstChart {
                        HashMap<String, List<String>> treeMap,
                        TreeItem<String> tree,
                        TreeView treeView){
-
-
 
         loadData(hg_to_group, weights, treeMap, tree, treeView);
         finishSetup();
