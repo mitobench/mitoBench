@@ -15,7 +15,7 @@ import java.util.*;
 public class SourceStrategyHaplogroups implements ISourceStrategy {
 
     private TreeItem<String> tree;
-    private HashMap<String, HashMap<String, Integer>> weights;
+    private HashMap<String, HashMap<String, Double>> weights;
     private HashMap<Integer, List<String>> nodes_to_level;
     private TreeView treeView;
     private HashMap<String, List<String>> treemap;
@@ -23,7 +23,7 @@ public class SourceStrategyHaplogroups implements ISourceStrategy {
 
     @Override
     public WeightedTreeItem<String> getData(HashMap<String, List<String>> hg_to_group,
-                                            HashMap<String, HashMap<String, Integer>> weights,
+                                            HashMap<String, HashMap<String, Double>> weights,
                                             HashMap<String, List<String>> treeMap,
                                             TreeItem<String> tree,
                                             TreeView treeView) {
@@ -117,7 +117,7 @@ public class SourceStrategyHaplogroups implements ISourceStrategy {
         // set first donut, add each element to group-donut-component
         List<String> hgs_of_this_level = nodes_to_level.get(levels_sorted.get(0));
         for(int i = 0; i < hgs_of_this_level.size(); i++){
-            int weight = weights.get(group).get(hgs_of_this_level.get(i));
+            double weight = weights.get(group).get(hgs_of_this_level.get(i));
             WeightedTreeItem<String> subItem = new WeightedTreeItem(weight, hgs_of_this_level.get(i));
             item.getChildren().add(subItem);
         }
@@ -137,7 +137,7 @@ public class SourceStrategyHaplogroups implements ISourceStrategy {
                         hg_upper = hgs_of_upper_level.get(i);
                         List<String> path_to_root = treemap.get(hg_this_level);
                         if(path_to_root.contains(hg_upper)){
-                            int weight = weights.get(group).get(hg_this_level);
+                            double weight = weights.get(group).get(hg_this_level);
                             WeightedTreeItem newItem = new WeightedTreeItem(weight, hg_this_level);
                             // get item of upper HG, add new item as child
                             getItem(hg_upper).getChildren().add(newItem);
@@ -147,7 +147,7 @@ public class SourceStrategyHaplogroups implements ISourceStrategy {
                     // if item cannot included to one of the items before (no hierarchically relation),
                     // item is added to group item
                     if(!itemCreated){
-                        int weight = weights.get(group).get(hg_this_level);
+                        double weight = weights.get(group).get(hg_this_level);
                         WeightedTreeItem newItem = new WeightedTreeItem(weight, hg_this_level);
                         item.getChildren().add(newItem);
                     }

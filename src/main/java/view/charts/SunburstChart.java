@@ -64,7 +64,7 @@ public class SunburstChart {
      * @param treeView
      */
     public void create(HashMap<String, List<String>> hg_to_group,
-                       HashMap<String, HashMap<String, Integer>> weights,
+                       HashMap<String, HashMap<String, Double>> weights,
                        HashMap<String, List<String>> treeMap,
                        TreeItem<String> tree,
                        TreeView treeView){
@@ -79,7 +79,7 @@ public class SunburstChart {
     }
 
     private void loadData( HashMap<String, List<String>> hg_to_group,
-                           HashMap<String, HashMap<String, Integer>> weights,
+                           HashMap<String, HashMap<String, Double>> weights,
                            HashMap<String, List<String>> treeMap,
                            TreeItem<String> tree, TreeView treeView){
         // load data
@@ -186,7 +186,7 @@ public class SunburstChart {
      * @param weights
      */
     public void addData(HashMap<String, List<String>> hg_to_group,
-                        HashMap<String, HashMap<String, Integer>> weights,
+                        HashMap<String, HashMap<String, Double>> weights,
                         HashMap<String, List<String>> treeMap,
                         TreeItem<String> tree,
                         TreeView treeView) {

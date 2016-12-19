@@ -49,7 +49,7 @@ public class ColorScheme {
 
 
 
-        File file = new File("/home/neukamm/IdeaProjects/MitoBench/src/main/java/view/charts/Colors.css");
+        File file = new File("src/main/java/view/charts/Colors.css");
         URL url = file.toURI().toURL();
         stage.getScene().getStylesheets().add(url.toExternalForm());
 

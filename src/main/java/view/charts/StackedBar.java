@@ -16,7 +16,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import java.util.*;
 
 /**
@@ -37,32 +36,22 @@ public class StackedBar {
 
         xAxis = new CategoryAxis();
         yAxis = new NumberAxis();
-        sbc = new StackedBarChart<>(xAxis, yAxis);
 
+        xAxis.setTickMarkVisible(false);
+
+        // set autoranging to false to allow manual settings
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(100);
+        yAxis.setTickUnit(5);
+        yAxis.setMinorTickVisible(false);
+        yAxis.setLabel("Frequency in %");
+
+        sbc = new StackedBarChart<>(xAxis, yAxis);
         sbc.setTitle(title);
         sbc.prefWidthProperty().bind(tabPane.widthProperty());
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
-
-        yAxis.setTickUnit(1);
-        yAxis.setTickLabelFormatter(new StringConverter<Number>() {
-            @Override public String toString(Number object) {
-                if(object.intValue()!=object.doubleValue())
-                    return "";
-
-                return ""+(object.intValue());
-            }
-
-            @Override public Number fromString(String string) {
-                Number val = Double.parseDouble(string);
-                return val.intValue();
-            }
-        });
-
-        yAxis.setMinorTickVisible(false);
-        xAxis.setTickMarkVisible(false);
-
-
         sbc.setLegendSide(Side.RIGHT);
 
         setContextMenu(stage);
@@ -102,9 +91,9 @@ public class StackedBar {
      * This method adds a tooltip to the chart, which provides information such as the name of the Haplogroup and their
      * occurrences.
      *
-     * @param t
+     * @param
      */
-    public void addTooltip(Event t){
+    public void addTooltip(){
 
         for (final XYChart.Series<String, Number> series : sbc.getData()) {
             for (final XYChart.Data<String, Number> data : series.getData()) {
@@ -114,7 +103,7 @@ public class StackedBar {
                     public void handle(MouseEvent event) {
                         // +15 moves the tooltip 15 pixels below the mouse cursor;
                         tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
-                        tooltip.setText(series.getName() + " | " + data.getYValue().toString());
+                        tooltip.setText(series.getName() + " | " + data.getYValue().toString() + "%");
                     }
                 });
                 data.getNode().setOnMouseExited(new EventHandler<MouseEvent>(){
