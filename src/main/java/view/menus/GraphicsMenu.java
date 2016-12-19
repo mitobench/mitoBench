@@ -149,35 +149,77 @@ public class GraphicsMenu {
 
                         String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
                         String[] selection_haplogroups = cols[0];
-                        String[] seletcion_groups = cols[1];
+                        String[] selection_groups = cols[1];
 
 
                         // reduce haplogroups to maximum size of 20
-                        if(selection_haplogroups.length >= 20)
-                            selection_haplogroups = reduceHGs(selection_haplogroups);
+                        if(selection_haplogroups.length >= 20) {
 
 
-                        stackedBar.clearData();
-                        stackedBar.setCategories(seletcion_groups);
+                            //------------------------------------------------------
 
-                        // consider Hgs only once per group
-                        if (selection_haplogroups.length != 0) {
-                            for(int i = 0; i < selection_haplogroups.length; i++){
+                            stackedBar.clearData();
+                            stackedBar.setCategories(selection_groups);
+                            HashMap<String, ArrayList> hgs_summed = reduceHGs(selection_haplogroups);
+                            List< XYChart.Data<String, Number> > data_list = new ArrayList<XYChart.Data<String, Number>>();
 
-                                List< XYChart.Data<String, Number> > data_list = new ArrayList<XYChart.Data<String, Number>>();
-                                // fill data_list : <group(i), countHG >
-                                for(int j = 0; j < seletcion_groups.length; j++){
+                                // count occurrences of all subHGs in each group
+                            for(int i = 0; i < selection_groups.length; i++){
 
-                                    int count_per_HG = tableController.getCountPerHG(selection_haplogroups[i], seletcion_groups[j], tableController.getColIndex("Haplogroup"),
-                                            tableController.getColIndex("Grouping"));
+                                String group = selection_groups[i];
+                                for(String key : hgs_summed.keySet()) {
+                                    int count = 0;
+                                    ArrayList<String> subHGs = hgs_summed.get(key);
 
-                                    XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(seletcion_groups[j], count_per_HG);
+                                    for(String hg : subHGs){
+                                        count += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+                                    }
+                                    XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, count);
                                     data_list.add(data);
+
+                                    stackedBar.addSeries(data_list, key);
                                 }
-                                stackedBar.addSeries(data_list, selection_haplogroups[i]);
+
+
                             }
+
+                            stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+                            stackedBar.addTooltip(t);
+
+                            ColorScheme colorScheme = new ColorScheme(stage);
+                            colorScheme.setNewColors(stackedBar, selection_haplogroups);
+
+
+
+
+
+
+                        } else {
+                            stackedBar.clearData();
+                            stackedBar.setCategories(selection_groups);
+
+                            // consider Hgs only once per group
+                            if (selection_haplogroups.length != 0) {
+                                for(int i = 0; i < selection_haplogroups.length; i++){
+
+                                    List< XYChart.Data<String, Number> > data_list = new ArrayList<XYChart.Data<String, Number>>();
+                                    // fill data_list : <group(i), countHG >
+                                    for(int j = 0; j < selection_groups.length; j++){
+
+                                        int count_per_HG = tableController.getCountPerHG(selection_haplogroups[i], selection_groups[j], tableController.getColIndex("Haplogroup"),
+                                                tableController.getColIndex("Grouping"));
+
+                                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], count_per_HG);
+                                        data_list.add(data);
+                                    }
+                                    stackedBar.addSeries(data_list, selection_haplogroups[i]);
+                                }
+                            }
+
                         }
-                        stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+
+
+                         stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
                         stackedBar.addTooltip(t);
 
                         ColorScheme colorScheme = new ColorScheme(stage);
@@ -248,34 +290,41 @@ public class GraphicsMenu {
 
 
 
-    private String[] reduceHGs(String[] hgs){
+    private HashMap<String, ArrayList> reduceHGs(String[] hgs){
 
-        Set<String> hg_reduced = new HashSet<>();
-//        String[] hg_core_list = new String[]{"L0-156", "L1-99", "L2-131", "L3-5010", "L4-16", "M1-44", "N-3470",  "I-19",  "W-59", "X-88",
-//                                        "R-2954",  "R0-1171", "U-730" , "K-197" , "J-239" , "T-229" , "T1-51", "T2-175", "H-7", "HV-1132"};
+        HashMap<String, ArrayList> hgs_summarized = new HashMap<>();
 
-        //        String[] hg_core_list = new String[]{"L0-156", "L1-99", "L2-131", "L3-5010", "L4-16", "M1-44", "N-3470",  "I-19",  "W-59", "X-88",
-//                                        "R-2954",  "R0-1171", "U-730" , "K-197" , "J-239" , "T-229" , "T1-51", "T2-175", "H-7", "HV-1132"};
+        String[] hg_reduced = new String[20];
+        // number of subHGs
+        //"L4-16", "M1-44", "T1-51", "W-59",  "I-62", "X-88", "L1-99", "L0-156", "L2-131", "T2-175",  "K-197" ,  "T-229" ,  "J-239" ,
+        //"H-677",  "U-730" , R0-1171",  "HV-1132", "R-2954", "N-3470",    "L3-5010",
 
+        String[] hg_core_list = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
+                                             "K",  "T",  "J",  "H", "U", "R0", "HV", "R",  "N",  "L3"};
 
-        String[] hg_core_list = new String[]{"L0", "L1", "L2", "L3", "L4", "M1", "N",  "I",  "W", "X",
-                                             "R",  "R0", "U" , "K" , "J" , "T" , "T1", "T2", "H", "HV"};
-
-
-        HashMap<String, List<String>> hg_subs = new HashMap<>();
-
-        for (String hg : hgs) {
-            for(String hg_core : hg_core_list){
-                List<String> core_subs = treeMap.get(hg_core);
+        for(String hg_core : hg_core_list){
+            List<String> core_subs = treeMap.get(hg_core);
+            for(String hg : hgs){
                 if(core_subs.contains(hg)){
-                    hg_reduced.add(hg);
+                    if(hgs_summarized.containsKey(hg_core)){
+                        ArrayList tmp = hgs_summarized.get(hg_core);
+                        tmp.add(hg);
+                        hgs_summarized.put(hg_core, tmp);
+                    } else {
+                        ArrayList<String> tmp = new ArrayList<>();
+                        tmp.add(hg);
+                        hgs_summarized.put(hg_core, tmp);
+                    }
                 }
             }
         }
 
-        return (String[])hg_reduced.toArray();
+        return hgs_summarized;
 
     }
+
+
+
 
     public Menu getMenuGraphics() {
         return menuGraphics;
