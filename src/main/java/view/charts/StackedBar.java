@@ -52,6 +52,7 @@ public class StackedBar {
         sbc.prefWidthProperty().bind(tabPane.widthProperty());
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
+
         sbc.setLegendSide(Side.RIGHT);
 
         setContextMenu(stage);

@@ -192,7 +192,7 @@ public class TableController {
                 if(e != null){
                     data_tmp[j][m] = col_entry[j];
                 } else {
-                    data_tmp[j][m] = "NA";
+                    data_tmp[j][m] = "Undefined";
                 }
             }
             m++;

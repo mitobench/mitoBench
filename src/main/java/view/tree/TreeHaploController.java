@@ -334,7 +334,7 @@ public class TreeHaploController {
         // get subtree of each
         for(String haplo : haplo_list){
             // get sub-haplogroups of 'haplo'
-            List<String> path = treeMap.get(haplo.toString());
+            List<String> path = treeMap.get(haplo.toString().trim().toUpperCase());
 
             // add them to list
             haplo_list_extended.addAll(path);

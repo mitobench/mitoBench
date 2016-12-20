@@ -16,6 +16,7 @@ public class ChartController {
     private List<String> used_hgs;
     private HashMap<String, List<String>> treeMap;
     private HashMap<String, HashMap<String, Double>> weights;
+    String[] hg_core_list;
 
 
 
@@ -112,28 +113,49 @@ public class ChartController {
             }
             data_all.put("Others", data_list);
 
-            // add HGs in correct order
-            stackedBar.addSeries(data_all.get("L0"), "L0");
-            stackedBar.addSeries(data_all.get("L1"), "L1");
-            stackedBar.addSeries(data_all.get("L2"), "L2");
-            stackedBar.addSeries(data_all.get("L3"), "L3");
-            stackedBar.addSeries(data_all.get("L4"), "L4");
-            stackedBar.addSeries(data_all.get("M1"), "M1");
-            stackedBar.addSeries(data_all.get("N"), "N");
-            stackedBar.addSeries(data_all.get("I"), "I");
-            stackedBar.addSeries(data_all.get("W"), "W");
-            stackedBar.addSeries(data_all.get("X"), "X");
-            stackedBar.addSeries(data_all.get("R"), "R");
-            stackedBar.addSeries(data_all.get("R0"), "R0");
-            stackedBar.addSeries(data_all.get("U"), "U");
-            stackedBar.addSeries(data_all.get("K"), "K");
-            stackedBar.addSeries(data_all.get("J"), "J");
-            stackedBar.addSeries(data_all.get("T"), "T");
-            stackedBar.addSeries(data_all.get("T1"), "T1");
-            stackedBar.addSeries(data_all.get("T2"), "T2");
-            stackedBar.addSeries(data_all.get("H"), "H");
-            stackedBar.addSeries(data_all.get("HV"), "HV");
-            stackedBar.addSeries(data_all.get("Others"), "Others");
+
+            for(String key : hg_core_list){
+                if(data_all.containsKey(key))
+                    stackedBar.addSeries(data_all.get(key), key);
+            }
+//            // add HGs in correct order
+//            if(data_all.containsKey("L0"))
+//                stackedBar.addSeries(data_all.get("L0"), "L0");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("L1"), "L1");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("L2"), "L2");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("L3"), "L3");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("L4"), "L4");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("M1"), "M1");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("N"), "N");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("I"), "I");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("W"), "W");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("X"), "X");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("R"), "R");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("R0"), "R0");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("U"), "U");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("K"), "K");
+//            if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("J"), "J"); if(data_all.containsKey("L0"))
+//            stackedBar.addSeries(data_all.get("T"), "T");
+//            stackedBar.addSeries(data_all.get("T1"), "T1");
+//            stackedBar.addSeries(data_all.get("T2"), "T2");
+//            stackedBar.addSeries(data_all.get("H"), "H");
+//            stackedBar.addSeries(data_all.get("HV"), "HV");
+            if(data_all.containsKey("Others"))
+                stackedBar.addSeries(data_all.get("Others"), "Others");
 
         } else {        // add data if less than 20 haplogroups
 
@@ -151,7 +173,7 @@ public class ChartController {
                         double count_per_HG = tableController.getCountPerHG(selection_haplogroups[i], selection_groups[j], tableController.getColIndex("Haplogroup"),
                                 tableController.getColIndex("Grouping"));
 
-                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], roundValue((count_per_HG / numberOfElementsPerCaregory[i]) * 100));
+                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], roundValue((count_per_HG / numberOfElementsPerCaregory[j]) * 100));
                         data_list.add(data);
                     }
                     stackedBar.addSeries(data_list, selection_haplogroups[i]);
@@ -199,7 +221,7 @@ public class ChartController {
         //"L4-16", "M1-44", "T1-51", "W-59",  "I-62", "X-88", "L1-99", "L0-156", "L2-131", "T2-175",  "K-197" ,  "T-229" ,  "J-239" ,
         //"H-677",  "U-730" , "HV-1132", "R0-1171", "R-2954", "N-3470",  "L3-5010",
 
-        String[] hg_core_list = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
+        hg_core_list = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
                 "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
 
         used_hgs = new ArrayList<>();
