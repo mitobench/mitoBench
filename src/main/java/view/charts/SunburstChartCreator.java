@@ -1,7 +1,9 @@
 package view.charts;
+import controls.sunburst.*;
+import data.ISourceStrategy;
+import data.SourceStrategyHaplogroup;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -11,15 +13,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import view.controls.sunburst.*;
-import view.data.ISourceStrategy;
-import view.data.SourceStrategyHaplogroups;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import view.table.TableController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.List;
 /**
  * Created by neukamm on 30.11.16.
  */
-public class SunburstChart {
+public class SunburstChartCreator {
 
     private SunburstView sunburstView;
     private BorderPane sunburstBorderPane;
@@ -37,16 +35,13 @@ public class SunburstChart {
     private ColorStrategySectorShades colorStrategyShades;
     private Stage stage;
     private TabPane tabPane;
-    private TableController tableController;
 
 
-
-    public SunburstChart(BorderPane borderPane, Stage stage, TabPane tabPane, TableController tableController){
+    public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane){
 
         this.stage = stage;
         this.tabPane = tabPane;
         this.sunburstBorderPane = borderPane;
-        this.tableController = tableController;
 
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
@@ -197,7 +192,7 @@ public class SunburstChart {
                         TreeView treeView) {
 
         // Define a strategy by which the view.data should be received.
-        ISourceStrategy sourceStrategy = new SourceStrategyHaplogroups();
+        ISourceStrategy sourceStrategy = new SourceStrategyHaplogroup();
         rootData = sourceStrategy.getData(hg_to_group, weights, treeMap, tree, treeView);
 
     }

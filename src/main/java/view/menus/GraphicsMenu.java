@@ -23,7 +23,7 @@ public class GraphicsMenu {
     private TableController tableController;
     private BarPlotHaplo barPlotHaplo;
     private StackedBar stackedBar;
-    private SunburstChart sunburstChart;
+    private SunburstChartCreator sunburstChart;
     private TabPane tabPane;
     private HashMap<String, List<String>> treeMap_path_to_root;
     private TreeItem<String> tree_root;
@@ -66,7 +66,7 @@ public class GraphicsMenu {
     }
 
     private void initSunburst(){
-        sunburstChart = new SunburstChart(new BorderPane(), stage, tabPane, tableController);
+        sunburstChart = new SunburstChartCreator(new BorderPane(), stage, tabPane);
         Tab tab = new Tab();
         tab.setText("Sunburst Chart");
         tab.setContent(sunburstChart.getBorderPane());
