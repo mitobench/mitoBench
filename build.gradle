@@ -42,9 +42,9 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.testfx:testfx-core:4.0.+"
-    testCompile "org.testfx:testfx-junit:4.0.+"
-    testRuntime 'org.jfxtras:openjfx-monocle:1.8.0_20'
-    testCompile 'org.mockito:mockito-core:1.9.5'
+    compile 'org.mockito:mockito-core:2.4.0'
+    compile "org.testfx:testfx-junit:4.0.+"
+    compile 'org.jfxtras:openjfx-monocle:1.8.0_20'
 }
 
 task copyTestResources(type: Copy) {
@@ -72,24 +72,6 @@ jar {
     }
 }
 
-
-/*buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url  "http://dl.bintray.com/apeltzer/Mitobench"
-        }
-    }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
-        classpath 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:0.3'
-
-        testCompile "org.testfx:testfx-core:4.0.+"
-        testCompile "org.testfx:testfx-junit:4.0.+"
-        testRuntime 'org.jfxtras:openjfx-monocle:1.8.0_20'
-        testCompile 'org.mockito:mockito-core:1.9.5'
-    }
-}*/
 
 
 jacocoTestReport {
