@@ -56,6 +56,14 @@ public class GUITestSteps {
         });
     }
 
+    public void part3AboutDialogueTests() {
+        step("Open About Dialogue", () -> {
+            robot.clickOn("#helpMenu");
+            robot.clickOn("#aboutMenuItem");
+            verifyThat("#aboutDialogue", isVisible());
+        });
+    }
+
 
     private void step(final String step, final Runnable runnable) {
         ++stepno;

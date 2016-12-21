@@ -5,7 +5,7 @@ package view.dialogues.information;
  */
 public class AboutDialogue extends AbstractInformationDialogue {
 
-    public AboutDialogue(String title, String message) {
-        super(title, message);
+    public AboutDialogue(String title, String message, String id) {
+        super(title, message, id);
     }
 }

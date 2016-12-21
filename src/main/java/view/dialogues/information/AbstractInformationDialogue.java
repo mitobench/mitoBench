@@ -8,13 +8,13 @@ import javafx.scene.control.Alert;
  */
 public class AbstractInformationDialogue {
 
-    public AbstractInformationDialogue(String title, String message) {
+    public AbstractInformationDialogue(String title, String message, String id) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
+        alert.getDialogPane().setId(id);
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 }
 
 

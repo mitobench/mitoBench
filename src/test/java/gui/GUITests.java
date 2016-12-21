@@ -43,6 +43,7 @@ public class GUITests extends FxRobot {
         GUITestSteps steps = new GUITestSteps(this);
         steps.part1BasicStuff();
         steps.part2MenuInteraction();
+        steps.part3AboutDialogueTests();
     }
 
 
