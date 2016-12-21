@@ -42,6 +42,7 @@ public class GUITests extends FxRobot {
     public void testWalkThrough() {
         GUITestSteps steps = new GUITestSteps(this);
         steps.part1BasicStuff();
+        steps.part2MenuInteraction();
     }
 
 

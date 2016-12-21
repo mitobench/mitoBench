@@ -10,7 +10,9 @@ import view.charts.*;
 import view.table.TableController;
 import view.tree.TreeHaploController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -34,6 +36,7 @@ public class GraphicsMenu {
 
     public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage){
         menuGraphics = new Menu("Graphics");
+        menuGraphics.setId("graphicsMenu");
         this.tableController = tableController;
         tabPane = vBox;
         treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();

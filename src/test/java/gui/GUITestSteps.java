@@ -35,7 +35,25 @@ public class GUITestSteps {
         step("MenuBar exists", () -> {
             verifyThat("#menuBar", isVisible());
         });
+    }
 
+    public void part2MenuInteraction() {
+        step("Open File Menu", () -> {
+            robot.clickOn("#fileMenu");
+            verifyThat("#fileMenu", isVisible());
+        });
+        step("Open Table Menu", () -> {
+            robot.clickOn("#tableMenu");
+            verifyThat("#tableMenu", isVisible());
+        });
+        step("Open Graphics Menu", () -> {
+            robot.clickOn("#graphicsMenu");
+            verifyThat("#graphicsMenu", isVisible());
+        });
+        step("Open Help Menu", () -> {
+            robot.clickOn("#helpMenu");
+            verifyThat("#helpMenu", isVisible());
+        });
     }
 
 

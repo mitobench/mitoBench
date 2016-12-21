@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
 import view.table.TableController;
 
 
@@ -18,6 +17,7 @@ public class TableMenu {
 
     public TableMenu(TableController tableController){
         menuTable = new Menu("Table");
+        menuTable.setId("tableMenu");
         this.tableController = tableController;
         addSubMenus();
     }

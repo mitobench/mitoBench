@@ -15,6 +15,7 @@ public class HelpMenu {
     public HelpMenu(){
 
         menuHelp = new Menu("Help");
+        menuHelp.setId("helpMenu");
         add();
 
     }

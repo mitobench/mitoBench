@@ -250,6 +250,7 @@ public class FileMenu {
                 System.exit(0);
             }
         });
+        menuFile.setId("fileMenu");
 
         menuFile.getItems().addAll(importFile, exportFile, importProject, exportProject, new SeparatorMenuItem(), exit);
     }
