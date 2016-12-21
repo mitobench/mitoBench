@@ -3,12 +3,16 @@ package view;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import view.menus.*;
-import view.table.*;
+import view.table.TableController;
 import view.tree.TreeHaploController;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,6 +41,7 @@ public class MitoBenchWindow extends Application{
 
 
         root = new BorderPane();
+        root.setId("mainBorderPane");
         scene = new Scene(root, 1200, 600);
 
         this.primaryStage = primaryStage;
@@ -61,6 +66,7 @@ public class MitoBenchWindow extends Application{
     private MenuBar getMenuPane() throws Exception
     {
         MenuBar menuBar = new MenuBar();
+        menuBar.setId("menuBar");
 
         FileMenu fileMenu = new FileMenu(tableController, MITOBENCH_VERSION);
         EditMenu editMenu = new EditMenu();
@@ -124,6 +130,7 @@ public class MitoBenchWindow extends Application{
     private BorderPane getLeftSplitPane()throws IOException, SAXException, ParserConfigurationException
     {
         BorderPane borderPane = new BorderPane();
+        borderPane.setId("mainEntryTable");
 
         // initialize table
         tableController = new TableController(scene);
@@ -138,6 +145,7 @@ public class MitoBenchWindow extends Application{
 
         // set haplotree - seach view
         Pane treepane = new Pane();
+        treepane.setId("treeViewButton");
 
         treeController = new TreeHaploController(treepane, tableController);
 

@@ -37,6 +37,11 @@ dependencies {
     compile group: 'org.javafxdata', name: 'datafx-flow', version: '8.0b5'
     compile 'junit:junit:4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.testfx:testfx-core:4.0.+"
+    testCompile "org.testfx:testfx-junit:4.0.+"
+    compile 'org.slf4j:slf4j-simple:1.7.22'
+    testRuntime 'org.jfxtras:openjfx-monocle:1.8.0_20'
+    testCompile 'org.mockito:mockito-core:1.9.5'
     compile 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:0.3'
     compile 'org.apache.poi:poi:3.15'
     compile 'org.apache.poi:poi-ooxml:3.15'
@@ -48,7 +53,12 @@ task copyTestResources(type: Copy) {
 }
 processTestResources.dependsOn copyTestResources
 
-
+//Required for headless testing here!!
+test {
+    if (!project.hasProperty("noHeadless")) {
+        jvmArgs "-Dheadless=true"
+    }
+}
 
 jar {
     manifest {

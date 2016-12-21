@@ -28,6 +28,7 @@ public abstract class AbstractExceptionDialogue {
         Label label = new Label("The exception stacktrace was:");
 
         TextArea textArea = new TextArea(exceptionText);
+        textArea.setId("exceptionArea");
         textArea.setEditable(false);
         textArea.setWrapText(true);
 
