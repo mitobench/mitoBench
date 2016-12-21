@@ -145,7 +145,6 @@ public class MitoBenchWindow extends Application{
 
         // set haplotree - seach view
         Pane treepane = new Pane();
-        treepane.setId("treeViewButton");
 
         treeController = new TreeHaploController(treepane, tableController);
 

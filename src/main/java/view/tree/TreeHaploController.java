@@ -21,7 +21,9 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
@@ -65,6 +67,7 @@ public class TreeHaploController {
         node_to_children = new HashMap<>();
 
         searchLbl.setGraphic(downArrow);
+        searchLbl.setId("treeViewOpenCloseLabel");
         upArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";");
         downArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";");
 
@@ -99,6 +102,7 @@ public class TreeHaploController {
      */
     private void configureSearch(Pane root) throws IOException, SAXException, ParserConfigurationException{
         searchPane = new VBox();
+        searchPane.setId("treeviewSearchPane");
         searchPane.setAlignment(Pos.TOP_LEFT);
 
         StackPane sp1 = new StackPane();
@@ -109,7 +113,9 @@ public class TreeHaploController {
         //sp1.autosize();
 
         Button applyBtn = new Button("Apply filter");
+        applyBtn.setId("treeviewApplyButton");
         searchFieldListHaplogroup = new TextField();
+        searchFieldListHaplogroup.setId("treeviewSearchField");
         searchFieldListHaplogroup.setPrefSize(50,10);
 
 
@@ -175,6 +181,7 @@ public class TreeHaploController {
         infolabel.setMinSize(20, 30);
 
         VBox hb2 = new VBox();
+        hb2.setId("treeView-inner-tree");
         hb2.getChildren().addAll(infolabel, tree.getTree(), haploLabel, searchFieldListHaplogroup , applyBtn);
         hb2.setSpacing(10);
         sp1.getChildren().addAll(hb2);

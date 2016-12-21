@@ -44,6 +44,7 @@ public class GUITests extends FxRobot {
         steps.part1BasicStuff();
         steps.part2MenuInteraction();
         steps.part3AboutDialogueTests();
+        steps.part4TreeViewTests();
     }
 
 

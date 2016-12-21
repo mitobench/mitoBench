@@ -30,7 +30,7 @@ public class GUITestSteps {
             verifyThat("#mainEntryTable", isVisible());
         });
         step("TreeView Button exists", () -> {
-            verifyThat("#treeViewButton", isVisible());
+            verifyThat("#treeViewOpenCloseLabel", isVisible());
         });
         step("MenuBar exists", () -> {
             verifyThat("#menuBar", isVisible());
@@ -61,6 +61,18 @@ public class GUITestSteps {
             robot.clickOn("#helpMenu");
             robot.clickOn("#aboutMenuItem");
             verifyThat("#aboutDialogue", isVisible());
+            robot.clickOn("#aboutDialogue" + "button");
+        });
+    }
+
+    public void part4TreeViewTests() {
+        step("Open TreeView", () -> {
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+            robot.clickOn("#treeviewApplyButton");
+            robot.clickOn("#treeViewOpenCloseLabel");
         });
     }
 
