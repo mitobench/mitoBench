@@ -92,7 +92,7 @@ public class ARPWriter implements IOutputData {
         TableColumn tbclm_id = tableController.getTableColumnByName("ID");
 
         tableController.getTable().getItems().stream().forEach(o
-                -> hmp.put((String) tbclm_id.getCellData(o), (String) tbclm_region.getCellData(o)));
+                -> hmp.put(tbclm_id.getCellData(o), tbclm_region.getCellData(o)));
 
         this.regions = hmp;
     }

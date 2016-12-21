@@ -58,7 +58,7 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
      * @param control
      */
     public SunburstViewSkin(final SunburstView<T> control) {
-        super(control, new BehaviorBase<>(control, Collections.<KeyBinding> emptyList()));
+        super(control, new BehaviorBase<>(control, Collections.emptyList()));
 
 
 
@@ -394,7 +394,7 @@ public class SunburstViewSkin<T> extends BehaviorSkinBase<SunburstView<T>, Behav
      * @param item
      * @return
      */
-    private final SunburstDonutUnit buildDonutUnit(WeightedTreeItem<T> item){
+    private SunburstDonutUnit buildDonutUnit(WeightedTreeItem<T> item){
         SunburstDonutUnit unit = new SunburstDonutUnit(item);
         unit.setStroke(Color.WHITE);
         return unit;

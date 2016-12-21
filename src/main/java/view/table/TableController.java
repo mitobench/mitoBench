@@ -139,7 +139,7 @@ public class TableController {
                 List<Entry> entries = table_content.get(key_new);
                 List<Entry> entries_new = input_new.get(key_new);
 
-                boolean hit = false;
+                boolean hit;
                 for (Entry e_new : entries_new){
                     hit = false;
                     for(Entry e : entries){
@@ -495,7 +495,7 @@ public class TableController {
 
         // if "grouping" exists, create groups
         if (getCurrentColumnNames().contains("Grouping")){
-            String groupname = null;
+            String groupname;
             //iterate over rows
             for (Object row : table.getItems()) {
                 ObservableList row_parsed = (ObservableList) row;

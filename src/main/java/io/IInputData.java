@@ -9,6 +9,6 @@ import java.util.List;
  * Created by peltzer on 17/11/2016.
  */
 public interface IInputData {
-    public HashMap<String, List<Entry>> getCorrespondingData();
+    HashMap<String, List<Entry>> getCorrespondingData();
 
 }

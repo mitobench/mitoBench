@@ -51,9 +51,9 @@ public class CSVWriter implements IOutputData {
                 String text = "";
                 for(int i = 0; i < entry.size(); i++){
                     if(i == entry.size()-1){
-                        text += (String)entry.get(i) + "\n";
+                        text += entry.get(i) + "\n";
                     } else {
-                        text += (String)entry.get(i) + separator;
+                        text += entry.get(i) + separator;
                     }
 
                 }

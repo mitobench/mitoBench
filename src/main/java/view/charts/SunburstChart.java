@@ -153,14 +153,17 @@ public class SunburstChart {
         zoomSlider.setMinorTickCount(1);
         zoomSlider.setBlockIncrement(0.1);
 
+        HBox toolbar = new HBox(20);
+
         zoomSlider.valueProperty().addListener(x -> {
+            toolbar.toFront();
             double scale = zoomSlider.getValue();
             sunburstView.setScaleX(scale);
             sunburstView.setScaleY(scale);
         });
 
 
-        HBox toolbar = new HBox(20);
+
         BorderPane.setMargin(toolbar, new Insets(10));
 
 

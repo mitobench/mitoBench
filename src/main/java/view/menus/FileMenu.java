@@ -207,7 +207,7 @@ public class FileMenu {
             public void handle(ActionEvent t) {
 
                 FileChooser fileChooser = new FileChooser();
-                ProjectReader projectReader = null; // new ProjectReader();
+                ProjectReader projectReader; // new ProjectReader();
 
                 try {
                     projectReader = new ProjectReader();
