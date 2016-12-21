@@ -130,7 +130,7 @@ public class MitoBenchWindow extends Application{
 
         VBox vbox = new VBox();
         vbox.setSpacing(10);
-        vbox.setPadding(new Insets(40, 10, 10, 10));
+        vbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.prefHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty());
         vbox.getChildren().addAll(tableController.getTable());

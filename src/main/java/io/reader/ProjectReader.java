@@ -38,7 +38,6 @@ public class ProjectReader {
                 init = false;
                 //check if format is indeed ARP format
                 if (currline.startsWith("#")) {
-                    continue;
                 } else {
                     throw new ProjectException("This is not in .mitoproj Format!");
                 }
@@ -52,13 +51,10 @@ public class ProjectReader {
                         if (currline.startsWith("\tkey\t")) {
                             // parse one entry
                             key = currline.replace("\tkey\t", "").trim();
-                            continue;
                         } else if (currline.startsWith("\t\t##")) {
                             headergroup = currline.replace("\t\t##", "").split("\t");
-                            continue;
                         } else if (currline.startsWith("\t\t#")) {
                             headertype = currline.replace("\t\t#", "").split("\t");
-                            continue;
                         } else if (currline.startsWith("\t\t")) {
                             entries = currline.replace("\t\t", "").split("\t");
 

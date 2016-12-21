@@ -8,8 +8,8 @@ import java.io.PrintWriter;
  *
  */
 public interface IMitoException {
-    public void printStackTrace(PrintWriter pw);
-    public String getType();
+    void printStackTrace(PrintWriter pw);
+    String getType();
 
 
 

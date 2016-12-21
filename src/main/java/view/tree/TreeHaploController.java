@@ -16,7 +16,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.GroupBuilder;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -40,9 +40,9 @@ public class TreeHaploController {
     private VBox searchPane;
     private Rectangle2D boxBounds = new Rectangle2D(500, 300, 600, 480);
     private double ACTION_BOX_HGT = 30;
-    private StackPane downArrow = StackPaneBuilder.create().style("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";").maxHeight(10).maxWidth(15).build();
-    private StackPane upArrow = StackPaneBuilder.create().style("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";").maxHeight(10).maxWidth(15).build();
-    private Label searchLbl = LabelBuilder.create().text("Tree View").graphic(downArrow).contentDisplay(ContentDisplay.RIGHT).build();
+    private StackPane downArrow = new StackPane();
+    private StackPane upArrow = new StackPane();
+    private Label searchLbl = new Label("Tree View");
     private SimpleBooleanProperty isExpanded = new SimpleBooleanProperty();
     private Rectangle clipRect;
     private Timeline timelineUp;
@@ -63,6 +63,10 @@ public class TreeHaploController {
         treeMap = new HashMap<>();
         treeMap_leaf_to_root = new HashMap<>();
         node_to_children = new HashMap<>();
+
+        searchLbl.setGraphic(downArrow);
+        upArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";");
+        downArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";");
 
         configureSearch(root);
         setAnimation();
@@ -170,8 +174,8 @@ public class TreeHaploController {
         Label haploLabel = new Label("Comma separated list of haplogroups:");
         infolabel.setMinSize(20, 30);
 
-
-        VBox hb2 = VBoxBuilder.create().children(infolabel, tree.getTree(), haploLabel, searchFieldListHaplogroup , applyBtn).build();
+        VBox hb2 = new VBox();
+        hb2.getChildren().addAll(infolabel, tree.getTree(), haploLabel, searchFieldListHaplogroup , applyBtn);
         hb2.setSpacing(10);
         sp1.getChildren().addAll(hb2);
 
@@ -186,10 +190,10 @@ public class TreeHaploController {
             }
         });
 
-        searchPane.getChildren().addAll(GroupBuilder.create().children(sp1).build(), GroupBuilder.create().children(sp2).build());
-        root.getChildren().add(GroupBuilder.create().children(searchPane).build());
-
-
+        searchPane.getChildren().addAll(sp1, sp2);
+        Group searchpaneGroup = new Group();
+        searchpaneGroup.getChildren().add(searchPane);
+        root.getChildren().add(searchpaneGroup);
     }
 
 
@@ -238,7 +242,7 @@ public class TreeHaploController {
         // parse haplogroup list, get all corresponding table entries (subgroups included)
         // and show results in table
 
-        if(!searchFieldListHaplogroup.getText().equals("")){
+        if(!searchFieldListHaplogroup.getText().equals("") && tableManager.getTable().getItems().size() > 0){
             List<String> allHaplogroups = getAllSubgroups(searchFieldListHaplogroup.getText().split(","));
 
             seletcion_haplogroups = allHaplogroups.toArray(new String[allHaplogroups.size()]);
