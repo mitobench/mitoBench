@@ -1,23 +1,23 @@
 package view.charts;
+
 import controls.sunburst.*;
 import data.ISourceStrategy;
 import data.SourceStrategyHaplogroup;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
-import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import javafx.event.Event;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.List;

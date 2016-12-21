@@ -58,12 +58,4 @@ public class SaveAsDialogue extends Application {
     }
 
 
-    /**
-     * This method sets the selected extension filter based on the users selection from a dialogue class.
-     *
-     * @param selectmeFirst
-     */
-    public void setPreselectedExport(FileChooser.ExtensionFilter selectmeFirst) {
-        fileChooser.setSelectedExtensionFilter(selectmeFirst);
-    }
 }

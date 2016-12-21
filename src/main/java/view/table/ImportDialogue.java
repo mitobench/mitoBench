@@ -44,6 +44,7 @@ public class ImportDialogue extends Application {
 
     private static void configureFileChooser(final FileChooser fileChooser) {
         fileChooser.setTitle("Import your file");
+
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Multi-FastA Input (*.fa, *.fasta, *.fas)", "*.fasta", "*.fa", "*.fas"),
                 new FileChooser.ExtensionFilter("Haplogrep 2 HSD Format (*.hsd)", "*.hsd"),

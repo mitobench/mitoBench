@@ -203,6 +203,7 @@ public class FileMenu {
          */
 
         MenuItem importProject = new MenuItem("Import Project");
+        importProject.setId("fileMenu_importProjectItem");
         importProject.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
@@ -245,6 +246,7 @@ public class FileMenu {
          */
 
         MenuItem exit = new MenuItem("Exit");
+        exit.setId("fileMenu-exitItem");
         exit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 System.exit(0);

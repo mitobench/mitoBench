@@ -76,6 +76,13 @@ public class GUITestSteps {
         });
     }
 
+    public void part5TestImportDialogue() {
+        step("Open Project file", () -> {
+            robot.clickOn("#fileMenu_importProjectItem");
+        });
+
+    }
+
 
     private void step(final String step, final Runnable runnable) {
         ++stepno;

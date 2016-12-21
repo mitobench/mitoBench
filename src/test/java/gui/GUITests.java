@@ -20,6 +20,10 @@ import static org.testfx.api.FxToolkit.setupApplication;
 @RunWith(MockitoJUnitRunner.class)
 public class GUITests extends FxRobot {
 
+    // @Mock
+    // private ImportDialogue importDialogue;
+
+
     @BeforeClass
     public static void setupSpec() throws Exception {
         if (Boolean.getBoolean("headless")) {
@@ -34,6 +38,8 @@ public class GUITests extends FxRobot {
 
     @Before
     public void setUp() throws Exception {
+
+        //    setUpFileDialogue(importDialogue, new File(GUITestFiles.project_file));
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -46,6 +52,16 @@ public class GUITests extends FxRobot {
         steps.part3AboutDialogueTests();
         steps.part4TreeViewTests();
     }
+
+
+    /**
+     * Testing file dialogues
+     */
+
+    // private void setUpFileDialogue(final ImportDialogue importDialogue, final File file1){
+    //     when(importDialogue.getInputFile()).thenReturn(file1);
+    //  }
+
 
 
 }
