@@ -1,4 +1,4 @@
-package view.table.datatypes;
+package view.datatypes;
 
 /**
  * Created by neukamm on 07.12.16.

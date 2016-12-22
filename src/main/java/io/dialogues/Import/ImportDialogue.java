@@ -1,4 +1,4 @@
-package view.table;
+package io.dialogues.Import;
 
 /**
  * Created by neukamm on 07.11.16.

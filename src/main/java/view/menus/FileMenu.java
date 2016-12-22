@@ -18,9 +18,9 @@ import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
 import view.dialogues.error.ProjectErrorDialogue;
-import view.table.ImportDialogue;
+import io.dialogues.Import.ImportDialogue;
 import view.table.TableController;
-import view.table.exportdialogue.ExportDialogue;
+import io.dialogues.export.ExportDialogue;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,7 +146,7 @@ public class FileMenu {
 
          */
 
-        MenuItem exportFile = new MenuItem("Export Data");
+        MenuItem exportFile = new MenuItem("export Data");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 ExportDialogue exportDialogue = new ExportDialogue(tableController);
@@ -165,16 +165,16 @@ public class FileMenu {
 
          */
 
-        MenuItem exportProject = new MenuItem("Export Project");
+        MenuItem exportProject = new MenuItem("export Project");
         exportProject.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 FileChooser fileChooser = new FileChooser();
                 ProjectWriter projectWriter = new ProjectWriter();
 
                 try {
-                    fileChooser.setTitle("Export your project");
+                    fileChooser.setTitle("export your project");
                     fileChooser.getExtensionFilters().addAll(
-                            new FileChooser.ExtensionFilter("MitoProject Export (*.mitoproj)", "*.mitoproj"));
+                            new FileChooser.ExtensionFilter("MitoProject export (*.mitoproj)", "*.mitoproj"));
 
                     File file = fileChooser.showSaveDialog(new Stage());
                     if(file!=null){

@@ -1,4 +1,4 @@
-package view.table.exportdialogue;
+package io.dialogues.export;
 
 import javafx.scene.control.ChoiceDialog;
 
