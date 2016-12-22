@@ -1,6 +1,7 @@
 package gui;
 
 import io.dialogues.Import.ImportDialogue;
+import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-        setUpFileDialogue(importDialogue, getResource(GUITestFiles.project_file).toFile());
+       // setUpFileDialogue(importDialogue, getResource(GUITestFiles.project_file).toFile());
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -71,7 +72,9 @@ public class GUITests extends FxRobot implements GUITestValidator {
      */
 
      private void setUpFileDialogue(final ImportDialogue importDialogue, final File file){
-         when(importDialogue.start()).thenReturn(file);
+         when(importDialogue.start(any(Stage.class))).thenReturn(file);
+         when(importDialogue.isFileSelected()).thenReturn(true);
+         when(importDialogue.getSelectedFile()).thenReturn(file);
 
      }
 

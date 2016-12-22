@@ -33,11 +33,13 @@ public class FileMenu {
     private Menu menuFile;
     private TableController tableController;
     private String MITOBENCH_VERSION;
+    private Stage stage;
 
-    public FileMenu(TableController tableController, String version) throws IOException {
+    public FileMenu(TableController tableController, String version, Stage stage) throws IOException {
         this.menuFile = new Menu("File");
         this.tableController = tableController;
         MITOBENCH_VERSION = version;
+        this.stage = stage;
         addSubMenus();
 
     }
@@ -57,7 +59,8 @@ public class FileMenu {
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 ImportDialogue importDialogue = new ImportDialogue();
-                File f = importDialogue.start();
+                importDialogue.start(new Stage());
+                File f = importDialogue.getSelectedFile();
 
                 if (f != null) {
                     String absolutePath = f.getAbsolutePath();
