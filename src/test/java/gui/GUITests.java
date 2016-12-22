@@ -1,19 +1,24 @@
 package gui;
 
+import io.dialogues.Import.ImportDialogue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
 import view.MitoBenchWindow;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.mockito.Mockito.*;
 import static org.testfx.api.FxToolkit.registerPrimaryStage;
 import static org.testfx.api.FxToolkit.setupApplication;
 
@@ -23,11 +28,11 @@ import static org.testfx.api.FxToolkit.setupApplication;
  * Basic GUI Testing is now implemented almost :-)
  */
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class GUITests extends FxRobot implements GUITestValidator {
 
-    // @Mock
-    // private ImportDialogue importDialogue;
+    @Mock
+    private ImportDialogue importDialogue = mock(ImportDialogue.class);
 
 
     @BeforeClass
@@ -45,7 +50,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-        //    setUpFileDialogue(importDialogue, new File(GUITestFiles.project_file));
+        setUpFileDialogue(importDialogue, getResource(GUITestFiles.project_file).toFile());
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -65,9 +70,10 @@ public class GUITests extends FxRobot implements GUITestValidator {
      * Testing file dialogues
      */
 
-    // private void setUpFileDialogue(final ImportDialogue importDialogue, final File file1){
-    //     when(importDialogue.getInputFile()).thenReturn(file1);
-    //  }
+     private void setUpFileDialogue(final ImportDialogue importDialogue, final File file){
+         when(importDialogue.start()).thenReturn(file);
+
+     }
 
 
     /**
@@ -97,6 +103,16 @@ public class GUITests extends FxRobot implements GUITestValidator {
         }
     }
 
+
+    private Path getResource(final String file) throws Exception {
+        URL url = getClass().getResource("/" + file);
+
+        if (url == null) {
+            throw new FileNotFoundException(String.format("Unable to load %s", file));
+        } else {
+            return Paths.get(url.toURI());
+        }
+    }
 
 
 

@@ -5,31 +5,21 @@ package io.dialogues.Import;
  */
 
 
-import javafx.application.Application;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 
 
-public class ImportDialogue extends Application {
+public class ImportDialogue  {
 
     private FileChooser fileChooser;
-    private Stage primaryStage;
-    private File inputFile;
 
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-
-
-    @Override
-    public void start(Stage stage) {
-        this.primaryStage = stage;
-
+    public File start() {
         fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
-        File file = fileChooser.showOpenDialog(primaryStage);
+        //File file = fileChooser.showOpenDialog(new Stage());
+        File file = new File("test_files/project.mitoproj");
         if (file == null) {
             try {
                 //Dont do anything here...
@@ -38,8 +28,10 @@ public class ImportDialogue extends Application {
             }
 
         } else {
-            inputFile = file;
+            return file;
         }
+
+        return null;
     }
 
     private static void configureFileChooser(final FileChooser fileChooser) {
@@ -49,11 +41,9 @@ public class ImportDialogue extends Application {
                 new FileChooser.ExtensionFilter("Multi-FastA Input (*.fa, *.fasta, *.fas)", "*.fasta", "*.fa", "*.fas"),
                 new FileChooser.ExtensionFilter("Haplogrep 2 HSD Format (*.hsd)", "*.hsd"),
                 new FileChooser.ExtensionFilter("ARP Arlequin Input Format (*.arp)", "*.arp"),
-                new FileChooser.ExtensionFilter("Generic Input Format (*.tsv)", "*.tsv")
+                new FileChooser.ExtensionFilter("Generic Input Format (*.tsv)", "*.tsv"),
+                new FileChooser.ExtensionFilter("MitoProject Input (*.mitoproj)", "*.mitoproj")
         );
     }
 
-    public File getInputFile() {
-        return inputFile;
-    }
 }

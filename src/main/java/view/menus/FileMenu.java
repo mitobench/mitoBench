@@ -12,15 +12,13 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
-import view.dialogues.error.ProjectErrorDialogue;
 import io.dialogues.Import.ImportDialogue;
 import view.table.TableController;
-import io.dialogues.export.ExportDialogue;
+import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,14 +53,14 @@ public class FileMenu {
          */
 
         MenuItem importFile = new MenuItem("Import Data");
+        importFile.setId("fileMenu_importData");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 ImportDialogue importDialogue = new ImportDialogue();
-                importDialogue.start(new Stage());
+                File f = importDialogue.start();
 
-
-                if (importDialogue.getInputFile() != null) {
-                    String absolutePath = importDialogue.getInputFile().getAbsolutePath();
+                if (f != null) {
+                    String absolutePath = f.getAbsolutePath();
 
 
                     //Input is FastA
@@ -72,7 +70,7 @@ public class FileMenu {
                         MultiFastAInput multiFastAInput = null;
                         try {
                             try {
-                                multiFastAInput = new MultiFastAInput(importDialogue.getInputFile().getPath());
+                                multiFastAInput = new MultiFastAInput(f.getPath());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -90,7 +88,7 @@ public class FileMenu {
                         try {
                             HSDInput hsdInputParser = null;
                             try {
-                                hsdInputParser = new HSDInput(importDialogue.getInputFile().getPath());
+                                hsdInputParser = new HSDInput(f.getPath());
                             } catch (HSDException e) {
                                 HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
                             }
@@ -106,7 +104,7 @@ public class FileMenu {
 
                     if (absolutePath.endsWith(".tsv")) {
                         try {
-                            GenericInputParser genericInputParser = new GenericInputParser(importDialogue.getInputFile().getPath());
+                            GenericInputParser genericInputParser = new GenericInputParser(f.getPath());
                             HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
                             tableController.updateTable(data_map);
                         } catch (IOException e) {
@@ -119,7 +117,7 @@ public class FileMenu {
                     if(absolutePath.endsWith(".arp")){
                         ARPReader arpreader = null;
                         try {
-                            arpreader = new ARPReader(importDialogue.getInputFile().getPath());
+                            arpreader = new ARPReader(f.getPath());
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (ARPException e) {
@@ -128,6 +126,21 @@ public class FileMenu {
                         HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
                         tableController.updateTable(data_map);
                         tableController.loadGroups();
+                    }
+
+                    if(absolutePath.endsWith(".mitoproj")){
+
+                        ProjectReader projectReader = new ProjectReader();
+                        try {
+                            projectReader.read(f);
+                            projectReader.loadData(tableController);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (ProjectException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
                 } else {
                     try {
@@ -146,10 +159,10 @@ public class FileMenu {
 
          */
 
-        MenuItem exportFile = new MenuItem("export Data");
+        MenuItem exportFile = new MenuItem("Export Data");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue(tableController);
+                ExportDialogue exportDialogue = new ExportDialogue(tableController, MITOBENCH_VERSION);
                 try {
                     exportDialogue.start(new Stage());
                 } catch (Exception e) {
@@ -157,87 +170,6 @@ public class FileMenu {
                 }
             }
         });
-
-
-
-        /*
-                        EXPORT Project
-
-         */
-
-        MenuItem exportProject = new MenuItem("export Project");
-        exportProject.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                FileChooser fileChooser = new FileChooser();
-                ProjectWriter projectWriter = new ProjectWriter();
-
-                try {
-                    fileChooser.setTitle("export your project");
-                    fileChooser.getExtensionFilters().addAll(
-                            new FileChooser.ExtensionFilter("MitoProject export (*.mitoproj)", "*.mitoproj"));
-
-                    File file = fileChooser.showSaveDialog(new Stage());
-                    if(file!=null){
-                        projectWriter.write(file.getAbsolutePath(), tableController, MITOBENCH_VERSION);
-                    }  else {
-                        try {
-                            //Didndonuffin
-                        }catch (Exception e ) {
-                            System.out.println(e.getMessage());
-                        }
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-
-
-
-        /*
-                        IMPORT Project
-
-         */
-
-        MenuItem importProject = new MenuItem("Import Project");
-        importProject.setId("fileMenu_importProjectItem");
-        importProject.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-
-                FileChooser fileChooser = new FileChooser();
-                ProjectReader projectReader; // new ProjectReader();
-
-                try {
-                    projectReader = new ProjectReader();
-                    fileChooser.setTitle("Import your project file");
-                    fileChooser.getExtensionFilters().addAll(
-                            new FileChooser.ExtensionFilter("MitoProject Input (*.mitoproj)", "*.mitoproj"));
-                    File file = fileChooser.showOpenDialog(new Stage());
-                    if(file != null){
-                        projectReader.read(file);
-                        projectReader.loadData(tableController);
-                    } else {
-                        try {
-                            //Didndonuffin
-                        }catch (Exception e ) {
-                            System.out.println(e.getMessage());
-                        }
-                    }
-
-
-                } catch (ProjectException e){
-                    ProjectErrorDialogue projectErrorDialogue = new ProjectErrorDialogue(e);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-
 
 
 
@@ -254,7 +186,7 @@ public class FileMenu {
         });
         menuFile.setId("fileMenu");
 
-        menuFile.getItems().addAll(importFile, exportFile, importProject, exportProject, new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exit);
     }
 
 

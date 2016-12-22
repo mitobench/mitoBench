@@ -14,12 +14,13 @@ import java.util.List;
  * Created by neukamm on 09.12.2016.
  */
 public class ProjectWriter {
+    private String MITOBENCH_VERSION;
 
 
-    public ProjectWriter(){}
+    public ProjectWriter(String mitoVersion){ MITOBENCH_VERSION = mitoVersion;}
 
 
-    public void write(String outfile, TableController tableController, String version) throws IOException, ProjectException {
+    public void write(String outfile, TableController tableController) throws IOException, ProjectException {
 
         //Initialize properly
         if (!outfile.endsWith("mitoproj")) {
@@ -33,7 +34,7 @@ public class ProjectWriter {
 
             // write header
             // This has been generated with MitoBench version XYZ, do not edit manually unless you know what you are doing.
-            String header = "# This file has been generated with MitoBench version " + version + " and contains all information of a MitoBench project\n# Created on  "+ date.toString()
+            String header = "# This file has been generated with MitoBench version " + MITOBENCH_VERSION + " and contains all information of a MitoBench project\n# Created on  "+ date.toString()
                     + "\n# Please do NOT edit manually unless you know what you are doing.\n\n";
             writer.write(header);
 

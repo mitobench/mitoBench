@@ -1,4 +1,4 @@
-package io.dialogues.export;
+package io.dialogues.Export;
 
 import javafx.application.Application;
 import javafx.stage.FileChooser;

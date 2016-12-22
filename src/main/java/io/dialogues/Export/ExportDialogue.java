@@ -1,9 +1,6 @@
-package io.dialogues.export;
+package io.dialogues.Export;
 
-import io.writer.ARPWriter;
-import io.writer.BEASTWriter;
-import io.writer.CSVWriter;
-import io.writer.ExcelWriter;
+import io.writer.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Alert;
@@ -21,7 +18,8 @@ import java.util.Optional;
  */
 public class ExportDialogue extends Application {
     private List<String> columnsInTable = FXCollections.observableArrayList("option1", "option2", "option3");
-    private TableController tableManager;
+    private TableController tableController;
+    private String MITOBENCH_VERSION;
     //TODO this should come from the class instantiation...
 
 
@@ -29,9 +27,10 @@ public class ExportDialogue extends Application {
         Application.launch(args);
     }
 
-    public ExportDialogue(TableController tableManager) {
-        this.tableManager = tableManager;
+    public ExportDialogue(TableController tableManager, String mitoVersion) {
+        this.tableController = tableManager;
         this.columnsInTable = tableManager.getCurrentColumnNames();
+        this.MITOBENCH_VERSION = mitoVersion;
     }
 
 
@@ -46,6 +45,7 @@ public class ExportDialogue extends Application {
         ButtonType beast_button = new ButtonType("BEAST");
         ButtonType csv_button = new ButtonType("CSV");
         ButtonType xlsx_button = new ButtonType("XLSX");
+        ButtonType mito_button = new ButtonType("MITOPROJ");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         //We disallow ID and mtSequence as entries
@@ -53,7 +53,7 @@ public class ExportDialogue extends Application {
         List<String> options = this.columnsInTable;
 
 
-        alert.getButtonTypes().setAll(arp_button, beast_button, csv_button, xlsx_button, buttonTypeCancel);
+        alert.getButtonTypes().setAll(arp_button, beast_button, csv_button, xlsx_button, mito_button, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
 
@@ -67,7 +67,7 @@ public class ExportDialogue extends Application {
             saveAsDialogue.start(new Stage());
             if(saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
-                ARPWriter arpwriter = new ARPWriter(tableManager);
+                ARPWriter arpwriter = new ARPWriter(tableController);
                 arpwriter.setGroups(selection);
                 arpwriter.writeData(outfileDB);
             }
@@ -78,7 +78,7 @@ public class ExportDialogue extends Application {
             saveAsDialogue.start(new Stage());
             if (saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
-                BEASTWriter beastwriter = new BEASTWriter(tableManager);
+                BEASTWriter beastwriter = new BEASTWriter(tableController);
                 beastwriter.writeData(outfileDB);
             }
             //CSV Output
@@ -89,7 +89,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    CSVWriter csvWriter = new CSVWriter(tableManager);
+                    CSVWriter csvWriter = new CSVWriter(tableController);
                     csvWriter.writeData(outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
@@ -103,8 +103,21 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    ExcelWriter excelwriter = new ExcelWriter(tableManager);
+                    ExcelWriter excelwriter = new ExcelWriter(tableController);
                     excelwriter.writeData(outFileDB);
+                } catch (Exception e) {
+                    System.err.println("Caught Exception: " + e.getMessage());
+                }
+            }
+        } else if (result.get() == mito_button) {
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("MitoBench project (*.mitoproj)", "*.mitoproj");
+            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+            saveAsDialogue.start(new Stage());
+            if (saveAsDialogue.getOutFile() != null) {
+                String outFileDB = saveAsDialogue.getOutFile();
+                try {
+                    ProjectWriter projectWriter = new ProjectWriter(MITOBENCH_VERSION);
+                    projectWriter.write(outFileDB, tableController);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }

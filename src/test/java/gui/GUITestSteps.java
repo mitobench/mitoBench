@@ -79,7 +79,7 @@ public class GUITestSteps {
     public void part5TestImportDialogue() {
         step("Open Project file", () -> {
             robot.clickOn("#fileMenu");
-            robot.clickOn("#fileMenu_importProjectItem");
+            robot.clickOn("#fileMenu_importData");
         });
 
     }
