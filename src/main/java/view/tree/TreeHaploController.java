@@ -17,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -338,7 +339,7 @@ public class TreeHaploController {
      * get all nodes (haplogroups) lying below treenode (path to all leaves connected to treenode)
      * @param haplo_list
      */
-    public List<String> getAllSubgroups(String[] haplo_list){
+    private List<String> getAllSubgroups(String[] haplo_list){
         List<String> haplo_list_extended = new ArrayList<String>();
 
         // iterate over all specified haplogroups
@@ -354,7 +355,6 @@ public class TreeHaploController {
         return haplo_list_extended;
 
     }
-
 
 
     public void createTreeMap(TreeItem item){

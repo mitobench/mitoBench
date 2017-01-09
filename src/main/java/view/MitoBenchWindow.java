@@ -70,7 +70,7 @@ public class MitoBenchWindow extends Application{
 
         FileMenu fileMenu = new FileMenu(tableController, MITOBENCH_VERSION, primaryStage);
         EditMenu editMenu = new EditMenu();
-        ToolsMenu toolsMenu = new ToolsMenu();
+        ToolsMenu toolsMenu = new ToolsMenu(tableController, treeController);
         TableMenu tableMenu = new TableMenu(tableController);
         GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController, primaryStage);
         HelpMenu helpMenu = new HelpMenu();
