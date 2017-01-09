@@ -335,10 +335,10 @@ public class TreeHaploController {
 
 
     /**
-     * get all sub-groups of haplo
+     * get all nodes (haplogroups) lying below treenode (path to all leaves connected to treenode)
      * @param haplo_list
      */
-    private List<String> getAllSubgroups(String[] haplo_list){
+    public List<String> getAllSubgroups(String[] haplo_list){
         List<String> haplo_list_extended = new ArrayList<String>();
 
         // iterate over all specified haplogroups
@@ -357,7 +357,7 @@ public class TreeHaploController {
 
 
 
-    private void createTreeMap(TreeItem item){
+    public void createTreeMap(TreeItem item){
 
         TreeIterator<String> iterator = new TreeIterator<>(item);
         TreeItem it = item;
@@ -370,7 +370,12 @@ public class TreeHaploController {
     }
 
 
-    private List<String> getPathToRoot(TreeItem it){
+    /**
+     * get all nodes on the path from treenode to root
+     * @param it
+     * @return
+     */
+    public List<String> getPathToRoot(TreeItem it){
 
         List<String> path_to_root = new ArrayList<>();
         while(it.getParent()!=null){
