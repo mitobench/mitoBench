@@ -65,7 +65,7 @@ public class HaploStatistics {
             keys.add("Others");
 
 
-            writer = new BufferedWriter(new FileWriter("/home/neukamm/Desktop/stats.txt"));
+            writer = new BufferedWriter(new FileWriter("stats.txt"));
 
             // write header
             writer.write("Population\tSum\t");
