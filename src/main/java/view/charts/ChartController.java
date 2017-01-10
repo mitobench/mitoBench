@@ -125,9 +125,6 @@ public class ChartController {
 
 
         for (String key : hgs_summed.keySet()) {
-            if(key.startsWith("L4"))
-                System.out.print("");
-
             ArrayList<String> subHGs = hgs_summed.get(key);
             List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
             for (int i = 0; i < selection_groups.length; i++) {
@@ -190,9 +187,11 @@ public class ChartController {
                 }
 
                 // add to data collection
-                if(!data_all.containsKey(keyHG)){
-                    data_all.put(keyHG, data_list);
-                } else {
+//                if(!data_all.containsKey(keyHG)){
+//                    data_all.put(keyHG, data_list);
+//                } else {
+                if (data_all.containsKey(keyHG)){
+
                     for(int i = 0; i < data_all.get(keyHG).size(); i++){
                         for(int j = 0; j < data_list.size(); j++) {
                             if (data_list.get(j).getXValue().equals(data_all.get(keyHG).get(i).getXValue())) {

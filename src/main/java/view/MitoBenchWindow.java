@@ -2,10 +2,13 @@ package view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -32,7 +35,7 @@ public class MitoBenchWindow extends Application{
     private TreeHaploController treeController;
     private TabPane tabPane;
     private Stage primaryStage;
-
+    private TabPane statsTabpane;
 
 
     @Override
@@ -70,7 +73,7 @@ public class MitoBenchWindow extends Application{
 
         FileMenu fileMenu = new FileMenu(tableController, MITOBENCH_VERSION, primaryStage);
         EditMenu editMenu = new EditMenu();
-        ToolsMenu toolsMenu = new ToolsMenu(tableController, treeController);
+        ToolsMenu toolsMenu = new ToolsMenu(tableController, treeController, statsTabpane, scene);
         TableMenu tableMenu = new TableMenu(tableController);
         GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController, primaryStage);
         HelpMenu helpMenu = new HelpMenu();
@@ -91,7 +94,7 @@ public class MitoBenchWindow extends Application{
 
 
         SplitPane center = new SplitPane();
-        center.getItems().addAll(getLeftSplitPane(), getPlotPane());
+        center.getItems().addAll(getLeftSplitPane(), getRightSplitPane());
 
 
         // bind center to scene --> resizing
@@ -127,7 +130,7 @@ public class MitoBenchWindow extends Application{
      *
      * @return
      */
-    private BorderPane getLeftSplitPane()throws IOException, SAXException, ParserConfigurationException
+    private BorderPane getLeftSplitPane() throws IOException, SAXException, ParserConfigurationException
     {
         BorderPane borderPane = new BorderPane();
         borderPane.setId("mainEntryTable");
@@ -151,6 +154,29 @@ public class MitoBenchWindow extends Application{
         borderPane.setTop(treepane);
 
         return borderPane;
+    }
+
+
+    private SplitPane getRightSplitPane() {
+
+        SplitPane plot_stats = new SplitPane();
+        plot_stats.setOrientation(Orientation.VERTICAL);
+        plot_stats.getItems().addAll(getPlotPane(), getStatsPane());
+
+        return plot_stats;
+
+    }
+
+    private BorderPane getStatsPane(){
+        BorderPane statsBorderPane = new BorderPane();
+        statsBorderPane.prefHeightProperty().bind(scene.heightProperty());
+        statsBorderPane.prefWidthProperty().bind(scene.widthProperty());
+        statsBorderPane.setId("mainWindowLeftpart");
+
+        statsTabpane = new TabPane();
+        statsBorderPane.setCenter(statsTabpane);
+
+        return statsBorderPane;
     }
 
 }

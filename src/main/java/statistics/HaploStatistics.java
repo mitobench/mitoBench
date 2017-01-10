@@ -1,7 +1,15 @@
 package statistics;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.util.Callback;
 import view.charts.ChartController;
 import view.table.TableController;
 import view.tree.TreeHaploController;
@@ -22,6 +30,7 @@ public class HaploStatistics {
     private ChartController chartController;
     private HashMap<String, List<XYChart.Data<String, Number>>> data_all;
     private int number_of_groups;
+
 
     public HaploStatistics(TableController tableController, TreeHaploController treeHaploController){
         this.tableController  =tableController;
@@ -100,6 +109,86 @@ public class HaploStatistics {
             writer.flush();
             writer.close();
         }
+
+    }
+
+
+    /**
+     * This method writes count information to table in GUI.
+     * @param data_all
+     * @param scene
+     * @return
+     */
+    public TableView writeToTable(HashMap<String, List<XYChart.Data<String, Number>>>  data_all, Scene scene){
+        List<String> keys = new ArrayList<>();
+        keys.addAll(data_all.keySet());
+        keys.remove("Others");
+        Collections.sort(keys);
+        keys.add("Others");
+
+        TableView<ObservableList> table = new TableView<>();
+        table.setEditable(false);
+        // allow multiple selection of rows in tableView
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        table.prefHeightProperty().bind(scene.heightProperty());
+        table.prefWidthProperty().bind(scene.widthProperty());
+
+        table.setEditable(false);
+
+        TableColumn population = new TableColumn("Population");
+        TableColumn total_number = new TableColumn("Total Number");
+
+        // add columns
+        List<TableColumn> columns = new ArrayList<>();
+        columns.add(population);
+        columns.add(total_number);
+
+        for(String key : keys){
+            columns.add(new TableColumn(key));
+        }
+
+        int k = 0;
+        for(TableColumn col : columns){
+            int j = k;
+            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                    return new SimpleStringProperty(param.getValue().get(j).toString());
+                }
+            });
+            table.getColumns().add(col);
+            k++;
+        }
+
+        // add data (table content)
+        // write population HG count information
+        ObservableList<ObservableList> entries = FXCollections.observableArrayList();
+        for(int i = 0; i < number_of_groups ; i++){
+            ObservableList  entry = FXCollections.observableArrayList();
+            int count_all_hgs = countAllHGs(i);
+            for(String key : data_all.keySet()){
+                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
+                entry.add(data_list.get(i).getXValue());
+                entry.add(count_all_hgs);
+                break;
+            }
+
+
+            for(String key : keys){
+                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
+                entry.add(data_list.get(i).getYValue());
+            }
+
+            entries.add(entry);
+
+        }
+
+        // clear Items in table
+        table.getItems().removeAll(table.getItems());
+        //FINALLY ADDED TO TableView
+        table.getItems().addAll(entries);
+
+        return table;
 
     }
 

@@ -5,10 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import view.dialogues.popup.HGStatisticsPopupDialogue;
 import view.table.TableController;
 import statistics.HaploStatistics;
@@ -25,15 +23,16 @@ public class ToolsMenu {
     private TableController tableController;
     private TreeHaploController treeHaploController;
 
-    public ToolsMenu(TableController tableController, TreeHaploController treeHaploController) throws IOException {
+    public ToolsMenu(TableController tableController, TreeHaploController treeHaploController, TabPane statsTabpane,
+                     Scene scene) throws IOException {
 
         menuTools = new Menu("Statistics");
         this.tableController = tableController;
         this.treeHaploController = treeHaploController;
-        addSubMenus();
+        addSubMenus(statsTabpane, scene);
     }
 
-    private void addSubMenus() throws IOException {
+    private void addSubMenus(TabPane statsTabpane, Scene scene) throws IOException {
         MenuItem haploStats = new MenuItem("Count Haplogroups");
         haploStats.setId("toolsMenu_stats_hg");
 
@@ -43,7 +42,7 @@ public class ToolsMenu {
 
 
                     // open
-                    HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue(haploStatistics);
+                    HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue(haploStatistics, statsTabpane, scene);
                     hgStatisticsPopupDialogug.show();
                     //haploStatistics.count(new String[]{"H","HV","I","J","K","L0","L1","L2","L3","L4","M1","N","N1a","N1b","R","R0","T","T1","T2","U","W","X"});
                     //haploStatistics.printStatistics();
