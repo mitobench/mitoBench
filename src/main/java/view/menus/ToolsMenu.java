@@ -2,10 +2,16 @@ package view.menus;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import view.dialogues.popup.HGStatisticsPopupDialogue;
 import view.table.TableController;
-import view.tree.HaploStatistics;
+import statistics.HaploStatistics;
 import view.tree.TreeHaploController;
 
 import java.io.IOException;
@@ -28,19 +34,20 @@ public class ToolsMenu {
     }
 
     private void addSubMenus() throws IOException {
-        MenuItem haploStats = new MenuItem("Statistics Haplogroups");
+        MenuItem haploStats = new MenuItem("Count Haplogroups");
         haploStats.setId("toolsMenu_stats_hg");
 
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 HaploStatistics haploStatistics = new HaploStatistics(tableController, treeHaploController);
-                try {
 
-                    haploStatistics.getCounts(new String[]{"H","HV","I","J","K","L0","L1","L2","L3","L4","M1","N","N1a","N1b","R","R0","T","T1","T2","U","W","X"});
-                    haploStatistics.printStatistics();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                    // open
+                    HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue(haploStatistics);
+                    hgStatisticsPopupDialogug.show();
+                    //haploStatistics.count(new String[]{"H","HV","I","J","K","L0","L1","L2","L3","L4","M1","N","N1a","N1b","R","R0","T","T1","T2","U","W","X"});
+                    //haploStatistics.printStatistics();
+
             }
         });
 

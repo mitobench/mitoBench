@@ -70,7 +70,7 @@ public class ChartController {
 
             stackedBar.clearData();
             stackedBar.setCategories(selection_groups);
-            HashMap<String, ArrayList> hgs_summed = reduceHGs(selection_haplogroups, coreHGs);
+            HashMap<String, ArrayList> hgs_summed = summarizeHaolpgroups(selection_haplogroups, coreHGs);
 
             HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<String, List<XYChart.Data<String, Number>>>();
             data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups, numberOfElementsPerCaregory);
@@ -125,6 +125,8 @@ public class ChartController {
 
 
         for (String key : hgs_summed.keySet()) {
+            if(key.startsWith("L4"))
+                System.out.print("");
 
             ArrayList<String> subHGs = hgs_summed.get(key);
             List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
@@ -263,7 +265,7 @@ public class ChartController {
      * @return
      */
 
-    public HashMap<String, ArrayList> reduceHGs(String[] hgs, String[] coreHGs_variable){
+    public HashMap<String, ArrayList> summarizeHaolpgroups(String[] hgs, String[] coreHGs_variable){
 
         HashMap<String, ArrayList> hgs_summarized = new HashMap<>();
         // number of subHGs
@@ -278,10 +280,10 @@ public class ChartController {
         for(String hg_core : hg_core_list){
             List<String> core_subs = treeMap.get(hg_core);
             for(String hg : hgs){
-                if(hg.contains("+")){
-                    System.out.print("");
-                    hg = hg.split("\\+")[0];
-                }
+//                if(hg.contains("+")){
+//                    System.out.print("");
+//                    hg = hg.split("\\+")[0];
+//                }
                 if(core_subs.contains(hg)) {
                     if(!used_hgs.contains(hg)){
                         used_hgs.add(hg);
@@ -459,7 +461,6 @@ public class ChartController {
 
         TableColumn haplo_col = tableController.getTableColumnByName(names[0]);
         TableColumn grouping_col = tableController.getTableColumnByName(names[1]);
-
 
         Set<String> columnDataHG = new HashSet<>();
         selectedTableItems.stream().forEach((o)

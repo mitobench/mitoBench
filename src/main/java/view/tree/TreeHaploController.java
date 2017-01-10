@@ -362,6 +362,8 @@ public class TreeHaploController {
         TreeIterator<String> iterator = new TreeIterator<>(item);
         TreeItem it = item;
         while (iterator.hasNext()) {
+            if(it.getValue().toString().startsWith("L4a"))
+                System.out.print("");
             treeMap.put(it.getValue().toString(), getSubtree(it));
             treeMap_leaf_to_root.put(it.getValue().toString(), getPathToRoot(it));
             node_to_children.put(it.getValue().toString(), it.getChildren());
@@ -390,21 +392,14 @@ public class TreeHaploController {
 
     private List<String> getSubtree(TreeItem root){
 
-        if(root.getValue().toString().equals("H")){
-            System.out.println("");
-        }
-
         List<String> path = new ArrayList<String>();
         TreeIterator<String> iterator = new TreeIterator<>(root);
-        TreeItem it = iterator.next();
+        TreeItem it;// = iterator.next();
         while (iterator.hasNext()) {
-            path.add(it.getValue().toString());
             it = iterator.next();
-
+            path.add(it.getValue().toString());
         }
-
         return path;
-
     }
 
     /**

@@ -1,10 +1,10 @@
-package view.tree;
+package statistics;
 
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.TableColumn;
 import view.charts.ChartController;
 import view.table.TableController;
+import view.tree.TreeHaploController;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -28,38 +28,32 @@ public class HaploStatistics {
         chartController = new ChartController(tableController, treeHaploController.getTreeMap());
     }
 
-    public void getCounts(String[] HGs){
+    /**
+     * This method gets counts for each haplogroup (per group). haplogropus are summarized to user defined "core-groups".
+     * @param coreHGs user defined core HGs
+     */
+    public void count(String[] coreHGs){
         ObservableList<ObservableList> tableItems = tableController.getTable().getItems();
 
+        // get set of unique group and haplogroup entries
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
-
-        TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
-        TableColumn grouping_col = tableController.getTableColumnByName("Grouping");
-
-//        List<String> columnDataHG = new ArrayList<>();
-//        tableItems.stream().forEach((o)
-//                -> columnDataHG.add((String)haplo_col.getCellData(o)));
-//
-//        Set<String> columnDataGroup = new HashSet<>();
-//        tableItems.stream().forEach((o)
-//                -> columnDataGroup.add((String)grouping_col.getCellData(o)));
-//
-//        String[] selection_haplogroups = columnDataHG.toArray(new String[columnDataHG.size()]);
-//        String[] selection_groups =columnDataGroup.toArray(new String[columnDataGroup.size()]);
-
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = cols[1];
 
-
         number_of_groups = selection_groups.length;
-        HashMap<String, ArrayList> hgs_summed = chartController.reduceHGs(selection_haplogroups, HGs);
-        data_all = new HashMap<String, List<XYChart.Data<String, Number>>>();
-        int[] numberOfElementsPerCaregory = chartController.getNumberOfElementsPerCategory(selection_groups);
 
-        data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups, numberOfElementsPerCaregory);
+        HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaolpgroups(selection_haplogroups, coreHGs);
+        data_all = chartController.assignHGs(hgs_summarized,
+                                             selection_haplogroups,
+                                             selection_groups,
+                                             chartController.getNumberOfElementsPerCategory(selection_groups));
 
     }
 
+    /**
+     * This method prints counting information.
+     * @throws IOException
+     */
     public void printStatistics() throws IOException {
         Writer writer = null;
         try {
@@ -119,4 +113,7 @@ public class HaploStatistics {
     }
 
 
+    public HashMap<String, List<XYChart.Data<String, Number>>> getData_all() {
+        return data_all;
+    }
 }
