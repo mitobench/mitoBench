@@ -88,7 +88,9 @@ public class GraphicsMenu {
 
     private void addSubMenus() {
 
-        Menu barchart = new Menu("Barchart");
+        Menu haplo_graphics = new Menu("Haolpgroups");
+
+        Menu barchart = new Menu("Create Barchart...");
 
 
         /*
@@ -161,7 +163,7 @@ public class GraphicsMenu {
 
          */
 
-        MenuItem sunburstChartItem = new MenuItem("Create Sunburst chart");
+        MenuItem sunburstChartItem = new MenuItem("Create Sunburst chart...");
         sunburstChartItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -201,10 +203,13 @@ public class GraphicsMenu {
             }
         });
 
+        Menu grouping_graphics = new Menu("Grouping");
 
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
+        haplo_graphics.getItems().addAll(barchart, sunburstChartItem);
 
-        menuGraphics.getItems().addAll(barchart, sunburstChartItem, new SeparatorMenuItem(), clearPlotBox);
+
+        menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);
     }
 
 
