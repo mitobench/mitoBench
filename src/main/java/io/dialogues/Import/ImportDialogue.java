@@ -55,7 +55,6 @@ public class ImportDialogue  {
     }
 
     public File getSelectedFile() {
-        System.out.println("");
         return selectedFile;
     }
 

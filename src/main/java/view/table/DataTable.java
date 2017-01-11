@@ -147,7 +147,7 @@ public class DataTable {
             for(String key : data.keySet()){
                 if(!key.equals("ID")){
                     String[] d = data.get(key);
-                    data.put(key, append(d, "NA"));
+                    data.put(key, append(d, "Undefined"));
                 }
             }
         } else {
@@ -182,7 +182,7 @@ public class DataTable {
 
     public void addColumn(String key, int size){
         String[] a = new String[size+1];
-        Arrays.fill(a, "NA");
+        Arrays.fill(a, "Undefined");
         data.put(key, a);
     }
 
