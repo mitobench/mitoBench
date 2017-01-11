@@ -205,4 +205,8 @@ public class HaploStatistics {
     public HashMap<String, List<XYChart.Data<String, Number>>> getData_all() {
         return data_all;
     }
+
+    public ChartController getChartController() {
+        return chartController;
+    }
 }
