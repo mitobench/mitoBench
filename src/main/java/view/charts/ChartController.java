@@ -29,22 +29,22 @@ public class ChartController {
 
 
     /**
-     * This method adds all data to the bar chart.
-     * @param barPlotHaplo
-     * @param columnData
-     * @param haplo_col
+     *
+     * @param barPlot
+     * @param column
+     * @param name_to_filter
      */
-    public void addDataBarChart(BarPlotHaplo barPlotHaplo, List<String> columnData, TableColumn haplo_col){
-
+    public void addDataBarChart(ABarPlot barPlot, TableColumn column, String name_to_filter){
+        List<String> columnData = new ArrayList<>();
         for (Object item : tableController.getTable().getItems()) {
-            columnData.add((String)haplo_col.getCellObservableValue(item).getValue());
+            columnData.add((String)column.getCellObservableValue(item).getValue());
         }
-        String[] seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
+        String[] selected_data = columnData.toArray(new String[columnData.size()]);
 
-        barPlotHaplo.clearData();
+        barPlot.clearData();
 
-        if (seletcion_haplogroups.length !=0) {
-            barPlotHaplo.addData(tableController.getDataHist());
+        if (selected_data.length !=0) {
+            barPlot.addData(tableController.getDataHist(name_to_filter));
 
         }
 

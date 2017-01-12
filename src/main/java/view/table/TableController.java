@@ -297,7 +297,7 @@ public class TableController {
      *
      * @return
      */
-    public HashMap<String, Integer> getDataHist(){
+    public HashMap<String, Integer> getDataHist(String name_to_filter){
 
         ObservableList<ObservableList> data_to_plot;
         HashMap<String, Integer> haplo_to_count = new HashMap<>();
@@ -309,7 +309,7 @@ public class TableController {
         }
         for(ObservableList item : data_to_plot){
 
-            String haplogroup = (String)item.get(column_to_index.get("Haplogroup"));
+            String haplogroup = (String)item.get(column_to_index.get(name_to_filter));
 
             if(haplo_to_count.containsKey(haplogroup)){
                 haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);

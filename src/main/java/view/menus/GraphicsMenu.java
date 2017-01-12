@@ -3,6 +3,7 @@ package view.menus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -10,6 +11,8 @@ import view.charts.*;
 import view.table.TableController;
 import view.tree.TreeHaploController;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +27,7 @@ public class GraphicsMenu {
     private Menu menuGraphics;
     private TableController tableController;
     private BarPlotHaplo barPlotHaplo;
+    private BarChartGrouping barChartGrouping;
     private StackedBar stackedBar;
     private SunburstChartCreator sunburstChart;
     private TabPane tabPane;
@@ -48,15 +52,25 @@ public class GraphicsMenu {
     }
 
 
-    private void initBarchart(){
+    private void initHaploBarchart(){
         this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", tabPane, stage);
         Tab tab = new Tab();
-        tab.setText("Bar Chart");
+        tab.setText("Bar Chart haplogroups");
         tab.setContent(barPlotHaplo.getBarChart());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
 
     }
+
+    private void initGroupBarChart(){
+        barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane, stage);
+        Tab tab = new Tab();
+        tab.setText("Bar Chart Grouping");
+        tab.setContent(barChartGrouping.getBarChart());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
+    }
+
 
     private void initStackedBarchart(){
         this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, stage);
@@ -104,12 +118,12 @@ public class GraphicsMenu {
                 try {
 
                     if(tableController.getTable().getItems().size() != 0 ){
-                        initBarchart();
+                        initHaploBarchart();
 
                         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
-                        List<String> columnData = new ArrayList<>();
 
-                        chartController.addDataBarChart(barPlotHaplo, columnData, haplo_col);
+
+                        chartController.addDataBarChart(barPlotHaplo, haplo_col, "Haplogroup");
                     }
 
                 } catch (Exception e) {
@@ -145,7 +159,7 @@ public class GraphicsMenu {
                         stackedBar.addTooltip();
 
                         ColorScheme colorScheme = new ColorScheme(stage);
-                        colorScheme.setNewColors(stackedBar, selection_haplogroups);
+                        colorScheme.setNewColors(stackedBar);
 
                     }
 
@@ -204,7 +218,26 @@ public class GraphicsMenu {
         });
 
         Menu grouping_graphics = new Menu("Grouping");
+        MenuItem grouping_barchart = new MenuItem("Grouping bar chart");
+        grouping_barchart.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+                    if(tableController.getTable().getItems().size() != 0 ) {
+                        initGroupBarChart();
 
+                        TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
+                        chartController.addDataBarChart(barChartGrouping, haplo_col, "Grouping");
+                        barChartGrouping.setColor(stage);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
         haplo_graphics.getItems().addAll(barchart, sunburstChartItem);
 

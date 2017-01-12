@@ -16,11 +16,6 @@ import java.util.List;
  */
 public class ColorScheme {
 
-    List<String> core_hgs = Arrays.asList("L0", "L1", "L2", "L3", "L4",
-                                          "M1", "N", "I", "W", "X", "R",
-                                          "R0", "U", "K", "J", "T", "T1",
-                                          "T2", "H", "HV");
-
     HashMap<String, Integer> colors = new HashMap<>();
 
     public ColorScheme(Stage stage) throws MalformedURLException {
@@ -56,10 +51,7 @@ public class ColorScheme {
     }
 
 
-    public void setNewColors(StackedBar stackedBar, String[] haplogroups) {
-
-
-
+    public void setNewColors(StackedBar stackedBar) {
         /**
          * Set Series color
          */
@@ -82,34 +74,11 @@ public class ColorScheme {
             i++;
         }
 
-//        int i = 0;
-//        while(i < haplogroups.length){
-//            for (Node n : stackedBar.getSbc().lookupAll(".default-color" + i + ".chart-bar")) {
-//                String col = colors.get(haplogroups[i]);
-//                if(col!=null && col.length()!=0){
-//                    n.setStyle("-fx-bar-fill:black;");
-//                } else {
-//                    n.setStyle("-fx-bar-fill:white;");
-//                }
-//            }
-//            i++;
-//        }
+    }
+
+    public  void setColorsBarChart(ABarPlot barPlot){
 
 
-
-//        // Array "haplogroups" are ordered as added to bar plot
-//        for (int i = 0; i < haplogroups.length; i++) {
-//            String hg = haplogroups[i];
-//
-//            for (Node n : stackedBar.getSbc().lookupAll(".default-color" + i + ".chart-bar")) {
-//                String col = colors.get(hg);
-//                if(col!=null && col.length()!=0){
-//                    //n.setStyle("-fx-bar-fill:#161616;");
-//                    n.setStyle(colors.get(hg));
-//                }
-//
-//            }
-//        }
     }
 
 

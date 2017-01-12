@@ -4,7 +4,6 @@ import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
 import javafx.scene.SnapshotParameters;
