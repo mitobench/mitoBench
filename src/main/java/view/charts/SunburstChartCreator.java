@@ -1,5 +1,6 @@
 package view.charts;
 
+import controls.skin.SunburstViewSkin;
 import controls.sunburst.*;
 import data.ISourceStrategy;
 import data.SourceStrategyHaplogroup;
@@ -18,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,7 @@ public class SunburstChartCreator {
     private ColorStrategySectorShades colorStrategyShades;
     private Stage stage;
     private TabPane tabPane;
+    private Button goBack;
 
 
     public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane){
@@ -135,6 +138,16 @@ public class SunburstChartCreator {
         });
 
 
+        // add Button to go back when one level ist seleted
+        goBack = new Button("Go back");
+        goBack.setVisible(false);
+        goBack.setOnAction(e -> {
+            // set rest of chart visible
+
+            // remove button
+            goBack.setVisible(false);
+        });
+        sunburstBorderPane.setBottom(goBack);
 
         // Zoom level
 
@@ -157,6 +170,19 @@ public class SunburstChartCreator {
             sunburstView.setScaleY(scale);
         });
 
+        // set slider to change level
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(sunburstView.getMaxDeepness());
+        slider.setValue(sunburstView.getMaxDeepness());
+        slider.setShowTickLabels(false);
+        slider.setShowTickMarks(false);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(1);
+        slider.setBlockIncrement(1);
+
+        slider.valueProperty().addListener(x -> sunburstView.setMaxDeepness((int)slider.getValue()));
+
 
 
         BorderPane.setMargin(toolbar, new Insets(10));
@@ -165,7 +191,7 @@ public class SunburstChartCreator {
         Separator separator = new Separator();
         separator.setOrientation(Orientation.VERTICAL);
 
-        toolbar.getChildren().addAll(zoomSlider, btnCSShades, btnCSRandom, separator, btnShowLegend, btnHideLegend);
+        toolbar.getChildren().addAll(zoomSlider, slider, btnCSShades, btnCSRandom, separator, btnShowLegend, btnHideLegend);
 
         sunburstBorderPane.setTop(toolbar);
 
@@ -232,9 +258,18 @@ public class SunburstChartCreator {
             }
         });
 
-        final ContextMenu menu = new ContextMenu(
-                saveAsPDF
-        );
+        final MenuItem showLevel = new MenuItem("Show only this level");
+        showLevel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                goBack.setVisible(true);
+               // sunburstView.setLevelVisible(sunburstView.getSelectedItem());
+                sunburstView.setVisible(false);
+
+            }
+        });
+
+        final ContextMenu menu = new ContextMenu();
+        menu.getItems().addAll(saveAsPDF, showLevel);
 
         sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent event) {
@@ -247,6 +282,7 @@ public class SunburstChartCreator {
 
 
     }
+
 
 
 
