@@ -1,0 +1,35 @@
+.sunburst-view {
+
+
+}
+
+#centerCircle {
+    -fx-fill: transparent;
+}
+
+#centerCircle:hover {
+    -fx-fill: #fff2b9;
+    -fx-opacity: 60%;
+
+    /*
+    -fx-fill  : linear-gradient(from 50% 0% to 50% 100%,
+
+                                        rgb(207, 0, 58) 0%,
+
+                                        rgb(129, 0, 33) 100%);
+    */
+
+    -fx-stroke: transparent;
+}
+
+
+.sunburst-view .donut-unit:hover {
+    /* -fx-opacity: 70%; */
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.legend {
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    /*-fx-background-color: red;*/
+}

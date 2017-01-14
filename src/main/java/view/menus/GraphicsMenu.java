@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -36,9 +37,10 @@ public class GraphicsMenu {
     private TreeView treeView;
     private Stage stage;
     private ChartController chartController;
+    private Scene scene;
 
 
-    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage){
+    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage, Scene scene){
         menuGraphics = new Menu("Graphics");
         menuGraphics.setId("graphicsMenu");
         this.tableController = tableController;
@@ -48,6 +50,7 @@ public class GraphicsMenu {
         treeView = treeController.getTree().getTree();
         this.stage = stage;
         this.chartController = new ChartController(tableController, treeController.getTreeMap());
+        this.scene = scene;
         addSubMenus();
     }
 
@@ -83,7 +86,7 @@ public class GraphicsMenu {
     }
 
     private void initSunburst(){
-        sunburstChart = new SunburstChartCreator(new BorderPane(), stage, tabPane);
+        sunburstChart = new SunburstChartCreator(new BorderPane(), stage, tabPane, scene);
         Tab tab = new Tab();
         tab.setText("Sunburst Chart");
         tab.setContent(sunburstChart.getBorderPane());

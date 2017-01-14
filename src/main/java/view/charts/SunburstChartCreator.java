@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -21,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.apache.poi.ss.formula.functions.T;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class SunburstChartCreator {
     private Button goBack;
 
 
-    public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane){
+    public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane, Scene scene){
 
         this.stage = stage;
         this.tabPane = tabPane;
@@ -48,6 +50,9 @@ public class SunburstChartCreator {
 
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
+        File f = new File("src/main/java/view/charts/css/sunburstview.css");
+        stage.getScene().getStylesheets().clear();
+        stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
@@ -143,9 +148,10 @@ public class SunburstChartCreator {
         goBack.setVisible(false);
         goBack.setOnAction(e -> {
             // set rest of chart visible
-
+            sunburstView.setVisible(true);
             // remove button
             goBack.setVisible(false);
+
         });
         sunburstBorderPane.setBottom(goBack);
 
@@ -175,8 +181,8 @@ public class SunburstChartCreator {
         slider.setMin(0);
         slider.setMax(sunburstView.getMaxDeepness());
         slider.setValue(sunburstView.getMaxDeepness());
-        slider.setShowTickLabels(false);
-        slider.setShowTickMarks(false);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
         slider.setMajorTickUnit(1);
         slider.setMinorTickCount(1);
         slider.setBlockIncrement(1);

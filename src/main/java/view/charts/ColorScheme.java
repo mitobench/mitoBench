@@ -44,9 +44,9 @@ public class ColorScheme {
 
 
 
-        File file = new File("src/main/java/view/charts/Colors.css");
-        URL url = file.toURI().toURL();
-        stage.getScene().getStylesheets().add(url.toExternalForm());
+        File f = new File("src/main/java/view/charts/css/Colors.css");
+        stage.getScene().getStylesheets().clear();
+        stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
     }
 
