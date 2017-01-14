@@ -100,6 +100,7 @@ public class SunburstChartCreator {
 
         // set legend
         SunburstLegend myLegend = new SunburstLegend(sunburstView);
+        // todo: order legend items in columns
 
         // set color buttons
         ToggleButton btnCSShades = new ToggleButton("Shades Color Strategy");
