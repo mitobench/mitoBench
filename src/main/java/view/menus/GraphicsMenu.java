@@ -121,12 +121,13 @@ public class GraphicsMenu {
                 try {
 
                     if(tableController.getTable().getItems().size() != 0 ){
-                        initHaploBarchart();
-
                         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
 
+                        if(haplo_col!=null){
+                            initHaploBarchart();
+                            chartController.addDataBarChart(barPlotHaplo, haplo_col, "Haplogroup");
+                        }
 
-                        chartController.addDataBarChart(barPlotHaplo, haplo_col, "Haplogroup");
                     }
 
                 } catch (Exception e) {
@@ -226,11 +227,16 @@ public class GraphicsMenu {
             public void handle(ActionEvent t) {
                 try {
                     if(tableController.getTable().getItems().size() != 0 ) {
-                        initGroupBarChart();
+
 
                         TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
-                        chartController.addDataBarChart(barChartGrouping, haplo_col, "Grouping");
-                        barChartGrouping.setColor(stage);
+                        if(haplo_col != null){
+                            initGroupBarChart();
+                            chartController.addDataBarChart(barChartGrouping, haplo_col, "Grouping");
+                            barChartGrouping.setColor(stage);
+                        }
+
+
 
                     }
 

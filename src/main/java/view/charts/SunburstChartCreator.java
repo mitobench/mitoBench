@@ -149,7 +149,7 @@ public class SunburstChartCreator {
         goBack.setVisible(false);
         goBack.setOnAction(e -> {
             // set rest of chart visible
-            sunburstView.setVisible(true);
+            sunburstView.setOnlySelectedLevelVisibleReturn();
             // remove button
             goBack.setVisible(false);
 
@@ -269,8 +269,7 @@ public class SunburstChartCreator {
         showLevel.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 goBack.setVisible(true);
-               // sunburstView.setLevelVisible(sunburstView.getSelectedItem());
-                sunburstView.setVisible(false);
+                sunburstView.setOnlySelectedLevelVisible();
 
             }
         });
