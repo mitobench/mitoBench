@@ -59,58 +59,6 @@ public class HaploStatistics {
 
     }
 
-    /**
-     * This method prints counting information.
-     * @throws IOException
-     */
-    public void printStatistics() throws IOException {
-        Writer writer = null;
-        try {
-
-            List<String> keys = new ArrayList<>();
-            keys.addAll(data_all.keySet());
-            keys.remove("Others");
-            Collections.sort(keys);
-            keys.add("Others");
-
-
-            writer = new BufferedWriter(new FileWriter("stats.txt"));
-
-            // write header
-            writer.write("Population\tSum\t");
-            for(String key : keys){
-                writer.write(key+"\t");
-            }
-            writer.write("\n");
-
-            // write population HG count information
-            for(int i = 0; i < number_of_groups ; i++){
-                int count_all_hgs = countAllHGs(i);
-                for(String key : data_all.keySet()){
-                    List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                    writer.write(data_list.get(i).getXValue() + "\t" + count_all_hgs + "\t" );
-                    break;
-                }
-
-
-                for(String key : keys){
-                    List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                    writer.write(data_list.get(i).getYValue() + "\t");
-                }
-
-                writer.write("\n");
-            }
-
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }finally {
-
-            writer.flush();
-            writer.close();
-        }
-
-    }
 
 
     /**
@@ -205,8 +153,15 @@ public class HaploStatistics {
     public HashMap<String, List<XYChart.Data<String, Number>>> getData_all() {
         return data_all;
     }
-
     public ChartController getChartController() {
         return chartController;
+    }
+
+    public TableController getTableController() {
+        return tableController;
+    }
+
+    public int getNumber_of_groups() {
+        return number_of_groups;
     }
 }

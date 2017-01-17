@@ -71,9 +71,10 @@ public class MitoBenchWindow extends Application{
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menuBar");
 
-        FileMenu fileMenu = new FileMenu(tableController, MITOBENCH_VERSION, primaryStage);
+
         EditMenu editMenu = new EditMenu();
         ToolsMenu toolsMenu = new ToolsMenu(tableController, treeController, statsTabpane, scene);
+        FileMenu fileMenu = new FileMenu(tableController, MITOBENCH_VERSION, primaryStage, toolsMenu);
         TableMenu tableMenu = new TableMenu(tableController);
         GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController, primaryStage, scene);
         HelpMenu helpMenu = new HelpMenu();

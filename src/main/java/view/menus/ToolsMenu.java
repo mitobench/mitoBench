@@ -22,6 +22,7 @@ public class ToolsMenu {
     private Menu menuTools;
     private TableController tableController;
     private TreeHaploController treeHaploController;
+    private HaploStatistics haploStatistics;
 
     public ToolsMenu(TableController tableController, TreeHaploController treeHaploController, TabPane statsTabpane,
                      Scene scene) throws IOException {
@@ -35,18 +36,12 @@ public class ToolsMenu {
     private void addSubMenus(TabPane statsTabpane, Scene scene) throws IOException {
         MenuItem haploStats = new MenuItem("Count Haplogroups");
         haploStats.setId("toolsMenu_stats_hg");
-
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                HaploStatistics haploStatistics = new HaploStatistics(tableController, treeHaploController);
-
-
-                    // open
-                    HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue(haploStatistics, statsTabpane, scene);
-                    hgStatisticsPopupDialogug.show();
-                    //haploStatistics.count(new String[]{"H","HV","I","J","K","L0","L1","L2","L3","L4","M1","N","N1a","N1b","R","R0","T","T1","T2","U","W","X"});
-                    //haploStatistics.printStatistics();
-
+                haploStatistics = new HaploStatistics(tableController, treeHaploController);
+                // open
+                HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue(haploStatistics, statsTabpane, scene);
+                hgStatisticsPopupDialogug.show();
             }
         });
 
@@ -55,7 +50,11 @@ public class ToolsMenu {
 
 
 
-        public Menu getMenuTools() {
+    public Menu getMenuTools() {
         return menuTools;
+    }
+
+    public HaploStatistics getHaploStatistics() {
+        return haploStatistics;
     }
 }

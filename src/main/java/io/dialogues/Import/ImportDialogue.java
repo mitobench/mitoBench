@@ -63,7 +63,6 @@ public class ImportDialogue  {
         configureFileChooser(fileChooser);
         BiFunction<FileChooser, Window, File> openFunction = FileChooser::showOpenDialog;
         selectedFile = openFunction.apply(fileChooser, stage);
-        System.out.println("");
     }
 
 

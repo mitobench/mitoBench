@@ -72,16 +72,13 @@ public class HGStatisticsPopupDialogue {
                         hg_list = textField.getText().split(",");
                     }
                     haploStatistics.count(hg_list);
-                    try {
-                        TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
-                        Tab tab = new Tab();
-                        tab.setText("Count statistics");
-                        tab.setContent(table);
-                        statsTabPane.getTabs().add(tab);
-                        haploStatistics.printStatistics();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
+
+                    TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
+                    Tab tab = new Tab();
+                    tab.setText("Count statistics");
+                    tab.setContent(table);
+                    statsTabPane.getTabs().add(tab);
+
                     dialog.close();
                 }
 

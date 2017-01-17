@@ -5,14 +5,18 @@ import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
+import io.dialogues.Export.SaveAsDialogue;
 import io.reader.*;
 import io.writer.ProjectWriter;
+import io.writer.StatisticsWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
@@ -24,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * Created by neukamm on 16.11.16.
@@ -34,12 +39,14 @@ public class FileMenu {
     private TableController tableController;
     private String MITOBENCH_VERSION;
     private Stage stage;
+    private ToolsMenu toolsMenu;
 
-    public FileMenu(TableController tableController, String version, Stage stage) throws IOException {
+    public FileMenu(TableController tableController, String version, Stage stage, ToolsMenu toolsMenu) throws IOException {
         this.menuFile = new Menu("File");
         this.tableController = tableController;
         MITOBENCH_VERSION = version;
         this.stage = stage;
+        this.toolsMenu = toolsMenu;
         addSubMenus();
 
     }
@@ -175,6 +182,24 @@ public class FileMenu {
         });
 
 
+        MenuItem exportCurrStats = new MenuItem("Export statistics (current view)");
+        exportCurrStats.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
+                SaveAsDialogue sad = new SaveAsDialogue(fex);
+                sad.start(new Stage());
+                StatisticsWriter statisticsWriter = new StatisticsWriter();
+                try {
+                    statisticsWriter.write(sad.getOutFile(), toolsMenu.getHaploStatistics());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
 
         /*
                 EXIT OPTION
@@ -189,7 +214,7 @@ public class FileMenu {
         });
         menuFile.setId("fileMenu");
 
-        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
 
