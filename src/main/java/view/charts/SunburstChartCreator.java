@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class SunburstChartCreator {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
+    private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
     private TabPane tabPane;
     private Button goBack;
@@ -57,6 +60,7 @@ public class SunburstChartCreator {
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
+        colorStrategyGroups = new ColorStrategyGroups();
 
 
     }
@@ -92,7 +96,7 @@ public class SunburstChartCreator {
 
         // Set the view.data as root item
         sunburstView.setRootItem(rootData);
-        sunburstView.setColorStrategy(colorStrategyShades);
+        sunburstView.setColorStrategy(colorStrategyGroups);
     }
 
     private void finishSetup(){
@@ -144,17 +148,17 @@ public class SunburstChartCreator {
         });
 
 
-        // add Button to go back when one level ist seleted
-        goBack = new Button("Go back");
-        goBack.setVisible(false);
-        goBack.setOnAction(e -> {
-            // set rest of chart visible
-            //sunburstView.setOnlySelectedLevelVisibleReturn();
-            // remove button
-            goBack.setVisible(false);
-
-        });
-        sunburstBorderPane.setBottom(goBack);
+//        // add Button to go back when one level ist seleted
+//        goBack = new Button("Go back");
+//        goBack.setVisible(false);
+//        goBack.setOnAction(e -> {
+//            // set rest of chart visible
+//            //sunburstView.setOnlySelectedLevelVisibleReturn();
+//            // remove button
+//            goBack.setVisible(false);
+//
+//        });
+//        sunburstBorderPane.setBottom(goBack);
 
         // Zoom level
 
@@ -224,6 +228,7 @@ public class SunburstChartCreator {
                         TreeItem<String> tree,
                         TreeView treeView) {
 
+
         // Define a strategy by which the view.data should be received.
         ISourceStrategy sourceStrategy = new SourceStrategyHaplogroup();
         rootData = sourceStrategy.getData(hg_to_group, weights, treeMap, tree, treeView);
@@ -265,17 +270,17 @@ public class SunburstChartCreator {
             }
         });
 
-        final MenuItem showLevel = new MenuItem("Show only this level");
-        showLevel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-                goBack.setVisible(true);
-                //sunburstView.setOnlySelectedLevelVisible();
-
-            }
-        });
+//        final MenuItem showLevel = new MenuItem("Show only this level");
+//        showLevel.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override public void handle(ActionEvent event) {
+//                goBack.setVisible(true);
+//                //sunburstView.setOnlySelectedLevelVisible();
+//
+//            }
+//        });
 
         final ContextMenu menu = new ContextMenu();
-        menu.getItems().addAll(saveAsPDF, showLevel);
+        menu.getItems().addAll(saveAsPDF);
 
         sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent event) {

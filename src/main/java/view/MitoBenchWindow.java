@@ -60,10 +60,10 @@ public class MitoBenchWindow extends Application{
         root.setTop(getMenuPane());
 
 
+
         this.primaryStage.show();
 
     }
-
 
 
     private MenuBar getMenuPane() throws Exception
@@ -95,7 +95,8 @@ public class MitoBenchWindow extends Application{
 
 
         SplitPane center = new SplitPane();
-        center.getItems().addAll(getLeftSplitPane(), getRightSplitPane());
+        center.setOrientation(Orientation.VERTICAL);
+        center.getItems().addAll(getRightSplitPane(), getLeftSplitPane());
 
 
         // bind center to scene --> resizing
@@ -139,13 +140,13 @@ public class MitoBenchWindow extends Application{
         // initialize table
         tableController = new TableController(scene);
 
-        VBox vbox = new VBox();
-        vbox.setSpacing(10);
-        vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.prefHeightProperty().bind(scene.heightProperty());
-        vbox.prefWidthProperty().bind(scene.widthProperty());
-        vbox.getChildren().addAll(tableController.getTable());
-        borderPane.setCenter(vbox);
+        VBox vbox_center = new VBox();
+        vbox_center.setSpacing(10);
+        vbox_center.setPadding(new Insets(10, 10, 10, 10));
+        vbox_center.prefHeightProperty().bind(scene.heightProperty());
+        vbox_center.prefWidthProperty().bind(scene.widthProperty());
+        vbox_center.getChildren().addAll(tableController.getTable());
+        borderPane.setCenter(vbox_center);
 
         // set haplotree - seach view
         Pane treepane = new Pane();
@@ -161,7 +162,7 @@ public class MitoBenchWindow extends Application{
     private SplitPane getRightSplitPane() {
 
         SplitPane plot_stats = new SplitPane();
-        plot_stats.setOrientation(Orientation.VERTICAL);
+        plot_stats.setOrientation(Orientation.HORIZONTAL);
         plot_stats.getItems().addAll(getPlotPane(), getStatsPane());
 
         return plot_stats;

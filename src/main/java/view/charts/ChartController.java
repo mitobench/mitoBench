@@ -379,6 +379,7 @@ public class ChartController {
 
                         List<String> tmp = hg_to_group.get(group);
                         tmp.add((String)list.get(tableController.getColIndex("Haplogroup")));
+                        Collections.sort(tmp);
                         hg_to_group.put(group, tmp);
 
                     }
