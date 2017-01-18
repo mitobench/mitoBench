@@ -9,6 +9,5 @@ import java.util.List;
 public interface IDataStorage {
 
     HashMap<String, String> getData();
-    void addData(String key, String data);
 
 }

@@ -32,7 +32,10 @@ public class CSVWriter implements IOutputData {
     public void writeData(String file) throws IOException {
         Writer writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(new File(file+".csv")));
+            if(!file.endsWith(".csv"))
+                file = file + ".csv";
+
+            writer = new BufferedWriter(new FileWriter(new File(file)));
 
             // write header
             String header = "";

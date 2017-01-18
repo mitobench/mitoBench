@@ -35,7 +35,7 @@ public class TableController {
     private HashMap<String, Integer> column_to_index;
     private TableController controller;
     private GroupController groupController;
-    private MTStorage mtStorage;
+    //private MTStorage mtStorage;
 
     private HashMap<String, List<Entry>> table_content;
 
@@ -61,7 +61,7 @@ public class TableController {
 
         this.controller = this;
         groupController = new GroupController();
-        mtStorage = new MTStorage();
+        //mtStorage = new MTStorage();
 
         table_content = new HashMap<>();
 
@@ -350,7 +350,7 @@ public class TableController {
     /**
      *
      * This method parses the current table view to a view.data - table representation (ObservableList<ObservableList<String>>)
-     * which can be used for output purposes for example
+     * which can be used for output purposes for example.
      *
      * @return
      */
@@ -362,15 +362,17 @@ public class TableController {
         ObservableList<TableColumn> columns = tableView.getColumns();
 
         for (Object row : tableView.getItems()) {
+            String id = "";
             ObservableList<String> values = FXCollections.observableArrayList();
             for (TableColumn column : columns) {
                 String val = (String) column.getCellObservableValue(row).getValue();
-                if(column.getText().equals("MTSequence")){
-                    values.add(
-                            mtStorage.getData().get(val));
+                if(column.getText().equals("MTSequence")) {
+                    values.add(dataTable.getMtStorage().getData().get(id));
+                } else if(column.getText().equals("ID")){
+                    id = val;
+                    values.add((String) column.getCellObservableValue(row).getValue());
                 } else {
-                    values.add(
-                            (String) column.getCellObservableValue(row).getValue());
+                    values.add((String) column.getCellObservableValue(row).getValue());
                 }
 
             }

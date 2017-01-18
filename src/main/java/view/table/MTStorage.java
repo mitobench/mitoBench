@@ -21,11 +21,6 @@ public class MTStorage implements IDataStorage {
         return mtSequences;
     }
 
-    @Override
-    public void addData(String key, String data) {
-        mtSequences.put(key, data);
-    }
-
     public void setMTStorage(DataTable table){
 
         // iterate over rows
