@@ -40,11 +40,13 @@ public class GraphicsMenu {
     private Stage stage;
     private ChartController chartController;
     private Scene scene;
+    private TreeHaploController treeController;
 
 
     public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage, Scene scene){
         menuGraphics = new Menu("Graphics");
         menuGraphics.setId("graphicsMenu");
+        this.treeController = treeController;
         this.tableController = tableController;
         tabPane = vBox;
         treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();
@@ -57,7 +59,7 @@ public class GraphicsMenu {
     }
 
 
-    private void initHaploBarchart(){
+    public void initHaploBarchart(){
         this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", tabPane, stage);
         Tab tab = new Tab();
         tab.setText("Bar Chart haplogroups");
@@ -67,7 +69,7 @@ public class GraphicsMenu {
 
     }
 
-    private void initGroupBarChart(){
+    public void initGroupBarChart(){
         barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane, stage);
         Tab tab = new Tab();
         tab.setText("Bar Chart Grouping");
@@ -77,8 +79,8 @@ public class GraphicsMenu {
     }
 
 
-    private void initStackedBarchart(){
-        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, stage);
+    public void initStackedBarchart(){
+        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, stage, this);
         Tab tab = new Tab();
         tab.setText("Bar Chart per group");
         tab.setContent(stackedBar.getSbc());
@@ -127,7 +129,7 @@ public class GraphicsMenu {
 
                         if(haplo_col!=null){
                             initHaploBarchart();
-                            chartController.addDataBarChart(barPlotHaplo, haplo_col, "Haplogroup");
+                            createHaploBarchart(haplo_col, "", null);
                         }
 
                     }
@@ -159,7 +161,7 @@ public class GraphicsMenu {
                         String[] selection_groups = cols[1];
 
 
-                        chartController.addDataStackedBarChart(stackedBar, cols, selection_haplogroups, selection_groups);
+                        chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
 
                         stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
@@ -237,7 +239,7 @@ public class GraphicsMenu {
                         TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
                         if(haplo_col != null){
                             initGroupBarChart();
-                            chartController.addDataBarChart(barChartGrouping, haplo_col, "Grouping");
+                            chartController.addDataBarChart(barChartGrouping, haplo_col, "", null);
                             barChartGrouping.setColor(stage);
                         }
 
@@ -259,13 +261,14 @@ public class GraphicsMenu {
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);
     }
 
+    public void createHaploBarchart(TableColumn haplo_col, String filter, TableColumn col2){
+        chartController.addDataBarChart(barPlotHaplo, haplo_col, filter, col2);
+    }
 
 
     public Menu getMenuGraphics() {
         return menuGraphics;
     }
-
-
-
-
+    public TableController getTableController() { return tableController; }
+    public TreeHaploController getTreeController() { return treeController; }
 }

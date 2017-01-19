@@ -32,20 +32,29 @@ public class ChartController {
      *
      * @param barPlot
      * @param column
-     * @param name_to_filter
      */
-    public void addDataBarChart(ABarPlot barPlot, TableColumn column, String name_to_filter){
-        List<String> columnData = new ArrayList<>();
-        for (Object item : tableController.getTable().getItems()) {
-            columnData.add((String)column.getCellObservableValue(item).getValue());
-        }
-        String[] selected_data = columnData.toArray(new String[columnData.size()]);
+    public void addDataBarChart(ABarPlot barPlot, TableColumn column, String filter, TableColumn col2){
+        if(filter.length()!=0 && col2 != null){
+            List<String> columnData = new ArrayList<>();
+            for (Object item : tableController.getTable().getItems()) {
+                if(col2.getCellObservableValue(item).getValue().equals(filter)){
+                    columnData.add((String)column.getCellObservableValue(item).getValue());
+                }
 
-        barPlot.clearData();
+            }
 
-        if (selected_data.length !=0) {
-            barPlot.addData(tableController.getDataHist(name_to_filter));
+        } else {
+            List<String> columnData = new ArrayList<>();
+            for (Object item : tableController.getTable().getItems()) {
+                columnData.add((String)column.getCellObservableValue(item).getValue());
+            }
+            String[] selected_data = columnData.toArray(new String[columnData.size()]);
+            barPlot.clearData();
 
+            if (selected_data.length !=0) {
+                barPlot.addData(tableController.getDataHist(selected_data));
+
+            }
         }
 
     }
@@ -55,12 +64,11 @@ public class ChartController {
      * This method adds all data to the stacked bar chart.
      *
      * @param stackedBar
-     * @param cols
      * @param selection_haplogroups
      * @param selection_groups
      */
 
-    public void addDataStackedBarChart(StackedBar stackedBar, String[][] cols, String[] selection_haplogroups, String[] selection_groups) {
+    public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, String[] selection_groups) {
 
         // get number of elements per group
         int[] numberOfElementsPerCaregory = getNumberOfElementsPerCategory(selection_groups);

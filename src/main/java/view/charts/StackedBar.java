@@ -2,21 +2,21 @@ package view.charts;
 
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.*;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import view.menus.GraphicsMenu;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -33,10 +33,12 @@ public class StackedBar {
     private TabPane tabPane;
     private Stage stage;
     private final Glow glow = new Glow(.5);
+    private GraphicsMenu graphicsMenu;
 
-    public StackedBar(String title, TabPane vBox, Stage stage) {
+    public StackedBar(String title, TabPane vBox, Stage stage, GraphicsMenu graphicsMenu) {
         tabPane = vBox;
         this.stage = stage;
+        this.graphicsMenu = graphicsMenu;
 
         xAxis = new CategoryAxis();
         yAxis = new NumberAxis();
@@ -56,7 +58,6 @@ public class StackedBar {
         sbc.prefWidthProperty().bind(tabPane.widthProperty());
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
-
         sbc.setLegendSide(Side.RIGHT);
 
         setContextMenu(stage);
@@ -149,12 +150,30 @@ public class StackedBar {
                     public void handle(MouseEvent e) {
 
                         // todo: create new barchart with only subhaplogroups of selected haplogroup
-                        System.out.println("openDetailsScreen(<selected Bar>)");
-                        System.out.println(item.getXValue() + " : " + item.getYValue());
+                        createSubBarPlot(item);
                     }
                 });
             }
         }
+    }
+
+    private void createSubBarPlot(XYChart.Data<String, Number> item){
+        String group = item.getXValue();
+        String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
+
+        graphicsMenu.initHaploBarchart();
+        TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
+        TableColumn col2 = graphicsMenu.getTableController().getTableColumnByName("Grouping");
+        // filter haplo column, include only subgroups of selected Haplogroup
+        List<String> sub_hgs = graphicsMenu.getTreeController().getTreeMap().get(hg);
+
+        List<String> columnData = new ArrayList<>();
+        for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {
+            if(sub_hgs.contains((String)haplo_col.getCellObservableValue(tmp).getValue()) )
+                columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
+        }
+
+        graphicsMenu.createHaploBarchart(haplo_col, group, col2);
     }
 
 

@@ -297,20 +297,10 @@ public class TableController {
      *
      * @return
      */
-    public HashMap<String, Integer> getDataHist(String name_to_filter){
-
-        ObservableList<ObservableList> data_to_plot;
+    public HashMap<String, Integer> getDataHist(String[] data){
         HashMap<String, Integer> haplo_to_count = new HashMap<>();
 
-        if(table.getSelectionModel().getSelectedItems().size() == 0 || table.getSelectionModel().getSelectedItems() == null){
-            data_to_plot = this.data;
-        } else {
-            data_to_plot = table.getSelectionModel().getSelectedItems();
-        }
-        for(ObservableList item : data_to_plot){
-
-            String haplogroup = (String)item.get(column_to_index.get(name_to_filter));
-
+        for(String haplogroup : data){
             if(haplo_to_count.containsKey(haplogroup)){
                 haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
             } else {
