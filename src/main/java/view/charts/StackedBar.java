@@ -13,6 +13,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -31,6 +32,7 @@ public class StackedBar {
     private NumberAxis yAxis;
     private TabPane tabPane;
     private Stage stage;
+    private final Glow glow = new Glow(.5);
 
     public StackedBar(String title, TabPane vBox, Stage stage) {
         tabPane = vBox;
@@ -77,28 +79,9 @@ public class StackedBar {
         }
 
         this.seriesList.add(series);
-    }
-
-
-    public void sortBars(){
-
-        for(XYChart.Series serie : seriesList){
-            Collections.sort(serie.getData(), new Comparator<XYChart.Data>() {
-
-                @Override
-                public int compare(XYChart.Data o1, XYChart.Data o2) {
-                    Node xValue1 = o1.getNode();
-                    //Number xValue2 = (Number) o2.getXValue();
-                    //return new BigDecimal(xValue1.toString()).compareTo(new BigDecimal(xValue2.toString()));
-                    return 0;
-                }
-            });
-        }
-
-
-
 
     }
+
 
     /**
      * This method cleans up all data
@@ -140,6 +123,39 @@ public class StackedBar {
         }
     }
 
+
+    public void addListener(){
+        //now you can get the nodes.
+        for (XYChart.Series<String,Number> serie: sbc.getData()){
+            //setupHover(serie);
+            for (XYChart.Data<String, Number> item: serie.getData()){
+                Node n = item.getNode();
+                n.setEffect(null);
+                n.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        n.setEffect(glow);
+                    }
+                });
+                n.addEventHandler(MouseEvent.MOUSE_EXITED,
+                        new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                n.setEffect(null);
+                            }
+                        });
+                n.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+
+                        // todo: create new barchart with only subhaplogroups of selected haplogroup
+                        System.out.println("openDetailsScreen(<selected Bar>)");
+                        System.out.println(item.getXValue() + " : " + item.getYValue());
+                    }
+                });
+            }
+        }
+    }
 
 
     /*

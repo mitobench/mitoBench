@@ -5,7 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.charts.*;
@@ -160,6 +162,9 @@ public class GraphicsMenu {
                         chartController.addDataStackedBarChart(stackedBar, cols, selection_haplogroups, selection_groups);
 
                         stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+
+                        // add settings
+                        stackedBar.addListener();
                         stackedBar.addTooltip();
 
                         ColorScheme colorScheme = new ColorScheme(stage);
