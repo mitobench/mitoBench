@@ -23,28 +23,27 @@ public class ImageWriter {
      * write image to png
      * @param stage
      * @param image
-     */
+//     */
     public void saveImage(Stage stage, WritableImage image) throws ImageException {
         FileChooser fileChooser = new FileChooser();
         //Show save file dialog
-        if(fileChooser.showSaveDialog(stage) != null){
-            String outfile = fileChooser.showSaveDialog(stage).getAbsolutePath();
+        String outfile = fileChooser.showSaveDialog(stage).getAbsolutePath();
 
-            //Initialize properly
-            if (!outfile.endsWith("png")) {
-                outfile =outfile+ ".png";
-            }
+        //Initialize filepath properly
+        if (!outfile.endsWith("png")) {
+            outfile =outfile+ ".png";
+        }
 
-            File file  = new File(outfile);
+        File file  = new File(outfile);
 
-            if(file != null){
-                try {
-                    ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-                } catch (IOException e) {
-                    throw new ImageException("Image cannot be saved.");
-                }
+        if(file != null){
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+            } catch (IOException e) {
+                throw new ImageException("Image cannot be saved.");
             }
         }
+
 
     }
 }
