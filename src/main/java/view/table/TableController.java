@@ -409,9 +409,9 @@ public class TableController {
         return groupController;
     }
 
-    public double getCountPerHG(String hg, String group, int colIndexHG, int colIndexGroup){
+    public int getCountPerHG(String hg, String group, int colIndexHG, int colIndexGroup){
 
-        double count = 0.0;
+        int count = 0;
         ObservableList<ObservableList> selection = getSelectedRows();
         for(int i = 0; i < selection.size(); i++){
             ObservableList list = selection.get(i);

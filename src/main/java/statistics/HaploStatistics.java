@@ -124,7 +124,7 @@ public class HaploStatistics {
 
             for(String key : keys){
                 List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                entry.add(data_list.get(i).getYValue());
+                entry.add(data_list.get(i).getYValue().intValue());
             }
 
             entries.add(entry);
