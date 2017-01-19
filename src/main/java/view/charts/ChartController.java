@@ -15,8 +15,8 @@ public class ChartController {
     private TableController tableController;
     private List<String> used_hgs;
     private HashMap<String, List<String>> treeMap;
-    private HashMap<String, HashMap<String, Double>> weights;
-    private String[] hg_core_list;
+    private HashMap<String, HashMap<String, Integer>> weights;
+    private List<String> hg_core_list;
     private String[] coreHGs = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
             "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
 
@@ -75,6 +75,8 @@ public class ChartController {
             HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<String, List<XYChart.Data<String, Number>>>();
             data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups, numberOfElementsPerCaregory);
 
+            // sort list alphabetically
+            java.util.Collections.sort(hg_core_list);
 
             for(String key : hg_core_list){
                 if(data_all.containsKey(key)) {
@@ -114,6 +116,8 @@ public class ChartController {
                 }
             }
         }
+
+        //stackedBar.sortBars();
     }
 
 
@@ -166,7 +170,7 @@ public class ChartController {
             for (int i = 0; i < selection_groups.length; i++) {
                 String group = selection_groups[i];
                 if(hg.contains("+")){
-                    double count = tableController.getCountPerHG(hg,
+                    int count = tableController.getCountPerHG(hg,
                                                                  group,
                                                                  tableController.getColIndex("Haplogroup"),
                                                                  tableController.getColIndex("Grouping"));
@@ -307,7 +311,7 @@ public class ChartController {
      * @param coreHGs
      * @return
      */
-    public String[] generateHG_core_list(String[] coreHGs){
+    public List<String> generateHG_core_list(String[] coreHGs){
         List<Integer> sizes = new ArrayList<>();
         HashMap<Integer, List<String>> count_to_hg = new HashMap<>();
         for(String key : coreHGs){
@@ -326,12 +330,12 @@ public class ChartController {
         }
         Collections.sort(sizes);
 
-        String[] hgs_sorted = new String[coreHGs.length];
+        List<String> hgs_sorted = new ArrayList<>();
         for(int i = 0; i < sizes.size(); i++){
-            hgs_sorted[i] = count_to_hg.get(sizes.get(i)).get(0);
+            hgs_sorted.add(i, count_to_hg.get(sizes.get(i)).get(0));
             if(count_to_hg.get(sizes.get(i)).size() > 1){
                 for(int j = 1; j < count_to_hg.get(sizes.get(i)).size(); j++){
-                    hgs_sorted[i+j] = count_to_hg.get(sizes.get(i)).get(j);
+                    hgs_sorted.add((i+j),  count_to_hg.get(sizes.get(i)).get(j));
                     i += j;
 
                 }
@@ -413,14 +417,14 @@ public class ChartController {
         for(int i = 0; i < seletcion_groups.length; i++) {
             String group = seletcion_groups[i];
             if (!weights.containsKey(group)) {
-                weights.put(group, new HashMap<String, Double>());
+                weights.put(group, new HashMap<String, Integer>());
             }
-            HashMap<String, Double> hash_tmp = weights.get(group);
+            HashMap<String, Integer> hash_tmp = weights.get(group);
 
             for(String hg : haplogroups){
 
                 // get number of occurrences of this hg within this group
-                double count_per_HG = tableController.getCountPerHG(
+                int count_per_HG = tableController.getCountPerHG(
                         hg,
                         group,
                         tableController.getColIndex("Haplogroup"),
@@ -465,7 +469,7 @@ public class ChartController {
     }
 
 
-    public HashMap<String, HashMap<String, Double>> getWeights() {
+    public HashMap<String, HashMap<String, Integer>> getWeights() {
         return weights;
     }
 

@@ -57,8 +57,10 @@ public class ColorScheme {
          */
         for (int i = 0; i < stackedBar.getSeriesList().size(); i++) {
             for (Node node : stackedBar.getSbc().lookupAll(".series" + i)) {
+                String hg = node.getAccessibleText().split(" ")[0].trim();
                 node.getStyleClass().remove("default-color" + (i % 8));
-                node.getStyleClass().add("default-color" + (i % 28));
+                //node.getStyleClass().add("default-color" + (i % 28));
+                node.getStyleClass().add("default-color"+hg);
             }
         }
 
@@ -68,8 +70,9 @@ public class ColorScheme {
         int i = 0;
         for (Node node : stackedBar.getSbc().lookupAll(".chart-legend-item")) {
             if (node instanceof Label && ((Label) node).getGraphic() != null) {
+                String hg = ((Label) node).getText();
                 ((Label) node).getGraphic().getStyleClass().remove("default-color" + (i % 8));
-                ((Label) node).getGraphic().getStyleClass().add("default-color" + (i % 28));
+                ((Label) node).getGraphic().getStyleClass().add("default-color" + hg);
             }
             i++;
         }

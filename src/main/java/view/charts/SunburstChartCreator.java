@@ -39,7 +39,7 @@ public class SunburstChartCreator {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
-    private ColorStrategyGroups colorStrategyGroups;
+    //private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
     private TabPane tabPane;
     private Button goBack;
@@ -60,7 +60,7 @@ public class SunburstChartCreator {
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
-        colorStrategyGroups = new ColorStrategyGroups();
+        //colorStrategyGroups = new ColorStrategyGroups();
 
 
     }
@@ -75,7 +75,7 @@ public class SunburstChartCreator {
      * @param treeView
      */
     public void create(HashMap<String, List<String>> hg_to_group,
-                       HashMap<String, HashMap<String, Double>> weights,
+                       HashMap<String, HashMap<String, Integer>> weights,
                        HashMap<String, List<String>> treeMap,
                        TreeItem<String> tree,
                        TreeView treeView){
@@ -88,7 +88,7 @@ public class SunburstChartCreator {
     }
 
     private void loadData( HashMap<String, List<String>> hg_to_group,
-                           HashMap<String, HashMap<String, Double>> weights,
+                           HashMap<String, HashMap<String, Integer>> weights,
                            HashMap<String, List<String>> treeMap,
                            TreeItem<String> tree, TreeView treeView){
         // load data
@@ -96,7 +96,8 @@ public class SunburstChartCreator {
 
         // Set the view.data as root item
         sunburstView.setRootItem(rootData);
-        sunburstView.setColorStrategy(colorStrategyGroups);
+        //sunburstView.setColorStrategy(colorStrategyGroups);
+        sunburstView.setColorStrategy(colorStrategyShades);
     }
 
     private void finishSetup(){
@@ -223,7 +224,7 @@ public class SunburstChartCreator {
      * @param weights
      */
     public void addData(HashMap<String, List<String>> hg_to_group,
-                        HashMap<String, HashMap<String, Double>> weights,
+                        HashMap<String, HashMap<String, Integer>> weights,
                         HashMap<String, List<String>> treeMap,
                         TreeItem<String> tree,
                         TreeView treeView) {

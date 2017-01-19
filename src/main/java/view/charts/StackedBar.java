@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.*;
 import javafx.scene.control.ContextMenu;
@@ -15,6 +16,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -76,6 +79,26 @@ public class StackedBar {
         this.seriesList.add(series);
     }
 
+
+    public void sortBars(){
+
+        for(XYChart.Series serie : seriesList){
+            Collections.sort(serie.getData(), new Comparator<XYChart.Data>() {
+
+                @Override
+                public int compare(XYChart.Data o1, XYChart.Data o2) {
+                    Node xValue1 = o1.getNode();
+                    //Number xValue2 = (Number) o2.getXValue();
+                    //return new BigDecimal(xValue1.toString()).compareTo(new BigDecimal(xValue2.toString()));
+                    return 0;
+                }
+            });
+        }
+
+
+
+
+    }
 
     /**
      * This method cleans up all data
@@ -165,11 +188,9 @@ public class StackedBar {
     public void setCategories(String[] groups){
         xAxis.setCategories(FXCollections.observableArrayList(groups));
     }
-
     public List<XYChart.Series<String, Number>> getSeriesList() {
         return seriesList;
     }
-
     public StackedBarChart<String, Number> getSbc() {
         return sbc;
     }
