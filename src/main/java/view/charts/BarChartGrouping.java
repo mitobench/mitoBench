@@ -42,6 +42,11 @@ public class BarChartGrouping extends ABarPlot {
         this.bc.getData().add(series);
     }
 
+    /**
+     * This method set specified colors to bar chart
+     * @param stage
+     * @throws MalformedURLException
+     */
     public void setColor(Stage stage) throws MalformedURLException {
 
         File file = new File("src/main/java/view/charts/css/ColorsBarchart.css");
@@ -52,6 +57,5 @@ public class BarChartGrouping extends ABarPlot {
         for (Node node : this.bc.lookupAll(".series")) {
             node.getStyleClass().remove("default-color0");
         }
-
     }
 }

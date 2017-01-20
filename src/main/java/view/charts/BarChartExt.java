@@ -73,11 +73,8 @@ public class BarChartExt<X, Y> extends BarChart<X, Y> {
         super.layoutPlotChildren();
 
         for (Node bar : nodeMap.keySet()) {
-
             Node text = nodeMap.get(bar);
-
             text.relocate(bar.getBoundsInParent().getMinX(), bar.getBoundsInParent().getMinY()-15);
-
         }
 
     }

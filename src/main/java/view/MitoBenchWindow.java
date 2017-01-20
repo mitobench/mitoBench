@@ -7,8 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -59,10 +57,7 @@ public class MitoBenchWindow extends Application{
         root.setCenter(getCenterPane());
         root.setTop(getMenuPane());
 
-
-
         this.primaryStage.show();
-
     }
 
 
@@ -71,12 +66,11 @@ public class MitoBenchWindow extends Application{
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menuBar");
 
-
         EditMenu editMenu = new EditMenu();
         ToolsMenu toolsMenu = new ToolsMenu(tableController, treeController, statsTabpane, scene);
         FileMenu fileMenu = new FileMenu(tableController, MITOBENCH_VERSION, primaryStage, toolsMenu);
         TableMenu tableMenu = new TableMenu(tableController);
-        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController, primaryStage, scene);
+        GraphicsMenu graphicsMenu = new GraphicsMenu(tableController, tabPane, treeController, primaryStage);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
@@ -92,7 +86,6 @@ public class MitoBenchWindow extends Application{
 
 
     public SplitPane  getCenterPane() throws ParserConfigurationException, SAXException, IOException {
-
 
         SplitPane center = new SplitPane();
         center.setOrientation(Orientation.VERTICAL);
@@ -148,7 +141,8 @@ public class MitoBenchWindow extends Application{
         vbox_center.getChildren().addAll(tableController.getTable());
         borderPane.setCenter(vbox_center);
 
-        // set haplotree - seach view
+        // set haplotree - search view
+        // todo: place tree view somewhere else
         Pane treepane = new Pane();
 
         treeController = new TreeHaploController(treepane, tableController);

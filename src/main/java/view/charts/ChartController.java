@@ -53,10 +53,8 @@ public class ChartController {
 
             if (selected_data.length !=0) {
                 barPlot.addData(tableController.getDataHist(selected_data));
-
             }
         }
-
     }
 
 
@@ -80,7 +78,7 @@ public class ChartController {
             stackedBar.setCategories(selection_groups);
             HashMap<String, ArrayList> hgs_summed = summarizeHaolpgroups(selection_haplogroups, coreHGs);
 
-            HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<String, List<XYChart.Data<String, Number>>>();
+            HashMap<String, List<XYChart.Data<String, Number>>> data_all;
             data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups, numberOfElementsPerCaregory);
 
             // sort list alphabetically
@@ -124,8 +122,6 @@ public class ChartController {
                 }
             }
         }
-
-        //stackedBar.sortBars();
     }
 
 
@@ -144,6 +140,7 @@ public class ChartController {
                                                                          String[] selection_haplogroups,
                                                                          String[] selection_groups,
                                                                          int[] numberOfElementsPerCaregory){
+
         HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<String, List<XYChart.Data<String, Number>>>();
 
         for (String key : hgs_summed.keySet()) {

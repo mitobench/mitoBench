@@ -6,19 +6,16 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by neukamm on 15.12.16.
  */
-public class ColorScheme {
+public class ColorSchemeStackedBarChart {
 
     HashMap<String, Integer> colors = new HashMap<>();
 
-    public ColorScheme(Stage stage) throws MalformedURLException {
+    public ColorSchemeStackedBarChart(Stage stage) throws MalformedURLException {
 
 
         colors.put("L0", 0);
@@ -43,7 +40,7 @@ public class ColorScheme {
         colors.put("HV", 19);
 
 
-
+        // set stylesheet so specify colors
         File f = new File("src/main/java/view/charts/css/Colors.css");
         stage.getScene().getStylesheets().clear();
         stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
@@ -59,7 +56,6 @@ public class ColorScheme {
             for (Node node : stackedBar.getSbc().lookupAll(".series" + i)) {
                 String hg = node.getAccessibleText().split(" ")[0].trim();
                 node.getStyleClass().remove("default-color" + (i % 8));
-                //node.getStyleClass().add("default-color" + (i % 28));
                 node.getStyleClass().add("default-color"+hg);
             }
         }
@@ -78,13 +74,6 @@ public class ColorScheme {
         }
 
     }
-
-    public  void setColorsBarChart(ABarPlot barPlot){
-
-
-    }
-
-
 
 
 }

@@ -45,8 +45,6 @@ public abstract class ABarPlot {
         bc.setTitle(title);
         bc.setAnimated(false);
         yAxis.setLabel(ylabel);
-        //yAxis.setTickUnit(1);
-        //yAxis.setMinorTickVisible(false);
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override public String toString(Number object) {
                 if(object.intValue()!=object.doubleValue())

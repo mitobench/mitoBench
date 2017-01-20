@@ -2,9 +2,7 @@ package view.charts;
 
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
@@ -18,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import view.menus.GraphicsMenu;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -31,13 +28,11 @@ public class StackedBar {
     private CategoryAxis xAxis;
     private NumberAxis yAxis;
     private TabPane tabPane;
-    private Stage stage;
     private final Glow glow = new Glow(.5);
     private GraphicsMenu graphicsMenu;
 
-    public StackedBar(String title, TabPane vBox, Stage stage, GraphicsMenu graphicsMenu) {
+    public StackedBar(String title, TabPane vBox, GraphicsMenu graphicsMenu) {
         tabPane = vBox;
-        this.stage = stage;
         this.graphicsMenu = graphicsMenu;
 
         xAxis = new CategoryAxis();
@@ -60,7 +55,7 @@ public class StackedBar {
         sbc.setCategoryGap(20);
         sbc.setLegendSide(Side.RIGHT);
 
-        setContextMenu(stage);
+        setContextMenu(new Stage());
 
     }
 
@@ -148,9 +143,12 @@ public class StackedBar {
                 n.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
+                        if(MouseButton.PRIMARY.equals(e.getButton())){
+                            // todo: create new barchart with only subhaplogroups of selected haplogroup
+                            createSubBarPlot(item);
+                        }
 
-                        // todo: create new barchart with only subhaplogroups of selected haplogroup
-                        createSubBarPlot(item);
+
                     }
                 });
             }

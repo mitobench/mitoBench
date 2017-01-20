@@ -39,13 +39,13 @@ public class SunburstChartCreator {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
-    //private ColorStrategyGroups colorStrategyGroups;
+    private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
     private TabPane tabPane;
     private Button goBack;
 
 
-    public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane, Scene scene){
+    public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane){
 
         this.stage = stage;
         this.tabPane = tabPane;
@@ -59,7 +59,7 @@ public class SunburstChartCreator {
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
-        //colorStrategyGroups = new ColorStrategyGroups();
+        colorStrategyGroups = new ColorStrategyGroups();
 
 
     }
@@ -148,7 +148,7 @@ public class SunburstChartCreator {
         });
 
 
-//        // add Button to go back when one level ist seleted
+//        // add Button to go back when one level ist selected
 //        goBack = new Button("Go back");
 //        goBack.setVisible(false);
 //        goBack.setOnAction(e -> {

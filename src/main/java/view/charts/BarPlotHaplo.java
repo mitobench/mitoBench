@@ -18,8 +18,6 @@ public class BarPlotHaplo extends ABarPlot {
     public BarPlotHaplo(String title, String ylabel, TabPane scene, Stage stage) {
         super(title, ylabel, scene, stage);
         this.bc.setLegendVisible(false);
-
-
     }
 
 
