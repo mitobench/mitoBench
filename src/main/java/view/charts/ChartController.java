@@ -15,7 +15,7 @@ public class ChartController {
     private TableController tableController;
     private List<String> used_hgs;
     private HashMap<String, List<String>> treeMap;
-    private HashMap<String, HashMap<String, Integer>> weights;
+    private HashMap<String, HashMap<String, Double>> weights;
     private List<String> hg_core_list;
     private String[] coreHGs = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
             "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
@@ -425,9 +425,9 @@ public class ChartController {
         for(int i = 0; i < seletcion_groups.length; i++) {
             String group = seletcion_groups[i];
             if (!weights.containsKey(group)) {
-                weights.put(group, new HashMap<String, Integer>());
+                weights.put(group, new HashMap<String, Double>());
             }
-            HashMap<String, Integer> hash_tmp = weights.get(group);
+            HashMap<String, Double> hash_tmp = weights.get(group);
 
             for(String hg : haplogroups){
 
@@ -441,7 +441,7 @@ public class ChartController {
 
                 if(count_per_HG!=0){
                     if (!hash_tmp.containsKey(hg)) {
-                        hash_tmp.put(hg, count_per_HG);
+                        hash_tmp.put(hg, (double)count_per_HG);
                     } else {
                         hash_tmp.put(hg, hash_tmp.get(hg) + 1);
                     }
@@ -477,7 +477,7 @@ public class ChartController {
     }
 
 
-    public HashMap<String, HashMap<String, Integer>> getWeights() {
+    public HashMap<String, HashMap<String, Double>> getWeights() {
         return weights;
     }
 

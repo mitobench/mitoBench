@@ -50,7 +50,6 @@ public class SunburstChartCreator {
         this.stage = stage;
         this.tabPane = tabPane;
         this.sunburstBorderPane = borderPane;
-
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
         File f = new File("src/main/java/view/charts/css/sunburstview.css");
@@ -75,7 +74,7 @@ public class SunburstChartCreator {
      * @param treeView
      */
     public void create(HashMap<String, List<String>> hg_to_group,
-                       HashMap<String, HashMap<String, Integer>> weights,
+                       HashMap<String, HashMap<String, Double>> weights,
                        HashMap<String, List<String>> treeMap,
                        TreeItem<String> tree,
                        TreeView treeView){
@@ -88,7 +87,7 @@ public class SunburstChartCreator {
     }
 
     private void loadData( HashMap<String, List<String>> hg_to_group,
-                           HashMap<String, HashMap<String, Integer>> weights,
+                           HashMap<String, HashMap<String, Double>> weights,
                            HashMap<String, List<String>> treeMap,
                            TreeItem<String> tree, TreeView treeView){
         // load data
@@ -224,7 +223,7 @@ public class SunburstChartCreator {
      * @param weights
      */
     public void addData(HashMap<String, List<String>> hg_to_group,
-                        HashMap<String, HashMap<String, Integer>> weights,
+                        HashMap<String, HashMap<String, Double>> weights,
                         HashMap<String, List<String>> treeMap,
                         TreeItem<String> tree,
                         TreeView treeView) {
