@@ -63,7 +63,7 @@ public class StatisticsWriter {
             for(int k = 0; k < keys.size(); k++){
                 List<XYChart.Data<String, Number>> data_list = data_all.get(keys.get(k));
                 if(k == keys.size()-1)
-                    writer.write(data_list.get(i).getYValue().intValue());
+                    writer.write(data_list.get(i).getYValue().intValue()+"");
                 else
                     writer.write(data_list.get(i).getYValue().intValue() + ",");
             }
