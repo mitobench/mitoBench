@@ -45,7 +45,7 @@ public class TreeHaploController {
     private double ACTION_BOX_HGT = 30;
     private StackPane downArrow = new StackPane();
     private StackPane upArrow = new StackPane();
-    private Label searchLbl = new Label("Tree View");
+    private Label searchLbl = new Label("Haplo tree");
     private SimpleBooleanProperty isExpanded = new SimpleBooleanProperty();
     private Rectangle clipRect;
     private Timeline timelineUp;
@@ -342,8 +342,7 @@ public class TreeHaploController {
     private List<String> getAllSubgroups(String[] haplo_list){
         List<String> haplo_list_extended = new ArrayList<String>();
 
-        // iterate over all specified haplogroups
-        // get subtree of each
+        // iterate over all specified haplogroups, get subtree of each
         for(String haplo : haplo_list){
             // get sub-haplogroups of 'haplo'
             List<String> path = treeMap.get(haplo.toString().trim().toUpperCase());

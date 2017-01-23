@@ -53,7 +53,6 @@ public class SunburstChartCreator {
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
         File f = new File("src/main/java/view/charts/css/sunburstview.css");
-        stage.getScene().getStylesheets().clear();
         stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
         // Create all the available color strategies once to be able to use them at runtime.

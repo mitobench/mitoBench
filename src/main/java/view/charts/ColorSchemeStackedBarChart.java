@@ -42,7 +42,7 @@ public class ColorSchemeStackedBarChart {
 
         // set stylesheet so specify colors
         File f = new File("src/main/java/view/charts/css/Colors.css");
-        stage.getScene().getStylesheets().clear();
+        //stage.getScene().getStylesheets().clear();
         stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
     }

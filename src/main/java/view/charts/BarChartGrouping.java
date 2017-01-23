@@ -51,7 +51,7 @@ public class BarChartGrouping extends ABarPlot {
 
         File file = new File("src/main/java/view/charts/css/ColorsBarchart.css");
         URL url = file.toURI().toURL();
-        stage.getScene().getStylesheets().clear();
+        //stage.getScene().getStylesheets().clear();
         stage.getScene().getStylesheets().add(url.toExternalForm());
 
         for (Node node : this.bc.lookupAll(".series")) {

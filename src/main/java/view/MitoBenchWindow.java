@@ -54,7 +54,22 @@ public class MitoBenchWindow extends Application{
         root.prefHeightProperty().bind(scene.heightProperty());
         root.prefWidthProperty().bind(scene.widthProperty());
 
-        root.setCenter(getCenterPane());
+        // initialize table
+        tableController = new TableController(scene);
+
+
+        BorderPane center = new BorderPane();
+        // tree view
+
+        // set haplotree - search view
+        Pane treepane = new Pane();
+
+        treeController = new TreeHaploController(treepane, tableController);
+
+        center.setTop(treepane);
+        center.setCenter(getCenterPane());
+        root.setCenter(center);
+
         root.setTop(getMenuPane());
 
         this.primaryStage.show();
@@ -130,9 +145,6 @@ public class MitoBenchWindow extends Application{
         BorderPane borderPane = new BorderPane();
         borderPane.setId("mainEntryTable");
 
-        // initialize table
-        tableController = new TableController(scene);
-
         VBox vbox_center = new VBox();
         vbox_center.setSpacing(10);
         vbox_center.setPadding(new Insets(10, 10, 10, 10));
@@ -140,14 +152,6 @@ public class MitoBenchWindow extends Application{
         vbox_center.prefWidthProperty().bind(scene.widthProperty());
         vbox_center.getChildren().addAll(tableController.getTable());
         borderPane.setCenter(vbox_center);
-
-        // set haplotree - search view
-        // todo: place tree view somewhere else
-        Pane treepane = new Pane();
-
-        treeController = new TreeHaploController(treepane, tableController);
-
-        borderPane.setTop(treepane);
 
         return borderPane;
     }
