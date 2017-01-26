@@ -3,13 +3,17 @@ package view.menus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.charts.*;
 import view.table.TableController;
 import view.tree.TreeHaploController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,6 +37,7 @@ public class GraphicsMenu {
     private Stage stage;
     private ChartController chartController;
     private TreeHaploController treeController;
+    private ProfilePlot profilePlot;
 
 
     public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage){
@@ -91,6 +96,19 @@ public class GraphicsMenu {
 
     }
 
+
+    private void initProfilePlot(){
+        profilePlot = new ProfilePlot();
+        Tab tab = new Tab();
+        tab.setText("Profile Plot");
+        tab.setContent(profilePlot.getPlot());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
+
+
+    }
+
+
     public void clearCharts(){
         stackedBar = null;
         barPlotHaplo = null;
@@ -100,7 +118,7 @@ public class GraphicsMenu {
 
     private void addSubMenus() {
 
-        Menu haplo_graphics = new Menu("Haolpgroups");
+        Menu haplo_graphics = new Menu("Haplogroups");
         Menu barchart = new Menu("Create Barchart...");
         Menu grouping_graphics = new Menu("Grouping");
 
@@ -196,6 +214,84 @@ public class GraphicsMenu {
             }
         });
 
+
+
+         /*
+
+                    Create profile plot
+
+         */
+
+        MenuItem profilePlotItem = new MenuItem("Create Profile Plot...");
+        profilePlotItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+                    // makes only sense if grouping exists.
+                    if(tableController.getTableColumnByName("Grouping") != null
+                            && tableController.getTable().getItems().size() != 0 ){
+                        initProfilePlot();
+                        // get selected rows
+                        ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+                        HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
+                        profilePlot.createPlot("Profile Plot", "Haplogroup", "Count");
+
+                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+                        String[] selection_haplogroups = cols[0];
+                        String[] selection_groups = cols[1];
+                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups, chartController.getCoreHGs());
+                        int[] numberOfElementsPerCaregory = chartController.getNumberOfElementsPerCategory(selection_groups);
+                        HashMap<String, List<XYChart.Data<String, Number>>> data_all;
+                        data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups, numberOfElementsPerCaregory);
+
+                        // sort list alphabetically
+                        List<String> hg_core_curr = chartController.getHg_core_list();
+                        java.util.Collections.sort(hg_core_curr);
+
+                        HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();
+
+                        for(String key : hg_core_curr){
+                            if(data_all.containsKey(key)) {
+
+                                for(int i = 0; i < selection_groups.length; i++){
+                                    String group = data_all.get(key).get(i).getXValue();
+                                    if(!group_hg.containsKey(group)){
+                                        List<XYChart.Data<String, Number>> hg = new ArrayList<>();
+                                        hg.add(data_all.get(key).get(i));
+                                        group_hg.put(group, hg);
+                                    } else {
+                                        List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
+                                        hg_tmp.addAll(group_hg.get(group));
+                                        hg_tmp.add(data_all.get(key).get(i));
+                                        group_hg.put(group, hg_tmp);
+                                    }
+
+                                       data_all.get(key).get(i).setYValue(chartController.roundValue(data_all.get(key).get(i).getYValue().doubleValue()));
+                                }
+//                                profilePlot.addSeries(data_all.get(key), key);
+
+                            }
+                        }
+
+                        for(String group : group_hg.keySet()){
+                            profilePlot.addSeries(hg_core_curr, group_hg.get(group), group);
+                        }
+
+                        for(XYChart.Series series : profilePlot.getSeriesList())
+                            profilePlot.getPlot().getData().add(series);
+
+                        profilePlot.addListener();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+
          /*
 
                     Plot HG frequency for each group
@@ -239,7 +335,7 @@ public class GraphicsMenu {
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
-        haplo_graphics.getItems().addAll(barchart, sunburstChartItem);
+        haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem);
 
 
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);

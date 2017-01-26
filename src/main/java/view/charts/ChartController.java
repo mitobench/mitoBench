@@ -304,7 +304,7 @@ public class ChartController {
      * @return
      */
 
-    private double roundValue(double val){
+    public double roundValue(double val){
         return  (double)Math.round(val * 100d) / 100d;
 
     }
@@ -480,5 +480,9 @@ public class ChartController {
 
     public String[] getCoreHGs() {
         return coreHGs;
+    }
+
+    public List<String> getHg_core_list() {
+        return hg_core_list;
     }
 }

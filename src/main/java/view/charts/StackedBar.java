@@ -123,7 +123,6 @@ public class StackedBar {
     public void addListener(){
         //now you can get the nodes.
         for (XYChart.Series<String,Number> serie: sbc.getData()){
-            //setupHover(serie);
             for (XYChart.Data<String, Number> item: serie.getData()){
                 Node n = item.getNode();
                 n.setEffect(null);
