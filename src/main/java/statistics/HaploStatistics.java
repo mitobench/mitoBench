@@ -4,13 +4,17 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import view.charts.ChartController;
+import view.charts.ProfilePlot;
 import view.table.TableController;
 import view.tree.TreeHaploController;
 
@@ -33,7 +37,7 @@ public class HaploStatistics {
 
 
     public HaploStatistics(TableController tableController, TreeHaploController treeHaploController){
-        this.tableController  =tableController;
+        this.tableController = tableController;
         chartController = new ChartController(tableController, treeHaploController.getTreeMap());
     }
 
@@ -63,6 +67,7 @@ public class HaploStatistics {
 
     /**
      * This method writes count information to table in GUI.
+     *
      * @param data_all
      * @param scene
      * @return
@@ -141,6 +146,12 @@ public class HaploStatistics {
     }
 
 
+    /**
+     * This method counts all occurrences of one haplogroup in a group.
+     *
+     * @param group
+     * @return
+     */
     private int countAllHGs(int group){
         int count=0;
         for(String key : data_all.keySet()){
@@ -150,9 +161,55 @@ public class HaploStatistics {
     }
 
 
+    /**
+     * This method adds listener to each row in count table.
+     * When cursor enters row, the corresponding line in profile plot is highlighted.
+     *
+     * @param table
+     * @param profilePlot
+     */
+    public void addListener(TableView table, ProfilePlot profilePlot){
+        table.setRowFactory( tv -> {
+            TableRow<ObservableList> row = new TableRow<>();
+            row.setOnMouseEntered(event -> {
+                if (! row.isEmpty()) {
+                    ObservableList rowData = row.getItem();
+                    String group = rowData.get(0).toString();
+                    row.setStyle("-fx-background-color: dodgerblue;");
+
+                    // set line width of corresponding line to 6px
+                    for(XYChart.Series serie : profilePlot.getPlot().getData()){
+                        if(serie.getName().equals(group)){
+                            serie.getNode().setStyle(" -fx-stroke-width: 6px;");
+                        }
+                    }
+
+                }
+            });
+
+            row.setOnMouseExited(event -> {
+                if (! row.isEmpty()) {
+                    row.setStyle("");
+                    ObservableList rowData = row.getItem();
+                    String group = rowData.get(0).toString();
+
+                    for(XYChart.Series serie : profilePlot.getPlot().getData()){
+                        if(serie.getName().equals(group)){
+                            serie.getNode().setStyle(" -fx-stroke-width: 2px;");
+                        }
+                    }
+                }
+            });
+
+
+            return row ;
+        });
+    }
+
     public HashMap<String, List<XYChart.Data<String, Number>>> getData_all() {
         return data_all;
     }
+
     public ChartController getChartController() {
         return chartController;
     }

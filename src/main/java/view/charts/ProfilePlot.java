@@ -1,15 +1,14 @@
 package view.charts;
 
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,23 +19,27 @@ public class ProfilePlot {
 
     CategoryAxis xAxis = new CategoryAxis();
     NumberAxis yAxis = new NumberAxis();
-    LineChart<String,Number> profilePlot =
-            new LineChart<String,Number>(xAxis,yAxis);
+    LineChart<String,Number> profilePlot = new LineChart<String,Number>(xAxis,yAxis);
     List<XYChart.Series> seriesList = new ArrayList<>();
-    private final Glow glow = new Glow(.5);
-    int maxVal=0;
+    int maxVal = 0;
 
 
     public ProfilePlot(){
 
     }
 
+    /**
+     * This method initializes the line chart, sets title and axes labels
+     * and sets values on y axis to integer with tick unit 5.
+     *
+     * @param title
+     * @param lable_xaxis
+     * @param label_yaxis
+     */
     public void createPlot(String title, String lable_xaxis, String label_yaxis){
         xAxis.setLabel(lable_xaxis);
         yAxis.setLabel(label_yaxis);
         yAxis.setAutoRanging(false);
-        //yAxis.setLowerBound(1000);
-        //yAxis.setUpperBound(100);
         yAxis.setTickUnit(5);
         yAxis.setMinorTickVisible(false);
 
@@ -44,13 +47,13 @@ public class ProfilePlot {
 
     }
 
-    public LineChart<String,Number>  getPlot(){
-        return profilePlot;
-    }
-
 
     /**
      * This method add all previously creates series to chart.
+     *
+     * @param hgs
+     * @param data
+     * @param name
      */
     public void addSeries(List<String> hgs, List<XYChart.Data<String, Number>> data, String name){
         XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
@@ -65,6 +68,29 @@ public class ProfilePlot {
 
         this.seriesList.add(series);
     }
+
+
+    /**
+     * This method adds a css file to the profile plot to set the line with to 2px.
+     */
+    public void addListener(){
+        File f = new File("src/main/java/view/charts/css/ProfilePlot.css");
+        profilePlot.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+        profilePlot.setCreateSymbols(false);
+        profilePlot.getStyleClass().add("thick-chart");
+
+    }
+
+
+    /*
+            Getter and Setter
+     */
+
+    public LineChart<String,Number>  getPlot(){
+        return profilePlot;
+    }
+
+
 
     /**
      * This method returns all series as list.
@@ -82,34 +108,5 @@ public class ProfilePlot {
     }
 
 
-    public void addListener(){
-
-        for (XYChart.Series<String,Number> serie: profilePlot.getData()){
-            for (XYChart.Data<String, Number> item: serie.getData()) {
-                Node n = item.getNode();
-                n.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent e) {
-                        ((Node)(e.getSource())).setCursor(Cursor.HAND);
-                    }
-                });
-            }
-        }
-
-    }
-
-
-    private void setOnMouseEventsOnSeries(Node node,
-                                          final LineChart chart, final String label) {
-
-        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent t) {
-                chart.setTitle(label);
-            }
-        });
-
-    }
 
 }

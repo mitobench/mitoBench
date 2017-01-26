@@ -3,12 +3,12 @@ package view.menus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import statistics.HaploStatistics;
 import view.charts.*;
 import view.table.TableController;
 import view.tree.TreeHaploController;
@@ -38,9 +38,13 @@ public class GraphicsMenu {
     private ChartController chartController;
     private TreeHaploController treeController;
     private ProfilePlot profilePlot;
+    private Scene scene;
+    private TabPane statsTabpane;
 
 
-    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage){
+    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage,
+                        Scene scene, TabPane statsTabpane){
+
         menuGraphics = new Menu("Graphics");
         menuGraphics.setId("graphicsMenu");
         this.treeController = treeController;
@@ -51,6 +55,8 @@ public class GraphicsMenu {
         treeView = treeController.getTree().getTree();
         this.stage = stage;
         this.chartController = new ChartController(tableController, treeController.getTreeMap());
+        this.scene = scene;
+        this.statsTabpane = statsTabpane;
         addSubMenus();
     }
 
@@ -104,7 +110,6 @@ public class GraphicsMenu {
         tab.setContent(profilePlot.getPlot());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
-
 
     }
 
@@ -176,7 +181,6 @@ public class GraphicsMenu {
 
                         ColorSchemeStackedBarChart colorScheme = new ColorSchemeStackedBarChart(stage);
                         colorScheme.setNewColors(stackedBar);
-
                     }
 
                 } catch (Exception e) {
@@ -267,8 +271,6 @@ public class GraphicsMenu {
 
                                        data_all.get(key).get(i).setYValue(chartController.roundValue(data_all.get(key).get(i).getYValue().doubleValue()));
                                 }
-//                                profilePlot.addSeries(data_all.get(key), key);
-
                             }
                         }
 
@@ -280,6 +282,19 @@ public class GraphicsMenu {
                             profilePlot.getPlot().getData().add(series);
 
                         profilePlot.addListener();
+
+                        // add count statistics (in table format)
+                        // todo: exclude code in separate file?
+
+                        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController);
+
+                        haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
+                        TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
+                        haploStatistics.addListener(table, profilePlot);
+                        Tab tab = new Tab();
+                        tab.setText("Count statistics");
+                        tab.setContent(table);
+                        statsTabpane.getTabs().add(tab);
 
                     }
 

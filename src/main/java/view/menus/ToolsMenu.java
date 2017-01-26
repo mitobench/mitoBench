@@ -39,7 +39,6 @@ public class ToolsMenu {
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 haploStatistics = new HaploStatistics(tableController, treeHaploController);
-                // open
                 HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue(haploStatistics, statsTabpane, scene);
                 hgStatisticsPopupDialogug.show();
             }
