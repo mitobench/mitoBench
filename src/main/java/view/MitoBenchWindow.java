@@ -68,7 +68,9 @@ public class MitoBenchWindow extends Application{
         // set haplotree - search view
         Pane treepane = new Pane();
 
-        treeController = new TreeHaploController(treepane, tableController);
+        treeController = new TreeHaploController(tableController);
+        treeController.configureSearch(treepane);
+        treeController.setAnimation();
 
         center.setTop(treepane);
         center.setCenter(getCenterPane());

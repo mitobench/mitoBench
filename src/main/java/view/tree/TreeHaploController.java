@@ -59,7 +59,7 @@ public class TreeHaploController {
     private HashMap<String, List<String>> treeMap_leaf_to_root;
     private HashMap<String, List<String>> node_to_children;
 
-    public TreeHaploController(Pane root, TableController tableManager) throws IOException, SAXException, ParserConfigurationException {
+    public TreeHaploController(TableController tableManager) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
 
@@ -71,11 +71,6 @@ public class TreeHaploController {
         searchLbl.setId("treeViewOpenCloseLabel");
         upArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";");
         downArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";");
-
-        configureSearch(root);
-        setAnimation();
-
-
         isExpanded.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> paramObservableValue, Boolean paramT1, Boolean paramT2) {
@@ -101,7 +96,7 @@ public class TreeHaploController {
      * Method to configure the search pane.
      * @param
      */
-    private void configureSearch(Pane root) throws IOException, SAXException, ParserConfigurationException{
+    public void configureSearch(Pane root) throws IOException, SAXException, ParserConfigurationException{
         searchPane = new VBox();
         searchPane.setId("treeviewSearchPane");
         searchPane.setAlignment(Pos.TOP_LEFT);
@@ -272,7 +267,7 @@ public class TreeHaploController {
 
     }
 
-    private void setAnimation(){
+    public void setAnimation(){
 		/* Initial position setting for Top Pane*/
         clipRect = new Rectangle();
         clipRect.setWidth(boxBounds.getWidth());
@@ -325,7 +320,7 @@ public class TreeHaploController {
     /**
      * Method to toggle the search pane visibility.
      */
-    private void togglePaneVisibility(){
+    public void togglePaneVisibility(){
         if(isExpanded.get()){
             isExpanded.set(false);
         }else{
@@ -361,8 +356,6 @@ public class TreeHaploController {
         TreeIterator<String> iterator = new TreeIterator<>(item);
         TreeItem it = item;
         while (iterator.hasNext()) {
-            if(it.getValue().toString().startsWith("L4a"))
-                System.out.print("");
             treeMap.put(it.getValue().toString(), getSubtree(it));
             treeMap_leaf_to_root.put(it.getValue().toString(), getPathToRoot(it));
             node_to_children.put(it.getValue().toString(), it.getChildren());
@@ -425,5 +418,17 @@ public class TreeHaploController {
 
     public HashMap<String, List<String>> getTreeMap_leaf_to_root() {
         return treeMap_leaf_to_root;
+    }
+
+    public boolean isIsExpanded() {
+        return isExpanded.get();
+    }
+
+    public SimpleBooleanProperty isExpandedProperty() {
+        return isExpanded;
+    }
+
+    public void setIsExpanded(boolean isExpanded) {
+        this.isExpanded.set(isExpanded);
     }
 }
