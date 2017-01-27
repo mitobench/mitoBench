@@ -18,21 +18,17 @@ public class TreeHaplo{
     private TreeView<String> tree;
 
     public TreeHaplo(String root){
-
         finalTree = new TreeItem<String> (root);
         finalTree.setExpanded(true);
-
-
-
     }
 
-    public void addStructure() throws IOException, SAXException, ParserConfigurationException {
+    public void addStructure() throws IOException {
 
         PhyloTreeParser p = new PhyloTreeParser();
         finalTree = p.getFinalTree();
-
         tree = new TreeView<String> (finalTree);
         tree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
 
     }
 
