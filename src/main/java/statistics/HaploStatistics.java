@@ -38,7 +38,8 @@ public class HaploStatistics {
 
     public HaploStatistics(TableController tableController, TreeHaploController treeHaploController){
         this.tableController = tableController;
-        chartController = new ChartController(tableController, treeHaploController.getTreeMap());
+        chartController = new ChartController();
+        chartController.init(tableController, treeHaploController.getTreeMap());
     }
 
     /**

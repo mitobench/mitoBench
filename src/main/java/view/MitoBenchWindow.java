@@ -55,7 +55,11 @@ public class MitoBenchWindow extends Application{
         root.prefWidthProperty().bind(scene.widthProperty());
 
         // initialize table
-        tableController = new TableController(scene);
+        tableController = new TableController();
+        //tableController.setScene(scene);
+        tableController.init();
+        tableController.getTable().prefHeightProperty().bind(scene.heightProperty());
+        tableController.getTable().prefWidthProperty().bind(scene.widthProperty());
 
 
         BorderPane center = new BorderPane();

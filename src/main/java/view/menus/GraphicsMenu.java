@@ -54,7 +54,8 @@ public class GraphicsMenu {
         tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
         treeView = treeController.getTree().getTree();
         this.stage = stage;
-        this.chartController = new ChartController(tableController, treeController.getTreeMap());
+        this.chartController = new ChartController();
+        chartController.init(tableController, treeController.getTreeMap());
         this.scene = scene;
         this.statsTabpane = statsTabpane;
         addSubMenus();
@@ -124,9 +125,11 @@ public class GraphicsMenu {
     private void addSubMenus() {
 
         Menu haplo_graphics = new Menu("Haplogroups");
+        haplo_graphics.setId("haplo_graphics");
         Menu barchart = new Menu("Create Barchart...");
+        barchart.setId("barchart");
         Menu grouping_graphics = new Menu("Grouping");
-
+        grouping_graphics.setId("grouping_graphics");
 
         /*
                         Plot HG frequency
@@ -134,6 +137,7 @@ public class GraphicsMenu {
          */
 
         MenuItem plotHGfreq = new MenuItem("Plot haplogroup frequency");
+        plotHGfreq.setId("plotHGfreq_item");
         plotHGfreq.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -160,7 +164,7 @@ public class GraphicsMenu {
          */
 
         MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group (Stacked Barchart)");
-
+        plotHGfreqGroup.setId("plotHGfreqGroup_item");
         plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -198,6 +202,7 @@ public class GraphicsMenu {
          */
 
         MenuItem sunburstChartItem = new MenuItem("Create Sunburst chart...");
+        sunburstChartItem.setId("sunburstChart_item");
         sunburstChartItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -227,6 +232,7 @@ public class GraphicsMenu {
          */
 
         MenuItem profilePlotItem = new MenuItem("Create Profile Plot...");
+        profilePlotItem.setId("profilePlot_item");
         profilePlotItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -314,6 +320,7 @@ public class GraphicsMenu {
          */
 
         MenuItem clearPlotBox = new MenuItem("Clear barcharts");
+        clearPlotBox.setId("clearPlotBox_item");
         clearPlotBox.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -327,6 +334,7 @@ public class GraphicsMenu {
 
 
         MenuItem grouping_barchart = new MenuItem("Grouping bar chart");
+        grouping_barchart.setId("grouping_barchart_item");
         grouping_barchart.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {

@@ -24,53 +24,58 @@ public class StatisticsWriter {
      * @throws IOException
      */
     public void write(String path, HaploStatistics haploStatistics) throws IOException {
-        data_all = haploStatistics.getData_all();
+        if(haploStatistics != null){
 
-        Writer writer = null;
+            data_all = haploStatistics.getData_all();
 
-        List<String> keys = new ArrayList<>();
-        keys.addAll(data_all.keySet());
-        keys.remove("Others");
-        Collections.sort(keys);
-        keys.add("Others");
+            Writer writer = null;
 
-
-        if(!path.endsWith("csv"))
-            path = path + ".csv";
-
-        writer = new BufferedWriter(new FileWriter(new File(path)));
-
-        // write header
-        writer.write("Population , Sum, ");
-        for(int i = 0; i < keys.size(); i++){
-            if(i == keys.size()-1)
-                writer.write(keys.get(i));
-            else
-                writer.write(keys.get(i) + ",");
-        }
-        writer.write("\n");
-
-        // write population HG count information
-        for(int i = 0; i < haploStatistics.getNumber_of_groups() ; i++){
-            int count_all_hgs = countAllHGs(i);
-            for(String key : data_all.keySet()){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                writer.write(data_list.get(i).getXValue() + "," + count_all_hgs + "," );
-                break;
-            }
+            List<String> keys = new ArrayList<>();
+            keys.addAll(data_all.keySet());
+            keys.remove("Others");
+            Collections.sort(keys);
+            keys.add("Others");
 
 
-            for(int k = 0; k < keys.size(); k++){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(keys.get(k));
-                if(k == keys.size()-1)
-                    writer.write(data_list.get(i).getYValue().intValue()+"");
+            if(!path.endsWith("csv"))
+                path = path + ".csv";
+
+            writer = new BufferedWriter(new FileWriter(new File(path)));
+
+            // write header
+            writer.write("Population , Sum, ");
+            for(int i = 0; i < keys.size(); i++){
+                if(i == keys.size()-1)
+                    writer.write(keys.get(i));
                 else
-                    writer.write(data_list.get(i).getYValue().intValue() + ",");
+                    writer.write(keys.get(i) + ",");
             }
-
             writer.write("\n");
+
+            // write population HG count information
+            for(int i = 0; i < haploStatistics.getNumber_of_groups() ; i++){
+                int count_all_hgs = countAllHGs(i);
+                for(String key : data_all.keySet()){
+                    List<XYChart.Data<String, Number>> data_list = data_all.get(key);
+                    writer.write(data_list.get(i).getXValue() + "," + count_all_hgs + "," );
+                    break;
+                }
+
+
+                for(int k = 0; k < keys.size(); k++){
+                    List<XYChart.Data<String, Number>> data_list = data_all.get(keys.get(k));
+                    if(k == keys.size()-1)
+                        writer.write(data_list.get(i).getYValue().intValue()+"");
+                    else
+                        writer.write(data_list.get(i).getYValue().intValue() + ",");
+                }
+
+                writer.write("\n");
             }
             writer.close();
+
+        }
+
     }
 
     /**

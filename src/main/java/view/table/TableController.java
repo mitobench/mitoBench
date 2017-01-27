@@ -35,19 +35,15 @@ public class TableController {
     private HashMap<String, Integer> column_to_index;
     private TableController controller;
     private GroupController groupController;
-    //private MTStorage mtStorage;
-
     private HashMap<String, List<Entry>> table_content;
 
+    public TableController() {
 
+    }
 
-    public TableController(Scene scene) {
-
+    public void init(){
         table = new TableView();
         table.setEditable(false);
-
-        table.prefHeightProperty().bind(scene.heightProperty());
-        table.prefWidthProperty().bind(scene.widthProperty());
 
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -61,7 +57,6 @@ public class TableController {
 
         this.controller = this;
         groupController = new GroupController();
-        //mtStorage = new MTStorage();
 
         table_content = new HashMap<>();
 
@@ -218,7 +213,7 @@ public class TableController {
      * @param newItems
      */
     public void updateView(ObservableList<ObservableList> newItems){
-        copyData();
+        data_copy = copyData();
 
         ObservableList<ObservableList> data_selection = FXCollections.observableArrayList();
         for(ObservableList item : newItems){
@@ -239,12 +234,15 @@ public class TableController {
      * copy view.data to always allow resetting of table
      * to old/initial state
      */
-    public void copyData(){
-        if(data_copy.size()==0){
+    public ObservableList<ObservableList> copyData(){
+        ObservableList<ObservableList> copy = FXCollections.observableArrayList();
+        if(copy.size()==0){
             for(ObservableList item : data){
-                data_copy.add(item);
+                copy.add(item);
             }
         }
+
+        return copy;
     }
 
 
@@ -506,4 +504,7 @@ public class TableController {
     public HashMap<String, List<Entry>> getTable_content() {
         return table_content;
     }
+
+
+
 }

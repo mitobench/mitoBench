@@ -22,7 +22,11 @@ public class ChartController {
 
 
 
-    public ChartController(TableController tableController, HashMap<String, List<String>> treeMap) {
+    public ChartController() {
+
+    }
+
+    public void init(TableController tableController, HashMap<String, List<String>> treeMap){
         this.tableController = tableController;
         this.treeMap = treeMap;
     }

@@ -49,6 +49,29 @@ public class GUITestSteps {
         step("Open Graphics Menu", () -> {
             robot.clickOn("#graphicsMenu");
             verifyThat("#graphicsMenu", isVisible());
+            robot.clickOn("#haplo_graphics");
+            verifyThat("#haplo_graphics", isVisible());
+
+            robot.clickOn("#barchart");
+            verifyThat("#barchart", isVisible());
+            //robot.clickOn("#plotHGfreq_item");
+            //verifyThat("#plotHGfreq_item", isVisible());
+            //robot.clickOn("#plotHGfreqGroup_item");
+            //verifyThat("#plotHGfreqGroup_item", isVisible());
+
+            //robot.clickOn("#sunburstChart_item");
+            //verifyThat("#sunburstChart_item", isVisible());
+            //robot.clickOn("#profilePlot_item");
+            //verifyThat("#profilePlot_item", isVisible());
+
+            robot.clickOn("#grouping_graphics");
+            verifyThat("#grouping_graphics", isVisible());
+            //robot.clickOn("#grouping_barchart_item");
+            //verifyThat("#grouping_barchart_item", isVisible());
+
+            //robot.clickOn("#clearPlotBox_item");
+            //verifyThat("#clearPlotBox_item", isVisible());
+
         });
         step("Open Help Menu", () -> {
             robot.clickOn("#helpMenu");

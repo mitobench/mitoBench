@@ -146,19 +146,6 @@ public class SunburstChartCreator {
             myLegend.clearLegend();
         });
 
-
-//        // add Button to go back when one level ist selected
-//        goBack = new Button("Go back");
-//        goBack.setVisible(false);
-//        goBack.setOnAction(e -> {
-//            // set rest of chart visible
-//            //sunburstView.setOnlySelectedLevelVisibleReturn();
-//            // remove button
-//            goBack.setVisible(false);
-//
-//        });
-//        sunburstBorderPane.setBottom(goBack);
-
         // Zoom level
 
         Slider zoomSlider = new Slider();
@@ -190,13 +177,9 @@ public class SunburstChartCreator {
         slider.setMajorTickUnit(1);
         slider.setMinorTickCount(1);
         slider.setBlockIncrement(1);
-
         slider.valueProperty().addListener(x -> sunburstView.setMaxDeepness((int)slider.getValue()));
 
-
-
         BorderPane.setMargin(toolbar, new Insets(10));
-
 
         Separator separator = new Separator();
         separator.setOrientation(Orientation.VERTICAL);
@@ -204,10 +187,9 @@ public class SunburstChartCreator {
         toolbar.getChildren().addAll(zoomSlider, slider, btnCSShades, btnCSRandom, separator, btnShowLegend, btnHideLegend);
 
         sunburstBorderPane.setTop(toolbar);
-
         sunburstBorderPane.setCenter(sunburstView);
-        BorderPane.setAlignment(sunburstView, Pos.CENTER);
         sunburstBorderPane.setRight(myLegend);
+        BorderPane.setAlignment(sunburstView, Pos.CENTER);
         BorderPane.setMargin(myLegend, new Insets(20));
         BorderPane.setAlignment(myLegend, Pos.CENTER_LEFT);
 
