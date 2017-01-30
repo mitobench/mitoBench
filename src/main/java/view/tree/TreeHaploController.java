@@ -130,10 +130,13 @@ public class TreeHaploController {
         applyBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent paramT) {
-                if(searchFieldListHaplogroup.getText().equals(""))
-                    applyFilterFunction();
-                else
-                    applyFilterFunctionList();
+                if (tableManager.getTable().getItems().size() > 0){
+                    if(searchFieldListHaplogroup.getText().equals(""))
+                        applyFilterFunction();
+                    else
+                        applyFilterFunctionList();
+                }
+
 
             }
         });
@@ -422,10 +425,6 @@ public class TreeHaploController {
 
     public boolean isIsExpanded() {
         return isExpanded.get();
-    }
-
-    public SimpleBooleanProperty isExpandedProperty() {
-        return isExpanded;
     }
 
     public void setIsExpanded(boolean isExpanded) {

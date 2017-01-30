@@ -41,6 +41,7 @@ public class FileMenu {
 
     public FileMenu(TableController tableController, String version, Stage stage, ToolsMenu toolsMenu) throws IOException {
         this.menuFile = new Menu("File");
+        menuFile.setId("fileMenu");
         this.tableController = tableController;
         MITOBENCH_VERSION = version;
         this.stage = stage;
@@ -69,102 +70,14 @@ public class FileMenu {
 //                fileDialogue.showChooser();
 //                File f = fileDialogue.getSelectedFile().toFile();
 
-                File f;
+                File f;// = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
 
                 ImportDialogue importDialogue = new ImportDialogue();
                 importDialogue.start(new Stage());
                 f = importDialogue.getSelectedFile();
 
-                if (f != null) {
-                    String absolutePath = f.getAbsolutePath();
+                openProjectFile(f);
 
-
-                    //Input is FastA
-                    if (absolutePath.endsWith(".fasta") | absolutePath.endsWith("*.fas") | absolutePath.endsWith("*.fa")) {
-
-
-                        MultiFastAInput multiFastAInput = null;
-                        try {
-                            try {
-                                multiFastAInput = new MultiFastAInput(f.getPath());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } catch (FastAException e) {
-                            FastAErrorDialogue fastAErrorDialogue = new FastAErrorDialogue(e);
-                        }
-                        HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
-                        tableController.updateTable(input_multifasta);
-
-
-                    }
-
-                    //Input is HSD Format
-                    if (absolutePath.endsWith(".hsd")) {
-                        try {
-                            HSDInput hsdInputParser = null;
-                            try {
-                                hsdInputParser = new HSDInput(f.getPath());
-                            } catch (HSDException e) {
-                                HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
-                            }
-                            HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
-                            tableController.updateTable(data_map);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    //Input is Generic Format
-
-                    if (absolutePath.endsWith(".tsv")) {
-                        try {
-                            GenericInputParser genericInputParser = new GenericInputParser(f.getPath());
-                            HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                            tableController.updateTable(data_map);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    //Input is in ARP Format
-
-                    if(absolutePath.endsWith(".arp")){
-                        ARPReader arpreader = null;
-                        try {
-                            arpreader = new ARPReader(f.getPath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ARPException e) {
-                            ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
-                        }
-                        HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
-                        tableController.updateTable(data_map);
-                        tableController.loadGroups();
-                    }
-
-                    if(absolutePath.endsWith(".mitoproj")){
-
-                        ProjectReader projectReader = new ProjectReader();
-                        try {
-                            projectReader.read(f);
-                            projectReader.loadData(tableController);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (ProjectException e) {
-                            e.printStackTrace();
-                        }
-
-
-                    }
-                } else {
-                    try {
-                        //Didndonuffin
-                    }catch (Exception e ) {
-                        System.out.println(e.getMessage());
-                    }
-                }
             }
         });
 
@@ -218,9 +131,103 @@ public class FileMenu {
                 System.exit(0);
             }
         });
-        menuFile.setId("fileMenu");
 
         menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exportCurrStats , new SeparatorMenuItem(), exit);
+    }
+
+    public void openProjectFile(File f){
+
+        if (f != null) {
+            String absolutePath = f.getAbsolutePath();
+
+
+            //Input is FastA
+            if (absolutePath.endsWith(".fasta") | absolutePath.endsWith("*.fas") | absolutePath.endsWith("*.fa")) {
+
+
+                MultiFastAInput multiFastAInput = null;
+                try {
+                    try {
+                        multiFastAInput = new MultiFastAInput(f.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (FastAException e) {
+                    FastAErrorDialogue fastAErrorDialogue = new FastAErrorDialogue(e);
+                }
+                HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
+                tableController.updateTable(input_multifasta);
+
+
+            }
+
+            //Input is HSD Format
+            if (absolutePath.endsWith(".hsd")) {
+                try {
+                    HSDInput hsdInputParser = null;
+                    try {
+                        hsdInputParser = new HSDInput(f.getPath());
+                    } catch (HSDException e) {
+                        HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
+                    }
+                    HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
+                    tableController.updateTable(data_map);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Input is Generic Format
+
+            if (absolutePath.endsWith(".tsv")) {
+                try {
+                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath());
+                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
+                    tableController.updateTable(data_map);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Input is in ARP Format
+
+            if(absolutePath.endsWith(".arp")){
+                ARPReader arpreader = null;
+                try {
+                    arpreader = new ARPReader(f.getPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ARPException e) {
+                    ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
+                }
+                HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
+                tableController.updateTable(data_map);
+                tableController.loadGroups();
+            }
+
+            if(absolutePath.endsWith(".mitoproj")){
+
+                ProjectReader projectReader = new ProjectReader();
+                try {
+                    projectReader.read(f);
+                    projectReader.loadData(tableController);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ProjectException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        } else {
+            try {
+                //Didndonuffin
+            }catch (Exception e ) {
+                System.out.println(e.getMessage());
+            }
+        }
+
     }
 
 

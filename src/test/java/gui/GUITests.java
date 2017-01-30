@@ -59,12 +59,10 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Test
     public void testWalkThrough() {
         GUITestSteps steps = new GUITestSteps(this);
-        //steps.part6FillTable(tableController);
         steps.part1BasicStuff();
         steps.part2MenuInteraction();
         steps.part3AboutDialogueTests();
         steps.part4TreeViewTests();
-
 
     }
 

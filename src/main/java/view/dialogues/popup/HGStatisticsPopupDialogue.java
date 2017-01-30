@@ -23,13 +23,16 @@ public class HGStatisticsPopupDialogue {
     private VBox dialogVbox;
     private Stage dialog;
 
-    public HGStatisticsPopupDialogue(HaploStatistics haploStatistics, TabPane statsTabpane, Scene scene){
+    public HGStatisticsPopupDialogue(){
         dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(new Stage());
         dialogVbox = new VBox(20);
-        addComponents(haploStatistics, statsTabpane, scene);
 
+    }
+
+    public void init(HaploStatistics haploStatistics, TabPane statsTabpane, Scene scene){
+        addComponents(haploStatistics, statsTabpane, scene);
     }
 
     /**

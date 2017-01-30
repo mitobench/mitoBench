@@ -5,6 +5,7 @@ import io.dialogues.Import.ImportDialogue;
 import io.reader.ProjectReader;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.media.Track;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -108,9 +109,24 @@ public class GUITestSteps {
             robot.clickOn("#treeViewOpenCloseLabel");
             //Now our dropdown menu should appear!
             verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+            robot.clickOn("#treeView-inner-tree");
             robot.clickOn("#treeviewApplyButton");
             robot.clickOn("#treeViewOpenCloseLabel");
+
+
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+            robot.push(KeyCode.ENTER);
+            robot.clickOn("#treeViewOpenCloseLabel");
+
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeviewApplyButton");
+            robot.clickOn("#treeViewOpenCloseLabel");
+
         });
     }
 
@@ -120,28 +136,35 @@ public class GUITestSteps {
     }
 
 
-    public void part6FillTable(TableController tableController){
+    public void part6FillTable(){
         step("Open Project file", () -> {
             robot.clickOn("#fileMenu");
+            verifyThat("#fileMenu", isVisible());
             robot.clickOn("#fileMenu_importData");
+            verifyThat("#fileMenu_importData", isVisible());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
-        String path = "./project.mitoproj";
-        ProjectReader projectReader = new ProjectReader();
-        System.out.println(getResource(path));
-        try {
-            projectReader.read(new File(getResource(path).getFile()));
-            projectReader.loadData(tableController);
-            System.out.println(projectReader.getDatatable().keySet());
-            System.out.println("Read file to table");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ProjectException e) {
-            e.printStackTrace();
-        }
+//        String path = "./project.mitoproj";
+//        ProjectReader projectReader = new ProjectReader();
+//        System.out.println(getResource(path));
+//        try {
+//            projectReader.read(new File(getResource(path).getFile()));
+//            projectReader.loadData(tableController);
+//            System.out.println(projectReader.getDatatable().keySet());
+//            System.out.println("Read file to table");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ProjectException e) {
+//            e.printStackTrace();
+//        }
 
         robot.clickOn("#tableView");
-        assertTrue(tableController.getData().size() > 0);
+        //assertTrue(tableController.getTable().getItems().size() > 0);
 
 
     }
