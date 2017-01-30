@@ -1,7 +1,11 @@
+package IO;
+
 import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
 import io.datastructure.Entry;
+import io.datastructure.arp.ArpProfile;
+import io.datastructure.arp.ArpStructure;
 import io.datastructure.generic.GenericInputData;
 import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
@@ -219,6 +223,8 @@ public class IOTests {
 
         assertEquals(entry.getType().getTypeInformation(), new CategoricInputType("String").getTypeInformation());
         assertEquals(entry.getIdentifier(), "MTSequence");
+
+
     }
 
     @Test(expected = ARPException.class)

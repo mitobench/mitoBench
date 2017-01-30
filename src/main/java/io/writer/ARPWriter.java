@@ -73,7 +73,7 @@ public class ARPWriter implements IOutputData {
     }
 
 
-    private ArrayList<FastaEntry> getSequenceData() {
+    public ArrayList<FastaEntry> getSequenceData() {
         ArrayList<FastaEntry> list = new ArrayList<>();
         //TableColumn tbclm_seq = tableController.getTableColumnByName("MTSequence");
         TableColumn tbclm_id = tableController.getTableColumnByName("ID");
@@ -111,4 +111,9 @@ public class ARPWriter implements IOutputData {
         return hmp;
     }
 
+
+    public HashMap returnRegions(){
+        getRegions();
+        return regions;
+    }
 }
