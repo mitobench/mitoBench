@@ -43,6 +43,7 @@ public class TableController {
 
     public void init(){
         table = new TableView();
+        table.setId("tableView");
         table.setEditable(false);
 
         // allow multiple selection of rows in tableView

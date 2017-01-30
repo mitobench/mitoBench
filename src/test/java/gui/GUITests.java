@@ -1,7 +1,7 @@
 package gui;
 
+import io.FileHandling.FileDialogueFactory;
 import io.dialogues.Import.ImportDialogue;
-import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,10 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
 import view.MitoBenchWindow;
+import view.table.TableController;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,8 +31,9 @@ import static org.testfx.api.FxToolkit.setupApplication;
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class GUITests extends FxRobot implements GUITestValidator {
 
-    @Mock
-    private ImportDialogue importDialogue = mock(ImportDialogue.class);
+    private String file_project;
+    private TableController tableController;
+
 
 
     @BeforeClass
@@ -51,7 +51,10 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-       // setUpFileDialogue(importDialogue, getResource(GUITestFiles.project_file).toFile());
+        tableController = new TableController();
+        tableController.init();
+
+        //setUpFileDialogue(project.toFile());
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -59,11 +62,12 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Test
     public void testWalkThrough() {
         GUITestSteps steps = new GUITestSteps(this);
+
         steps.part1BasicStuff();
         steps.part2MenuInteraction();
         steps.part3AboutDialogueTests();
         steps.part4TreeViewTests();
-        steps.part5TestImportDialogue();
+        steps.part6FillTable(tableController);
 
     }
 
@@ -72,11 +76,10 @@ public class GUITests extends FxRobot implements GUITestValidator {
      * Testing file dialogues
      */
 
-     private void setUpFileDialogue(final ImportDialogue importDialogue, final File file){
-         when(importDialogue.start(any(Stage.class))).thenReturn(file);
-         when(importDialogue.isFileSelected()).thenReturn(true);
-         when(importDialogue.getSelectedFile()).thenReturn(file);
-
+     private void setUpFileDialogue(final File file1, final Path... files){
+         ImportDialogue dialogue = mock(ImportDialogue.class);
+         when(dialogue.isFileSelected()).thenReturn(true);
+         when(dialogue.getSelectedFile()).thenReturn(file1);
      }
 
 

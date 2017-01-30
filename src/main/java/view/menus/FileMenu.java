@@ -4,10 +4,14 @@ import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
 import io.Exceptions.ProjectException;
+import io.FileHandling.FileDialogue;
+import io.FileHandling.FileDialogueFactoryImpl;
+import io.FileHandling.FileDialogueType;
+import io.FileHandling.FileFilters;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
+import io.dialogues.Import.ImportDialogue;
 import io.reader.*;
-import io.writer.ProjectWriter;
 import io.writer.StatisticsWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,11 +20,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
-import io.dialogues.Import.ImportDialogue;
 import view.table.TableController;
 import io.dialogues.Export.ExportDialogue;
 
@@ -28,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiFunction;
 
 /**
  * Created by neukamm on 16.11.16.
@@ -40,6 +41,7 @@ public class FileMenu {
     private String MITOBENCH_VERSION;
     private Stage stage;
     private ToolsMenu toolsMenu;
+    private boolean isTestMode;
 
     public FileMenu(TableController tableController, String version, Stage stage, ToolsMenu toolsMenu) throws IOException {
         this.menuFile = new Menu("File");
@@ -47,6 +49,7 @@ public class FileMenu {
         MITOBENCH_VERSION = version;
         this.stage = stage;
         this.toolsMenu = toolsMenu;
+        isTestMode = false;
         addSubMenus();
 
     }
@@ -65,9 +68,16 @@ public class FileMenu {
         importFile.setId("fileMenu_importData");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
+//                FileDialogueFactoryImpl fileDialogueFactory = new FileDialogueFactoryImpl();
+//                FileDialogue fileDialogue = fileDialogueFactory.create(FileDialogueType.NEW_SESSION, stage);
+//                fileDialogue.showChooser();
+//                File f = fileDialogue.getSelectedFile().toFile();
+
+                File f;
+
                 ImportDialogue importDialogue = new ImportDialogue();
                 importDialogue.start(new Stage());
-                File f = importDialogue.getSelectedFile();
+                f = importDialogue.getSelectedFile();
 
                 if (f != null) {
                     String absolutePath = f.getAbsolutePath();
@@ -189,9 +199,9 @@ public class FileMenu {
                 FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
                 SaveAsDialogue sad = new SaveAsDialogue(fex);
                 sad.start(new Stage());
-                StatisticsWriter statisticsWriter = new StatisticsWriter();
+                StatisticsWriter statisticsWriter = new StatisticsWriter(toolsMenu.getHaploStatistics());
                 try {
-                    statisticsWriter.write(sad.getOutFile(), toolsMenu.getHaploStatistics());
+                    statisticsWriter.writeData(sad.getOutFile());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -222,5 +232,12 @@ public class FileMenu {
         return menuFile;
     }
 
+    public boolean isTestMode() {
+        return isTestMode;
+    }
+
+    public void setTestMode(boolean testMode) {
+        isTestMode = testMode;
+    }
 
 }

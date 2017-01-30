@@ -43,6 +43,7 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.testfx:testfx-core:4.0.+"
+    compile group: 'org.easymock', name: 'easymock', version: '3.1'
     compile 'org.mockito:mockito-core:2.4.0'
     compile "org.testfx:testfx-junit:4.0.+"
     compile 'org.jfxtras:openjfx-monocle:1.8.0_20'

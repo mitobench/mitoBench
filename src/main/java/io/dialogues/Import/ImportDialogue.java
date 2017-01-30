@@ -22,8 +22,6 @@ public class ImportDialogue  {
     public File start(Stage stage) {
         this.stage = stage;
         show();
-        //selectedFile = fileChooser.showOpenDialog(new Stage());
-        //File file = new File("test_files/project.mitoproj");
         if (selectedFile == null) {
             try {
                 //Dont do anything here...

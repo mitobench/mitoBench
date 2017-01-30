@@ -1,5 +1,6 @@
 package io.writer;
 
+import io.IOutputData;
 import javafx.scene.chart.XYChart;
 import statistics.HaploStatistics;
 
@@ -12,25 +13,28 @@ import java.util.List;
 /**
  * Created by neukamm on 17.01.17.
  */
-public class StatisticsWriter {
+public class StatisticsWriter implements IOutputData{
 
     private HashMap<String, List<XYChart.Data<String, Number>>> data_all;
+    private HaploStatistics haploStatistics;
+    private List<String> keys;
 
-    public StatisticsWriter(){}
+    public StatisticsWriter(HaploStatistics haploStatistics){
+        this.haploStatistics = haploStatistics;
+    }
 
     /**
      * This method writes the statistics to csv file.
-     * @param haploStatistics
      * @throws IOException
      */
-    public void write(String path, HaploStatistics haploStatistics) throws IOException {
+    @Override
+    public void writeData(String path) throws IOException {
+
+
         if(haploStatistics != null){
+            data_all = this.haploStatistics.getData_all();
 
-            data_all = haploStatistics.getData_all();
-
-            Writer writer = null;
-
-            List<String> keys = new ArrayList<>();
+            keys = new ArrayList<>();
             keys.addAll(data_all.keySet());
             keys.remove("Others");
             Collections.sort(keys);
@@ -40,54 +44,64 @@ public class StatisticsWriter {
             if(!path.endsWith("csv"))
                 path = path + ".csv";
 
-            writer = new BufferedWriter(new FileWriter(new File(path)));
-
-            // write header
-            writer.write("Population , Sum, ");
-            for(int i = 0; i < keys.size(); i++){
-                if(i == keys.size()-1)
-                    writer.write(keys.get(i));
-                else
-                    writer.write(keys.get(i) + ",");
-            }
-            writer.write("\n");
-
-            // write population HG count information
-            for(int i = 0; i < haploStatistics.getNumber_of_groups() ; i++){
-                int count_all_hgs = countAllHGs(i);
-                for(String key : data_all.keySet()){
-                    List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                    writer.write(data_list.get(i).getXValue() + "," + count_all_hgs + "," );
-                    break;
-                }
+            write(new FileOutputStream(new File(path).getAbsoluteFile()));
 
 
-                for(int k = 0; k < keys.size(); k++){
-                    List<XYChart.Data<String, Number>> data_list = data_all.get(keys.get(k));
-                    if(k == keys.size()-1)
-                        writer.write(data_list.get(i).getYValue().intValue()+"");
-                    else
-                        writer.write(data_list.get(i).getYValue().intValue() + ",");
-                }
-
-                writer.write("\n");
-            }
-            writer.close();
 
         }
 
     }
 
-    /**
-     * This method count all haplogroups below one group.
-     * @param group
-     * @return
-     */
-    private int countAllHGs(int group){
-        int count=0;
-        for(String key : data_all.keySet()){
-            count += data_all.get(key).get(group).getYValue().intValue();
+    public void write(OutputStream outputStream) throws IOException {
+        OutputStreamWriter writerOutputStream = new OutputStreamWriter(outputStream, "UTF-8");
+        // write header
+        writerOutputStream.write("Population , Sum, ");
+        for(int i = 0; i < keys.size(); i++){
+            if(i == keys.size()-1){
+                writerOutputStream.write(keys.get(i));
+            }
+            else {
+                String tmp = keys.get(i) + ",";
+                writerOutputStream.write(tmp);
+            }
         }
-        return count;
+        writerOutputStream.write("\n");
+
+        // write population HG count information
+        for(int i = 0; i < this.haploStatistics.getNumber_of_groups() ; i++){
+            int count_all_hgs = haploStatistics.countAllHGs(i);
+            for(String key : data_all.keySet()){
+                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
+                String tmp = data_list.get(i).getXValue() + "," + count_all_hgs + ",";
+                writerOutputStream.write(tmp);
+                break;
+            }
+
+
+            for(int k = 0; k < keys.size(); k++){
+                List<XYChart.Data<String, Number>> data_list = data_all.get(keys.get(k));
+                if(k == keys.size()-1){
+                    int val = data_list.get(i).getYValue().intValue();
+                    writerOutputStream.write(val+"");
+                }
+                else{
+                    int val = data_list.get(i).getYValue().intValue();
+                    writerOutputStream.write(val+"");
+                    writerOutputStream.write(",");
+                }
+
+            }
+
+            writerOutputStream.write("\n");
+        }
+        writerOutputStream.close();
+
+
+    }
+
+
+    @Override
+    public void setGroups(String groupID) {
+        //Do nothing here, not required for this format at all
     }
 }

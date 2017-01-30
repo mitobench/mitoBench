@@ -1,21 +1,36 @@
 package gui;
 
+import io.Exceptions.ProjectException;
+import io.dialogues.Import.ImportDialogue;
+import io.reader.ProjectReader;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
+import javafx.scene.media.Track;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
+import view.table.TableController;
 
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Path;
+
+import static com.google.common.io.Resources.getResource;
+import static junit.framework.TestCase.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.hasText;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 /**
  * Created by peltzer on 21/12/2016.
  */
 public class GUITestSteps {
+
     private static final Logger LOG = LoggerFactory.getLogger(GUITestSteps.class);
-
-
     private final FxRobot robot;
-
     private int stepno;
 
     public GUITestSteps(final FxRobot robot) {
@@ -107,6 +122,32 @@ public class GUITestSteps {
 
     }
 
+
+    public void part6FillTable(TableController tableController){
+        //ImportDialogue dialogue = mock(ImportDialogue.class);
+        //when(dialogue.isFileSelected()).thenReturn(true);
+        //when(dialogue.getSelectedFile()).thenReturn(path.toFile());
+
+        String path = "./project.mitoproj";
+        ProjectReader projectReader = new ProjectReader();
+        System.out.println(getResource(path));
+        try {
+            projectReader.read(new File(getResource(path).getFile()));
+            //projectReader.read(new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj"));
+            projectReader.loadData(tableController);
+            System.out.println(projectReader.getDatatable().keySet());
+            System.out.println("Read file to table");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ProjectException e) {
+            e.printStackTrace();
+        }
+
+        robot.clickOn("#tableView");
+        assertTrue(tableController.getData().size() > 0);
+
+
+    }
 
     private void step(final String step, final Runnable runnable) {
         ++stepno;

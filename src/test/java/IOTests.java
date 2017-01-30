@@ -33,6 +33,7 @@ public class IOTests {
 
     private void setUp(String path) {
         URL url = getClass().getResource(path);
+        System.out.println(url);
         try {
             is = url.openStream();
         } catch (IOException e) {

@@ -91,4 +91,7 @@ public class ProjectReader {
 
     }
 
+    public HashMap<String, List<Entry>> getDatatable() {
+        return datatable;
+    }
 }

@@ -153,7 +153,7 @@ public class HaploStatistics {
      * @param group
      * @return
      */
-    private int countAllHGs(int group){
+    public int countAllHGs(int group){
         int count=0;
         for(String key : data_all.keySet()){
             count += data_all.get(key).get(group).getYValue().intValue();
@@ -221,5 +221,21 @@ public class HaploStatistics {
 
     public int getNumber_of_groups() {
         return number_of_groups;
+    }
+
+    public void setTableController(TableController tableController) {
+        this.tableController = tableController;
+    }
+
+    public void setChartController(ChartController chartController) {
+        this.chartController = chartController;
+    }
+
+    public void setData_all(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
+        this.data_all = data_all;
+    }
+
+    public void setNumber_of_groups(int number_of_groups) {
+        this.number_of_groups = number_of_groups;
     }
 }

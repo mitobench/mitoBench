@@ -1,6 +1,5 @@
 package gui.GUI_functionality;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import io.PhyloTreeParser;
 import javafx.application.Application;
 import javafx.scene.control.TreeItem;
@@ -17,7 +16,6 @@ import view.tree.TreeHaploController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +63,7 @@ public class TreeTest {
     @Test
     public void treeTest() throws IOException {
 
-        System.out.println("Test if tree ist initialized correct.");
+        System.out.println("Test if tree is initialized correct.");
         assertEquals(new TreeItem<String>("RSRS").getValue(), treeHaplo.getRootItem().getValue());
 
         System.out.println("Test if treeView was initialized correct.");
