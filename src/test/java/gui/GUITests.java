@@ -1,12 +1,10 @@
 package gui;
 
-import io.FileHandling.FileDialogueFactory;
 import io.dialogues.Import.ImportDialogue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
 import view.MitoBenchWindow;
@@ -54,7 +52,6 @@ public class GUITests extends FxRobot implements GUITestValidator {
         tableController = new TableController();
         tableController.init();
 
-        //setUpFileDialogue(project.toFile());
         setupApplication(MitoBenchWindow.class);
 
     }

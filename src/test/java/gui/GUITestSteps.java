@@ -115,25 +115,22 @@ public class GUITestSteps {
     }
 
     public void part5TestImportDialogue() {
-        step("Open Project file", () -> {
-            robot.clickOn("#fileMenu");
-            robot.clickOn("#fileMenu_importData");
-        });
+
 
     }
 
 
     public void part6FillTable(TableController tableController){
-        //ImportDialogue dialogue = mock(ImportDialogue.class);
-        //when(dialogue.isFileSelected()).thenReturn(true);
-        //when(dialogue.getSelectedFile()).thenReturn(path.toFile());
+        step("Open Project file", () -> {
+            robot.clickOn("#fileMenu");
+            robot.clickOn("#fileMenu_importData");
+        });
 
         String path = "./project.mitoproj";
         ProjectReader projectReader = new ProjectReader();
         System.out.println(getResource(path));
         try {
             projectReader.read(new File(getResource(path).getFile()));
-            //projectReader.read(new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj"));
             projectReader.loadData(tableController);
             System.out.println(projectReader.getDatatable().keySet());
             System.out.println("Read file to table");
