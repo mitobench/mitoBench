@@ -26,9 +26,7 @@ import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by neukamm on 16.11.16.
@@ -78,17 +76,16 @@ public class FileMenu {
                 File f;
 
                 // = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
-                IImportDialogue importDialogue = importDialogueFactory.create(stage, false);
-                importDialogue.start();
-                f = importDialogue.getSelectedFile();
-
-
-                   // f = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
-
-
-
+                IImportDialogue importDialogue;
+                if(isJUnitTest()){
+                    f = new File("test_files\\project.mitoproj");
+                    importDialogue = importDialogueFactory.create(stage, true);
+                } else {
+                    importDialogue = importDialogueFactory.create(stage, false);
+                    importDialogue.start();
+                    f = importDialogue.getSelectedFile();
+                }
                 openProjectFile(f);
-
             }
         });
 
@@ -248,12 +245,23 @@ public class FileMenu {
     }
 
 
+    /**
+     * This method tests based on a user defined System.property whether java is in
+     * testing mode.
+     * 
+     * @return
+     */
     public static boolean isJUnitTest() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        List<StackTraceElement> list = Arrays.asList(stackTrace);
-        for (StackTraceElement element : list) {
-            if (element.getClassName().startsWith("org.junit.")) {
-                return true;
+        Properties props = System.getProperties();
+        Enumeration e = props.propertyNames();
+
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            if(key.startsWith("javafx.running")){
+                if(props.getProperty("javafx.running").equals("true")){
+                    return true;
+                }
+
             }
         }
         return false;
