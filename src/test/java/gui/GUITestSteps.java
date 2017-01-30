@@ -1,28 +1,16 @@
 package gui;
 
-import io.Exceptions.ProjectException;
 import io.dialogues.Import.ImportDialogue;
-import io.reader.ProjectReader;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
-import javafx.scene.media.Track;
-import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+import org.junit.Test;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
-import view.table.TableController;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.file.Path;
-
-import static com.google.common.io.Resources.getResource;
-import static junit.framework.TestCase.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.testfx.api.FxAssert.verifyThat;
-import static org.testfx.matcher.base.NodeMatchers.hasText;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 /**
@@ -33,6 +21,7 @@ public class GUITestSteps {
     private static final Logger LOG = LoggerFactory.getLogger(GUITestSteps.class);
     private final FxRobot robot;
     private int stepno;
+
 
     public GUITestSteps(final FxRobot robot) {
         this.robot = robot;
@@ -138,15 +127,17 @@ public class GUITestSteps {
 
     public void part6FillTable(){
         step("Open Project file", () -> {
-            robot.clickOn("#fileMenu");
-            verifyThat("#fileMenu", isVisible());
-            robot.clickOn("#fileMenu_importData");
-            verifyThat("#fileMenu_importData", isVisible());
+            robot.clickOn("#fileMenu").clickOn("Import Data");
+
+            //verifyThat("#fileMenu", isVisible());
+            //robot.clickOn("#importData");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            //verifyThat("#importData", isVisible());
+
         });
 
 //        String path = "./project.mitoproj";
@@ -168,6 +159,13 @@ public class GUITestSteps {
 
 
     }
+
+    public void part7ExportStatistics(){
+        step("Export Statistics", () -> {
+            robot.clickOn("#fileMenu").clickOn("#exportCurrentStats");
+        });
+    }
+
 
     private void step(final String step, final Runnable runnable) {
         ++stepno;

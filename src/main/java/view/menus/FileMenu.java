@@ -7,6 +7,7 @@ import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.ImportDialogue;
+import io.dialogues.Import.ImportDialogueFactoryImpl;
 import io.reader.*;
 import io.writer.StatisticsWriter;
 import javafx.event.ActionEvent;
@@ -62,7 +63,7 @@ public class FileMenu {
          */
 
         MenuItem importFile = new MenuItem("Import Data");
-        importFile.setId("fileMenu_importData");
+        importFile.setId("importData");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 //                FileDialogueFactoryImpl fileDialogueFactory = new FileDialogueFactoryImpl();
@@ -71,8 +72,8 @@ public class FileMenu {
 //                File f = fileDialogue.getSelectedFile().toFile();
 
                 File f;// = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
-
-                ImportDialogue importDialogue = new ImportDialogue();
+                ImportDialogueFactoryImpl importDialogueFactory  = new ImportDialogueFactoryImpl();
+                ImportDialogue importDialogue = importDialogueFactory.create();
                 importDialogue.start(new Stage());
                 f = importDialogue.getSelectedFile();
 
@@ -102,6 +103,7 @@ public class FileMenu {
 
 
         MenuItem exportCurrStats = new MenuItem("Export statistics (current view)");
+        exportCurrStats.setId("exportCurrentStats");
         exportCurrStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 

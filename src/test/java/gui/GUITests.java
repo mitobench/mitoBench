@@ -1,10 +1,13 @@
 package gui;
 
 import io.dialogues.Import.ImportDialogue;
+import io.dialogues.Import.ImportDialogueFactory;
+import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
 import view.MitoBenchWindow;
@@ -32,6 +35,12 @@ public class GUITests extends FxRobot implements GUITestValidator {
     private String file_project;
     private TableController tableController;
 
+    @Mock
+    private ImportDialogue importDialogue;
+
+    @Mock
+    private ImportDialogueFactory importDialogueFactory;
+
 
 
     @BeforeClass
@@ -49,9 +58,9 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-        tableController = new TableController();
-        tableController.init();
-
+        //tableController = new TableController();
+        //tableController.init();
+        setUpFileDialogue(new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj"));
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -63,6 +72,8 @@ public class GUITests extends FxRobot implements GUITestValidator {
         steps.part2MenuInteraction();
         steps.part3AboutDialogueTests();
         steps.part4TreeViewTests();
+        steps.part6FillTable();
+        steps.part7ExportStatistics();
 
     }
 
@@ -72,9 +83,10 @@ public class GUITests extends FxRobot implements GUITestValidator {
      */
 
      private void setUpFileDialogue(final File file1, final Path... files){
-         ImportDialogue dialogue = mock(ImportDialogue.class);
-         when(dialogue.isFileSelected()).thenReturn(true);
-         when(dialogue.getSelectedFile()).thenReturn(file1);
+         importDialogue = mock(ImportDialogue.class);
+         when(importDialogueFactory.create()).thenReturn(importDialogue);
+         when(importDialogue.isFileSelected()).thenReturn(true);
+         when(importDialogue.getSelectedFile()).thenReturn(file1);
      }
 
 
