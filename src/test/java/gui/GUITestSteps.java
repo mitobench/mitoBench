@@ -1,11 +1,6 @@
 package gui;
 
-import io.dialogues.Import.ImportDialogue;
-import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
-import javafx.stage.FileChooser;
-import org.junit.Test;
-import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
@@ -28,6 +23,7 @@ public class GUITestSteps {
     }
 
     public void part1BasicStuff() {
+
         step("Open application", () -> {
             verifyThat("#mainBorderPane", isVisible());
         });
@@ -162,7 +158,8 @@ public class GUITestSteps {
 
     public void part7ExportStatistics(){
         step("Export Statistics", () -> {
-            robot.clickOn("#fileMenu").clickOn("#exportCurrentStats");
+            robot.clickOn("#fileMenu");
+            robot.clickOn("#exportCurrentStats");
         });
     }
 

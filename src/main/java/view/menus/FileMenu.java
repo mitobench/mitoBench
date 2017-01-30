@@ -6,7 +6,8 @@ import io.Exceptions.HSDException;
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
-import io.dialogues.Import.ImportDialogue;
+import io.dialogues.Import.IImportDialogue;
+import io.dialogues.Import.IImportDialogueFactory;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
 import io.reader.*;
 import io.writer.StatisticsWriter;
@@ -25,6 +26,7 @@ import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class FileMenu {
     private Stage stage;
     private ToolsMenu toolsMenu;
     private boolean isTestMode;
+    private IImportDialogueFactory importDialogueFactory;
 
     public FileMenu(TableController tableController, String version, Stage stage, ToolsMenu toolsMenu) throws IOException {
         this.menuFile = new Menu("File");
@@ -48,6 +51,7 @@ public class FileMenu {
         this.stage = stage;
         this.toolsMenu = toolsMenu;
         isTestMode = false;
+        importDialogueFactory = new ImportDialogueFactoryImpl();
         addSubMenus();
 
     }
@@ -71,11 +75,17 @@ public class FileMenu {
 //                fileDialogue.showChooser();
 //                File f = fileDialogue.getSelectedFile().toFile();
 
-                File f;// = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
-                ImportDialogueFactoryImpl importDialogueFactory  = new ImportDialogueFactoryImpl();
-                ImportDialogue importDialogue = importDialogueFactory.create();
-                importDialogue.start(new Stage());
+                File f;
+
+                // = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
+                IImportDialogue importDialogue = importDialogueFactory.create(stage, false);
+                importDialogue.start();
                 f = importDialogue.getSelectedFile();
+
+
+                   // f = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
+
+
 
                 openProjectFile(f);
 
@@ -103,7 +113,7 @@ public class FileMenu {
 
 
         MenuItem exportCurrStats = new MenuItem("Export statistics (current view)");
-        exportCurrStats.setId("exportCurrentStats");
+        exportCurrStats.setId("#exportCurrentStats");
         exportCurrStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
@@ -237,12 +247,16 @@ public class FileMenu {
         return menuFile;
     }
 
-    public boolean isTestMode() {
-        return isTestMode;
-    }
 
-    public void setTestMode(boolean testMode) {
-        isTestMode = testMode;
+    public static boolean isJUnitTest() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        List<StackTraceElement> list = Arrays.asList(stackTrace);
+        for (StackTraceElement element : list) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

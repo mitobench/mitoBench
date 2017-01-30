@@ -1,5 +1,7 @@
 package view;
 
+import io.dialogues.Import.IImportDialogueFactory;
+import io.dialogues.Import.ImportDialogueFactoryImpl;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -39,7 +41,6 @@ public class MitoBenchWindow extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-
 
         root = new BorderPane();
         root.setId("mainBorderPane");

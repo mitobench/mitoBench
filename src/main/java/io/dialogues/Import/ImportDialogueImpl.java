@@ -13,27 +13,36 @@ import java.io.File;
 import java.util.function.BiFunction;
 
 
-public class ImportDialogue  {
+public class ImportDialogueImpl implements IImportDialogue {
 
     private FileChooser fileChooser;
     private File selectedFile;
     private Stage stage;
+    private boolean isTestMode;
 
-    public File start(Stage stage) {
+    public ImportDialogueImpl(Stage stage, boolean isTestMode){
         this.stage = stage;
-        show();
-        if (selectedFile == null) {
-            try {
-                //Dont do anything here...
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
+        setTestMode(isTestMode);
+    }
 
-        } else {
-            return selectedFile;
+    @Override
+    public void start() {
+        if(!isTestMode()){
+            show();
         }
 
-        return null;
+//        if (selectedFile == null) {
+//            try {
+//                //Dont do anything here...
+//            } catch (Exception ex) {
+//                System.out.println(ex.getMessage());
+//            }
+//
+//        } else {
+//            return selectedFile;
+//        }
+//
+//        return null;
     }
 
     private static void configureFileChooser(final FileChooser fileChooser) {
@@ -48,15 +57,26 @@ public class ImportDialogue  {
         );
     }
 
+    @Override
     public boolean isFileSelected() {
         return selectedFile != null;
     }
 
+    @Override
     public File getSelectedFile() {
         return selectedFile;
     }
 
-    public void show(){
+    @Override
+    public boolean isTestMode() {
+        return isTestMode;
+    }
+
+    public void setTestMode(boolean testMode) {
+        isTestMode = testMode;
+    }
+
+    private void show(){
         fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         BiFunction<FileChooser, Window, File> openFunction = FileChooser::showOpenDialog;

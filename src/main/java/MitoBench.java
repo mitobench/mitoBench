@@ -4,7 +4,7 @@ import view.MitoBenchWindow;
 /**
  * Created by neukamm on 03.11.16.
  */
-public class MitoBenchRunner {
+public class MitoBench {
 
 
     /**
@@ -18,7 +18,6 @@ public class MitoBenchRunner {
             public void run() {javafx.application.Application.launch(MitoBenchWindow.class);
             }
         }.start();
-
 
     }
 }

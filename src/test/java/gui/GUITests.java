@@ -1,7 +1,9 @@
 package gui;
 
-import io.dialogues.Import.ImportDialogue;
-import io.dialogues.Import.ImportDialogueFactory;
+import io.dialogues.Import.IImportDialogueFactory;
+import io.dialogues.Import.IImportDialogue;
+import io.dialogues.Import.ImportDialogueFactoryImpl;
+import io.dialogues.Import.ImportDialogueImpl;
 import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
 import view.MitoBenchWindow;
-import view.table.TableController;
 
 import java.io.*;
 import java.net.URL;
@@ -32,14 +33,11 @@ import static org.testfx.api.FxToolkit.setupApplication;
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class GUITests extends FxRobot implements GUITestValidator {
 
-    private String file_project;
-    private TableController tableController;
+    @Mock
+    private IImportDialogue importDialogue;
 
     @Mock
-    private ImportDialogue importDialogue;
-
-    @Mock
-    private ImportDialogueFactory importDialogueFactory;
+    private IImportDialogueFactory importDialogueFactory;
 
 
 
@@ -60,7 +58,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
 
         //tableController = new TableController();
         //tableController.init();
-        setUpFileDialogue(new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj"));
+        setUpFileDialogue(importDialogue, new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj"));
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -68,12 +66,12 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Test
     public void testWalkThrough() {
         GUITestSteps steps = new GUITestSteps(this);
-        steps.part1BasicStuff();
-        steps.part2MenuInteraction();
-        steps.part3AboutDialogueTests();
-        steps.part4TreeViewTests();
+        //steps.part1BasicStuff();
+        //steps.part2MenuInteraction();
+        //steps.part3AboutDialogueTests();
+        //steps.part4TreeViewTests();
         steps.part6FillTable();
-        steps.part7ExportStatistics();
+        //steps.part7ExportStatistics();
 
     }
 
@@ -82,9 +80,8 @@ public class GUITests extends FxRobot implements GUITestValidator {
      * Testing file dialogues
      */
 
-     private void setUpFileDialogue(final File file1, final Path... files){
-         importDialogue = mock(ImportDialogue.class);
-         when(importDialogueFactory.create()).thenReturn(importDialogue);
+     private void setUpFileDialogue(final IImportDialogue dialogue, final File file1){
+         when(importDialogueFactory.create(any(Stage.class), eq(true))).thenReturn(dialogue);
          when(importDialogue.isFileSelected()).thenReturn(true);
          when(importDialogue.getSelectedFile()).thenReturn(file1);
      }
