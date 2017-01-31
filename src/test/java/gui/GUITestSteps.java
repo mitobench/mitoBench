@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,17 +142,34 @@ public class GUITestSteps {
     }
 
 
-    public void part6FillTable(File file){
+    public void part6FillTable(String file){
         step("Open Project file", () -> {
             robot.clickOn("#fileMenu").clickOn("Import Data");
+            verifyThat("#import_dialogue_alt", isVisible());
+            robot.clickOn("#textfield_path").write(file);
+            robot.clickOn("#btn_open");
         });
     }
 
-    public void part7ExportStatistics(){
-        step("Export Statistics", () -> {
-            robot.clickOn("#fileMenu");
-            robot.clickOn("#exportCurrentStats");
+    public void partStatistics(){
+
+        step("Calculate Statistics", () -> {
+            robot.clickOn("#menu_statistics");
+            robot.clickOn("#toolsMenu_stats_hg");
+            verifyThat("#statistics_popup", isVisible());
+
+            // click on default HG selection
+            robot.clickOn("#checkbox_hg_default_selection");
+            robot.clickOn("#button_ok_statistics");
+            verifyThat("#tab_statistics", isVisible());
+
         });
+
+//
+//        step("Export Statistics", () -> {
+//            robot.clickOn("#fileMenu");
+//            robot.clickOn("#exportCurrentStats");
+//        });
     }
 
 

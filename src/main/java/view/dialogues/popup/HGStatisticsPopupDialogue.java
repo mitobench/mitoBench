@@ -28,6 +28,7 @@ public class HGStatisticsPopupDialogue {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(new Stage());
         dialogVbox = new VBox(20);
+        dialogVbox.setId("statistics_popup");
 
     }
 
@@ -43,8 +44,10 @@ public class HGStatisticsPopupDialogue {
         TextField textField = new TextField();
         Label label = new Label("Please enter comma separated list of haplogroups \naccording to which the haplogroups should be grouped:");
         Button okBtn = new Button("OK");
+        okBtn.setId("button_ok_statistics");
         Label default_list = new Label("or use the default list:");
         CheckBox default_list_checkbox = new CheckBox("Use default list");
+        default_list_checkbox.setId("checkbox_hg_default_selection");
         default_list_checkbox.setSelected(false);
         Tooltip tp = new Tooltip("Default list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
         default_list_checkbox.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -78,6 +81,7 @@ public class HGStatisticsPopupDialogue {
 
                     TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
                     Tab tab = new Tab();
+                    tab.setId("tab_statistics");
                     tab.setText("Count statistics");
                     tab.setContent(table);
                     statsTabPane.getTabs().add(tab);

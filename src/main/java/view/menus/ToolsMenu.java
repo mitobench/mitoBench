@@ -28,6 +28,7 @@ public class ToolsMenu {
                      Scene scene) throws IOException {
 
         menuTools = new Menu("Statistics");
+        menuTools.setId("menu_statistics");
         this.tableController = tableController;
         this.treeHaploController = treeHaploController;
         addSubMenus(statsTabpane, scene);

@@ -8,6 +8,7 @@ import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
+import io.dialogues.Import.ImportDialogueAlternative;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
 import io.reader.*;
 import io.writer.StatisticsWriter;
@@ -42,6 +43,7 @@ public class FileMenu {
     private ToolsMenu toolsMenu;
     private boolean isTestMode;
     private IImportDialogueFactory importDialogueFactory;
+    private FileMenu fm;
 
     public FileMenu(TableController tableController, String version, Stage stage, ToolsMenu toolsMenu) throws IOException {
         this.menuFile = new Menu("File");
@@ -52,6 +54,7 @@ public class FileMenu {
         this.toolsMenu = toolsMenu;
         isTestMode = false;
         importDialogueFactory = new ImportDialogueFactoryImpl();
+        fm = this;
         addSubMenus();
 
     }
@@ -74,19 +77,17 @@ public class FileMenu {
                 IImportDialogue importDialogue;
 
                 if(isJUnitTest()){
-                    try {
+
                         // todo: do not hard code this!!!!!
-                        f = Paths.get(getClass().getResource("/" + "./project.mitoproj").toURI()).toFile();
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    importDialogue = importDialogueFactory.create(stage, true);
+                        ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fm);
+                        f = importDialogueAlternative.getFile();
+
                 } else {
                     importDialogue = importDialogueFactory.create(stage, false);
                     importDialogue.start();
-                    f = importDialogue.getSelectedFile();
+                    openProjectFile(importDialogue.getSelectedFile());
                 }
-                openProjectFile(f);
+
             }
         });
 

@@ -33,7 +33,7 @@ import static org.testfx.api.FxToolkit.setupApplication;
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class GUITests extends FxRobot implements GUITestValidator {
 
-   private File project;
+   private Path project;
 
 
 
@@ -55,7 +55,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
 
 
         String project_file_string = "./project.mitoproj";
-        project = getResource(project_file_string).toFile();
+        project = getResource(project_file_string);
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -67,9 +67,9 @@ public class GUITests extends FxRobot implements GUITestValidator {
         steps.part1BasicStuff();
         steps.part2MenuInteraction();
         steps.part4TreeViewTests();
-        steps.part6FillTable(project);
+        steps.part6FillTable(project.toString());
         steps.part5CreatePlots();
-        //steps.part7ExportStatistics();
+        steps.partStatistics();
 
     }
 
