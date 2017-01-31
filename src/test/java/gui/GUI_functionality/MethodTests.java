@@ -1,15 +1,11 @@
 package gui.GUI_functionality;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TreeView;
+import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import view.charts.ChartController;
 import view.table.TableController;
 
-import javax.swing.text.TabableView;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +22,8 @@ public class MethodTests {
     private ChartController chartController;
     private TableController tableController;
 
-    private void setUp() throws ParserConfigurationException, SAXException, IOException {
+    @Before
+    public void setUp() throws ParserConfigurationException, SAXException, IOException {
         HashMap<String, List<String>> treeMap = new HashMap<>();
 
         tableController = new TableController();
@@ -37,7 +34,7 @@ public class MethodTests {
 
 
     @Test
-    public void chartController() throws IOException, SAXException, ParserConfigurationException {
+    public void chartControllerTests() throws IOException, SAXException, ParserConfigurationException {
         setUp();
 
         // test method "roundValue()"

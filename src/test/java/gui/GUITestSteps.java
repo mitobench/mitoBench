@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.scene.input.KeyCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
@@ -84,25 +85,25 @@ public class GUITestSteps {
             robot.clickOn("#treeviewApplyButton");
             robot.clickOn("#treeViewOpenCloseLabel");
 
-//
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
-//            robot.push(KeyCode.ENTER);
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//            robot.clickOn("#treeviewApplyButton");
-//            robot.clickOn("#treeViewOpenCloseLabel");
+
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+            robot.push(KeyCode.ENTER);
+            robot.clickOn("#treeViewOpenCloseLabel");
+
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeviewApplyButton");
+            robot.clickOn("#treeViewOpenCloseLabel");
 
         });
     }
 
     public void part5CreatePlots(){
-        step("Open Project file", () -> {
+        step("Plot HG frequency", () -> {
             robot.clickOn("#graphicsMenu");
             verifyThat("#graphicsMenu", isVisible());
             robot.clickOn("#haplo_graphics");
@@ -112,29 +113,48 @@ public class GUITestSteps {
             verifyThat("#barchart", isVisible());
             robot.clickOn("#plotHGfreq_item");
             verifyThat("#tab_haplo_barchart", isVisible());
+        });
+
+
+        step("Plot Stacked bar chart", () -> {
 
             robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#barchart").clickOn("#plotHGfreqGroup_item");
             verifyThat("#tab_stacked_bar_chart", isVisible());
+        });
+        step("Plot Sunburstchart", () -> {
+
 
             robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#sunburstChart_item");
             verifyThat("#tab_sunburst", isVisible());
             robot.moveTo("#borderpane_sunburst");
+        });
+        step("Plot Grouped barchart", () -> {
 
             robot.clickOn("#graphicsMenu").clickOn("#grouping_graphics");
             verifyThat("#grouping_graphics", isVisible());
             robot.clickOn("#grouping_barchart_item");
             verifyThat("#tab_group_barchart", isVisible());
 
-            robot.clickOn("#graphicsMenu");
-            robot.clickOn("#haplo_graphics");
-            //robot.clickOn("#profilePlotItem");
-            //verifyThat("#tab_profilePlot", isVisible());
+        });
 
 
+        step("Plot profile plot", () -> {
+
+            robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#pplot");
+            verifyThat("#tab_profilePlot", isVisible());
+
+        });
+
+
+
+        step("Clear plots", () -> {
+
             robot.clickOn("#graphicsMenu");
-            //robot.clickOn("#clear_plots");
+            robot.clickOn("#clear_plots");
             //verifyThat("#clearPlotBox_item", isVisible());
         });
+
+
     }
 
 

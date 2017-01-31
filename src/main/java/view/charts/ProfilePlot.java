@@ -1,12 +1,20 @@
 package view.charts;
 
+import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
+import statistics.HaploStatistics;
+import view.table.TableController;
+import view.tree.TreeHaploController;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,19 +29,7 @@ public class ProfilePlot {
     int maxVal = 0;
 
 
-    public ProfilePlot(){
-
-    }
-
-    /**
-     * This method initializes the line chart, sets title and axes labels
-     * and sets values on y axis to integer with tick unit 5.
-     *
-     * @param title
-     * @param lable_xaxis
-     * @param label_yaxis
-     */
-    public void createPlot(String title, String lable_xaxis, String label_yaxis){
+    public ProfilePlot(String title, String lable_xaxis, String label_yaxis){
         xAxis.setLabel(lable_xaxis);
         yAxis.setLabel(label_yaxis);
         yAxis.setAutoRanging(false);
@@ -41,9 +37,68 @@ public class ProfilePlot {
         yAxis.setMinorTickVisible(false);
 
         profilePlot.setTitle(title);
-
     }
 
+
+
+    public void create(TableController tableController, ChartController chartController, TreeHaploController treeController,
+                       TabPane statsTabpane, Scene scene){
+
+        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+        String[] selection_haplogroups = cols[0];
+        String[] selection_groups = cols[1];
+        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups, chartController.getCoreHGs());
+        int[] numberOfElementsPerCaregory = chartController.getNumberOfElementsPerCategory(selection_groups);
+        HashMap<String, List<XYChart.Data<String, Number>>> data_all;
+        data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups, numberOfElementsPerCaregory);
+
+        // sort list alphabetically
+        List<String> hg_core_curr = chartController.getHg_core_list();
+        java.util.Collections.sort(hg_core_curr);
+
+        HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();
+
+        for(String key : hg_core_curr){
+            if(data_all.containsKey(key)) {
+
+                for(int i = 0; i < selection_groups.length; i++){
+                    String group = data_all.get(key).get(i).getXValue();
+                    if(!group_hg.containsKey(group)){
+                        List<XYChart.Data<String, Number>> hg = new ArrayList<>();
+                        hg.add(data_all.get(key).get(i));
+                        group_hg.put(group, hg);
+                    } else {
+                        List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
+                        hg_tmp.addAll(group_hg.get(group));
+                        hg_tmp.add(data_all.get(key).get(i));
+                        group_hg.put(group, hg_tmp);
+                    }
+
+                    data_all.get(key).get(i).setYValue(chartController.roundValue(data_all.get(key).get(i).getYValue().doubleValue()));
+                }
+            }
+        }
+
+        for(String group : group_hg.keySet()){
+            addSeries(hg_core_curr, group_hg.get(group), group);
+        }
+
+        for(XYChart.Series series : seriesList)
+            profilePlot.getData().add(series);
+
+        addListener();
+
+        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController);
+
+        haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
+        TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
+        haploStatistics.addListener(table, this);
+        Tab tab = new Tab();
+        tab.setId("tab_table_stats");
+        tab.setText("Count statistics");
+        tab.setContent(table);
+        statsTabpane.getTabs().add(tab);
+    }
 
     /**
      * This method add all previously creates series to chart.

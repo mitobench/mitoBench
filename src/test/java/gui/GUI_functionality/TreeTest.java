@@ -32,21 +32,6 @@ public class TreeTest {
     private TreeHaplo treeHaplo;
     private TreeHaploController treeController;
 
-    @BeforeClass
-    public static void setUpClass() throws InterruptedException {
-        // Initialise Java FX
-
-        System.out.printf("About to launch FX App\n");
-        Thread t = new Thread("JavaFX Init Thread") {
-            public void run() {
-                Application.launch(MitoBenchWindow.class, new String[0]);
-            }
-        };
-        t.setDaemon(true);
-        t.start();
-        System.out.printf("FX App thread started\n");
-        Thread.sleep(500);
-    }
 
     @Before
     public void setUp() throws IOException, ParserConfigurationException, SAXException {
@@ -85,11 +70,6 @@ public class TreeTest {
         HashMap<String, List<String>> treeMap = treeController.getTreeMap_leaf_to_root();
         List<String> pathH = Arrays.asList("L0", "RSRS");
         assertEquals(pathH, treeMap.get("L0d"));
-
-
-
-
-
 
     }
 

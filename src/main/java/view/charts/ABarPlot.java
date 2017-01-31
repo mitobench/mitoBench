@@ -69,7 +69,7 @@ public abstract class ABarPlot {
 
 
     /**
-     * This method removes all data to generate a clean barplot.
+     * This method removes all data.
      */
     public void clearData(){
 

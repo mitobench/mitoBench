@@ -1,14 +1,18 @@
 package gui;
 
 
+import gui.GUI_functionality.MethodTests;
+import gui.GUI_functionality.TreeTest;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
+import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
@@ -27,6 +31,7 @@ import static org.testfx.api.FxToolkit.setupApplication;
 public class GUITests extends FxRobot implements GUITestValidator {
 
     private Path project;
+    private GUITestFiles testFiles;
 
 
 
@@ -46,24 +51,39 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-        String project_file_string = "./project.mitoproj";
-        project = getResource(project_file_string);
+        testFiles = new GUITestFiles();
         setupApplication(MitoBenchWindow.class);
 
     }
 
     @Test
-    public void testWalkThrough(){
+    public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
         steps.part3AboutDialogueTests();
         steps.part1BasicStuff();
         steps.part2MenuInteraction();
         steps.part4TreeViewTests();
-        steps.part6FillTable(project.toString());
+        steps.part6FillTable(getResource(testFiles.getProject_file()).toString());
         steps.part5CreatePlots();
         steps.partStatistics();
 
+    }
+
+    @Test
+    public void treeTests() throws IOException, ParserConfigurationException, SAXException {
+
+        TreeTest treeTest = new TreeTest();
+        treeTest.setUp();
+        treeTest.treeTest();
+
+    }
+
+    @Test
+    public void methodTests() throws IOException, SAXException, ParserConfigurationException {
+        MethodTests methodTests = new MethodTests();
+        methodTests.setUp();
+        methodTests.chartControllerTests();
     }
 
 
@@ -85,7 +105,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
 
     }
 
-    private Path getResource(final String file) throws Exception {
+    private Path getResource(String file) throws Exception {
         URL url = getClass().getResource("/" + file);
 
         if (url == null) {
