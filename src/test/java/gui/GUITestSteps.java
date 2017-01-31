@@ -1,12 +1,8 @@
 package gui;
 
-import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
-
-import java.io.File;
 
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
@@ -88,19 +84,19 @@ public class GUITestSteps {
             robot.clickOn("#treeviewApplyButton");
             robot.clickOn("#treeViewOpenCloseLabel");
 
-
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
-            robot.push(KeyCode.ENTER);
-            robot.clickOn("#treeViewOpenCloseLabel");
-
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeviewApplyButton");
-            robot.clickOn("#treeViewOpenCloseLabel");
+//
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+//            robot.push(KeyCode.ENTER);
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//            robot.clickOn("#treeviewApplyButton");
+//            robot.clickOn("#treeViewOpenCloseLabel");
 
         });
     }

@@ -1,26 +1,19 @@
 package gui;
 
-import io.dialogues.Import.IImportDialogueFactory;
-import io.dialogues.Import.IImportDialogue;
-import io.dialogues.Import.ImportDialogueFactoryImpl;
-import io.dialogues.Import.ImportDialogueImpl;
-import javafx.stage.Stage;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
 import view.MitoBenchWindow;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.mockito.Mockito.*;
 import static org.testfx.api.FxToolkit.registerPrimaryStage;
 import static org.testfx.api.FxToolkit.setupApplication;
 
@@ -33,7 +26,7 @@ import static org.testfx.api.FxToolkit.setupApplication;
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class GUITests extends FxRobot implements GUITestValidator {
 
-   private Path project;
+    private Path project;
 
 
 
@@ -53,7 +46,6 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-
         String project_file_string = "./project.mitoproj";
         project = getResource(project_file_string);
         setupApplication(MitoBenchWindow.class);
@@ -61,8 +53,9 @@ public class GUITests extends FxRobot implements GUITestValidator {
     }
 
     @Test
-    public void testWalkThrough() {
+    public void testWalkThrough(){
         GUITestSteps steps = new GUITestSteps(this);
+
         steps.part3AboutDialogueTests();
         steps.part1BasicStuff();
         steps.part2MenuInteraction();

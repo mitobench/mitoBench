@@ -78,9 +78,8 @@ public class FileMenu {
 
                 if(isJUnitTest()){
 
-                        // todo: do not hard code this!!!!!
                         ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fm);
-                        f = importDialogueAlternative.getFile();
+                        importDialogueAlternative.getFile();
 
                 } else {
                     importDialogue = importDialogueFactory.create(stage, false);
