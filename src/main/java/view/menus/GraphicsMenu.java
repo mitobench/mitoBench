@@ -65,6 +65,7 @@ public class GraphicsMenu {
     public void initHaploBarchart(){
         this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", tabPane, stage);
         Tab tab = new Tab();
+        tab.setId("tab_haplo_barchart");
         tab.setText("Bar Chart haplogroups");
         tab.setContent(barPlotHaplo.getBarChart());
         tabPane.getTabs().add(tab);
@@ -75,6 +76,7 @@ public class GraphicsMenu {
     public void initGroupBarChart(){
         barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane, stage);
         Tab tab = new Tab();
+        tab.setId("tab_group_barchart");
         tab.setText("Bar Chart Grouping");
         tab.setContent(barChartGrouping.getBarChart());
         tabPane.getTabs().add(tab);
@@ -85,6 +87,7 @@ public class GraphicsMenu {
     public void initStackedBarchart(){
         this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, this);
         Tab tab = new Tab();
+        tab.setId("tab_stacked_bar_chart");
         tab.setText("Bar Chart per group");
         tab.setContent(stackedBar.getSbc());
         tabPane.getTabs().add(tab);
@@ -95,6 +98,7 @@ public class GraphicsMenu {
     private void initSunburst(){
         sunburstChart = new SunburstChartCreator(new BorderPane(), stage, tabPane);
         Tab tab = new Tab();
+        tab.setId("tab_sunburst");
         tab.setText("Sunburst Chart");
         tab.setContent(sunburstChart.getBorderPane());
         tabPane.getTabs().add(tab);
@@ -107,6 +111,7 @@ public class GraphicsMenu {
     private void initProfilePlot(){
         profilePlot = new ProfilePlot();
         Tab tab = new Tab();
+        tab.setId("tab_profilePlot");
         tab.setText("Profile Plot");
         tab.setContent(profilePlot.getPlot());
         tabPane.getTabs().add(tab);
@@ -232,7 +237,7 @@ public class GraphicsMenu {
          */
 
         MenuItem profilePlotItem = new MenuItem("Create Profile Plot...");
-        profilePlotItem.setId("profilePlot_item");
+        profilePlotItem.setId("profilePlotItem");
         profilePlotItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -319,8 +324,8 @@ public class GraphicsMenu {
 
          */
 
-        MenuItem clearPlotBox = new MenuItem("Clear barcharts");
-        clearPlotBox.setId("clearPlotBox_item");
+        MenuItem clearPlotBox = new MenuItem("Clear Charts");
+        clearPlotBox.setId("clear_plots");
         clearPlotBox.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {

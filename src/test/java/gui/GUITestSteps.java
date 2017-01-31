@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.api.FxRobot;
 
+import java.io.File;
+
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
@@ -48,32 +50,20 @@ public class GUITestSteps {
             verifyThat("#tableMenu", isVisible());
         });
         step("Open Graphics Menu", () -> {
-            robot.clickOn("#graphicsMenu");
-            verifyThat("#graphicsMenu", isVisible());
-            robot.clickOn("#haplo_graphics");
-            verifyThat("#haplo_graphics", isVisible());
-
-            robot.clickOn("#barchart");
-            verifyThat("#barchart", isVisible());
-            //robot.clickOn("#plotHGfreq_item");
-            //verifyThat("#plotHGfreq_item", isVisible());
-            //robot.clickOn("#plotHGfreqGroup_item");
-            //verifyThat("#plotHGfreqGroup_item", isVisible());
-
-            //robot.clickOn("#sunburstChart_item");
-            //verifyThat("#sunburstChart_item", isVisible());
-            //robot.clickOn("#profilePlot_item");
-            //verifyThat("#profilePlot_item", isVisible());
-
-            robot.clickOn("#grouping_graphics");
-            verifyThat("#grouping_graphics", isVisible());
-            //robot.clickOn("#grouping_barchart_item");
-            //verifyThat("#grouping_barchart_item", isVisible());
-
-            //robot.clickOn("#clearPlotBox_item");
-            //verifyThat("#clearPlotBox_item", isVisible());
-
+            step("Open application", () -> {
+                verifyThat("#mainBorderPane", isVisible());
+            });
+            step("Test Table is visible", () -> {
+                verifyThat("#mainEntryTable", isVisible());
+            });
+            step("TreeView Button exists", () -> {
+                verifyThat("#treeViewOpenCloseLabel", isVisible());
+            });
+            step("MenuBar exists", () -> {
+                verifyThat("#menuBar", isVisible());
+            });
         });
+
         step("Open Help Menu", () -> {
             robot.clickOn("#helpMenu");
             verifyThat("#helpMenu", isVisible());
@@ -82,8 +72,7 @@ public class GUITestSteps {
 
     public void part3AboutDialogueTests() {
         step("Open About Dialogue", () -> {
-            robot.clickOn("#helpMenu");
-            robot.clickOn("#aboutMenuItem");
+            robot.clickOn("#helpMenu").clickOn("#aboutMenuItem");
             verifyThat("#aboutDialogue", isVisible());
             robot.clickOn("#aboutDialogue" + "button");
         });
@@ -115,45 +104,47 @@ public class GUITestSteps {
         });
     }
 
-    public void part5TestImportDialogue() {
+    public void part5CreatePlots(){
+        step("Open Project file", () -> {
+            robot.clickOn("#graphicsMenu");
+            verifyThat("#graphicsMenu", isVisible());
+            robot.clickOn("#haplo_graphics");
+            verifyThat("#haplo_graphics", isVisible());
+
+            robot.clickOn("#barchart");
+            verifyThat("#barchart", isVisible());
+            robot.clickOn("#plotHGfreq_item");
+            verifyThat("#tab_haplo_barchart", isVisible());
+
+            robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#barchart").clickOn("#plotHGfreqGroup_item");
+            verifyThat("#tab_stacked_bar_chart", isVisible());
+
+            robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#sunburstChart_item");
+            verifyThat("#tab_sunburst", isVisible());
+            robot.moveTo("#borderpane_sunburst");
+
+            robot.clickOn("#graphicsMenu").clickOn("#grouping_graphics");
+            verifyThat("#grouping_graphics", isVisible());
+            robot.clickOn("#grouping_barchart_item");
+            verifyThat("#tab_group_barchart", isVisible());
+
+            robot.clickOn("#graphicsMenu");
+            robot.clickOn("#haplo_graphics");
+            //robot.clickOn("#profilePlotItem");
+            //verifyThat("#tab_profilePlot", isVisible());
 
 
+            robot.clickOn("#graphicsMenu");
+            //robot.clickOn("#clear_plots");
+            //verifyThat("#clearPlotBox_item", isVisible());
+        });
     }
 
 
-    public void part6FillTable(){
+    public void part6FillTable(File file){
         step("Open Project file", () -> {
             robot.clickOn("#fileMenu").clickOn("Import Data");
-
-            //verifyThat("#fileMenu", isVisible());
-            //robot.clickOn("#importData");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            //verifyThat("#importData", isVisible());
-
         });
-
-//        String path = "./project.mitoproj";
-//        ProjectReader projectReader = new ProjectReader();
-//        System.out.println(getResource(path));
-//        try {
-//            projectReader.read(new File(getResource(path).getFile()));
-//            projectReader.loadData(tableController);
-//            System.out.println(projectReader.getDatatable().keySet());
-//            System.out.println("Read file to table");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ProjectException e) {
-//            e.printStackTrace();
-//        }
-
-        robot.clickOn("#tableView");
-        //assertTrue(tableController.getTable().getItems().size() > 0);
-
-
     }
 
     public void part7ExportStatistics(){

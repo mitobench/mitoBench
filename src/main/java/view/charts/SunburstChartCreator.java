@@ -50,6 +50,7 @@ public class SunburstChartCreator {
         this.stage = stage;
         this.tabPane = tabPane;
         this.sunburstBorderPane = borderPane;
+        this.getBorderPane().setId("borderpane_sunburst");
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
         File f = new File("src/main/java/view/charts/css/sunburstview.css");

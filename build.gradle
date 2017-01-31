@@ -43,7 +43,6 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.testfx:testfx-core:4.0.+"
-    compile group: 'org.easymock', name: 'easymock', version: '3.1'
     compile 'org.mockito:mockito-core:2.4.0'
     compile "org.testfx:testfx-junit:4.0.+"
     compile 'org.jfxtras:openjfx-monocle:1.8.0_20'
@@ -67,7 +66,7 @@ test {
 jar {
     manifest {
         attributes("Implementation-Title": "MitoBench",
-                "Implementation-Version": version, "main-Class": "MitoBenchRunner")
+                "Implementation-Version": version, "main-Class": "MitoBench")
     }
     doFirst {
         from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }

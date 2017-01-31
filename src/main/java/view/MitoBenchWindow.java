@@ -44,12 +44,14 @@ public class MitoBenchWindow extends Application{
 
         root = new BorderPane();
         root.setId("mainBorderPane");
-        scene = new Scene(root, 1200, 600);
+        scene = new Scene(root);
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Mito Bench");
         this.primaryStage.setScene(scene);
         this.primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
+        primaryStage.toFront();
 
         // bind width and height to scene to enable resizing
         root.prefHeightProperty().bind(scene.heightProperty());

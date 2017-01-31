@@ -26,6 +26,8 @@ import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -68,17 +70,16 @@ public class FileMenu {
         importFile.setId("importData");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-//                FileDialogueFactoryImpl fileDialogueFactory = new FileDialogueFactoryImpl();
-//                FileDialogue fileDialogue = fileDialogueFactory.create(FileDialogueType.NEW_SESSION, stage);
-//                fileDialogue.showChooser();
-//                File f = fileDialogue.getSelectedFile().toFile();
-
-                File f;
-
-                // = new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj");
+                File f = null;
                 IImportDialogue importDialogue;
+
                 if(isJUnitTest()){
-                    f = new File("test_files\\project.mitoproj");
+                    try {
+                        // todo: do not hard code this!!!!!
+                        f = Paths.get(getClass().getResource("/" + "./project.mitoproj").toURI()).toFile();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
                     importDialogue = importDialogueFactory.create(stage, true);
                 } else {
                     importDialogue = importDialogueFactory.create(stage, false);
@@ -109,7 +110,7 @@ public class FileMenu {
         });
 
 
-        MenuItem exportCurrStats = new MenuItem("Export statistics (current view)");
+        MenuItem exportCurrStats = new MenuItem("Export statistics");
         exportCurrStats.setId("#exportCurrentStats");
         exportCurrStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {

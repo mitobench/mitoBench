@@ -33,11 +33,7 @@ import static org.testfx.api.FxToolkit.setupApplication;
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class GUITests extends FxRobot implements GUITestValidator {
 
-    @Mock
-    private IImportDialogue importDialogue;
-
-    @Mock
-    private IImportDialogueFactory importDialogueFactory;
+   private File project;
 
 
 
@@ -57,9 +53,9 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-        //tableController = new TableController();
-        //tableController.init();
-        setUpFileDialogue(importDialogue, new File("/home/neukamm/GitWorkspace/MitoBench/test_files/project.mitoproj"));
+
+        String project_file_string = "./project.mitoproj";
+        project = getResource(project_file_string).toFile();
         setupApplication(MitoBenchWindow.class);
 
     }
@@ -67,25 +63,16 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Test
     public void testWalkThrough() {
         GUITestSteps steps = new GUITestSteps(this);
-        //steps.part1BasicStuff();
-        //steps.part2MenuInteraction();
-        //steps.part3AboutDialogueTests();
-        //steps.part4TreeViewTests();
-        steps.part6FillTable();
+        steps.part3AboutDialogueTests();
+        steps.part1BasicStuff();
+        steps.part2MenuInteraction();
+        steps.part4TreeViewTests();
+        steps.part6FillTable(project);
+        steps.part5CreatePlots();
         //steps.part7ExportStatistics();
 
     }
 
-
-    /**
-     * Testing file dialogues
-     */
-
-     private void setUpFileDialogue(final IImportDialogue dialogue, final File file1){
-         when(importDialogueFactory.create(any(Stage.class), eq(true))).thenReturn(dialogue);
-         when(importDialogue.isFileSelected()).thenReturn(true);
-         when(importDialogue.getSelectedFile()).thenReturn(file1);
-     }
 
 
     /**
@@ -105,17 +92,6 @@ public class GUITests extends FxRobot implements GUITestValidator {
 
     }
 
-    private String readFile(final String input) throws Exception {
-        URL url = getClass().getResource(input);
-        Path file = Paths.get(url.toURI());
-        try {
-            return new String(Files.readAllBytes(file), "UTF-8");
-        } catch (IOException e) {
-            throw new IOException(String.format("Unable to read file %s", file), e);
-        }
-    }
-
-
     private Path getResource(final String file) throws Exception {
         URL url = getClass().getResource("/" + file);
 
@@ -125,9 +101,6 @@ public class GUITests extends FxRobot implements GUITestValidator {
             return Paths.get(url.toURI());
         }
     }
-
-
-
 
 
 }
