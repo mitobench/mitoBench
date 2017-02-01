@@ -8,7 +8,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public class ExportDialogue extends Application {
     private List<String> columnsInTable = FXCollections.observableArrayList("option1", "option2", "option3");
-    private TableController tableController;
+    private TableControllerUserBench tableController;
     private String MITOBENCH_VERSION;
     //TODO this should come from the class instantiation...
 
@@ -27,7 +27,7 @@ public class ExportDialogue extends Application {
         Application.launch(args);
     }
 
-    public ExportDialogue(TableController tableManager, String mitoVersion) {
+    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion) {
         this.tableController = tableManager;
         this.columnsInTable = tableManager.getCurrentColumnNames();
         this.MITOBENCH_VERSION = mitoVersion;

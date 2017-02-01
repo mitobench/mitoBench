@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import view.charts.ChartController;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -20,13 +20,13 @@ import static junit.framework.TestCase.assertEquals;
 public class MethodTests {
 
     private ChartController chartController;
-    private TableController tableController;
+    private TableControllerUserBench tableController;
 
     @Before
     public void setUp() throws ParserConfigurationException, SAXException, IOException {
         HashMap<String, List<String>> treeMap = new HashMap<>();
 
-        tableController = new TableController();
+        tableController = new TableControllerUserBench();
         chartController = new ChartController();
 
     }

@@ -18,31 +18,14 @@ public class ImportDialogueImpl implements IImportDialogue {
     private FileChooser fileChooser;
     private File selectedFile;
     private Stage stage;
-    private boolean isTestMode;
 
-    public ImportDialogueImpl(Stage stage, boolean isTestMode){
+    public ImportDialogueImpl(Stage stage){
         this.stage = stage;
-        setTestMode(isTestMode);
     }
 
     @Override
     public void start() {
-        if(!isTestMode()){
-            show();
-        }
-
-//        if (selectedFile == null) {
-//            try {
-//                //Dont do anything here...
-//            } catch (Exception ex) {
-//                System.out.println(ex.getMessage());
-//            }
-//
-//        } else {
-//            return selectedFile;
-//        }
-//
-//        return null;
+        show();
     }
 
     private static void configureFileChooser(final FileChooser fileChooser) {
@@ -65,15 +48,6 @@ public class ImportDialogueImpl implements IImportDialogue {
     @Override
     public File getSelectedFile() {
         return selectedFile;
-    }
-
-    @Override
-    public boolean isTestMode() {
-        return isTestMode;
-    }
-
-    public void setTestMode(boolean testMode) {
-        isTestMode = testMode;
     }
 
     private void show(){

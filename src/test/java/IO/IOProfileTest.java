@@ -1,12 +1,11 @@
 package IO;
 
 import io.datastructure.arp.ArpProfile;
-import io.datastructure.arp.ArpSample;
 import io.datastructure.arp.ArpStructure;
 import io.writer.ARPWriter;
 import org.junit.Before;
 import org.junit.Test;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
@@ -17,12 +16,12 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class IOProfileTest {
 
-    private TableController tableController;
+    private TableControllerUserBench tableController;
 
 
     @Before
     public void setup() throws TimeoutException {
-        //tableController = new TableController();
+        //tableController = new TableControllerUserBench();
         //tableController.init();
 
     }

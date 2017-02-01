@@ -2,7 +2,7 @@ package io.writer;
 
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import java.io.*;
 import java.util.Date;
@@ -20,7 +20,7 @@ public class ProjectWriter {
     public ProjectWriter(String mitoVersion){ MITOBENCH_VERSION = mitoVersion;}
 
 
-    public void write(String outfile, TableController tableController) throws IOException, ProjectException {
+    public void write(String outfile, TableControllerUserBench tableController) throws IOException, ProjectException {
 
         //Initialize properly
         if (!outfile.endsWith("mitoproj")) {

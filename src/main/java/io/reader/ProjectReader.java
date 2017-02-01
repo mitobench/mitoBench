@@ -6,7 +6,8 @@ import io.datastructure.generic.GenericInputData;
 import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
 import io.inputtypes.RadioCarbonInputType;
-import view.table.TableController;
+import view.table.ATableController;
+import view.table.TableControllerUserBench;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -84,14 +85,11 @@ public class ProjectReader {
 
 
 
-    public void loadData(TableController tableController){
+    public void loadData(ATableController tableController){
 
         tableController.updateTable(datatable);
         tableController.loadGroups();
 
     }
 
-    public HashMap<String, List<Entry>> getDatatable() {
-        return datatable;
-    }
 }

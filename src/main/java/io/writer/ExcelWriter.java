@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,9 +19,9 @@ import java.util.List;
  * Created by peltzer on 22/11/2016.
  */
 public class ExcelWriter implements IOutputData {
-    private TableController tableController;
+    private TableControllerUserBench tableController;
 
-    public ExcelWriter(TableController tableController) {
+    public ExcelWriter(TableControllerUserBench tableController) {
 
         this.tableController = tableController;
     }

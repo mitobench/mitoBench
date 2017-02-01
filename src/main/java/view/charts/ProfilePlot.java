@@ -9,7 +9,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import statistics.HaploStatistics;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 import view.tree.TreeHaploController;
 
 import java.io.File;
@@ -41,16 +41,15 @@ public class ProfilePlot {
 
 
 
-    public void create(TableController tableController, ChartController chartController, TreeHaploController treeController,
+    public void create(TableControllerUserBench tableController, ChartController chartController, TreeHaploController treeController,
                        TabPane statsTabpane, Scene scene){
 
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = cols[1];
         HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups, chartController.getCoreHGs());
-        int[] numberOfElementsPerCaregory = chartController.getNumberOfElementsPerCategory(selection_groups);
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
-        data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups, numberOfElementsPerCaregory);
+        data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
         // sort list alphabetically
         List<String> hg_core_curr = chartController.getHg_core_list();
@@ -60,7 +59,6 @@ public class ProfilePlot {
 
         for(String key : hg_core_curr){
             if(data_all.containsKey(key)) {
-
                 for(int i = 0; i < selection_groups.length; i++){
                     String group = data_all.get(key).get(i).getXValue();
                     if(!group_hg.containsKey(group)){
@@ -76,6 +74,8 @@ public class ProfilePlot {
 
                     data_all.get(key).get(i).setYValue(chartController.roundValue(data_all.get(key).get(i).getYValue().doubleValue()));
                 }
+            } else {
+
             }
         }
 
@@ -87,6 +87,7 @@ public class ProfilePlot {
             profilePlot.getData().add(series);
 
         addListener();
+        setMaxBoundary();
 
         HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController);
 
@@ -142,22 +143,15 @@ public class ProfilePlot {
         return profilePlot;
     }
 
-
-
-    /**
-     * This method returns all series as list.
-     * @return
-     */
-    public List<XYChart.Series> getSeriesList() {
-        //addListener();
+    public void setMaxBoundary(){
         for(int i = 1; i < 6; i++){
             if((maxVal+i)%5 == 0){
                 yAxis.setUpperBound(maxVal+i);
                 break;
             }
         }
-        return seriesList;
     }
+
 
 
 

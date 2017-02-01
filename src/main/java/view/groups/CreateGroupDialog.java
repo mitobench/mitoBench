@@ -15,7 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import view.table.TableController;
+import view.table.ATableController;
+import view.table.TableControllerUserBench;
 
 
 /**
@@ -26,9 +27,9 @@ public class CreateGroupDialog {
 
     private TextField groupnameField;
     private Stage dialog;
-    private TableController controller;
+    private ATableController controller;
 
-    public CreateGroupDialog(GroupController groupController, TableView table, TableController tableController){
+    public CreateGroupDialog(GroupController groupController, TableView table, ATableController tableController){
 
         controller = tableController;
 

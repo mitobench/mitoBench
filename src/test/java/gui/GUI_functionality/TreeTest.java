@@ -1,16 +1,13 @@
 package gui.GUI_functionality;
 
 import io.PhyloTreeParser;
-import javafx.application.Application;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-import view.MitoBenchWindow;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 import view.tree.TreeHaplo;
 import view.tree.TreeHaploController;
 
@@ -38,7 +35,8 @@ public class TreeTest {
 
         treeHaplo = new TreeHaplo("Haplo Tree");
         treeHaplo.addStructure();
-        TableController tableController = new TableController();
+        TableControllerUserBench tableController = new TableControllerUserBench();
+        tableController.init();
         treeController = new TreeHaploController(tableController);
         treeController.configureSearch(new Pane());
         treeController.setAnimation();

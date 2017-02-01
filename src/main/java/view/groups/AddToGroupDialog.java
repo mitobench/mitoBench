@@ -15,7 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import view.table.TableController;
+import view.table.ATableController;
+import view.table.TableControllerUserBench;
 
 
 /**
@@ -26,10 +27,10 @@ public class AddToGroupDialog {
 
     private ComboBox comboBox;
     private Stage dialog;
-    private TableController controller;
+    private ATableController controller;
 
 
-    public AddToGroupDialog(GroupController groupController, ObservableList groupItems, TableController tableController){
+    public AddToGroupDialog(GroupController groupController, ObservableList groupItems, ATableController tableController){
 
         this.controller = tableController;
         dialog = new Stage();
@@ -72,6 +73,7 @@ public class AddToGroupDialog {
                 // add elements to group
                 groupController.addElements(groupItems, comboBox.getValue().toString());
                 controller.updateTable(controller.createNewEntryList(comboBox.getValue().toString()));
+                controller.setContextMenu();
                 dialog.close();
             }
         });

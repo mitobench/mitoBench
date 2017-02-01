@@ -6,9 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
 import view.dialogues.popup.HGStatisticsPopupDialogue;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 import statistics.HaploStatistics;
 import view.tree.TreeHaploController;
 
@@ -17,15 +16,15 @@ import java.io.IOException;
 /**
  * Created by neukamm on 16.11.16.
  */
-public class ToolsMenu {
+public class StatisticsMenu {
 
     private Menu menuTools;
-    private TableController tableController;
+    private TableControllerUserBench tableController;
     private TreeHaploController treeHaploController;
     private HaploStatistics haploStatistics;
 
-    public ToolsMenu(TableController tableController, TreeHaploController treeHaploController, TabPane statsTabpane,
-                     Scene scene) throws IOException {
+    public StatisticsMenu(TableControllerUserBench tableController, TreeHaploController treeHaploController, TabPane statsTabpane,
+                          Scene scene) throws IOException {
 
         menuTools = new Menu("Statistics");
         menuTools.setId("menu_statistics");

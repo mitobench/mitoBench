@@ -17,7 +17,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -28,7 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 import view.table.TableSelectionFilter;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,7 +50,7 @@ public class TreeHaploController {
     private Timeline timelineUp;
     private Timeline timelineDown;
     private String[] seletcion_haplogroups;
-    private TableController tableManager;
+    private TableControllerUserBench tableManager;
 
     private TextField searchFieldListHaplogroup;
     private TreeHaplo tree;
@@ -59,7 +58,7 @@ public class TreeHaploController {
     private HashMap<String, List<String>> treeMap_leaf_to_root;
     private HashMap<String, List<String>> node_to_children;
 
-    public TreeHaploController(TableController tableManager) throws IOException, SAXException, ParserConfigurationException {
+    public TreeHaploController(TableControllerUserBench tableManager) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
 

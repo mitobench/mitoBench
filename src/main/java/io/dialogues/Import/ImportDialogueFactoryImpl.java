@@ -17,8 +17,8 @@ public class ImportDialogueFactoryImpl implements IImportDialogueFactory {
     }
 
     @Override
-    public ImportDialogueImpl create(Stage stage, boolean isTestMode) {
-        return new ImportDialogueImpl(stage, isTestMode);
+    public ImportDialogueImpl create(Stage stage) {
+        return new ImportDialogueImpl(stage);
     }
 
 }

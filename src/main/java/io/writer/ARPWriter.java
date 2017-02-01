@@ -6,7 +6,7 @@ import io.datastructure.arp.ArpSample;
 import io.datastructure.arp.ArpStructure;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,10 +26,10 @@ public class ARPWriter implements IOutputData {
     private String groups = "";
     private int groupSize = 0;
     private HashMap<String, String> regions;
-    private TableController tableController;
+    private TableControllerUserBench tableController;
 
 
-    public ARPWriter(TableController tableController) {
+    public ARPWriter(TableControllerUserBench tableController) {
         this.tableController = tableController;
     }
 

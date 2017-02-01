@@ -3,7 +3,7 @@ package io.writer;
 import io.IOutputData;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,11 +18,11 @@ import java.util.HashMap;
  * <ID>_0 (whereas we use year zero == 2000 after julian calender to be more precise.
  */
 public class BEASTWriter implements IOutputData {
-    private TableController tblcontroller;
+    private TableControllerUserBench tblcontroller;
     private FileWriter fileWriter;
     private BufferedWriter bfWriter;
 
-    public BEASTWriter(TableController tblcontroller) {
+    public BEASTWriter(TableControllerUserBench tblcontroller) {
         this.tblcontroller = tblcontroller;
     }
 

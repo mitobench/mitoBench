@@ -4,24 +4,18 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import view.charts.ChartController;
 import view.charts.ProfilePlot;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 import view.tree.TreeHaploController;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.*;
 
 /**
@@ -30,13 +24,13 @@ import java.util.*;
 public class HaploStatistics {
 
 
-    private TableController tableController;
+    private TableControllerUserBench tableController;
     private ChartController chartController;
     private HashMap<String, List<XYChart.Data<String, Number>>> data_all;
     private int number_of_groups;
 
 
-    public HaploStatistics(TableController tableController, TreeHaploController treeHaploController){
+    public HaploStatistics(TableControllerUserBench tableController, TreeHaploController treeHaploController){
         this.tableController = tableController;
         chartController = new ChartController();
         chartController.init(tableController, treeHaploController.getTreeMap());
@@ -59,8 +53,7 @@ public class HaploStatistics {
         HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaolpgroups(selection_haplogroups, coreHGs);
         data_all = chartController.assignHGs(hgs_summarized,
                                              selection_haplogroups,
-                                             selection_groups,
-                                             chartController.getNumberOfElementsPerCategory(selection_groups));
+                                             selection_groups);
 
     }
 
@@ -215,7 +208,7 @@ public class HaploStatistics {
         return chartController;
     }
 
-    public TableController getTableController() {
+    public TableControllerUserBench getTableController() {
         return tableController;
     }
 
@@ -223,7 +216,7 @@ public class HaploStatistics {
         return number_of_groups;
     }
 
-    public void setTableController(TableController tableController) {
+    public void setTableController(TableControllerUserBench tableController) {
         this.tableController = tableController;
     }
 

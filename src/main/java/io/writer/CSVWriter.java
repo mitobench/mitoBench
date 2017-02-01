@@ -2,7 +2,7 @@ package io.writer;
 
 import io.IOutputData;
 import javafx.collections.ObservableList;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 import java.io.*;
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.List;
 public class CSVWriter implements IOutputData {
 
     private ObservableList<ObservableList> data;
-    private TableController tableController;
+    private TableControllerUserBench tableController;
     private String separator = ",";
 
-    public CSVWriter(TableController tableController){
+    public CSVWriter(TableControllerUserBench tableController){
         this.data = tableController.getData();
         this.tableController = tableController;
     }

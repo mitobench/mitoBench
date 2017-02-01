@@ -39,7 +39,7 @@ public class SunburstChartCreator {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
-    private ColorStrategyGroups colorStrategyGroups;
+    //private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
     private TabPane tabPane;
     private Button goBack;
@@ -59,7 +59,7 @@ public class SunburstChartCreator {
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
-        colorStrategyGroups = new ColorStrategyGroups();
+        //colorStrategyGroups = new ColorStrategyGroups();
 
 
     }

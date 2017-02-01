@@ -4,16 +4,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import statistics.HaploStatistics;
 import view.charts.*;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 import view.tree.TreeHaploController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class GraphicsMenu {
 
 
     private Menu menuGraphics;
-    private TableController tableController;
+    private TableControllerUserBench tableController;
     private BarPlotHaplo barPlotHaplo;
     private BarChartGrouping barChartGrouping;
     private StackedBar stackedBar;
@@ -42,7 +39,7 @@ public class GraphicsMenu {
     private TabPane statsTabpane;
 
 
-    public GraphicsMenu(TableController tableController, TabPane vBox, TreeHaploController treeController, Stage stage,
+    public GraphicsMenu(TableControllerUserBench tableController, TabPane vBox, TreeHaploController treeController, Stage stage,
                         Scene scene, TabPane statsTabpane){
 
         menuGraphics = new Menu("Graphics");
@@ -237,7 +234,7 @@ public class GraphicsMenu {
          */
 
         MenuItem profilePlotItem = new MenuItem("Create Profile Plot");
-        profilePlotItem.setId("pplot");
+        profilePlotItem.setId("profilePlot");
         profilePlotItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try {
@@ -323,6 +320,6 @@ public class GraphicsMenu {
     public Menu getMenuGraphics() {
         return menuGraphics;
     }
-    public TableController getTableController() { return tableController; }
+    public TableControllerUserBench getTableController() { return tableController; }
     public TreeHaploController getTreeController() { return treeController; }
 }

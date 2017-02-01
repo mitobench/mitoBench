@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 
 
 /**
@@ -13,9 +13,9 @@ import view.table.TableController;
 public class TableMenu {
 
     private Menu menuTable;
-    private TableController tableController;
+    private TableControllerUserBench tableController;
 
-    public TableMenu(TableController tableController){
+    public TableMenu(TableControllerUserBench tableController){
         menuTable = new Menu("Table");
         menuTable.setId("tableMenu");
         this.tableController = tableController;

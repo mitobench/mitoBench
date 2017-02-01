@@ -13,7 +13,6 @@ public interface IImportDialogue {
 
     File getSelectedFile();
 
-    boolean isTestMode();
 
 
 }

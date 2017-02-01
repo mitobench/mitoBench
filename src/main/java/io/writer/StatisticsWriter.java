@@ -31,7 +31,7 @@ public class StatisticsWriter implements IOutputData{
     public void writeData(String path) throws IOException {
 
 
-        if(haploStatistics != null){
+        if(haploStatistics != null && path.length()>0){
             data_all = this.haploStatistics.getData_all();
 
             keys = new ArrayList<>();

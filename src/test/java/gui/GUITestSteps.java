@@ -123,11 +123,19 @@ public class GUITestSteps {
         });
         step("Plot Sunburstchart", () -> {
 
-
             robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#sunburstChart_item");
             verifyThat("#tab_sunburst", isVisible());
             robot.moveTo("#borderpane_sunburst");
         });
+
+        step("Plot profile plot", () -> {
+
+            robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").moveTo("#sunburstChart_item").clickOn("#profilePlot");
+            verifyThat("#tab_profilePlot", isVisible());
+
+        });
+
+
         step("Plot Grouped barchart", () -> {
 
             robot.clickOn("#graphicsMenu").clickOn("#grouping_graphics");
@@ -138,12 +146,7 @@ public class GUITestSteps {
         });
 
 
-        step("Plot profile plot", () -> {
 
-            robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#pplot");
-            verifyThat("#tab_profilePlot", isVisible());
-
-        });
 
 
 

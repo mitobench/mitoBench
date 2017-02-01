@@ -17,7 +17,7 @@ public class TableSelectionFilter {
 
     }
 
-    public void haplogroupFilter(TableController tableController, String[] haplogroups, int columnIndexhaplo){
+    public void haplogroupFilter(TableControllerUserBench tableController, String[] haplogroups, int columnIndexhaplo){
 
         if(columnIndexhaplo >=0){
 

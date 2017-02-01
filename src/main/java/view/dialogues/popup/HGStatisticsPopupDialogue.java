@@ -85,6 +85,7 @@ public class HGStatisticsPopupDialogue {
                     tab.setText("Count statistics");
                     tab.setContent(table);
                     statsTabPane.getTabs().add(tab);
+                    statsTabPane.getSelectionModel().select(tab);
 
                     dialog.close();
                 }

@@ -19,15 +19,19 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import view.MitoBenchWindow;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
-import view.table.TableController;
+import view.table.TableControllerDB;
+import view.table.TableControllerUserBench;
 import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -37,24 +41,32 @@ import java.util.*;
 public class FileMenu {
 
     private Menu menuFile;
-    private TableController tableController;
+    private TableControllerUserBench tableControllerUserBench;
+    private TableControllerDB tableControllerDB;
+    private MitoBenchWindow mitoBenchWindow;
     private String MITOBENCH_VERSION;
     private Stage stage;
-    private ToolsMenu toolsMenu;
-    private boolean isTestMode;
+    private StatisticsMenu toolsMenu;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
 
-    public FileMenu(TableController tableController, String version, Stage stage, ToolsMenu toolsMenu) throws IOException {
-        this.menuFile = new Menu("File");
-        menuFile.setId("fileMenu");
-        this.tableController = tableController;
+    public FileMenu(TableControllerUserBench tableController, String version, Stage stage, StatisticsMenu toolsMenu,
+                    MitoBenchWindow mitoBenchWindow, TableControllerDB tableControllerDB ) throws IOException {
+
         MITOBENCH_VERSION = version;
+
+        this.mitoBenchWindow = mitoBenchWindow;
+        this.tableControllerDB = tableControllerDB;
+        this.tableControllerUserBench = tableController;
         this.stage = stage;
         this.toolsMenu = toolsMenu;
-        isTestMode = false;
+
+        this.menuFile = new Menu("File");
+        menuFile.setId("fileMenu");
+
         importDialogueFactory = new ImportDialogueFactoryImpl();
         fm = this;
+
         addSubMenus();
 
     }
@@ -73,7 +85,6 @@ public class FileMenu {
         importFile.setId("importData");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                File f = null;
                 IImportDialogue importDialogue;
 
                 if(isJUnitTest()){
@@ -82,7 +93,7 @@ public class FileMenu {
                         importDialogueAlternative.getFile();
 
                 } else {
-                    importDialogue = importDialogueFactory.create(stage, false);
+                    importDialogue = importDialogueFactory.create(stage);
                     importDialogue.start();
                     openProjectFile(importDialogue.getSelectedFile());
                 }
@@ -93,6 +104,40 @@ public class FileMenu {
 
 
         /*
+                        IMPORT DIALOGUE
+
+         */
+
+        MenuItem importFromDB = new MenuItem("Import Data from DB");
+        importFromDB.setId("importFromDB");
+        importFromDB.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                // split table pane
+                tableControllerDB = new TableControllerDB();
+                mitoBenchWindow.splitTablePane();
+
+                // todo: make db query
+
+                // for testing: read test database
+                tableControllerDB.init();
+                tableControllerDB.setRowFactory();
+                mitoBenchWindow.getTable_DB().getChildren().add(tableControllerDB.getTable());
+
+                // create project reader to read tmp database
+                ProjectReader reader = new ProjectReader();
+                try {
+                    reader.read(new File("test_files/project.mitoproj"));
+                    reader.loadData(tableControllerDB);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
+
+        /*
                         EXPORT DIALOGUE
 
          */
@@ -100,7 +145,7 @@ public class FileMenu {
         MenuItem exportFile = new MenuItem("Export Data");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue(tableController, MITOBENCH_VERSION);
+                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION);
                 try {
                     exportDialogue.start(new Stage());
                 } catch (Exception e) {
@@ -142,7 +187,7 @@ public class FileMenu {
             }
         });
 
-        menuFile.getItems().addAll(importFile, exportFile, new SeparatorMenuItem(), exportCurrStats , new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, importFromDB, exportFile, new SeparatorMenuItem(), exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
     public void openProjectFile(File f){
@@ -166,7 +211,7 @@ public class FileMenu {
                     FastAErrorDialogue fastAErrorDialogue = new FastAErrorDialogue(e);
                 }
                 HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
-                tableController.updateTable(input_multifasta);
+                tableControllerUserBench.updateTable(input_multifasta);
 
 
             }
@@ -181,7 +226,7 @@ public class FileMenu {
                         HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
                     }
                     HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
-                    tableController.updateTable(data_map);
+                    tableControllerUserBench.updateTable(data_map);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -194,7 +239,7 @@ public class FileMenu {
                 try {
                     GenericInputParser genericInputParser = new GenericInputParser(f.getPath());
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                    tableController.updateTable(data_map);
+                    tableControllerUserBench.updateTable(data_map);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -212,8 +257,8 @@ public class FileMenu {
                     ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
                 }
                 HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
-                tableController.updateTable(data_map);
-                tableController.loadGroups();
+                tableControllerUserBench.updateTable(data_map);
+                tableControllerUserBench.loadGroups();
             }
 
             if(absolutePath.endsWith(".mitoproj")){
@@ -221,7 +266,7 @@ public class FileMenu {
                 ProjectReader projectReader = new ProjectReader();
                 try {
                     projectReader.read(f);
-                    projectReader.loadData(tableController);
+                    projectReader.loadData(tableControllerUserBench);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ProjectException e) {
@@ -267,5 +312,17 @@ public class FileMenu {
         }
         return false;
     }
+
+
+    private Path getResource(String file) throws Exception {
+        URL url = getClass().getResource("/" + file);
+
+        if (url == null) {
+            throw new FileNotFoundException(String.format("Unable to load %s", file));
+        } else {
+            return Paths.get(url.toURI());
+        }
+    }
+
 
 }

@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
-import view.table.TableController;
+import view.table.TableControllerUserBench;
 import view.tree.TreeHaploController;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class HaploStatsTest {
 
     private TreeHaploController treeController;
     private HaploStatistics haploStatistics;
-    private TableController tableController;
+    private TableControllerUserBench tableController;
 
 
     @BeforeClass
@@ -41,7 +41,7 @@ public class HaploStatsTest {
 
     @Before
     public void setUp() throws IOException, ParserConfigurationException, SAXException {
-        tableController = new TableController();
+        tableController = new TableControllerUserBench();
         treeController = new TreeHaploController(tableController);
         haploStatistics = new HaploStatistics(tableController, treeController);
 

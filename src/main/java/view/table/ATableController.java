@@ -9,35 +9,39 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.DataFormat;
 import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
 import view.groups.GroupController;
 
-import java.util.*;
-
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
- * Created by neukamm on 07.11.16.
+ * Created by neukamm on 01.02.17.
  */
-public class TableController {
+public abstract class ATableController {
 
-    private TableView<ObservableList> table;
-    private List<String> col_names;
 
-    private ObservableList<ObservableList> data;
-    private ObservableList<ObservableList> data_copy;
 
-    private DataTable dataTable;
-    private HashMap<String, Integer> column_to_index;
-    private TableController controller;
-    private GroupController groupController;
-    private HashMap<String, List<Entry>> table_content;
+    protected TableView<ObservableList> table;
+    protected List<String> col_names;
 
-    public TableController() {
+    protected ObservableList<ObservableList> data;
+    protected ObservableList<ObservableList> data_copy;
+
+
+    protected DataTable dataTable;
+    protected HashMap<String, Integer> column_to_index;
+    protected ATableController controller;
+    protected GroupController groupController;
+    protected HashMap<String, List<Entry>> table_content;
+
+    public ATableController(){
 
     }
 
@@ -55,17 +59,13 @@ public class TableController {
 
         dataTable = new DataTable();
         column_to_index = new HashMap<>();
-
         this.controller = this;
         groupController = new GroupController();
 
         table_content = new HashMap<>();
 
+
     }
-
-
-
-
 
     /**
      * This method gets a hash map of new input entries, updates the view.data table and prepares the table view for updating.
@@ -75,7 +75,7 @@ public class TableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
-        // update Enrty structure
+        // update Entry structure
         updateEntryList(input);
 
         // add new values to existing one (DataTable)
@@ -123,7 +123,6 @@ public class TableController {
         table.getItems().addAll(data);
 
         setColumns_to_index();
-        setContextMenu();
     }
 
 
@@ -206,7 +205,6 @@ public class TableController {
 
         return parsedData;
     }
-
 
 
     /**
@@ -436,33 +434,10 @@ public class TableController {
         }
     }
 
-    private void setContextMenu(){
 
-        final ContextMenu menu = new ContextMenu();
+    public void updateTable(){
 
-        final MenuItem addNewGropuItem = new MenuItem("Create new group");
-        addNewGropuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                CreateGroupDialog createGroupDialog =
-                        new CreateGroupDialog(groupController, table, controller);
-            }
-        });
-
-        final MenuItem addAllSelectedItem
-                = new MenuItem("Add to group");
-        addAllSelectedItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                AddToGroupDialog addToGroupDialog =
-                        new AddToGroupDialog(groupController, table.getSelectionModel().getSelectedItems(), controller);
-            }
-        });
-
-        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
-        table.setContextMenu(menu);
     }
-
 
 
     /**
@@ -501,11 +476,35 @@ public class TableController {
         }
     }
 
+    public void setContextMenu(){
+
+        final ContextMenu menu = new ContextMenu();
+
+        final MenuItem addNewGropuItem = new MenuItem("Create new group");
+        addNewGropuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                CreateGroupDialog createGroupDialog =
+                        new CreateGroupDialog(groupController, table, controller);
+            }
+        });
+
+        final MenuItem addAllSelectedItem
+                = new MenuItem("Add to group");
+        addAllSelectedItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                AddToGroupDialog addToGroupDialog =
+                        new AddToGroupDialog(groupController, table.getSelectionModel().getSelectedItems(), controller);
+            }
+        });
+
+        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
+        table.setContextMenu(menu);
+    }
 
     public HashMap<String, List<Entry>> getTable_content() {
         return table_content;
     }
-
-
 
 }
