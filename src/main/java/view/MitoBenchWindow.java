@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
 import view.menus.*;
 import view.table.TableControllerDB;
 import view.table.TableControllerUserBench;
-import view.tree.TreeHaploController;
+import view.tree.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -28,26 +28,25 @@ public class MitoBenchWindow extends Application{
 
     private final String MITOBENCH_VERSION = "0.1";
 
-    private BorderPane root;
+    private BorderPane pane_root;
     private TableControllerUserBench tableControllerUserBench;
     private TableControllerDB tableControllerDB;
+    private HaplotreeController treeController;
     private Scene scene;
-    private TreeHaploController treeController;
-    private TabPane tabPane;
+    private TabPane tabpane_visualization;
     private Stage primaryStage;
-    private TabPane statsTabpane;
-    private BorderPane tablePane;
-    private VBox table_userBench;
-    private VBox table_DB;
+    private TabPane tabpane_statistics;
+    private BorderPane pane_table;
+    private VBox pane_table_userBench;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception
     {
 
-        root = new BorderPane();
-        root.setId("mainBorderPane");
-        scene = new Scene(root);
+        pane_root = new BorderPane();
+        pane_root.setId("mainBorderPane");
+        scene = new Scene(pane_root);
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Mito Bench");
@@ -57,33 +56,36 @@ public class MitoBenchWindow extends Application{
         primaryStage.toFront();
 
         // bind width and height to scene to enable resizing
-        root.prefHeightProperty().bind(scene.heightProperty());
-        root.prefWidthProperty().bind(scene.widthProperty());
+        pane_root.prefHeightProperty().bind(scene.heightProperty());
+        pane_root.prefWidthProperty().bind(scene.widthProperty());
 
         // initialize table
         tableControllerUserBench = new TableControllerUserBench();
-        //tableControllerUserBench.setScene(scene);
         tableControllerUserBench.init();
-        tableControllerUserBench.setDragDrop();
+        // this binding is responsible for binding table to main window
         tableControllerUserBench.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerUserBench.getTable().prefWidthProperty().bind(scene.widthProperty());
 
+        tableControllerDB = new TableControllerDB();
+        tableControllerDB.init();
+        // this binding is responsible for binding table to main window
+        tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
+        tableControllerDB.getTable().prefWidthProperty().bind(scene.widthProperty());
 
-        BorderPane center = new BorderPane();
-        // tree view
-
-        // set haplotree - search view
-        Pane treepane = new Pane();
-
-        treeController = new TreeHaploController(tableControllerUserBench);
-        treeController.configureSearch(treepane);
+        BorderPane borderpane_center = new BorderPane();
+        // initialize haplotree with search function
+        Pane pane_tree = new Pane();
+        treeController = new HaplotreeController(tableControllerUserBench);
+        treeController.configureSearch(pane_tree);
         treeController.setAnimation();
+        borderpane_center.setTop(pane_tree);
 
-        center.setTop(treepane);
-        center.setCenter(getCenterPane());
-        root.setCenter(center);
+        // get all components of central part
+        borderpane_center.setCenter(getCenterPane());
 
-        root.setTop(getMenuPane());
+        // set all components to main window
+        pane_root.setCenter(borderpane_center);
+        pane_root.setTop(getMenuPane());
 
         this.primaryStage.show();
     }
@@ -95,10 +97,11 @@ public class MitoBenchWindow extends Application{
         menuBar.setId("menuBar");
 
         EditMenu editMenu = new EditMenu();
-        StatisticsMenu toolsMenu = new StatisticsMenu(tableControllerUserBench, treeController, statsTabpane, scene);
-        FileMenu fileMenu = new FileMenu(tableControllerUserBench, MITOBENCH_VERSION, primaryStage, toolsMenu, this, tableControllerDB);
+        StatisticsMenu toolsMenu = new StatisticsMenu(tableControllerUserBench, treeController, tabpane_statistics, scene);
+        FileMenu fileMenu = new FileMenu(tableControllerUserBench, MITOBENCH_VERSION, primaryStage, toolsMenu,
+                this, tableControllerDB);
         TableMenu tableMenu = new TableMenu(tableControllerUserBench);
-        GraphicsMenu graphicsMenu = new GraphicsMenu(tableControllerUserBench, tabPane, treeController, primaryStage, scene, statsTabpane);
+        GraphicsMenu graphicsMenu = new GraphicsMenu(tableControllerUserBench, tabpane_visualization, treeController, primaryStage, scene, tabpane_statistics);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
@@ -115,15 +118,11 @@ public class MitoBenchWindow extends Application{
 
     public SplitPane  getCenterPane() throws ParserConfigurationException, SAXException, IOException {
 
-        SplitPane center = new SplitPane();
-        center.setOrientation(Orientation.VERTICAL);
-        center.getItems().addAll(configureVisAndStatsisticsPane(), configureTablePane());
-
-        // bind center to scene --> resizing
-        center.prefHeightProperty().bind(scene.heightProperty());
-        center.prefWidthProperty().bind(scene.widthProperty());
-
-        return center;
+        SplitPane splitpane_center = new SplitPane();
+        splitpane_center.setOrientation(Orientation.VERTICAL);
+        // add table and vis/statistics pane
+        splitpane_center.getItems().addAll(configureVisAndStatisticsPane(), configureTablePane());
+        return splitpane_center;
 
     }
 
@@ -136,12 +135,10 @@ public class MitoBenchWindow extends Application{
      */
     private TabPane configureVisPane()
     {
-        tabPane = new TabPane();
-        tabPane.prefHeightProperty().bind(scene.heightProperty());
-        tabPane.prefWidthProperty().bind(scene.widthProperty());
-        tabPane.setPadding(new Insets(10, 10, 10,10));
+        tabpane_visualization = new TabPane();
+        tabpane_visualization.setPadding(new Insets(10, 10, 10,10));
 
-        return tabPane;
+        return tabpane_visualization;
     }
 
 
@@ -152,31 +149,31 @@ public class MitoBenchWindow extends Application{
      */
     private BorderPane configureTablePane() throws IOException, SAXException, ParserConfigurationException
     {
-        tablePane = new BorderPane();
-        tablePane.setId("mainEntryTable");
+        pane_table = new BorderPane();
+        pane_table.setId("mainEntryTable");
 
-        table_userBench = new VBox();
-        table_userBench.setSpacing(10);
-        table_userBench.setPadding(new Insets(10, 10, 10, 10));
-        table_userBench.prefHeightProperty().bind(scene.heightProperty());
-        table_userBench.prefWidthProperty().bind(scene.widthProperty());
-        table_userBench.getChildren().addAll(tableControllerUserBench.getTable());
-        tablePane.setCenter(table_userBench);
+        pane_table_userBench = new VBox();
+        pane_table_userBench.setSpacing(10);
+        pane_table_userBench.setPadding(new Insets(10, 10, 10, 10));
+        pane_table_userBench.getChildren().addAll(tableControllerUserBench.getTable());
+        pane_table.setCenter(pane_table_userBench);
 
-        return tablePane;
+        return pane_table;
     }
 
 
-    public void splitTablePane(){
+    public void splitTablePane(TableControllerDB tableControllerDB){
         SplitPane splitPane_table = new SplitPane();
-        splitPane_table.prefHeightProperty().bind(tablePane.heightProperty());
-        splitPane_table.prefWidthProperty().bind(tablePane.widthProperty());
         splitPane_table.setOrientation(Orientation.HORIZONTAL);
 
-        table_DB = new VBox();
-        splitPane_table.getItems().addAll(table_userBench, table_DB);
-        tablePane.getChildren().remove(table_userBench);
-        tablePane.setCenter(splitPane_table);
+        VBox pane_table_DB = new VBox();
+        pane_table_DB.setSpacing(10);
+        pane_table_DB.setPadding(new Insets(10, 10, 10, 10));
+        pane_table_DB.getChildren().add(tableControllerDB.getTable());
+        pane_table.getChildren().remove(pane_table_userBench);
+        pane_table.setCenter(splitPane_table);
+
+        splitPane_table.getItems().addAll(pane_table_userBench, pane_table_DB);
 
     }
 
@@ -186,13 +183,13 @@ public class MitoBenchWindow extends Application{
      * @return
      */
 
-    private SplitPane configureVisAndStatsisticsPane() {
+    private SplitPane configureVisAndStatisticsPane() {
 
-        SplitPane plot_stats = new SplitPane();
-        plot_stats.setOrientation(Orientation.HORIZONTAL);
-        plot_stats.getItems().addAll(configureVisPane(), configureStatisticsPane());
+        SplitPane splitpane_viz_statistics = new SplitPane();
+        splitpane_viz_statistics.setOrientation(Orientation.HORIZONTAL);
+        splitpane_viz_statistics.getItems().addAll(configureVisPane(), configureStatisticsPane());
 
-        return plot_stats;
+        return splitpane_viz_statistics;
 
     }
 
@@ -201,19 +198,17 @@ public class MitoBenchWindow extends Application{
      * @return
      */
     private BorderPane configureStatisticsPane(){
-        BorderPane statsBorderPane = new BorderPane();
-        statsBorderPane.prefHeightProperty().bind(scene.heightProperty());
-        statsBorderPane.prefWidthProperty().bind(scene.widthProperty());
-        statsBorderPane.setId("mainWindowLeftpart");
+        BorderPane borderpane_statistics = new BorderPane();
+        borderpane_statistics.setId("mainWindowLeftpart");
 
-        statsTabpane = new TabPane();
-        statsBorderPane.setCenter(statsTabpane);
+        tabpane_statistics = new TabPane();
+        borderpane_statistics.setCenter(tabpane_statistics);
 
-        return statsBorderPane;
+        return borderpane_statistics;
     }
+    
 
-
-    public VBox getTable_DB() {
-        return table_DB;
+    public Scene getScene() {
+        return scene;
     }
 }

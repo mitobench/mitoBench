@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 import view.table.TableControllerUserBench;
 import view.tree.TreeHaplo;
-import view.tree.TreeHaploController;
+import view.tree.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class TreeTest {
 
 
     private TreeHaplo treeHaplo;
-    private TreeHaploController treeController;
+    private HaplotreeController treeController;
 
 
     @Before
@@ -37,7 +37,7 @@ public class TreeTest {
         treeHaplo.addStructure();
         TableControllerUserBench tableController = new TableControllerUserBench();
         tableController.init();
-        treeController = new TreeHaploController(tableController);
+        treeController = new HaplotreeController(tableController);
         treeController.configureSearch(new Pane());
         treeController.setAnimation();
 

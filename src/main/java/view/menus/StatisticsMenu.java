@@ -9,7 +9,7 @@ import javafx.scene.control.TabPane;
 import view.dialogues.popup.HGStatisticsPopupDialogue;
 import view.table.TableControllerUserBench;
 import statistics.HaploStatistics;
-import view.tree.TreeHaploController;
+import view.tree.HaplotreeController;
 
 import java.io.IOException;
 
@@ -20,10 +20,10 @@ public class StatisticsMenu {
 
     private Menu menuTools;
     private TableControllerUserBench tableController;
-    private TreeHaploController treeHaploController;
+    private HaplotreeController treeHaploController;
     private HaploStatistics haploStatistics;
 
-    public StatisticsMenu(TableControllerUserBench tableController, TreeHaploController treeHaploController, TabPane statsTabpane,
+    public StatisticsMenu(TableControllerUserBench tableController, HaplotreeController treeHaploController, TabPane statsTabpane,
                           Scene scene) throws IOException {
 
         menuTools = new Menu("Statistics");

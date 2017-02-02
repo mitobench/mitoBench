@@ -14,7 +14,7 @@ import javafx.util.Callback;
 import view.charts.ChartController;
 import view.charts.ProfilePlot;
 import view.table.TableControllerUserBench;
-import view.tree.TreeHaploController;
+import view.tree.HaplotreeController;
 
 import java.util.*;
 
@@ -30,7 +30,7 @@ public class HaploStatistics {
     private int number_of_groups;
 
 
-    public HaploStatistics(TableControllerUserBench tableController, TreeHaploController treeHaploController){
+    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController){
         this.tableController = tableController;
         chartController = new ChartController();
         chartController.init(tableController, treeHaploController.getTreeMap());

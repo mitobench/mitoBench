@@ -14,15 +14,18 @@ import io.reader.*;
 import io.writer.StatisticsWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.MitoBenchWindow;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
+import view.table.DrapAndDropEventMaganer;
 import view.table.TableControllerDB;
 import view.table.TableControllerUserBench;
 import io.dialogues.Export.ExportDialogue;
@@ -89,8 +92,8 @@ public class FileMenu {
 
                 if(isJUnitTest()){
 
-                        ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fm);
-                        importDialogueAlternative.getFile();
+                    ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fm);
+                    importDialogueAlternative.getFile();
 
                 } else {
                     importDialogue = importDialogueFactory.create(stage);
@@ -104,7 +107,7 @@ public class FileMenu {
 
 
         /*
-                        IMPORT DIALOGUE
+                        IMPORT from database
 
          */
 
@@ -113,15 +116,13 @@ public class FileMenu {
         importFromDB.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 // split table pane
-                tableControllerDB = new TableControllerDB();
-                mitoBenchWindow.splitTablePane();
+                mitoBenchWindow.splitTablePane(tableControllerDB);
 
                 // todo: make db query
 
                 // for testing: read test database
-                tableControllerDB.init();
-                tableControllerDB.setRowFactory();
-                mitoBenchWindow.getTable_DB().getChildren().add(tableControllerDB.getTable());
+
+                //mitoBenchWindow.getPane_table_DB().getChildren().add(tableControllerDB.getTable());
 
                 // create project reader to read tmp database
                 ProjectReader reader = new ProjectReader();
@@ -131,6 +132,9 @@ public class FileMenu {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                DrapAndDropEventMaganer drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
+                drapAndDropEventMaganer.createEvent();
 
 
             }

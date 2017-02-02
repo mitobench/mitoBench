@@ -11,20 +11,5 @@ public class TableControllerUserBench extends ATableController{
 
     }
 
-    public void setDragDrop(){
-        table.setOnDragDetected(event -> {
-
-        });
-
-        table.setOnDragOver(event -> {
-
-        });
-
-
-        table.setOnDragDropped(event -> {
-
-        });
-
-    }
 
 }

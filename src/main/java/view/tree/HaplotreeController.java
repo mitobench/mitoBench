@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class TreeHaploController {
+public class HaplotreeController {
 
     private VBox searchPane;
     private Rectangle2D boxBounds = new Rectangle2D(500, 300, 600, 480);
@@ -58,7 +58,7 @@ public class TreeHaploController {
     private HashMap<String, List<String>> treeMap_leaf_to_root;
     private HashMap<String, List<String>> node_to_children;
 
-    public TreeHaploController(TableControllerUserBench tableManager) throws IOException, SAXException, ParserConfigurationException {
+    public HaplotreeController(TableControllerUserBench tableManager) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
 

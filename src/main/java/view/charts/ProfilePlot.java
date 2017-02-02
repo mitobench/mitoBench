@@ -10,7 +10,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import statistics.HaploStatistics;
 import view.table.TableControllerUserBench;
-import view.tree.TreeHaploController;
+import view.tree.HaplotreeController;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class ProfilePlot {
 
 
 
-    public void create(TableControllerUserBench tableController, ChartController chartController, TreeHaploController treeController,
+    public void create(TableControllerUserBench tableController, ChartController chartController, HaplotreeController treeController,
                        TabPane statsTabpane, Scene scene){
 
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());

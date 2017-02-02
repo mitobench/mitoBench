@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.charts.*;
 import view.table.TableControllerUserBench;
-import view.tree.TreeHaploController;
+import view.tree.HaplotreeController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,13 +33,13 @@ public class GraphicsMenu {
     private TreeView treeView;
     private Stage stage;
     private ChartController chartController;
-    private TreeHaploController treeController;
+    private HaplotreeController treeController;
     private ProfilePlot profilePlot;
     private Scene scene;
     private TabPane statsTabpane;
 
 
-    public GraphicsMenu(TableControllerUserBench tableController, TabPane vBox, TreeHaploController treeController, Stage stage,
+    public GraphicsMenu(TableControllerUserBench tableController, TabPane vBox, HaplotreeController treeController, Stage stage,
                         Scene scene, TabPane statsTabpane){
 
         menuGraphics = new Menu("Graphics");
@@ -321,5 +321,5 @@ public class GraphicsMenu {
         return menuGraphics;
     }
     public TableControllerUserBench getTableController() { return tableController; }
-    public TreeHaploController getTreeController() { return treeController; }
+    public HaplotreeController getTreeController() { return treeController; }
 }
