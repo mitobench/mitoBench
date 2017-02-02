@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
-import javafx.scene.input.DataFormat;
 import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
@@ -46,6 +45,7 @@ public abstract class ATableController {
     }
 
     public void init(){
+
         table = new TableView();
         table.setId("tableView");
         table.setEditable(false);
@@ -250,7 +250,7 @@ public abstract class ATableController {
      * create new table entry for each selected item to easily update tableview
      * @return
      */
-    public HashMap<String, List<Entry>> createNewEntryList(String gName){
+    public HashMap<String, List<Entry>> createNewEntryListForGrouping(String gName){
 
         HashMap<String, List<Entry>> entries = new HashMap<>();
 
@@ -265,6 +265,25 @@ public abstract class ATableController {
         return entries;
     }
 
+
+    public HashMap<String, List<Entry>>  createNewEntryListDragAndDrop(ObservableList<ObservableList> items){
+
+        HashMap<String, List<Entry>> entries = new HashMap<>();
+
+        for(int i = 0; i < items.size(); i++) {
+            ObservableList item = items.get(i);
+            String rowName = items.get(i).get(getColIndex("ID")).toString();
+            List<Entry> eList = new ArrayList<>();
+            List<String> colnames = getCurrentColumnNames();
+            for(int k = 0; k < item.size(); k++){
+                Entry e = new Entry(colnames.get(k), new CategoricInputType("String"), new GenericInputData(item.get(k).toString()));
+                eList.add(e);
+            }
+            entries.put(rowName, eList);
+
+        }
+        return entries;
+    }
 
     /**
      * set table to old/initial state
@@ -434,10 +453,6 @@ public abstract class ATableController {
         }
     }
 
-
-    public void updateTable(){
-
-    }
 
 
     /**

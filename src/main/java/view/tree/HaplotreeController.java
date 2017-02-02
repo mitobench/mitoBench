@@ -103,9 +103,8 @@ public class HaplotreeController {
         StackPane sp1 = new StackPane();
         sp1.setPadding(new Insets(10));
         sp1.setAlignment(Pos.TOP_LEFT);
-        sp1.setStyle("-fx-background-color:#333333,#EAA956;-fx-background-insets:0,1.5;-fx-opacity:.92;-fx-background-radius:0px 0px 0px 5px;");
+        sp1.setStyle("-fx-background-color:#333333,#b1afb0;-fx-background-insets:0,1.5;-fx-opacity:.92;-fx-background-radius:0px 0px 0px 5px;");
         sp1.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()-ACTION_BOX_HGT);
-        //sp1.autosize();
 
         Button applyBtn = new Button("Apply filter");
         applyBtn.setId("treeviewApplyButton");
@@ -187,7 +186,7 @@ public class HaplotreeController {
         StackPane sp2 = new StackPane();
         sp2.setPrefSize(100, ACTION_BOX_HGT);
         sp2.getChildren().add(searchLbl);
-        sp2.setStyle("-fx-cursor:hand;-fx-background-color:#EAA956;-fx-border-width:0px 1px 1px 1px;-fx-border-color:#333333;-fx-opacity:.92;-fx-border-radius:0px 0px 5px 5px;-fx-background-radius:0px 0px 5px 5px;");
+        sp2.setStyle("-fx-cursor:hand;-fx-background-color:#b1afb0;-fx-border-width:0px 1px 1px 1px;-fx-border-color:#333333;-fx-opacity:.92;-fx-border-radius:0px 0px 5px 5px;-fx-background-radius:0px 0px 5px 5px;");
         sp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent paramT) {

@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.table.ATableController;
-import view.table.TableControllerUserBench;
 
 
 /**
@@ -65,7 +64,7 @@ public class CreateGroupDialog {
                 String gName = groupnameField.getText();
                 groupController.createGroup(gName);
                 groupController.addElements(groupItems, gName);
-                controller.updateTable(controller.createNewEntryList(groupnameField.getText()));
+                controller.updateTable(controller.createNewEntryListForGrouping(groupnameField.getText()));
                 dialog.close();
             }
         });

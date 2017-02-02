@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.table.ATableController;
-import view.table.TableControllerUserBench;
 
 
 /**
@@ -72,7 +71,7 @@ public class AddToGroupDialog {
             @Override public void handle(ActionEvent e) {
                 // add elements to group
                 groupController.addElements(groupItems, comboBox.getValue().toString());
-                controller.updateTable(controller.createNewEntryList(comboBox.getValue().toString()));
+                controller.updateTable(controller.createNewEntryListForGrouping(comboBox.getValue().toString()));
                 controller.setContextMenu();
                 dialog.close();
             }

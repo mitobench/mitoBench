@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
@@ -149,13 +150,14 @@ public class MitoBenchWindow extends Application{
      */
     private BorderPane configureTablePane() throws IOException, SAXException, ParserConfigurationException
     {
+        final Label label = new Label("User table");
+
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTable");
-
         pane_table_userBench = new VBox();
         pane_table_userBench.setSpacing(10);
-        pane_table_userBench.setPadding(new Insets(10, 10, 10, 10));
-        pane_table_userBench.getChildren().addAll(tableControllerUserBench.getTable());
+        pane_table_userBench.setPadding(new Insets(20, 10, 10, 10));
+        pane_table_userBench.getChildren().addAll(label, tableControllerUserBench.getTable());
         pane_table.setCenter(pane_table_userBench);
 
         return pane_table;
@@ -166,10 +168,12 @@ public class MitoBenchWindow extends Application{
         SplitPane splitPane_table = new SplitPane();
         splitPane_table.setOrientation(Orientation.HORIZONTAL);
 
+        final Label label = new Label("Database");
+
         VBox pane_table_DB = new VBox();
         pane_table_DB.setSpacing(10);
-        pane_table_DB.setPadding(new Insets(10, 10, 10, 10));
-        pane_table_DB.getChildren().add(tableControllerDB.getTable());
+        pane_table_DB.setPadding(new Insets(20, 10, 10, 10));
+        pane_table_DB.getChildren().addAll(label, tableControllerDB.getTable());
         pane_table.getChildren().remove(pane_table_userBench);
         pane_table.setCenter(splitPane_table);
 
