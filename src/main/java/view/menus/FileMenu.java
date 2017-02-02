@@ -25,6 +25,7 @@ import view.MitoBenchWindow;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
+import view.dialogues.popup.DatabaseConnectionDialogue;
 import view.table.DrapAndDropEventMaganer;
 import view.table.TableControllerDB;
 import view.table.TableControllerUserBench;
@@ -119,19 +120,20 @@ public class FileMenu {
                 mitoBenchWindow.splitTablePane(tableControllerDB);
 
                 // todo: make db query
+                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB);
 
                 // for testing: read test database
 
                 //mitoBenchWindow.getPane_table_DB().getChildren().add(tableControllerDB.getTable());
 
                 // create project reader to read tmp database
-                ProjectReader reader = new ProjectReader();
-                try {
-                    reader.read(new File("test_files/project.mitoproj"));
-                    reader.loadData(tableControllerDB);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                ProjectReader reader = new ProjectReader();
+//                try {
+//                    reader.read(new File("test_files/project.mitoproj"));
+//                    reader.loadData(tableControllerDB);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
 
                 DrapAndDropEventMaganer drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
                 drapAndDropEventMaganer.createEvent();
