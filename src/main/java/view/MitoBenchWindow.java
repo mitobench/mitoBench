@@ -64,6 +64,7 @@ public class MitoBenchWindow extends Application{
         tableControllerUserBench = new TableControllerUserBench();
         tableControllerUserBench.init();
         tableControllerUserBench.createContextMenu();
+
         // this binding is responsible for binding table to main window
         tableControllerUserBench.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerUserBench.getTable().prefWidthProperty().bind(scene.widthProperty());
@@ -113,6 +114,7 @@ public class MitoBenchWindow extends Application{
                                   graphicsMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 
+        tableControllerUserBench.addEditMenue(editMenu);
         return menuBar;
     }
 

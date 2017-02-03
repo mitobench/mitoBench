@@ -15,6 +15,7 @@ import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
 import view.groups.GroupController;
+import view.menus.EditMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public abstract class ATableController {
     protected ATableController controller;
     protected GroupController groupController;
     protected List<String> col_names;
+    protected EditMenu editMenu;
 
     public ATableController(){
 
@@ -59,7 +61,7 @@ public abstract class ATableController {
         dataTable = new DataTable();
         column_to_index = new HashMap<>();
         this.controller = this;
-        groupController = new GroupController();
+        groupController = new GroupController(this);
 
         table_content = new HashMap<>();
 
@@ -72,59 +74,59 @@ public abstract class ATableController {
      * @param input
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
+            // update Entry structure
+            updateEntryList(input);
 
-        // update Entry structure
-        updateEntryList(input);
+            // add new values to existing one (DataTable)
+            dataTable.update(input);
 
-        // add new values to existing one (DataTable)
-        dataTable.update(input);
+            // clean whole table
+            data.clear();
 
-        // clean whole table
-        data.clear();
+            // get current col names
+            List<String> curr_colnames = getCurrentColumnNames();
 
-        // get current col names
-        List<String> curr_colnames = getCurrentColumnNames();
+            table.getColumns().removeAll(table.getColumns());
 
-        table.getColumns().removeAll(table.getColumns());
+            // define column order
+            Set<String> cols = dataTable.getDataTable().keySet();
+            for(String s : cols) {
+                if(!curr_colnames.contains(s))
+                    curr_colnames.add(s);
+            }
 
-        // define column order
-        Set<String> cols = dataTable.getDataTable().keySet();
-        for(String s : cols) {
-            if(!curr_colnames.contains(s))
-                curr_colnames.add(s);
-        }
-
-        // display updated table
-        data = parseDataTableToObservableList(dataTable, curr_colnames);
+            // display updated table
+            data = parseDataTableToObservableList(dataTable, curr_colnames);
 
 
-        // add columns
-        int i = 0;
-        for(String colName : curr_colnames) {
-            int j = i;
-            TableColumn col = new TableColumn(colName);
-            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(j).toString());
-                }
-            });
+            // add columns
+            int i = 0;
+            for(String colName : curr_colnames) {
+                int j = i;
+                TableColumn col = new TableColumn(colName);
+                col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+                    public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                        return new SimpleStringProperty(param.getValue().get(j).toString());
+                    }
+                });
 
-            col_names.add(colName);
-            table.getColumns().addAll(col);
-            i++;
+                col_names.add(colName);
+                table.getColumns().addAll(col);
+                i++;
 
-        }
+            }
 
-        // clear Items in table
-        table.getItems().removeAll(table.getItems());
-        //FINALLY ADDED TO TableView
-        table.getItems().addAll(data);
+            // clear Items in table
+            table.getItems().removeAll(table.getItems());
+            //FINALLY ADDED TO TableView
+            table.getItems().addAll(data);
 
-        setColumns_to_index();
+            setColumns_to_index();
+
     }
 
 
-    private void updateEntryList(HashMap<String, List<Entry>> input_new) {
+    protected void updateEntryList(HashMap<String, List<Entry>> input_new) {
 
         for(String key_new : input_new.keySet()){
             if(table_content.containsKey(key_new)){
@@ -164,7 +166,7 @@ public abstract class ATableController {
      * @param dataTable
      * @return
      */
-    private ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames){
+    protected ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames){
 
         if(curr_colnames.size()==0){
             curr_colnames = new ArrayList<String>(dataTable.getDataTable().keySet());
@@ -333,8 +335,23 @@ public abstract class ATableController {
      * @return
      */
     public TableColumn getTableColumnByName(String name) {
-        for (TableColumn col : table.getColumns())
-            if (col.getText().equals(name)) return col ;
+        if(name.equals("Grouping")){
+            for (TableColumn col : table.getColumns()) {
+                if(col.getText().contains("Grouping")){
+                    return col;
+                }
+            }
+
+        } else {
+            for (TableColumn col : table.getColumns()) {
+                if (col.getText().equals(name)) {
+                    return col;
+                }
+            }
+        }
+
+
+
         return null ;
     }
 
@@ -396,7 +413,17 @@ public abstract class ATableController {
      */
 
     public int getColIndex(String key){
-        return column_to_index.get(key);
+        if(key.equals("Grouping")){
+            for(String s : column_to_index.keySet()){
+                if(s.contains("Grouping")){
+                    return column_to_index.get(s);
+                }
+            }
+        } else {
+            return column_to_index.get(key);
+        }
+        // this return will never reached
+        return -1;
     }
 
     public TableView getTable() {
@@ -443,7 +470,7 @@ public abstract class ATableController {
      *  save to each column the index (column number)
      */
 
-    private void setColumns_to_index(){
+    public void setColumns_to_index(){
         int i = 0;
         for(TableColumn col : this.table.getColumns()){
             column_to_index.put(col.getText(),i);
@@ -493,5 +520,16 @@ public abstract class ATableController {
     public HashMap<String, List<Entry>> getTable_content() {
         return table_content;
     }
+    public void addEditMenue(EditMenu editMenu){
+        this.editMenu = editMenu;
+    }
 
+    public void changeColumnName(String oldname, String newname) {
+        for (TableColumn col : table.getColumns()){
+            if(col.getText().equals(oldname)){
+                col.setText(newname);
+            }
+        }
+        setColumns_to_index();
+    }
 }

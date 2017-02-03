@@ -1,25 +1,61 @@
 package view.groups;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.util.HashMap;
-import java.util.Set;
+import javafx.scene.control.TableColumn;
+import view.table.ATableController;
+
+import java.util.*;
 
 /**
  * Created by neukamm on 25.11.2016.
  */
 public class GroupController {
 
-    HashMap<String, Group> allGroups = new HashMap<>();
+    private HashMap<String, Group> allGroups = new HashMap<>();
+    private ATableController tableController;
+    private boolean groupingIsSet = false;
+    private String colname_group;
 
-
-    public GroupController(){
-
+    public GroupController(ATableController tableController){
+        this.tableController = tableController;
     }
 
 
     public void createGroup(String groupname){
+        groupingIsSet = true;
         Group g = new Group(groupname);
         allGroups.put(groupname, g);
+    }
+
+    public void createGroupByColumn(String colName){
+        if(groupingIsSet)
+            clearGrouping();
+
+        TableColumn column = tableController.getTableColumnByName(colName);
+        tableController.changeColumnName(colName, colName+" (Grouping)");
+        colname_group = colName+" (Grouping)";
+        HashMap<String, ObservableList<ObservableList>> group_row = new HashMap();
+        // get elements if colums as list with only unique entries
+        Set<String> columnData = new HashSet<>();
+        for (Object item : tableController.getTable().getItems()) {
+            String entry = (String) column.getCellObservableValue(item).getValue();
+            columnData.add(entry);
+            if(group_row.containsKey(entry)){
+                ObservableList<ObservableList> tmp = group_row.get(entry);
+                tmp.addAll((ObservableList) item);
+                group_row.put(entry, tmp);
+            } else {
+                ObservableList rows = FXCollections.observableArrayList();
+                rows.addAll(item);
+                group_row.put(entry, rows);
+            }
+        }
+
+        for(String groupname : columnData){
+            createGroup(groupname);
+            addElements(group_row.get(groupname), groupname);
+        }
     }
 
     public void addElement(ObservableList element, String groupname){
@@ -43,6 +79,13 @@ public class GroupController {
     }
 
 
+    public void clearGrouping(){
+        groupingIsSet = false;
+        allGroups.clear();
+        // reset table column
+        tableController.changeColumnName(colname_group, colname_group.split(" ()")[0]);
+    }
+
     public Set<String> getGroupnames(){
         return allGroups.keySet();
     }
@@ -54,6 +97,8 @@ public class GroupController {
         //}
 
     }
+
+
 
     public HashMap<String, Group> getAllGroups() {
         return allGroups;

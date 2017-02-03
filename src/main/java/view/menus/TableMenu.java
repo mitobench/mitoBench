@@ -99,6 +99,7 @@ public class TableMenu {
                     tableController.getDataTable().getDataTable().clear();
                     tableController.getTable().getColumns().removeAll(tableController.getTable().getColumns());
                     tableController.getGroupController().clear();
+                    tableController.updateTable(null);
                 } catch (Exception e){
                     e.printStackTrace();
                 }
