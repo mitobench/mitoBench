@@ -26,12 +26,12 @@ public class AddToGroupDialog {
 
     private ComboBox comboBox;
     private Stage dialog;
-    private ATableController controller;
+    private ATableController tableController;
 
 
     public AddToGroupDialog(GroupController groupController, ObservableList groupItems, ATableController tableController){
 
-        this.controller = tableController;
+        this.tableController = tableController;
         dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         // Boxes
@@ -71,8 +71,7 @@ public class AddToGroupDialog {
             @Override public void handle(ActionEvent e) {
                 // add elements to group
                 groupController.addElements(groupItems, comboBox.getValue().toString());
-                controller.updateTable(controller.createNewEntryListForGrouping(comboBox.getValue().toString()));
-                controller.setContextMenu();
+                tableController.updateTable(tableController.createNewEntryListForGrouping(comboBox.getValue().toString()));
                 dialog.close();
             }
         });

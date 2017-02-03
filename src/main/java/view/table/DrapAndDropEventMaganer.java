@@ -91,28 +91,25 @@ public class DrapAndDropEventMaganer {
 
 
     private  void mouseDragOver(final DragEvent e) {
-        final Dragboard db = e.getDragboard();
-
-            tableUserController.getTable().setStyle("-fx-border-color: #ff525e;"
-                    + "-fx-border-width: 5;"
-                    + "-fx-background-color: #C6C6C6;"
-                    + "-fx-border-style: solid;");
-            e.acceptTransferModes(TransferMode.ANY);
-
+        tableUserController.getTable().setStyle("-fx-border-color: #ff525e;"
+                + "-fx-border-width: 5;"
+                + "-fx-background-color: #C6C6C6;"
+                + "-fx-border-style: solid;");
+        e.acceptTransferModes(TransferMode.ANY);
     }
 
 
     private void mouseDragDropped() {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        addData(tableDBController, tableUserController, selected);
-                    } catch (Exception ex) {
-                        Logger.getLogger(DrapAndDropEventMaganer.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    addData(tableDBController, tableUserController, selected);
+                } catch (Exception ex) {
+                    Logger.getLogger(DrapAndDropEventMaganer.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            });
+            }
+        });
     }
 
 

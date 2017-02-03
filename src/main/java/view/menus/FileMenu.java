@@ -122,19 +122,6 @@ public class FileMenu {
                 // todo: make db query
                 DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB);
 
-                // for testing: read test database
-
-                //mitoBenchWindow.getPane_table_DB().getChildren().add(tableControllerDB.getTable());
-
-                // create project reader to read tmp database
-//                ProjectReader reader = new ProjectReader();
-//                try {
-//                    reader.read(new File("test_files/project.mitoproj"));
-//                    reader.loadData(tableControllerDB);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-
                 DrapAndDropEventMaganer drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
                 drapAndDropEventMaganer.createEvent();
 

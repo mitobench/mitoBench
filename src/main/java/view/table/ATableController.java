@@ -1,5 +1,6 @@
 package view.table;
 
+import database.ColumnNameMapper;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
@@ -28,17 +29,16 @@ public abstract class ATableController {
 
 
     protected TableView<ObservableList> table;
-    protected List<String> col_names;
 
     protected ObservableList<ObservableList> data;
     protected ObservableList<ObservableList> data_copy;
 
-
     protected DataTable dataTable;
     protected HashMap<String, Integer> column_to_index;
+    protected HashMap<String, List<Entry>> table_content;
     protected ATableController controller;
     protected GroupController groupController;
-    protected HashMap<String, List<Entry>> table_content;
+    protected List<String> col_names;
 
     public ATableController(){
 
@@ -49,7 +49,6 @@ public abstract class ATableController {
         table = new TableView();
         table.setId("tableView");
         table.setEditable(false);
-
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -63,7 +62,6 @@ public abstract class ATableController {
         groupController = new GroupController();
 
         table_content = new HashMap<>();
-
 
     }
 
@@ -193,7 +191,6 @@ public abstract class ATableController {
             m++;
         }
 
-
         for(int i = 0 ; i < data_tmp.length; i++){
             ObservableList row = FXCollections.observableArrayList();
             for(int j = 0 ; j < data_tmp[i].length; j++){
@@ -269,14 +266,15 @@ public abstract class ATableController {
     public HashMap<String, List<Entry>>  createNewEntryListDragAndDrop(ObservableList<ObservableList> items){
 
         HashMap<String, List<Entry>> entries = new HashMap<>();
-
+        ColumnNameMapper mapper = new ColumnNameMapper();
         for(int i = 0; i < items.size(); i++) {
             ObservableList item = items.get(i);
             String rowName = items.get(i).get(getColIndex("ID")).toString();
             List<Entry> eList = new ArrayList<>();
             List<String> colnames = getCurrentColumnNames();
             for(int k = 0; k < item.size(); k++){
-                Entry e = new Entry(colnames.get(k), new CategoricInputType("String"), new GenericInputData(item.get(k).toString()));
+
+                Entry e = new Entry(mapper.mapString(colnames.get(k)), new CategoricInputType("String"), new GenericInputData(item.get(k).toString()));
                 eList.add(e);
             }
             entries.put(rowName, eList);
@@ -491,32 +489,6 @@ public abstract class ATableController {
         }
     }
 
-    public void setContextMenu(){
-
-        final ContextMenu menu = new ContextMenu();
-
-        final MenuItem addNewGropuItem = new MenuItem("Create new group");
-        addNewGropuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                CreateGroupDialog createGroupDialog =
-                        new CreateGroupDialog(groupController, table, controller);
-            }
-        });
-
-        final MenuItem addAllSelectedItem
-                = new MenuItem("Add to group");
-        addAllSelectedItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                AddToGroupDialog addToGroupDialog =
-                        new AddToGroupDialog(groupController, table.getSelectionModel().getSelectedItems(), controller);
-            }
-        });
-
-        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
-        table.setContextMenu(menu);
-    }
 
     public HashMap<String, List<Entry>> getTable_content() {
         return table_content;

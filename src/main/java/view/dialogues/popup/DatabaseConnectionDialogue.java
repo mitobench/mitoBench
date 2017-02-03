@@ -56,6 +56,8 @@ public class DatabaseConnectionDialogue {
         Label password_label = new Label("Password");
         usernamme_field = new TextField();
         password_field = new TextField();
+        usernamme_field.setText("mitodbreader");
+        password_field.setText("*****************");
         loginBtn = new Button("Login");
 
         dialogVbox.add(title_label, 0,0,2,1);
@@ -75,6 +77,8 @@ public class DatabaseConnectionDialogue {
                 password = password_field.getText();
 
                 //For testing and stuff
+                usernamme_field.setText("mitodbreader");
+                password_field.setText("*****************");
                 password = "LKeAFGVqSZdtr8peTPOv";
                 username = "mitodbreader";
 
