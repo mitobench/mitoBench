@@ -82,31 +82,31 @@ public class GUITestSteps {
         });
     }
 
-    public void part4TreeViewTests() {
-        step("Open TreeView", () -> {
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeView-inner-tree");
-            robot.clickOn("#treeviewApplyButton");
-            robot.clickOn("#treeViewOpenCloseLabel");
-
-
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
-            robot.push(KeyCode.ENTER);
-            robot.clickOn("#treeViewOpenCloseLabel");
-
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeviewApplyButton");
-            robot.clickOn("#treeViewOpenCloseLabel");
-
-        });
-    }
+//    public void part4TreeViewTests() {
+//        step("Open TreeView", () -> {
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//            robot.clickOn("#treeView-inner-tree");
+//            robot.clickOn("#treeviewApplyButton");
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//
+//
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+//            robot.push(KeyCode.ENTER);
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//            robot.clickOn("#treeviewApplyButton");
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//
+//        });
+//    }
 
     public void part5CreatePlots(){
         step("Plot HG frequency", () -> {
