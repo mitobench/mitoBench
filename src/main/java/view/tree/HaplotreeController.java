@@ -27,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
+import view.table.ATableController;
 import view.table.TableControllerUserBench;
 import view.table.TableSelectionFilter;
 
@@ -50,7 +51,7 @@ public class HaplotreeController {
     private Timeline timelineUp;
     private Timeline timelineDown;
     private String[] seletcion_haplogroups;
-    private TableControllerUserBench tableManager;
+    private ATableController tableManager;
 
     private TextField searchFieldListHaplogroup;
     private TreeHaplo tree;
@@ -58,7 +59,7 @@ public class HaplotreeController {
     private HashMap<String, List<String>> treeMap_leaf_to_root;
     private HashMap<String, List<String>> node_to_children;
 
-    public HaplotreeController(TableControllerUserBench tableManager) throws IOException, SAXException, ParserConfigurationException {
+    public HaplotreeController(ATableController tableManager) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
 

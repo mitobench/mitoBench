@@ -1,12 +1,16 @@
 package gui.GUI_functionality;
 
 import io.PhyloTreeParser;
+import javafx.application.Application;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
+import view.MitoBenchWindow;
+import view.table.ATableController;
 import view.table.TableControllerUserBench;
 import view.tree.TreeHaplo;
 import view.tree.HaplotreeController;
@@ -30,12 +34,31 @@ public class TreeTest {
     private HaplotreeController treeController;
 
 
+
+    @BeforeClass
+    public static void setUpClass() throws InterruptedException {
+        // Initialise Java FX
+
+        System.out.printf("About to launch FX App\n");
+        Thread t = new Thread("JavaFX Init Thread") {
+            public void run() {
+                Application.launch(MitoBenchWindow.class, new String[0]);
+            }
+        };
+        t.setDaemon(true);
+        t.start();
+        System.out.printf("FX App thread started\n");
+        Thread.sleep(500);
+    }
+
+
     @Before
     public void setUp() throws IOException, ParserConfigurationException, SAXException {
 
+
         treeHaplo = new TreeHaplo("Haplo Tree");
         treeHaplo.addStructure();
-        TableControllerUserBench tableController = new TableControllerUserBench();
+        ATableController tableController = new TableControllerUserBench();
         tableController.init();
         treeController = new HaplotreeController(tableController);
         treeController.configureSearch(new Pane());
