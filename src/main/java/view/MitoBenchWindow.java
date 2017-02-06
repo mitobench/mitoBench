@@ -63,7 +63,8 @@ public class MitoBenchWindow extends Application{
 
         // initialize table
         tableControllerUserBench = new TableControllerUserBench();
-        tableControllerUserBench.init(info_selected_items);
+        tableControllerUserBench.init();
+        tableControllerUserBench.addRowListener(info_selected_items);
         tableControllerUserBench.getTable().setId("mainEntryTable");
         tableControllerUserBench.createContextMenu();
 
@@ -72,7 +73,7 @@ public class MitoBenchWindow extends Application{
         tableControllerUserBench.getTable().prefWidthProperty().bind(scene.widthProperty());
 
         tableControllerDB = new TableControllerDB();
-        tableControllerDB.init(info_selected_items);
+        tableControllerDB.init();
         tableControllerDB.getTable().setId("dbtable");
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());

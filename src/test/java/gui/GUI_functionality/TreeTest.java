@@ -60,7 +60,7 @@ public class TreeTest {
         treeHaplo = new TreeHaplo("Haplo Tree");
         treeHaplo.addStructure();
         ATableController tableController = new TableControllerUserBench();
-        tableController.init(new Label());
+        tableController.init();
         treeController = new HaplotreeController(tableController);
         treeController.configureSearch(new Pane());
         treeController.setAnimation();

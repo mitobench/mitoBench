@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
@@ -25,6 +26,14 @@ public class TableControllerUserBench extends ATableController{
 
     public TableControllerUserBench() {
         super();
+    }
+
+    public void addRowListener(Label infolabel){
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            // update text
+            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " rows are selected");
+        });
+
     }
 
     public void createContextMenu(){

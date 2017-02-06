@@ -1,12 +1,12 @@
 package gui;
 
-import javafx.scene.Node;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxToolkit;
 import view.MitoBenchWindow;
 
 import static org.testfx.api.FxAssert.verifyThat;
@@ -31,7 +31,7 @@ public class GUIDatabaseTest extends FxRobot {
             System.setProperty("java.awt.headless", "true");
         }
         System.setProperty("javafx.running", "true");
-        registerPrimaryStage();
+        //FxToolkit.registerPrimaryStage();
     }
 
     @Before

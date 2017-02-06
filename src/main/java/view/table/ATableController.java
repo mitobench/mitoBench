@@ -47,17 +47,13 @@ public abstract class ATableController {
 
     }
 
-    public void init(Label infolabel){
+    public void init(){
 
         table = new TableView();
         //table.setId("tableView");
         table.setEditable(false);
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            // update text
-            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " rows are selected");
-        });
 
         data = FXCollections.observableArrayList();
         data_copy = FXCollections.observableArrayList();
