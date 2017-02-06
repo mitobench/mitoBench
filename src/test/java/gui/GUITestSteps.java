@@ -36,6 +36,12 @@ public class GUITestSteps {
         step("MenuBar exists", () -> {
             verifyThat("#menuBar", isVisible());
         });
+        step("Visualization pane exists", () -> {
+            verifyThat("#mainVizTabpane", isVisible());
+        });
+        step("Statistics pane exists", () -> {
+            verifyThat("#mainWindowLeftpart", isVisible());
+        });
     }
 
     public void part2MenuInteraction() {

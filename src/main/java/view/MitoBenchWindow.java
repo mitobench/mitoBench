@@ -63,6 +63,7 @@ public class MitoBenchWindow extends Application{
         // initialize table
         tableControllerUserBench = new TableControllerUserBench();
         tableControllerUserBench.init();
+        tableControllerUserBench.getTable().setId("mainEntryTable");
         tableControllerUserBench.createContextMenu();
 
         // this binding is responsible for binding table to main window
@@ -71,6 +72,7 @@ public class MitoBenchWindow extends Application{
 
         tableControllerDB = new TableControllerDB();
         tableControllerDB.init();
+        tableControllerDB.getTable().setId("dbtable");
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerDB.getTable().prefWidthProperty().bind(scene.widthProperty());
@@ -140,6 +142,7 @@ public class MitoBenchWindow extends Application{
     private TabPane configureVisPane()
     {
         tabpane_visualization = new TabPane();
+        tabpane_visualization.setId("mainVizTabpane");
         tabpane_visualization.setPadding(new Insets(10, 10, 10,10));
 
         return tabpane_visualization;

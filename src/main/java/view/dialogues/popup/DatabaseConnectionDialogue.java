@@ -52,13 +52,24 @@ public class DatabaseConnectionDialogue {
 
     private void setComponents(){
         Label title_label = new Label("Connect to database");
+        title_label.setId("title_label");
         Label username_label = new Label("Username");
+        username_label.setId("username_label");
+
         Label password_label = new Label("Password");
+        password_label.setId("password_label");
+
         usernamme_field = new TextField();
+        usernamme_field.setId("usernamme_field");
+
         password_field = new TextField();
+        password_field.setId("password_field");
+
         usernamme_field.setText("mitodbreader");
         password_field.setText("*****************");
+
         loginBtn = new Button("Login");
+        loginBtn.setId("loginButton");
 
         dialogVbox.add(title_label, 0,0,2,1);
         dialogVbox.add(username_label,0,1,1,1);
