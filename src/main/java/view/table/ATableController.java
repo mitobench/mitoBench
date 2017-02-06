@@ -7,6 +7,7 @@ import io.inputtypes.CategoricInputType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,13 +47,17 @@ public abstract class ATableController {
 
     }
 
-    public void init(){
+    public void init(Label infolabel){
 
         table = new TableView();
         //table.setId("tableView");
         table.setEditable(false);
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            // update text
+            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " rows are selected");
+        });
 
         data = FXCollections.observableArrayList();
         data_copy = FXCollections.observableArrayList();

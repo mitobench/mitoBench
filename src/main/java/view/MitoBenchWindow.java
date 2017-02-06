@@ -39,6 +39,7 @@ public class MitoBenchWindow extends Application{
     private TabPane tabpane_statistics;
     private BorderPane pane_table;
     private VBox pane_table_userBench;
+    private Label info_selected_items=new Label("");
 
 
     @Override
@@ -62,7 +63,7 @@ public class MitoBenchWindow extends Application{
 
         // initialize table
         tableControllerUserBench = new TableControllerUserBench();
-        tableControllerUserBench.init();
+        tableControllerUserBench.init(info_selected_items);
         tableControllerUserBench.getTable().setId("mainEntryTable");
         tableControllerUserBench.createContextMenu();
 
@@ -71,7 +72,7 @@ public class MitoBenchWindow extends Application{
         tableControllerUserBench.getTable().prefWidthProperty().bind(scene.widthProperty());
 
         tableControllerDB = new TableControllerDB();
-        tableControllerDB.init();
+        tableControllerDB.init(info_selected_items);
         tableControllerDB.getTable().setId("dbtable");
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
@@ -157,13 +158,17 @@ public class MitoBenchWindow extends Application{
     private BorderPane configureTablePane() throws IOException, SAXException, ParserConfigurationException
     {
         final Label label = new Label("User table");
+        String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " rows are selected";
+        info_selected_items.setText(info_text);
+
+
 
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTable");
         pane_table_userBench = new VBox();
         pane_table_userBench.setSpacing(10);
         pane_table_userBench.setPadding(new Insets(20, 10, 10, 10));
-        pane_table_userBench.getChildren().addAll(label, tableControllerUserBench.getTable());
+        pane_table_userBench.getChildren().addAll(label, tableControllerUserBench.getTable(), info_selected_items);
         pane_table.setCenter(pane_table_userBench);
 
         return pane_table;

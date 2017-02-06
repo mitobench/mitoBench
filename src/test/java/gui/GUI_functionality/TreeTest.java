@@ -2,6 +2,7 @@ package gui.GUI_functionality;
 
 import io.PhyloTreeParser;
 import javafx.application.Application;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
@@ -59,7 +60,7 @@ public class TreeTest {
         treeHaplo = new TreeHaplo("Haplo Tree");
         treeHaplo.addStructure();
         ATableController tableController = new TableControllerUserBench();
-        tableController.init();
+        tableController.init(new Label());
         treeController = new HaplotreeController(tableController);
         treeController.configureSearch(new Pane());
         treeController.setAnimation();
