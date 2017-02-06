@@ -164,7 +164,7 @@ public class MitoBenchWindow extends Application{
 
 
         pane_table = new BorderPane();
-        pane_table.setId("mainEntryTable");
+        pane_table.setId("mainEntryTablePane");
         pane_table_userBench = new VBox();
         pane_table_userBench.setSpacing(10);
         pane_table_userBench.setPadding(new Insets(20, 10, 10, 10));
