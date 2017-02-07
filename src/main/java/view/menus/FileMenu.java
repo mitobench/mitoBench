@@ -83,8 +83,8 @@ public class FileMenu {
 
          */
 
-        MenuItem importFile = new MenuItem("Import Data");
-        importFile.setId("importData");
+        MenuItem importFile = new MenuItem("Import");
+        importFile.setId("import");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 IImportDialogue importDialogue;

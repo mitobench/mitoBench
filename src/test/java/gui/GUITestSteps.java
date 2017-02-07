@@ -17,7 +17,6 @@ public class GUITestSteps {
     private final FxRobot robot;
     private int stepno;
 
-
     public GUITestSteps(final FxRobot robot) {
         this.robot = robot;
     }
@@ -82,31 +81,31 @@ public class GUITestSteps {
         });
     }
 
-//    public void part4TreeViewTests() {
-//        step("Open TreeView", () -> {
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//            robot.clickOn("#treeView-inner-tree");
-//            robot.clickOn("#treeviewApplyButton");
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//
-//
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
-//            robot.push(KeyCode.ENTER);
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//            robot.clickOn("#treeviewApplyButton");
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//
-//        });
-//    }
+    public void part4TreeViewTests() {
+        step("Open TreeView", () -> {
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeView-inner-tree");
+            robot.clickOn("#treeviewApplyButton");
+            robot.clickOn("#treeViewOpenCloseLabel");
+
+
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+            robot.push(KeyCode.ENTER);
+            robot.clickOn("#treeViewOpenCloseLabel");
+
+            robot.clickOn("#treeViewOpenCloseLabel");
+            //Now our dropdown menu should appear!
+            verifyThat("#treeviewSearchPane", isVisible());
+            robot.clickOn("#treeviewApplyButton");
+            robot.clickOn("#treeViewOpenCloseLabel");
+
+        });
+    }
 
     public void part5CreatePlots(){
         step("Plot HG frequency", () -> {
@@ -151,11 +150,6 @@ public class GUITestSteps {
 
         });
 
-
-
-
-
-
         step("Clear plots", () -> {
 
             robot.clickOn("#graphicsMenu");
@@ -169,10 +163,11 @@ public class GUITestSteps {
 
     public void part6FillTable(String file){
         step("Open Project file", () -> {
-            robot.clickOn("#fileMenu").clickOn("Import Data");
+            robot.clickOn("#fileMenu").moveTo("Import").clickOn("Import");
             verifyThat("#import_dialogue_alt", isVisible());
             robot.clickOn("#textfield_path").write(file);
             robot.clickOn("#btn_open");
+
         });
     }
 
@@ -205,9 +200,11 @@ public class GUITestSteps {
             verifyThat("#dbtable" , isVisible());
 
             robot.clickOn("#dbtable").drag("#dbtable").dropTo("#mainEntryTable");
+
         });
 
     }
+
 
 
     private void step(final String step, final Runnable runnable) {

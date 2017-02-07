@@ -1,6 +1,7 @@
 package view;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -20,6 +21,9 @@ import view.tree.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -55,7 +59,8 @@ public class MitoBenchWindow extends Application{
         this.primaryStage.setScene(scene);
         this.primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
-        primaryStage.toFront();
+        //primaryStage.setAlwaysOnTop(true);
+
 
         // bind width and height to scene to enable resizing
         pane_root.prefHeightProperty().bind(scene.heightProperty());
@@ -104,7 +109,7 @@ public class MitoBenchWindow extends Application{
         menuBar.setId("menuBar");
 
         EditMenu editMenu = new EditMenu();
-        StatisticsMenu toolsMenu = new StatisticsMenu(tableControllerUserBench, treeController, tabpane_statistics, scene);
+        StatisticsMenu toolsMenu = new StatisticsMenu(tableControllerUserBench, treeController, tabpane_statistics, scene, primaryStage);
         FileMenu fileMenu = new FileMenu(tableControllerUserBench, MITOBENCH_VERSION, primaryStage, toolsMenu,
                 this, tableControllerDB);
         TableMenu tableMenu = new TableMenu(tableControllerUserBench);
@@ -227,4 +232,6 @@ public class MitoBenchWindow extends Application{
     public Scene getScene() {
         return scene;
     }
+
+
 }

@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
+import javafx.stage.Stage;
 import view.dialogues.popup.HGStatisticsPopupDialogue;
 import view.table.TableControllerUserBench;
 import statistics.HaploStatistics;
@@ -18,18 +19,20 @@ import java.io.IOException;
  */
 public class StatisticsMenu {
 
+    private final Stage stage;
     private Menu menuTools;
     private TableControllerUserBench tableController;
     private HaplotreeController treeHaploController;
     private HaploStatistics haploStatistics;
 
     public StatisticsMenu(TableControllerUserBench tableController, HaplotreeController treeHaploController, TabPane statsTabpane,
-                          Scene scene) throws IOException {
+                          Scene scene, Stage pstage) throws IOException {
 
         menuTools = new Menu("Statistics");
         menuTools.setId("menu_statistics");
         this.tableController = tableController;
         this.treeHaploController = treeHaploController;
+        stage = pstage;
         addSubMenus(statsTabpane, scene);
     }
 
@@ -39,6 +42,7 @@ public class StatisticsMenu {
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 haploStatistics = new HaploStatistics(tableController, treeHaploController);
+                stage.toBack();
                 HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue();
                 hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
                 hgStatisticsPopupDialogug.show();

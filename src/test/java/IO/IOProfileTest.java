@@ -21,7 +21,7 @@ public class IOProfileTest {
 
     @Before
     public void setup() throws TimeoutException {
-        //tableController = new TableControllerUserBench();
+        //tableController = new TableController();
         //tableController.init();
 
     }
