@@ -472,6 +472,7 @@ public abstract class ATableController {
      */
 
     public void setColumns_to_index(){
+        cleanColToIndex();
         int i = 0;
         for(TableColumn col : this.table.getColumns()){
             column_to_index.put(col.getText(),i);
@@ -526,11 +527,17 @@ public abstract class ATableController {
     }
 
     public void changeColumnName(String oldname, String newname) {
+        System.out.println("Changing column name");
         for (TableColumn col : table.getColumns()){
             if(col.getText().equals(oldname)){
-                col.setText(newname);
+                col.setText(newname.trim());
             }
         }
         setColumns_to_index();
+        System.out.println("updated indexes");
+    }
+
+    public void cleanColToIndex() {
+        column_to_index.clear();
     }
 }

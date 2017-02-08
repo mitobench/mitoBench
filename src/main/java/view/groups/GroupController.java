@@ -1,5 +1,6 @@
 package view.groups;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -33,6 +34,8 @@ public class GroupController {
             clearGrouping();
 
         TableColumn column = tableController.getTableColumnByName(colName);
+        System.out.println("Create new group-----------");
+        System.out.println("Old name: " + colName + " ¦ New name" + colName+" (Grouping)");
         tableController.changeColumnName(colName, colName+" (Grouping)");
         colname_group = colName+" (Grouping)";
         HashMap<String, ObservableList<ObservableList>> group_row = new HashMap();
@@ -83,7 +86,8 @@ public class GroupController {
         groupingIsSet = false;
         allGroups.clear();
         // reset table column
-        tableController.changeColumnName(colname_group, colname_group.split(" ()")[0]);
+        tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
+        //tableController.cleanColToIndex();
     }
 
     public Set<String> getGroupnames(){
