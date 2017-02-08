@@ -62,7 +62,8 @@ public class CreateGroupDialog {
             @Override public void handle(ActionEvent e) {
                 // create new Group
                 String gName = groupnameField.getText();
-                groupController.createGroup(gName);
+                //groupController.createGroup(gName);
+                groupController.createGroupByColumn(gName);
                 groupController.addElements(groupItems, gName);
                 controller.updateTable(controller.createNewEntryListForGrouping(groupnameField.getText()));
                 dialog.close();

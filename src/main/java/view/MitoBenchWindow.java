@@ -124,6 +124,7 @@ public class MitoBenchWindow extends Application{
                                   helpMenu.getMenuHelp());
 
         tableControllerUserBench.addEditMenue(editMenu);
+        tableControllerDB.addEditMenue(editMenu);
         return menuBar;
     }
 

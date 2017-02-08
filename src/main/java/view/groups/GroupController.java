@@ -34,10 +34,17 @@ public class GroupController {
             clearGrouping();
 
         TableColumn column = tableController.getTableColumnByName(colName);
+
+        if(!colName.contains("(Grouping)")){
+            tableController.changeColumnName(colName, colName+" (Grouping)");
+            colname_group = colName+" (Grouping)";
+        } else {
+            colname_group = colName;
+        }
         System.out.println("Create new group-----------");
-        System.out.println("Old name: " + colName + " ¦ New name" + colName+" (Grouping)");
-        tableController.changeColumnName(colName, colName+" (Grouping)");
-        colname_group = colName+" (Grouping)";
+        System.out.println("Old name: " + colName + " ¦ New name: " + colname_group);
+
+
         HashMap<String, ObservableList<ObservableList>> group_row = new HashMap();
         // get elements if colums as list with only unique entries
         Set<String> columnData = new HashSet<>();

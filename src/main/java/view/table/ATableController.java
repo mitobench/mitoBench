@@ -343,6 +343,12 @@ public abstract class ATableController {
                 }
             }
 
+        } else if(name.contains("Haplogroup")){
+            for (TableColumn col : table.getColumns()) {
+                if (col.getText().contains("Haplogroup")) {
+                    return col;
+                }
+            }
         } else {
             for (TableColumn col : table.getColumns()) {
                 if (col.getText().equals(name)) {
@@ -420,6 +426,13 @@ public abstract class ATableController {
                     return column_to_index.get(s);
                 }
             }
+        } else if(key.equals("Haplogroup")){
+            for(String s : column_to_index.keySet()){
+                if(s.contains("Haplogroup")){
+                    return column_to_index.get(s);
+                }
+            }
+
         } else {
             return column_to_index.get(key);
         }
@@ -478,6 +491,7 @@ public abstract class ATableController {
             column_to_index.put(col.getText(),i);
             i++;
         }
+        editMenu.upateGroupItem(getCurrentColumnNames(), groupController);
     }
 
 
@@ -501,19 +515,25 @@ public abstract class ATableController {
 
     public void loadGroups(){
 
-        // if "grouping" exists, create groups
-        if (getCurrentColumnNames().contains("Grouping")){
-            String groupname;
-            //iterate over rows
-            for (Object row : table.getItems()) {
-                ObservableList row_parsed = (ObservableList) row;
+        // if "grouping" column already exists, create groups
+        for(String colname : getCurrentColumnNames()){
+            if(colname.contains("(Grouping)")){
+                groupController.createGroupByColumn(colname);
+//                String groupname;
+//                //iterate over rows
+//                for (Object row : table.getItems()) {
+//                    ObservableList row_parsed = (ObservableList) row;
+//
+//                    groupname = (String) getTableColumnByName("Grouping").getCellObservableValue(row).getValue();
+//
+//                    if(!groupController.getAllGroups().keySet().contains(groupname)) {
+//                        groupController.createGroupByColumn();
+//
+//                    }
+//                    groupController.addElement(row_parsed, colname);
+//                }
+                break;
 
-                groupname = (String) getTableColumnByName("Grouping").getCellObservableValue(row).getValue();
-
-                if(!groupController.getAllGroups().keySet().contains(groupname)) {
-                    groupController.createGroup(groupname);
-                }
-                groupController.addElement(row_parsed, groupname);
             }
         }
     }
