@@ -21,7 +21,7 @@ public class GUITestSteps {
         this.robot = robot;
     }
 
-    public void part1BasicStuff() {
+    public void part4BasicStuff() {
 
         step("Open application", () -> {
             verifyThat("#mainBorderPane", isVisible());
@@ -43,7 +43,7 @@ public class GUITestSteps {
         });
     }
 
-    public void part2MenuInteraction() {
+    public void part9MenuInteraction() {
         step("Open File Menu", () -> {
             robot.clickOn("#fileMenu");
             verifyThat("#fileMenu", isVisible());
@@ -81,7 +81,7 @@ public class GUITestSteps {
         });
     }
 
-    public void part4TreeViewTests() {
+    public void part1TreeViewTests() {
         step("Open TreeView", () -> {
             robot.clickOn("#treeViewOpenCloseLabel");
             //Now our dropdown menu should appear!
@@ -107,7 +107,7 @@ public class GUITestSteps {
         });
     }
 
-    public void part5CreatePlots(){
+    public void part8CreatePlots(){
         step("Plot HG frequency", () -> {
             robot.clickOn("#graphicsMenu");
             verifyThat("#graphicsMenu", isVisible());
@@ -161,9 +161,9 @@ public class GUITestSteps {
     }
 
 
-    public void part6FillTable(String file){
+    public void part2FillTable(String file){
         step("Open Project file", () -> {
-            robot.clickOn("#fileMenu").moveTo("Import").clickOn("Import");
+            robot.clickOn("#fileMenu").clickOn("Import");
             verifyThat("#import_dialogue_alt", isVisible());
             robot.clickOn("#textfield_path").write(file);
             robot.clickOn("#btn_open");
@@ -171,7 +171,7 @@ public class GUITestSteps {
         });
     }
 
-    public void partStatistics() {
+    public void part6Statistics() {
 
         step("Calculate Statistics", () -> {
             robot.clickOn("#menu_statistics");
@@ -187,7 +187,7 @@ public class GUITestSteps {
     }
 
 
-    public void dBTest(){
+    public void part5DBTest(){
         step("Calculate Statistics", () -> {
             robot.clickOn("#fileMenu").clickOn("#importFromDB");
             verifyThat("#connect_to_database", isVisible());

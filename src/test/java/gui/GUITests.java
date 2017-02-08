@@ -2,12 +2,9 @@ package gui;
 
 
 import io.PhyloTreeParser;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -88,14 +85,18 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-        //steps.part3AboutDialogueTests();
-        steps.part1BasicStuff();
-        steps.part2MenuInteraction();
-        //steps.part4TreeViewTests();
-        //steps.part6FillTable(getResource(testFiles.getProject_file()).toString());
-        //steps.part5CreatePlots();
-        //steps.partStatistics();
-        //steps.dBTest();
+        steps.part1TreeViewTests();
+        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
+        steps.part3AboutDialogueTests();
+        steps.part4BasicStuff();
+        //steps.part5DBTest();
+        steps.part6Statistics();
+        steps.part8CreatePlots();
+        steps.part9MenuInteraction();
+
+
+
+
     }
 
     @Test
