@@ -7,14 +7,9 @@ import io.inputtypes.CategoricInputType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import view.groups.AddToGroupDialog;
-import view.groups.CreateGroupDialog;
 import view.groups.GroupController;
 import view.menus.EditMenu;
 
@@ -48,7 +43,6 @@ public abstract class ATableController {
     public void init(){
 
         table = new TableView();
-        //table.setId("tableView");
         table.setEditable(false);
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -535,21 +529,7 @@ public abstract class ATableController {
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
                 groupController.createGroupByColumn(colname);
-//                String groupname;
-//                //iterate over rows
-//                for (Object row : table.getItems()) {
-//                    ObservableList row_parsed = (ObservableList) row;
-//
-//                    groupname = (String) getTableColumnByName("Grouping").getCellObservableValue(row).getValue();
-//
-//                    if(!groupController.getAllGroups().keySet().contains(groupname)) {
-//                        groupController.createGroupByColumn();
-//
-//                    }
-//                    groupController.addElement(row_parsed, colname);
-//                }
                 break;
-
             }
         }
     }

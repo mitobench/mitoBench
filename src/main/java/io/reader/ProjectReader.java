@@ -7,7 +7,6 @@ import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
 import io.inputtypes.RadioCarbonInputType;
 import view.table.ATableController;
-import view.table.TableControllerUserBench;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class ProjectReader {
 
                             List<Entry> all_entries = new ArrayList<>();
                             for (int i = 0; i < headergroup.length; i++) {
-                                // create right data type
+                                // create correct data type
                                 Entry entry;
                                 if (headertype.equals("C14")) {
                                     entry = new Entry(headergroup[i].trim(), new RadioCarbonInputType(headertype[i].trim()), new RadioCarbonData(entries[i].trim(), RadioCarbonData.PARSE_C14_DATE_INFORMATION));

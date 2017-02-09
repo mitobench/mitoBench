@@ -1,7 +1,6 @@
 package view;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -20,10 +19,6 @@ import view.tree.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
 
 /**
  * Created by neukamm on 03.11.16.
@@ -42,7 +37,7 @@ public class MitoBenchWindow extends Application{
     private TabPane tabpane_statistics;
     private BorderPane pane_table;
     private VBox pane_table_userBench;
-    private Label info_selected_items=new Label("");
+    private Label info_selected_items = new Label("");
 
 
     @Override
@@ -58,8 +53,6 @@ public class MitoBenchWindow extends Application{
         this.primaryStage.setScene(scene);
         this.primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
-        //primaryStage.setAlwaysOnTop(true);
-
 
         // bind width and height to scene to enable resizing
         pane_root.prefHeightProperty().bind(scene.heightProperty());

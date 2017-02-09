@@ -1,6 +1,5 @@
 package view.groups;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -41,9 +40,6 @@ public class GroupController {
         } else {
             colname_group = colName;
         }
-        System.out.println("Create new group-----------");
-        System.out.println("Old name: " + colName + " ¦ New name: " + colname_group);
-
 
         HashMap<String, ObservableList<ObservableList>> group_row = new HashMap();
         // get elements if colums as list with only unique entries
@@ -103,15 +99,6 @@ public class GroupController {
 
     public void clear(){
         allGroups.clear();
-        //for(String key : allGroups.keySet()){
-        //    allGroups.remove(key);
-        //}
-
     }
 
-
-
-    public HashMap<String, Group> getAllGroups() {
-        return allGroups;
-    }
 }

@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import view.groups.GroupController;
-import view.table.ATableController;
 
 import java.util.List;
 
