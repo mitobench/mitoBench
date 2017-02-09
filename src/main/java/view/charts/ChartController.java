@@ -37,27 +37,21 @@ public class ChartController {
      * @param barPlot
      * @param column
      */
-    public void addDataBarChart(ABarPlot barPlot, TableColumn column, String filter, TableColumn col2){
-        if(filter.length()!=0 && col2 != null){
-            List<String> columnData = new ArrayList<>();
+    public void addDataBarChart(ABarPlot barPlot, TableColumn column, String filter, TableColumn col2, List<String> column_data){
+
+        if(column_data == null){
+            column_data = new ArrayList<>();
             for (Object item : tableController.getTable().getItems()) {
-                if(col2.getCellObservableValue(item).getValue().equals(filter)){
-                    columnData.add((String)column.getCellObservableValue(item).getValue());
-                }
-
+                column_data.add((String)column.getCellObservableValue(item).getValue());
             }
+        }
 
-        } else {
-            List<String> columnData = new ArrayList<>();
-            for (Object item : tableController.getTable().getItems()) {
-                columnData.add((String)column.getCellObservableValue(item).getValue());
-            }
-            String[] selected_data = columnData.toArray(new String[columnData.size()]);
-            barPlot.clearData();
 
-            if (selected_data.length !=0) {
-                barPlot.addData(tableController.getDataHist(selected_data));
-            }
+        String[] selected_data = column_data.toArray(new String[column_data.size()]);
+        barPlot.clearData();
+
+        if (selected_data.length !=0) {
+            barPlot.addData(tableController.getDataHist(selected_data));
         }
     }
 

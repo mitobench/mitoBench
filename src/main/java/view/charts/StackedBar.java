@@ -170,7 +170,7 @@ public class StackedBar {
                 columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
         }
 
-        graphicsMenu.createHaploBarchart(haplo_col, group, col2);
+        graphicsMenu.createHaploBarchart(haplo_col, group, col2, columnData);
     }
 
 

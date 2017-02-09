@@ -149,7 +149,7 @@ public class GraphicsMenu {
 
                         if(haplo_col!=null){
                             initHaploBarchart();
-                            createHaploBarchart(haplo_col, "", null);
+                            createHaploBarchart(haplo_col, "", null, null);
                         }
                     }
 
@@ -291,7 +291,7 @@ public class GraphicsMenu {
                         TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
                         if(haplo_col != null){
                             initGroupBarChart();
-                            chartController.addDataBarChart(barChartGrouping, haplo_col, "", null);
+                            chartController.addDataBarChart(barChartGrouping, haplo_col, "", null, null);
                             barChartGrouping.setColor(stage);
                         }
                     }
@@ -312,8 +312,8 @@ public class GraphicsMenu {
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);
     }
 
-    public void createHaploBarchart(TableColumn haplo_col, String filter, TableColumn col2){
-        chartController.addDataBarChart(barPlotHaplo, haplo_col, filter, col2);
+    public void createHaploBarchart(TableColumn haplo_col, String filter, TableColumn col2, List<String> columnData ){
+        chartController.addDataBarChart(barPlotHaplo, haplo_col, filter, col2, columnData);
     }
 
 
