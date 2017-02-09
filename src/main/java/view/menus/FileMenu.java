@@ -51,6 +51,7 @@ public class FileMenu {
     private StatisticsMenu toolsMenu;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
+    private DrapAndDropEventMaganer drapAndDropEventMaganer;
 
     public FileMenu(TableControllerUserBench tableController, String version, Stage stage, StatisticsMenu toolsMenu,
                     MitoBenchWindow mitoBenchWindow, TableControllerDB tableControllerDB ) throws IOException {
@@ -118,10 +119,13 @@ public class FileMenu {
                 mitoBenchWindow.splitTablePane(tableControllerDB);
 
                 // todo: make db query
-                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB);
+                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB,"Database Login");
 
-                DrapAndDropEventMaganer drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
-                drapAndDropEventMaganer.createEvent();
+                if(drapAndDropEventMaganer==null){
+                    drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
+                    drapAndDropEventMaganer.createEvent();
+
+                }
 
 
             }

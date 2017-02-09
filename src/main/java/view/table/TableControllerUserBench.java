@@ -1,21 +1,16 @@
 package view.table;
 
 
-import io.datastructure.Entry;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.util.Callback;
+
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
 
-import java.util.*;
+
 
 /**
  * Created by neukamm on 07.11.16.
@@ -62,10 +57,5 @@ public class TableControllerUserBench extends ATableController{
 
 
     }
-
-    public void updateEditMenuItem(){
-        editMenu.upateGroupItem(col_names_sorted, groupController);
-    }
-
 
 }

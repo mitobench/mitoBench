@@ -4,12 +4,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -168,8 +167,6 @@ public class MitoBenchWindow extends Application{
         String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " rows are selected";
         info_selected_items.setText(info_text);
 
-
-
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTablePane");
         pane_table_userBench = new VBox();
@@ -189,9 +186,22 @@ public class MitoBenchWindow extends Application{
         final Label label = new Label("Database");
 
         VBox pane_table_DB = new VBox();
+        HBox topPanel = new HBox();
+        topPanel.setSpacing(10);
+
+        HBox buttonHBox = new HBox();
+        buttonHBox.setSpacing(10);
+        buttonHBox.setAlignment(Pos.TOP_RIGHT);
+        Button addAllBtn = new Button("Add all");
+        Button addSelectedBtn = new Button("Add selected");
+        tableControllerDB.addButtonFunctionality(addAllBtn, addSelectedBtn, tableControllerDB, tableControllerUserBench);
+
+        buttonHBox.getChildren().addAll(addAllBtn, addSelectedBtn);
+        topPanel.getChildren().addAll(label, buttonHBox);
+
         pane_table_DB.setSpacing(10);
         pane_table_DB.setPadding(new Insets(20, 10, 10, 10));
-        pane_table_DB.getChildren().addAll(label, tableControllerDB.getTable());
+        pane_table_DB.getChildren().addAll(topPanel, tableControllerDB.getTable());
         pane_table.getChildren().remove(pane_table_userBench);
         pane_table.setCenter(splitPane_table);
 

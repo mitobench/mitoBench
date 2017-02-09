@@ -129,6 +129,7 @@ public abstract class ATableController {
 
     protected void updateEntryList(HashMap<String, List<Entry>> input_new) {
 
+
         for(String key_new : input_new.keySet()){
             if(table_content.containsKey(key_new)){
                 // update entry
@@ -157,6 +158,8 @@ public abstract class ATableController {
             }
 
         }
+
+
 
     }
 

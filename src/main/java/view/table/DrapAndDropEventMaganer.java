@@ -22,10 +22,14 @@ public class DrapAndDropEventMaganer {
 
     private TableControllerDB tableDBController;
     private TableControllerUserBench tableUserController;
-    private DataFormat myformat = new DataFormat("tabledata");
+    private DataFormat myformat;
     private ObservableList<ObservableList> selected;
 
     public DrapAndDropEventMaganer(TableControllerDB tableDB, TableControllerUserBench tableUser){
+
+        if(myformat == null){
+            myformat = new DataFormat("tabledata");
+        }
 
         this.tableDBController = tableDB;
         this.tableUserController = tableUser;
@@ -64,7 +68,6 @@ public class DrapAndDropEventMaganer {
                     data_copy.addAll(selected.get(i));
                     data_list.add(data_copy);
                 }
-
 
                 if(selected !=null){
                     Dragboard db = tableDBController.getTable().startDragAndDrop(TransferMode.ANY);
