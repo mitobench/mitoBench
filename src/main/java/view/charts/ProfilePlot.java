@@ -1,13 +1,19 @@
 package view.charts;
 
+import io.Exceptions.ImageException;
+import io.writer.ImageWriter;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import statistics.HaploStatistics;
 import view.table.TableControllerUserBench;
 import view.tree.HaplotreeController;
@@ -29,7 +35,7 @@ public class ProfilePlot {
     int maxVal = 0;
 
 
-    public ProfilePlot(String title, String lable_xaxis, String label_yaxis){
+    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, Stage stage){
         xAxis.setLabel(lable_xaxis);
         yAxis.setLabel(label_yaxis);
         yAxis.setAutoRanging(false);
@@ -37,6 +43,7 @@ public class ProfilePlot {
         yAxis.setMinorTickVisible(false);
 
         profilePlot.setTitle(title);
+        setContextMenu(stage, tabpane);
     }
 
 
@@ -150,6 +157,43 @@ public class ProfilePlot {
                 break;
             }
         }
+    }
+
+
+    /**
+     * This method initializes a context menu to save chart as image.
+     * @param stage
+     */
+    private void setContextMenu(Stage stage, TabPane tabPane){
+
+
+        //adding a context menu item to the chart
+        final MenuItem saveAsPng = new MenuItem("Save as png");
+        saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent event) {
+                ImageWriter imageWriter = new ImageWriter();
+                try {
+                    imageWriter.saveImage(stage, profilePlot.snapshot(new SnapshotParameters(), null));
+                } catch (ImageException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        final ContextMenu menu = new ContextMenu(
+                saveAsPng
+        );
+
+        profilePlot.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override public void handle(MouseEvent event) {
+                if (MouseButton.SECONDARY.equals(event.getButton())) {
+                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
+                }
+            }
+        });
+
+
+
     }
 
 

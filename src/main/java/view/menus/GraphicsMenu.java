@@ -106,7 +106,7 @@ public class GraphicsMenu {
 
 
     private void initProfilePlot(){
-        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Count");
+        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Count", tabPane, stage);
         Tab tab = new Tab();
         tab.setId("tab_profilePlot");
         tab.setText("Profile Plot");

@@ -15,9 +15,7 @@ import javafx.util.Callback;
 import view.groups.AddToGroupDialog;
 import view.groups.CreateGroupDialog;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by neukamm on 07.11.16.
@@ -61,62 +59,13 @@ public class TableControllerUserBench extends ATableController{
 
         menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
         table.setContextMenu(menu);
+
+
     }
 
-    @Override
-    public void updateTable(HashMap<String, List<Entry>> input) {
-        if(input != null){
-            // update Entry structure
-            updateEntryList(input);
-
-            // add new values to existing one (DataTable)
-            dataTable.update(input);
-
-            // clean whole table
-            data.clear();
-
-            // get current col names
-            List<String> curr_colnames = getCurrentColumnNames();
-
-            table.getColumns().removeAll(table.getColumns());
-
-            // define column order
-            Set<String> cols = dataTable.getDataTable().keySet();
-            for(String s : cols) {
-                if(!curr_colnames.contains(s))
-                    curr_colnames.add(s);
-            }
-
-            // display updated table
-            data = parseDataTableToObservableList(dataTable, curr_colnames);
-
-
-            // add columns
-            int i = 0;
-            for(String colName : curr_colnames) {
-                int j = i;
-                TableColumn col = new TableColumn(colName);
-                col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                        return new SimpleStringProperty(param.getValue().get(j).toString());
-                    }
-                });
-
-                col_names.add(colName);
-                table.getColumns().addAll(col);
-                i++;
-
-            }
-
-            // clear Items in table
-            table.getItems().removeAll(table.getItems());
-            //FINALLY ADDED TO TableView
-            table.getItems().addAll(data);
-
-            setColumns_to_index();
-        }
-
-        editMenu.upateGroupItem(getCurrentColumnNames(), groupController);
+    public void updateEditMenuItem(){
+        editMenu.upateGroupItem(col_names_sorted, groupController);
     }
+
 
 }

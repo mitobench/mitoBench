@@ -18,10 +18,7 @@ import view.groups.CreateGroupDialog;
 import view.groups.GroupController;
 import view.menus.EditMenu;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by neukamm on 01.02.17.
@@ -41,6 +38,7 @@ public abstract class ATableController {
     protected ATableController controller;
     protected GroupController groupController;
     protected List<String> col_names;
+    protected List<String> col_names_sorted;
     protected EditMenu editMenu;
 
     public ATableController(){
@@ -75,54 +73,56 @@ public abstract class ATableController {
      * @param input
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
-            // update Entry structure
-            updateEntryList(input);
+        // update Entry structure
+        updateEntryList(input);
 
-            // add new values to existing one (DataTable)
-            dataTable.update(input);
+        // add new values to existing one (DataTable)
+        dataTable.update(input);
 
-            // clean whole table
-            data.clear();
+        // clean whole table
+        data.clear();
 
-            // get current col names
-            List<String> curr_colnames = getCurrentColumnNames();
+        // get current col names
+        List<String> curr_colnames = getCurrentColumnNames();
 
-            table.getColumns().removeAll(table.getColumns());
+        table.getColumns().removeAll(table.getColumns());
 
-            // define column order
-            Set<String> cols = dataTable.getDataTable().keySet();
-            for(String s : cols) {
-                if(!curr_colnames.contains(s))
-                    curr_colnames.add(s);
-            }
+        // define column order
+        Set<String> cols = dataTable.getDataTable().keySet();
+        for(String s : cols) {
+            if(!curr_colnames.contains(s))
+                curr_colnames.add(s);
+        }
 
-            // display updated table
-            data = parseDataTableToObservableList(dataTable, curr_colnames);
+        // display updated table
+        data = parseDataTableToObservableList(dataTable, curr_colnames);
 
 
-            // add columns
-            int i = 0;
-            for(String colName : curr_colnames) {
-                int j = i;
-                TableColumn col = new TableColumn(colName);
-                col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                        return new SimpleStringProperty(param.getValue().get(j).toString());
-                    }
-                });
+        // add columns
+        int i = 0;
+        for(String colName : col_names_sorted) {
+            int j = i;
+            TableColumn col = new TableColumn(colName);
+            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                    return new SimpleStringProperty(param.getValue().get(j).toString());
+                }
+            });
 
-                col_names.add(colName);
-                table.getColumns().addAll(col);
-                i++;
+            col_names.add(colName);
+            table.getColumns().addAll(col);
+            i++;
 
-            }
+        }
 
-            // clear Items in table
-            table.getItems().removeAll(table.getItems());
-            //FINALLY ADDED TO TableView
-            table.getItems().addAll(data);
+        // clear Items in table
+        table.getItems().removeAll(table.getItems());
+        //FINALLY ADDED TO TableView
+        table.getItems().addAll(data);
 
-            setColumns_to_index();
+        setColumns_to_index();
+
+        editMenu.upateGroupItem(col_names_sorted, groupController);
 
     }
 
@@ -173,6 +173,19 @@ public abstract class ATableController {
             curr_colnames = new ArrayList<String>(dataTable.getDataTable().keySet());
         }
 
+        // set column order (ID -> MT Sequence -> Others)
+        col_names_sorted = new ArrayList<>();
+        if(curr_colnames.contains("ID")){
+            col_names_sorted.add("ID");
+            curr_colnames.remove("ID");
+        }
+        if(curr_colnames.contains("MTSequence")){
+            col_names_sorted.add("MTSequence");
+            curr_colnames.remove("MTSequence");
+        }
+        Collections.sort(curr_colnames);
+        col_names_sorted.addAll(curr_colnames);
+
 
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
 
@@ -181,7 +194,7 @@ public abstract class ATableController {
         String[][] data_tmp = new String[dataTable.getDataTable().get("ID").length][dataTable.getDataTable().keySet().size()];
 
         int m = 0;
-        for(String col : curr_colnames){
+        for(String col : col_names_sorted){
             String[] col_entry = data_hash.get(col);
             for(int j = 0; j < col_entry.length; j++){
                 String e = col_entry[j];
