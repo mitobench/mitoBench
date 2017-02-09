@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import view.table.ATableController;
 
 import java.sql.SQLException;
@@ -28,19 +27,19 @@ public class DBSearchDialogue extends APopupDialogue{
 
     public DBSearchDialogue(String title){
         super(title);
-        dialogVbox.setId("set_database_query");
+        dialogGrid.setId("set_database_query");
         dialog.setResizable(true);
         show();
     }
 
 
     public void fillDialogue() {
-        dialogVbox.add(new Label("Please complete search query"), 0,0,3,1);
-        dialogVbox.add(new Label("select"), 0,1,1,1);
-        dialogVbox.add(textfield_selection_table, 1,1,1,1);
-        dialogVbox.add(new Label("from sequence_data"), 2,1,1,1);
-        dialogVbox.add(btnSend,0,2,1,1);
-        dialogVbox.add(message, 2,2,1,1);
+        dialogGrid.add(new Label("Please complete search query"), 0,0,3,1);
+        dialogGrid.add(new Label("select"), 0,1,1,1);
+        dialogGrid.add(textfield_selection_table, 1,1,1,1);
+        dialogGrid.add(new Label("from sequence_data"), 2,1,1,1);
+        dialogGrid.add(btnSend,0,2,1,1);
+        dialogGrid.add(message, 2,2,1,1);
 
     }
 

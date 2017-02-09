@@ -2,7 +2,6 @@ package view.dialogues.popup;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,7 +24,7 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
     public DatabaseConnectionDialogue(ATableController tableUserDB, String title){
         super(title);
         table = tableUserDB;
-        dialogVbox.setId("connect_to_database");
+        dialogGrid.setId("connect_to_database");
         setComponents();
         addListener();
         show();
@@ -53,12 +52,12 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
         loginBtn = new Button("Login");
         loginBtn.setId("loginButton");
 
-        dialogVbox.add(title_label, 0,0,2,1);
-        dialogVbox.add(username_label,0,1,1,1);
-        dialogVbox.add(usernamme_field,1,1,1,1);
-        dialogVbox.add(password_label,0,2,1,1);
-        dialogVbox.add(password_field,1,2,1,1);
-        dialogVbox.add(loginBtn,1,3,2,1);
+        dialogGrid.add(title_label, 0,0,2,1);
+        dialogGrid.add(username_label,0,1,1,1);
+        dialogGrid.add(usernamme_field,1,1,1,1);
+        dialogGrid.add(password_label,0,2,1,1);
+        dialogGrid.add(password_field,1,2,1,1);
+        dialogGrid.add(loginBtn,1,3,2,1);
 
     }
 

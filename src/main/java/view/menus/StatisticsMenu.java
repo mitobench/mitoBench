@@ -43,9 +43,8 @@ public class StatisticsMenu {
             public void handle(ActionEvent t) {
                 haploStatistics = new HaploStatistics(tableController, treeHaploController);
                 stage.toBack();
-                HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue();
+                HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics");
                 hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
-                hgStatisticsPopupDialogug.show();
             }
         });
 

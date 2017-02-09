@@ -1,5 +1,6 @@
 package view.dialogues.popup;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -11,7 +12,7 @@ import javafx.stage.Stage;
 public abstract class APopupDialogue {
 
 
-    protected GridPane dialogVbox;
+    protected GridPane dialogGrid;
     protected Stage dialog;
 
     public APopupDialogue(String title){
@@ -20,9 +21,10 @@ public abstract class APopupDialogue {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(new Stage());
 
-        dialogVbox = new GridPane();
-        dialogVbox.setHgap(10);
-        dialogVbox.setVgap(10);
+        dialogGrid = new GridPane();
+        dialogGrid.setAlignment(Pos.CENTER);
+        dialogGrid.setHgap(10);
+        dialogGrid.setVgap(10);
 
     }
 
@@ -30,7 +32,7 @@ public abstract class APopupDialogue {
      * This method displays dialogue.
      */
     protected void show(){
-        Scene dialogScene = new Scene(dialogVbox, 500, 200);
+        Scene dialogScene = new Scene(dialogGrid, 500, 200);
         dialog.setScene(dialogScene);
         dialog.show();
     }
