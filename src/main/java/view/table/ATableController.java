@@ -96,15 +96,7 @@ public abstract class ATableController {
         int i = 0;
         for(String colName : col_names_sorted) {
             int j = i;
-            TableColumn col = new TableColumn(colName);
-            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(j).toString());
-                }
-            });
-
-            col_names.add(colName);
-            table.getColumns().addAll(col);
+            addColumn(colName, i);
             i++;
 
         }
@@ -305,6 +297,21 @@ public abstract class ATableController {
         for(ObservableList item : data_copy){
             data.add(item);
         }
+    }
+
+    public void addColumn(String colname, int j){
+
+        TableColumn col = new TableColumn(colname);
+        col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                return new SimpleStringProperty(param.getValue().get(j).toString());
+            }
+        });
+
+
+        col_names.add(colname);
+        table.getColumns().addAll(col);
+
     }
 
 

@@ -1,8 +1,11 @@
 package view.groups;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.util.Callback;
 import view.table.ATableController;
 
 import java.util.*;
@@ -22,7 +25,7 @@ public class GroupController {
     }
 
 
-    public void createGroup(String groupname){
+    private void createGroup(String groupname){
         groupingIsSet = true;
         Group g = new Group(groupname);
         allGroups.put(groupname, g);
@@ -33,35 +36,43 @@ public class GroupController {
             clearGrouping();
 
         TableColumn column = tableController.getTableColumnByName(colName);
-
-        if(!colName.contains("(Grouping)")){
-            tableController.changeColumnName(colName, colName+" (Grouping)");
-            colname_group = colName+" (Grouping)";
-        } else {
-            colname_group = colName;
-        }
-
-        HashMap<String, ObservableList<ObservableList>> group_row = new HashMap();
-        // get elements if colums as list with only unique entries
-        Set<String> columnData = new HashSet<>();
-        for (Object item : tableController.getTable().getItems()) {
-            String entry = (String) column.getCellObservableValue(item).getValue();
-            columnData.add(entry);
-            if(group_row.containsKey(entry)){
-                ObservableList<ObservableList> tmp = group_row.get(entry);
-                tmp.addAll((ObservableList) item);
-                group_row.put(entry, tmp);
+        if(column!=null){
+            if(!colName.contains("(Grouping)")){
+                tableController.changeColumnName(colName, colName+" (Grouping)");
+                colname_group = colName+" (Grouping)";
             } else {
-                ObservableList rows = FXCollections.observableArrayList();
-                rows.addAll(item);
-                group_row.put(entry, rows);
+                colname_group = colName;
             }
+
+            HashMap<String, ObservableList<ObservableList>> group_row = new HashMap();
+            // get elements if colums as list with only unique entries
+            Set<String> columnData = new HashSet<>();
+            for (Object item : tableController.getTable().getItems()) {
+                String entry = (String) column.getCellObservableValue(item).getValue();
+                columnData.add(entry);
+                if(group_row.containsKey(entry)){
+                    ObservableList<ObservableList> tmp = group_row.get(entry);
+                    tmp.addAll((ObservableList) item);
+                    group_row.put(entry, tmp);
+                } else {
+                    ObservableList rows = FXCollections.observableArrayList();
+                    rows.addAll(item);
+                    group_row.put(entry, rows);
+                }
+            }
+
+            for(String groupname : columnData){
+                createGroup(groupname);
+                addElements(group_row.get(groupname), groupname);
+            }
+        } else {
+            ObservableList group_data = tableController.getTable().getSelectionModel().getSelectedItems();
+            tableController.addColumn(colName + " (Grouping)", 0);
+
+
         }
 
-        for(String groupname : columnData){
-            createGroup(groupname);
-            addElements(group_row.get(groupname), groupname);
-        }
+
     }
 
     public void addElement(ObservableList element, String groupname){
