@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
@@ -243,6 +244,13 @@ public class SunburstChartCreator {
         final MenuItem saveAsPDF = new MenuItem("Save as png");
         saveAsPDF.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
+
+//                PrinterJob job = PrinterJob.createPrinterJob();
+//                if(job != null){
+//                    job.showPrintDialog(stage); // Window must be your main Stage
+//                    job.printPage(sunburstView);
+//                    job.endJob();
+//                }
                 ImageWriter imageWriter = new ImageWriter();
                 try {
                     imageWriter.saveImage(stage, tabPane.snapshot(new SnapshotParameters(), null));

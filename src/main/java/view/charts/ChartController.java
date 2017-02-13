@@ -3,8 +3,10 @@ package view.charts;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
+import javafx.stage.Stage;
 import view.table.TableControllerUserBench;
 
+import java.net.MalformedURLException;
 import java.util.*;
 
 /**
@@ -94,6 +96,7 @@ public class ChartController {
 
             if(data_all.containsKey("Others"))
                 stackedBar.addSeries(data_all.get("Others"), "Others");
+
 
         } else {        // add data if less than 20 haplogroups
 

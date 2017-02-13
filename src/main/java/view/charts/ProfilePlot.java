@@ -4,6 +4,7 @@ import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.CategoryAxis;
@@ -171,6 +172,12 @@ public class ProfilePlot {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
+//                PrinterJob job = PrinterJob.createPrinterJob();
+//                if(job != null){
+//                    job.showPrintDialog(stage); // Window must be your main Stage
+//                    job.printPage(profilePlot);
+//                    job.endJob();
+//                }
                 ImageWriter imageWriter = new ImageWriter();
                 try {
                     imageWriter.saveImage(stage, profilePlot.snapshot(new SnapshotParameters(), null));

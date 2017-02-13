@@ -4,6 +4,7 @@ import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -113,6 +114,13 @@ public abstract class ABarPlot {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
+
+//                PrinterJob job = PrinterJob.createPrinterJob();
+//                if(job != null){
+//                    job.showPrintDialog(stage); // Window must be your main Stage
+//                    job.printPage(bc);
+//                    job.endJob();
+//                }
                 ImageWriter imageWriter = new ImageWriter();
                 try {
                     imageWriter.saveImage(stage, bc.snapshot(new SnapshotParameters(), null));

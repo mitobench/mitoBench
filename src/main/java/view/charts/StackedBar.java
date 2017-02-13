@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.*;
@@ -192,6 +193,13 @@ public class StackedBar {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
+//
+//                PrinterJob job = PrinterJob.createPrinterJob();
+//                if(job != null){
+//                    job.showPrintDialog(stage); // Window must be your main Stage
+//                    job.printPage(sbc);
+//                    job.endJob();
+//                }
                 ImageWriter imageWriter = new ImageWriter();
                 try {
                     imageWriter.saveImage(stage, sbc.snapshot(new SnapshotParameters(), null));
