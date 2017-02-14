@@ -5,11 +5,14 @@ import io.writer.ImageWriter;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Side;
-import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.*;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
@@ -17,7 +20,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import view.menus.GraphicsMenu;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by neukamm on 29.11.16.
@@ -193,16 +197,13 @@ public class StackedBar {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
-//
-//                PrinterJob job = PrinterJob.createPrinterJob();
-//                if(job != null){
-//                    job.showPrintDialog(stage); // Window must be your main Stage
-//                    job.printPage(sbc);
-//                    job.endJob();
-//                }
+                int scale = 6; //6x resolution should be enough, users should downscale if required
+                final Bounds bounds = sbc.getLayoutBounds();
+                final SnapshotParameters spa = new SnapshotParameters();
+                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
                 ImageWriter imageWriter = new ImageWriter();
                 try {
-                    imageWriter.saveImage(stage, sbc.snapshot(new SnapshotParameters(), null));
+                    imageWriter.saveImage(stage, sbc.snapshot(spa, null));
                 } catch (ImageException e) {
                     e.printStackTrace();
                 }
