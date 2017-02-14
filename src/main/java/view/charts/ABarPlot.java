@@ -4,6 +4,7 @@ import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -114,16 +115,13 @@ public abstract class ABarPlot {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
-
-//                PrinterJob job = PrinterJob.createPrinterJob();
-//                if(job != null){
-//                    job.showPrintDialog(stage); // Window must be your main Stage
-//                    job.printPage(bc);
-//                    job.endJob();
-//                }
+                int scale = 6; //6x resolution should be enough, users should downscale if required
+                final Bounds bounds = bc.getLayoutBounds();
+                final SnapshotParameters spa = new SnapshotParameters();
+                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
                 ImageWriter imageWriter = new ImageWriter();
                 try {
-                    imageWriter.saveImage(stage, bc.snapshot(new SnapshotParameters(), null));
+                    imageWriter.saveImage(stage, bc.snapshot(spa, null));
                 } catch (ImageException e) {
                     e.printStackTrace();
                 }
