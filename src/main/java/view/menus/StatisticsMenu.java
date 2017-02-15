@@ -7,7 +7,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-import view.dialogues.popup.HGStatisticsPopupDialogue;
+import view.dialogues.settings.HGStatisticsPopupDialogue;
 import view.table.TableControllerUserBench;
 import statistics.HaploStatistics;
 import view.tree.HaplotreeController;

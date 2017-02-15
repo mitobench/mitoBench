@@ -1,4 +1,4 @@
-package view.groups;
+package view.dialogues.settings;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.groups.GroupController;
 import view.table.ATableController;
 
 
@@ -46,7 +47,6 @@ public class AddToGroupDialog {
             comboEntries.add(s);
         }
 
-        //comboBox = new ComboBox(comboEntries);
         comboBox = new ComboBox<String>();
         comboBox.getItems().addAll(groupController.getGroupnames());
         comboBox.setEditable(true);
@@ -98,4 +98,6 @@ public class AddToGroupDialog {
     public ComboBox getComboBox() {
         return comboBox;
     }
+
+
 }

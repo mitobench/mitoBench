@@ -1,4 +1,4 @@
-package view.dialogues.popup;
+package view.dialogues.settings;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,5 +35,8 @@ public abstract class APopupDialogue {
         Scene dialogScene = new Scene(dialogGrid, 500, 200);
         dialog.setScene(dialogScene);
         dialog.show();
+    }
+    public void close(){
+        dialog.close();
     }
 }

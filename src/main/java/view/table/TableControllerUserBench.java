@@ -7,8 +7,8 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 
-import view.groups.AddToGroupDialog;
-import view.groups.CreateGroupDialog;
+import view.dialogues.settings.AddToGroupDialog;
+import view.dialogues.settings.CreateGroupDialog;
 
 
 

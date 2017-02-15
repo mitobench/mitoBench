@@ -93,12 +93,8 @@ public abstract class ATableController {
 
 
         // add columns
-        int i = 0;
-        for(String colName : col_names_sorted) {
-            int j = i;
-            addColumn(colName, i);
-            i++;
-
+        for(int i = 0; i < col_names_sorted.size(); i++) {
+            addColumn(col_names_sorted.get(i), i);
         }
 
         // clear Items in table

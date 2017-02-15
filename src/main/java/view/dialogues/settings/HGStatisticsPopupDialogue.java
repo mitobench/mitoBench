@@ -1,4 +1,4 @@
-package view.dialogues.popup;
+package view.dialogues.settings;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

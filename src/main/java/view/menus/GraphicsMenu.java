@@ -8,9 +8,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.charts.*;
+import view.dialogues.settings.AdvancedStackedBarchartDialogue;
 import view.table.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -169,34 +171,46 @@ public class GraphicsMenu {
         plotHGfreqGroup.setId("plotHGfreqGroup_item");
         plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                try {
-                    if(tableController.getTableColumnByName("Grouping") != null
-                            && tableController.getTable().getItems().size()!=0) {
+                if(tableController.getTableColumnByName("Grouping") != null
+                        && tableController.getTable().getItems().size()!=0) {
 
-                        initStackedBarchart();
-                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
-                        String[] selection_haplogroups = cols[0];
-                        String[] selection_groups = cols[1];
+                    String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+                    String[] selection_haplogroups = cols[0];
+                    String[] selection_groups = cols[1];
 
-                        chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
-                        stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+                    AdvancedStackedBarchartDialogue advancedStackedBarchartDialogue =
+                            new AdvancedStackedBarchartDialogue("Advanced Stacked Barchart Settings", selection_groups);
 
-                        // add settings
+                    advancedStackedBarchartDialogue.getApplyBtn().setOnAction(new EventHandler<ActionEvent>() {
+                        @Override public void handle(ActionEvent e) {
+                            advancedStackedBarchartDialogue.getApplyBtn();
+                            initStackedBarchart();
 
-                        stackedBar.addTooltip();
-                        ColorSchemeStackedBarChart colorScheme = new ColorSchemeStackedBarChart(stage);
 
-                        if(selection_haplogroups.length > 20){
-                            colorScheme.setNewColors(stackedBar);
-                            stackedBar.addListener();
-                        } else {
-                            colorScheme.setNewColorsLess20(stackedBar);
+                            //chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
+                            chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, advancedStackedBarchartDialogue.getStackOrder());
+                            stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+
+                            // add settings
+
+                            stackedBar.addTooltip();
+                            ColorSchemeStackedBarChart colorScheme = null;
+                            try {
+                                colorScheme = new ColorSchemeStackedBarChart(stage);
+                            } catch (MalformedURLException e1) {
+                                e1.printStackTrace();
+                            }
+
+                            if(selection_haplogroups.length > 20){
+                                colorScheme.setNewColors(stackedBar);
+                                stackedBar.addListener();
+                            } else {
+                                colorScheme.setNewColorsLess20(stackedBar);
+                            }
+
+                            advancedStackedBarchartDialogue.close();
                         }
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    });
                 }
             }
         });

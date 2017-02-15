@@ -1,4 +1,4 @@
-package view.dialogues.popup;
+package view.dialogues.settings;
 
 import database.DataAccessor;
 import io.datastructure.Entry;
