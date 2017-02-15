@@ -41,7 +41,7 @@ public class EditMenu {
             colItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
                     //
-                    groupController.createGroupByColumn(colItem.getText());
+                    groupController.createGroupByColumn(colItem.getText(), "");
 
                 }
             });

@@ -1,6 +1,7 @@
 package view.table;
 
 import io.datastructure.Entry;
+import javafx.scene.control.TableColumn;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -147,7 +148,7 @@ public class DataTable {
             for(String key : data.keySet()){
                 if(!key.equals("ID")){
                     String[] d = data.get(key);
-                    data.put(key, append(d, "Undefined"));
+                    data.put(key.trim(), append(d, "Undefined"));
                 }
             }
         } else {
@@ -156,7 +157,7 @@ public class DataTable {
                 if(!key.equals("ID")){
                     String[] newCol = new String[data.size()];
                     Arrays.fill(newCol, "");
-                    data.put(key,  newCol);
+                    data.put(key.trim(),  newCol);
                 }
             }
         }
@@ -192,5 +193,18 @@ public class DataTable {
 
     public MTStorage getMtStorage() {
         return mtStorage;
+    }
+
+    public void updateDatatable(String oldname, String newname) {
+
+        for(String key : data.keySet()){
+            if (key.equals(oldname)){
+                String[] entries = data.get(key);
+                data.remove(key);
+                data.put(newname.trim(), entries);
+                break;
+            }
+        }
+
     }
 }

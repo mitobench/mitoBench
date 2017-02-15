@@ -38,7 +38,7 @@ public class TableControllerUserBench extends ATableController{
             @Override
             public void handle(ActionEvent event) {
                 CreateGroupDialog createGroupDialog =
-                        new CreateGroupDialog(groupController, table, controller);
+                        new CreateGroupDialog("", groupController, table, controller);
             }
         });
 
@@ -48,7 +48,7 @@ public class TableControllerUserBench extends ATableController{
             @Override
             public void handle(ActionEvent event) {
                 AddToGroupDialog addToGroupDialog =
-                        new AddToGroupDialog(groupController, table.getSelectionModel().getSelectedItems(), controller);
+                        new AddToGroupDialog("", groupController, table.getSelectionModel().getSelectedItems(), controller);
             }
         });
 

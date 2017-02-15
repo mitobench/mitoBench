@@ -33,10 +33,9 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
 
     private void addComponents(String[] groups) {
         applyBtn = new Button("Apply order");
-
         dialogGrid.add(new Label("Please choose stack order."), 0,0);
-        dialogGrid.add( setTable(groups), 1,0,3,1);
-        dialogGrid.add(applyBtn, 0,1,1,1);
+        dialogGrid.add( setTable(groups), 0,1);
+        dialogGrid.add(applyBtn, 0,2);
 
     }
 

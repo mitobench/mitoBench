@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import view.groups.GroupController;
 import view.table.TableControllerUserBench;
 
 
@@ -14,8 +15,10 @@ public class TableMenu {
 
     private Menu menuTable;
     private TableControllerUserBench tableController;
+    private GroupController groupController;
 
-    public TableMenu(TableControllerUserBench tableController){
+    public TableMenu(TableControllerUserBench tableController, GroupController groupController){
+        this.groupController = groupController;
         menuTable = new Menu("Table");
         menuTable.setId("tableMenu");
         this.tableController = tableController;
@@ -99,6 +102,7 @@ public class TableMenu {
                     tableController.getDataTable().getDataTable().clear();
                     tableController.getTable().getColumns().removeAll(tableController.getTable().getColumns());
                     tableController.getGroupController().clear();
+                    groupController.clearGrouping();
                 } catch (Exception e){
                     e.printStackTrace();
                 }

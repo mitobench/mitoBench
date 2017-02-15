@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
+import view.groups.GroupController;
 import view.menus.*;
 import view.table.TableControllerDB;
 import view.table.TableControllerUserBench;
@@ -38,6 +39,7 @@ public class MitoBenchWindow extends Application{
     private BorderPane pane_table;
     private VBox pane_table_userBench;
     private Label info_selected_items = new Label("");
+    private GroupController groupController;
 
 
     @Override
@@ -58,12 +60,18 @@ public class MitoBenchWindow extends Application{
         pane_root.prefHeightProperty().bind(scene.heightProperty());
         pane_root.prefWidthProperty().bind(scene.widthProperty());
 
+
+
+
         // initialize table
         tableControllerUserBench = new TableControllerUserBench();
         tableControllerUserBench.init();
         tableControllerUserBench.addRowListener(info_selected_items);
         tableControllerUserBench.getTable().setId("mainEntryTable");
         tableControllerUserBench.createContextMenu();
+
+        groupController = new GroupController(tableControllerUserBench);
+        tableControllerUserBench.setGroupController(groupController);
 
         // this binding is responsible for binding table to main window
         tableControllerUserBench.getTable().prefHeightProperty().bind(scene.heightProperty());
@@ -91,6 +99,7 @@ public class MitoBenchWindow extends Application{
         pane_root.setCenter(borderpane_center);
         pane_root.setTop(getMenuPane());
 
+
         this.primaryStage.show();
     }
 
@@ -104,12 +113,14 @@ public class MitoBenchWindow extends Application{
         StatisticsMenu toolsMenu = new StatisticsMenu(tableControllerUserBench, treeController, tabpane_statistics, scene, primaryStage);
         FileMenu fileMenu = new FileMenu(tableControllerUserBench, MITOBENCH_VERSION, primaryStage, toolsMenu,
                 this, tableControllerDB);
-        TableMenu tableMenu = new TableMenu(tableControllerUserBench);
+        GroupMenu groupMenu = new GroupMenu(groupController, tableControllerUserBench);
+        TableMenu tableMenu = new TableMenu(tableControllerUserBench, tableControllerUserBench.getGroupController());
         GraphicsMenu graphicsMenu = new GraphicsMenu(tableControllerUserBench, tabpane_visualization, treeController, primaryStage, scene, tabpane_statistics);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
                                   editMenu.getMenuEdit() ,
+                                  groupMenu.getMenuGroup(),
                                   toolsMenu.getMenuTools(),
                                   tableMenu.getMenuTable(),
                                   graphicsMenu.getMenuGraphics(),

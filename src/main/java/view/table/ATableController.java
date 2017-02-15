@@ -54,8 +54,6 @@ public abstract class ATableController {
         dataTable = new DataTable();
         column_to_index = new HashMap<>();
         this.controller = this;
-        groupController = new GroupController(this);
-
         table_content = new HashMap<>();
 
     }
@@ -84,7 +82,7 @@ public abstract class ATableController {
         // define column order
         Set<String> cols = dataTable.getDataTable().keySet();
         for(String s : cols) {
-            if(!curr_colnames.contains(s))
+            if(!curr_colnames.contains(s.trim()))
                 curr_colnames.add(s);
         }
 
@@ -136,7 +134,7 @@ public abstract class ATableController {
 
             }  else {
                 //  create new Entry
-                table_content.put(key_new, input_new.get(key_new));
+                table_content.put(key_new.trim(), input_new.get(key_new));
             }
 
         }
@@ -155,7 +153,7 @@ public abstract class ATableController {
     protected ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames){
 
         if(curr_colnames.size()==0){
-            curr_colnames = new ArrayList<String>(dataTable.getDataTable().keySet());
+            curr_colnames = new ArrayList<String>(getCurrentColumnNames());
         }
 
         // set column order (ID -> MT Sequence -> Others)
@@ -248,14 +246,14 @@ public abstract class ATableController {
      * create new table entry for each selected item to easily update tableview
      * @return
      */
-    public HashMap<String, List<Entry>> createNewEntryListForGrouping(String gName){
+    public HashMap<String, List<Entry>> createNewEntryListForGrouping(String gName, String colName){
 
         HashMap<String, List<Entry>> entries = new HashMap<>();
 
         for(int i = 0; i < table.getSelectionModel().getSelectedItems().size(); i++){
             String rowName = table.getSelectionModel().getSelectedItems().get(i).get(getColIndex("ID")).toString();
             List<Entry> eList = new ArrayList<>();
-            Entry e = new Entry("Grouping", new CategoricInputType("String"), new GenericInputData(gName));
+            Entry e = new Entry(colName, new CategoricInputType("String"), new GenericInputData(gName));
             eList.add(e);
             entries.put(rowName, eList);
         }
@@ -531,7 +529,7 @@ public abstract class ATableController {
         // if "grouping" column already exists, create groups
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
-                groupController.createGroupByColumn(colname);
+                groupController.createGroupByColumn(colname, "");
                 break;
             }
         }
@@ -546,17 +544,53 @@ public abstract class ATableController {
     }
 
     public void changeColumnName(String oldname, String newname) {
-        System.out.println("Changing column name");
+        System.out.println("Rename column from " + oldname + " to " + newname);
         for (TableColumn col : table.getColumns()){
             if(col.getText().equals(oldname)){
                 col.setText(newname.trim());
             }
         }
         setColumns_to_index();
-        System.out.println("updated indexes");
+        dataTable.updateDatatable(oldname, newname);
     }
 
     public void cleanColToIndex() {
         column_to_index.clear();
+    }
+
+    public void cleanColnames() {
+        col_names.removeAll(col_names);
+        for(TableColumn col : table.getColumns()){
+            col_names.add(col.getText());
+        }
+    }
+
+    public void removeColumn(String colname_group) {
+        // remove from tableview
+        for(TableColumn col : table.getColumns()){
+            if(col.getText().equals(colname_group)){
+                table.getColumns().remove(col);
+                break;
+            }
+        }
+
+        // remove from data
+        ObservableList<ObservableList> data_new = FXCollections.observableArrayList();
+        int index = getColIndex(colname_group);
+        for(ObservableList list : data){
+            list.remove(index);
+            data_new.add(list);
+        }
+
+        // remove from datatable
+        dataTable.getDataTable().remove(colname_group);
+        //updateView(data);
+        table.getItems().removeAll(table.getItems());
+        table.getItems().addAll(data_new);
+
+    }
+
+    public void setGroupController(GroupController groupController) {
+        this.groupController = groupController;
     }
 }

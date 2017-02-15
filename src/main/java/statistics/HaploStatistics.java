@@ -83,7 +83,7 @@ public class HaploStatistics {
 
         table.setEditable(false);
 
-        TableColumn population = new TableColumn("Population");
+        TableColumn population = new TableColumn("Groups");
         TableColumn total_number = new TableColumn("Total Number");
 
         // add columns

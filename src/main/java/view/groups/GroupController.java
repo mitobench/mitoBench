@@ -1,11 +1,8 @@
 package view.groups;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import javafx.util.Callback;
 import view.table.ATableController;
 
 import java.util.*;
@@ -31,11 +28,12 @@ public class GroupController {
         allGroups.put(groupname, g);
     }
 
-    public void createGroupByColumn(String colName){
+    public void createGroupByColumn(String colName, String gname){
         if(groupingIsSet)
             clearGrouping();
 
         TableColumn column = tableController.getTableColumnByName(colName);
+
         if(column!=null){
             if(!colName.contains("(Grouping)")){
                 tableController.changeColumnName(colName, colName+" (Grouping)");
@@ -45,7 +43,7 @@ public class GroupController {
             }
 
             HashMap<String, ObservableList<ObservableList>> group_row = new HashMap();
-            // get elements if colums as list with only unique entries
+            // get elements if columns as list with only unique entries
             Set<String> columnData = new HashSet<>();
             for (Object item : tableController.getTable().getItems()) {
                 String entry = (String) column.getCellObservableValue(item).getValue();
@@ -67,12 +65,12 @@ public class GroupController {
             }
         } else {
             ObservableList group_data = tableController.getTable().getSelectionModel().getSelectedItems();
+            //TableColumn colGroup = new TableColumn(colName + " (Grouping)");
             tableController.addColumn(colName + " (Grouping)", 0);
-
-
+            colname_group = colName + " (Grouping)";
+            createGroup(gname);
+            addElements(group_data, gname);
         }
-
-
     }
 
     public void addElement(ObservableList element, String groupname){
@@ -102,6 +100,7 @@ public class GroupController {
         // reset table column
         tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
         //tableController.cleanColToIndex();
+        tableController.cleanColnames();
     }
 
     public Set<String> getGroupnames(){
@@ -112,4 +111,7 @@ public class GroupController {
         allGroups.clear();
     }
 
+    public String getColname_group() {
+        return colname_group;
+    }
 }

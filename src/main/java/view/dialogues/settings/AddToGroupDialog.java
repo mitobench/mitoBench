@@ -22,7 +22,7 @@ import view.table.ATableController;
 /**
  * Created by neukamm on 26.11.2016.
  */
-public class AddToGroupDialog {
+public class AddToGroupDialog extends APopupDialogue{
 
 
     private ComboBox comboBox;
@@ -30,16 +30,9 @@ public class AddToGroupDialog {
     private ATableController tableController;
 
 
-    public AddToGroupDialog(GroupController groupController, ObservableList groupItems, ATableController tableController){
-
+    public AddToGroupDialog(String title, GroupController groupController, ObservableList groupItems, ATableController tableController) {
+        super(title);
         this.tableController = tableController;
-        dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        // Boxes
-        VBox dialogVbox = new VBox(20);
-        HBox hBox = new HBox(20);
-
-
         // Elements
         ObservableList<String> comboEntries = FXCollections.observableArrayList();
 
@@ -55,13 +48,10 @@ public class AddToGroupDialog {
         Button okButton = new Button("OK");
         addButtonListener(okButton, groupController, groupItems);
 
-        hBox.getChildren().addAll(new Label("Select group"), comboBox);
-        dialogVbox.getChildren().addAll(hBox, okButton);
-        dialogVbox.setAlignment(Pos.CENTER);
-
-        Scene dialogScene = new Scene(dialogVbox, 250, 80);
-        dialog.setScene(dialogScene);
-        dialog.show();
+        dialogGrid.add(new Label("Select group"), 0,0);
+        dialogGrid.add(comboBox, 1,0);
+        dialogGrid.add(okButton, 1,1);
+        show();
     }
 
     private void addButtonListener(Button okButton, GroupController groupController, ObservableList groupItems){
@@ -71,8 +61,9 @@ public class AddToGroupDialog {
             @Override public void handle(ActionEvent e) {
                 // add elements to group
                 groupController.addElements(groupItems, comboBox.getValue().toString());
-                tableController.updateTable(tableController.createNewEntryListForGrouping(comboBox.getValue().toString()));
-                dialog.close();
+                tableController.updateTable(tableController.createNewEntryListForGrouping(comboBox.getValue().toString(), "Group (Grouping)"));
+                close();
+
             }
         });
 
@@ -93,10 +84,6 @@ public class AddToGroupDialog {
                     }
                 });
 
-    }
-
-    public ComboBox getComboBox() {
-        return comboBox;
     }
 
 

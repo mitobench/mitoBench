@@ -22,22 +22,15 @@ import view.table.ATableController;
 /**
  * Created by neukamm on 26.11.2016.
  */
-public class CreateGroupDialog {
+public class CreateGroupDialog extends APopupDialogue{
 
 
     private TextField groupnameField;
-    private Stage dialog;
     private ATableController controller;
 
-    public CreateGroupDialog(GroupController groupController, TableView table, ATableController tableController){
-
+    public CreateGroupDialog(String title, GroupController groupController, TableView table, ATableController tableController){
+        super(title);
         controller = tableController;
-
-        dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        // Boxes
-        VBox dialogVbox = new VBox(20);
-        HBox hBox = new HBox(20);
 
         // Elements
         this.groupnameField = new TextField();
@@ -45,32 +38,25 @@ public class CreateGroupDialog {
         Button okButton = new Button("OK");
         addButtonListener(okButton, groupController, table.getSelectionModel().getSelectedItems());
 
-
-        hBox.getChildren().addAll(new Label("Groupname:"), groupnameField);
-        dialogVbox.getChildren().addAll(hBox, okButton);
-        dialogVbox.setAlignment(Pos.CENTER);
-
-        Scene dialogScene = new Scene(dialogVbox, 270, 80);
-        dialog.setScene(dialogScene);
-        dialog.show();
+        dialogGrid.add(new Label("Groupname:"), 0,0);
+        dialogGrid.add(groupnameField, 1,0);
+        dialogGrid.add(okButton, 1,1);
+        show();
 
     }
 
     private void addButtonListener(Button okButton, GroupController groupController, ObservableList groupItems){
 
-
         okButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 // create new Group
-                String gName = groupnameField.getText();
+                String groupName = groupnameField.getText();
                 //groupController.createGroup(gName);
-                groupController.createGroupByColumn(gName);
-                groupController.addElements(groupItems, gName);
-                controller.updateTable(controller.createNewEntryListForGrouping(groupnameField.getText()));
-                dialog.close();
+                groupController.createGroupByColumn("Group", groupName);
+                controller.updateTable(controller.createNewEntryListForGrouping(groupnameField.getText(), "Group (Grouping)"));
+                close();
             }
         });
-
 
         DropShadow shadow = new DropShadow();
         //Adding the shadow when the mouse cursor is on
@@ -90,8 +76,4 @@ public class CreateGroupDialog {
 
     }
 
-
-    public TextField getGroupnameField() {
-        return groupnameField;
-    }
 }
