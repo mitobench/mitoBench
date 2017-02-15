@@ -160,12 +160,10 @@ public class StackedBar {
     }
 
     private void createSubBarPlot(XYChart.Data<String, Number> item){
-        String group = item.getXValue();
         String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
 
         graphicsMenu.initHaploBarchart();
         TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
-        TableColumn col2 = graphicsMenu.getTableController().getTableColumnByName("Grouping");
         // filter haplo column, include only subgroups of selected Haplogroup
         List<String> sub_hgs = graphicsMenu.getTreeController().getTreeMap().get(hg);
 
@@ -175,7 +173,7 @@ public class StackedBar {
                 columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
         }
 
-        graphicsMenu.createHaploBarchart(haplo_col, group, col2, columnData);
+        graphicsMenu.createHaploBarchart(haplo_col, columnData);
     }
 
 

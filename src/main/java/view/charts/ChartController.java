@@ -39,7 +39,7 @@ public class ChartController {
      * @param barPlot
      * @param column
      */
-    public void addDataBarChart(ABarPlot barPlot, TableColumn column, String filter, TableColumn col2, List<String> column_data){
+    public void addDataBarChart(ABarPlot barPlot, TableColumn column, List<String> column_data){
 
         if(column_data == null){
             column_data = new ArrayList<>();
@@ -109,14 +109,12 @@ public class ChartController {
                     List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
                     // fill data_list : <group(i), countHG >
                     for (int j = 0; j < selection_groups.length; j++) {
-                        if(selection_haplogroups[i].contains("+")){
-                            System.out.print("");
-                        }
-
-                        double count_per_HG = tableController.getCountPerHG(selection_haplogroups[i], selection_groups[j], tableController.getColIndex("Haplogroup"),
+                        double count_per_HG = tableController.getCountPerHG(selection_haplogroups[i],
+                                selection_groups[j], tableController.getColIndex("Haplogroup"),
                                 tableController.getColIndex("Grouping"));
 
-                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], count_per_HG);
+                        double val = roundValue((count_per_HG/ numberOfElementsPerCaregory[j]) * 100);
+                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], val);
                         data_list.add(data);
                     }
                     stackedBar.addSeries(data_list, selection_haplogroups[i]);
@@ -270,7 +268,10 @@ public class ChartController {
     public int[] getNumberOfElementsPerCategory(String[] categories){
         int[] counts = new int[categories.length];
         Arrays.fill(counts, 0);
-        ObservableList<ObservableList> selectedTableItems = tableController.getTable().getItems();
+        ObservableList<ObservableList> selectedTableItems = tableController.getTable().getSelectionModel().getSelectedItems();
+        if(selectedTableItems.size()==0){
+            selectedTableItems = tableController.getTable().getItems();
+        }
         for(int i = 0; i < categories.length; i++) {
             String cat = categories[i];
 

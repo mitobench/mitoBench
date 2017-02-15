@@ -149,7 +149,7 @@ public class GraphicsMenu {
 
                         if(haplo_col!=null){
                             initHaploBarchart();
-                            createHaploBarchart(haplo_col, "", null, null);
+                            createHaploBarchart(haplo_col, null);
                         }
                     }
 
@@ -182,11 +182,17 @@ public class GraphicsMenu {
                         stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
                         // add settings
-                        stackedBar.addListener();
-                        stackedBar.addTooltip();
 
+                        stackedBar.addTooltip();
                         ColorSchemeStackedBarChart colorScheme = new ColorSchemeStackedBarChart(stage);
-                        colorScheme.setNewColors(stackedBar);
+
+                        if(selection_haplogroups.length > 20){
+                            colorScheme.setNewColors(stackedBar);
+                            stackedBar.addListener();
+                        } else {
+                            colorScheme.setNewColorsLess20(stackedBar);
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -291,7 +297,7 @@ public class GraphicsMenu {
                         TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
                         if(haplo_col != null){
                             initGroupBarChart();
-                            chartController.addDataBarChart(barChartGrouping, haplo_col, "", null, null);
+                            chartController.addDataBarChart(barChartGrouping, haplo_col, null);
                             barChartGrouping.setColor(stage);
                         }
                     }
@@ -312,8 +318,8 @@ public class GraphicsMenu {
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);
     }
 
-    public void createHaploBarchart(TableColumn haplo_col, String filter, TableColumn col2, List<String> columnData ){
-        chartController.addDataBarChart(barPlotHaplo, haplo_col, filter, col2, columnData);
+    public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ){
+        chartController.addDataBarChart(barPlotHaplo, haplo_col, columnData);
     }
 
 
