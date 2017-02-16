@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
 
 
@@ -66,7 +67,7 @@ public abstract class ABarPlot {
 
     }
 
-    public abstract void addData(HashMap<String, Integer>  data);
+    public abstract void addData(HashMap<String, Integer>  data) throws MalformedURLException;
 
 
     /**
@@ -115,7 +116,6 @@ public abstract class ABarPlot {
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
                 int scale = 6; //6x resolution should be enough, users should downscale if required
-                final Bounds bounds = bc.getLayoutBounds();
                 final SnapshotParameters spa = new SnapshotParameters();
                 spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
                 ImageWriter imageWriter = new ImageWriter();

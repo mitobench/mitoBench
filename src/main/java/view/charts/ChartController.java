@@ -39,7 +39,7 @@ public class ChartController {
      * @param barPlot
      * @param column
      */
-    public void addDataBarChart(ABarPlot barPlot, TableColumn column, List<String> column_data){
+    public void addDataBarChart(ABarPlot barPlot, TableColumn column, List<String> column_data) throws MalformedURLException {
 
         if(column_data == null){
             column_data = new ArrayList<>();

@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import view.menus.GraphicsMenu;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,7 +150,11 @@ public class StackedBar {
                     public void handle(MouseEvent e) {
                         if(MouseButton.PRIMARY.equals(e.getButton())){
                             // todo: create new barchart with only subhaplogroups of selected haplogroup
-                            createSubBarPlot(item);
+                            try {
+                                createSubBarPlot(item);
+                            } catch (MalformedURLException e1) {
+                                e1.printStackTrace();
+                            }
                         }
 
 
@@ -159,7 +164,7 @@ public class StackedBar {
         }
     }
 
-    private void createSubBarPlot(XYChart.Data<String, Number> item){
+    private void createSubBarPlot(XYChart.Data<String, Number> item) throws MalformedURLException {
         String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
 
         graphicsMenu.initHaploBarchart();

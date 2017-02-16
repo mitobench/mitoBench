@@ -62,7 +62,8 @@ public class GraphicsMenu {
 
 
     public void initHaploBarchart(){
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", tabPane, stage);
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency",
+                tabPane, stage, chartController, tableController);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Bar Chart haplogroups");
@@ -332,7 +333,7 @@ public class GraphicsMenu {
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);
     }
 
-    public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ){
+    public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
         chartController.addDataBarChart(barPlotHaplo, haplo_col, columnData);
     }
 
