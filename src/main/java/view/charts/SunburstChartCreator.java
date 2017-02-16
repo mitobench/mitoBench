@@ -168,7 +168,7 @@ public class SunburstChartCreator {
         Slider slider = new Slider();
         slider.setMin(0);
         slider.setMax(sunburstView.getMaxDeepness());
-        slider.setValue(sunburstView.getMaxDeepness());
+        slider.setValue(3);
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
         slider.setMajorTickUnit(1);

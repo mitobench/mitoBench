@@ -13,7 +13,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import view.datatypes.IData;
 import view.groups.GroupController;
-import view.menus.EditMenu;
+import view.menus.GroupMenu;
 
 import java.util.*;
 
@@ -36,7 +36,7 @@ public abstract class ATableController {
     protected GroupController groupController;
     protected List<String> col_names;
     protected List<String> col_names_sorted;
-    protected EditMenu editMenu;
+    protected GroupMenu groupMenu;
 
     public ATableController(){
 
@@ -91,7 +91,6 @@ public abstract class ATableController {
         // display updated table
         data = parseDataTableToObservableList(dataTable, curr_colnames);
 
-
         // add columns
         for(int i = 0; i < col_names_sorted.size(); i++) {
             addColumn(col_names_sorted.get(i), i);
@@ -104,13 +103,12 @@ public abstract class ATableController {
 
         setColumns_to_index();
 
-        editMenu.upateGroupItem(col_names_sorted, groupController);
+        groupMenu.upateGroupItem(col_names_sorted, groupController);
 
     }
 
 
     protected void updateEntryList(HashMap<String, List<Entry>> input_new) {
-
 
         for(String key_new : input_new.keySet()){
             if(table_content.containsKey(key_new)){
@@ -129,20 +127,13 @@ public abstract class ATableController {
                     }
                     if(!hit)
                         entries.add(e_new);
-
-
                 }
-
-
             }  else {
                 //  create new Entry
                 table_content.put(key_new.trim(), input_new.get(key_new));
             }
 
         }
-
-
-
     }
 
     /**
@@ -301,6 +292,94 @@ public abstract class ATableController {
     }
 
 
+    public void addGroupmenu(GroupMenu groupMenu){
+        this.groupMenu = groupMenu;
+    }
+
+    public void changeColumnName(String oldname, String newname) {
+        for (TableColumn col : table.getColumns()){
+            if(col.getText().equals(oldname)){
+                col.setText(newname.trim());
+            }
+        }
+        setColumns_to_index();
+        dataTable.updateDatatable(oldname, newname);
+    }
+
+    public void cleanColToIndex() {
+        column_to_index.clear();
+    }
+
+    public void cleanColnames() {
+        col_names.removeAll(col_names);
+        for(TableColumn col : table.getColumns()){
+            col_names.add(col.getText());
+        }
+    }
+
+    public void removeColumn(String colname_group) {
+        // remove from tableview
+        for(TableColumn col : table.getColumns()){
+            if(col.getText().equals(colname_group)){
+                table.getColumns().remove(col);
+                break;
+            }
+        }
+
+        // remove from data
+        ObservableList<ObservableList> data_new = FXCollections.observableArrayList();
+        int index = getColIndex(colname_group);
+        for(ObservableList list : data){
+            list.remove(index);
+            data_new.add(list);
+        }
+
+        // remove from datatable
+        dataTable.getDataTable().remove(colname_group);
+        cleanColnames();
+        col_names_sorted.remove(colname_group);
+        setColumns_to_index();
+        table.getItems().removeAll(table.getItems());
+        cleanTableContent(colname_group);
+        resetTable();
+        updateTable(table_content);
+
+    }
+
+    public void cleanTableContent(String group_colname){
+        for(String key : table_content.keySet()){
+            for(Entry e : table_content.get(key)){
+                if(e.getIdentifier().equals(group_colname)){
+                    table_content.get(key).remove(e);
+                    break;
+                } else if(e.getIdentifier().contains(group_colname)){
+                    String id = e.getIdentifier();
+                    IData d = e.getData();
+                    IInputType type = e.getType();
+                    table_content.get(key).remove(e);
+                    table_content.get(key).add(new Entry(id.split(" \\(")[0].trim(), type, d));
+                    break;
+                }
+            }
+        }
+
+
+    }
+
+
+    public void loadGroups(){
+        // if "grouping" column already exists, create groups
+        for(String colname : getCurrentColumnNames()){
+            if(colname.contains("(Grouping)")){
+                groupController.createGroupByColumn(colname, "");
+                break;
+            }
+        }
+    }
+
+
+
+
     /*
 
 
@@ -309,6 +388,13 @@ public abstract class ATableController {
 
 
      */
+
+
+
+    public HashMap<String, List<Entry>> getTable_content() {
+        return table_content;
+    }
+
 
 
     /**
@@ -494,7 +580,7 @@ public abstract class ATableController {
             column_to_index.put(col.getText(),i);
             i++;
         }
-        editMenu.upateGroupItem(getCurrentColumnNames(), groupController);
+        groupMenu.upateGroupItem(getCurrentColumnNames(), groupController);
     }
 
 
@@ -516,104 +602,8 @@ public abstract class ATableController {
 
     }
 
-    public void loadGroups(){
-
-        // if "grouping" column already exists, create groups
-        for(String colname : getCurrentColumnNames()){
-            if(colname.contains("(Grouping)")){
-                groupController.createGroupByColumn(colname, "");
-                break;
-            }
-        }
-    }
 
 
-    public HashMap<String, List<Entry>> getTable_content() {
-        return table_content;
-    }
-    public void addEditMenue(EditMenu editMenu){
-        this.editMenu = editMenu;
-    }
-
-    public void changeColumnName(String oldname, String newname) {
-        System.out.println("Rename column from " + oldname + " to " + newname);
-        for (TableColumn col : table.getColumns()){
-            if(col.getText().equals(oldname)){
-                col.setText(newname.trim());
-            }
-        }
-        setColumns_to_index();
-        dataTable.updateDatatable(oldname, newname);
-    }
-
-    public void cleanColToIndex() {
-        column_to_index.clear();
-    }
-
-    public void cleanColnames() {
-        col_names.removeAll(col_names);
-        for(TableColumn col : table.getColumns()){
-            col_names.add(col.getText());
-        }
-    }
-
-    public void removeColumn(String colname_group) {
-        // remove from tableview
-        for(TableColumn col : table.getColumns()){
-            if(col.getText().equals(colname_group)){
-                table.getColumns().remove(col);
-                break;
-            }
-        }
-
-        // remove from data
-        ObservableList<ObservableList> data_new = FXCollections.observableArrayList();
-        int index = getColIndex(colname_group);
-        for(ObservableList list : data){
-            list.remove(index);
-            data_new.add(list);
-        }
-
-        // remove from datatable
-        dataTable.getDataTable().remove(colname_group);
-        cleanColnames();
-        col_names_sorted.remove(colname_group);
-        setColumns_to_index();
-        //updateView(data);
-        table.getItems().removeAll(table.getItems());
-        cleanTableContent(colname_group);
-        ObservableList<ObservableList> test = FXCollections.observableArrayList();
-        ObservableList test1 = FXCollections.observableArrayList();
-        test1.add("t");
-        test1.add("e");
-        test1.add("s");
-        test1.add("t");
-        test1.add("1");
-        test.add(test1);
-        resetTable();
-        updateTable(table_content);
-
-    }
-
-    public void cleanTableContent(String group_colname){
-        for(String key : table_content.keySet()){
-            for(Entry e : table_content.get(key)){
-                if(e.getIdentifier().equals(group_colname)){
-                    table_content.get(key).remove(e);
-                    break;
-                } else if(e.getIdentifier().contains(group_colname)){
-                    String id = e.getIdentifier();
-                    IData d = e.getData();
-                    IInputType type = e.getType();
-                    table_content.get(key).remove(e);
-                    table_content.get(key).add(new Entry(id.split(" \\(")[0].trim(), type, d));
-                    break;
-                }
-            }
-        }
-
-
-    }
 
     public void setGroupController(GroupController groupController) {
         this.groupController = groupController;

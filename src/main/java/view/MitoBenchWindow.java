@@ -6,10 +6,8 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import view.groups.GroupController;
@@ -40,6 +38,9 @@ public class MitoBenchWindow extends Application{
     private VBox pane_table_userBench;
     private Label info_selected_items = new Label("");
     private GroupController groupController;
+    private SplitPane splitPane_table;
+    private VBox pane_table_DB;
+    private Button enableDBBtn;
 
 
     @Override
@@ -99,7 +100,7 @@ public class MitoBenchWindow extends Application{
         pane_root.setCenter(borderpane_center);
         pane_root.setTop(getMenuPane());
 
-
+        primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
         this.primaryStage.show();
     }
 
@@ -126,8 +127,8 @@ public class MitoBenchWindow extends Application{
                                   graphicsMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 
-        tableControllerUserBench.addEditMenue(editMenu);
-        tableControllerDB.addEditMenue(editMenu);
+        tableControllerUserBench.addGroupmenu(groupMenu);
+        tableControllerDB.addGroupmenu(groupMenu);
         return menuBar;
     }
 
@@ -171,12 +172,19 @@ public class MitoBenchWindow extends Application{
         String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " rows are selected";
         info_selected_items.setText(info_text);
 
+        BorderPane topbar = new BorderPane();
+        enableDBBtn = new Button("Enable DB table");
+        enableDBBtn.setVisible(false);
+        tableControllerUserBench.addButtonFunctionality(enableDBBtn, this);
+        topbar.setLeft(label);
+        topbar.setRight(enableDBBtn);
+
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTablePane");
         pane_table_userBench = new VBox();
         pane_table_userBench.setSpacing(10);
         pane_table_userBench.setPadding(new Insets(20, 10, 10, 10));
-        pane_table_userBench.getChildren().addAll(label, tableControllerUserBench.getTable(), info_selected_items);
+        pane_table_userBench.getChildren().addAll(topbar, tableControllerUserBench.getTable(), info_selected_items);
         pane_table.setCenter(pane_table_userBench);
 
         return pane_table;
@@ -184,12 +192,12 @@ public class MitoBenchWindow extends Application{
 
 
     public void splitTablePane(TableControllerDB tableControllerDB){
-        SplitPane splitPane_table = new SplitPane();
+        splitPane_table = new SplitPane();
         splitPane_table.setOrientation(Orientation.HORIZONTAL);
 
         final Label label = new Label("Database");
 
-        VBox pane_table_DB = new VBox();
+        pane_table_DB = new VBox();
         HBox topPanel = new HBox();
         topPanel.setSpacing(10);
 
@@ -198,9 +206,11 @@ public class MitoBenchWindow extends Application{
         buttonHBox.setAlignment(Pos.TOP_RIGHT);
         Button addAllBtn = new Button("Add all");
         Button addSelectedBtn = new Button("Add selected");
-        tableControllerDB.addButtonFunctionality(addAllBtn, addSelectedBtn, tableControllerDB, tableControllerUserBench);
+        Button disableBtn = new Button("Disable DB table");
+        tableControllerDB.addButtonFunctionality(addAllBtn, addSelectedBtn, disableBtn,
+                tableControllerDB, tableControllerUserBench, this);
 
-        buttonHBox.getChildren().addAll(addAllBtn, addSelectedBtn);
+        buttonHBox.getChildren().addAll(addAllBtn, addSelectedBtn, disableBtn);
         topPanel.getChildren().addAll(label, buttonHBox);
 
         pane_table_DB.setSpacing(10);
@@ -249,4 +259,17 @@ public class MitoBenchWindow extends Application{
     }
 
 
+    public void disableBDTable() {
+        splitPane_table.getItems().remove(pane_table_DB);
+    }
+
+
+    public void enableBDTable() {
+        splitPane_table.getItems().add(pane_table_DB);
+    }
+
+
+    public Button getEnableDBBtn() {
+        return enableDBBtn;
+    }
 }

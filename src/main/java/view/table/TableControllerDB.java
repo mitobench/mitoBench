@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import view.MitoBenchWindow;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +23,9 @@ public class TableControllerDB extends ATableController{
     }
 
 
-    public void addButtonFunctionality(Button addAllBtn, Button addSelectedBtn,
-                   TableControllerDB tableControllerDB, TableControllerUserBench tableControllerUserBench) {
+    public void addButtonFunctionality(Button addAllBtn, Button addSelectedBtn, Button disableBtn,
+                                       TableControllerDB tableControllerDB, TableControllerUserBench tableControllerUserBench,
+                                       MitoBenchWindow mitoBenchWindow) {
 
         addAllBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -33,6 +35,7 @@ public class TableControllerDB extends ATableController{
                 data_obs.addAll(selected);
                 HashMap<String, List<Entry>> data_entries = tableControllerDB.createNewEntryListDragAndDrop(data_obs);
                 tableControllerUserBench.updateTable(data_entries);
+
             }
         });
 
@@ -46,6 +49,15 @@ public class TableControllerDB extends ATableController{
                     HashMap<String, List<Entry>> data_entries = tableControllerDB.createNewEntryListDragAndDrop(data_obs);
                     tableControllerUserBench.updateTable(data_entries);
                 }
+
+            }
+        });
+
+        disableBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                //table.setVisible(false);
+                mitoBenchWindow.disableBDTable();
+                mitoBenchWindow.getEnableDBBtn().setVisible(true);
 
             }
         });

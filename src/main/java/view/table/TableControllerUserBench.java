@@ -1,15 +1,22 @@
 package view.table;
 
 
+import io.datastructure.Entry;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 
+import view.MitoBenchWindow;
 import view.dialogues.settings.AddToGroupDialog;
 import view.dialogues.settings.CreateGroupDialog;
 
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -56,6 +63,15 @@ public class TableControllerUserBench extends ATableController{
         table.setContextMenu(menu);
 
 
+    }
+
+    public void addButtonFunctionality(Button btn, MitoBenchWindow mitoBenchWindow){
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                mitoBenchWindow.enableBDTable();
+                btn.setVisible(false);
+            }
+        });
     }
 
 }
