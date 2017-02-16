@@ -101,6 +101,7 @@ public class GroupController {
         tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
         //tableController.cleanColToIndex();
         tableController.cleanColnames();
+        tableController.cleanTableContent("(Grouping)");
     }
 
     public Set<String> getGroupnames(){

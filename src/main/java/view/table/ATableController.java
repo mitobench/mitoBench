@@ -1,6 +1,7 @@
 package view.table;
 
 import database.ColumnNameMapper;
+import io.IInputType;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
@@ -10,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import view.datatypes.IData;
 import view.groups.GroupController;
 import view.menus.EditMenu;
 
@@ -209,19 +211,9 @@ public abstract class ATableController {
      */
     public void updateView(ObservableList<ObservableList> newItems){
         data_copy = copyData();
-
-        ObservableList<ObservableList> data_selection = FXCollections.observableArrayList();
-        for(ObservableList item : newItems){
-            data_selection.add(item);
-        }
-
         data.removeAll(data);
-        for(ObservableList item : data_selection){
-            data.add(item);
-        }
-
+        data.addAll(newItems);
         this.table.setItems(data);
-
     }
 
 
@@ -584,9 +576,42 @@ public abstract class ATableController {
 
         // remove from datatable
         dataTable.getDataTable().remove(colname_group);
+        cleanColnames();
+        col_names_sorted.remove(colname_group);
+        setColumns_to_index();
         //updateView(data);
         table.getItems().removeAll(table.getItems());
-        table.getItems().addAll(data_new);
+        cleanTableContent(colname_group);
+        ObservableList<ObservableList> test = FXCollections.observableArrayList();
+        ObservableList test1 = FXCollections.observableArrayList();
+        test1.add("t");
+        test1.add("e");
+        test1.add("s");
+        test1.add("t");
+        test1.add("1");
+        test.add(test1);
+        resetTable();
+        updateTable(table_content);
+
+    }
+
+    public void cleanTableContent(String group_colname){
+        for(String key : table_content.keySet()){
+            for(Entry e : table_content.get(key)){
+                if(e.getIdentifier().equals(group_colname)){
+                    table_content.get(key).remove(e);
+                    break;
+                } else if(e.getIdentifier().contains(group_colname)){
+                    String id = e.getIdentifier();
+                    IData d = e.getData();
+                    IInputType type = e.getType();
+                    table_content.get(key).remove(e);
+                    table_content.get(key).add(new Entry(id.split(" \\(")[0].trim(), type, d));
+                    break;
+                }
+            }
+        }
+
 
     }
 
