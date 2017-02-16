@@ -1,6 +1,6 @@
 package view.charts;
 
-import controls.skin.SunburstViewSkin;
+
 import controls.sunburst.*;
 import data.ISourceStrategy;
 import data.SourceStrategyHaplogroup;
@@ -12,8 +12,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.print.PrinterJob;
-import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -21,11 +19,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,10 +35,11 @@ public class SunburstChartCreator {
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
-    //private ColorStrategyGroups colorStrategyGroups;
+    private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
     private TabPane tabPane;
     private Button goBack;
+    private HBox chart_legend;
 
 
     public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane){
@@ -61,7 +57,6 @@ public class SunburstChartCreator {
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
         //colorStrategyGroups = new ColorStrategyGroups();
-
 
     }
 
@@ -189,11 +184,11 @@ public class SunburstChartCreator {
         toolbar.getChildren().addAll(zoomSlider, slider, btnCSShades, btnCSRandom, separator, btnShowLegend, btnHideLegend);
 
         sunburstBorderPane.setTop(toolbar);
-        sunburstBorderPane.setCenter(sunburstView);
-        sunburstBorderPane.setRight(myLegend);
-        BorderPane.setAlignment(sunburstView, Pos.CENTER);
-        BorderPane.setMargin(myLegend, new Insets(20));
-        BorderPane.setAlignment(myLegend, Pos.CENTER_LEFT);
+
+        chart_legend = new HBox();
+        chart_legend.getChildren().addAll(sunburstView, myLegend);
+        sunburstBorderPane.setCenter(chart_legend);
+        BorderPane.setAlignment(chart_legend, Pos.TOP_RIGHT);
 
         Event.fireEvent(sunburstView, new SunburstView.VisualChangedEvent());
 
@@ -245,29 +240,17 @@ public class SunburstChartCreator {
         saveAsPDF.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
 
-//                PrinterJob job = PrinterJob.createPrinterJob();
-//                if(job != null){
-//                    job.showPrintDialog(stage); // Window must be your main Stage
-//                    job.printPage(sunburstView);
-//                    job.endJob();
-//                }
+                int scale = 6; //6x resolution should be enough, users should downscale if required
+                final SnapshotParameters spa = new SnapshotParameters();
+                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
                 ImageWriter imageWriter = new ImageWriter();
                 try {
-                    imageWriter.saveImage(stage, tabPane.snapshot(new SnapshotParameters(), null));
+                    imageWriter.saveImage(stage, chart_legend.snapshot(new SnapshotParameters(), null));
                 } catch (ImageException e) {
                     e.printStackTrace();
                 }
             }
         });
-
-//        final MenuItem showLevel = new MenuItem("Show only this level");
-//        showLevel.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override public void handle(ActionEvent event) {
-//                goBack.setVisible(true);
-//                //sunburstView.setOnlySelectedLevelVisible();
-//
-//            }
-//        });
 
         final ContextMenu menu = new ContextMenu();
         menu.getItems().addAll(saveAsPDF);
