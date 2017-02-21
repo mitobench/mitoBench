@@ -199,6 +199,10 @@ public class GUITestSteps {
             verifyThat("#usernamme_field", isVisible());
             verifyThat("#password_field", isVisible());
             robot.clickOn("#loginButton");
+
+            verifyThat("#set_database_query", isVisible());
+            robot.clickOn("#textfield_selection_table").write("*");
+            robot.clickOn("#db_sendBtn");
             verifyThat("#dbtable" , isVisible());
 
             robot.clickOn("#dbtable").drag("#dbtable").dropTo("#mainEntryTable");

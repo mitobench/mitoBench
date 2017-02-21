@@ -29,6 +29,9 @@ public class DBSearchDialogue extends APopupDialogue{
         super(title);
         dialogGrid.setId("set_database_query");
         dialog.setResizable(true);
+
+        textfield_selection_table.setId("textfield_selection_table");
+        btnSend.setId("db_sendBtn");
         show();
     }
 
