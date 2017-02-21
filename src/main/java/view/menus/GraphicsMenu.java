@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.charts.*;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
@@ -62,8 +61,7 @@ public class GraphicsMenu {
 
 
     public void initHaploBarchart() throws MalformedURLException {
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency",
-                tabPane, stage, chartController, tableController);
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", stage, chartController, tableController);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Bar Chart haplogroups");
@@ -74,7 +72,7 @@ public class GraphicsMenu {
     }
 
     public void initGroupBarChart(){
-        barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane, stage);
+        barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane);
         Tab tab = new Tab();
         tab.setId("tab_group_barchart");
         tab.setText("Bar Chart Grouping");
@@ -111,7 +109,7 @@ public class GraphicsMenu {
 
 
     private void initProfilePlot(){
-        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane, stage);
+        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane);
         Tab tab = new Tab();
         tab.setId("tab_profilePlot");
         tab.setText("Profile Plot");

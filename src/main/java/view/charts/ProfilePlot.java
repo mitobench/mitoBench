@@ -29,25 +29,25 @@ import java.util.List;
 /**
  * Created by neukamm on 26.01.17.
  */
-public class ProfilePlot extends AChart{
+public class ProfilePlot extends AChart {
 
     LineChart<String,Number> profilePlot = new LineChart<String,Number>(xAxis,yAxis);
     List<XYChart.Series> seriesList = new ArrayList<>();
     int maxVal = 0;
 
 
-    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, Stage stage){
-        super(title, lable_xaxis, label_yaxis);
+    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane){
+        super(lable_xaxis, label_yaxis);
 
         // set autoranging to false to allow manual settings
 
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
-        yAxis.setTickUnit(5);
 
-        setContextMenu(stage, tabpane);
         profilePlot.setTitle(title);
         profilePlot.setStyle("-fx-font-size: " + 20 + "px;");
+
+        setContextMenu(profilePlot, tabpane);
     }
 
 
@@ -166,48 +166,6 @@ public class ProfilePlot extends AChart{
             }
         }
     }
-
-
-    /**
-     * This method initializes a context menu to save chart as image.
-     * @param stage
-     */
-    private void setContextMenu(Stage stage, TabPane tabPane){
-
-
-        //adding a context menu item to the chart
-        final MenuItem saveAsPng = new MenuItem("Save as png");
-        saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-                int scale = 6; //6x resolution should be enough, users should downscale if required
-                final SnapshotParameters spa = new SnapshotParameters();
-                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
-                ImageWriter imageWriter = new ImageWriter();
-                try {
-                    imageWriter.saveImage(stage, profilePlot.snapshot(spa, null));
-                } catch (ImageException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        final ContextMenu menu = new ContextMenu(
-                saveAsPng
-        );
-
-        profilePlot.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                if (MouseButton.SECONDARY.equals(event.getButton())) {
-                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
-                }
-            }
-        });
-
-
-
-    }
-
-
 
 
 }

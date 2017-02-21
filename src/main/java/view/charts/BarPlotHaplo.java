@@ -1,9 +1,11 @@
 package view.charts;
 
-import controls.sunburst.ColorStrategyGroups;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -19,7 +21,7 @@ import java.util.*;
 /**
  * Created by neukamm on 03.11.16.
  */
-public class BarPlotHaplo extends ABarPlot {
+public class BarPlotHaplo extends AChart {
 
     private final ChartController chartController;
     private final TableControllerUserBench tableController;
@@ -27,13 +29,19 @@ public class BarPlotHaplo extends ABarPlot {
     private final Stage stage;
     private XYChart.Series series;
     private ColorSchemeBarchart colorSchemeBarchart;
+    private BarChartExt<String, Number> bc;
 
 
-    public BarPlotHaplo(String title, String ylabel, TabPane scene, Stage stage, ChartController cc,
+    public BarPlotHaplo(String title, String ylabel, Stage stage, ChartController cc,
                         TableControllerUserBench tc) throws MalformedURLException {
-        super(title, ylabel, scene, stage);
+
+        super(ylabel, "");
+
         this.stage = stage;
-        this.bc.setLegendVisible(false);
+
+        bc = new BarChartExt<String, Number>(xAxis, yAxis);
+        bc.setLegendVisible(false);
+
         chartController = cc;
         tableController = tc;
 
@@ -56,8 +64,6 @@ public class BarPlotHaplo extends ABarPlot {
 
     }
 
-
-    @Override
     public void addData(HashMap<String, Integer> data) throws MalformedURLException {
 
         series = new XYChart.Series();
@@ -95,6 +101,31 @@ public class BarPlotHaplo extends ABarPlot {
         return d;
     }
 
+
+    /**
+     * This method returns the BarChart object
+     * @return
+     */
+    public BarChart<String,Number> getBarChart() {
+        return bc;
+    }
+
+    /**
+     * This method removes all data.
+     */
+    public void clearData(){
+
+        for (XYChart.Series<String, Number> series : bc.getData()) {
+            for (XYChart.Data<String, Number> data : series.getData()) {
+                Node node = data.getNode();
+                Parent parent = node.parentProperty().get();
+                if (parent != null && parent instanceof Group) {
+                    Group group = (Group) parent;
+                    group.getChildren().clear();
+                }
+            }
+        }
+    }
 
 }
 

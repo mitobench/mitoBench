@@ -1,16 +1,9 @@
 package view.charts;
 
-import io.Exceptions.ImageException;
-import io.writer.ImageWriter;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -18,7 +11,6 @@ import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import view.menus.GraphicsMenu;
 
 import java.net.MalformedURLException;
@@ -28,35 +20,27 @@ import java.util.List;
 /**
  * Created by neukamm on 29.11.16.
  */
-public class StackedBar {
+public class StackedBar extends AChart{
 
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;
-    private CategoryAxis xAxis;
-    private NumberAxis yAxis;
     private TabPane tabPane;
     private final Glow glow = new Glow(.5);
     private GraphicsMenu graphicsMenu;
 
     public StackedBar(String title, TabPane vBox, GraphicsMenu graphicsMenu) {
+        super("", "Frequency in %");
+
         tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
 
-        xAxis = new CategoryAxis();
-        yAxis = new NumberAxis();
-
-        xAxis.setTickMarkVisible(false);
 
         // set autoranging to false to allow manual settings
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
-        yAxis.setTickUnit(5);
-        yAxis.setMinorTickVisible(false);
-        yAxis.setLabel("Frequency in %");
-        xAxis.tickLabelFontProperty().set(Font.font(17));
 
-        yAxis.tickLabelFontProperty().set(Font.font(15));
+        xAxis.tickLabelFontProperty().set(Font.font(17));
 
         sbc = new StackedBarChart<>(xAxis, yAxis);
         sbc.setTitle(title);
@@ -66,8 +50,7 @@ public class StackedBar {
         sbc.setLegendSide(Side.RIGHT);
         sbc.setStyle("-fx-font-size: " + 20 + "px;");
 
-
-        setContextMenu(new Stage());
+        setContextMenu(sbc, vBox);
 
     }
 
@@ -194,46 +177,6 @@ public class StackedBar {
 
 
      */
-
-    /**
-     * This method initializes a context menu to save chart as image.
-     * @param stage
-     */
-    private void setContextMenu(Stage stage){
-
-
-        //adding a context menu item to the chart
-        final MenuItem saveAsPng = new MenuItem("Save as png");
-        saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-                int scale = 6; //6x resolution should be enough, users should downscale if required
-                final Bounds bounds = sbc.getLayoutBounds();
-                final SnapshotParameters spa = new SnapshotParameters();
-                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
-                ImageWriter imageWriter = new ImageWriter();
-                try {
-                    imageWriter.saveImage(stage, sbc.snapshot(spa, null));
-                } catch (ImageException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        final ContextMenu menu = new ContextMenu(
-                saveAsPng
-        );
-
-        sbc.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                if (MouseButton.SECONDARY.equals(event.getButton())) {
-                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
-                }
-            }
-        });
-
-
-
-    }
 
     public void setCategories(String[] groups){
         xAxis.setCategories(FXCollections.observableArrayList(groups));

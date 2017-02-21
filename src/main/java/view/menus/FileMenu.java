@@ -1,9 +1,6 @@
 package view.menus;
 
-import io.Exceptions.ARPException;
-import io.Exceptions.FastAException;
-import io.Exceptions.HSDException;
-import io.Exceptions.ProjectException;
+import io.Exceptions.*;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
@@ -11,12 +8,15 @@ import io.dialogues.Import.IImportDialogueFactory;
 import io.dialogues.Import.ImportDialogueAlternative;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
 import io.reader.*;
+import io.writer.ImageWriter;
 import io.writer.StatisticsWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.MitoBenchWindow;
@@ -42,6 +42,7 @@ import java.util.*;
  */
 public class FileMenu {
 
+    private TabPane viz_pane;
     private Menu menuFile;
     private TableControllerUserBench tableControllerUserBench;
     private TableControllerDB tableControllerDB;
@@ -54,7 +55,8 @@ public class FileMenu {
     private DrapAndDropEventMaganer drapAndDropEventMaganer;
 
     public FileMenu(TableControllerUserBench tableController, String version, Stage stage, StatisticsMenu toolsMenu,
-                    MitoBenchWindow mitoBenchWindow, TableControllerDB tableControllerDB ) throws IOException {
+                    MitoBenchWindow mitoBenchWindow, TableControllerDB tableControllerDB, TabPane tabpane_visualization)
+            throws IOException {
 
         MITOBENCH_VERSION = version;
 
@@ -69,6 +71,7 @@ public class FileMenu {
 
         importDialogueFactory = new ImportDialogueFactoryImpl();
         fm = this;
+        viz_pane = tabpane_visualization;
 
         addSubMenus();
 
@@ -132,6 +135,41 @@ public class FileMenu {
         });
 
 
+
+        /*
+
+                        Export Image
+
+
+         */
+
+
+        MenuItem exportImage = new MenuItem("Export Chart");
+        exportImage.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+                    FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Image format (*.png)", "*.txt");
+                    //SaveAsDialogue sad = new SaveAsDialogue(fex);
+                    //sad.start(new Stage());
+
+                    int scale = 6; //6x resolution should be enough, users should downscale if required
+                    final SnapshotParameters spa = new SnapshotParameters();
+                    spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
+                    ImageWriter imageWriter = new ImageWriter();
+                    try {
+                        imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
+                    } catch (ImageException e) {
+                        e.printStackTrace();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
         /*
                         EXPORT DIALOGUE
 
@@ -182,7 +220,7 @@ public class FileMenu {
             }
         });
 
-        menuFile.getItems().addAll(importFile, importFromDB, exportFile, new SeparatorMenuItem(), exportCurrStats , new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, importFromDB, exportFile, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
     public void openProjectFile(File f){

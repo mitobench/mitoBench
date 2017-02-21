@@ -113,7 +113,7 @@ public class MitoBenchWindow extends Application{
         EditMenu editMenu = new EditMenu();
         StatisticsMenu toolsMenu = new StatisticsMenu(tableControllerUserBench, treeController, tabpane_statistics, scene, primaryStage);
         FileMenu fileMenu = new FileMenu(tableControllerUserBench, MITOBENCH_VERSION, primaryStage, toolsMenu,
-                this, tableControllerDB);
+                this, tableControllerDB, tabpane_visualization);
         GroupMenu groupMenu = new GroupMenu(groupController, tableControllerUserBench);
         TableMenu tableMenu = new TableMenu(tableControllerUserBench, tableControllerUserBench.getGroupController());
         GraphicsMenu graphicsMenu = new GraphicsMenu(tableControllerUserBench, tabpane_visualization, treeController, primaryStage, scene, tabpane_statistics);

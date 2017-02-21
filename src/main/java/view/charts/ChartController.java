@@ -3,7 +3,6 @@ package view.charts;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
-import javafx.stage.Stage;
 import view.table.TableControllerUserBench;
 
 import java.net.MalformedURLException;
@@ -34,12 +33,40 @@ public class ChartController {
     }
 
 
+
+
+
+    // todo: do this better!
     /**
      *
      * @param barPlot
      * @param column
      */
-    public void addDataBarChart(ABarPlot barPlot, TableColumn column, List<String> column_data) throws MalformedURLException {
+    public void addDataBarChart(BarPlotHaplo barPlot, TableColumn column, List<String> column_data) throws MalformedURLException {
+
+        if(column_data == null){
+            column_data = new ArrayList<>();
+            for (Object item : tableController.getTable().getItems()) {
+                column_data.add((String)column.getCellObservableValue(item).getValue());
+            }
+        }
+
+
+        String[] selected_data = column_data.toArray(new String[column_data.size()]);
+        barPlot.clearData();
+
+        if (selected_data.length !=0) {
+            barPlot.addData(tableController.getDataHist(selected_data));
+        }
+    }
+
+
+    /**
+     *
+     * @param barPlot
+     * @param column
+     */
+    public void addDataBarChart(BarChartGrouping barPlot, TableColumn column, List<String> column_data) throws MalformedURLException {
 
         if(column_data == null){
             column_data = new ArrayList<>();

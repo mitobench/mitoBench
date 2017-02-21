@@ -1,9 +1,13 @@
 package view.charts;
 
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -13,23 +17,40 @@ import java.util.HashMap;
 /**
  * Created by neukamm on 12.01.17.
  */
-public class BarChartGrouping extends ABarPlot {
+public class BarChartGrouping extends AChart {
 
     private XYChart.Series series;
+    private BarChartExt<String, Number> bc;
     /**
      * Constructor which sets axes, title and context menu
      *
      * @param title
      * @param ylabel
      * @param scene
-     * @param stage
      */
-    public BarChartGrouping(String title, String ylabel, TabPane scene, Stage stage) {
-        super(title, ylabel, scene, stage);
-        this.bc.setLegendVisible(false);
+    public BarChartGrouping(String title, String ylabel, TabPane scene) {
+        super(ylabel, null);
+        bc = new BarChartExt<String, Number>(xAxis, yAxis);
+        bc.setLegendVisible(false);
+        bc.setTitle(title);
+
+        yAxis.setTickLabelFormatter(new StringConverter<Number>() {
+            @Override public String toString(Number object) {
+                if(object.intValue()!=object.doubleValue())
+                    return "";
+
+                return ""+(object.intValue());
+            }
+
+            @Override public Number fromString(String string) {
+                Number val = Double.parseDouble(string);
+                return val.intValue();
+            }
+        });
+
+        setContextMenu(bc, scene);
     }
 
-    @Override
     public void addData(HashMap<String, Integer> data) {
         this.series = new XYChart.Series();
         series.setName("");
@@ -58,4 +79,31 @@ public class BarChartGrouping extends ABarPlot {
             node.getStyleClass().remove("default-color0");
         }
     }
+
+    /**
+     * This method returns the BarChart object
+     * @return
+     */
+    public BarChart<String,Number> getBarChart() {
+        return bc;
+    }
+
+
+    /**
+     * This method removes all data.
+     */
+    public void clearData(){
+
+        for (XYChart.Series<String, Number> series : bc.getData()) {
+            for (XYChart.Data<String, Number> data : series.getData()) {
+                Node node = data.getNode();
+                Parent parent = node.parentProperty().get();
+                if (parent != null && parent instanceof Group) {
+                    Group group = (Group) parent;
+                    group.getChildren().clear();
+                }
+            }
+        }
+    }
+
 }

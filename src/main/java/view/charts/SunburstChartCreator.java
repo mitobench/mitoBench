@@ -4,21 +4,15 @@ package view.charts;
 import controls.sunburst.*;
 import data.ISourceStrategy;
 import data.SourceStrategyHaplogroup;
-import io.Exceptions.ImageException;
-import io.writer.ImageWriter;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
@@ -31,7 +25,7 @@ import java.util.List;
 /**
  * Created by neukamm on 30.11.16.
  */
-public class SunburstChartCreator {
+public class SunburstChartCreator extends AChart{
 
     private SunburstView sunburstView;
     private BorderPane sunburstBorderPane;
@@ -40,15 +34,14 @@ public class SunburstChartCreator {
     private ColorStrategySectorShades colorStrategyShades;
     private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
-    private TabPane tabPane;
 
     double orgSceneX, orgSceneY;
     double orgTranslateX, orgTranslateY;
 
     public SunburstChartCreator(Stage stage, TabPane tabPane){
+        super( null, null);
 
         this.stage = stage;
-        this.tabPane = tabPane;
         this.sunburstBorderPane = new BorderPane();
         this.sunburstBorderPane.setMinSize(0,0);
 
@@ -65,6 +58,7 @@ public class SunburstChartCreator {
         colorStrategyGroups = new ColorStrategyGroups();
 
         setDragAndMove();
+        setContextMenu(sunburstBorderPane, tabPane);
 
     }
 
@@ -85,7 +79,6 @@ public class SunburstChartCreator {
 
         loadData(hg_to_group, weights, treeMap, tree, treeView);
         finishSetup();
-        setContextMenu(stage);
 
 
     }
@@ -272,41 +265,6 @@ public class SunburstChartCreator {
      */
     public BorderPane getBorderPane(){
         return sunburstBorderPane;
-    }
-
-    private void setContextMenu(Stage stage){
-
-
-        //adding a context menu item to the chart
-        final MenuItem saveAsPDF = new MenuItem("Save as png");
-        saveAsPDF.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-
-                int scale = 6; //6x resolution should be enough, users should downscale if required
-                final SnapshotParameters spa = new SnapshotParameters();
-                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
-                ImageWriter imageWriter = new ImageWriter();
-                try {
-                    HBox tmp_box = new HBox();
-                    tmp_box.getChildren().addAll(sunburstBorderPane.getCenter(), sunburstBorderPane.getRight());
-                    imageWriter.saveImage(stage, tmp_box.snapshot(new SnapshotParameters(), null));
-                } catch (ImageException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        final ContextMenu menu = new ContextMenu();
-        menu.getItems().addAll(saveAsPDF);
-
-        sunburstView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                if (MouseButton.SECONDARY.equals(event.getButton())) {
-                    menu.show(tabPane, event.getScreenX(), event.getScreenY());
-                }
-            }
-        });
-
     }
 
 
