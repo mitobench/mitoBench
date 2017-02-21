@@ -212,6 +212,12 @@ public class GUITestSteps {
     }
 
 
+    public void partTestGrouping(){
+        step("Calculate Statistics", () -> {
+            robot.clickOn("#menu_grouping").clickOn("#create_groups").clickOn("#group_by_column");
+        });
+    }
+
 
     private void step(final String step, final Runnable runnable) {
         ++stepno;
