@@ -15,6 +15,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -45,8 +46,13 @@ public abstract class ABarPlot {
         NumberAxis yAxis = new NumberAxis();
         bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setTitle(title);
+        bc.setStyle("-fx-font-size: " + 20 + "px;");
         bc.setAnimated(false);
-        yAxis.setLabel(ylabel);
+        xAxis.tickLabelFontProperty().set(Font.font(15));
+        xAxis.setTickMarkVisible(false);
+        xAxis.tickLabelFontProperty().set(Font.font(15));
+
+        yAxis.tickLabelFontProperty().set(Font.font(15));
         yAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override public String toString(Number object) {
                 if(object.intValue()!=object.doubleValue())

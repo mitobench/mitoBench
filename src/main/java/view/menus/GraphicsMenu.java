@@ -61,7 +61,7 @@ public class GraphicsMenu {
     }
 
 
-    public void initHaploBarchart(){
+    public void initHaploBarchart() throws MalformedURLException {
         this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency",
                 tabPane, stage, chartController, tableController);
         Tab tab = new Tab();
@@ -100,6 +100,8 @@ public class GraphicsMenu {
         Tab tab = new Tab();
         tab.setId("tab_sunburst");
         tab.setText("Sunburst Chart");
+        sunburstChart.getBorderPane().prefHeightProperty().bind(scene.heightProperty());
+        sunburstChart.getBorderPane().prefWidthProperty().bind(scene.widthProperty());
         tab.setContent(sunburstChart.getBorderPane());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
@@ -109,7 +111,7 @@ public class GraphicsMenu {
 
 
     private void initProfilePlot(){
-        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Count", tabPane, stage);
+        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane, stage);
         Tab tab = new Tab();
         tab.setId("tab_profilePlot");
         tab.setText("Profile Plot");

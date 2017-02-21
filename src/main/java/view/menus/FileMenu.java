@@ -260,6 +260,7 @@ public class FileMenu {
 
                 ProjectReader projectReader = new ProjectReader();
                 try {
+
                     projectReader.read(f);
                     projectReader.loadData(tableControllerUserBench);
                 } catch (IOException e) {

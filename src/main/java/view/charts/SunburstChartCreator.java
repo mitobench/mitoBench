@@ -12,13 +12,17 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.controlsfx.control.SegmentedButton;
 
 import java.io.File;
 import java.util.HashMap;
@@ -39,7 +43,7 @@ public class SunburstChartCreator {
     private Stage stage;
     private TabPane tabPane;
     private Button goBack;
-    private HBox chart_legend;
+    private GridPane chart_legend;
 
 
     public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane){
@@ -47,16 +51,18 @@ public class SunburstChartCreator {
         this.stage = stage;
         this.tabPane = tabPane;
         this.sunburstBorderPane = borderPane;
+
         this.getBorderPane().setId("borderpane_sunburst");
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
+        sunburstView.setMinWidth(Screen.getPrimary().getVisualBounds().getWidth()/3);
         File f = new File("src/main/java/view/charts/css/sunburstview.css");
         stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
-        //colorStrategyGroups = new ColorStrategyGroups();
+        colorStrategyGroups = new ColorStrategyGroups();
 
     }
 
@@ -91,32 +97,24 @@ public class SunburstChartCreator {
 
         // Set the view.data as root item
         sunburstView.setRootItem(rootData);
-        //sunburstView.setColorStrategy(colorStrategyGroups);
-        sunburstView.setColorStrategy(colorStrategyShades);
+        sunburstView.setColorStrategy(colorStrategyGroups);
+        //sunburstView.setColorStrategy(colorStrategyShades);
     }
 
     private void finishSetup(){
-
-
-        // set legend
         SunburstLegend myLegend = new SunburstLegend(sunburstView);
-        // todo: order legend items in columns
 
-        // set color buttons
+        // Example Controls
+
         ToggleButton btnCSShades = new ToggleButton("Shades Color Strategy");
-        ToggleButton btnCSRandom = new ToggleButton("Random Color Strategy");
-
         btnCSShades.setOnAction(event -> {
-            btnCSRandom.setSelected(false);
             sunburstView.setColorStrategy(colorStrategyShades);
         });
 
-
+        ToggleButton btnCSRandom = new ToggleButton("Random Color Strategy");
         btnCSRandom.setOnAction(event -> {
-            btnCSShades.setSelected(false);
             sunburstView.setColorStrategy(colorStrategyRandom);
         });
-
 
         IColorStrategy colorStrategy = sunburstView.getColorStrategy();
         if(colorStrategy instanceof ColorStrategyRandom){
@@ -126,22 +124,34 @@ public class SunburstChartCreator {
         }
 
 
-        // set legend buttons
-
         ToggleButton btnShowLegend = new ToggleButton("Show Legend");
+        btnShowLegend.setSelected(true);
         ToggleButton btnHideLegend = new ToggleButton("Hide Legend");
 
-        btnShowLegend.setSelected(true);
+        btnHideLegend.setOnAction(event -> {
+            btnShowLegend.setSelected(false);
+            myLegend.clearLegend();
+        });
         btnShowLegend.setOnAction(event -> {
             btnHideLegend.setSelected(false);
             myLegend.updateLegend();
         });
 
+        HBox toolbar = new HBox(20);
+        BorderPane.setMargin(toolbar, new Insets(10));
 
-        btnHideLegend.setOnAction(event ->{
-            btnShowLegend.setSelected(false);
-            myLegend.clearLegend();
-        });
+        // Max Level drawn
+
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(sunburstView.getMaxDeepness());
+        slider.setValue(3);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(1);
+        slider.setBlockIncrement(1);
+        slider.valueProperty().addListener(x -> sunburstView.setMaxDeepness((int)slider.getValue()));
 
         // Zoom level
 
@@ -155,8 +165,6 @@ public class SunburstChartCreator {
         zoomSlider.setMinorTickCount(1);
         zoomSlider.setBlockIncrement(0.1);
 
-        HBox toolbar = new HBox(20);
-
         zoomSlider.valueProperty().addListener(x -> {
             toolbar.toFront();
             double scale = zoomSlider.getValue();
@@ -164,31 +172,25 @@ public class SunburstChartCreator {
             sunburstView.setScaleY(scale);
         });
 
-        // set slider to change level
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(sunburstView.getMaxDeepness());
-        slider.setValue(3);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(1);
-        slider.setMinorTickCount(1);
-        slider.setBlockIncrement(1);
-        slider.valueProperty().addListener(x -> sunburstView.setMaxDeepness((int)slider.getValue()));
 
-        BorderPane.setMargin(toolbar, new Insets(10));
 
-        Separator separator = new Separator();
-        separator.setOrientation(Orientation.VERTICAL);
+        SegmentedButton colorStrategies = new SegmentedButton();
+        colorStrategies.getButtons().addAll(btnCSShades, btnCSRandom);
 
-        toolbar.getChildren().addAll(zoomSlider, slider, btnCSShades, btnCSRandom, separator, btnShowLegend, btnHideLegend);
+        SegmentedButton legendVisibility = new SegmentedButton();
+        legendVisibility.getButtons().addAll(btnShowLegend, btnHideLegend);
+
+        toolbar.getChildren().addAll(colorStrategies, slider, legendVisibility, zoomSlider);
 
         sunburstBorderPane.setTop(toolbar);
 
-        chart_legend = new HBox();
-        chart_legend.getChildren().addAll(sunburstView, myLegend);
-        sunburstBorderPane.setCenter(chart_legend);
-        BorderPane.setAlignment(chart_legend, Pos.TOP_RIGHT);
+        sunburstBorderPane.setCenter(sunburstView);
+        BorderPane.setAlignment(sunburstView, Pos.CENTER_RIGHT);
+
+        sunburstBorderPane.setRight(myLegend);
+        BorderPane.setMargin(myLegend, new Insets(20));
+        BorderPane.setAlignment(myLegend, Pos.CENTER_LEFT);
+        stage.show();
 
         Event.fireEvent(sunburstView, new SunburstView.VisualChangedEvent());
 

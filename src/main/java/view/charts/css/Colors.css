@@ -18,7 +18,7 @@
 .default-colorT1.chart-bar { -fx-bar-fill: #026e75; }/* T1 */
 .default-colorT2.chart-bar { -fx-bar-fill: #065a83; }/* T2 */
 .default-colorH.chart-bar { -fx-bar-fill: darkgrey; }/* H */
-.default-colorHV.chart-bar { -fx-bar-fill: grey; }/* HV */
+.default-colorHV.chart-bar { -fx-bar-fill: #4f4f4f; }/* HV */
 .default-colorOthers.chart-bar { -fx-bar-fill: rgba(0, 0, 0, 0.98); }/* others */
 
 

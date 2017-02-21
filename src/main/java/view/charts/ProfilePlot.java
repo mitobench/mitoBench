@@ -15,6 +15,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import statistics.HaploStatistics;
 import view.table.TableControllerUserBench;
@@ -28,24 +29,25 @@ import java.util.List;
 /**
  * Created by neukamm on 26.01.17.
  */
-public class ProfilePlot {
+public class ProfilePlot extends AChart{
 
-    CategoryAxis xAxis = new CategoryAxis();
-    NumberAxis yAxis = new NumberAxis();
     LineChart<String,Number> profilePlot = new LineChart<String,Number>(xAxis,yAxis);
     List<XYChart.Series> seriesList = new ArrayList<>();
     int maxVal = 0;
 
 
     public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, Stage stage){
-        xAxis.setLabel(lable_xaxis);
-        yAxis.setLabel(label_yaxis);
-        yAxis.setAutoRanging(false);
-        yAxis.setTickUnit(5);
-        yAxis.setMinorTickVisible(false);
+        super(title, lable_xaxis, label_yaxis);
 
-        profilePlot.setTitle(title);
+        // set autoranging to false to allow manual settings
+
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(100);
+        yAxis.setTickUnit(5);
+
         setContextMenu(stage, tabpane);
+        profilePlot.setTitle(title);
+        profilePlot.setStyle("-fx-font-size: " + 20 + "px;");
     }
 
 
@@ -65,6 +67,7 @@ public class ProfilePlot {
         java.util.Collections.sort(hg_core_curr);
 
         HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();
+        int[] number_of_elements = chartController.getNumberOfElementsPerCategory(selection_groups);
 
         for(String key : hg_core_curr){
             if(data_all.containsKey(key)) {
@@ -81,7 +84,9 @@ public class ProfilePlot {
                         group_hg.put(group, hg_tmp);
                     }
 
-                    data_all.get(key).get(i).setYValue(chartController.roundValue(data_all.get(key).get(i).getYValue().doubleValue()));
+                    double val = data_all.get(key).get(i).getYValue().doubleValue();
+                    double val_norm = (val/number_of_elements[i])*100;
+                    data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
                 }
             } else {
 
@@ -122,7 +127,8 @@ public class ProfilePlot {
         series.setName(name);
 
         for(int i = 0; i < hgs.size(); i++){
-            series.getData().add(new XYChart.Data(hgs.get(i), data.get(i).getYValue().doubleValue()));
+            double val = data.get(i).getYValue().doubleValue();
+            series.getData().add(new XYChart.Data(hgs.get(i), val));
             if(data.get(i).getYValue().doubleValue() > maxVal)
                 maxVal = (int)data.get(i).getYValue().doubleValue();
 
@@ -173,8 +179,7 @@ public class ProfilePlot {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
-                 int scale = 6; //6x resolution should be enough, users should downscale if required
-                final Bounds bounds = profilePlot.getLayoutBounds();
+                int scale = 6; //6x resolution should be enough, users should downscale if required
                 final SnapshotParameters spa = new SnapshotParameters();
                 spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
                 ImageWriter imageWriter = new ImageWriter();

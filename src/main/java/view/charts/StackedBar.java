@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import view.menus.GraphicsMenu;
 
@@ -53,6 +54,9 @@ public class StackedBar {
         yAxis.setTickUnit(5);
         yAxis.setMinorTickVisible(false);
         yAxis.setLabel("Frequency in %");
+        xAxis.tickLabelFontProperty().set(Font.font(17));
+
+        yAxis.tickLabelFontProperty().set(Font.font(15));
 
         sbc = new StackedBarChart<>(xAxis, yAxis);
         sbc.setTitle(title);
@@ -60,6 +64,8 @@ public class StackedBar {
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
         sbc.setLegendSide(Side.RIGHT);
+        sbc.setStyle("-fx-font-size: " + 20 + "px;");
+
 
         setContextMenu(new Stage());
 

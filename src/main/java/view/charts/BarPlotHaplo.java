@@ -11,7 +11,9 @@ import javafx.stage.Stage;
 import view.table.TableControllerUserBench;
 
 
+import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -28,12 +30,22 @@ public class BarPlotHaplo extends ABarPlot {
 
 
     public BarPlotHaplo(String title, String ylabel, TabPane scene, Stage stage, ChartController cc,
-                        TableControllerUserBench tc) {
+                        TableControllerUserBench tc) throws MalformedURLException {
         super(title, ylabel, scene, stage);
         this.stage = stage;
         this.bc.setLegendVisible(false);
         chartController = cc;
         tableController = tc;
+
+
+        File file = new File("src/main/java/view/charts/css/ColorsBarchart.css");
+        URL url = file.toURI().toURL();
+        //stage.getScene().getStylesheets().clear();
+        stage.getScene().getStylesheets().add(url.toExternalForm());
+
+        for (Node node : this.bc.lookupAll(".series")) {
+            node.getStyleClass().remove("default-color0");
+        }
 
         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
         List<String> columnDataHG = new ArrayList<>();
@@ -55,7 +67,8 @@ public class BarPlotHaplo extends ABarPlot {
         for (String haplo : data.keySet()) {
             XYChart.Data<String, Number> d = new XYChart.Data(haplo, data.get(haplo).intValue());
 
-            series.getData().add(setColor(d, hgs_summed));
+            //series.getData().add(setColor(d, hgs_summed));
+            series.getData().add(d);
         }
 
         this.bc.getData().clear();
