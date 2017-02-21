@@ -85,14 +85,14 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-//        steps.part1TreeViewTests();
-//        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
-//        steps.part3AboutDialogueTests();
-//        steps.part4BasicStuff();
-//        //steps.part5DBTest();
-//        steps.part6Statistics();
-//        steps.part8CreatePlots();
-//        steps.part9MenuInteraction();
+        steps.part1TreeViewTests();
+        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
+        steps.part3AboutDialogueTests();
+        steps.part4BasicStuff();
+        //steps.part5DBTest();
+        steps.part6Statistics();
+        steps.part8CreatePlots();
+        steps.part9MenuInteraction();
 
 
 

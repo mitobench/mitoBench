@@ -138,7 +138,6 @@ public class StackedBar extends AChart{
                     @Override
                     public void handle(MouseEvent e) {
                         if(MouseButton.PRIMARY.equals(e.getButton())){
-                            // todo: create new barchart with only subhaplogroups of selected haplogroup
                             try {
                                 createSubBarPlot(item);
                             } catch (MalformedURLException e1) {

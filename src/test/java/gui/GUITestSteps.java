@@ -124,6 +124,8 @@ public class GUITestSteps {
         step("Plot Stacked bar chart", () -> {
 
             robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#barchart").clickOn("#plotHGfreqGroup_item");
+            verifyThat("#stackedBarChartDialogue", isVisible());
+            robot.clickOn("#stackedBarApplyBtn");
             verifyThat("#tab_stacked_bar_chart", isVisible());
         });
         step("Plot Sunburstchart", () -> {
