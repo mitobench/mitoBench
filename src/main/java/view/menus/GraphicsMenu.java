@@ -96,12 +96,12 @@ public class GraphicsMenu {
     }
 
     private void initSunburst(){
-        sunburstChart = new SunburstChartCreator(new BorderPane(), stage, tabPane);
+        sunburstChart = new SunburstChartCreator(stage, tabPane);
         Tab tab = new Tab();
         tab.setId("tab_sunburst");
         tab.setText("Sunburst Chart");
-        sunburstChart.getBorderPane().prefHeightProperty().bind(scene.heightProperty());
-        sunburstChart.getBorderPane().prefWidthProperty().bind(scene.widthProperty());
+        sunburstChart.getBorderPane().prefHeightProperty().bind(stage.heightProperty());
+        sunburstChart.getBorderPane().prefWidthProperty().bind(stage.widthProperty());
         tab.setContent(sunburstChart.getBorderPane());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);

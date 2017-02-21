@@ -10,16 +10,15 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
@@ -42,15 +41,16 @@ public class SunburstChartCreator {
     private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
     private TabPane tabPane;
-    private Button goBack;
-    private GridPane chart_legend;
 
+    double orgSceneX, orgSceneY;
+    double orgTranslateX, orgTranslateY;
 
-    public SunburstChartCreator(BorderPane borderPane, Stage stage, TabPane tabPane){
+    public SunburstChartCreator(Stage stage, TabPane tabPane){
 
         this.stage = stage;
         this.tabPane = tabPane;
-        this.sunburstBorderPane = borderPane;
+        this.sunburstBorderPane = new BorderPane();
+        this.sunburstBorderPane.setMinSize(0,0);
 
         this.getBorderPane().setId("borderpane_sunburst");
         // Create the SunburstJ Control
@@ -63,6 +63,8 @@ public class SunburstChartCreator {
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
         colorStrategyGroups = new ColorStrategyGroups();
+
+        setDragAndMove();
 
     }
 
@@ -215,6 +217,44 @@ public class SunburstChartCreator {
 
     }
 
+    /**
+     * This method allows drag and drop of sunburst view
+     */
+    public void setDragAndMove(){
+        sunburstView.setCursor(Cursor.HAND);
+        sunburstView.setOnMousePressed(circleOnMousePressedEventHandler);
+        sunburstView.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+
+    }
+
+
+    EventHandler<MouseEvent> circleOnMousePressedEventHandler =
+            new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    orgSceneX = t.getSceneX();
+                    orgSceneY = t.getSceneY();
+                    orgTranslateX = ((SunburstView)(t.getSource())).getTranslateX();
+                    orgTranslateY = ((SunburstView)(t.getSource())).getTranslateY();
+                }
+            };
+
+    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
+            new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    double offsetX = t.getSceneX() - orgSceneX;
+                    double offsetY = t.getSceneY() - orgSceneY;
+                    double newTranslateX = orgTranslateX + offsetX;
+                    double newTranslateY = orgTranslateY + offsetY;
+
+                    ((SunburstView)(t.getSource())).setTranslateX(newTranslateX);
+                    ((SunburstView)(t.getSource())).setTranslateY(newTranslateY);
+                }
+            };
+
 
 
     public void clear(){
@@ -247,7 +287,9 @@ public class SunburstChartCreator {
                 spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
                 ImageWriter imageWriter = new ImageWriter();
                 try {
-                    imageWriter.saveImage(stage, chart_legend.snapshot(new SnapshotParameters(), null));
+                    HBox tmp_box = new HBox();
+                    tmp_box.getChildren().addAll(sunburstBorderPane.getCenter(), sunburstBorderPane.getRight());
+                    imageWriter.saveImage(stage, tmp_box.snapshot(new SnapshotParameters(), null));
                 } catch (ImageException e) {
                     e.printStackTrace();
                 }
@@ -265,13 +307,7 @@ public class SunburstChartCreator {
             }
         });
 
-
-
     }
-
-
-
-
 
 
 }
