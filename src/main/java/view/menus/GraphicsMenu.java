@@ -4,14 +4,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import view.charts.*;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
+import view.groups.GroupController;
 import view.table.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,10 +41,13 @@ public class GraphicsMenu {
     private ProfilePlot profilePlot;
     private Scene scene;
     private TabPane statsTabpane;
+    private PieChartViz pieChartViz;
+    private GroupController groupController;
+    private ColorSchemeStackedBarChart colorScheme;
 
 
     public GraphicsMenu(TableControllerUserBench tableController, TabPane vBox, HaplotreeController treeController, Stage stage,
-                        Scene scene, TabPane statsTabpane){
+                        Scene scene, TabPane statsTabpane, GroupController groupController){
 
         menuGraphics = new Menu("Graphics");
         menuGraphics.setId("graphicsMenu");
@@ -56,6 +62,7 @@ public class GraphicsMenu {
         chartController.init(tableController, treeController.getTreeMap());
         this.scene = scene;
         this.statsTabpane = statsTabpane;
+        this.groupController = groupController;
         addSubMenus();
     }
 
@@ -104,6 +111,20 @@ public class GraphicsMenu {
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
 
+
+    }
+
+
+    private void initPieChart(String title){
+        pieChartViz = new PieChartViz(title, tabPane);
+        Tab tab = new Tab();
+        tab.setId("tab_piechart");
+        tab.setText("Pie Chart");
+        pieChartViz.getChart().prefHeightProperty().bind(stage.heightProperty());
+        pieChartViz.getChart().prefWidthProperty().bind(stage.widthProperty());
+        tab.setContent(pieChartViz.getChart());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
 
     }
 
@@ -195,7 +216,7 @@ public class GraphicsMenu {
                             // add settings
 
                             stackedBar.addTooltip();
-                            ColorSchemeStackedBarChart colorScheme = null;
+                            colorScheme = null;
                             try {
                                 colorScheme = new ColorSchemeStackedBarChart(stage);
                             } catch (MalformedURLException e1) {
@@ -279,6 +300,54 @@ public class GraphicsMenu {
             }
         });
 
+        /*
+
+
+        Pie Chart
+
+         */
+
+        MenuItem pieCcart = new MenuItem("Create Pie Chart");
+        pieCcart.setId("piechart");
+        pieCcart.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+                    // makes only sense if grouping exists.
+                    if(tableController.getTableColumnByName("Grouping") != null
+                            && tableController.getTable().getItems().size() != 0 ){
+
+
+                        // get selected rows
+                        ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+                        HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
+
+
+                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
+                                tableController.getSelectedRows());
+                        String[] selection_haplogroups = cols[0];
+                        String[] selection_groups = cols[1];
+
+                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
+                                chartController.getCoreHGs());
+                        HashMap<String, List<XYChart.Data<String, Number>>> data_all =
+                              chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+
+                        for(String group : groupController.getGroupnames()) {
+                            initPieChart(group);
+                            pieChartViz.createPlot(group, data_all);
+                            pieChartViz.setColor(stage);
+                        }
+
+
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
 
 
@@ -327,7 +396,7 @@ public class GraphicsMenu {
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
-        haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem);
+        haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieCcart);
 
 
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);
