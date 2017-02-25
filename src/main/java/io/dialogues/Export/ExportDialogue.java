@@ -8,7 +8,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 
 import java.util.List;
 import java.util.Optional;

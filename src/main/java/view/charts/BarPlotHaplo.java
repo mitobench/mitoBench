@@ -7,10 +7,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 
 
 import java.io.File;

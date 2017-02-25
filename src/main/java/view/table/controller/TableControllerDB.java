@@ -1,4 +1,4 @@
-package view.table;
+package view.table.controller;
 
 import io.datastructure.Entry;
 import javafx.collections.FXCollections;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by neukamm on 01.02.17.
  */
-public class TableControllerDB extends ATableController{
+public class TableControllerDB extends ATableController {
 
 
 

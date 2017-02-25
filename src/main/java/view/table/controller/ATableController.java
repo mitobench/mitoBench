@@ -1,4 +1,4 @@
-package view.table;
+package view.table.controller;
 
 import database.ColumnNameMapper;
 import io.IInputType;
@@ -14,6 +14,7 @@ import javafx.util.Callback;
 import view.datatypes.IData;
 import view.groups.GroupController;
 import view.menus.GroupMenu;
+import view.table.DataTable;
 
 import java.util.*;
 
@@ -284,7 +285,6 @@ public abstract class ATableController {
                 return new SimpleStringProperty(param.getValue().get(j).toString());
             }
         });
-
 
         col_names.add(colname);
         table.getColumns().addAll(col);

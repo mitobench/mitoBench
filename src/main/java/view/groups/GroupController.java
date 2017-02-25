@@ -3,7 +3,7 @@ package view.groups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import view.table.ATableController;
+import view.table.controller.ATableController;
 
 import java.util.*;
 

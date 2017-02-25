@@ -25,8 +25,8 @@ import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
 import view.table.DrapAndDropEventMaganer;
-import view.table.TableControllerDB;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerDB;
+import view.table.controller.TableControllerUserBench;
 import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;

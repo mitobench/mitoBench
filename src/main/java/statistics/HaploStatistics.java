@@ -13,7 +13,8 @@ import javafx.scene.control.TableView;
 import javafx.util.Callback;
 import view.charts.ChartController;
 import view.charts.ProfilePlot;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerMutations;
+import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import java.util.*;
@@ -25,6 +26,7 @@ public class HaploStatistics {
 
 
     private TableControllerUserBench tableController;
+    private TableControllerMutations tableControllerMutations;
     private ChartController chartController;
     private HashMap<String, List<XYChart.Data<String, Number>>> data_all;
     private int number_of_groups;
@@ -34,6 +36,8 @@ public class HaploStatistics {
         this.tableController = tableController;
         chartController = new ChartController();
         chartController.init(tableController, treeHaploController.getTreeMap());
+        tableControllerMutations = new TableControllerMutations();
+        tableControllerMutations.init();
     }
 
     /**
@@ -52,8 +56,8 @@ public class HaploStatistics {
 
         HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaolpgroups(selection_haplogroups, coreHGs);
         data_all = chartController.assignHGs(hgs_summarized,
-                                             selection_haplogroups,
-                                             selection_groups);
+                selection_haplogroups,
+                selection_groups);
 
     }
 
@@ -73,37 +77,12 @@ public class HaploStatistics {
         Collections.sort(keys);
         keys.add("Others");
 
-        TableView<ObservableList> table = new TableView<>();
-        table.setEditable(false);
-        // allow multiple selection of rows in tableView
-        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        table.prefHeightProperty().bind(scene.heightProperty());
-        table.prefWidthProperty().bind(scene.widthProperty());
-
-        table.setEditable(false);
-
-        TableColumn population = new TableColumn("Groups");
-        TableColumn total_number = new TableColumn("Total Number");
-
-        // add columns
-        List<TableColumn> columns = new ArrayList<>();
-        columns.add(population);
-        columns.add(total_number);
-
+        TableView<ObservableList> table = tableControllerMutations.getTable();
+        tableControllerMutations.addColumn("Groups", 0);
+        tableControllerMutations.addColumn("Total Number", 1);
+        int k = 2;
         for(String key : keys){
-            columns.add(new TableColumn(key));
-        }
-
-        int k = 0;
-        for(TableColumn col : columns){
-            int j = k;
-            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(j).toString());
-                }
-            });
-            table.getColumns().add(col);
+            tableControllerMutations.addColumn(key, k);
             k++;
         }
 

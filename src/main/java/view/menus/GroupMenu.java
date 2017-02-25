@@ -6,7 +6,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import view.groups.GroupController;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 
 import java.util.List;
 

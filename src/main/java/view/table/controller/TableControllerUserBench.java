@@ -1,9 +1,6 @@
-package view.table;
+package view.table.controller;
 
 
-import io.datastructure.Entry;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -14,15 +11,13 @@ import javafx.scene.control.MenuItem;
 import view.MitoBenchWindow;
 import view.dialogues.settings.AddToGroupDialog;
 import view.dialogues.settings.CreateGroupDialog;
-
-import java.util.HashMap;
-import java.util.List;
+import view.table.controller.ATableController;
 
 
 /**
  * Created by neukamm on 07.11.16.
  */
-public class TableControllerUserBench extends ATableController{
+public class TableControllerUserBench extends ATableController {
 
     public TableControllerUserBench() {
         super();

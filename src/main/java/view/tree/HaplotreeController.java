@@ -27,7 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
-import view.table.ATableController;
+import view.table.controller.ATableController;
 import view.table.TableSelectionFilter;
 
 import javax.xml.parsers.ParserConfigurationException;

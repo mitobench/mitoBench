@@ -2,7 +2,7 @@ package io.writer;
 
 import io.IOutputData;
 import javafx.collections.ObservableList;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 
 import java.io.*;
 import java.util.List;

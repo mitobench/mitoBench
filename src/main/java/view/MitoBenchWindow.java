@@ -12,8 +12,8 @@ import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import view.groups.GroupController;
 import view.menus.*;
-import view.table.TableControllerDB;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerDB;
+import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;

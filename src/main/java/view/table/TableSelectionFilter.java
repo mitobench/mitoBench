@@ -4,6 +4,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableView;
+import view.table.controller.ATableController;
+
 import java.util.Arrays;
 import java.util.function.Predicate;
 

@@ -7,8 +7,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import statistics.MutationStatistics;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 import statistics.HaploStatistics;
 import view.tree.HaplotreeController;
 
@@ -24,6 +25,7 @@ public class StatisticsMenu {
     private TableControllerUserBench tableController;
     private HaplotreeController treeHaploController;
     private HaploStatistics haploStatistics;
+    private MutationStatistics mutationStatistics;
 
     public StatisticsMenu(TableControllerUserBench tableController, HaplotreeController treeHaploController, TabPane statsTabpane,
                           Scene scene, Stage pstage) throws IOException {
@@ -48,7 +50,17 @@ public class StatisticsMenu {
             }
         });
 
-        menuTools.getItems().add(haploStats);
+        MenuItem mutations = new MenuItem("Calculate mutation frequency");
+        mutations.setId("toolsMenu_mutation_freq");
+        mutations.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                mutationStatistics = new MutationStatistics();
+                mutationStatistics.writeToTable(treeHaploController.getTree().getHgs_per_mutation(), statsTabpane);
+
+            }
+        });
+
+        menuTools.getItems().addAll(haploStats, mutations);
     }
 
 

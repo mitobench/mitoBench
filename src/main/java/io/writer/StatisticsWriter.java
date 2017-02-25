@@ -67,7 +67,7 @@ public class StatisticsWriter implements IOutputData{
         }
         writerOutputStream.write("\n");
 
-        // write population HG count information
+        // write population HG writeToTable information
         for(int i = 0; i < this.haploStatistics.getNumber_of_groups() ; i++){
             int count_all_hgs = haploStatistics.countAllHGs(i);
             for(String key : data_all.keySet()){

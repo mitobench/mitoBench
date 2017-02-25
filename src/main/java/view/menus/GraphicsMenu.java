@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import view.charts.*;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
 import view.groups.GroupController;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import java.net.MalformedURLException;

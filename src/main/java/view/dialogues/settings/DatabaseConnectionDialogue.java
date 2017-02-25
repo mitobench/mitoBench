@@ -5,7 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import view.table.ATableController;
+import view.table.controller.ATableController;
 
 /**
  * Created by neukamm on 02.02.17.

@@ -14,7 +14,7 @@ import org.testfx.api.FxRobot;
 import statistics.HaploStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 import view.tree.TreeHaplo;
 

@@ -6,7 +6,7 @@ import io.datastructure.arp.ArpSample;
 import io.datastructure.arp.ArpStructure;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 
 import java.io.BufferedWriter;
 import java.io.File;

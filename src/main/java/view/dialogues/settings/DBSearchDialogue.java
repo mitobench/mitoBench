@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import view.table.ATableController;
+import view.table.controller.ATableController;
 
 import java.sql.SQLException;
 import java.util.HashMap;

@@ -5,7 +5,7 @@ import io.datastructure.arp.ArpStructure;
 import io.writer.ARPWriter;
 import org.junit.Before;
 import org.junit.Test;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;

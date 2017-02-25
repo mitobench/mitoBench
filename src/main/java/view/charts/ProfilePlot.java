@@ -1,24 +1,11 @@
 package view.charts;
 
-import io.Exceptions.ImageException;
-import io.writer.ImageWriter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
-import javafx.print.PrinterJob;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import statistics.HaploStatistics;
-import view.table.TableControllerUserBench;
+import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import java.io.File;

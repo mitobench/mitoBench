@@ -7,6 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 
 import javafx.scene.input.*;
+import view.table.controller.ATableController;
+import view.table.controller.TableControllerDB;
+import view.table.controller.TableControllerUserBench;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -6,7 +6,7 @@ import io.datastructure.generic.GenericInputData;
 import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
 import io.inputtypes.RadioCarbonInputType;
-import view.table.ATableController;
+import view.table.controller.ATableController;
 
 import java.io.*;
 import java.util.ArrayList;

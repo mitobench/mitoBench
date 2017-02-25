@@ -3,7 +3,8 @@ package view.charts;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
-import view.table.TableControllerUserBench;
+import view.table.controller.ATableController;
+import view.table.controller.TableControllerUserBench;
 
 import java.net.MalformedURLException;
 import java.util.*;
@@ -13,7 +14,7 @@ import java.util.*;
  */
 public class ChartController {
 
-    private TableControllerUserBench tableController;
+    private ATableController tableController;
     private List<String> used_hgs;
     private HashMap<String, List<String>> treeMap;
     private HashMap<String, HashMap<String, Double>> weights;
@@ -27,7 +28,7 @@ public class ChartController {
 
     }
 
-    public void init(TableControllerUserBench tableController, HashMap<String, List<String>> treeMap){
+    public void init(ATableController tableController, HashMap<String, List<String>> treeMap){
         this.tableController = tableController;
         this.treeMap = treeMap;
     }
@@ -467,7 +468,7 @@ public class ChartController {
     public void getWeights(String[] seletcion_haplogroups, String[] seletcion_groups){
 
         // hash map
-        // Group : <HG : count>
+        // Group : <HG : writeToTable>
         weights = new HashMap<>();
         Set<String> haplogroups = new HashSet<String>(Arrays.asList(seletcion_haplogroups));
 
