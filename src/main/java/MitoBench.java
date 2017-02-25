@@ -6,7 +6,6 @@ import view.MitoBenchWindow;
  */
 public class MitoBench {
 
-
     /**
      * just starts the main Mitobench window (so far)
      * @param args

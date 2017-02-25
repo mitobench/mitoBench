@@ -1,5 +1,6 @@
 package view;
 
+import Logging.LogClass;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -18,6 +19,8 @@ import view.tree.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import org.apache.log4j.*;
+
 
 /**
  * Created by neukamm on 03.11.16.
@@ -41,11 +44,16 @@ public class MitoBenchWindow extends Application{
     private SplitPane splitPane_table;
     private VBox pane_table_DB;
     private Button enableDBBtn;
+    private Logger logger;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+
+        LogClass logController = new LogClass();
+        logController.setUp();
+        logger = logController.getLogger(MitoBenchWindow.class);
 
         pane_root = new BorderPane();
         pane_root.setId("mainBorderPane");
@@ -60,9 +68,6 @@ public class MitoBenchWindow extends Application{
         // bind width and height to scene to enable resizing
         pane_root.prefHeightProperty().bind(scene.heightProperty());
         pane_root.prefWidthProperty().bind(scene.widthProperty());
-
-
-
 
         // initialize table
         tableControllerUserBench = new TableControllerUserBench();
@@ -108,6 +113,7 @@ public class MitoBenchWindow extends Application{
     private MenuBar getMenuPane() throws Exception
     {
         MenuBar menuBar = new MenuBar();
+        logger.debug("Add Menu Bar");
         menuBar.setId("menuBar");
 
         EditMenu editMenu = new EditMenu();

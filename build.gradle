@@ -47,6 +47,7 @@ dependencies {
     compile 'org.jfxtras:openjfx-monocle:1.8.0_20'
     compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1201-jdbc41'
     compile group: 'org.controlsfx', name: 'controlsfx', version: '8.0.6_20'
+    compile group: 'log4j', name: 'log4j', version: '1.2.16'
 }
 
 task copyTestResources(type: Copy) {
