@@ -4,8 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import view.MitoBenchWindow;
 import view.dialogues.settings.APopupDialogue;
 
 import java.io.File;
@@ -19,14 +20,17 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
     private final LogClass logger;
     private final Stage stage;
+    private final MitoBenchWindow mito;
     private Label filePathLabel;
 
 
-    public LoggerSettingsDialogue(String title, LogClass logClass, Stage primaryStage) {
+
+    public LoggerSettingsDialogue(String title, LogClass logClass, Stage primaryStage, MitoBenchWindow mitoBenchWindow) {
         super(title);
         logger = logClass;
-        setComponents();
+        mito = mitoBenchWindow;
         stage = primaryStage;
+        setComponents();
         show();
     }
 
@@ -52,9 +56,14 @@ public class LoggerSettingsDialogue extends APopupDialogue{
         chooseFileBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                FileChooser fc = new FileChooser();
-                File file = fc.showSaveDialog(stage);
-                filePathLabel.setText(file.getAbsolutePath());
+                //FileChooser fc = new FileChooser();
+                //File file = fc.showSaveDialog(stage);
+                DirectoryChooser chooser = new DirectoryChooser();
+                chooser.setTitle("JavaFX Projects");
+                File defaultDirectory = new File(System.getProperty("user.dir"));
+                chooser.setInitialDirectory(defaultDirectory);
+                File selectedDirectory = chooser.showDialog(stage);
+                filePathLabel.setText(selectedDirectory.getAbsolutePath());
 
             }
         });
@@ -65,7 +74,11 @@ public class LoggerSettingsDialogue extends APopupDialogue{
             public void handle(ActionEvent e) {
                 logger.updateLog4jConfiguration(filePathLabel.getText());
                 close();
-                stage.close();
+                try {
+                    mito.continueInit(stage);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
 
