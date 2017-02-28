@@ -1,7 +1,10 @@
 package view;
 
 import Logging.LogClass;
+import Logging.LoggerSettingsDialogue;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -10,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.xml.sax.SAXException;
 import view.groups.GroupController;
 import view.menus.*;
@@ -45,15 +49,16 @@ public class MitoBenchWindow extends Application{
     private VBox pane_table_DB;
     private Button enableDBBtn;
     private Logger logger;
+    private LogClass logClass;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception
     {
 
-        LogClass logController = new LogClass();
-        logController.setUp();
-        logger = logController.getLogger(MitoBenchWindow.class);
+        logClass = new LogClass();
+        logClass.setUp();
+        logger = logClass.getLogger(MitoBenchWindow.class);
 
         pane_root = new BorderPane();
         pane_root.setId("mainBorderPane");
@@ -107,6 +112,20 @@ public class MitoBenchWindow extends Application{
 
         primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
         this.primaryStage.show();
+
+
+
+
+//        Platform.setImplicitExit(false);
+//
+//        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//            @Override
+//            public void handle(WindowEvent event) {
+//                LoggerSettingsDialogue loggerSettingsDialogue =
+//                        new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
+//            }
+//        });
+
     }
 
 
@@ -279,4 +298,6 @@ public class MitoBenchWindow extends Application{
     public Button getEnableDBBtn() {
         return enableDBBtn;
     }
+
+
 }

@@ -1,16 +1,21 @@
 package Logging;
 
 import org.apache.log4j.*;
-import view.MitoBenchWindow;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 /**
  * Created by neukamm on 25.02.17.
  */
 public class LogClass {
+    private String file;
+    private FileAppender fileAppender;
+
     public LogClass(){}
 
     public void setUp(){
@@ -29,8 +34,8 @@ public class LogClass {
         consoleAppender.activateOptions();
 
         // creates file appender
-        FileAppender fileAppender = new FileAppender();
-        String file = fileName + "_" + dateFormat.format(date) + ".log";
+        fileAppender = new FileAppender();
+        file = fileName + "_" + dateFormat.format(date) + ".log";
         fileAppender.setFile(file);
         fileAppender.setLayout(layout);
         fileAppender.activateOptions();
@@ -48,5 +53,18 @@ public class LogClass {
     public Logger getLogger(Class c){
         // creates a custom logger and log messages
         return Logger.getLogger(c);
+    }
+
+    public void updateLog4jConfiguration(String logFile) {
+        Properties props = new Properties();
+        try {
+            InputStream configStream = getClass().getResourceAsStream( "/logger.properties");
+            props.load(configStream);
+            configStream.close();
+        } catch (IOException e) {
+            System.out.println("Error: Cannot laod configuration file ");
+        }
+        props.setProperty("log4j.appender.FILE.file", logFile);
+        PropertyConfigurator.configure(props);
     }
 }
