@@ -95,11 +95,13 @@ public class GroupController {
 
 
     public void clearGrouping(){
-        groupingIsSet = false;
-        allGroups.clear();
-        tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
-        tableController.cleanColnames();
-        tableController.cleanTableContent("(Grouping)");
+        if(groupingIsSet){
+            groupingIsSet = false;
+            allGroups.clear();
+            tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
+            tableController.cleanColnames();
+            tableController.cleanTableContent("(Grouping)");
+        }
     }
 
     public Set<String> getGroupnames(){
@@ -120,5 +122,9 @@ public class GroupController {
 
     public void setOwnGroupingIsSet(boolean ownGroupingIsSet) {
         this.ownGroupingIsSet = ownGroupingIsSet;
+    }
+
+    public boolean isGroupingIsSet() {
+        return groupingIsSet;
     }
 }

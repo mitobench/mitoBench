@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
@@ -17,12 +18,14 @@ public class TableMenu {
     private Menu menuTable;
     private TableControllerUserBench tableController;
     private GroupController groupController;
+    private Logger LOG;
 
     public TableMenu(MitoBenchWindow mitoBenchWindow){
         this.groupController = mitoBenchWindow.getGroupController();
         menuTable = new Menu("Table");
         menuTable.setId("tableMenu");
         this.tableController = mitoBenchWindow.getTableControllerUserBench();
+        LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
         addSubMenus();
     }
 
@@ -77,6 +80,7 @@ public class TableMenu {
             public void handle(ActionEvent t) {
                 try{
                     tableController.resetTable();
+                    LOG.info("Reset data table.");
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -94,7 +98,6 @@ public class TableMenu {
         cleanTable.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try{
-
                     // clean view.data model
                     tableController.getData().removeAll(tableController.getData());
                     // clean table view
@@ -104,6 +107,7 @@ public class TableMenu {
                     tableController.getTable().getColumns().removeAll(tableController.getTable().getColumns());
                     tableController.getGroupController().clear();
                     groupController.clearGrouping();
+                    LOG.info("Remove all data from data table.");
                 } catch (Exception e){
                     e.printStackTrace();
                 }

@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableView;
+import org.apache.log4j.Logger;
 import view.table.controller.ATableController;
 
 import java.util.Arrays;
@@ -19,7 +20,8 @@ public class TableSelectionFilter {
 
     }
 
-    public void haplogroupFilter(ATableController tableController, String[] haplogroups, int columnIndexhaplo){
+    public void haplogroupFilter(ATableController tableController, String[] haplogroups,
+                                 int columnIndexhaplo, Logger LOG){
 
         if(columnIndexhaplo >=0){
 

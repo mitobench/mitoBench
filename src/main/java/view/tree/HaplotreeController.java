@@ -4,6 +4,7 @@ package view.tree;
  * Created by neukamm on 09.11.16.
  */
 
+import Logging.LogClass;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -26,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 import view.table.controller.ATableController;
 import view.table.TableSelectionFilter;
@@ -33,6 +35,7 @@ import view.table.TableSelectionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,9 +61,12 @@ public class HaplotreeController {
     private HashMap<String, List<String>> treeMap_leaf_to_root;
     private HashMap<String, List<String>> node_to_children;
 
-    public HaplotreeController(ATableController tableManager) throws IOException, SAXException, ParserConfigurationException {
+    private Logger LOG;
+
+    public HaplotreeController(ATableController tableManager, LogClass logClass) throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
+        LOG = logClass.getLogger(this.getClass());
 
         treeMap = new HashMap<>();
         treeMap_leaf_to_root = new HashMap<>();
@@ -211,6 +217,7 @@ public class HaplotreeController {
                 seletcion_haplogroups[i] = itemSelection.get(i).getValue();
             }
             // if selection has size zero --> take all haplogroups
+            String[] backup_hg_selection = seletcion_haplogroups.clone();
             if(seletcion_haplogroups.length == 0){
                 TableColumn haplo_col = tableManager.getTableColumnByName("Haplogroup");
                 List<String> columnData = new ArrayList<>();
@@ -219,8 +226,8 @@ public class HaplotreeController {
                 }
                 seletcion_haplogroups = columnData.toArray(new String[columnData.size()]);
             } else { // get all sub-haplo-groups of selected HG's
-                List<String> HGs = getAllSubgroups(seletcion_haplogroups);
-                seletcion_haplogroups = HGs.toArray(new String[HGs.size()]);
+                List<String> haplotypes = getAllSubgroups(seletcion_haplogroups);
+                seletcion_haplogroups = haplotypes.toArray(new String[haplotypes.size()]);
             }
 
             // close tree view
@@ -233,7 +240,9 @@ public class HaplotreeController {
             TableSelectionFilter tableFilter = new TableSelectionFilter();
 
             if (seletcion_haplogroups.length !=0) {
-                tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
+                LOG.info("Filter data. Table now contains only data of Haplotype: " + Arrays.toString(backup_hg_selection));
+                tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups,
+                        tableManager.getColIndex("Haplogroup"), LOG);
             }
 
         }
@@ -261,7 +270,12 @@ public class HaplotreeController {
             TableSelectionFilter tableFilter = new TableSelectionFilter();
 
             if (seletcion_haplogroups.length !=0) {
-                tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups, tableManager.getColIndex("Haplogroup"));
+                LOG.info("Filter data. Table now contains only data of Haplotype: " +
+                        Arrays.toString(searchFieldListHaplogroup.getText().split(",")));
+
+                tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups,
+                        tableManager.getColIndex("Haplogroup"), LOG);
+                searchFieldListHaplogroup.setText("");
             }
         }
 

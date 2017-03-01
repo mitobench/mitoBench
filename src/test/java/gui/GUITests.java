@@ -73,7 +73,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
 
         treeHaplo = new TreeHaplo("Haplo Tree");
         treeHaplo.addStructure();
-        treeController = new HaplotreeController(tableController);
+        treeController = new HaplotreeController(tableController, logClass);
         treeController.configureSearch(new Pane());
         treeController.setAnimation();
 

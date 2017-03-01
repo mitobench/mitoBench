@@ -108,7 +108,7 @@ public class MitoBenchWindow extends Application{
         // initialize haplotree with search function
         BorderPane borderpane_center = new BorderPane();
         Pane pane_tree = new Pane();
-        treeController = new HaplotreeController(tableControllerUserBench);
+        treeController = new HaplotreeController(tableControllerUserBench, logClass);
         treeController.configureSearch(pane_tree);
         treeController.setAnimation();
         borderpane_center.setTop(pane_tree);
