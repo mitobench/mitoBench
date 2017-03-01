@@ -1,5 +1,6 @@
 package view.table.controller;
 
+import Logging.LogClass;
 import database.ColumnNameMapper;
 import io.IInputType;
 import io.datastructure.Entry;
@@ -40,10 +41,10 @@ public abstract class ATableController {
     protected GroupMenu groupMenu;
 
     public ATableController(){
-
     }
 
     public void init(){
+
 
         table = new TableView();
         table.setEditable(false);
@@ -584,6 +585,9 @@ public abstract class ATableController {
     }
 
 
+    public void setGroupController(GroupController groupController) {
+        this.groupController = groupController;
+    }
 
     /**
      * This method returns all selected rows. If no row is selected, all rows are returned.
@@ -603,9 +607,4 @@ public abstract class ATableController {
     }
 
 
-
-
-    public void setGroupController(GroupController groupController) {
-        this.groupController = groupController;
-    }
 }

@@ -124,7 +124,6 @@ public class MitoBenchWindow extends Application{
     private MenuBar getMenuPane() throws Exception
     {
         MenuBar menuBar = new MenuBar();
-        logger.debug("Add Menu Bar");
         menuBar.setId("menuBar");
 
         EditMenu editMenu = new EditMenu();

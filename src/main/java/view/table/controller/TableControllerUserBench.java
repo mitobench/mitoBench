@@ -1,6 +1,7 @@
 package view.table.controller;
 
 
+import Logging.LogClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,7 +12,6 @@ import javafx.scene.control.MenuItem;
 import view.MitoBenchWindow;
 import view.dialogues.settings.AddToGroupDialog;
 import view.dialogues.settings.CreateGroupDialog;
-import view.table.controller.ATableController;
 
 
 /**

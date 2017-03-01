@@ -27,6 +27,7 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
     public LoggerSettingsDialogue(String title, LogClass logClass, Stage primaryStage, MitoBenchWindow mitoBenchWindow) {
         super(title);
+        dialogGrid.setId("logDialogue");
         logger = logClass;
         mito = mitoBenchWindow;
         stage = primaryStage;
@@ -37,9 +38,11 @@ public class LoggerSettingsDialogue extends APopupDialogue{
     private void setComponents() {
 
         Label setFilePathLabel = new Label("Choose log file location");
-        filePathLabel = new Label("/path/to/file/log.log");
+        filePathLabel = new Label(System.getProperty("user.dir"));
         Button chooseFileBtn = new Button("Choose location");
+        chooseFileBtn.setId("btn_chooseLogDir");
         Button applyBtn = new Button("Apply");
+        applyBtn.setId("btn_applyLogDir");
 
         addButtonListener(applyBtn, chooseFileBtn);
 

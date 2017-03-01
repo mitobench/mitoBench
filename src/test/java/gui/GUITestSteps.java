@@ -211,6 +211,13 @@ public class GUITestSteps {
 
     }
 
+    public void partSetLogDir() {
+        step("Set Log Directory", () -> {
+            verifyThat("#logDialogue", isVisible());
+            robot.clickOn("#btn_applyLogDir");
+        });
+    }
+
 
     public void partTestGrouping(){
         step("Calculate Statistics", () -> {
@@ -225,4 +232,6 @@ public class GUITestSteps {
         runnable.run();
         LOG.info("STEP {}:   End - {}", stepno, step);
     }
+
+
 }
