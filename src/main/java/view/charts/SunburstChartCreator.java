@@ -1,6 +1,7 @@
 package view.charts;
 
 
+import Logging.LogClass;
 import controls.sunburst.*;
 import data.ISourceStrategy;
 import data.SourceStrategyHaplogroup;
@@ -38,8 +39,8 @@ public class SunburstChartCreator extends AChart{
     double orgSceneX, orgSceneY;
     double orgTranslateX, orgTranslateY;
 
-    public SunburstChartCreator(Stage stage, TabPane tabPane){
-        super( null, null);
+    public SunburstChartCreator(Stage stage, TabPane tabPane, LogClass logClass){
+        super( null, null, logClass);
 
         this.stage = stage;
         this.sunburstBorderPane = new BorderPane();

@@ -1,11 +1,13 @@
 package view.dialogues.settings;
 
+import Logging.LogClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import org.apache.log4j.Logger;
 import statistics.HaploStatistics;
 
 
@@ -20,16 +22,18 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
     private HaploStatistics haploStatistics;
     private Scene scene;
     private TabPane statsTabPane;
+    private Logger LOG;
 
-    public HGStatisticsPopupDialogue(String title){
-        super(title);
+    public HGStatisticsPopupDialogue(String title, LogClass LOGClass){
+        super(title, LOGClass);
         dialogGrid.setId("statistics_popup");
         show();
 
     }
 
-    public void init(HaploStatistics haploStatistics, TabPane statsTabpane, Scene scene){
+    public void init(HaploStatistics haploStatistics, TabPane statsTabpane, Scene scene, Logger LOG){
         addComponents(haploStatistics, statsTabpane, scene);
+        this.LOG = LOG;
         addListener();
     }
 
@@ -82,6 +86,8 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
                     tab.setContent(table);
                     statsTabPane.getTabs().add(tab);
                     statsTabPane.getSelectionModel().select(tab);
+
+                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + hg_list);
 
                     dialog.close();
                 }

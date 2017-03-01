@@ -1,5 +1,6 @@
 package view.dialogues.settings;
 
+import Logging.LogClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -21,8 +22,8 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
     private  ATableController table;
     private Boolean loggedIn = false;
 
-    public DatabaseConnectionDialogue(ATableController tableUserDB, String title){
-        super(title);
+    public DatabaseConnectionDialogue(ATableController tableUserDB, String title, LogClass logClass){
+        super(title, logClass);
         table = tableUserDB;
         dialogGrid.setId("connect_to_database");
         setComponents();
@@ -75,7 +76,7 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
                 username = "mitodbreader";
 
                 // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask");
+                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", logClass);
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addButtonFunc(username, password, table);
                 dialog.close();

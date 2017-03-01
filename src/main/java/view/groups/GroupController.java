@@ -16,6 +16,7 @@ public class GroupController {
     private ATableController tableController;
     private boolean groupingIsSet = false;
     private String colname_group;
+    private boolean ownGroupingIsSet = false;
 
     public GroupController(ATableController tableController){
         this.tableController = tableController;
@@ -65,7 +66,6 @@ public class GroupController {
             }
         } else {
             ObservableList group_data = tableController.getTable().getSelectionModel().getSelectedItems();
-            //TableColumn colGroup = new TableColumn(colName + " (Grouping)");
             tableController.addColumn(colName + " (Grouping)", 0);
             colname_group = colName + " (Grouping)";
             createGroup(gname);
@@ -97,9 +97,7 @@ public class GroupController {
     public void clearGrouping(){
         groupingIsSet = false;
         allGroups.clear();
-        // reset table column
         tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
-        //tableController.cleanColToIndex();
         tableController.cleanColnames();
         tableController.cleanTableContent("(Grouping)");
     }
@@ -114,5 +112,13 @@ public class GroupController {
 
     public String getColname_group() {
         return colname_group;
+    }
+
+    public boolean isOwnGroupingIsSet() {
+        return ownGroupingIsSet;
+    }
+
+    public void setOwnGroupingIsSet(boolean ownGroupingIsSet) {
+        this.ownGroupingIsSet = ownGroupingIsSet;
     }
 }

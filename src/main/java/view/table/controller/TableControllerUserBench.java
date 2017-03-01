@@ -19,8 +19,8 @@ import view.dialogues.settings.CreateGroupDialog;
  */
 public class TableControllerUserBench extends ATableController {
 
-    public TableControllerUserBench() {
-        super();
+    public TableControllerUserBench(LogClass logClass) {
+        super(logClass);
     }
 
     public void addRowListener(Label infolabel){
@@ -40,7 +40,7 @@ public class TableControllerUserBench extends ATableController {
             @Override
             public void handle(ActionEvent event) {
                 CreateGroupDialog createGroupDialog =
-                        new CreateGroupDialog("", groupController, table, controller);
+                        new CreateGroupDialog("", groupController, controller, logClass);
             }
         });
 
@@ -50,7 +50,8 @@ public class TableControllerUserBench extends ATableController {
             @Override
             public void handle(ActionEvent event) {
                 AddToGroupDialog addToGroupDialog =
-                        new AddToGroupDialog("", groupController, table.getSelectionModel().getSelectedItems(), controller);
+                        new AddToGroupDialog("", groupController, table.getSelectionModel().getSelectedItems(),
+                                controller, logClass);
             }
         });
 

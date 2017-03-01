@@ -5,6 +5,7 @@ import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,7 +23,8 @@ import java.util.List;
 public class HSDInput implements IInputData {
     private HashMap<String, List<Entry>> map;
 
-    public HSDInput(String filetoParse) throws IOException, HSDException {
+    public HSDInput(String filetoParse, Logger LOG) throws IOException, HSDException {
+        LOG.info("Read HSD file: " + filetoParse);
         FileReader fr = new FileReader(new File(filetoParse));
         BufferedReader bfr = new BufferedReader(fr);
         map = new HashMap<>();

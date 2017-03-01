@@ -1,5 +1,6 @@
 package view.menus;
 
+import Logging.LogClass;
 import io.Exceptions.*;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
@@ -19,6 +20,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
@@ -53,17 +55,19 @@ public class FileMenu {
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
     private DrapAndDropEventMaganer drapAndDropEventMaganer;
+    private Logger LOG;
+    private LogClass logClass;
 
-    public FileMenu(TableControllerUserBench tableController, String version, Stage stage, StatisticsMenu toolsMenu,
-                    MitoBenchWindow mitoBenchWindow, TableControllerDB tableControllerDB, TabPane tabpane_visualization)
+    public FileMenu( StatisticsMenu toolsMenu,
+                    MitoBenchWindow mitoBenchWindow)
             throws IOException {
 
-        MITOBENCH_VERSION = version;
+        MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
 
         this.mitoBenchWindow = mitoBenchWindow;
-        this.tableControllerDB = tableControllerDB;
-        this.tableControllerUserBench = tableController;
-        this.stage = stage;
+        this.tableControllerDB = mitoBenchWindow.getTableControllerDB();
+        this.tableControllerUserBench = mitoBenchWindow.getTableControllerUserBench();
+        this.stage = mitoBenchWindow.getPrimaryStage();
         this.toolsMenu = toolsMenu;
 
         this.menuFile = new Menu("File");
@@ -71,8 +75,10 @@ public class FileMenu {
 
         importDialogueFactory = new ImportDialogueFactoryImpl();
         fm = this;
-        viz_pane = tabpane_visualization;
+        viz_pane = mitoBenchWindow.getTabpane_visualization();
 
+        LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
+        this.logClass = mitoBenchWindow.getLogClass();
         addSubMenus();
 
     }
@@ -122,12 +128,12 @@ public class FileMenu {
                 mitoBenchWindow.splitTablePane(tableControllerDB);
 
                 // todo: make db query
-                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB,"Database Login");
+                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB,
+                        "Database Login", logClass);
 
                 if(drapAndDropEventMaganer==null){
                     drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
                     drapAndDropEventMaganer.createEvent();
-
                 }
 
 
@@ -155,7 +161,7 @@ public class FileMenu {
                     int scale = 6; //6x resolution should be enough, users should downscale if required
                     final SnapshotParameters spa = new SnapshotParameters();
                     spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
-                    ImageWriter imageWriter = new ImageWriter();
+                    ImageWriter imageWriter = new ImageWriter(logClass);
                     try {
                         imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
                     } catch (ImageException e) {
@@ -178,7 +184,7 @@ public class FileMenu {
         MenuItem exportFile = new MenuItem("Export Data");
         exportFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION);
+                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass);
                 try {
                     exportDialogue.start(new Stage());
                 } catch (Exception e) {
@@ -228,15 +234,13 @@ public class FileMenu {
         if (f != null) {
             String absolutePath = f.getAbsolutePath();
 
-
             //Input is FastA
             if (absolutePath.endsWith(".fasta") | absolutePath.endsWith("*.fas") | absolutePath.endsWith("*.fa")) {
-
 
                 MultiFastAInput multiFastAInput = null;
                 try {
                     try {
-                        multiFastAInput = new MultiFastAInput(f.getPath());
+                        multiFastAInput = new MultiFastAInput(f.getPath(), LOG);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -254,7 +258,7 @@ public class FileMenu {
                 try {
                     HSDInput hsdInputParser = null;
                     try {
-                        hsdInputParser = new HSDInput(f.getPath());
+                        hsdInputParser = new HSDInput(f.getPath(), LOG);
                     } catch (HSDException e) {
                         HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
                     }
@@ -270,7 +274,7 @@ public class FileMenu {
 
             if (absolutePath.endsWith(".tsv")) {
                 try {
-                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath());
+                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG);
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
                 } catch (IOException e) {
@@ -283,7 +287,7 @@ public class FileMenu {
             if(absolutePath.endsWith(".arp")){
                 ARPReader arpreader = null;
                 try {
-                    arpreader = new ARPReader(f.getPath());
+                    arpreader = new ARPReader(f.getPath(), LOG);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ARPException e) {
@@ -299,7 +303,7 @@ public class FileMenu {
                 ProjectReader projectReader = new ProjectReader();
                 try {
 
-                    projectReader.read(f);
+                    projectReader.read(f, LOG);
                     projectReader.loadData(tableControllerUserBench);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -311,7 +315,7 @@ public class FileMenu {
             }
         } else {
             try {
-                //Didndonuffin
+                // do nothing
             }catch (Exception e ) {
                 System.out.println(e.getMessage());
             }
@@ -345,17 +349,6 @@ public class FileMenu {
             }
         }
         return false;
-    }
-
-
-    private Path getResource(String file) throws Exception {
-        URL url = getClass().getResource("/" + file);
-
-        if (url == null) {
-            throw new FileNotFoundException(String.format("Unable to load %s", file));
-        } else {
-            return Paths.get(url.toURI());
-        }
     }
 
 

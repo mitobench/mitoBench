@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import view.MitoBenchWindow;
 import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
 
@@ -17,11 +18,11 @@ public class TableMenu {
     private TableControllerUserBench tableController;
     private GroupController groupController;
 
-    public TableMenu(TableControllerUserBench tableController, GroupController groupController){
-        this.groupController = groupController;
+    public TableMenu(MitoBenchWindow mitoBenchWindow){
+        this.groupController = mitoBenchWindow.getGroupController();
         menuTable = new Menu("Table");
         menuTable.setId("tableMenu");
-        this.tableController = tableController;
+        this.tableController = mitoBenchWindow.getTableControllerUserBench();
         addSubMenus();
     }
 

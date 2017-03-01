@@ -1,5 +1,6 @@
 package view.dialogues.settings;
 
+import Logging.LogClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,8 +26,9 @@ public class AddToGroupDialog extends APopupDialogue{
     private ATableController tableController;
 
 
-    public AddToGroupDialog(String title, GroupController groupController, ObservableList groupItems, ATableController tableController) {
-        super(title);
+    public AddToGroupDialog(String title, GroupController groupController, ObservableList groupItems,
+                            ATableController tableController, LogClass logClass) {
+        super(title, logClass);
         this.tableController = tableController;
         // Elements
         ObservableList<String> comboEntries = FXCollections.observableArrayList();

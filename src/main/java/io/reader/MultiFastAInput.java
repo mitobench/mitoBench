@@ -6,6 +6,7 @@ import io.datastructure.Entry;
 import io.datastructure.fastA.FastaEntry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,9 +35,12 @@ public class MultiFastAInput implements IInputData {
     /**
      * This method reads the actual file and generates an ArrayList of FastA entries properly.
      * @param fileToParse
+     * @param LOG
      * @throws IOException
      */
-    public MultiFastAInput(String fileToParse) throws IOException, FastAException {
+    public MultiFastAInput(String fileToParse, Logger LOG) throws IOException, FastAException {
+        LOG.info("Read generic file: " + fileToParse);
+
         fastaEntrys = new ArrayList<FastaEntry>();
         File f = new File(fileToParse);
         fr = new FileReader(f);

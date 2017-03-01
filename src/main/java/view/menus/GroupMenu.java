@@ -5,9 +5,12 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import org.apache.log4j.Logger;
+import view.MitoBenchWindow;
 import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,11 +23,14 @@ public class GroupMenu {
     private Menu menuGroup;
     private Menu groupByColumnItem;
     private final Menu groupingItem;
+    private Logger LOG;
 
-    public GroupMenu(GroupController gc, TableControllerUserBench tb){
+    public GroupMenu(MitoBenchWindow mitoBenchWindow){
+        LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
+
         menuGroup = new Menu("Grouping");
-        groupController = gc;
-        tableController = tb;
+        groupController = mitoBenchWindow.getGroupController();
+        tableController = mitoBenchWindow.getTableControllerUserBench();
 
         groupingItem = new Menu("Grouping");
         groupingItem.setId("grouping");
@@ -46,7 +52,7 @@ public class GroupMenu {
             groupByColumnItem.getItems().add(colItem);
             colItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
-                    //
+                    LOG.info("Group data on column: " + colItem.getText());
                     groupController.createGroupByColumn(colItem.getText(), "");
                 }
             });
@@ -56,9 +62,13 @@ public class GroupMenu {
         delOwnGrouping.setId("delOwnGrouping");
         delOwnGrouping.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                String group_col = groupController.getColname_group();
-                if(group_col.equals("Group (Grouping)")){
-                    tableController.removeColumn(group_col);
+                if(groupController.isOwnGroupingIsSet()){
+                    String group_col = groupController.getColname_group();
+                    LOG.info("Delete grouping with groups: " + Arrays.toString(groupController.getGroupnames().toArray()));
+                    if(group_col.equals("Group (Grouping)")){
+                        tableController.removeColumn(group_col);
+                        groupController.setOwnGroupingIsSet(false);
+                    }
                 }
             }
         });
@@ -67,6 +77,9 @@ public class GroupMenu {
         delGrouping.setId("delGrouping");
         delGrouping.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
+                LOG.info("Delete grouping on column '" + groupController.getColname_group() + "' with groups "
+                        + Arrays.toString(groupController.getGroupnames().toArray()));
+
                 groupController.clearGrouping();
             }
         });
@@ -86,7 +99,7 @@ public class GroupMenu {
             groupByColumnItem.getItems().add(colItem);
             colItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
-                    //
+                    LOG.info("Create grouping on column: " + colItem.getText());
                     groupController.createGroupByColumn(colItem.getText(), "");
 
                 }

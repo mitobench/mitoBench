@@ -1,5 +1,6 @@
 package view.dialogues.settings;
 
+import Logging.LogClass;
 import database.DataAccessor;
 import io.datastructure.Entry;
 import javafx.event.ActionEvent;
@@ -25,8 +26,8 @@ public class DBSearchDialogue extends APopupDialogue{
     private Button btnSend = new Button("Send");
     private HashMap<String, List<Entry>> data;
 
-    public DBSearchDialogue(String title){
-        super(title);
+    public DBSearchDialogue(String title, LogClass logClass){
+        super(title, logClass);
         dialogGrid.setId("set_database_query");
         dialog.setResizable(true);
 
@@ -57,6 +58,7 @@ public class DBSearchDialogue extends APopupDialogue{
 
                     String query = "select " + textfield_selection_table.getText() + " from sequence_data";
                     if(isQueryValid(query)){
+                        logClass.getLogger(this.getClass()).info("Import data from mitoDB. Query: " + query);
                         data = accessor.getEntries(query);
                         message.setText("");
                         table.updateTable(data);
@@ -77,9 +79,6 @@ public class DBSearchDialogue extends APopupDialogue{
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
-
-
-
             }
         });
 

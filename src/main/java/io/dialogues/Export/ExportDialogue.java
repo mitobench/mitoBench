@@ -1,5 +1,6 @@
 package io.dialogues.Export;
 
+import Logging.LogClass;
 import io.writer.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -8,6 +9,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 import view.table.controller.TableControllerUserBench;
 
 import java.util.List;
@@ -21,13 +23,15 @@ public class ExportDialogue extends Application {
     private TableControllerUserBench tableController;
     private String MITOBENCH_VERSION;
     //TODO this should come from the class instantiation...
+    private Logger LOG;
 
 
     public static void main(String[] args) {
         Application.launch(args);
     }
 
-    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion) {
+    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion, LogClass logClass) {
+        LOG = logClass.getLogger(this.getClass());
         this.tableController = tableManager;
         this.columnsInTable = tableManager.getCurrentColumnNames();
         this.MITOBENCH_VERSION = mitoVersion;
@@ -67,6 +71,7 @@ public class ExportDialogue extends Application {
             saveAsDialogue.start(new Stage());
             if(saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
+                LOG.info("Export data into ARP format with grouping on column '" + selection + "'. File: " + outfileDB);
                 ARPWriter arpwriter = new ARPWriter(tableController);
                 arpwriter.setGroups(selection);
                 arpwriter.writeData(outfileDB);
@@ -78,6 +83,7 @@ public class ExportDialogue extends Application {
             saveAsDialogue.start(new Stage());
             if (saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
+                LOG.info("Export data into BEAST format. File: " + outfileDB);
                 BEASTWriter beastwriter = new BEASTWriter(tableController);
                 beastwriter.writeData(outfileDB);
             }
@@ -91,6 +97,7 @@ public class ExportDialogue extends Application {
                 try {
                     CSVWriter csvWriter = new CSVWriter(tableController);
                     csvWriter.writeData(outFileDB);
+                    LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
@@ -105,6 +112,8 @@ public class ExportDialogue extends Application {
                 try {
                     ExcelWriter excelwriter = new ExcelWriter(tableController);
                     excelwriter.writeData(outFileDB);
+                    LOG.info("Export data into Excel format. File: " + outFileDB);
+
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
@@ -118,6 +127,7 @@ public class ExportDialogue extends Application {
                 try {
                     ProjectWriter projectWriter = new ProjectWriter(MITOBENCH_VERSION);
                     projectWriter.write(outFileDB, tableController);
+                    LOG.info("Export whole project. File: " + outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }

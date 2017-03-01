@@ -1,16 +1,12 @@
 package statistics;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
+import Logging.LogClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.util.Callback;
 import view.charts.ChartController;
 import view.charts.ProfilePlot;
 import view.table.controller.TableControllerMutations;
@@ -32,11 +28,11 @@ public class HaploStatistics {
     private int number_of_groups;
 
 
-    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController){
+    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController, LogClass LOGClass){
         this.tableController = tableController;
         chartController = new ChartController();
         chartController.init(tableController, treeHaploController.getTreeMap());
-        tableControllerMutations = new TableControllerMutations();
+        tableControllerMutations = new TableControllerMutations(LOGClass);
         tableControllerMutations.init();
     }
 

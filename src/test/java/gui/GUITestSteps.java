@@ -43,7 +43,7 @@ public class GUITestSteps {
         });
     }
 
-    public void part9MenuInteraction() {
+    public void part8MenuInteraction() {
         step("Open File Menu", () -> {
             robot.clickOn("#fileMenu");
             verifyThat("#fileMenu", isVisible());
@@ -107,7 +107,7 @@ public class GUITestSteps {
         });
     }
 
-    public void part8CreatePlots(){
+    public void part7CreatePlots(){
         step("Plot HG frequency", () -> {
             robot.clickOn("#graphicsMenu");
             verifyThat("#graphicsMenu", isVisible());
@@ -211,7 +211,7 @@ public class GUITestSteps {
 
     }
 
-    public void partSetLogDir() {
+    public void part0SetLogDir() {
         step("Set Log Directory", () -> {
             verifyThat("#logDialogue", isVisible());
             robot.clickOn("#btn_applyLogDir");

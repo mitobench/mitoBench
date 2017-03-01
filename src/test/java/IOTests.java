@@ -1,3 +1,4 @@
+import gui.GUITestSteps;
 import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
@@ -11,6 +12,7 @@ import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
 import org.junit.Test;
+import sun.rmi.runtime.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -29,6 +32,7 @@ public class IOTests {
     private InputStream is;
     private InputStreamReader isr;
     private BufferedReader bfr;
+    private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GUITestSteps.class);
 
 
     private void setUp(String path) {
@@ -54,7 +58,7 @@ public class IOTests {
         setUp(path);
         HashMap output = null;
         try {
-            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath());
+            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath(), LOG);
             output = multiFastAInput.getCorrespondingData();
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,7 +75,7 @@ public class IOTests {
         setUp(path);
         HashMap output = null;
         try {
-            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath());
+            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath(), LOG);
             output = multiFastAInput.getCorrespondingData();
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,7 +88,7 @@ public class IOTests {
         setUp(path);
         HashMap output = null;
         try {
-            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath());
+            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath(), LOG);
             output = multiFastAInput.getCorrespondingData();
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,7 +101,7 @@ public class IOTests {
         setUp(path);
         HashMap output = null;
         try {
-            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath());
+            MultiFastAInput multiFastAInput = new MultiFastAInput(getClass().getResource(path).getPath(), LOG);
             output = multiFastAInput.getCorrespondingData();
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,7 +121,7 @@ public class IOTests {
         HashMap output = null;
 
         try {
-            GenericInputParser gi = new GenericInputParser(getClass().getResource(path).getPath());
+            GenericInputParser gi = new GenericInputParser(getClass().getResource(path).getPath(), LOG);
             output = gi.getCorrespondingData();
         } catch (IOException e) {
             e.printStackTrace();
@@ -153,7 +157,7 @@ public class IOTests {
         try {
             HSDInput hsdInput = null;
             try {
-                hsdInput = new HSDInput(getClass().getResource(path).getPath());
+                hsdInput = new HSDInput(getClass().getResource(path).getPath(), LOG);
             } catch (HSDException e) {
                 e.printStackTrace();
             }
@@ -180,7 +184,7 @@ public class IOTests {
 
         HashMap output = null;
         try {
-            HSDInput hsdInput = new HSDInput(getClass().getResource(path).getPath());
+            HSDInput hsdInput = new HSDInput(getClass().getResource(path).getPath(), LOG);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -201,7 +205,7 @@ public class IOTests {
         try {
             ARPReader arpinput = null;
             try {
-                arpinput = new ARPReader(getClass().getResource(path).getPath());
+                arpinput = new ARPReader(getClass().getResource(path).getPath(), LOG);
             } catch (ARPException e) {
                 e.printStackTrace();
             }
@@ -227,7 +231,7 @@ public class IOTests {
 
         HashMap output = null;
         try {
-            ARPReader arpReader = new ARPReader(getClass().getResource(path).getPath());
+            ARPReader arpReader = new ARPReader(getClass().getResource(path).getPath(), LOG);
         } catch (IOException e) {
             e.printStackTrace();
         }

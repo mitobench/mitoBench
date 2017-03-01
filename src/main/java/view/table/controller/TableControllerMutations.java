@@ -1,10 +1,12 @@
 package view.table.controller;
 
-import view.table.controller.ATableController;
+import Logging.LogClass;
 
 /**
  * Created by neukamm on 25.02.17.
  */
 public class TableControllerMutations extends ATableController {
-    public TableControllerMutations(){}
+    public TableControllerMutations(LogClass logClass){
+        super(logClass);
+    }
 }

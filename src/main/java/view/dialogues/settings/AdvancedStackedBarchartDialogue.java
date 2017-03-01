@@ -1,6 +1,7 @@
 package view.dialogues.settings;
 
 
+import Logging.LogClass;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,8 +24,8 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
 
-    public AdvancedStackedBarchartDialogue(String title, String[] groups) {
-        super(title);
+    public AdvancedStackedBarchartDialogue(String title, String[] groups, LogClass logClass) {
+        super(title, logClass);
         addComponents(groups);
         allowDragAndDrop();
 

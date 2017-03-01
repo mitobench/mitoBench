@@ -1,5 +1,6 @@
 package IO;
 
+import Logging.LogClass;
 import io.datastructure.arp.ArpProfile;
 import io.datastructure.arp.ArpStructure;
 import io.writer.ARPWriter;
@@ -17,10 +18,13 @@ import static junit.framework.TestCase.assertEquals;
 public class IOProfileTest {
 
     private TableControllerUserBench tableController;
+    private LogClass logClass;
 
 
     @Before
     public void setup() throws TimeoutException {
+        logClass = new LogClass();
+        logClass.setUp();
         //tableController = new TableController();
         //tableController.init();
 

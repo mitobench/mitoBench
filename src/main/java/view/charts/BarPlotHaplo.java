@@ -1,5 +1,6 @@
 package view.charts;
 
+import Logging.LogClass;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
@@ -32,9 +33,9 @@ public class BarPlotHaplo extends AChart {
 
 
     public BarPlotHaplo(String title, String ylabel, Stage stage, ChartController cc,
-                        TableControllerUserBench tc) throws MalformedURLException {
+                        TableControllerUserBench tc, LogClass logClass) throws MalformedURLException {
 
-        super(ylabel, "");
+        super(ylabel, "", logClass);
 
         this.stage = stage;
 

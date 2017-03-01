@@ -1,5 +1,6 @@
 package io.writer;
 
+import Logging.LogClass;
 import io.Exceptions.ImageException;
 import io.dialogues.Export.SaveAsDialogue;
 import javafx.embed.swing.SwingFXUtils;
@@ -8,6 +9,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -18,7 +20,13 @@ import java.io.IOException;
  */
 public class ImageWriter {
 
-    public ImageWriter(){
+    private final LogClass lc;
+    private final Logger LOG;
+
+
+    public ImageWriter(LogClass logClass){
+        lc = logClass;
+        LOG = lc.getLogger(this.getClass());
     }
 
 
@@ -35,15 +43,15 @@ public class ImageWriter {
         FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Image format (*.png)", "*.png");
         SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
         saveAsDialogue.start(new Stage());
-        String outfile = "";
+        String outfile;
         if (saveAsDialogue.getOutFile() != null) {
             outfile = saveAsDialogue.getOutFile();
             //Initialize filepath properly
             if (!outfile.endsWith("png"))
-                outfile =outfile+ ".png";
-
+                outfile = outfile+ ".png";
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(node.snapshot(spa, null), null), "png", new File(outfile));
+                LOG.info("Save image: " + outfile);
             } catch (IOException e) {
                 throw new ImageException("Image cannot be saved.");
             }

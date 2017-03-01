@@ -1,8 +1,10 @@
 package statistics;
 
+import Logging.LogClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import org.apache.log4j.Logger;
 import view.table.controller.TableControllerMutations;
 
 import java.io.File;
@@ -18,9 +20,11 @@ public class MutationStatistics {
 
 
     private final TableControllerMutations tableController;
+    private Logger LOG;
 
-    public MutationStatistics() {
-            tableController = new TableControllerMutations();
+    public MutationStatistics(LogClass LOGClass) {
+            tableController = new TableControllerMutations(LOGClass);
+            LOG = LOGClass.getLogger(this.getClass());
             tableController.init();
     }
 

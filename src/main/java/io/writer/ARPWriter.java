@@ -6,6 +6,7 @@ import io.datastructure.arp.ArpSample;
 import io.datastructure.arp.ArpStructure;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
+import org.apache.log4j.Logger;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.BufferedWriter;

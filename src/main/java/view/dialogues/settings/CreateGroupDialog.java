@@ -1,5 +1,6 @@
 package view.dialogues.settings;
 
+import Logging.LogClass;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,15 +23,15 @@ public class CreateGroupDialog extends APopupDialogue{
     private TextField groupnameField;
     private ATableController controller;
 
-    public CreateGroupDialog(String title, GroupController groupController, TableView table, ATableController tableController){
-        super(title);
+    public CreateGroupDialog(String title, GroupController groupController, ATableController tableController, LogClass logClass){
+        super(title, logClass);
         controller = tableController;
 
         // Elements
         this.groupnameField = new TextField();
 
         Button okButton = new Button("OK");
-        addButtonListener(okButton, groupController, table.getSelectionModel().getSelectedItems());
+        addButtonListener(okButton, groupController);
 
         dialogGrid.add(new Label("Groupname:"), 0,0);
         dialogGrid.add(groupnameField, 1,0);
@@ -39,13 +40,14 @@ public class CreateGroupDialog extends APopupDialogue{
 
     }
 
-    private void addButtonListener(Button okButton, GroupController groupController, ObservableList groupItems){
+    private void addButtonListener(Button okButton, GroupController groupController){
 
         okButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 // create new Group
                 String groupName = groupnameField.getText();
-                //groupController.createGroup(gName);
+                LOG.info("Create new group: " + groupName);
+                groupController.setOwnGroupingIsSet(true);
                 groupController.createGroupByColumn("Group", groupName);
                 controller.updateTable(controller.createNewEntryListForGrouping(groupnameField.getText(), "Group (Grouping)"));
                 close();

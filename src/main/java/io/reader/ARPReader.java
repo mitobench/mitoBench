@@ -5,6 +5,7 @@ import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,14 +19,16 @@ import java.util.List;
  */
 public class ARPReader implements IInputData {
     private HashMap<String, List<Entry>> map = new HashMap<>();
+    private Logger LOG;
 
-    public ARPReader(String file) throws IOException, ARPException {
+    public ARPReader(String file, Logger logger) throws IOException, ARPException {
+        LOG = logger;
+        LOG.info("Read ARP file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
 
 
         String currline = "";
-        int count = 0;
         boolean init = true;
         String currGroup = "";
             while ((currline = bfr.readLine()) != null) {

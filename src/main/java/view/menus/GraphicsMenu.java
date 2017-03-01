@@ -1,5 +1,6 @@
 package view.menus;
 
+import Logging.LogClass;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
+import view.MitoBenchWindow;
 import view.charts.*;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
 import view.groups.GroupController;
@@ -44,31 +47,37 @@ public class GraphicsMenu {
     private PieChartViz pieChartViz;
     private GroupController groupController;
     private ColorSchemeStackedBarChart colorScheme;
+    private Logger LOG;
+    private LogClass logClass;
 
 
-    public GraphicsMenu(TableControllerUserBench tableController, TabPane vBox, HaplotreeController treeController, Stage stage,
-                        Scene scene, TabPane statsTabpane, GroupController groupController){
+    public GraphicsMenu(MitoBenchWindow mitoBenchWindow){
 
         menuGraphics = new Menu("Graphics");
         menuGraphics.setId("graphicsMenu");
-        this.treeController = treeController;
-        this.tableController = tableController;
-        tabPane = vBox;
+        treeController = mitoBenchWindow.getTreeController();
+        tableController = mitoBenchWindow.getTableControllerUserBench();
+        tabPane = mitoBenchWindow.getTabpane_visualization();
         treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();
         tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
         treeView = treeController.getTree().getTree();
-        this.stage = stage;
-        this.chartController = new ChartController();
+        stage = mitoBenchWindow.getPrimaryStage();
+        chartController = new ChartController();
         chartController.init(tableController, treeController.getTreeMap());
-        this.scene = scene;
-        this.statsTabpane = statsTabpane;
-        this.groupController = groupController;
+        scene = mitoBenchWindow.getScene();
+        this.statsTabpane = mitoBenchWindow.getTabpane_statistics();
+        this.groupController = mitoBenchWindow.getGroupController();
+        LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
+        logClass = mitoBenchWindow.getLogClass();
         addSubMenus();
     }
 
 
     public void initHaploBarchart() throws MalformedURLException {
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", stage, chartController, tableController);
+        LOG.info("Visualize data: Haplogroup frequency (Barchart)");
+
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", stage, chartController,
+                tableController, logClass);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Bar Chart haplogroups");
@@ -79,7 +88,9 @@ public class GraphicsMenu {
     }
 
     public void initGroupBarChart(){
-        barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane);
+        LOG.info("Visualize data: Group frequency (Barchart)");
+
+        barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_group_barchart");
         tab.setText("Bar Chart Grouping");
@@ -90,6 +101,8 @@ public class GraphicsMenu {
 
 
     public void initStackedBarchart(){
+        LOG.info("Visualize data: Haplogroup frequency per group (Stacked Barchart)");
+
         this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, this);
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");
@@ -101,7 +114,9 @@ public class GraphicsMenu {
     }
 
     private void initSunburst(){
-        sunburstChart = new SunburstChartCreator(stage, tabPane);
+        LOG.info("Visualize data: Sunburst Chart");
+
+        sunburstChart = new SunburstChartCreator(stage, tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_sunburst");
         tab.setText("Sunburst Chart");
@@ -116,7 +131,9 @@ public class GraphicsMenu {
 
 
     private void initPieChart(String title){
-        pieChartViz = new PieChartViz(title, tabPane);
+        LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
+
+        pieChartViz = new PieChartViz(title, tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_piechart");
         tab.setText("Pie Chart");
@@ -130,7 +147,9 @@ public class GraphicsMenu {
 
 
     private void initProfilePlot(){
-        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane);
+        LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
+
+        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_profilePlot");
         tab.setText("Profile Plot");
@@ -142,6 +161,7 @@ public class GraphicsMenu {
 
 
     public void clearCharts(){
+
         stackedBar = null;
         barPlotHaplo = null;
         tabPane.getTabs().clear();
@@ -201,7 +221,7 @@ public class GraphicsMenu {
                     String[] selection_groups = cols[1];
 
                     AdvancedStackedBarchartDialogue advancedStackedBarchartDialogue =
-                            new AdvancedStackedBarchartDialogue("Advanced Stacked Barchart Settings", selection_groups);
+                            new AdvancedStackedBarchartDialogue("Advanced Stacked Barchart Settings", selection_groups, logClass);
 
                     advancedStackedBarchartDialogue.getApplyBtn().setOnAction(new EventHandler<ActionEvent>() {
                         @Override public void handle(ActionEvent e) {
@@ -288,7 +308,7 @@ public class GraphicsMenu {
                         ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
                         HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
 
-                        profilePlot.create(tableController, chartController, treeController, statsTabpane, scene);
+                        profilePlot.create(tableController, chartController, treeController, statsTabpane, scene, logClass);
 
 
 
@@ -412,4 +432,5 @@ public class GraphicsMenu {
     }
     public TableControllerUserBench getTableController() { return tableController; }
     public HaplotreeController getTreeController() { return treeController; }
+    public LogClass getLogClass() { return logClass; }
 }

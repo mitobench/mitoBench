@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import org.apache.log4j.Logger;
 import view.datatypes.IData;
 import view.groups.GroupController;
 import view.menus.GroupMenu;
@@ -39,8 +40,12 @@ public abstract class ATableController {
     protected List<String> col_names;
     protected List<String> col_names_sorted;
     protected GroupMenu groupMenu;
+    protected Logger LOG;
+    protected LogClass logClass;
 
-    public ATableController(){
+    public ATableController(LogClass logClass){
+        this.logClass = logClass;
+        LOG = logClass.getLogger(this.getClass());
     }
 
     public void init(){

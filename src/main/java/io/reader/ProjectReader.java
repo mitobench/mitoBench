@@ -6,6 +6,7 @@ import io.datastructure.generic.GenericInputData;
 import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
 import io.inputtypes.RadioCarbonInputType;
+import org.apache.log4j.Logger;
 import view.table.controller.ATableController;
 
 import java.io.*;
@@ -23,7 +24,8 @@ public class ProjectReader {
 
     public ProjectReader(){}
 
-    public void read(File infile) throws IOException, ProjectException {
+    public void read(File infile, Logger LOG) throws IOException, ProjectException {
+        LOG.info("Read project file: " + infile);
         FileReader fr = new FileReader(infile);
         BufferedReader bfr = new BufferedReader(fr);
         datatable = new HashMap<>();
@@ -68,13 +70,9 @@ public class ProjectReader {
                                 } else {
                                     entry = new Entry(headergroup[i].trim(), new CategoricInputType(headertype[i].trim()), new GenericInputData(entries[i].trim()));
                                 }
-
                                 all_entries.add(entry);
-
-
                             }
                             datatable.put(key, all_entries);
-
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package view.menus;
 
+import Logging.LogClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -7,7 +8,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 import statistics.MutationStatistics;
+import sun.rmi.runtime.Log;
+import view.MitoBenchWindow;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
 import view.table.controller.TableControllerUserBench;
 import statistics.HaploStatistics;
@@ -26,16 +30,19 @@ public class StatisticsMenu {
     private HaplotreeController treeHaploController;
     private HaploStatistics haploStatistics;
     private MutationStatistics mutationStatistics;
+    private Logger LOG;
+    private LogClass LOGClass;
 
-    public StatisticsMenu(TableControllerUserBench tableController, HaplotreeController treeHaploController, TabPane statsTabpane,
-                          Scene scene, Stage pstage) throws IOException {
+    public StatisticsMenu(MitoBenchWindow mitoBenchWindow) throws IOException {
+        LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
+        LOGClass =mitoBenchWindow.getLogClass();
 
         menuTools = new Menu("Statistics");
         menuTools.setId("menu_statistics");
-        this.tableController = tableController;
-        this.treeHaploController = treeHaploController;
-        stage = pstage;
-        addSubMenus(statsTabpane, scene);
+        tableController = mitoBenchWindow.getTableControllerUserBench();
+        treeHaploController = mitoBenchWindow.getTreeController();
+        stage = mitoBenchWindow.getPrimaryStage();
+        addSubMenus(mitoBenchWindow.getTabpane_statistics(), mitoBenchWindow.getScene());
     }
 
     private void addSubMenus(TabPane statsTabpane, Scene scene) throws IOException {
@@ -43,10 +50,9 @@ public class StatisticsMenu {
         haploStats.setId("toolsMenu_stats_hg");
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                haploStatistics = new HaploStatistics(tableController, treeHaploController);
-                stage.toBack();
-                HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics");
-                hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
+                haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
+                HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
+                hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene, LOG);
             }
         });
 
@@ -54,7 +60,9 @@ public class StatisticsMenu {
         mutations.setId("toolsMenu_mutation_freq");
         mutations.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                mutationStatistics = new MutationStatistics();
+                LOG.info("Calculate frequency per mutation");
+
+                mutationStatistics = new MutationStatistics(LOGClass);
                 mutationStatistics.writeToTable(treeHaploController.getTree().getHgs_per_mutation(), statsTabpane);
 
             }

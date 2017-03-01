@@ -1,5 +1,6 @@
 package view.table.controller;
 
+import Logging.LogClass;
 import io.datastructure.Entry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,23 +19,21 @@ public class TableControllerDB extends ATableController {
 
 
 
-    public TableControllerDB(){
-        super();
+    public TableControllerDB(LogClass logClass){
+        super(logClass);
     }
 
 
-    public void addButtonFunctionality(Button addAllBtn, Button addSelectedBtn, Button disableBtn,
-                                       TableControllerDB tableControllerDB, TableControllerUserBench tableControllerUserBench,
-                                       MitoBenchWindow mitoBenchWindow) {
+    public void addButtonFunctionality(Button addAllBtn, Button addSelectedBtn, Button disableBtn, MitoBenchWindow mitoBenchWindow) {
 
         addAllBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 // parse data back to observable list
-                ObservableList selected = tableControllerDB.getTable().getItems();
+                ObservableList selected = getTable().getItems();
                 ObservableList data_obs = FXCollections.observableArrayList();
                 data_obs.addAll(selected);
-                HashMap<String, List<Entry>> data_entries = tableControllerDB.createNewEntryListDragAndDrop(data_obs);
-                tableControllerUserBench.updateTable(data_entries);
+                HashMap<String, List<Entry>> data_entries = createNewEntryListDragAndDrop(data_obs);
+                mitoBenchWindow.getTableControllerUserBench().updateTable(data_entries);
 
             }
         });
@@ -42,12 +41,12 @@ public class TableControllerDB extends ATableController {
         addSelectedBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 // parse data back to observable list
-                ObservableList selected = tableControllerDB.getTable().getSelectionModel().getSelectedItems();
+                ObservableList selected = table.getSelectionModel().getSelectedItems();
                 if(selected.size()!=0){
                     ObservableList data_obs = FXCollections.observableArrayList();
                     data_obs.addAll(selected);
-                    HashMap<String, List<Entry>> data_entries = tableControllerDB.createNewEntryListDragAndDrop(data_obs);
-                    tableControllerUserBench.updateTable(data_entries);
+                    HashMap<String, List<Entry>> data_entries = createNewEntryListDragAndDrop(data_obs);
+                    mitoBenchWindow.getTableControllerUserBench().updateTable(data_entries);
                 }
 
             }

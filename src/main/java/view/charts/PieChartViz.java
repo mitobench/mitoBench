@@ -1,5 +1,6 @@
 package view.charts;
 
+import Logging.LogClass;
 import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
@@ -17,8 +18,8 @@ public class PieChartViz extends AChart {
 
     private final PieChart chart;
 
-    public PieChartViz(String title, TabPane tabPane) {
-        super(null, null);
+    public PieChartViz(String title, TabPane tabPane, LogClass logClass) {
+        super(null, null, logClass);
         chart = new PieChart();
         chart.setTitle(title);
         setContextMenu(chart, tabPane);

@@ -6,6 +6,7 @@ import io.datastructure.generic.GenericInputData;
 import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
 import io.inputtypes.RadioCarbonInputType;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,13 +22,14 @@ public class GenericInputParser implements IInputData {
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
 
-    public GenericInputParser(String file) throws IOException {
+    public GenericInputParser(String file, Logger LOG) throws IOException {
+        LOG.info("Read generic file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
         String[] headergroup = null;
         String[] headertype = null;
 
-        String currline = "";
+        String currline;
 
         while ((currline = bfr.readLine()) != null) {
             //Parse header, two line header !!
@@ -41,7 +43,7 @@ public class GenericInputParser implements IInputData {
                 String[] splitLine = currline.split("\t");
                 //Assume ID is always first! -> requirement
                 List<Entry> entries = new ArrayList<>();
-//we need to take care of our different types here now, too
+                //we need to take care of our different types here now, too
                 for (int i = 0; i < splitLine.length; i++) {
                     String headerType = headertype[i];
                     Entry e = null;
@@ -55,12 +57,8 @@ public class GenericInputParser implements IInputData {
                 }
                 //Now add with ID to hashmap
                 map.put(splitLine[0], entries);
-
-
             }
         }
-
-
     }
 
 

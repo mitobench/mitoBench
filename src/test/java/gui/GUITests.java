@@ -1,6 +1,7 @@
 package gui;
 
 
+import Logging.LogClass;
 import io.PhyloTreeParser;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -45,7 +46,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     private TreeHaplo treeHaplo;
     private HaplotreeController treeController;
     private HaploStatistics haploStatistics;
-
+    private LogClass logClass;
     private GUITestFiles testFiles;
 
     @BeforeClass
@@ -64,8 +65,9 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-
-        tableController = new TableControllerUserBench();
+        logClass = new LogClass();
+        logClass.setUp();
+        tableController = new TableControllerUserBench(logClass);
         chartController = new ChartController();
 
 
@@ -75,7 +77,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
         treeController.configureSearch(new Pane());
         treeController.setAnimation();
 
-        haploStatistics = new HaploStatistics(tableController, treeController);
+        haploStatistics = new HaploStatistics(tableController, treeController, logClass);
 
         testFiles = new GUITestFiles();
         setupApplication(MitoBenchWindow.class);
@@ -85,7 +87,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-        steps.partSetLogDir();
+        steps.part0SetLogDir();
         steps.part1TreeViewTests();
         steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
         steps.part3AboutDialogueTests();
@@ -93,8 +95,8 @@ public class GUITests extends FxRobot implements GUITestValidator {
         steps.part5DBTest();
         //steps.partTestGrouping();
         steps.part6Statistics();
-        steps.part8CreatePlots();
-        steps.part9MenuInteraction();
+        steps.part7CreatePlots();
+        steps.part8MenuInteraction();
 
     }
 

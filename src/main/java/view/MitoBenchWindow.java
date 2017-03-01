@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
+import org.slf4j.*;
 import org.xml.sax.SAXException;
 import view.groups.GroupController;
 import view.menus.*;
@@ -45,7 +47,6 @@ public class MitoBenchWindow extends Application{
     private SplitPane splitPane_table;
     private VBox pane_table_DB;
     private Button enableDBBtn;
-    private Logger logger;
     private LogClass logClass;
 
 
@@ -63,30 +64,33 @@ public class MitoBenchWindow extends Application{
 
     public void continueInit(Stage stage) throws Exception {
 
+        // init Logger
         logClass.setUp();
-        logger = logClass.getLogger(MitoBenchWindow.class);
 
+        // set main window properties
         pane_root = new BorderPane();
         pane_root.setId("mainBorderPane");
         scene = new Scene(pane_root);
 
-        this.primaryStage = stage;
-        this.primaryStage.setTitle("Mito Bench");
-        this.primaryStage.setScene(scene);
-        this.primaryStage.setResizable(true);
+        primaryStage = stage;
+        primaryStage.setTitle("Mito Bench");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
+        primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
 
         // bind width and height to scene to enable resizing
         pane_root.prefHeightProperty().bind(scene.heightProperty());
         pane_root.prefWidthProperty().bind(scene.widthProperty());
 
         // initialize table
-        tableControllerUserBench = new TableControllerUserBench();
+        tableControllerUserBench = new TableControllerUserBench(logClass);
         tableControllerUserBench.init();
         tableControllerUserBench.addRowListener(info_selected_items);
         tableControllerUserBench.getTable().setId("mainEntryTable");
         tableControllerUserBench.createContextMenu();
 
+        // init group controller
         groupController = new GroupController(tableControllerUserBench);
         tableControllerUserBench.setGroupController(groupController);
 
@@ -94,15 +98,15 @@ public class MitoBenchWindow extends Application{
         tableControllerUserBench.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerUserBench.getTable().prefWidthProperty().bind(scene.widthProperty());
 
-        tableControllerDB = new TableControllerDB();
+        tableControllerDB = new TableControllerDB(logClass);
         tableControllerDB.init();
         tableControllerDB.getTable().setId("dbtable");
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerDB.getTable().prefWidthProperty().bind(scene.widthProperty());
 
-        BorderPane borderpane_center = new BorderPane();
         // initialize haplotree with search function
+        BorderPane borderpane_center = new BorderPane();
         Pane pane_tree = new Pane();
         treeController = new HaplotreeController(tableControllerUserBench);
         treeController.configureSearch(pane_tree);
@@ -116,8 +120,7 @@ public class MitoBenchWindow extends Application{
         pane_root.setCenter(borderpane_center);
         pane_root.setTop(getMenuPane());
 
-        primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
-        this.primaryStage.show();
+        primaryStage.show();
 
     }
 
@@ -127,19 +130,17 @@ public class MitoBenchWindow extends Application{
         menuBar.setId("menuBar");
 
         EditMenu editMenu = new EditMenu();
-        StatisticsMenu toolsMenu = new StatisticsMenu(tableControllerUserBench, treeController, tabpane_statistics, scene, primaryStage);
-        FileMenu fileMenu = new FileMenu(tableControllerUserBench, MITOBENCH_VERSION, primaryStage, toolsMenu,
-                this, tableControllerDB, tabpane_visualization);
-        GroupMenu groupMenu = new GroupMenu(groupController, tableControllerUserBench);
-        TableMenu tableMenu = new TableMenu(tableControllerUserBench, tableControllerUserBench.getGroupController());
-        GraphicsMenu graphicsMenu = new GraphicsMenu(tableControllerUserBench, tabpane_visualization, treeController,
-                primaryStage, scene, tabpane_statistics, groupController);
+        StatisticsMenu statisticsMenu = new StatisticsMenu(this);
+        FileMenu fileMenu = new FileMenu( statisticsMenu, this);
+        GroupMenu groupMenu = new GroupMenu(this);
+        TableMenu tableMenu = new TableMenu(this);
+        GraphicsMenu graphicsMenu = new GraphicsMenu(this);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
                                   editMenu.getMenuEdit() ,
                                   groupMenu.getMenuGroup(),
-                                  toolsMenu.getMenuTools(),
+                                  statisticsMenu.getMenuTools(),
                                   tableMenu.getMenuTable(),
                                   graphicsMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
@@ -224,8 +225,7 @@ public class MitoBenchWindow extends Application{
         Button addAllBtn = new Button("Add all");
         Button addSelectedBtn = new Button("Add selected");
         Button disableBtn = new Button("Disable DB table");
-        tableControllerDB.addButtonFunctionality(addAllBtn, addSelectedBtn, disableBtn,
-                tableControllerDB, tableControllerUserBench, this);
+        tableControllerDB.addButtonFunctionality(addAllBtn, addSelectedBtn, disableBtn, this);
 
         buttonHBox.getChildren().addAll(addAllBtn, addSelectedBtn, disableBtn);
         topPanel.getChildren().addAll(label, buttonHBox);
@@ -290,5 +290,63 @@ public class MitoBenchWindow extends Application{
         return enableDBBtn;
     }
 
+    public LogClass getLogClass() {
+        return logClass;
+    }
 
+    public String getMITOBENCH_VERSION() {
+        return MITOBENCH_VERSION;
+    }
+
+    public BorderPane getPane_root() {
+        return pane_root;
+    }
+
+    public TableControllerUserBench getTableControllerUserBench() {
+        return tableControllerUserBench;
+    }
+
+    public TableControllerDB getTableControllerDB() {
+        return tableControllerDB;
+    }
+
+    public HaplotreeController getTreeController() {
+        return treeController;
+    }
+
+    public TabPane getTabpane_visualization() {
+        return tabpane_visualization;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public TabPane getTabpane_statistics() {
+        return tabpane_statistics;
+    }
+
+    public BorderPane getPane_table() {
+        return pane_table;
+    }
+
+    public VBox getPane_table_userBench() {
+        return pane_table_userBench;
+    }
+
+    public Label getInfo_selected_items() {
+        return info_selected_items;
+    }
+
+    public GroupController getGroupController() {
+        return groupController;
+    }
+
+    public SplitPane getSplitPane_table() {
+        return splitPane_table;
+    }
+
+    public VBox getPane_table_DB() {
+        return pane_table_DB;
+    }
 }

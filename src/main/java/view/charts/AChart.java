@@ -1,5 +1,6 @@
 package view.charts;
 
+import Logging.LogClass;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
@@ -18,12 +19,13 @@ import javafx.scene.text.Font;
  */
 public abstract class AChart {
 
+    private final LogClass lc;
     protected Node node;
 
     protected CategoryAxis xAxis = new CategoryAxis();
     protected NumberAxis yAxis = new NumberAxis();
 
-    public AChart(String lable_xaxis, String label_yaxis){
+    public AChart(String lable_xaxis, String label_yaxis, LogClass logClass){
 
         xAxis.tickLabelFontProperty().set(Font.font(15));
         xAxis.setLabel(lable_xaxis);
@@ -33,6 +35,8 @@ public abstract class AChart {
         yAxis.setLabel(label_yaxis);
         yAxis.setMinorTickVisible(false);
         yAxis.tickLabelFontProperty().set(Font.font(15));
+
+        lc = logClass;
 
     }
 
@@ -47,7 +51,7 @@ public abstract class AChart {
         final MenuItem saveAsPng = new MenuItem("Save as png");
         saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent event) {
-                ImageWriter imageWriter = new ImageWriter();
+                ImageWriter imageWriter = new ImageWriter(lc);
                 try {
                     imageWriter.saveImage(node);
                 } catch (ImageException e) {

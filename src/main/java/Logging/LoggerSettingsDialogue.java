@@ -26,7 +26,7 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
 
     public LoggerSettingsDialogue(String title, LogClass logClass, Stage primaryStage, MitoBenchWindow mitoBenchWindow) {
-        super(title);
+        super(title, mitoBenchWindow.getLogClass());
         dialogGrid.setId("logDialogue");
         logger = logClass;
         mito = mitoBenchWindow;

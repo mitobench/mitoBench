@@ -1,5 +1,6 @@
 package view.charts;
 
+import Logging.LogClass;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,13 +24,13 @@ public class BarChartGrouping extends AChart {
     private BarChartExt<String, Number> bc;
     /**
      * Constructor which sets axes, title and context menu
-     *
-     * @param title
+     *  @param title
      * @param ylabel
      * @param scene
+     * @param logClass
      */
-    public BarChartGrouping(String title, String ylabel, TabPane scene) {
-        super(ylabel, null);
+    public BarChartGrouping(String title, String ylabel, TabPane scene, LogClass logClass) {
+        super(ylabel, null, logClass);
         bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setLegendVisible(false);
         bc.setTitle(title);

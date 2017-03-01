@@ -35,7 +35,7 @@ public class DataAccessor {
     }
 
 
-    public HashMap<String, List<Entry>>  getEntries(String query) throws SQLException {
+    public HashMap<String, List<Entry>> getEntries(String query) throws SQLException {
         try (
                 Statement stmnt = connection.createStatement();
                 ResultSet rs = stmnt.executeQuery(query)

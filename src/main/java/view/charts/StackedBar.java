@@ -29,7 +29,7 @@ public class StackedBar extends AChart{
     private GraphicsMenu graphicsMenu;
 
     public StackedBar(String title, TabPane vBox, GraphicsMenu graphicsMenu) {
-        super("", "Frequency in %");
+        super("", "Frequency in %", graphicsMenu.getLogClass());
 
         tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
