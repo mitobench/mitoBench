@@ -77,9 +77,6 @@ public class TableControllerUserBench extends ATableController {
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
 
-        if(!groupController.isGroupingExists())
-            groupController.createInitialGrouping();
-
     }
 
 

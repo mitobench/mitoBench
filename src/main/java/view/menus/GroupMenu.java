@@ -59,6 +59,7 @@ public class GroupMenu {
         }
 
 
+
         MenuItem delGrouping = new MenuItem("Delete grouping");
         delGrouping.setId("delGrouping");
         delGrouping.setOnAction(new EventHandler<ActionEvent>() {

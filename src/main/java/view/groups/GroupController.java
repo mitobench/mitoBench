@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import view.table.controller.ATableController;
+import view.table.controller.TableControllerUserBench;
 
 import java.util.*;
 
@@ -13,12 +14,12 @@ import java.util.*;
 public class GroupController {
 
     private HashMap<String, Group> allGroups = new HashMap<>();
-    private ATableController tableController;
+    private TableControllerUserBench tableController;
     private boolean groupingExists = false;
     private String colname_group;
     private boolean ownGroupingIsSet = false;
 
-    public GroupController(ATableController tableController){
+    public GroupController(TableControllerUserBench tableController){
         this.tableController = tableController;
     }
 
@@ -38,6 +39,10 @@ public class GroupController {
     public void createGroupByColumn(String colName, String gname){
         if(groupingExists)
             clearGrouping();
+        groupingExists = true;
+
+        if(tableController.getTableColumnByName("All data")!=null)
+            tableController.removeColumn("All data");
 
         TableColumn column = tableController.getTableColumnByName(colName);
 
@@ -107,6 +112,9 @@ public class GroupController {
             tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
             tableController.cleanColnames();
             tableController.cleanTableContent("(Grouping)");
+            colname_group=null;
+            if(tableController.getTableColumnByName("All data")!=null)
+                tableController.removeColumn("All data");
         }
     }
 

@@ -34,6 +34,8 @@ public class TableControllerDB extends ATableController {
                 data_obs.addAll(selected);
                 HashMap<String, List<Entry>> data_entries = createNewEntryListDragAndDrop(data_obs);
                 mitoBenchWindow.getTableControllerUserBench().updateTable(data_entries);
+                if(!mitoBenchWindow.getTableControllerUserBench().getGroupController().isGroupingExists())
+                    mitoBenchWindow.getTableControllerUserBench().getGroupController().createInitialGrouping();
 
             }
         });
@@ -47,6 +49,8 @@ public class TableControllerDB extends ATableController {
                     data_obs.addAll(selected);
                     HashMap<String, List<Entry>> data_entries = createNewEntryListDragAndDrop(data_obs);
                     mitoBenchWindow.getTableControllerUserBench().updateTable(data_entries);
+                    if(!mitoBenchWindow.getTableControllerUserBench().getGroupController().isGroupingExists())
+                        mitoBenchWindow.getTableControllerUserBench().getGroupController().createInitialGrouping();
                 }
 
             }

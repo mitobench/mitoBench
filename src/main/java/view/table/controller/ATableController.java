@@ -302,6 +302,7 @@ public abstract class ATableController {
     }
 
     public void changeColumnName(String oldname, String newname) {
+
         for (TableColumn col : table.getColumns()){
             if(col.getText().equals(oldname)){
                 col.setText(newname.trim());

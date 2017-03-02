@@ -79,7 +79,7 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
                 username = "mitodbreader";
 
                 // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", logClass, mitoBenchWindow);
+                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", mitoBenchWindow);
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addButtonFunc(username, password, table);
                 dialog.close();
