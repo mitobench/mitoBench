@@ -58,20 +58,6 @@ public class GroupMenu {
             });
         }
 
-        MenuItem delOwnGrouping = new MenuItem("Delete own grouping");
-        delOwnGrouping.setId("delOwnGrouping");
-        delOwnGrouping.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                if(groupController.isOwnGroupingIsSet()){
-                    String group_col = groupController.getColname_group();
-                    LOG.info("Delete grouping with groups: " + Arrays.toString(groupController.getGroupnames().toArray()));
-                    if(group_col.equals("Group (Grouping)")){
-                        tableController.removeColumn(group_col);
-                        groupController.setOwnGroupingIsSet(false);
-                    }
-                }
-            }
-        });
 
         MenuItem delGrouping = new MenuItem("Delete grouping");
         delGrouping.setId("delGrouping");
@@ -80,11 +66,20 @@ public class GroupMenu {
                 LOG.info("Delete grouping on column '" + groupController.getColname_group() + "' with groups "
                         + Arrays.toString(groupController.getGroupnames().toArray()));
 
-                groupController.clearGrouping();
+                if(groupController.isOwnGroupingIsSet()){
+                    String group_col = groupController.getColname_group();
+                    LOG.info("Delete grouping with groups: " + Arrays.toString(groupController.getGroupnames().toArray()));
+                    if(group_col.equals("Group (Grouping)")){
+                        tableController.removeColumn(group_col);
+                        groupController.setOwnGroupingIsSet(false);
+                    }
+                } else {
+                    groupController.clearGrouping();
+                }
             }
         });
 
-        menuGroup.getItems().addAll(groupingItem, new SeparatorMenuItem(), delOwnGrouping, delGrouping);
+        menuGroup.getItems().addAll(groupingItem, new SeparatorMenuItem(), delGrouping);
 
     }
 

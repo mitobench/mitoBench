@@ -149,7 +149,8 @@ public class GraphicsMenu {
     private void initProfilePlot(){
         LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
 
-        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane, logClass);
+        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane,
+                logClass, groupController);
         Tab tab = new Tab();
         tab.setId("tab_profilePlot");
         tab.setText("Profile Plot");

@@ -27,14 +27,14 @@ public abstract class AChart {
 
     public AChart(String lable_xaxis, String label_yaxis, LogClass logClass){
 
-        xAxis.tickLabelFontProperty().set(Font.font(15));
+        xAxis.tickLabelFontProperty().set(Font.font(10));
         xAxis.setLabel(lable_xaxis);
         xAxis.setTickMarkVisible(false);
 
         yAxis.setTickUnit(5);
         yAxis.setLabel(label_yaxis);
         yAxis.setMinorTickVisible(false);
-        yAxis.tickLabelFontProperty().set(Font.font(15));
+        yAxis.tickLabelFontProperty().set(Font.font(10));
 
         lc = logClass;
 

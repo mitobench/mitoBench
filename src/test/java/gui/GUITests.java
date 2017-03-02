@@ -15,6 +15,7 @@ import org.testfx.api.FxRobot;
 import statistics.HaploStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
+import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 import view.tree.TreeHaplo;
@@ -43,6 +44,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
 
     private TableControllerUserBench tableController;
     private ChartController chartController;
+    private GroupController groupController;
     private TreeHaplo treeHaplo;
     private HaplotreeController treeController;
     private HaploStatistics haploStatistics;
@@ -69,7 +71,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
         logClass.setUp();
         tableController = new TableControllerUserBench(logClass);
         chartController = new ChartController();
-
+        groupController = new GroupController(tableController);
 
         treeHaplo = new TreeHaplo("Haplo Tree");
         treeHaplo.addStructure();
@@ -77,7 +79,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
         treeController.configureSearch(new Pane());
         treeController.setAnimation();
 
-        haploStatistics = new HaploStatistics(tableController, treeController, logClass);
+        haploStatistics = new HaploStatistics(tableController, treeController, logClass, groupController);
 
         testFiles = new GUITestFiles();
         setupApplication(MitoBenchWindow.class);

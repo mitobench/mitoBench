@@ -9,6 +9,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import view.charts.ChartController;
 import view.charts.ProfilePlot;
+import view.groups.GroupController;
 import view.table.controller.TableControllerMutations;
 import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
@@ -21,6 +22,7 @@ import java.util.*;
 public class HaploStatistics {
 
 
+    private final GroupController groupController;
     private TableControllerUserBench tableController;
     private TableControllerMutations tableControllerMutations;
     private ChartController chartController;
@@ -28,8 +30,9 @@ public class HaploStatistics {
     private int number_of_groups;
 
 
-    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController, LogClass LOGClass){
+    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController, LogClass LOGClass, GroupController groupController){
         this.tableController = tableController;
+        this.groupController = groupController;
         chartController = new ChartController();
         chartController.init(tableController, treeHaploController.getTreeMap());
         tableControllerMutations = new TableControllerMutations(LOGClass);
@@ -47,13 +50,10 @@ public class HaploStatistics {
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = cols[1];
-
         number_of_groups = selection_groups.length;
-
         HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaolpgroups(selection_haplogroups, coreHGs);
-        data_all = chartController.assignHGs(hgs_summarized,
-                selection_haplogroups,
-                selection_groups);
+        data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
+
 
     }
 

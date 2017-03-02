@@ -50,7 +50,6 @@ public abstract class ATableController {
 
     public void init(){
 
-
         table = new TableView();
         table.setEditable(false);
         // allow multiple selection of rows in tableView
@@ -64,7 +63,6 @@ public abstract class ATableController {
         column_to_index = new HashMap<>();
         this.controller = this;
         table_content = new HashMap<>();
-
     }
 
     /**
@@ -74,6 +72,7 @@ public abstract class ATableController {
      * @param input
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
+
         // update Entry structure
         updateEntryList(input);
 
@@ -111,7 +110,6 @@ public abstract class ATableController {
         setColumns_to_index();
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
-
     }
 
 
@@ -239,9 +237,10 @@ public abstract class ATableController {
     public HashMap<String, List<Entry>> createNewEntryListForGrouping(String gName, String colName){
 
         HashMap<String, List<Entry>> entries = new HashMap<>();
+        ObservableList<ObservableList> selection = getSelectedRows();
 
-        for(int i = 0; i < table.getSelectionModel().getSelectedItems().size(); i++){
-            String rowName = table.getSelectionModel().getSelectedItems().get(i).get(getColIndex("ID")).toString();
+        for(int i = 0; i < selection.size(); i++){
+            String rowName = selection.get(i).get(getColIndex("ID")).toString();
             List<Entry> eList = new ArrayList<>();
             Entry e = new Entry(colName, new CategoricInputType("String"), new GenericInputData(gName));
             eList.add(e);
@@ -323,10 +322,10 @@ public abstract class ATableController {
         }
     }
 
-    public void removeColumn(String colname_group) {
+    public void removeColumn(String colName) {
         // remove from tableview
         for(TableColumn col : table.getColumns()){
-            if(col.getText().equals(colname_group)){
+            if(col.getText().equals(colName)){
                 table.getColumns().remove(col);
                 break;
             }
@@ -334,19 +333,19 @@ public abstract class ATableController {
 
         // remove from data
         ObservableList<ObservableList> data_new = FXCollections.observableArrayList();
-        int index = getColIndex(colname_group);
+        int index = getColIndex(colName);
         for(ObservableList list : data){
             list.remove(index);
             data_new.add(list);
         }
 
         // remove from datatable
-        dataTable.getDataTable().remove(colname_group);
+        dataTable.getDataTable().remove(colName);
         cleanColnames();
-        col_names_sorted.remove(colname_group);
+        col_names_sorted.remove(colName);
         setColumns_to_index();
         table.getItems().removeAll(table.getItems());
-        cleanTableContent(colname_group);
+        cleanTableContent(colName);
         resetTable();
         updateTable(table_content);
 
@@ -374,9 +373,14 @@ public abstract class ATableController {
 
 
     public void loadGroups(){
+        // delete general grouping
+        if(getTableColumnByName("All data (Grouping)")!= null){
+            removeColumn("All data (Grouping)");
+        }
         // if "grouping" column already exists, create groups
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
+                groupController.setGroupingExists(true);
                 groupController.createGroupByColumn(colname, "");
                 break;
             }

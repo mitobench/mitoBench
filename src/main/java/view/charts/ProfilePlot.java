@@ -6,6 +6,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
+import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
@@ -19,14 +20,16 @@ import java.util.List;
  */
 public class ProfilePlot extends AChart {
 
+    private final GroupController gc;
     LineChart<String,Number> profilePlot = new LineChart<String,Number>(xAxis,yAxis);
     List<XYChart.Series> seriesList = new ArrayList<>();
     int maxVal = 0;
 
 
-    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass){
+    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass, GroupController groupController){
         super(lable_xaxis, label_yaxis, logClass);
 
+        gc = groupController;
         // set autoranging to false to allow manual settings
 
         yAxis.setLowerBound(0);
@@ -91,7 +94,7 @@ public class ProfilePlot extends AChart {
         addListener();
         setMaxBoundary();
 
-        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
+        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass, gc);
 
         haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
         TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);

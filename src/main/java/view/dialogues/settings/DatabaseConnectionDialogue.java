@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import view.MitoBenchWindow;
 import view.table.controller.ATableController;
 
 /**
@@ -21,9 +22,11 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
     private TextField usernamme_field;
     private  ATableController table;
     private Boolean loggedIn = false;
+    private MitoBenchWindow mitoBenchWindow;
 
-    public DatabaseConnectionDialogue(ATableController tableUserDB, String title, LogClass logClass){
+    public DatabaseConnectionDialogue(ATableController tableUserDB, String title, LogClass logClass, MitoBenchWindow mito){
         super(title, logClass);
+        mitoBenchWindow = mito;
         table = tableUserDB;
         dialogGrid.setId("connect_to_database");
         setComponents();
@@ -76,7 +79,7 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
                 username = "mitodbreader";
 
                 // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", logClass);
+                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", logClass, mitoBenchWindow);
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addButtonFunc(username, password, table);
                 dialog.close();

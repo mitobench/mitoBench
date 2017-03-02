@@ -14,7 +14,7 @@ public class GroupController {
 
     private HashMap<String, Group> allGroups = new HashMap<>();
     private ATableController tableController;
-    private boolean groupingIsSet = false;
+    private boolean groupingExists = false;
     private String colname_group;
     private boolean ownGroupingIsSet = false;
 
@@ -22,15 +22,21 @@ public class GroupController {
         this.tableController = tableController;
     }
 
+    public void createInitialGrouping() {
+        createGroupByColumn("All data", "All data");
+        tableController.updateTable(tableController.createNewEntryListForGrouping(
+                "All data", "All data (Grouping)"));
+    }
+
 
     private void createGroup(String groupname){
-        groupingIsSet = true;
+        groupingExists = true;
         Group g = new Group(groupname);
         allGroups.put(groupname, g);
     }
 
     public void createGroupByColumn(String colName, String gname){
-        if(groupingIsSet)
+        if(groupingExists)
             clearGrouping();
 
         TableColumn column = tableController.getTableColumnByName(colName);
@@ -65,7 +71,7 @@ public class GroupController {
                 addElements(group_row.get(groupname), groupname);
             }
         } else {
-            ObservableList group_data = tableController.getTable().getSelectionModel().getSelectedItems();
+            ObservableList group_data = tableController.getSelectedRows();
             tableController.addColumn(colName + " (Grouping)", 0);
             colname_group = colName + " (Grouping)";
             createGroup(gname);
@@ -95,8 +101,8 @@ public class GroupController {
 
 
     public void clearGrouping(){
-        if(groupingIsSet){
-            groupingIsSet = false;
+        if(groupingExists){
+            groupingExists = false;
             allGroups.clear();
             tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
             tableController.cleanColnames();
@@ -124,7 +130,11 @@ public class GroupController {
         this.ownGroupingIsSet = ownGroupingIsSet;
     }
 
-    public boolean isGroupingIsSet() {
-        return groupingIsSet;
+    public boolean isGroupingExists() {
+        return groupingExists;
+    }
+
+    public void setGroupingExists(boolean groupingExists) {
+        this.groupingExists = groupingExists;
     }
 }

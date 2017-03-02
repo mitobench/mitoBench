@@ -13,6 +13,7 @@ import statistics.MutationStatistics;
 import sun.rmi.runtime.Log;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
+import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
 import statistics.HaploStatistics;
 import view.tree.HaplotreeController;
@@ -28,6 +29,7 @@ public class StatisticsMenu {
     private Menu menuTools;
     private TableControllerUserBench tableController;
     private HaplotreeController treeHaploController;
+    private GroupController groupController;
     private HaploStatistics haploStatistics;
     private MutationStatistics mutationStatistics;
     private Logger LOG;
@@ -41,6 +43,7 @@ public class StatisticsMenu {
         menuTools.setId("menu_statistics");
         tableController = mitoBenchWindow.getTableControllerUserBench();
         treeHaploController = mitoBenchWindow.getTreeController();
+        groupController = mitoBenchWindow.getGroupController();
         stage = mitoBenchWindow.getPrimaryStage();
         addSubMenus(mitoBenchWindow.getTabpane_statistics(), mitoBenchWindow.getScene());
     }
@@ -50,7 +53,7 @@ public class StatisticsMenu {
         haploStats.setId("toolsMenu_stats_hg");
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
+                haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass, groupController);
                 HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
                 hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene, LOG);
             }

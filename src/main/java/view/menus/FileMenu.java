@@ -125,12 +125,9 @@ public class FileMenu {
         importFromDB.setId("importFromDB");
         importFromDB.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                // split table pane
-                mitoBenchWindow.splitTablePane(tableControllerDB);
-
                 // todo: make db query
                 DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB,
-                        "Database Login", logClass);
+                        "Database Login", logClass, mitoBenchWindow);
 
                 if(drapAndDropEventMaganer==null){
                     drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
@@ -297,8 +294,10 @@ public class FileMenu {
                     ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
                 }
                 HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
+
                 tableControllerUserBench.updateTable(data_map);
                 tableControllerUserBench.loadGroups();
+
             }
 
             if(absolutePath.endsWith(".mitoproj")){

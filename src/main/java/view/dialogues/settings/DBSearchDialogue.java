@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import view.MitoBenchWindow;
 import view.table.controller.ATableController;
 
 import java.sql.SQLException;
@@ -21,14 +22,15 @@ import java.util.List;
 public class DBSearchDialogue extends APopupDialogue{
 
 
+    private final MitoBenchWindow mito;
     private TextField textfield_selection_table = new TextField();
     private Label message = new Label("");
     private Button btnSend = new Button("Send");
     private HashMap<String, List<Entry>> data;
 
-    public DBSearchDialogue(String title, LogClass logClass){
+    public DBSearchDialogue(String title, LogClass logClass, MitoBenchWindow mitoBenchWindow){
         super(title, logClass);
-        dialogGrid.setId("set_database_query");
+        mito = mitoBenchWindow;        dialogGrid.setId("set_database_query");
         dialog.setResizable(true);
 
         textfield_selection_table.setId("textfield_selection_table");
@@ -63,6 +65,7 @@ public class DBSearchDialogue extends APopupDialogue{
                         message.setText("");
                         table.updateTable(data);
                         dialog.close();
+                        mito.splitTablePane(mito.getTableControllerDB());
                     } else {
                         message.setTextFill(Color.RED);
                         message.setText("Query was not correct");
