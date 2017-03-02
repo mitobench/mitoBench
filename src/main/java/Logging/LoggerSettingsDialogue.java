@@ -128,6 +128,12 @@ public class LoggerSettingsDialogue extends APopupDialogue{
         discardLogFile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                // remove tmp log file
+                try {
+                    Files.delete(Paths.get(System.getProperty("user.dir") + File.separator + "mito_log_tmp.log"));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 close();
                 stage.close();
                 System.exit(0);

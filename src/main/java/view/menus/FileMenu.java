@@ -1,6 +1,7 @@
 package view.menus;
 
 import Logging.LogClass;
+import Logging.LoggerSettingsDialogue;
 import io.Exceptions.*;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
@@ -222,7 +223,9 @@ public class FileMenu {
         exit.setId("fileMenu-exitItem");
         exit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                System.exit(0);
+                t.consume();
+                LoggerSettingsDialogue loggerSettingsDialogue =
+                        new LoggerSettingsDialogue("Log file configuration", logClass, stage);
             }
         });
 
