@@ -2,14 +2,20 @@ package Logging;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import view.MitoBenchWindow;
 import view.dialogues.settings.APopupDialogue;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 
 /**
@@ -17,39 +23,62 @@ import java.io.File;
  */
 public class LoggerSettingsDialogue extends APopupDialogue{
 
-
-    private final LogClass logger;
     private final Stage stage;
-    private final MitoBenchWindow mito;
-    private Label filePathLabel;
+    private TextField filePathLabel;
+    private TitledPane titledPane;
+    private Button saveLogFileBtn;
+    private Button chooseFileBtn;
+    private Button applyBtn;
+    private Label infoLogFile;
+    private Button discardLogFile;
+    private Label setFilePathLabel;
 
 
-
-    public LoggerSettingsDialogue(String title, LogClass logClass, Stage primaryStage, MitoBenchWindow mitoBenchWindow) {
-        super(title, mitoBenchWindow.getLogClass());
+    public LoggerSettingsDialogue(String title, LogClass logClass, Stage primaryStage) {
+        super(title, logClass);
         dialogGrid.setId("logDialogue");
-        logger = logClass;
-        mito = mitoBenchWindow;
         stage = primaryStage;
         setComponents();
+        disableComponents();
         show();
     }
 
     private void setComponents() {
 
-        Label setFilePathLabel = new Label("Choose log file location");
-        filePathLabel = new Label(System.getProperty("user.dir"));
-        Button chooseFileBtn = new Button("Choose location");
+        infoLogFile = new Label("Do you want to save the log file?");
+        saveLogFileBtn = new Button("Save LOG file");
+        discardLogFile = new Button("Discard LOG file");
+
+        setFilePathLabel = new Label("File location");
+        filePathLabel = new TextField(System.getProperty("user.dir"));
+        filePathLabel.setDisable(true);
+        chooseFileBtn = new Button("Change location");
         chooseFileBtn.setId("btn_chooseLogDir");
-        Button applyBtn = new Button("Apply");
+        applyBtn = new Button("Apply");
         applyBtn.setId("btn_applyLogDir");
 
-        addButtonListener(applyBtn, chooseFileBtn);
+        Separator separator1 = new Separator();
 
-        dialogGrid.add(setFilePathLabel, 0,0,1,1);
-        dialogGrid.add(chooseFileBtn, 2,0,1,1);
-        dialogGrid.add(filePathLabel, 0,1,3,1);
-        dialogGrid.add(applyBtn,2,2,1,1);
+        addButtonListener(applyBtn, chooseFileBtn);
+        dialogGrid.add(infoLogFile, 0,0,1,1);
+        dialogGrid.add(saveLogFileBtn, 1,0,1,1);
+        dialogGrid.add(discardLogFile, 2,0,1,1);
+
+        dialogGrid.add(separator1, 0,1, 3,1);
+
+        dialogGrid.add(setFilePathLabel, 0,2,1,1);
+        dialogGrid.add(filePathLabel, 0,3,2,1);
+        dialogGrid.add(chooseFileBtn, 2,3,1,1);
+
+        dialogGrid.add(applyBtn,2,4,1,1);
+
+
+
+        titledPane = new TitledPane();
+        titledPane.setText("LOG file configuration");
+        titledPane.setCollapsible(false);
+        titledPane.setContent(dialogGrid);
+
 
     }
 
@@ -59,8 +88,6 @@ public class LoggerSettingsDialogue extends APopupDialogue{
         chooseFileBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                //FileChooser fc = new FileChooser();
-                //File file = fc.showSaveDialog(stage);
                 DirectoryChooser chooser = new DirectoryChooser();
                 chooser.setTitle("JavaFX Projects");
                 File defaultDirectory = new File(System.getProperty("user.dir"));
@@ -75,15 +102,69 @@ public class LoggerSettingsDialogue extends APopupDialogue{
         applyBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                logger.updateLog4jConfiguration(filePathLabel.getText());
-                close();
+                //logger.updateLog4jConfiguration(filePathLabel.getText());
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
+                Date date = new Date();
+                String file_source = System.getProperty("user.dir") + File.separator + "mito_log_tmp.log";
+                String file_target = filePathLabel.getText() + File.separator + "mitobench_log_" + dateFormat.format(date) + ".log";
                 try {
-                    mito.continueInit(stage);
-                } catch (Exception e1) {
+                    Files.move(Paths.get(file_source), Paths.get(file_target));
+                } catch (IOException e1) {
                     e1.printStackTrace();
                 }
+                close();
+                stage.close();
+                System.exit(0);
             }
         });
+
+        saveLogFileBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                enableComponents();
+            }
+        });
+
+        discardLogFile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                close();
+                stage.close();
+                System.exit(0);
+            }
+        });
+    }
+
+
+    private void enableComponents(){
+        applyBtn.setDisable(false);
+        chooseFileBtn.setDisable(false);
+        setFilePathLabel.setDisable(false);
+        filePathLabel.setDisable(false);
+        filePathLabel.setEditable(true);
+
+    }
+
+
+    private void disableComponents(){
+        applyBtn.setDisable(true);
+        chooseFileBtn.setDisable(true);
+        setFilePathLabel.setDisable(true);
+    }
+
+
+    @Override
+    protected void show(){
+        Scene dialogScene = new Scene(titledPane, 500, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+
+    @Override
+    public void close(){
+        dialog.close();
+        stage.close();
+        System.exit(0);
 
     }
 }

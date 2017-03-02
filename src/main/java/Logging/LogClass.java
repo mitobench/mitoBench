@@ -21,7 +21,7 @@ public class LogClass {
      */
 
     public void setUp(){
-        String configFile = System.getProperty("user.dir") + File.separator + "/src/resources/logger.properties";
+        String configFile = System.getProperty("user.dir") + File.separator + "src/resources/logger.properties";
         PropertyConfigurator.configure(configFile);
     }
 
@@ -44,8 +44,6 @@ public class LogClass {
      */
 
     public void updateLog4jConfiguration(String logFile) {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
-        Date date = new Date();
-        System.setProperty("logfile.name", logFile + File.separator + "mitobench_log_" + dateFormat.format(date) + ".log");
+        System.setProperty("logfile.name", logFile);// + File.separator + "mitobench_log_" + dateFormat.format(date) + ".log");
     }
 }

@@ -3,6 +3,8 @@ package view;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -11,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.log4j.Logger;
 import org.slf4j.*;
 import org.xml.sax.SAXException;
@@ -22,7 +25,6 @@ import view.tree.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import org.apache.log4j.*;
 
 
 /**
@@ -55,9 +57,27 @@ public class MitoBenchWindow extends Application{
     {
 
 
+
         logClass = new LogClass();
-        LoggerSettingsDialogue loggerSettingsDialogue =
-                new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage, this);
+        logClass.updateLog4jConfiguration(System.getProperty("user.dir") + "/mito_log_tmp.log");
+        continueInit(primaryStage);
+        overrideCloseSettings();
+
+
+
+
+    }
+
+    private void overrideCloseSettings() {
+        Platform.setImplicitExit(false);
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                we.consume();
+                LoggerSettingsDialogue loggerSettingsDialogue =
+                        new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
+            }
+        });
 
     }
 

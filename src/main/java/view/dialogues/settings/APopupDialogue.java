@@ -43,6 +43,7 @@ public abstract class APopupDialogue {
         dialog.setScene(dialogScene);
         dialog.show();
     }
+
     public void close(){
         dialog.close();
     }
