@@ -12,7 +12,6 @@ import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
 import org.junit.Test;
-import sun.rmi.runtime.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;

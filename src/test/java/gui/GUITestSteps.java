@@ -214,7 +214,17 @@ public class GUITestSteps {
     public void part0SetLogDir() {
         step("Set Log Directory", () -> {
             verifyThat("#logDialogue", isVisible());
-            robot.clickOn("#btn_applyLogDir");
+            robot.clickOn("#discardLogFile");
+        });
+    }
+
+
+
+    public void closeWindow() {
+        step("Close window", () -> {
+            robot.clickOn("#fileMenu").clickOn("#fileMenu-exitItem");
+            verifyThat("#logDialogue", isVisible());
+            robot.clickOn("#discardLogFile");
         });
     }
 

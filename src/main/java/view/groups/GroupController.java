@@ -23,11 +23,11 @@ public class GroupController {
         this.tableController = tableController;
     }
 
-    public void createInitialGrouping() {
-        createGroupByColumn("All data", "All data");
-        tableController.updateTable(tableController.createNewEntryListForGrouping(
-                "All data", "All data (Grouping)"));
-    }
+//    public void createInitialGrouping() {
+//        createGroupByColumn("All data", "All data");
+//        tableController.updateTable(tableController.createNewEntryListForGrouping(
+//                "All data", "All data (Grouping)"));
+//    }
 
 
     private void createGroup(String groupname){

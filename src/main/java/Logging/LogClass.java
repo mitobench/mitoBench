@@ -3,9 +3,6 @@ package Logging;
 import org.apache.log4j.*;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by neukamm on 25.02.17.

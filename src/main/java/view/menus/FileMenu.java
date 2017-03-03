@@ -249,8 +249,8 @@ public class FileMenu {
                 }
                 HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
                 tableControllerUserBench.updateTable(input_multifasta);
-                if(!tableControllerUserBench.getGroupController().isGroupingExists())
-                    tableControllerUserBench.getGroupController().createInitialGrouping();
+              //  if(!tableControllerUserBench.getGroupController().isGroupingExists())
+              //      tableControllerUserBench.getGroupController().createInitialGrouping();
 
 
             }
@@ -266,8 +266,8 @@ public class FileMenu {
                     }
                     HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
-                    if(!tableControllerUserBench.getGroupController().isGroupingExists())
-                        tableControllerUserBench.getGroupController().createInitialGrouping();
+                   // if(!tableControllerUserBench.getGroupController().isGroupingExists())
+                        //tableControllerUserBench.getGroupController().createInitialGrouping();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -281,8 +281,8 @@ public class FileMenu {
                     GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG);
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
-                    if(!tableControllerUserBench.getGroupController().isGroupingExists())
-                        tableControllerUserBench.getGroupController().createInitialGrouping();
+                    //if(!tableControllerUserBench.getGroupController().isGroupingExists())
+                        //tableControllerUserBench.getGroupController().createInitialGrouping();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -303,8 +303,8 @@ public class FileMenu {
 
                 tableControllerUserBench.updateTable(data_map);
                 tableControllerUserBench.loadGroups();
-                if(!tableControllerUserBench.getGroupController().isGroupingExists())
-                    tableControllerUserBench.getGroupController().createInitialGrouping();
+              //  if(!tableControllerUserBench.getGroupController().isGroupingExists())
+                   // tableControllerUserBench.getGroupController().createInitialGrouping();
 
             }
 

@@ -68,6 +68,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void setUp() throws Exception {
 
         logClass = new LogClass();
+        logClass.updateLog4jConfiguration(System.getProperty("user.dir") + "/mito_log_tmp.log");
         logClass.setUp();
         tableController = new TableControllerUserBench(logClass);
         chartController = new ChartController();
@@ -89,7 +90,6 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-        steps.part0SetLogDir();
         steps.part1TreeViewTests();
         steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
         steps.part3AboutDialogueTests();
@@ -99,6 +99,8 @@ public class GUITests extends FxRobot implements GUITestValidator {
         steps.part6Statistics();
         steps.part7CreatePlots();
         steps.part8MenuInteraction();
+        //steps.closeWindow();
+        //steps.part0SetLogDir();
 
     }
 

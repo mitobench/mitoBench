@@ -14,8 +14,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.apache.log4j.Logger;
-import org.slf4j.*;
 import org.xml.sax.SAXException;
 import view.groups.GroupController;
 import view.menus.*;

@@ -374,14 +374,10 @@ public abstract class ATableController {
 
 
     public void loadGroups(){
-        // delete general grouping
-        if(getTableColumnByName("All data (Grouping)")!= null){
-            removeColumn("All data (Grouping)");
-        }
+
         // if "grouping" column already exists, create groups
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
-                groupController.setGroupingExists(true);
                 groupController.createGroupByColumn(colname, "");
                 break;
             }

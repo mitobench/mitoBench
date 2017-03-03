@@ -10,7 +10,6 @@ import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import statistics.MutationStatistics;
-import sun.rmi.runtime.Log;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
 import view.groups.GroupController;

@@ -47,13 +47,17 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
         infoLogFile = new Label("Do you want to save the log file?");
         saveLogFileBtn = new Button("Save LOG file");
+        saveLogFileBtn.setId("saveLogFileBtn");
         discardLogFile = new Button("Discard LOG file");
+        discardLogFile.setId("discardLogFile");
 
         setFilePathLabel = new Label("File location");
         filePathLabel = new TextField(System.getProperty("user.dir"));
         filePathLabel.setDisable(true);
+
         chooseFileBtn = new Button("Change location");
         chooseFileBtn.setId("btn_chooseLogDir");
+
         applyBtn = new Button("Apply");
         applyBtn.setId("btn_applyLogDir");
 
