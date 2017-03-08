@@ -17,6 +17,7 @@ public class TreeHaplo{
     private TreeItem<String> finalTree;
     private TreeView<String> tree;
     private HashMap<String, List<String>> hgs_per_mutation;
+    private HashMap<String, String[]> mutations_per_hg;
 
     public TreeHaplo(String root){
         finalTree = new TreeItem<String> (root);
@@ -32,18 +33,18 @@ public class TreeHaplo{
 
         MutationParser mutationParser = p.getMutationParser();
         hgs_per_mutation = mutationParser.getMutation_to_hg();
+        mutations_per_hg = mutationParser.getHg_to_mutation();
 
     }
 
     public TreeItem<String> getRootItem() {
         return finalTree;
     }
-
     public TreeView<String> getTree() {
         return tree;
     }
-
     public HashMap<String, List<String>> getHgs_per_mutation() {
         return hgs_per_mutation;
     }
+    public HashMap<String, String[]> getMutations_per_hg() { return mutations_per_hg; }
 }

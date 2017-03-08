@@ -65,7 +65,12 @@ public class StatisticsMenu {
                 LOG.info("Calculate frequency per mutation");
 
                 mutationStatistics = new MutationStatistics(LOGClass);
-                mutationStatistics.writeToTable(treeHaploController.getTree().getHgs_per_mutation(), statsTabpane);
+
+                mutationStatistics.calculateMutationFrequencies(treeHaploController.getTree().getMutations_per_hg(),
+                        tableController.getTableColumnByName("Haplogroup"), tableController.getTable(),
+                        treeHaploController);
+
+                mutationStatistics.writeToTable(statsTabpane);
 
             }
         });
