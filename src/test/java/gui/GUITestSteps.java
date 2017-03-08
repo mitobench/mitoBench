@@ -29,9 +29,6 @@ public class GUITestSteps {
         step("Test Table is visible", () -> {
             verifyThat("#mainEntryTable", isVisible());
         });
-        step("TreeView Button exists", () -> {
-            verifyThat("#treeViewOpenCloseLabel", isVisible());
-        });
         step("MenuBar exists", () -> {
             verifyThat("#menuBar", isVisible());
         });
@@ -59,9 +56,6 @@ public class GUITestSteps {
             step("Test Table is visible", () -> {
                 verifyThat("#mainEntryTable", isVisible());
             });
-            step("TreeView Button exists", () -> {
-                verifyThat("#treeViewOpenCloseLabel", isVisible());
-            });
             step("MenuBar exists", () -> {
                 verifyThat("#menuBar", isVisible());
             });
@@ -83,26 +77,41 @@ public class GUITestSteps {
 
     public void part1TreeViewTests() {
         step("Open TreeView", () -> {
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeView-inner-tree");
-            robot.clickOn("#treeviewApplyButton");
-            robot.clickOn("#treeViewOpenCloseLabel");
+            robot.clickOn("#menuEdit");
+            robot.clickOn("#filterItem");
+            robot.clickOn("#filterWithTree");
 
-
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
+            verifyThat("#treeFilterDialogue", isVisible());
             robot.clickOn("#treeviewSearchField").write("U,V,X,W");
             robot.push(KeyCode.ENTER);
-            robot.clickOn("#treeViewOpenCloseLabel");
 
-            robot.clickOn("#treeViewOpenCloseLabel");
-            //Now our dropdown menu should appear!
-            verifyThat("#treeviewSearchPane", isVisible());
-            robot.clickOn("#treeviewApplyButton");
-            robot.clickOn("#treeViewOpenCloseLabel");
+//
+            robot.clickOn("#menuEdit");
+            robot.clickOn("#filterItem");
+            robot.clickOn("#filterWithMutation");
+            verifyThat("#mutationFilterDialogue", isVisible());
+            robot.clickOn("#btnApplyMutDialogue");
+
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//            robot.clickOn("#treeView-inner-tree");
+//            robot.clickOn("#treeviewApplyButton");
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//
+//
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//
+//            robot.push(KeyCode.ENTER);
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//
+//            robot.clickOn("#treeViewOpenCloseLabel");
+//            //Now our dropdown menu should appear!
+//            verifyThat("#treeviewSearchPane", isVisible());
+//            robot.clickOn("#treeviewApplyButton");
+//            robot.clickOn("#treeViewOpenCloseLabel");
 
         });
     }

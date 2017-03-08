@@ -2,10 +2,6 @@ package gui;
 
 
 import Logging.LogClass;
-import io.PhyloTreeParser;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.Pane;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,6 +11,7 @@ import org.testfx.api.FxRobot;
 import statistics.HaploStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
+import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
@@ -24,9 +21,6 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
@@ -77,7 +71,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
         treeHaplo = new TreeHaplo("Haplo Tree");
         treeHaplo.addStructure();
         treeController = new HaplotreeController(tableController, logClass);
-        treeController.configureSearch();
+        treeController.configureSearch(null);
         treeController.setAnimation();
 
         haploStatistics = new HaploStatistics(tableController, treeController, logClass, groupController);
@@ -90,17 +84,17 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-//        //steps.part1TreeViewTests();
-//        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
-//        steps.part3AboutDialogueTests();
-//        //steps.part4BasicStuff();
-//        steps.part5DBTest();
-//        //steps.partTestGrouping();
-//        steps.part6Statistics();
-//        steps.part7CreatePlots();
-//        steps.part8MenuInteraction();
-//        //steps.closeWindow();
-//        //steps.part0SetLogDir();
+        steps.part1TreeViewTests();
+        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
+        steps.part3AboutDialogueTests();
+        steps.part4BasicStuff();
+        steps.part5DBTest();
+        //steps.partTestGrouping();
+        steps.part6Statistics();
+        steps.part7CreatePlots();
+        steps.part8MenuInteraction();
+        //steps.closeWindow();
+        //steps.part0SetLogDir();
 
     }
 

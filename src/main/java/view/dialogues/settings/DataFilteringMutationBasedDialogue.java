@@ -21,6 +21,7 @@ public class DataFilteringMutationBasedDialogue extends APopupDialogue {
 
     public DataFilteringMutationBasedDialogue(String title, LogClass logClass, MitoBenchWindow mito) {
         super(title, logClass);
+        dialogGrid.setId("mutationFilterDialogue");
         mitoBenchWindow = mito;
         addComponents();
         addListener();
@@ -30,12 +31,17 @@ public class DataFilteringMutationBasedDialogue extends APopupDialogue {
 
     private void addComponents() {
         Label label_enterMutation = new Label("Enter Mutation");
+        label_enterMutation.setId("label_enterMutation");
+
         field_mutation = new TextField();
+        field_mutation.setId("field_mutation");
 
         Label label_distance = new Label("Get all data with distance ");
         field_distance = new TextField("0");
+        field_distance.setId("field_distance");
 
         btn_apply = new Button("Apply filter");
+        btn_apply.setId("btnApplyMutDialogue");
 
         dialogGrid.add(label_enterMutation, 0,0,1,1);
         dialogGrid.add(field_mutation,1,0,1,1);

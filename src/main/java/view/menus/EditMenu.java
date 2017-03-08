@@ -29,28 +29,29 @@ public class EditMenu {
 
     public EditMenu(MitoBenchWindow mitoBenchWindow){
         menuEdit = new Menu("Edit");
+        menuEdit.setId("menuEdit");
         mito = mitoBenchWindow;
         treeController = mitoBenchWindow.getTreeController();
         logClass = mitoBenchWindow.getLogClass();
         tableController = mitoBenchWindow.getTableControllerUserBench();
-        addSubMenues();
+        addSubMenus();
 
     }
 
-    private void addSubMenues() {
+    private void addSubMenus() {
 
         Menu filterData = new Menu("Filter data...");
         filterData.setId("filterItem");
 
         MenuItem filterTreeBased = new MenuItem("... based on Haplotree");
-        filterTreeBased.setId("filterWithList");
+        filterTreeBased.setId("filterWithTree");
         filterTreeBased.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
                 try {
                     DataFilteringTreebasedDialogue dataFilteringWithListDialogue =
                             new DataFilteringTreebasedDialogue("Tree based data filtering",
-                            logClass, tableController);
+                            logClass, mito);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (SAXException e) {

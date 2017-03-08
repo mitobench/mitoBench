@@ -38,9 +38,10 @@ public class FilterData {
                 }
 
                 tableControllerUB.updateView(filtered_data);
-            } else {
-                throw new Exception("Muatation "+ mut + " does not exist!");
             }
+//            else {
+//                throw new Exception("Muatation "+ mut + " does not exist!");
+//            }
 
 
         }

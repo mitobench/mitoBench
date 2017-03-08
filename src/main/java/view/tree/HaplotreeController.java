@@ -9,8 +9,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,14 +19,13 @@ import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
+import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.table.controller.ATableController;
 import view.table.TableSelectionFilter;
 
@@ -75,8 +72,14 @@ public class HaplotreeController {
 
         searchLbl.setGraphic(downArrow);
         searchLbl.setId("treeViewOpenCloseLabel");
-        upArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";");
-        downArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";");
+
+        tree = new TreeHaplo("Haplo tree");
+        tree.addStructure();
+        createTreeMap(tree.getRootItem());
+
+
+        //upArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";");
+        //downArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";");
 //        isExpanded.addListener(new ChangeListener<Boolean>() {
 //            @Override
 //            public void changed(ObservableValue<? extends Boolean> paramObservableValue, Boolean paramT1, Boolean paramT2) {
@@ -101,8 +104,9 @@ public class HaplotreeController {
     /**
      * Method to configure the search pane.
      * @param
+     * @param dataFilteringTreebasedDialogue
      */
-    public void configureSearch() throws IOException, SAXException, ParserConfigurationException{
+    public void configureSearch(DataFilteringTreebasedDialogue dataFilteringTreebasedDialogue) throws IOException, SAXException, ParserConfigurationException{
         searchPane = new VBox();
         searchPane.setId("treeviewSearchPane");
         searchPane.setAlignment(Pos.TOP_LEFT);
@@ -120,9 +124,9 @@ public class HaplotreeController {
         searchFieldListHaplogroup.setPrefSize(50,10);
 
 
-        tree = new TreeHaplo("Haplo tree");
-        tree.addStructure();
-        createTreeMap(tree.getRootItem());
+//        tree = new TreeHaplo("Haplo tree");
+//        tree.addStructure();
+//        createTreeMap(tree.getRootItem());
 
 
         /*
@@ -137,9 +141,9 @@ public class HaplotreeController {
             public void handle(ActionEvent paramT) {
                 if (tableManager.getTable().getItems().size() > 0){
                     if(searchFieldListHaplogroup.getText().equals("")){
-                        applyFilterFunction();
+                        applyFilterFunction(dataFilteringTreebasedDialogue);
                     } else {
-                        applyFilterFunctionList();
+                        applyFilterFunctionList(dataFilteringTreebasedDialogue);
                     }
 
                 }
@@ -162,7 +166,7 @@ public class HaplotreeController {
             public void handle(KeyEvent ke)
             {
                 if (ke.getCode().equals(KeyCode.ENTER)) {
-                    applyFilterFunction();
+                    applyFilterFunction(dataFilteringTreebasedDialogue);
                 }
             }
         });
@@ -173,7 +177,7 @@ public class HaplotreeController {
             {
                 if (ke.getCode().equals(KeyCode.ENTER))
                 {
-                    applyFilterFunctionList();
+                    applyFilterFunctionList(dataFilteringTreebasedDialogue);
                 }
             }
         });
@@ -213,7 +217,7 @@ public class HaplotreeController {
     }
 
 
-    private void applyFilterFunction(){
+    private void applyFilterFunction(DataFilteringTreebasedDialogue dataFilteringTreebasedDialogue){
 
         ObservableList<TreeItem<String>> itemSelection =  tree.getTree().getSelectionModel().getSelectedItems();
 
@@ -251,13 +255,15 @@ public class HaplotreeController {
                 tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups,
                         tableManager.getColIndex("Haplogroup"), LOG);
             }
-
         }
+        dataFilteringTreebasedDialogue.close();
+
+
 
     }
 
 
-    private void applyFilterFunctionList(){
+    private void applyFilterFunctionList(DataFilteringTreebasedDialogue dataFilteringTreebasedDialogue){
 
         // parse haplogroup list, get all corresponding table entries (subgroups included)
         // and show results in table
@@ -284,8 +290,9 @@ public class HaplotreeController {
                         tableManager.getColIndex("Haplogroup"), LOG);
                 searchFieldListHaplogroup.setText("");
             }
-        }
 
+        }
+        dataFilteringTreebasedDialogue.close();
 
     }
 
