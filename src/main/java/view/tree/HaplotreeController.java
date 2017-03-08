@@ -62,6 +62,7 @@ public class HaplotreeController {
     private HashMap<String, List<String>> node_to_children;
 
     private Logger LOG;
+    private StackPane stackPaneSearchWithList;
 
     public HaplotreeController(ATableController tableManager, LogClass logClass) throws IOException, SAXException, ParserConfigurationException {
 
@@ -76,21 +77,21 @@ public class HaplotreeController {
         searchLbl.setId("treeViewOpenCloseLabel");
         upArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 1 L1 1 L.5 0 Z\";");
         downArrow.setStyle("-fx-padding: 8px 5px 0px 5px;-fx-background-color: black;-fx-shape: \"M0 0 L1 0 L.5 1 Z\";");
-        isExpanded.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> paramObservableValue, Boolean paramT1, Boolean paramT2) {
-                if(paramT2){
-                    // To expand
-                    timelineDown.play();
-                    searchLbl.setGraphic(upArrow);
-
-                }else{
-                    // To close
-                    timelineUp.play();
-                    searchLbl.setGraphic(downArrow);
-                }
-            }
-        });
+//        isExpanded.addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> paramObservableValue, Boolean paramT1, Boolean paramT2) {
+//                if(paramT2){
+//                    // To expand
+//                    timelineDown.play();
+//                    searchLbl.setGraphic(upArrow);
+//
+//                }else{
+//                    // To close
+//                    timelineUp.play();
+//                    searchLbl.setGraphic(downArrow);
+//                }
+//            }
+//        });
 
 
     }
@@ -101,16 +102,16 @@ public class HaplotreeController {
      * Method to configure the search pane.
      * @param
      */
-    public void configureSearch(Pane root) throws IOException, SAXException, ParserConfigurationException{
+    public void configureSearch() throws IOException, SAXException, ParserConfigurationException{
         searchPane = new VBox();
         searchPane.setId("treeviewSearchPane");
         searchPane.setAlignment(Pos.TOP_LEFT);
 
-        StackPane sp1 = new StackPane();
-        sp1.setPadding(new Insets(10));
-        sp1.setAlignment(Pos.TOP_LEFT);
-        sp1.setStyle("-fx-background-color:#333333,#b1afb0;-fx-background-insets:0,1.5;-fx-opacity:.92;-fx-background-radius:0px 0px 0px 5px;");
-        sp1.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()-ACTION_BOX_HGT);
+        stackPaneSearchWithList = new StackPane();
+        stackPaneSearchWithList.setPadding(new Insets(10));
+        stackPaneSearchWithList.setAlignment(Pos.TOP_LEFT);
+        stackPaneSearchWithList.setStyle("-fx-background-color:#333333,#b1afb0;-fx-background-insets:0,1.5;-fx-opacity:.92;-fx-background-radius:0px 0px 0px 5px;");
+        stackPaneSearchWithList.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()-ACTION_BOX_HGT);
 
         Button applyBtn = new Button("Apply filter");
         applyBtn.setId("treeviewApplyButton");
@@ -135,10 +136,12 @@ public class HaplotreeController {
             @Override
             public void handle(ActionEvent paramT) {
                 if (tableManager.getTable().getItems().size() > 0){
-                    if(searchFieldListHaplogroup.getText().equals(""))
+                    if(searchFieldListHaplogroup.getText().equals("")){
                         applyFilterFunction();
-                    else
+                    } else {
                         applyFilterFunctionList();
+                    }
+
                 }
 
 
@@ -177,7 +180,8 @@ public class HaplotreeController {
 
 
 
-        Label infolabel = new Label("Please select haplogroups either in the tree or specify a list:");
+        Label infolabel = new Label("Please select Haplogroups either " +
+                "in the tree OR specify the desired Haplogroups as list:");
         infolabel.setMinSize(80, 80);
 
         Label haploLabel = new Label("Comma separated list of haplogroups:");
@@ -187,23 +191,25 @@ public class HaplotreeController {
         hb2.setId("treeView-inner-tree");
         hb2.getChildren().addAll(infolabel, tree.getTree(), haploLabel, searchFieldListHaplogroup , applyBtn);
         hb2.setSpacing(10);
-        sp1.getChildren().addAll(hb2);
+        stackPaneSearchWithList.getChildren().addAll(hb2);
 
         StackPane sp2 = new StackPane();
         sp2.setPrefSize(100, ACTION_BOX_HGT);
         sp2.getChildren().add(searchLbl);
-        sp2.setStyle("-fx-cursor:hand;-fx-background-color:#b1afb0;-fx-border-width:0px 1px 1px 1px;-fx-border-color:#333333;-fx-opacity:.92;-fx-border-radius:0px 0px 5px 5px;-fx-background-radius:0px 0px 5px 5px;");
-        sp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent paramT) {
-                togglePaneVisibility();
-            }
-        });
+        sp2.setStyle("-fx-cursor:hand;-fx-background-color:#b1afb0;-fx-border-width:0px 1px 1px 1px;" +
+                "-fx-border-color:#333333;-fx-opacity:.92;-fx-border-radius:0px 0px 5px 5px;" +
+                "-fx-background-radius:0px 0px 5px 5px;");
+//        sp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent paramT) {
+//                togglePaneVisibility();
+//            }
+//        });
 
-        searchPane.getChildren().addAll(sp1, sp2);
+        searchPane.getChildren().addAll(stackPaneSearchWithList, sp2);
         Group searchpaneGroup = new Group();
         searchpaneGroup.getChildren().add(searchPane);
-        root.getChildren().add(searchpaneGroup);
+        //root.getChildren().add(searchpaneGroup);
     }
 
 
@@ -231,16 +237,17 @@ public class HaplotreeController {
             }
 
             // close tree view
-            timelineUp.play();
-            searchLbl.setGraphic(downArrow);
-            togglePaneVisibility();
+            //timelineUp.play();
+            //searchLbl.setGraphic(downArrow);
+            //togglePaneVisibility();
             tree.getTree().getSelectionModel().clearSelection();
 
             // parse selection to tablefilter
             TableSelectionFilter tableFilter = new TableSelectionFilter();
 
             if (seletcion_haplogroups.length !=0) {
-                LOG.info("Filter data. Table now contains only data of Haplotype: " + Arrays.toString(backup_hg_selection));
+                LOG.info("Filter data. Table now contains only data of Haplotype: "
+                        + Arrays.toString(backup_hg_selection));
                 tableFilter.haplogroupFilter(tableManager, seletcion_haplogroups,
                         tableManager.getColIndex("Haplogroup"), LOG);
             }
@@ -261,9 +268,9 @@ public class HaplotreeController {
             seletcion_haplogroups = allHaplogroups.toArray(new String[allHaplogroups.size()]);
 
             // close tree view
-            timelineUp.play();
-            searchLbl.setGraphic(downArrow);
-            togglePaneVisibility();
+            //timelineUp.play();
+            //searchLbl.setGraphic(downArrow);
+            //togglePaneVisibility();
             tree.getTree().getSelectionModel().clearSelection();
 
             // parse selection to tablefilter
@@ -332,16 +339,16 @@ public class HaplotreeController {
 
 
 
-    /**
-     * Method to toggle the search pane visibility.
-     */
-    public void togglePaneVisibility(){
-        if(isExpanded.get()){
-            isExpanded.set(false);
-        }else{
-            isExpanded.set(true);
-        }
-    }
+//    *
+//     * Method to toggle the search pane visibility.
+//
+//    public void togglePaneVisibility(){
+//        if(isExpanded.get()){
+//            isExpanded.set(false);
+//        }else{
+//            isExpanded.set(true);
+//        }
+//    }
 
 
 
@@ -441,5 +448,9 @@ public class HaplotreeController {
 
     public void setIsExpanded(boolean isExpanded) {
         this.isExpanded.set(isExpanded);
+    }
+
+    public StackPane getStackPaneSearchWithList() {
+        return stackPaneSearchWithList;
     }
 }

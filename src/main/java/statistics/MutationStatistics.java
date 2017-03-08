@@ -51,7 +51,7 @@ public class MutationStatistics {
         colHG.getStyleClass().add("align-header-left");
 
         // add data (table content)
-        // write mutation information to table
+        // write mutation information to table ONLY if mutation exists in dataset
         ObservableList<ObservableList> rows = FXCollections.observableArrayList();
         for(String mut : hgs_per_mutation.keySet()){
             ObservableList  row = FXCollections.observableArrayList();

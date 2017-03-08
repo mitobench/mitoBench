@@ -125,11 +125,11 @@ public class MitoBenchWindow extends Application{
 
         // initialize haplotree with search function
         BorderPane borderpane_center = new BorderPane();
-        Pane pane_tree = new Pane();
+//        Pane pane_tree = new Pane();
         treeController = new HaplotreeController(tableControllerUserBench, logClass);
-        treeController.configureSearch(pane_tree);
-        treeController.setAnimation();
-        borderpane_center.setTop(pane_tree);
+        treeController.configureSearch();
+//        treeController.setAnimation();
+        //borderpane_center.setTop(pane_tree);
 
         // get all components of central part
         borderpane_center.setCenter(getCenterPane());
@@ -147,7 +147,7 @@ public class MitoBenchWindow extends Application{
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menuBar");
 
-        EditMenu editMenu = new EditMenu();
+        EditMenu editMenu = new EditMenu(this);
         StatisticsMenu statisticsMenu = new StatisticsMenu(this);
         FileMenu fileMenu = new FileMenu( statisticsMenu, this);
         GroupMenu groupMenu = new GroupMenu(this);

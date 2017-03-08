@@ -44,6 +44,15 @@ public abstract class APopupDialogue {
         dialog.show();
     }
 
+    /**
+     * This method displays dialogue.
+     */
+    protected void show(int width, int height){
+        Scene dialogScene = new Scene(dialogGrid, width, height);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+
     public void close(){
         dialog.close();
     }
