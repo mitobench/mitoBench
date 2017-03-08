@@ -35,12 +35,13 @@ public class BarPlotHaplo extends AChart {
     public BarPlotHaplo(String title, String ylabel, Stage stage, ChartController cc,
                         TableControllerUserBench tc, LogClass logClass) throws MalformedURLException {
 
-        super(ylabel, "", logClass);
+        super("", ylabel, logClass);
 
         this.stage = stage;
 
         bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setLegendVisible(false);
+        bc.setTitle(title);
 
         chartController = cc;
         tableController = tc;

@@ -23,7 +23,7 @@ public class PieChartViz extends AChart {
         chart = new PieChart();
         chart.setTitle(title);
         setContextMenu(chart, tabPane);
-        chart.setStyle("-fx-fone-size: 20pt ;");
+        //chart.setStyle("-fx-fone-size: 20pt ;");
     }
 
     public void setColor(Stage stage) {

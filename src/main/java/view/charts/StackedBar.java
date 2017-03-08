@@ -40,7 +40,7 @@ public class StackedBar extends AChart{
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
 
-        xAxis.tickLabelFontProperty().set(Font.font(17));
+        //xAxis.tickLabelFontProperty().set(Font.font(17));
 
         sbc = new StackedBarChart<>(xAxis, yAxis);
         sbc.setTitle(title);
@@ -48,7 +48,7 @@ public class StackedBar extends AChart{
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
         sbc.setLegendSide(Side.RIGHT);
-        sbc.setStyle("-fx-font-size: " + 20 + "px;");
+        //sbc.setStyle("-fx-font-size: " + 20 + "px;");
 
         setContextMenu(sbc, vBox);
 

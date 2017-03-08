@@ -76,7 +76,7 @@ public class GraphicsMenu {
     public void initHaploBarchart() throws MalformedURLException {
         LOG.info("Visualize data: Haplogroup frequency (Barchart)");
 
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup frequency", "Frequency", stage, chartController,
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup occurrences", "Counts", stage, chartController,
                 tableController, logClass);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
@@ -90,7 +90,7 @@ public class GraphicsMenu {
     public void initGroupBarChart(){
         LOG.info("Visualize data: Group frequency (Barchart)");
 
-        barChartGrouping = new BarChartGrouping("Group frequency", "Frequency", tabPane, logClass);
+        barChartGrouping = new BarChartGrouping("Group occurrences", "Counts", tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_group_barchart");
         tab.setText("Bar Chart Grouping");
