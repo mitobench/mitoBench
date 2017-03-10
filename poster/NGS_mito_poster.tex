@@ -26,7 +26,7 @@
 \definecolor{headercol1}{RGB}{186,215,230}
 \definecolor{headercol2}{RGB}{80,80,80}
 \definecolor{headerfontcol}{RGB}{0,0,0}
-\definecolor{boxcolor}{RGB}{250,250,250}
+\definecolor{boxcolor}{RGB}{255,255,255} % white
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Utility functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -57,7 +57,7 @@
 %%%%%% Eye Catcher, Title, Authors and University Images %%%%%%%%%%%%%%%%%%%%%%
 \begin{poster}{
 	grid=false,
-	columns=4,
+	columns=5,
 	% Option is left on true though the eyecatcher is not used. The reason is
 	% that we have a bit nicer looking title and author formatting in the headercol
 	% this way
@@ -105,42 +105,117 @@
 	%\fbox{
 		\begin{minipage}{14em}
 			\includegraphics[width=4cm]{figures/it-logo.png}\\
-			\vspace{1em}
+			\\
 			\includegraphics[width=4cm]{figures/mpi-logo.png}
 		\end{minipage}
 	%}
 }
 
-\headerbox{Introduction}{name=introduction, column=0, span=4}{
-\lipsum[3-5]
+\headerbox{Introduction}{name=introduction, column=0, span=5}{
+
+Despite the availability of modern next generation sequencing technologies and
+therefore nuclear human genomes, the sequencing and analysis of mitochondrial DNA
+(mtDNA) is still common. Especially in the research field of ancient DNA and the
+context of population genetics, mtDNA is often the only proxy available to study
+extinct populations and their relationship with modern populations. As a consequence,
+many population genetic studies rely on the analysis of mtDNA. \\
+A plethora of methods for the analysis of mtDNA exist, that address questions in
+population genetics, phylogeny and others. However, these tools typically rely on
+different file formats and often require manual interaction with the data for downstream
+analysis. Ultimately, these steps can be cumbersome, especially for non-bioinformaticians,
+resulting in an increased risk of errors during the analysis. \\
+To tackle these issues, we present MitoBench, a workbench to interactively analyze
+and visualize mitochondrial genomes with a focus on population genetics. The
+graphical user interface is kept simple, to accommodate even users without further
+prior knowledge on computational methods. Furthermore, it shows additional
+information such as metadata and statistics. Currently, MitoBench offers automatic
+file conversion tools to connect the workbench with existing analysis methods
+such as BEAST, Arlequin and others.
+
 }
 
-\headerbox{Conclusions}{name=conclusions,column=2, span=2, below=introduction}{
-\lipsum[3-4]
+\headerbox{Workflow}{name=workflow, column=0, span=2, below=introduction}{
+\begin{center}
+		\includegraphics[width=0.7\textwidth]{figures/workflow_yed.jpg}
+\end{center}
 }
 
-\headerbox{MitoDB}{name=mitodb,column=0, span=2, below=introduction}{
-\lipsum[3-4]
-}
-
-
-\headerbox{MitoBench}{name=mitobench,column=0, span=4, below=mitodb}{
-\lipsum[3-5]
-}
-
-
-
-\headerbox{References}{name=references,column=0, span=3, below=mitobench}{
-\lipsum[1-2]
+\headerbox{MitoDB}{name=mitodb,column=2, span=3, below=introduction}{
+\begin{itemize}
+	\item Web-Frontend with Vaadin Java Framework
+	\item Backend with PostgreSQL, providing sequence information and meta-data (SQL)
+	\item Curated data upload with metadata
+	\item Retrieval possible through WebUI and mitoBench
+\end{itemize}
 }
 
 
-\headerbox{Contact}{name=contact,column=3, span=1, below=mitobench}{
-Judith Neukamm\\
-Institute for Archaeological Sciences\\
-University of T\"ubingen\\
+\headerbox{Conclusions}{name=conclusions,column=3, span=2, below=mitodb}{
+\textbf{MitoBench}
+\begin{itemize}
+		\item Easy file handling and file conversion
+		\item Combination, manipulation and visualization of MT data
+		\item Multiple filtering options
+		\item Statistics
+\end{itemize}
+
+\textbf{MitoDB}
+\begin{itemize}
+	\item Collect mitochondrial data
+\end{itemize}
+}
+
+
+
+
+\headerbox{MitoBench}{name=mitobench,column=0, span=3, below=workflow}{
+\begin{minipage}{0.5\textwidth}
+Data representation
+\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+Data visualization
+\begin{center}
+		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
+\end{center}
+\end{minipage}
+
 \\
-judith.neukamm@uni-tuebingen.de
+\begin{minipage}{0.5\textwidth}
+Data grouping
+\begin{itemize}
+	\item user-defined groups
+	\item grouping by column
+\end{itemize}
+%\begin{center}
+%		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
+%\end{center}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+Data filtering / Statistics
+\begin{itemize}
+	\item Haplogroup filtering
+	\item Filtering based on Mutation
+	\item Haplogroup frequencies
+	\item Mutation frequencies
+\end{itemize}
+%\begin{center}
+%		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
+%\end{center}
+\end{minipage}
+}
+
+
+
+%\headerbox{References}{name=references,column=0, span=3, below=mitobench}{
+%\lipsum[1-2]
+%}
+
+
+\headerbox{Contact}{name=contact,column=0, span=4, below=mitobench}{
+Judith Neukamm (judith.neukamm@uni-tuebingen.de)
 }
 
 \end{poster}
