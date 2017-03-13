@@ -9,7 +9,7 @@
 % $LastChangedBy:: rlegendi                                                 $ %
 % $Id:: poster.tex 128 2011-09-11 08:57:12Z rlegendi                        $ %
 % --------------------------------------------------------------------------- %
-\documentclass[a0paper,portrait]{baposter}
+\documentclass[a0paper,portrait, fontscale=0.285]{baposter}
 \usepackage{relsize}		% For \smaller
 \usepackage{url}			% For \url
 \usepackage{epstopdf}	% Included EPS files automatically converted to PDF to include with pdflatex
@@ -57,7 +57,7 @@
 %%%%%% Eye Catcher, Title, Authors and University Images %%%%%%%%%%%%%%%%%%%%%%
 \begin{poster}{
 	grid=false,
-	columns=5,
+	%columns=5,
 	% Option is left on true though the eyecatcher is not used. The reason is
 	% that we have a bit nicer looking title and author formatting in the headercol
 	% this way
@@ -72,11 +72,11 @@
 	headerfont=\Large\sf\bf,
 	textborder=rectangle,
 	headerborder=open,
-  boxshade=plain,
+  	boxshade=plain,
 	background=shadetb,
 	bgColorOne=white,
 	bgColorTwo=blue!10,
-	headerheight=7.5cm
+	headerheight=7cm
 }
 %%% Eye Cacther %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
@@ -90,7 +90,7 @@
 {
 	\vspace{1em} Judith Neukamm$^{1,3*}$, Alexander Peltzer$^{1,2,3*}$, Wolfgang Haak$^{2}$, Johannes Krause$^{1,2}$ and Kay Nieselt$^{3}$\\
 	\vspace{1em}
-	{\smaller 	1 Institute for Archaeological Sciences, Archaeo- and Paleogenetics, University of Tuebingen, Germany.\\
+	{\footnotesize 	1 Institute for Archaeological Sciences, Archaeo- and Paleogenetics, University of Tuebingen, Germany.\\
 	2 Max Planck Institute for the Science of Human History, Jena, Germany.\\
 	3 Integrative Transcriptomics, Center for Bioinformatics (ZBIT), University of Tuebingen, Germany.\\
 	$*$These authors contributed equally to the study.
@@ -111,7 +111,13 @@
 	%}
 }
 
-\headerbox{Introduction}{name=introduction, column=0, span=5}{
+
+
+%----------------------------------------------------------------------------------------
+%	Introduction
+%----------------------------------------------------------------------------------------
+
+\headerbox{Introduction}{name=introduction, row=0, column=0, span=3}{
 
 Despite the availability of modern next generation sequencing technologies and
 therefore nuclear human genomes, the sequencing and analysis of mitochondrial DNA
@@ -134,89 +140,157 @@ such as BEAST, Arlequin and others.
 
 }
 
-\headerbox{Workflow}{name=workflow, column=0, span=2, below=introduction}{
+
+
+%----------------------------------------------------------------------------------------
+%	MitoDB
+%----------------------------------------------------------------------------------------
+
+\headerbox{MitoDB}{name=mitodb, row=1, column=1, span=2, below=introduction}{
+	\begin{itemize}
+		\item Web-Frontend with Vaadin Java Framework
+		\item Backend with PostgreSQL, providing sequence information and meta-data (SQL)
+		\item Curated data upload with metadata
+		\item Retrieval possible through WebUI and mitoBench
+	\end{itemize}
+}
+
+
+%----------------------------------------------------------------------------------------
+%  Workflow
+%----------------------------------------------------------------------------------------
+
+
+\headerbox{Workflow}{name=workflow, column=0, below=introduction, bottomaligned=mitodb}{
 \begin{center}
-		\includegraphics[width=0.7\textwidth]{figures/workflow_yed.jpg}
+		\includegraphics[width=0.67\textwidth]{figures/workflow_yed.jpg}
 \end{center}
 }
 
-\headerbox{MitoDB}{name=mitodb,column=2, span=3, below=introduction}{
-\begin{itemize}
-	\item Web-Frontend with Vaadin Java Framework
-	\item Backend with PostgreSQL, providing sequence information and meta-data (SQL)
-	\item Curated data upload with metadata
-	\item Retrieval possible through WebUI and mitoBench
-\end{itemize}
+
+
+
+%----------------------------------------------------------------------------------------
+%	References
+%----------------------------------------------------------------------------------------
+
+\headerbox{References}{name=references, column=0, span=2, above=bottom}{
+	\footnotesize
+	\begingroup
+	\renewcommand{\section}[2]{}%
+	\bibliography{sample}
+	\endgroup
 }
 
 
-\headerbox{Conclusions}{name=conclusions,column=3, span=2, below=mitodb}{
-\textbf{MitoBench}
-\begin{itemize}
+
+
+%----------------------------------------------------------------------------------------
+%	Contact
+%----------------------------------------------------------------------------------------
+
+\headerbox{Contact}{name=contact, column=2, aligned=references,above=bottom}{
+	\begin{description}\compresslist
+		\item Judith Neukamm
+		\item University of T\"ubingen
+		%\item[Web] www.university.edu/smithlab
+		\item[Email] judith.neukamm@uni-tuebingen.de
+		\item[Phone] +49 7071 2975651
+	\end{description}
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	Conclusions
+%----------------------------------------------------------------------------------------
+
+\headerbox{Conclusions}{name=conclusions,row=0, column=2,  below=mitodb, above=references}{
+	\textbf{MitoBench}
+	\begin{itemize}
 		\item Easy file handling and file conversion
-		\item Combination, manipulation and visualization of MT data
+		\item Combination, manipulation and visualization of mitochondrial data
 		\item Multiple filtering options
 		\item Statistics
-\end{itemize}
-
-\textbf{MitoDB}
-\begin{itemize}
-	\item Collect mitochondrial data
-\end{itemize}
+	\end{itemize}
+	\textbf{MitoDB}
+	\begin{itemize}
+		\item Collection of mitochondrial data plus meta information
+		\item Curated database
+	\end{itemize}
 }
 
 
 
 
-\headerbox{MitoBench}{name=mitobench,column=0, span=3, below=workflow}{
-\begin{minipage}{0.5\textwidth}
-Data representation
+%----------------------------------------------------------------------------------------
+%	Mitobench
+%----------------------------------------------------------------------------------------
+
+
+\headerbox{MitoBench}{name=mitobench, column=0, span=2, below=workflow, bottomaligned=conclusions}{
+\begin{minipage}[t]{0.5\textwidth}
+	\textbf{Data import and export}
+	%\begin{itemize}
+%		\item (Multi-) FastA 
+%		\item ARP (Arlequin format \cite{excoffier2010arlequin})
+%		\item HSD (Haplogrep 2 format \cite{weissensteiner2016haplogrep}) 
+%		\item Excel file 
+%		\item Generic formats (tsv/csv format) 
+%	\end{itemize}	
 \begin{center}
-		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
+	\includegraphics[width=0.8\textwidth]{figures/import_export.jpg}
+	\end{center}
+\end{minipage}
+\hspace{0.5em}
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{Data representation}
+\begin{center}
+		\includegraphics[width=0.8\textwidth]{figures/load_generic.png}
 \end{center}
 \end{minipage}
-\begin{minipage}{0.5\textwidth}
-Data visualization
+
+\vspace{1em}
+
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{	Data grouping}
+	\begin{itemize}
+		\item interested in behaviour of different groups\\
+		$\rightarrow$ Group data by feature 
+		\item internal grouping (columns not sorted)
+	\end{itemize}
+\end{minipage}
+\hspace{0.5em}
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{Data filtering / Statistics}
+	\begin{itemize}
+		\item Haplogroup filtering
+		\item Filtering based on Mutation
+		\item Haplogroup frequencies
+		\item Mutation frequencies
+	\end{itemize}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{Data visualization}
 \begin{center}
-		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
+		\includegraphics[width=0.8\textwidth]{figures/stackedBarchart.png}
 \end{center}
 \end{minipage}
+\hspace{0.5em}
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{Data visualization}
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{figures/profile.png}
+	\end{center}
+\end{minipage}
 
-\\
-\begin{minipage}{0.5\textwidth}
-Data grouping
-\begin{itemize}
-	\item user-defined groups
-	\item grouping by column
-\end{itemize}
-%\begin{center}
-%		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
-%\end{center}
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-Data filtering / Statistics
-\begin{itemize}
-	\item Haplogroup filtering
-	\item Filtering based on Mutation
-	\item Haplogroup frequencies
-	\item Mutation frequencies
-\end{itemize}
-%\begin{center}
-%		\includegraphics[width=0.9\textwidth]{figures/mitobench.png}
-%\end{center}
-\end{minipage}
 }
 
 
 
-%\headerbox{References}{name=references,column=0, span=3, below=mitobench}{
-%\lipsum[1-2]
-%}
-
-
-\headerbox{Contact}{name=contact,column=0, span=4, below=mitobench}{
-Judith Neukamm (judith.neukamm@uni-tuebingen.de)
-}
 
 \end{poster}
 \end{document}
