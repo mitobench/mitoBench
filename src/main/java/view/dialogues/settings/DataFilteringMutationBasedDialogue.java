@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import statistics.MutationStatistics;
 import view.MitoBenchWindow;
 
 
@@ -58,11 +59,20 @@ public class DataFilteringMutationBasedDialogue extends APopupDialogue {
 
         btn_apply.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
+
+
+                MutationStatistics mutationStatistics = new MutationStatistics(logClass);
+                mutationStatistics.calculateMutationFrequencies(mitoBenchWindow.getTreeController().getTree().getMutations_per_hg(),
+                        mitoBenchWindow.getTableControllerUserBench().getTableColumnByName("Haplogroup"),
+                        mitoBenchWindow.getTableControllerUserBench().getTable(),
+                        mitoBenchWindow.getTreeController());
+
                 FilterData filterData = new FilterData(
                         mitoBenchWindow.getTableControllerUserBench(),
-                        mitoBenchWindow.getTreeController().getTree().getHgs_per_mutation());
+                        mutationStatistics.getHgs_per_mutation_of_current_data(),
+                        logClass);
                 try {
-                    filterData.filterMutation(field_mutation.getText().split(","));
+                    filterData.filterMutation(field_mutation.getText().split(","),   field_distance.getText());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

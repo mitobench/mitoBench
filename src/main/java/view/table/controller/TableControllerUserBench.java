@@ -36,51 +36,6 @@ public class TableControllerUserBench extends ATableController {
 
     }
 
-    @Override
-    public void updateTable(HashMap<String, List<Entry>> input) {
-
-        // update Entry structure
-        updateEntryList(input);
-
-        // add new values to existing one (DataTable)
-        dataTable.update(input);
-
-        // clean whole table
-        data.clear();
-
-        // get current col names
-        List<String> curr_colnames = getCurrentColumnNames();
-
-        table.getColumns().removeAll(table.getColumns());
-
-        // define column order
-        Set<String> cols = dataTable.getDataTable().keySet();
-        for(String s : cols) {
-            if(!curr_colnames.contains(s.trim()))
-                curr_colnames.add(s);
-        }
-
-        // display updated table
-        data = parseDataTableToObservableList(dataTable, curr_colnames);
-
-        // add columns
-        for(int i = 0; i < col_names_sorted.size(); i++) {
-            addColumn(col_names_sorted.get(i), i);
-        }
-
-        // clear Items in table
-        table.getItems().removeAll(table.getItems());
-        //FINALLY ADDED TO TableView
-        table.getItems().addAll(data);
-
-        setColumns_to_index();
-
-        groupMenu.upateGroupItem(col_names_sorted, groupController);
-
-    }
-
-
-
 
     public void createContextMenu(){
 

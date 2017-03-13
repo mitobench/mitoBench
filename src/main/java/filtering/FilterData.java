@@ -1,9 +1,13 @@
 package filtering;
 
+import Logging.LogClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.log4j.Logger;
+import statistics.MutationStatistics;
 import view.table.controller.TableControllerUserBench;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,38 +17,42 @@ import java.util.List;
 public class FilterData {
     private final HashMap<String, List<String>> hgs_per_mutation;
     private final TableControllerUserBench tableControllerUB;
-    ObservableList<ObservableList> selectedRows;
+    private final Logger LOG;
+    private ObservableList<ObservableList> selectedRows;
 
-    public FilterData(TableControllerUserBench tableControllerUserBench, HashMap<String, List<String>> hgs_per_mutation){
+    public FilterData(TableControllerUserBench tableControllerUserBench, HashMap<String, List<String>> hgs_per_mutation,
+                      LogClass logClass){
+
         tableControllerUB = tableControllerUserBench;
         selectedRows = tableControllerUserBench.getSelectedRows();
         this.hgs_per_mutation = hgs_per_mutation;
+        LOG = logClass.getLogger(this.getClass());
 
     }
 
-    public void filterMutation(String[] mutations) throws Exception {
-        for(String mut : mutations){
-            List<String> hgs = hgs_per_mutation.get(mut);
+    public void filterMutation(String[] mutations, String distance) throws Exception {
 
-            ObservableList<ObservableList> filtered_data = FXCollections.observableArrayList();
+        LOG.info("Filtering mutations: include only the mutation: " + Arrays.toString(mutations) +
+                " and all mutations with distance d=" + distance);
 
-            if(hgs!=null && hgs.size()>0 ){
+        // second: filter samples from table with this mutation(s)
+
+        ObservableList<ObservableList> filtered_data = FXCollections.observableArrayList();
+        for(ObservableList row : selectedRows){
+            int index_hg_col = tableControllerUB.getColIndex("Haplogroup");
+            for(String mut : mutations){
+                List<String> hgs = hgs_per_mutation.get(mut);
                 for(String hg : hgs){
-                    for(ObservableList row : selectedRows){
-                        if(row.contains(hg)){
-                            filtered_data.add(row);
-                        }
+                    String hg_without_plus = row.get(index_hg_col).toString().split("\\+")[0];
+                    if(hg_without_plus.equals(hg)){
+                        filtered_data.add(row);
+                        break;
                     }
                 }
-
-                tableControllerUB.updateView(filtered_data);
             }
-//            else {
-//                throw new Exception("Muatation "+ mut + " does not exist!");
-//            }
-
-
         }
+        tableControllerUB.updateView(filtered_data);
+
 
     }
 }

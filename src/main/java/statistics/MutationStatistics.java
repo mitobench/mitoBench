@@ -39,34 +39,39 @@ public class MutationStatistics {
                 -> hgs.add((String)haplogroupCol.getCellData(o)));
 
         for (String hg : hgs){
-            if(!hg.contains("+")){
-                List<String> hgs_pathToRoot = treeHaploController.getPathToRoot(treeHaploController.getTreeItem(hg));
-                List<String> mutations_of_hg = new ArrayList<>();
 
-                for(String hg_in_path : hgs_pathToRoot){
-                    String[] muts_on_path = mutations_per_hg.get(hg_in_path.trim());
-                    if(muts_on_path!=null)
-                        mutations_of_hg.addAll(Arrays.asList(muts_on_path));
-                }
+            String hg_tmp=hg;
+            if(hg.contains("+")) {
+                hg_tmp = hg.split("\\+")[0];
+            }
 
-                String[] mutations = mutations_per_hg.get(hg);
-                mutations_of_hg.addAll(Arrays.asList(mutations));
+            List<String> hgs_pathToRoot = treeHaploController.getPathToRoot(treeHaploController.getTreeItem(hg_tmp));
+            List<String> mutations_of_hg = new ArrayList<>();
 
-                if(mutations!=null){
-                    for(String mutation : mutations_of_hg){
+            for(String hg_in_path : hgs_pathToRoot){
+                String[] muts_on_path = mutations_per_hg.get(hg_in_path.trim());
+                if(muts_on_path!=null)
+                    mutations_of_hg.addAll(Arrays.asList(muts_on_path));
+            }
 
-                        List<String> list = new ArrayList<>();
-                        list.add(hg);
+            String[] mutations = mutations_per_hg.get(hg_tmp);
+            mutations_of_hg.addAll(Arrays.asList(mutations));
 
-                        if(hgs_per_mutation_of_current_data.containsKey(mutation)){
-                            list.addAll(hgs_per_mutation_of_current_data.get(mutation));
-                        }
+            if(mutations!=null){
+                for(String mutation : mutations_of_hg){
 
-                        hgs_per_mutation_of_current_data.put(mutation, list);
+                    List<String> list = new ArrayList<>();
+                    list.add(hg);
 
+                    if(hgs_per_mutation_of_current_data.containsKey(mutation)){
+                        list.addAll(hgs_per_mutation_of_current_data.get(mutation));
                     }
+
+                    hgs_per_mutation_of_current_data.put(mutation, list);
+
                 }
             }
+
         }
     }
 
@@ -88,7 +93,7 @@ public class MutationStatistics {
         tableController.addColumn("Mutation", 0);
         tableController.addColumn("Total Number", 1);
         tableController.addColumn("Frequency", 2);
-        tableController.addColumn("Haplogroup", 3);
+        tableController.addColumn("Haplogroups (unique)", 3);
 
         TableColumn colHG = (TableColumn)tableController.getTable().getColumns().get(3);
         colHG.getStyleClass().add("align-header-left");
@@ -117,4 +122,24 @@ public class MutationStatistics {
 
     }
 
+
+    public TableControllerMutations getTableController() {
+        return tableController;
+    }
+
+    public Logger getLOG() {
+        return LOG;
+    }
+
+    public void setLOG(Logger LOG) {
+        this.LOG = LOG;
+    }
+
+    public HashMap<String, List<String>> getHgs_per_mutation_of_current_data() {
+        return hgs_per_mutation_of_current_data;
+    }
+
+    public void setHgs_per_mutation_of_current_data(HashMap<String, List<String>> hgs_per_mutation_of_current_data) {
+        this.hgs_per_mutation_of_current_data = hgs_per_mutation_of_current_data;
+    }
 }

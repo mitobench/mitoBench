@@ -35,9 +35,11 @@ public class SunburstChartCreator extends AChart{
     private ColorStrategySectorShades colorStrategyShades;
     private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
+    private SunburstLegend myLegend;
 
-    double orgSceneX, orgSceneY;
-    double orgTranslateX, orgTranslateY;
+    private double orgSceneX, orgSceneY;
+    private double orgTranslateX, orgTranslateY;
+
 
     public SunburstChartCreator(Stage stage, TabPane tabPane, LogClass logClass){
         super( null, null, logClass);
@@ -59,6 +61,10 @@ public class SunburstChartCreator extends AChart{
         colorStrategyGroups = new ColorStrategyGroups();
 
         setDragAndMove();
+        myLegend = new SunburstLegend(sunburstView);
+        // pair chart and legend
+        HBox chart_legend = new HBox();
+        chart_legend.getChildren().addAll(sunburstView, myLegend);
         setContextMenu(sunburstBorderPane, tabPane);
 
     }
@@ -98,8 +104,6 @@ public class SunburstChartCreator extends AChart{
     }
 
     private void finishSetup(){
-        SunburstLegend myLegend = new SunburstLegend(sunburstView);
-
         // Example Controls
 
         ToggleButton btnCSShades = new ToggleButton("Shades Color Strategy");

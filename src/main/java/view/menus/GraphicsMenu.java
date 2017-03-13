@@ -90,7 +90,7 @@ public class GraphicsMenu {
     public void initGroupBarChart(){
         LOG.info("Visualize data: Group frequency (Barchart)");
 
-        barChartGrouping = new BarChartGrouping("Group occurrences", "Counts", tabPane, logClass);
+        barChartGrouping = new BarChartGrouping("Number of samples per group", "", tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_group_barchart");
         tab.setText("Bar Chart Grouping");

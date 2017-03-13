@@ -30,7 +30,9 @@ public class HaploStatistics {
     private int number_of_groups;
 
 
-    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController, LogClass LOGClass, GroupController groupController){
+    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController,
+                           LogClass LOGClass, GroupController groupController){
+
         this.tableController = tableController;
         this.groupController = groupController;
         chartController = new ChartController();
