@@ -15,6 +15,7 @@
 \usepackage{epstopdf}	% Included EPS files automatically converted to PDF to include with pdflatex
 \usepackage{lipsum}	% generate non sense text to fill boxes
 \usepackage[export]{adjustbox}
+\usepackage{enumitem}
 
 %%% Global Settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -58,7 +59,7 @@
 %%%%%% Eye Catcher, Title, Authors and University Images %%%%%%%%%%%%%%%%%%%%%%
 \begin{poster}{
 	grid=false,
-	%columns=5,
+	columns=5,
 	% Option is left on true though the eyecatcher is not used. The reason is
 	% that we have a bit nicer looking title and author formatting in the headercol
 	% this way
@@ -70,14 +71,14 @@
 	% Only simple background color used, no shading, so boxColorTwo isn't necessary
 	boxColorOne=boxcolor,
 	headershape=roundedright,
-	headerfont=\Large\sf\bf,
+	headerfont=\large\sf\bf,
 	textborder=rectangle,
 	headerborder=open,
   	boxshade=plain,
 	background=shadetb,
 	bgColorOne=white,
 	bgColorTwo=blue!10,
-	headerheight=7cm
+	headerheight=6.5cm
 }
 %%% Eye Cacther %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
@@ -118,7 +119,7 @@
 %	Introduction
 %----------------------------------------------------------------------------------------
 
-\headerbox{Introduction}{name=introduction, row=0, column=0, span=3}{
+\headerbox{Introduction}{name=introduction, row=0, column=0, span=5}{
 
 Despite the availability of modern next generation sequencing technologies and
 therefore nuclear human genomes, the sequencing and analysis of mitochondrial DNA
@@ -147,13 +148,18 @@ such as BEAST, Arlequin and others.
 %	MitoDB
 %----------------------------------------------------------------------------------------
 
-\headerbox{MitoDB}{name=mitodb, row=1, column=0, span=3, below=introduction}{
+\headerbox{MitoDB}{name=mitodb, row=1, column=3, span=2, below=introduction}{
+
 	\begin{itemize}
 		\item Web-Frontend with Vaadin Java Framework
-		\item Backend with PostgreSQL, providing sequence information and meta-data (SQL)
+		\item Backend with PostgreSQL, providing sequence\\ information and meta-data (SQL)
 		\item Curated data upload with metadata
 		\item Retrieval possible through WebUI and mitoBench
 	\end{itemize}
+
+
+
+
 }
 
 
@@ -161,10 +167,10 @@ such as BEAST, Arlequin and others.
 %  Workflow
 %----------------------------------------------------------------------------------------
 
-
+%
 %\headerbox{Workflow}{name=workflow, column=0, below=introduction, bottomaligned=mitodb}{
 %\begin{center}
-%		\includegraphics[width=0.67\textwidth]{figures/workflow_yed.jpg}
+%		\includegraphics[width=0.5\textwidth]{figures/workflow_yed.jpg}
 %\end{center}
 %}
 
@@ -175,14 +181,17 @@ such as BEAST, Arlequin and others.
 %	References
 %----------------------------------------------------------------------------------------
 
-\headerbox{References}{name=references, column=0, span=2, above=bottom}{
-	\footnotesize
-	Laurent Excoffier and Heidi EL Lischer. Arlequin suite ver 3.5: a new series of programs to perform population
-genetics analyses under linux and windows. \textit{Molecular ecology resources}, 10(3):564-567, 2010.\\
-\\
-Hansi Weissensteiner, Dominic Pacher, Anita Kloss-Brandst\"atter, Lukas Forer, G\"unther Specht, Hans-J\"urgen
+\headerbox{References}{name=references, column=0, span=3, above=bottom}{
+	\footnotesize%\tiny
+	\begin{itemize}[leftmargin=*]
+		\item Alexei J. Drummond, et al. "Bayesian phylogenetics with BEAUti and the BEAST 1.7." Molecular biology and evolution 29.8 (2012): 1969-1973.
+		\item Laurent Excoffier and Heidi EL Lischer. Arlequin suite ver 3.5: a new series of programs to perform population
+genetics analyses under linux and windows. \textit{Molecular ecology resources}, 10(3):564-567, 2010.
+		\item Hansi Weissensteiner, Dominic Pacher, Anita Kloss-Brandst\"atter, Lukas Forer, G\"unther Specht, Hans-J\"urgen
 Bandelt, Florian Kronenberg, Antonio Salas, and Sebastian Sch\"onherr. Haplogrep 2: mitochondrial haplogroup
 classification in the era of high-throughput sequencing. \textit{Nucleic acids research}, page gkw233, 2016.
+	\end{itemize}
+
 
 
 	%\begingroup
@@ -199,7 +208,7 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 %	Contact
 %----------------------------------------------------------------------------------------
 
-\headerbox{Contact}{name=contact, column=2, aligned=references,above=bottom}{
+\headerbox{Contact}{name=contact, column=3, span=2, aligned=references,above=bottom}{
 	\begin{description}\compresslist
 		\item Judith Neukamm
 		\item University of T\"ubingen
@@ -214,7 +223,7 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 %	Conclusions
 %----------------------------------------------------------------------------------------
 
-\headerbox{Conclusion}{name=conclusions,row=0, column=2,  below=mitodb, above=references}{
+\headerbox{Conclusion}{name=conclusions,row=0, column=3, span=2,  below=mitodb, above=references}{
 	\textbf{MitoBench}
 	\begin{itemize}
 		\item Easy file handling and file conversion
@@ -228,11 +237,9 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 		\item Curated database
 		\item accessible via mitoBench and web interface
 	\end{itemize}
-
-\bigskip
-\begin{center}
-\includegraphics[width=0.67\textwidth]{figures/workflow_yed.jpg}
-\end{center}
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{figures/workflow_yed.jpg}
+	\end{center}
 	
 }
 
@@ -244,7 +251,7 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 %----------------------------------------------------------------------------------------
 
 
-\headerbox{MitoBench}{name=mitobench, column=0, span=2,below=mitodb, bottomaligned=conclusions}{
+\headerbox{MitoBench}{name=mitobench, column=0, span=3,below=introduction, bottomaligned=conclusions}{
 \begin{minipage}[t]{0.5\textwidth}
 	\textbf{Data import and export}\\
 	\includegraphics[width=0.8\textwidth, left]{figures/import_export.jpg}
@@ -252,6 +259,7 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 \hspace{0.5em}
 \begin{minipage}[t]{0.5\textwidth}
 	\textbf{Data representation}\\
+	\\
 	\includegraphics[width=0.8\textwidth, left]{figures/load_generic.png}
 \end{minipage}
 
@@ -259,7 +267,7 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 
 \begin{minipage}[t]{0.5\textwidth}
 \textbf{	Data grouping}
-	\begin{itemize}
+	\begin{itemize}[leftmargin=*]
 		\item interested in behaviour of different groups\\
 		$\rightarrow$ Group data by feature
 		\item internal grouping (columns not sorted)
@@ -268,7 +276,7 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 \hspace{0.5em}
 \begin{minipage}[t]{0.5\textwidth}
 \textbf{Data filtering / Statistics}
-	\begin{itemize}
+	\begin{itemize}[leftmargin=*]
 		\item Haplogroup filtering / frequencies
 		\item Mutation filtering / frequencies
 	\end{itemize}
@@ -277,16 +285,35 @@ classification in the era of high-throughput sequencing. \textit{Nucleic acids r
 \vspace{1em}
 
 \begin{minipage}[t]{0.5\textwidth}
-\textbf{Data visualization}\\
+\textbf{Data visualizations}\\
 %\begin{center}
-		\includegraphics[width=0.9\textwidth, left]{figures/stackedBarchart.png}
+\\
+		\includegraphics[width=\textwidth, left]{figures/stackedBarchart.png}
 %\end{center}
 \end{minipage}
 \hspace{0.5em}
 \begin{minipage}[t]{0.5\textwidth}
-\textbf{Data visualization}\\
+\textbf{}\\
+\\
 	%\begin{center}
 		\includegraphics[width=0.9\textwidth, left]{figures/profile.png}
+	%\end{center}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{}\\
+%\begin{center}
+		\includegraphics[width=0.85\textwidth, center]{figures/sunburst2.png}
+%\end{center}
+\end{minipage}
+\hspace{0.5em}
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{}\\
+\\
+	%\begin{center}
+		\includegraphics[width=0.9\textwidth, left]{figures/group_sizes.png}
 	%\end{center}
 \end{minipage}
 
