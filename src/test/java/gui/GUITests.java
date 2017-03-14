@@ -126,6 +126,15 @@ public class GUITests extends FxRobot implements GUITestValidator {
         assertEquals(4, haploStatistics.getNumber_of_groups());
         assertEquals(tableController, haploStatistics.getTableController());
 
+
+        //mutationStatistics.calculateMutationFrequencies(treeController.getTree().getMutations_per_hg(),
+        //        tableController.getTableColumnByName("Haplogroup"), tableController.getTable(), treeController);
+
+        //assertEquals(62, mutationStatistics.getHgs_per_mutation_of_current_data().get("C15452a").size());
+
+
+
+
     }
 
     @Test

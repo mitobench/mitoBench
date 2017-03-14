@@ -9,6 +9,7 @@ import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
 import io.dialogues.Import.ImportDialogueAlternative;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
+import io.fileConversionPGDSpider.SpiderCoversion;
 import io.reader.*;
 import io.writer.ImageWriter;
 import io.writer.StatisticsWriter;
@@ -192,6 +193,26 @@ public class FileMenu {
         });
 
 
+
+
+        /*
+                        EXPORT WITH PGDSPIDER
+
+         */
+
+        MenuItem exportFileSpider = new MenuItem("Convert files with PGDSpider");
+        exportFileSpider.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+                    SpiderCoversion spiderCoversion = new SpiderCoversion();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
         MenuItem exportCurrStats = new MenuItem("Export statistics");
         exportCurrStats.setId("#exportCurrentStats");
         exportCurrStats.setOnAction(new EventHandler<ActionEvent>() {
@@ -226,7 +247,7 @@ public class FileMenu {
             }
         });
 
-        menuFile.getItems().addAll(importFile, importFromDB, exportFile, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(importFile, importFromDB, exportFile, exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
     public void openProjectFile(File f){
@@ -235,7 +256,7 @@ public class FileMenu {
             String absolutePath = f.getAbsolutePath();
 
             //Input is FastA
-            if (absolutePath.endsWith(".fasta") | absolutePath.endsWith("*.fas") | absolutePath.endsWith("*.fa")) {
+            if (absolutePath.endsWith(".fasta") || absolutePath.endsWith(".fas") || absolutePath.endsWith(".fa")) {
 
                 MultiFastAInput multiFastAInput = null;
                 try {
