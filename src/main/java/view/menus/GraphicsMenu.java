@@ -28,6 +28,7 @@ import java.util.List;
 public class GraphicsMenu {
 
 
+    private MitoBenchWindow mito;
     private Menu menuGraphics;
     private TableControllerUserBench tableController;
     private BarPlotHaplo barPlotHaplo;
@@ -53,6 +54,7 @@ public class GraphicsMenu {
 
     public GraphicsMenu(MitoBenchWindow mitoBenchWindow){
 
+        mito = mitoBenchWindow;
         menuGraphics = new Menu("Graphics");
         menuGraphics.setId("graphicsMenu");
         treeController = mitoBenchWindow.getTreeController();
@@ -309,7 +311,7 @@ public class GraphicsMenu {
                         ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
                         HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
 
-                        profilePlot.create(tableController, chartController, treeController, statsTabpane, scene, logClass);
+                        profilePlot.create(tableController, treeController, chartController, logClass, scene, statsTabpane);
 
 
 

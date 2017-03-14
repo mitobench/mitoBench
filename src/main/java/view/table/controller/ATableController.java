@@ -206,9 +206,11 @@ public abstract class ATableController {
      * @param newItems
      */
     public void updateView(ObservableList<ObservableList> newItems){
-        data_copy = copyData();
+        ObservableList<ObservableList> new_items_copy = FXCollections.observableArrayList();
+        new_items_copy = copyData(newItems);
+        data_copy = copyData(data);
         data.removeAll(data);
-        data.addAll(newItems);
+        data.addAll(new_items_copy);
         this.table.setItems(data);
     }
 
@@ -217,10 +219,10 @@ public abstract class ATableController {
      * copy view.data to always allow resetting of table
      * to old/initial state
      */
-    public ObservableList<ObservableList> copyData(){
+    public ObservableList<ObservableList> copyData(ObservableList<ObservableList> data_to_copy){
         ObservableList<ObservableList> copy = FXCollections.observableArrayList();
         if(copy.size()==0){
-            for(ObservableList item : data){
+            for(ObservableList item : data_to_copy){
                 copy.add(item);
             }
         }

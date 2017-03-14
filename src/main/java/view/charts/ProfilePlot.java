@@ -6,7 +6,9 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
+import view.MitoBenchWindow;
 import view.groups.GroupController;
+import view.table.controller.ATableController;
 import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
@@ -43,8 +45,8 @@ public class ProfilePlot extends AChart {
 
 
 
-    public void create(TableControllerUserBench tableController, ChartController chartController, HaplotreeController treeController,
-                       TabPane statsTabpane, Scene scene, LogClass logClass){
+    public void create(TableControllerUserBench tableController, HaplotreeController treeController,
+                       ChartController chartController, LogClass logClass, Scene scene, TabPane statsTabpane){
 
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] selection_haplogroups = cols[0];
@@ -94,7 +96,7 @@ public class ProfilePlot extends AChart {
         addListener();
         setMaxBoundary();
 
-        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass, gc);
+        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
 
         haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
         TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);

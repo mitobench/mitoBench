@@ -43,6 +43,7 @@ public class TableMenu {
         getSelectedRows.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try{
+                    LOG.info("Get only selected rows.");
                     tableController.updateView(tableController.getTable().getSelectionModel().getSelectedItems());
                 } catch (Exception e){
                     e.printStackTrace();
@@ -61,6 +62,7 @@ public class TableMenu {
         selectAllRows.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try{
+                    LOG.info("Select all rows in user data table.");
                     tableController.getTable().getSelectionModel().selectAll();
                 } catch (Exception e){
                     e.printStackTrace();
@@ -76,11 +78,12 @@ public class TableMenu {
          */
 
         MenuItem resetTable = new MenuItem("Reset table");
+        resetTable.setId("reset_item");
         resetTable.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try{
                     tableController.resetTable();
-                    LOG.info("Reset data table.");
+                    LOG.info("Reset user data table.");
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -98,6 +101,7 @@ public class TableMenu {
         cleanTable.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try{
+                    LOG.info("Remove all data from data table.");
                     // clean view.data model
                     tableController.getData().removeAll(tableController.getData());
                     // clean table view
@@ -107,7 +111,6 @@ public class TableMenu {
                     tableController.getTable().getColumns().removeAll(tableController.getTable().getColumns());
                     tableController.getGroupController().clear();
                     groupController.clearGrouping();
-                    LOG.info("Remove all data from data table.");
                 } catch (Exception e){
                     e.printStackTrace();
                 }

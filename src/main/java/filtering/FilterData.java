@@ -43,8 +43,8 @@ public class FilterData {
             for(String mut : mutations){
                 List<String> hgs = hgs_per_mutation.get(mut);
                 for(String hg : hgs){
-                    String hg_without_plus = row.get(index_hg_col).toString().split("\\+")[0];
-                    if(hg_without_plus.equals(hg)){
+                    //String hg_without_plus = row.get(index_hg_col).toString().split("\\+")[0];
+                    if(row.get(index_hg_col).equals(hg)){
                         filtered_data.add(row);
                         break;
                     }

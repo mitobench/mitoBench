@@ -230,6 +230,7 @@ public class MitoBenchWindow extends Application{
         Button addAllBtn = new Button("Add all");
         Button addSelectedBtn = new Button("Add selected");
         Button disableBtn = new Button("Disable DB table");
+        disableBtn.setId("btn_disable_db_table");
         tableControllerDB.addButtonFunctionality(addAllBtn, addSelectedBtn, disableBtn, this);
 
         buttonHBox.getChildren().addAll(addAllBtn, addSelectedBtn, disableBtn);

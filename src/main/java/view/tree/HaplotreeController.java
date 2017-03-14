@@ -64,14 +64,6 @@ public class HaplotreeController {
         treeMap_leaf_to_root = new HashMap<>();
         node_to_children = new HashMap<>();
 
-        treeSearchPane = new VBox();
-        treeSearchPane.setId("treeView-inner-tree");
-        treeSearchPane.setPadding(new Insets(10));
-        treeSearchPane.setAlignment(Pos.TOP_LEFT);
-        treeSearchPane.setStyle("-fx-background-color:#333333,#b1afb0;-fx-background-insets:0,1.5;-fx-opacity:.92;-fx-background-radius:0px 0px 0px 5px;");
-        treeSearchPane.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()-ACTION_BOX_HGT);
-        treeSearchPane.setSpacing(10);
-
 
         searchLbl = new Label("Haplo tree");
         searchLbl.setId("treeViewOpenCloseLabel");
@@ -161,6 +153,14 @@ public class HaplotreeController {
 
         Label haploLabel = new Label("Comma separated list of haplogroups:");
         infolabel.setMinSize(20, 30);
+
+        treeSearchPane = new VBox();
+        treeSearchPane.setId("treeView-inner-tree");
+        treeSearchPane.setPadding(new Insets(10));
+        treeSearchPane.setAlignment(Pos.TOP_LEFT);
+        treeSearchPane.setStyle("-fx-background-color:#333333,#b1afb0;-fx-background-insets:0,1.5;-fx-opacity:.92;-fx-background-radius:0px 0px 0px 5px;");
+        treeSearchPane.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()-ACTION_BOX_HGT);
+        treeSearchPane.setSpacing(10);
 
         treeSearchPane.getChildren().addAll(infolabel, tree.getTree(), haploLabel, searchFieldListHaplogroup , applyBtn);
 
@@ -342,7 +342,5 @@ public class HaplotreeController {
         return treeMap_leaf_to_root;
     }
 
-    public VBox getStackPaneSearchWithList() {
-        return treeSearchPane;
-    }
+    public VBox getStackPaneSearchWithList() { return treeSearchPane; }
 }

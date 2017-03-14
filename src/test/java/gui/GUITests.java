@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
 import statistics.HaploStatistics;
+import statistics.MutationStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
@@ -48,6 +49,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     private TreeHaplo treeHaplo;
     private HaplotreeController treeController;
     private HaploStatistics haploStatistics;
+    private MutationStatistics mutationStatistics;
     private LogClass logClass;
     private GUITestFiles testFiles;
 
@@ -79,7 +81,8 @@ public class GUITests extends FxRobot implements GUITestValidator {
         treeController = new HaplotreeController(tableController, logClass);
         treeController.configureSearch(null);
 
-        haploStatistics = new HaploStatistics(tableController, treeController, logClass, groupController);
+        haploStatistics = new HaploStatistics(tableController, treeController, logClass);
+        mutationStatistics = new MutationStatistics(logClass);
 
         testFiles = new GUITestFiles();
         setupApplication(MitoBenchWindow.class);
@@ -89,7 +92,6 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-        steps.part1TreeViewTests();
         steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
         steps.part3AboutDialogueTests();
         steps.part4BasicStuff();
@@ -97,6 +99,8 @@ public class GUITests extends FxRobot implements GUITestValidator {
         //steps.partTestGrouping();
         steps.part6Statistics();
         steps.part7CreatePlots();
+        steps.partFilterMutatuions();
+        steps.part1TreeViewTests();
         steps.part8MenuInteraction();
         //steps.closeWindow();
         //steps.part0SetLogDir();

@@ -82,8 +82,10 @@ public class GUITestSteps {
             robot.clickOn("#filterWithTree");
 
             verifyThat("#treeFilterDialogue", isVisible());
-            robot.clickOn("#treeviewSearchField").write("U,V,X,W");
+            robot.clickOn("#treeviewSearchField").write("L0,L1");
             robot.push(KeyCode.ENTER);
+
+            robot.clickOn("#tableMenu").clickOn("#reset_item");
 
 //
             robot.clickOn("#menuEdit");
@@ -184,7 +186,7 @@ public class GUITestSteps {
 
     public void part6Statistics() {
 
-        step("Calculate Statistics", () -> {
+        step("Calculate HG Statistics", () -> {
             robot.clickOn("#menu_statistics");
             robot.clickOn("#toolsMenu_stats_hg");
             verifyThat("#statistics_popup", isVisible());
@@ -195,6 +197,13 @@ public class GUITestSteps {
             verifyThat("#tab_statistics", isVisible());
 
         });
+
+        step("Calculate Mutation Statistics", () -> {
+            robot.clickOn("#menu_statistics");
+            robot.clickOn("#toolsMenu_mutation_freq");
+
+        });
+
     }
 
 
@@ -215,10 +224,25 @@ public class GUITestSteps {
             verifyThat("#dbtable" , isVisible());
 
             robot.clickOn("#dbtable").drag("#dbtable").dropTo("#mainEntryTable");
+            robot.clickOn("#btn_disable_db_table");
 
         });
 
     }
+
+
+    public void partFilterMutatuions() {
+        step("Set Filter Mutations", () -> {
+            robot.clickOn("#menuEdit").clickOn("#filterItem").clickOn("#filterWithMutation");
+            verifyThat("#mutationFilterDialogue", isVisible());
+
+            robot.clickOn("#field_mutation").write("C13914a").clickOn("#btnApplyMutDialogue");
+            robot.clickOn("#tableMenu").clickOn("#reset_item");
+
+        });
+    }
+
+
 
     public void part0SetLogDir() {
         step("Set Log Directory", () -> {

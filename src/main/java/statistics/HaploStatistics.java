@@ -22,7 +22,6 @@ import java.util.*;
 public class HaploStatistics {
 
 
-    private final GroupController groupController;
     private TableControllerUserBench tableController;
     private TableControllerMutations tableControllerMutations;
     private ChartController chartController;
@@ -31,10 +30,9 @@ public class HaploStatistics {
 
 
     public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController,
-                           LogClass LOGClass, GroupController groupController){
+                           LogClass LOGClass){
 
         this.tableController = tableController;
-        this.groupController = groupController;
         chartController = new ChartController();
         chartController.init(tableController, treeHaploController.getTreeMap());
         tableControllerMutations = new TableControllerMutations(LOGClass);
