@@ -155,7 +155,7 @@ public class StackedBar extends AChart{
     private void createSubBarPlot(XYChart.Data<String, Number> item) throws MalformedURLException {
         String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
 
-        graphicsMenu.initHaploBarchart();
+        graphicsMenu.initHaploBarchart("(sub-haplogroups of HG "+ hg +")");
         TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
         // filter haplo column, include only subgroups of selected Haplogroup
         List<String> sub_hgs = graphicsMenu.getTreeController().getTreeMap().get(hg);

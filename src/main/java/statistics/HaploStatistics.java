@@ -9,7 +9,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import view.charts.ChartController;
 import view.charts.ProfilePlot;
-import view.groups.GroupController;
 import view.table.controller.TableControllerMutations;
 import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;

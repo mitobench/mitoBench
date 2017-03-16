@@ -51,7 +51,7 @@ public class SunburstChartCreator extends AChart{
         this.getBorderPane().setId("borderpane_sunburst");
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
-        sunburstView.setMinWidth(Screen.getPrimary().getVisualBounds().getWidth()/3);
+        //sunburstView.setMinWidth(Screen.getPrimary().getVisualBounds().getWidth()/3);
         File f = new File("src/main/java/view/charts/css/sunburstview.css");
         stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
@@ -99,8 +99,8 @@ public class SunburstChartCreator extends AChart{
 
         // Set the view.data as root item
         sunburstView.setRootItem(rootData);
-        sunburstView.setColorStrategy(colorStrategyGroups);
-        //sunburstView.setColorStrategy(colorStrategyShades);
+        //sunburstView.setColorStrategy(colorStrategyGroups);
+        sunburstView.setColorStrategy(colorStrategyShades);
     }
 
     private void finishSetup(){
@@ -158,12 +158,17 @@ public class SunburstChartCreator extends AChart{
         Slider zoomSlider = new Slider();
         zoomSlider.setMin(0.1);
         zoomSlider.setMax(3);
-        zoomSlider.setValue(sunburstView.getScaleX());
+        zoomSlider.setValue(sunburstView.getScaleX()/1.5);
+        //zoomSlider.setValue(0.5);
         zoomSlider.setShowTickLabels(true);
         zoomSlider.setShowTickMarks(true);
         zoomSlider.setMajorTickUnit(0.5);
         zoomSlider.setMinorTickCount(1);
         zoomSlider.setBlockIncrement(0.1);
+
+        // set initial size
+        sunburstView.setScaleX(zoomSlider.getValue());
+        sunburstView.setScaleY(zoomSlider.getValue());
 
         zoomSlider.valueProperty().addListener(x -> {
             toolbar.toFront();
@@ -272,5 +277,7 @@ public class SunburstChartCreator extends AChart{
         return sunburstBorderPane;
     }
 
-
+    public SunburstView getSunburstView() {
+        return sunburstView;
+    }
 }

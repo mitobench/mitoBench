@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
@@ -17,6 +18,7 @@ import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import java.net.MalformedURLException;
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +52,7 @@ public class GraphicsMenu {
     private ColorSchemeStackedBarChart colorScheme;
     private Logger LOG;
     private LogClass logClass;
+    private int profilePlotID=1;
 
 
     public GraphicsMenu(MitoBenchWindow mitoBenchWindow){
@@ -75,14 +78,14 @@ public class GraphicsMenu {
     }
 
 
-    public void initHaploBarchart() throws MalformedURLException {
+    public void initHaploBarchart(String titlePart) throws MalformedURLException {
         LOG.info("Visualize data: Haplogroup frequency (Barchart)");
 
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup occurrences", "Counts", stage, chartController,
+        this.barPlotHaplo = new BarPlotHaplo("Haplogroup occurrences " + titlePart, "Counts", stage, chartController,
                 tableController, logClass);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
-        tab.setText("Bar Chart haplogroups");
+        tab.setText("Haplogroup occurrences");
         tab.setContent(barPlotHaplo.getBarChart());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
@@ -108,7 +111,7 @@ public class GraphicsMenu {
         this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, this);
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");
-        tab.setText("Bar Chart per group");
+        tab.setText("Haplogroup frequency per group");
         tab.setContent(stackedBar.getSbc());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
@@ -127,7 +130,6 @@ public class GraphicsMenu {
         tab.setContent(sunburstChart.getBorderPane());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
-
 
     }
 
@@ -150,15 +152,15 @@ public class GraphicsMenu {
 
     private void initProfilePlot(){
         LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
-
         profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane,
-                logClass, groupController);
+                logClass, profilePlotID);
         Tab tab = new Tab();
-        tab.setId("tab_profilePlot");
-        tab.setText("Profile Plot");
+        tab.setId("tab_profilePlot_" + profilePlotID);
+        tab.setText("Profile Plot (" + profilePlotID + ")");
         tab.setContent(profilePlot.getPlot());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
+        profilePlotID++;
 
     }
 
@@ -195,7 +197,7 @@ public class GraphicsMenu {
                         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
 
                         if(haplo_col!=null){
-                            initHaploBarchart();
+                            initHaploBarchart("(all data)");
                             createHaploBarchart(haplo_col, null);
                         }
                     }
@@ -312,8 +314,6 @@ public class GraphicsMenu {
                         HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
 
                         profilePlot.create(tableController, treeController, chartController, logClass, scene, statsTabpane);
-
-
 
                     }
 

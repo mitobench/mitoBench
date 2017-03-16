@@ -1,6 +1,8 @@
 package view.charts;
 
 import Logging.LogClass;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -13,6 +15,7 @@ import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import java.io.File;
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,16 +25,16 @@ import java.util.List;
  */
 public class ProfilePlot extends AChart {
 
-    private final GroupController gc;
+    private final int id;
+    private final TabPane tabpaneViz;
     LineChart<String,Number> profilePlot = new LineChart<String,Number>(xAxis,yAxis);
     List<XYChart.Series> seriesList = new ArrayList<>();
     int maxVal = 0;
 
 
-    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass, GroupController groupController){
+    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass, int uniqueID){
         super(lable_xaxis, label_yaxis, logClass);
 
-        gc = groupController;
         // set autoranging to false to allow manual settings
 
         yAxis.setLowerBound(0);
@@ -40,7 +43,9 @@ public class ProfilePlot extends AChart {
         profilePlot.setTitle(title);
         //profilePlot.setStyle("-fx-font-size: " + 10 + "px;");
 
-        setContextMenu(profilePlot, tabpane);
+        id = uniqueID;
+        tabpaneViz = tabpane;
+        setContextMenu(profilePlot, tabpaneViz);
     }
 
 
@@ -94,18 +99,26 @@ public class ProfilePlot extends AChart {
             profilePlot.getData().add(series);
 
         addListener();
+
         setMaxBoundary();
 
-        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
+        if(tableController.getGroupController().isGroupingExists()) {
 
-        haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
-        TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
-        haploStatistics.addListener(table, this);
-        Tab tab = new Tab();
-        tab.setId("tab_table_stats");
-        tab.setText("Count statistics");
-        tab.setContent(table);
-        statsTabpane.getTabs().add(tab);
+            HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
+
+            haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
+            TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
+            haploStatistics.addListener(table, this);
+            Tab tab = new Tab();
+            tab.setId("tab_table_stats_" + id);
+            tab.setText("Count statistics (" + id + ")");
+            tab.setContent(table);
+            statsTabpane.getTabs().add(tab);
+            statsTabpane.getSelectionModel().select(tab);
+        }
+
+        addTabPaneListener(statsTabpane, tabpaneViz);
+        addTabPaneListener(tabpaneViz, statsTabpane);
     }
 
     /**
@@ -143,6 +156,29 @@ public class ProfilePlot extends AChart {
     }
 
 
+
+    public void addTabPaneListener(TabPane pane_current, TabPane pane_to_update){
+        pane_current.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
+                // parse IDs
+                String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
+
+                for(Tab tab : pane_to_update.getTabs()){
+                    String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
+                    if(id_tab_current.equals(id_to_update)){
+                        pane_to_update.getSelectionModel().select(tab);
+                    }
+                }
+
+            }
+        });
+
+    }
+
+
+
     /*
             Getter and Setter
      */
@@ -159,6 +195,8 @@ public class ProfilePlot extends AChart {
             }
         }
     }
+
+
 
 
 }
