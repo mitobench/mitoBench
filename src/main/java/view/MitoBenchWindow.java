@@ -139,7 +139,7 @@ public class MitoBenchWindow extends Application{
         FileMenu fileMenu = new FileMenu( statisticsMenu, this);
         GroupMenu groupMenu = new GroupMenu(this);
         TableMenu tableMenu = new TableMenu(this);
-        GraphicsMenu graphicsMenu = new GraphicsMenu(this);
+        VisualizationMenu graphicsMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),

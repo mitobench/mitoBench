@@ -10,8 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
-import view.menus.GraphicsMenu;
+import view.menus.VisualizationMenu;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -26,9 +25,9 @@ public class StackedBar extends AChart{
     private StackedBarChart<String, Number> sbc;
     private TabPane tabPane;
     private final Glow glow = new Glow(.5);
-    private GraphicsMenu graphicsMenu;
+    private VisualizationMenu graphicsMenu;
 
-    public StackedBar(String title, TabPane vBox, GraphicsMenu graphicsMenu) {
+    public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
         tabPane = vBox;

@@ -7,18 +7,17 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.charts.*;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
 import view.groups.GroupController;
+import view.map.MapViewController;
 import view.table.controller.TableControllerUserBench;
 import view.tree.HaplotreeController;
 
 import java.net.MalformedURLException;
-import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.List;
 /**
  * Created by neukamm on 23.11.16.
  */
-public class GraphicsMenu {
+public class VisualizationMenu {
 
 
     private MitoBenchWindow mito;
@@ -53,12 +52,13 @@ public class GraphicsMenu {
     private Logger LOG;
     private LogClass logClass;
     private int profilePlotID=1;
+    private MapViewController mapview;
 
 
-    public GraphicsMenu(MitoBenchWindow mitoBenchWindow){
+    public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
 
         mito = mitoBenchWindow;
-        menuGraphics = new Menu("Graphics");
+        menuGraphics = new Menu("Visualization");
         menuGraphics.setId("graphicsMenu");
         treeController = mitoBenchWindow.getTreeController();
         tableController = mitoBenchWindow.getTableControllerUserBench();
@@ -161,6 +161,28 @@ public class GraphicsMenu {
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
         profilePlotID++;
+
+    }
+
+
+    private void initMap(String title){
+        LOG.info("Visualize data: Visualize all samples on map");
+
+        mapview = new MapViewController(tableController.getTableColumnByName("ID"),
+                tableController.getTableColumnByName("location"),
+                tableController.getTable().getItems());
+        //mapview.createMarkers();
+
+
+            Tab tab = new Tab();
+            tab.setId("tab_map");
+            tab.setText("Map");
+            tab.setContent(mapview.getMapView());
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
+
+
+
 
     }
 
@@ -415,14 +437,27 @@ public class GraphicsMenu {
             }
         });
 
+        Menu maps = new Menu("Map view");
+        maps.setId("maps_menu");
+        MenuItem mapsItem = new MenuItem("Visualize data on map");
+        mapsItem.setId("maps_item");
+        mapsItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                if(!tableController.isTableEmpty()){
+                    initMap("Map");
+                }
+
+            }
+        });
+
 
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
         haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieCcart);
+        maps.getItems().add(mapsItem);
 
-
-        menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, new SeparatorMenuItem(), clearPlotBox);
+        menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, maps, new SeparatorMenuItem(), clearPlotBox);
     }
 
     public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {

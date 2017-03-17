@@ -615,4 +615,13 @@ public abstract class ATableController {
     }
 
 
+    public boolean isTableEmpty(){
+        if(table.getItems()!=null && table.getItems().size()>0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
 }
