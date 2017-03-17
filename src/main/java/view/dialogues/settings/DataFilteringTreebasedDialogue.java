@@ -4,7 +4,7 @@ import Logging.LogClass;
 import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
 import view.table.controller.TableControllerUserBench;
-import view.tree.HaplotreeController;
+import controller.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -26,8 +26,8 @@ public class DataFilteringTreebasedDialogue extends APopupDialogue{
     private void addComponents(MitoBenchWindow mito) throws ParserConfigurationException, SAXException, IOException {
 
         treeController = mito.getTreeController();
-        treeController.configureSearch(this);
-        dialogGrid.add(treeController.getStackPaneSearchWithList(), 0,0);
+        treeController.setKeyEvents(this);
+        dialogGrid.add(treeController.getTreeView().getTreeSearchPane(), 0,0);
     }
 
 }

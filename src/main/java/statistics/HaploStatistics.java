@@ -11,7 +11,7 @@ import view.charts.ChartController;
 import view.charts.ProfilePlot;
 import view.table.controller.TableControllerMutations;
 import view.table.controller.TableControllerUserBench;
-import view.tree.HaplotreeController;
+import controller.HaplotreeController;
 
 import java.util.*;
 

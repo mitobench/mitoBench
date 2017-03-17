@@ -56,7 +56,7 @@ public class IOProfileTest {
 
         String structure_tmp =
                           "\n\n"+"[[Structure]]" + "\n\n"
-                        + "StructureName=\"MitoBench Exported Structure\"\n"
+                        + "StructureName=\"MitoBenchStarter Exported Structure\"\n"
                         + "NbGroups="+groups+"\n\n\n"
                         + "Group={\n"+"\""+ "Ancient" +"\""+ "\n" +"}" + "\n\n"
                         + "Group={\n"+"\""+ "Egyptian" +"\""+ "\n" +"}" + "\n\n";

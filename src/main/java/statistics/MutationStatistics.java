@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import org.apache.log4j.Logger;
 import view.table.controller.TableControllerMutations;
-import view.tree.HaplotreeController;
+import controller.HaplotreeController;
 
 import java.io.File;
 import java.util.*;

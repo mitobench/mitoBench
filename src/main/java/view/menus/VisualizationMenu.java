@@ -13,9 +13,10 @@ import view.MitoBenchWindow;
 import view.charts.*;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
 import view.groups.GroupController;
+import view.map.MapView;
 import view.map.MapViewController;
 import view.table.controller.TableControllerUserBench;
-import view.tree.HaplotreeController;
+import controller.HaplotreeController;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class VisualizationMenu {
     private Logger LOG;
     private LogClass logClass;
     private int profilePlotID=1;
-    private MapViewController mapview;
+    private MapViewController mapViewController;
 
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
@@ -168,16 +169,19 @@ public class VisualizationMenu {
     private void initMap(String title){
         LOG.info("Visualize data: Visualize all samples on map");
 
-        mapview = new MapViewController(tableController.getTableColumnByName("ID"),
+
+        MapView mapView = new MapView();
+        mapViewController = new MapViewController(tableController.getTableColumnByName("ID"),
                 tableController.getTableColumnByName("location"),
                 tableController.getTable().getItems());
-        //mapview.createMarkers();
+        mapViewController.setMapView(mapView);
+        mapViewController.createMarkers();
 
 
             Tab tab = new Tab();
             tab.setId("tab_map");
             tab.setText("Map");
-            tab.setContent(mapview.getMapView());
+            tab.setContent(mapViewController.getMapView().getMapView());
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
 

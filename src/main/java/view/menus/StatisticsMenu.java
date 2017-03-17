@@ -15,7 +15,7 @@ import view.dialogues.settings.HGStatisticsPopupDialogue;
 import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
 import statistics.HaploStatistics;
-import view.tree.HaplotreeController;
+import controller.HaplotreeController;
 
 import java.io.IOException;
 

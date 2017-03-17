@@ -2,6 +2,7 @@ package view;
 
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
+import controller.HaplotreeController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -19,7 +20,7 @@ import view.groups.GroupController;
 import view.menus.*;
 import view.table.controller.TableControllerDB;
 import view.table.controller.TableControllerUserBench;
-import view.tree.HaplotreeController;
+import view.tree.TreeView;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class MitoBenchWindow extends Application{
     private VBox pane_table_DB;
     private Button enableDBBtn;
     private LogClass logClass;
+    private TreeView treeView;
 
 
     @Override
@@ -57,18 +59,8 @@ public class MitoBenchWindow extends Application{
         logClass.updateLog4jConfiguration(System.getProperty("user.dir") + "/mito_log_tmp.log");
         continueInit(primaryStage);
         overrideCloseSettings();
-    }
 
-    private void overrideCloseSettings() {
-        Platform.setImplicitExit(false);
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                we.consume();
-                LoggerSettingsDialogue loggerSettingsDialogue =
-                        new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
-            }
-        });
     }
 
 
@@ -82,6 +74,7 @@ public class MitoBenchWindow extends Application{
         pane_root.setId("mainBorderPane");
         scene = new Scene(pane_root);
 
+        // set stage properties
         primaryStage = stage;
         primaryStage.setTitle("Mito Bench");
         primaryStage.setScene(scene);
@@ -117,7 +110,12 @@ public class MitoBenchWindow extends Application{
 
         // initialize haplotree with search function
         BorderPane borderpane_center = new BorderPane();
+
+
         treeController = new HaplotreeController(tableControllerUserBench, logClass);
+        treeView = new TreeView(treeController.getTree());
+        treeController.setTreeView(treeView);
+
         // get all components of central part
         borderpane_center.setCenter(getCenterPane());
 
@@ -275,7 +273,21 @@ public class MitoBenchWindow extends Application{
 
         return borderpane_statistics;
     }
-    
+
+
+    private void overrideCloseSettings() {
+        Platform.setImplicitExit(false);
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                we.consume();
+                LoggerSettingsDialogue loggerSettingsDialogue =
+                        new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
+            }
+        });
+    }
+
+
 
     public Scene getScene() {
         return scene;

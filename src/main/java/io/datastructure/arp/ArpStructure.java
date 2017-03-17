@@ -20,7 +20,7 @@ public class ArpStructure {
     public String getArpStructure(){
         String tmp =
                 "\n\n"+"[[Structure]]" + "\n\n"
-                        + "StructureName=\"MitoBench Exported Structure\"\n"
+                        + "StructureName=\"MitoBenchStarter Exported Structure\"\n"
                         + "NbGroups="+groups+"\n\n\n";
         Iterator iter = groupnames.keySet().iterator();
         while(iter.hasNext()){

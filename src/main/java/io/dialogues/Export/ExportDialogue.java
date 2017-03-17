@@ -119,7 +119,7 @@ public class ExportDialogue extends Application {
                 }
             }
         } else if (result.get() == mito_button) {
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("MitoBench project (*.mitoproj)", "*.mitoproj");
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("MitoBenchStarter project (*.mitoproj)", "*.mitoproj");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
             if (saveAsDialogue.getOutFile() != null) {

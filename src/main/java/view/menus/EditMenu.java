@@ -10,7 +10,7 @@ import view.MitoBenchWindow;
 import view.dialogues.settings.DataFilteringMutationBasedDialogue;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.table.controller.TableControllerUserBench;
-import view.tree.HaplotreeController;
+import controller.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;

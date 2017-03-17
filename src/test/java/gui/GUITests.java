@@ -15,11 +15,10 @@ import statistics.HaploStatistics;
 import statistics.MutationStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
-import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.groups.GroupController;
 import view.table.controller.TableControllerUserBench;
-import view.tree.HaplotreeController;
-import view.tree.TreeHaplo;
+import controller.HaplotreeController;
+import model.HaploTreeModel;
 
 import java.io.*;
 import java.net.URL;
@@ -46,7 +45,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     private TableControllerUserBench tableController;
     private ChartController chartController;
     private GroupController groupController;
-    private TreeHaplo treeHaplo;
+    private HaploTreeModel treeHaplo;
     private HaplotreeController treeController;
     private HaploStatistics haploStatistics;
     private MutationStatistics mutationStatistics;
@@ -76,10 +75,10 @@ public class GUITests extends FxRobot implements GUITestValidator {
         chartController = new ChartController();
         groupController = new GroupController(tableController);
 
-        treeHaplo = new TreeHaplo("Haplo Tree");
+        treeHaplo = new HaploTreeModel("Haplo Tree");
         treeHaplo.addStructure();
         treeController = new HaplotreeController(tableController, logClass);
-        treeController.configureSearch(null);
+        treeController.setKeyEvents(null);
 
         haploStatistics = new HaploStatistics(tableController, treeController, logClass);
         mutationStatistics = new MutationStatistics(logClass);

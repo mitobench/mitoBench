@@ -34,14 +34,14 @@ public class HelpMenu {
 
 
          /*
-                        About MitoBench
+                        About MitoBenchStarter
 
          */
 
-        MenuItem aboutItem = new MenuItem("About MitoBench");
+        MenuItem aboutItem = new MenuItem("About MitoBenchStarter");
         aboutItem.setId("aboutMenuItem");
         aboutItem.setOnAction(t -> {
-            AboutDialogue aboutDialogue = new AboutDialogue("About MitoBench", "See your fancy new homepage here!", "mitoBench and mitoDB","aboutDialogue");
+            AboutDialogue aboutDialogue = new AboutDialogue("About MitoBenchStarter", "See your fancy new homepage here!", "mitoBench and mitoDB","aboutDialogue");
             //TODO add logo here once we have one, add information on homepage once we have one!
 
 

@@ -8,14 +8,10 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
-import view.MitoBenchWindow;
-import view.groups.GroupController;
-import view.table.controller.ATableController;
 import view.table.controller.TableControllerUserBench;
-import view.tree.HaplotreeController;
+import controller.HaplotreeController;
 
 import java.io.File;
-import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

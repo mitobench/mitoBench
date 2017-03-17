@@ -2,7 +2,6 @@ package view.table.controller;
 
 
 import Logging.LogClass;
-import io.datastructure.Entry;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -13,10 +12,6 @@ import javafx.scene.control.MenuItem;
 import view.MitoBenchWindow;
 import view.dialogues.settings.AddToGroupDialog;
 import view.dialogues.settings.CreateGroupDialog;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 
 /**
