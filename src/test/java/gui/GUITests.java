@@ -101,6 +101,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
         steps.part7CreatePlots();
         steps.partFilterMutatuions();
         steps.part1TreeViewTests();
+        steps.partTestMap();
         steps.part8MenuInteraction();
         //steps.closeWindow();
         //steps.part0SetLogDir();

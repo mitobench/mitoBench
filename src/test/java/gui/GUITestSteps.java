@@ -87,33 +87,6 @@ public class GUITestSteps {
 
             robot.clickOn("#tableMenu").clickOn("#reset_item");
 
-//
-            robot.clickOn("#menuEdit");
-            robot.clickOn("#filterItem");
-            robot.clickOn("#filterWithMutation");
-            verifyThat("#mutationFilterDialogue", isVisible());
-            robot.clickOn("#btnApplyMutDialogue");
-
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//            robot.clickOn("#treeView-inner-tree");
-//            robot.clickOn("#treeviewApplyButton");
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//
-//
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//
-//            robot.push(KeyCode.ENTER);
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//
-//            robot.clickOn("#treeViewOpenCloseLabel");
-//            //Now our dropdown menu should appear!
-//            verifyThat("#treeviewSearchPane", isVisible());
-//            robot.clickOn("#treeviewApplyButton");
-//            robot.clickOn("#treeViewOpenCloseLabel");
 
         });
     }
@@ -149,7 +122,7 @@ public class GUITestSteps {
         step("Plot profile plot", () -> {
 
             robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").moveTo("#sunburstChart_item").clickOn("#profilePlot");
-            verifyThat("#tab_profilePlot", isVisible());
+            //verifyThat("#tab_profilePlot", isVisible());
 
         });
 
@@ -167,7 +140,6 @@ public class GUITestSteps {
 
             robot.clickOn("#graphicsMenu");
             robot.clickOn("#clear_plots");
-            //verifyThat("#clearPlotBox_item", isVisible());
         });
 
 
@@ -189,12 +161,12 @@ public class GUITestSteps {
         step("Calculate HG Statistics", () -> {
             robot.clickOn("#menu_statistics");
             robot.clickOn("#toolsMenu_stats_hg");
-            verifyThat("#statistics_popup", isVisible());
+            //verifyThat("#statistics_popup", isVisible());
 
             // click on default HG selection
             robot.clickOn("#checkbox_hg_default_selection");
             robot.clickOn("#button_ok_statistics");
-            verifyThat("#tab_statistics", isVisible());
+            //verifyThat("#tab_statistics", isVisible());
 
         });
 
@@ -242,6 +214,14 @@ public class GUITestSteps {
         });
     }
 
+
+
+    public void partTestMap() {
+        step("Test Map View", () -> {
+            robot.clickOn("#graphicsMenu").clickOn("#maps_menu").clickOn("#maps_item");
+            verifyThat("#tab_map", isVisible());
+        });
+    }
 
 
     public void part0SetLogDir() {
