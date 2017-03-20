@@ -9,13 +9,13 @@ arch=('any')
 url="http://it.inf.uni-tuebingen.de/?page_id=161"
 license=('custom')
 depends=('java-runtime')
-source=("MitoBenchStarter-${pkgver}.jar" "starter.sh")
-noextract=("MitoBenchStarter-${pkgver}.jar")
+source=("MitoBench-${pkgver}.jar" "starter.sh")
+noextract=("MitoBench-${pkgver}.jar")
 md5sums=('SKIP' 'SKIP')
 
 package() {
 	  cd "$srcdir"
-          install -D -m755 "${srcdir}/MitoBenchStarter-${pkgver}.jar" "${pkgdir}/opt/$pkgname/MitoBenchStarter-${pkgver}.jar"
+          install -D -m755 "${srcdir}/MitoBench-${pkgver}.jar" "${pkgdir}/opt/$pkgname/MitoBench-${pkgver}.jar"
           install -D -m755 "${srcdir}/starter.sh" "${pkgdir}/opt/$pkgname/starter.sh"
           install -D -m755 "${pkgdir}/opt/$pkgname/starter.sh" "${pkgdir}/usr/bin/$pkgname"
 	}
