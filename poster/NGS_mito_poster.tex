@@ -79,7 +79,7 @@
 	background=plain,%shadetb,
 	bgColorOne=white,
 	bgColorTwo=blue!10,
-	headerheight=6.5cm
+	headerheight=6cm
 }
 %%% Eye Cacther %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
@@ -94,10 +94,10 @@
 %%% Authors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
 	\vspace{1em} Judith Neukamm$^{1,3*}$, Alexander Peltzer$^{1,2,3*}$, Wolfgang Haak$^{2}$, Johannes Krause$^{1,2}$ and Kay Nieselt$^{3}$\\
-	{\footnotesize 1 Institute for Archaeological Sciences, Archaeo- and Paleogenetics, University of Tuebingen, Germany.\\
-	2 Max Planck Institute for the Science of Human History, Jena, Germany.\\
-	3 Integrative Transcriptomics, Center for Bioinformatics (ZBIT), University of Tuebingen, Germany.\\
-	$*$These authors contributed equally to the study.\\
+	{\footnotesize \textit{$^1$ Institute for Archaeological Sciences, Archaeo- and Paleogenetics, University of Tuebingen, Germany.\\
+	$^2$ Max Planck Institute for the Science of Human History, Jena, Germany.\\
+	$^3$ Integrative Transcriptomics, Center for Bioinformatics (ZBIT), University of Tuebingen, Germany.\\
+	$*$These authors contributed equally to the work.}\\
 	\vspace{1em}
 	Contact: judith.neukamm@uni-tuebingen.de
 	}
@@ -111,8 +111,8 @@
 
 \begin{minipage}{0.15\textwidth}
 	\begin{center}
-		\includegraphics[width=3cm]{figures/Tuebingen.png}\\
-		\includegraphics[width=2.5cm]{figures/Pali.png}
+		\includegraphics[width=3cm]{figures/Tuebingen.png}
+		%\includegraphics[width=2.5cm]{figures/Pali.png}
 	\end{center}
 \end{minipage}
 
@@ -129,42 +129,19 @@
 
 
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------Ha-------------------------------------------------
 %	Introduction
 %----------------------------------------------------------------------------------------
 
 \headerbox{Motivation \& Goals}{name=introduction, row=0, column=0, span=5}{
 		\begin{itemize}[leftmargin=*]
-			\item Especially in the research field of ancient DNA, mtDNA is often the only proxy available to study extinct populations and their relationship with modern populations
-			\item Tools for the analysis typically rely on different file formats $\rightarrow$ require manual interaction with the data for downstream analysis
-			\item mitoBench: workbench to interactively analyze and visualize mitochondrial genomes and ease file conversions
+				\item Especially in the research field of ancient human DNA, mitochondrial DNA (mtDNA) is often the only proxy available to study extinct populations and their relationship with modern populations
+				\item Tools for the analysis typically rely on different file formats $\rightarrow$ requires manual interaction with the data for downstream analysis
+				\item mitoBench: workbench to ease file conversions, interactively analyze human mitochondrial genomes and visualize results
+				\item mitoDB: database for mitochondrial reference data to provide a central reference database that can be easily accessed via the workbench
 		\end{itemize}
 
-
-%Despite the availability of modern next generation sequencing technologies and
-%therefore nuclear human genomes, the sequencing and analysis of mitochondrial DNA
-%(mtDNA) is still common. Especially in the research field of ancient DNA and the
-%context of population genetics, mtDNA is often the only proxy available to study
-%extinct populations and their relationship with modern populations. As a consequence,
-%many population genetic studies rely on the analysis of mtDNA. \\
-%A plethora of methods for the analysis of mtDNA exist, that address questions in
-%population genetics, phylogeny and others. However, these tools typically rely on
-%different file formats and often require manual interaction with the data for downstream
-%analysis. Ultimately, these steps can be cumbersome, especially for non-bioinformaticians,
-%resulting in an increased risk of errors during the analysis. \\
-%To tackle these issues, we present MitoBenchStarter, a workbench to interactively analyze
-%and visualize mitochondrial genomes with a focus on population genetics. The
-%graphical user interface is kept simple, to accommodate even users without further
-%prior knowledge on computational methods. Furthermore, it shows additional
-%information such as metadata and statistics. Currently, MitoBenchStarter offers automatic
-%file conversion tools to connect the workbench with existing analysis methods
-%such as BEAST, Arlequin and others.
-
 }
-
-
-
-
 
 
 %----------------------------------------------------------------------------------------
@@ -174,7 +151,7 @@
 
 \headerbox{Workflow}{name=workflow, column=0, span=2, below=introduction}{
 	\centering
-	\includegraphics[width=0.7\textwidth]{figures/workflow2.jpg}
+	\includegraphics[width=0.8\textwidth]{figures/workflow_yed.jpg}
 
 }
 
@@ -183,13 +160,13 @@
 %----------------------------------------------------------------------------------------
 
 
-\headerbox{MitoDB}{name=mitodb, row=1, column=2, span=3, below=introduction, bottomaligned=workflow}{
+\headerbox{mitoDB}{name=mitodb, row=1, column=2, span=3, below=introduction, bottomaligned=workflow}{
 
 	\begin{minipage}{0.8\textwidth}
 		\begin{itemize}
 			\item Web-Frontend with Vaadin Java Framework
-			\item Backend with PostgreSQL, providing sequence information and meta-data (SQL)
-			\item Curated data upload with metadata
+			\item Backend with PostgreSQL, providing sequence information and meta-data
+			\item Curated data upload with meta-data
 			\item Retrieval possible through WebUI and mitoBench
 		\end{itemize}
 	\end{minipage}
@@ -210,14 +187,15 @@
 %----------------------------------------------------------------------------------------
 
 
-\headerbox{MitoBenchStarter}{name=mitobench, column=0, span=3,below=workflow}{
+\headerbox{mitoBench}{name=mitobench, column=0, span=3,below=workflow}{
 	\begin{minipage}[t]{0.5\textwidth}
-		\textbf{Data import and export}\\
+		\textbf{File conversions}\\
 		\includegraphics[width=0.8\textwidth, left]{figures/import_export.jpg}
+		$\Rightarrow$ connect the workbench with existing analysis methods such as BEAST, Arlequin, PhyloTree and others
 	\end{minipage}
 	\hspace{0.5em}
 	\begin{minipage}[t]{0.5\textwidth}
-		\textbf{Data representation}\\
+		\textbf{Data representation as Table}\\
 		\\
 		\includegraphics[width=0.85\textwidth, left]{figures/load_generic.png}
 	\end{minipage}
@@ -227,10 +205,11 @@
 	\begin{minipage}[t]{0.5\textwidth}
 		\textbf{Data grouping}
 		\begin{itemize}[leftmargin=*]
-			\item Interested in behaviour of different groups\\
-			$\rightarrow$ Group data by feature
-			\item Internal grouping (columns not sorted)
+			\item group data based on shared feature \\
+			(e.g. time period, location)
+			\item user defined grouping
 		\end{itemize}
+		$\Rightarrow$ allows analysis of Haplogroup distribution between different groups
 	\end{minipage}
 	\hspace{0.5em}
 	\begin{minipage}[t]{0.5\textwidth}
@@ -260,7 +239,7 @@
 
 	\begin{minipage}[t]{0.5\textwidth}
 		\textbf{}\\
-		\includegraphics[width=0.85\textwidth, center]{figures/sunburst2.png}
+		\includegraphics[width=0.85\textwidth, center]{figures/sunburst3.png}
 	\end{minipage}
 	\hspace{0.5em}
 	\begin{minipage}[t]{0.5\textwidth}
@@ -272,78 +251,43 @@
 }
 
 
-
-%----------------------------------------------------------------------------------------
-%	Conclusions
-%----------------------------------------------------------------------------------------
-
-\headerbox{Conclusion}{name=conclusions,row=0, column=3, span=2,  below=mitodb}{
-	\textbf{mitoBench}
-	\begin{itemize}
-		\item Easy file handling and file conversion
-		\item Combination, manipulation and \\ visualization of mitochondrial data
-		\item Data filtering
-		\item Statistics
-	\end{itemize}
-	\textbf{mitoDB}
-	\begin{itemize}
-		\item Collection of mitochondrial data \\ plus meta information
-		\item Curated database
-		\item Accessible via mitoBench and web interface
-	\end{itemize}
-
-}
-
 %----------------------------------------------------------------------------------------
 %	Outlook
 %----------------------------------------------------------------------------------------
 
-\headerbox{Outlook}{name=outlook,row=0, column=3, span=2,  below=conclusions, bottomaligned=mitobench}{
+\headerbox{Outlook}{name=outlook,row=0, column=3, span=2,  below=mitodb}{
 	\textbf{mitoBench}
 	\begin{itemize}
-		\item Providing methods for downstream analysis (e.g. F$_{st}$ calculations, Founder Analysis)
-		\item More visualizations (e.g. using maps for geographical information)
+		\item Provide methods for downstream analysis \\
+		(e.g. F$_{ST}$ calculations, Founder Analysis)
+		\item Offer more visualizations (e.g. geographical maps)\\
+		\\
+		\hspace{1em}\includegraphics[width=0.5\textwidth]{figures/map.png}
 	\end{itemize}
-	\textbf{mitoDB}
+	\textbf{mitoDB \& web interface}
 	\begin{itemize}
-		\item Workspace: Potentially some analysis inside the WebUI
 		\item Export/import functionality
+		\item web-based dashboard to explore database\\
+		\\
+		\includegraphics[width=0.7\textwidth]{figures/mitodb_dashboard.png}
 	\end{itemize}
-
-\vspace{3em}
-\begin{flushright}
-	\begin{minipage}{0.75\textwidth}
-			\textbf{Looking for more information?}\\
-			%\phantom{x} TAP \hspace{1em} or \hspace{4em} SCAN\\
-			\includegraphics[width=2cm]{figures/nfc_logo.png} %\hspace{1em}
-			\includegraphics[width=2cm]{figures/qr_code_references.jpg} %\hspace{1em}
-			\includegraphics[width=2cm]{figures/qr_code_references.jpg} \\
-			\phantom{x} \hspace{2em} Poster guide \hspace{3em} References
-	\end{minipage}
-\end{flushright}
 
 }
-
-
-
-
 
 
 %----------------------------------------------------------------------------------------
 %	References
 %----------------------------------------------------------------------------------------
 
-%\headerbox{References}{name=references, column=0, span=5, above=bottom, below=mitobench}{
-%	\footnotesize
-%	\begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
-%		%\item Drummond, Alexei J. et al. "Bayesian phylogenetics with BEAUti and the BEAST 1.7." Molecular biology and evolution 29.8 (2012): 1969-1973.
-%		%\item Excoffier, Laurent,  and EL Lischer, Heidi. Arlequin suite ver 3.5: a new series of programs to perform population
-%		%genetics analyses under linux and windows. \textit{Molecular ecology resources}, 10(3):564-567, 2010.
-%		%\item Weissensteiner, Hansi, et al."Haplogrep 2: mitochondrial haplogroup
-%		%classification in the era of high-throughput sequencing." \textit{Nucleic acids research}, page gkw233, 2016.
-%		\item Van Oven, Mannis, and Manfred Kayser. "Updated comprehensive phylogenetic tree of global human mitochondrial DNA variation." Human mutation 30.2 (2009): E386-E394.
-%	\end{enumerate}
-%}
+\headerbox{References}{name=references, column=3, span=2, above=bottom, below=outlook}{
+	\scriptsize
+	\begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
+			\item Drummond, A. J., Suchard, M. A., Xie, D., \& Rambaut, A. (2012). Bayesian phylogenetics with BEAUti and the BEAST 1.7. \textit{Molecular biology and evolution}, 29(8), 1969-1973.
+			\item Excoffier, L., \& Lischer, H. E. (2010). Arlequin suite ver 3.5: a new series of programs to perform population genetics analyses under Linux and Windows. \textit{Molecular ecology resources}, 10(3), 564-567.
+			\item Van Oven, M., \& Kayser, M. (2009). Updated comprehensive phylogenetic tree of global human mitochondrial DNA variation. \textit{Human mutation}, 30(2), E386-E394.
+			\item Weissensteiner, H., Pacher, D., Kloss-Brandst\"atter, A., Forer, L., Specht, G., Bandelt, H. J., ... \& Sch\"onherr, S. (2016). HaploGrep 2: mitochondrial haplogroup classification in the era of high-throughput sequencing. \textit{Nucleic acids research}, gkw233.
+	\end{enumerate}
+}
 
 
 \end{poster}
