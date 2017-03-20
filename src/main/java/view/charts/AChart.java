@@ -13,6 +13,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by neukamm on 17.02.17.
@@ -27,16 +32,17 @@ public abstract class AChart {
 
     public AChart(String lable_xaxis, String label_yaxis, LogClass logClass){
 
-        xAxis.tickLabelFontProperty().set(Font.font(13));
+        xAxis.tickLabelFontProperty().set(Font.font(15));
         xAxis.setLabel(lable_xaxis);
         xAxis.setTickMarkVisible(false);
 
         yAxis.setTickUnit(5);
         yAxis.setLabel(label_yaxis);
         yAxis.setMinorTickVisible(false);
-        yAxis.tickLabelFontProperty().set(Font.font(13));
+        yAxis.tickLabelFontProperty().set(Font.font(15));
 
         lc = logClass;
+
 
     }
 

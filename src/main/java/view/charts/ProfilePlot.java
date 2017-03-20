@@ -37,7 +37,6 @@ public class ProfilePlot extends AChart {
         yAxis.setUpperBound(100);
 
         profilePlot.setTitle(title);
-        //profilePlot.setStyle("-fx-font-size: " + 10 + "px;");
 
         id = uniqueID;
         tabpaneViz = tabpane;

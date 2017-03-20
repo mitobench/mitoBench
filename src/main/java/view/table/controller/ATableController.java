@@ -14,7 +14,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
 import view.datatypes.IData;
-import view.groups.GroupController;
+import controller.GroupController;
 import view.menus.GroupMenu;
 import view.table.DataTable;
 

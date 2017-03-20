@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import statistics.MutationStatistics;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
-import view.groups.GroupController;
+import controller.GroupController;
 import view.table.controller.TableControllerUserBench;
 import statistics.HaploStatistics;
 import controller.HaplotreeController;

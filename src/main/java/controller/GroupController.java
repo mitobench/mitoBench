@@ -1,9 +1,9 @@
-package view.groups;
+package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import view.table.controller.ATableController;
+import model.Group;
 import view.table.controller.TableControllerUserBench;
 
 import java.util.*;

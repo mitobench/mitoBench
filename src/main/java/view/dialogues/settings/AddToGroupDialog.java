@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import view.groups.GroupController;
+import controller.GroupController;
 import view.table.controller.ATableController;
 
 

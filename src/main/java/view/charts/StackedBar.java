@@ -39,8 +39,6 @@ public class StackedBar extends AChart{
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
 
-        //xAxis.tickLabelFontProperty().set(Font.font(17));
-
         sbc = new StackedBarChart<>(xAxis, yAxis);
         sbc.setTitle(title);
         sbc.prefWidthProperty().bind(tabPane.widthProperty());

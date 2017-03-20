@@ -1,37 +1,61 @@
-package view.map;
+package controller;
 
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.*;
 import javafx.collections.ObservableList;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import netscape.javascript.JSObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by neukamm on 17.03.17.
  */
-public class MapViewController {
+public class MapViewController implements MapComponentInitializedListener {
 
-    private final ObservableList<ObservableList> items;
     private final TableColumn id_col;
     private final TableColumn location_col;
-
-    private MapView mapView;
+    private final ObservableList items;
+    private GoogleMapView mapView;
+    private GoogleMap map;
     private List<Marker> marker_all;
 
+    public MapViewController(TableColumn id, TableColumn location, ObservableList items){
 
-    public MapViewController(TableColumn id_column, TableColumn location_column, ObservableList<ObservableList> tableItems){
-        id_col = id_column;
-        location_col = location_column;
-        items = tableItems;
+        id_col = id;
+        location_col = location;
+        this.items = items;
+
+        mapView = new GoogleMapView();
+        mapView.addMapInializedListener(this);
 
     }
 
-    public void createMarkers(){
+
+    @Override
+    public void mapInitialized() {
+
+        //Set the initial properties of the map.
+        MapOptions mapOptions = new MapOptions();
+
+        mapOptions.overviewMapControl(false)
+                .center(new LatLong(47.6097, -122.3331))
+                .panControl(false)
+                .rotateControl(false)
+                .scaleControl(false)
+                .streetViewControl(false)
+                .zoomControl(false)
+                .zoom(2);
+
+
+        map = mapView.createMap(mapOptions);
+
 
         if(location_col!=null){
             marker_all = new ArrayList<>();
@@ -50,14 +74,16 @@ public class MapViewController {
                             .title(id);
 
                     Marker marker = new Marker( markerOptions );
-                    mapView.getMap().addMarker(marker);
+                    map.addMarker(marker);
 
-                    mapView.getMap().addUIEventHandler(marker, UIEventType.click, (JSObject obj) -> {
+
+                    map.addUIEventHandler(marker, UIEventType.click, (JSObject obj) -> {
                         InfoWindowOptions infoOptions = new InfoWindowOptions();
                         infoOptions.content("<h2>Sample ID: " + id + "</h2>");
                         InfoWindow window = new InfoWindow(infoOptions);
                         window.open(mapView.getMap(), marker);
                     });
+
                 }
 
             }
@@ -66,11 +92,19 @@ public class MapViewController {
     }
 
 
-    public MapView getMapView() {
+    public GoogleMapView getMapView() {
         return mapView;
     }
 
-    public void setMapView(MapView mapView) {
+    public void setMapView(GoogleMapView mapView) {
         this.mapView = mapView;
+    }
+
+    public GoogleMap getMap() {
+        return map;
+    }
+
+    public void setMap(GoogleMap map) {
+        this.map = map;
     }
 }

@@ -15,7 +15,7 @@ import statistics.HaploStatistics;
 import statistics.MutationStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
-import view.groups.GroupController;
+import controller.GroupController;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
 import model.HaploTreeModel;

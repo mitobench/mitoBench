@@ -7,14 +7,15 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.charts.*;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
-import view.groups.GroupController;
-import view.map.MapView;
-import view.map.MapViewController;
+import controller.GroupController;
+import controller.MapViewController;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
 
@@ -82,7 +83,11 @@ public class VisualizationMenu {
     public void initHaploBarchart(String titlePart) throws MalformedURLException {
         LOG.info("Visualize data: Haplogroup frequency (Barchart)");
 
-        this.barPlotHaplo = new BarPlotHaplo("Haplogroup occurrences " + titlePart, "Counts", stage, chartController,
+        Text t = new Text();
+        t.setText("Haplogroup occurrences " + titlePart);
+        t.setFont(Font.font(25));
+
+        this.barPlotHaplo = new BarPlotHaplo(t.getText(), "Counts", stage, chartController,
                 tableController, logClass);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
@@ -96,7 +101,11 @@ public class VisualizationMenu {
     public void initGroupBarChart(){
         LOG.info("Visualize data: Group frequency (Barchart)");
 
-        barChartGrouping = new BarChartGrouping("Number of samples per group", "", tabPane, logClass);
+        Text t = new Text();
+        t.setText("Number of samples per group");
+        t.setFont(Font.font(25));
+
+        barChartGrouping = new BarChartGrouping(t.getText(), "", tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_group_barchart");
         tab.setText("Bar Chart Grouping");
@@ -109,7 +118,11 @@ public class VisualizationMenu {
     public void initStackedBarchart(){
         LOG.info("Visualize data: Haplogroup frequency per group (Stacked Barchart)");
 
-        this.stackedBar = new StackedBar("Haplogroup frequency per group", tabPane, this);
+        Text t = new Text();
+        t.setText("Haplogroup frequency per group");
+        t.setFont(Font.font(25));
+
+        this.stackedBar = new StackedBar(t.getText(), tabPane, this);
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");
         tab.setText("Haplogroup frequency per group");
@@ -138,7 +151,12 @@ public class VisualizationMenu {
     private void initPieChart(String title){
         LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
 
-        pieChartViz = new PieChartViz(title, tabPane, logClass);
+        Text t = new Text(title);
+        t.setText("Haplogroup frequency per group");
+        t.setFont(Font.font(25));
+
+
+        pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
         Tab tab = new Tab();
         tab.setId("tab_piechart");
         tab.setText("Pie Chart");
@@ -153,8 +171,14 @@ public class VisualizationMenu {
 
     private void initProfilePlot(){
         LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
-        profilePlot = new ProfilePlot("Profile Plot", "Haplogroup", "Frequency in %", tabPane,
+
+        Text t = new Text();
+        t.setText("Haplogroup profile");
+        t.setFont(Font.font(100));
+
+        profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Frequency in %", tabPane,
                 logClass, profilePlotID);
+
         Tab tab = new Tab();
         tab.setId("tab_profilePlot_" + profilePlotID);
         tab.setText("Profile Plot (" + profilePlotID + ")");
@@ -169,25 +193,16 @@ public class VisualizationMenu {
     private void initMap(String title){
         LOG.info("Visualize data: Visualize all samples on map");
 
-
-        MapView mapView = new MapView();
-        mapViewController = new MapViewController(tableController.getTableColumnByName("ID"),
+        MapViewController mapViewController = new MapViewController(tableController.getTableColumnByName("ID"),
                 tableController.getTableColumnByName("location"),
                 tableController.getTable().getItems());
-        mapViewController.setMapView(mapView);
-        mapViewController.createMarkers();
 
-
-            Tab tab = new Tab();
-            tab.setId("tab_map");
-            tab.setText("Map");
-            tab.setContent(mapViewController.getMapView().getMapView());
-            tabPane.getTabs().add(tab);
-            tabPane.getSelectionModel().select(tab);
-
-
-
-
+        Tab tab = new Tab();
+        tab.setId("tab_map");
+        tab.setText("Map");
+        tab.setContent(mapViewController.getMapView());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
     }
 
 
@@ -443,7 +458,7 @@ public class VisualizationMenu {
 
         Menu maps = new Menu("Map view");
         maps.setId("maps_menu");
-        MenuItem mapsItem = new MenuItem("Visualize data on map");
+        MenuItem mapsItem = new MenuItem("Visualize data on map (internet connection needed)");
         mapsItem.setId("maps_item");
         mapsItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {

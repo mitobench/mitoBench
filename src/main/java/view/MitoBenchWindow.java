@@ -16,7 +16,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.xml.sax.SAXException;
-import view.groups.GroupController;
+import controller.GroupController;
 import view.menus.*;
 import view.table.controller.TableControllerDB;
 import view.table.controller.TableControllerUserBench;

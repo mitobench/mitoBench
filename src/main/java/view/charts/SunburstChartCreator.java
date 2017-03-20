@@ -62,6 +62,7 @@ public class SunburstChartCreator extends AChart{
 
         setDragAndMove();
         myLegend = new SunburstLegend(sunburstView);
+        myLegend.setStyle("-fx-font-size: " + 25 + "px;");
         // pair chart and legend
         HBox chart_legend = new HBox();
         chart_legend.getChildren().addAll(sunburstView, myLegend);

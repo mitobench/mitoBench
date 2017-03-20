@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -31,6 +33,7 @@ public class BarChartGrouping extends AChart {
      */
     public BarChartGrouping(String title, String ylabel, TabPane scene, LogClass logClass) {
         super(ylabel, null, logClass);
+
         bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setLegendVisible(false);
         bc.setTitle(title);

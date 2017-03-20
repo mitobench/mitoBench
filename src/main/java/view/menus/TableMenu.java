@@ -6,7 +6,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import view.groups.GroupController;
+import controller.GroupController;
 import view.table.controller.TableControllerUserBench;
 
 
