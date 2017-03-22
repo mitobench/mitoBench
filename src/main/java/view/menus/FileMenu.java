@@ -266,10 +266,6 @@ public class FileMenu {
                 }
                 HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
                 tableControllerUserBench.updateTable(input_multifasta);
-              //  if(!tableControllerUserBench.getGroupController().isGroupingExists())
-              //      tableControllerUserBench.getGroupController().createInitialGrouping();
-
-
             }
 
             //Input is HSD Format
@@ -283,9 +279,6 @@ public class FileMenu {
                     }
                     HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
-                   // if(!tableControllerUserBench.getGroupController().isGroupingExists())
-                        //tableControllerUserBench.getGroupController().createInitialGrouping();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -298,11 +291,26 @@ public class FileMenu {
                     GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG);
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
-                    //if(!tableControllerUserBench.getGroupController().isGroupingExists())
-                        //tableControllerUserBench.getGroupController().createInitialGrouping();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+
+            //Input is Excel Format
+
+            if (absolutePath.endsWith(".xlsx") || absolutePath.endsWith(".xls")) {
+                ExcelReader excelReader = null;
+                try {
+                    excelReader = new ExcelReader(f.getPath(), LOG);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (EXCELException e) {
+                    ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
+                }
+                HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
+
+                tableControllerUserBench.updateTable(data_map);
+                tableControllerUserBench.loadGroups();
             }
 
             //Input is in ARP Format
@@ -320,9 +328,6 @@ public class FileMenu {
 
                 tableControllerUserBench.updateTable(data_map);
                 tableControllerUserBench.loadGroups();
-              //  if(!tableControllerUserBench.getGroupController().isGroupingExists())
-                   // tableControllerUserBench.getGroupController().createInitialGrouping();
-
             }
 
             if(absolutePath.endsWith(".mitoproj")){
