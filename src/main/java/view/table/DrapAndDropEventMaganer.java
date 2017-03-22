@@ -125,7 +125,7 @@ public class DrapAndDropEventMaganer {
         data_obs.addAll(data);
         HashMap<String, List<Entry>> data_entries = tableFrom_controller.createNewEntryListDragAndDrop(data_obs);
         tableTo_controller.updateTable(data_entries);
-       // if(!tableTo_controller.getGroupController().isGroupingExists())
+       // if(!tableTo_controller.getGroupController().groupingExists())
        //     tableTo_controller.getGroupController().createInitialGrouping();
     }
 

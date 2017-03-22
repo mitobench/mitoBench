@@ -138,7 +138,7 @@ public class GroupController {
         this.ownGroupingIsSet = ownGroupingIsSet;
     }
 
-    public boolean isGroupingExists() {
+    public boolean groupingExists() {
         return groupingExists;
     }
 

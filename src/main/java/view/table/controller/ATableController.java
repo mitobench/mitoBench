@@ -380,7 +380,8 @@ public abstract class ATableController {
         // if "grouping" column already exists, create groups
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
-                groupController.createGroupByColumn(colname, "");
+                if(!groupController.groupingExists())
+                    groupController.createGroupByColumn(colname, "");
                 break;
             }
         }

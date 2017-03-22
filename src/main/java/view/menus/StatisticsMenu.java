@@ -52,7 +52,7 @@ public class StatisticsMenu {
         haploStats.setId("toolsMenu_stats_hg");
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                if(tableController.getGroupController().isGroupingExists()) {
+                if(tableController.getGroupController().groupingExists()) {
                     haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
                     HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
                     hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene, LOG);

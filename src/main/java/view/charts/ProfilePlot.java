@@ -97,7 +97,7 @@ public class ProfilePlot extends AChart {
 
         setMaxBoundary();
 
-        if(tableController.getGroupController().isGroupingExists()) {
+        if(tableController.getGroupController().groupingExists()) {
 
             HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
 
