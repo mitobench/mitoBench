@@ -24,14 +24,16 @@ public class StackedBar extends AChart{
 
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;
-    private TabPane tabPane;
     private final Glow glow = new Glow(.5);
     private VisualizationMenu graphicsMenu;
 
     public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
-        tabPane = vBox;
+        /*
+
+     */
+        TabPane tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
 
 
@@ -93,13 +95,10 @@ public class StackedBar extends AChart{
         for (final XYChart.Series<String, Number> series : sbc.getData()) {
             for (final XYChart.Data<String, Number> data : series.getData()) {
                 Tooltip tooltip = new Tooltip();
-                data.getNode().setOnMouseMoved(new EventHandler<MouseEvent>(){
-                    @Override
-                    public void handle(MouseEvent event) {
-                        // +15 moves the tooltip 15 pixels below the mouse cursor;
-                        tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
-                        tooltip.setText(series.getName() + " | " + data.getYValue().toString() + "%");
-                    }
+                data.getNode().setOnMouseMoved(event -> {
+                    // +15 moves the tooltip 15 pixels below the mouse cursor;
+                    tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
+                    tooltip.setText(series.getName() + " | " + data.getYValue().toString() + "%");
                 });
                 data.getNode().setOnMouseExited(new EventHandler<MouseEvent>(){
                     @Override

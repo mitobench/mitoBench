@@ -4,7 +4,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
 import view.table.controller.ATableController;
-import view.table.controller.TableControllerUserBench;
 
 import java.net.MalformedURLException;
 import java.util.*;

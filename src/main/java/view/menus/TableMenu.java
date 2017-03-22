@@ -1,12 +1,9 @@
 package view.menus;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import controller.GroupController;
 import view.table.controller.TableControllerUserBench;
 
 
@@ -17,11 +14,9 @@ public class TableMenu {
 
     private Menu menuTable;
     private TableControllerUserBench tableController;
-    private GroupController groupController;
     private Logger LOG;
 
     public TableMenu(MitoBenchWindow mitoBenchWindow){
-        this.groupController = mitoBenchWindow.getGroupController();
         menuTable = new Menu("Table");
         menuTable.setId("tableMenu");
         this.tableController = mitoBenchWindow.getTableControllerUserBench();
@@ -40,14 +35,12 @@ public class TableMenu {
          */
 
         MenuItem getSelectedRows = new MenuItem("Get selected rows");
-        getSelectedRows.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
-                    LOG.info("Get only selected rows.");
-                    tableController.updateView(tableController.getTable().getSelectionModel().getSelectedItems());
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        getSelectedRows.setOnAction(t -> {
+            try{
+                LOG.info("Get only selected rows.");
+                tableController.updateView(tableController.getTable().getSelectionModel().getSelectedItems());
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
 
@@ -59,14 +52,12 @@ public class TableMenu {
          */
 
         MenuItem selectAllRows = new MenuItem("Select all rows");
-        selectAllRows.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
-                    LOG.info("Select all rows in user data table.");
-                    tableController.getTable().getSelectionModel().selectAll();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        selectAllRows.setOnAction(t -> {
+            try{
+                LOG.info("Select all rows in user data table.");
+                tableController.getTable().getSelectionModel().selectAll();
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
 
@@ -79,14 +70,12 @@ public class TableMenu {
 
         MenuItem resetTable = new MenuItem("Reset table");
         resetTable.setId("reset_item");
-        resetTable.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
-                    tableController.resetTable();
-                    LOG.info("Reset user data table.");
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        resetTable.setOnAction(t -> {
+            try{
+                tableController.resetTable();
+                LOG.info("Reset user data table.");
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
 
@@ -98,14 +87,12 @@ public class TableMenu {
          */
 
         MenuItem cleanTable = new MenuItem("Clear table");
-        cleanTable.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
-                    LOG.info("Remove all data from data table.");
-                    tableController.cleartable();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        cleanTable.setOnAction(t -> {
+            try{
+                LOG.info("Remove all data from data table.");
+                tableController.cleartable();
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
 

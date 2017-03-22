@@ -1,8 +1,6 @@
 package view.charts;
 
 import Logging.LogClass;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,11 +21,7 @@ import java.util.*;
  */
 public class BarPlotHaplo extends AChart {
 
-    private final ChartController chartController;
-    private final TableControllerUserBench tableController;
-    private final HashMap<String, ArrayList> hgs_summed;
     private final Stage stage;
-    private XYChart.Series series;
     private ColorSchemeBarchart colorSchemeBarchart;
     private BarChartExt<String, Number> bc;
 
@@ -43,8 +37,8 @@ public class BarPlotHaplo extends AChart {
         bc.setLegendVisible(false);
         bc.setTitle(title);
 
-        chartController = cc;
-        tableController = tc;
+        ChartController chartController = cc;
+        TableControllerUserBench tableController = tc;
 
 
         File file = new File("src/main/java/view/charts/css/ColorsBarchart.css");
@@ -60,14 +54,14 @@ public class BarPlotHaplo extends AChart {
         List<String> columnDataHG = new ArrayList<>();
         tableController.getTable().getItems().stream().forEach((o)
                 -> columnDataHG.add((String)haplo_col.getCellData(o)));
-        hgs_summed = chartController.summarizeHaolpgroups(columnDataHG.stream().toArray(String[]::new), chartController.getCoreHGs());
+        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(columnDataHG.stream().toArray(String[]::new), chartController.getCoreHGs());
 
 
     }
 
     public void addData(HashMap<String, Integer> data) throws MalformedURLException {
 
-        series = new XYChart.Series();
+        XYChart.Series series = new XYChart.Series();
         series.setName("");
 
         colorSchemeBarchart = new ColorSchemeBarchart(stage);
@@ -81,25 +75,6 @@ public class BarPlotHaplo extends AChart {
         this.bc.getData().clear();
         this.bc.getData().add(series);
 
-    }
-
-    private XYChart.Data setColor(XYChart.Data<String, Number> d, HashMap<String, ArrayList> hgs_summed) {
-
-        d.nodeProperty().addListener(new ChangeListener<Node>() {
-            @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, Node newNode) {
-                if (newNode != null) {
-
-                    for(String key : hgs_summed.keySet()){
-                        ArrayList hg_sub = hgs_summed.get(key);
-                        if(hg_sub.contains(d.getXValue())){
-                            newNode = colorSchemeBarchart.setColor(newNode, key);
-                        }
-                    }
-                }
-            }
-        });
-
-        return d;
     }
 
 

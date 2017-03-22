@@ -1,8 +1,6 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -67,24 +65,22 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
 
 
     private void addListener(){
-        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                username = usernamme_field.getText();
-                password = password_field.getText();
+        loginBtn.setOnAction(e -> {
+            username = usernamme_field.getText();
+            password = password_field.getText();
 
-                //For testing and stuff
-                usernamme_field.setText("mitodbreader");
-                password_field.setText("*****************");
-                password = "LKeAFGVqSZdtr8peTPOv";
-                username = "mitodbreader";
+            //For testing and stuff
+            usernamme_field.setText("mitodbreader");
+            password_field.setText("*****************");
+            password = "LKeAFGVqSZdtr8peTPOv";
+            username = "mitodbreader";
 
-                // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", mitoBenchWindow);
-                dbSearchDialogue.fillDialogue();
-                dbSearchDialogue.addButtonFunc(username, password, table);
-                dialog.close();
+            // open search mask to specify which data should be loaded
+            DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", mitoBenchWindow);
+            dbSearchDialogue.fillDialogue();
+            dbSearchDialogue.addButtonFunc(username, password, table);
+            dialog.close();
 
-            }
         });
     }
 

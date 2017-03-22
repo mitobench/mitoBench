@@ -1,7 +1,5 @@
 package view.menus;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -50,11 +48,9 @@ public class GroupMenu {
         for(String col : tableController.getCurrentColumnNames() ){
             MenuItem colItem = new MenuItem(col);
             groupByColumnItem.getItems().add(colItem);
-            colItem.setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent t) {
-                    LOG.info("Group data on column: " + colItem.getText());
-                    groupController.createGroupByColumn(colItem.getText(), "");
-                }
+            colItem.setOnAction(t -> {
+                LOG.info("Group data on column: " + colItem.getText());
+                groupController.createGroupByColumn(colItem.getText(), "");
             });
         }
 
@@ -62,21 +58,19 @@ public class GroupMenu {
 
         MenuItem delGrouping = new MenuItem("Delete grouping");
         delGrouping.setId("delGrouping");
-        delGrouping.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                LOG.info("Delete grouping on column '" + groupController.getColname_group() + "' with groups "
-                        + Arrays.toString(groupController.getGroupnames().toArray()));
+        delGrouping.setOnAction(t -> {
+            LOG.info("Delete grouping on column '" + groupController.getColname_group() + "' with groups "
+                    + Arrays.toString(groupController.getGroupnames().toArray()));
 
-                if(groupController.isOwnGroupingIsSet()){
-                    String group_col = groupController.getColname_group();
-                    LOG.info("Delete grouping with groups: " + Arrays.toString(groupController.getGroupnames().toArray()));
-                    if(group_col.equals("Group (Grouping)")){
-                        tableController.removeColumn(group_col);
-                        groupController.setOwnGroupingIsSet(false);
-                    }
-                } else {
-                    groupController.clearGrouping();
+            if(groupController.isOwnGroupingIsSet()){
+                String group_col = groupController.getColname_group();
+                LOG.info("Delete grouping with groups: " + Arrays.toString(groupController.getGroupnames().toArray()));
+                if(group_col.equals("Group (Grouping)")){
+                    tableController.removeColumn(group_col);
+                    groupController.setOwnGroupingIsSet(false);
                 }
+            } else {
+                groupController.clearGrouping();
             }
         });
 
@@ -93,12 +87,10 @@ public class GroupMenu {
         for(String col : colnames ){
             MenuItem colItem = new MenuItem(col);
             groupByColumnItem.getItems().add(colItem);
-            colItem.setOnAction(new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent t) {
-                    LOG.info("Create grouping on column: " + colItem.getText());
-                    groupController.createGroupByColumn(colItem.getText(), "");
+            colItem.setOnAction(t -> {
+                LOG.info("Create grouping on column: " + colItem.getText());
+                groupController.createGroupByColumn(colItem.getText(), "");
 
-                }
             });
         }
     }

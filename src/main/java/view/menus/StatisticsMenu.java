@@ -25,11 +25,9 @@ import java.io.IOException;
  */
 public class StatisticsMenu {
 
-    private final Stage stage;
     private Menu menuTools;
     private TableControllerUserBench tableController;
     private HaplotreeController treeHaploController;
-    private GroupController groupController;
     private HaploStatistics haploStatistics;
     private MutationStatistics mutationStatistics;
     private Logger LOG;
@@ -43,8 +41,8 @@ public class StatisticsMenu {
         menuTools.setId("menu_statistics");
         tableController = mitoBenchWindow.getTableControllerUserBench();
         treeHaploController = mitoBenchWindow.getTreeController();
-        groupController = mitoBenchWindow.getGroupController();
-        stage = mitoBenchWindow.getPrimaryStage();
+        GroupController groupController = mitoBenchWindow.getGroupController();
+        Stage stage = mitoBenchWindow.getPrimaryStage();
         addSubMenus(mitoBenchWindow.getTabpane_statistics(), mitoBenchWindow.getScene());
     }
 

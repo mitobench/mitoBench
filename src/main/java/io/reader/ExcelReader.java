@@ -24,11 +24,10 @@ import java.util.List;
 public class ExcelReader implements IInputData{
 
     private HashMap<String, List<Entry>> map = new HashMap<>();
-    private Logger LOG;
 
     public ExcelReader(String file, Logger logger) throws IOException, EXCELException {
 
-        LOG = logger;
+        Logger LOG = logger;
         LOG.info("Read Excel file: " + file);
 
         String excelFilePath = file;

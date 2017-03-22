@@ -1,14 +1,10 @@
 package statistics;
 
 import Logging.LogClass;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import view.charts.ChartController;
@@ -91,16 +87,13 @@ public class HaploStatistics {
         for(int i = 0; i < number_of_groups ; i++){
             ObservableList  entry = FXCollections.observableArrayList();
             int count_all_hgs = countAllHGs(i);
-            for(String key : data_all.keySet()){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                entry.add(data_list.get(i).getXValue());
-                entry.add(count_all_hgs);
-                break;
-            }
-
+            // add first entry
+            List<XYChart.Data<String, Number>> data_list = data_all.get(data_all.keySet().iterator().next());
+            entry.add(data_list.get(i).getXValue());
+            entry.add(count_all_hgs);
 
             for(String key : keys){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
+                data_list = data_all.get(key);
                 entry.add(data_list.get(i).getYValue().intValue());
             }
 

@@ -1,17 +1,10 @@
 package view.charts;
 
 import Logging.LogClass;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import statistics.HaploStatistics;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
@@ -157,18 +150,15 @@ public class ProfilePlot extends AChart {
 
 
     public void addTabPaneListener(TabPane pane_current, TabPane pane_to_update){
-        pane_current.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-            @Override
-            public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
-                // parse IDs
-                if(newTab!=null && oldTab!=null){
-                    String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
+        pane_current.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            // parse IDs
+            if(newTab!=null && oldTab!=null){
+                String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
 
-                    for(Tab tab : pane_to_update.getTabs()){
-                        String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
-                        if(id_tab_current.equals(id_to_update)){
-                            pane_to_update.getSelectionModel().select(tab);
-                        }
+                for(Tab tab : pane_to_update.getTabs()){
+                    String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
+                    if(id_tab_current.equals(id_to_update)){
+                        pane_to_update.getSelectionModel().select(tab);
                     }
                 }
             }

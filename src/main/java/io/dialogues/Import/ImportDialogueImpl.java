@@ -15,7 +15,6 @@ import java.util.function.BiFunction;
 
 public class ImportDialogueImpl implements IImportDialogue {
 
-    private FileChooser fileChooser;
     private File selectedFile;
     private Stage stage;
 
@@ -51,7 +50,7 @@ public class ImportDialogueImpl implements IImportDialogue {
     }
 
     private void show(){
-        fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         BiFunction<FileChooser, Window, File> openFunction = FileChooser::showOpenDialog;
         selectedFile = openFunction.apply(fileChooser, stage);

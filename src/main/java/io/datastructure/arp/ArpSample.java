@@ -18,13 +18,12 @@ public class ArpSample {
     private HashMap<String,String> regions;
     private HashMap<String,String> storagetmp;
     private HashMap<String, Integer> storagecount;
-    private int groups;
 
 
     public ArpSample( ArrayList<FastaEntry> data, HashMap<String,String> regions, int groups){
         this.data = data;
         this.regions = regions;
-        this.groups = groups;
+        int groups1 = groups;
         storagetmp = new HashMap<>();
         storagecount = new HashMap<>();
     }

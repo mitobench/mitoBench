@@ -4,7 +4,6 @@ import Logging.LogClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
-import statistics.MutationStatistics;
 import view.table.controller.TableControllerUserBench;
 
 import java.util.Arrays;

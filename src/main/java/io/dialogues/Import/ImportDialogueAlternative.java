@@ -1,7 +1,5 @@
 package io.dialogues.Import;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -20,7 +18,6 @@ public class ImportDialogueAlternative {
     private Stage stage;
     private VBox box_background;
     private TextField textField_filepath;
-    private Button openBtn;
     private FileMenu fileMenu;
 
     public ImportDialogueAlternative(FileMenu fm){
@@ -33,7 +30,7 @@ public class ImportDialogueAlternative {
         textField_filepath = new TextField();
         textField_filepath.setId("textfield_path");
 
-        openBtn = new Button("Open");
+        Button openBtn = new Button("Open");
         openBtn.setId("btn_open");
         setAction(openBtn);
 
@@ -45,12 +42,9 @@ public class ImportDialogueAlternative {
 
 
     private void setAction(Button openBtn) {
-        openBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                fileMenu.openProjectFile(new File(textField_filepath.getText()));
-                stage.close();
-            }
+        openBtn.setOnAction(e -> {
+            fileMenu.openProjectFile(new File(textField_filepath.getText()));
+            stage.close();
         });
     }
 

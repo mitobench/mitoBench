@@ -19,8 +19,6 @@ import java.util.HashMap;
  */
 public class BEASTWriter implements IOutputData {
     private TableControllerUserBench tblcontroller;
-    private FileWriter fileWriter;
-    private BufferedWriter bfWriter;
 
     public BEASTWriter(TableControllerUserBench tblcontroller) {
         this.tblcontroller = tblcontroller;
@@ -29,8 +27,8 @@ public class BEASTWriter implements IOutputData {
 
     @Override
     public void writeData(String file) throws IOException {
-        fileWriter = new FileWriter(new File(file));
-        bfWriter = new BufferedWriter(fileWriter);
+        FileWriter fileWriter = new FileWriter(new File(file));
+        BufferedWriter bfWriter = new BufferedWriter(fileWriter);
         HashMap<FastaEntry, String> tmp = getSequenceData();
         for (FastaEntry key : tmp.keySet()) {
             String c14date = tmp.get(key);

@@ -31,7 +31,6 @@ import java.util.List;
 public class VisualizationMenu {
 
 
-    private MitoBenchWindow mito;
     private Menu menuGraphics;
     private TableControllerUserBench tableController;
     private BarPlotHaplo barPlotHaplo;
@@ -59,7 +58,7 @@ public class VisualizationMenu {
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
 
-        mito = mitoBenchWindow;
+        MitoBenchWindow mito = mitoBenchWindow;
         menuGraphics = new Menu("Visualization");
         menuGraphics.setId("graphicsMenu");
         treeController = mitoBenchWindow.getTreeController();

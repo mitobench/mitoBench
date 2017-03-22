@@ -2,8 +2,6 @@ package view.dialogues.settings;
 
 import Logging.LogClass;
 import filtering.FilterData;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -57,27 +55,25 @@ public class DataFilteringMutationBasedDialogue extends APopupDialogue {
 
     private void addListener() {
 
-        btn_apply.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        btn_apply.setOnAction(t -> {
 
 
-                MutationStatistics mutationStatistics = new MutationStatistics(logClass);
-                mutationStatistics.calculateMutationFrequencies(mitoBenchWindow.getTreeController().getTree().getMutations_per_hg(),
-                        mitoBenchWindow.getTableControllerUserBench().getTableColumnByName("Haplogroup"),
-                        mitoBenchWindow.getTableControllerUserBench().getTable(),
-                        mitoBenchWindow.getTreeController());
+            MutationStatistics mutationStatistics = new MutationStatistics(logClass);
+            mutationStatistics.calculateMutationFrequencies(mitoBenchWindow.getTreeController().getTree().getMutations_per_hg(),
+                    mitoBenchWindow.getTableControllerUserBench().getTableColumnByName("Haplogroup"),
+                    mitoBenchWindow.getTableControllerUserBench().getTable(),
+                    mitoBenchWindow.getTreeController());
 
-                FilterData filterData = new FilterData(
-                        mitoBenchWindow.getTableControllerUserBench(),
-                        mutationStatistics.getHgs_per_mutation_of_current_data(),
-                        logClass);
-                try {
-                    filterData.filterMutation(field_mutation.getText().split(","),   field_distance.getText());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                close();
+            FilterData filterData = new FilterData(
+                    mitoBenchWindow.getTableControllerUserBench(),
+                    mutationStatistics.getHgs_per_mutation_of_current_data(),
+                    logClass);
+            try {
+                filterData.filterMutation(field_mutation.getText().split(","),   field_distance.getText());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            close();
         });
 
 

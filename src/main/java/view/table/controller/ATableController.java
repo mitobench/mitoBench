@@ -30,16 +30,16 @@ public abstract class ATableController {
     protected TableView<ObservableList> table;
 
     protected ObservableList<ObservableList> data;
-    protected ObservableList<ObservableList> data_copy;
+    private ObservableList<ObservableList> data_copy;
 
-    protected DataTable dataTable;
-    protected HashMap<String, Integer> column_to_index;
-    protected HashMap<String, List<Entry>> table_content;
+    private DataTable dataTable;
+    private HashMap<String, Integer> column_to_index;
+    private HashMap<String, List<Entry>> table_content;
     protected ATableController controller;
     protected GroupController groupController;
-    protected List<String> col_names;
-    protected List<String> col_names_sorted;
-    protected GroupMenu groupMenu;
+    private List<String> col_names;
+    private List<String> col_names_sorted;
+    private GroupMenu groupMenu;
     protected Logger LOG;
     protected LogClass logClass;
 

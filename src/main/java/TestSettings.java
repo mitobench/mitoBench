@@ -3,7 +3,7 @@
  */
 public class TestSettings {
 
-    public TestSettings(){};
+    public TestSettings(){}
 
 
 }

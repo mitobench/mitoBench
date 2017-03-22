@@ -13,8 +13,6 @@ import io.fileConversionPGDSpider.SpiderCoversion;
 import io.reader.*;
 import io.writer.ImageWriter;
 import io.writer.StatisticsWriter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -88,17 +86,15 @@ public class FileMenu {
 
         MenuItem newProject = new MenuItem("New Project");
         newProject.setId("menu_item_new_project");
-        newProject.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                // clear all
-                tableControllerDB.cleartable();
-                tableControllerUserBench.cleartable();
-                viz_pane.getTabs().removeAll(viz_pane.getTabs());
-                mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
+        newProject.setOnAction(t -> {
+            // clear all
+            tableControllerDB.cleartable();
+            tableControllerUserBench.cleartable();
+            viz_pane.getTabs().removeAll(viz_pane.getTabs());
+            mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
 
 
 
-            }
         });
 
 
@@ -110,22 +106,20 @@ public class FileMenu {
 
         MenuItem importFile = new MenuItem("Import");
         importFile.setId("import");
-        importFile.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                IImportDialogue importDialogue;
+        importFile.setOnAction(t -> {
+            IImportDialogue importDialogue;
 
-                if(isJUnitTest()){
+            if(isJUnitTest()){
 
-                    ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fm);
-                    importDialogueAlternative.getFile();
+                ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fm);
+                importDialogueAlternative.getFile();
 
-                } else {
-                    importDialogue = importDialogueFactory.create(stage);
-                    importDialogue.start();
-                    openProjectFile(importDialogue.getSelectedFile());
-                }
-
+            } else {
+                importDialogue = importDialogueFactory.create(stage);
+                importDialogue.start();
+                openProjectFile(importDialogue.getSelectedFile());
             }
+
         });
 
 
@@ -137,19 +131,17 @@ public class FileMenu {
 
         MenuItem importFromDB = new MenuItem("Import Data from DB");
         importFromDB.setId("importFromDB");
-        importFromDB.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                // todo: make db query
-                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB,
-                        "Database Login", logClass, mitoBenchWindow);
+        importFromDB.setOnAction(t -> {
+            // todo: make db query
+            DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB,
+                    "Database Login", logClass, mitoBenchWindow);
 
-                if(drapAndDropEventMaganer==null){
-                    drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
-                    drapAndDropEventMaganer.createEvent();
-                }
-
-
+            if(drapAndDropEventMaganer==null){
+                drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
+                drapAndDropEventMaganer.createEvent();
             }
+
+
         });
 
 
@@ -163,26 +155,24 @@ public class FileMenu {
 
 
         MenuItem exportImage = new MenuItem("Export Chart");
-        exportImage.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        exportImage.setOnAction(t -> {
+            try {
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Image format (*.png)", "*.txt");
+                //SaveAsDialogue sad = new SaveAsDialogue(fex);
+                //sad.start(new Stage());
+
+                int scale = 6; //6x resolution should be enough, users should downscale if required
+                final SnapshotParameters spa = new SnapshotParameters();
+                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
+                ImageWriter imageWriter = new ImageWriter(logClass);
                 try {
-                    FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Image format (*.png)", "*.txt");
-                    //SaveAsDialogue sad = new SaveAsDialogue(fex);
-                    //sad.start(new Stage());
-
-                    int scale = 6; //6x resolution should be enough, users should downscale if required
-                    final SnapshotParameters spa = new SnapshotParameters();
-                    spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
-                    ImageWriter imageWriter = new ImageWriter(logClass);
-                    try {
-                        imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
-                    } catch (ImageException e) {
-                        e.printStackTrace();
-                    }
-
-                } catch (Exception e) {
+                    imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
+                } catch (ImageException e) {
                     e.printStackTrace();
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -194,14 +184,12 @@ public class FileMenu {
          */
 
         MenuItem exportFile = new MenuItem("Export Data");
-        exportFile.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass);
-                try {
-                    exportDialogue.start(new Stage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        exportFile.setOnAction(t -> {
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass);
+            try {
+                exportDialogue.start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -214,35 +202,31 @@ public class FileMenu {
          */
 
         MenuItem exportFileSpider = new MenuItem("Convert files with PGDSpider");
-        exportFileSpider.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
-                    SpiderCoversion spiderCoversion = new SpiderCoversion();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+        exportFileSpider.setOnAction(t -> {
+            try {
+                SpiderCoversion spiderCoversion = new SpiderCoversion();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         });
 
 
         MenuItem exportCurrStats = new MenuItem("Export statistics");
         exportCurrStats.setId("#exportCurrentStats");
-        exportCurrStats.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        exportCurrStats.setOnAction(t -> {
 
-                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
-                SaveAsDialogue sad = new SaveAsDialogue(fex);
-                sad.start(new Stage());
-                StatisticsWriter statisticsWriter = new StatisticsWriter(toolsMenu.getHaploStatistics());
-                try {
-                    statisticsWriter.writeData(sad.getOutFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
+            SaveAsDialogue sad = new SaveAsDialogue(fex);
+            sad.start(new Stage());
+            StatisticsWriter statisticsWriter = new StatisticsWriter(toolsMenu.getHaploStatistics());
+            try {
+                statisticsWriter.writeData(sad.getOutFile());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+
         });
 
 
@@ -252,12 +236,10 @@ public class FileMenu {
 
         MenuItem exit = new MenuItem("Exit");
         exit.setId("fileMenu-exitItem");
-        exit.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                t.consume();
-                LoggerSettingsDialogue loggerSettingsDialogue =
-                        new LoggerSettingsDialogue("Log file configuration", logClass, stage);
-            }
+        exit.setOnAction(t -> {
+            t.consume();
+            LoggerSettingsDialogue loggerSettingsDialogue =
+                    new LoggerSettingsDialogue("Log file configuration", logClass, stage);
         });
 
         menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
