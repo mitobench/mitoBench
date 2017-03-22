@@ -48,14 +48,6 @@
 \begin{document}
 \typeout{Poster rendering started}
 
-%%% Setting Background Image %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\background{
-%	\begin{tikzpicture}[remember picture,overlay]%
-%	\draw (current page.north west)+(-2em,2em) node[anchor=north west]
-%	{\includegraphics[height=1.1\textheight]{figures/background}};
-%	\end{tikzpicture}
-%}
-
 %%% General Poster Settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% Eye Catcher, Title, Authors and University Images %%%%%%%%%%%%%%%%%%%%%%
 \begin{poster}{
@@ -76,9 +68,9 @@
 	textborder=faded,%rectangle,
 	headerborder=open,
   	boxshade=plain,
-	background=plain,%shadetb,
+	background=plain,
 	bgColorOne=white,
-	bgColorTwo=blue!10,
+	bgColorTwo=red,
 	headerheight=6cm
 }
 %%% Eye Cacther %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,7 +81,7 @@
 }
 %%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {\Large\bf
-	MitoBenchStarter: An interactive visual workbench for population genetics on mitochondrial DNA
+	mitoBench: An interactive visual workbench for population genetics on mitochondrial DNA
 }
 %%% Authors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
@@ -105,9 +97,6 @@
 %%% Logo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {
 % The logos are compressed a bit into a simple box to make them smaller on the result
-% (Wasn't able to find any bigger of them.)
-%\setlength\fboxsep{0pt}
-%\setlength\fboxrule{0.5pt}
 
 \begin{minipage}{0.15\textwidth}
 	\begin{center}
@@ -116,15 +105,6 @@
 	\end{center}
 \end{minipage}
 
-	%\fbox{
-		%\begin{minipage}{10em}
-			%\includegraphics[width=4cm]{figures/it-logo.png}	\\
-			%\\
-%			\includegraphics[width=3cm]{figures/Max-Planck-Gesellschaft.png}
-%
-
-%		\end{minipage}
-	%}
 }
 
 
@@ -151,7 +131,7 @@
 
 \headerbox{Workflow}{name=workflow, column=0, span=2, below=introduction}{
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/workflow_yed.jpg}
+	\includegraphics[width=\textwidth]{figures/workflow.png}
 
 }
 
@@ -197,7 +177,7 @@
 	\begin{minipage}[t]{0.5\textwidth}
 		\textbf{Data representation as Table}\\
 		\\
-		\includegraphics[width=0.85\textwidth, left]{figures/load_generic.png}
+		\includegraphics[width=0.85\textwidth, left]{figures/table3.png}
 	\end{minipage}
 
 	\vspace{1em}
@@ -224,21 +204,23 @@
 	\vspace{1em}
 
 \textbf{Data visualizations}\\
-Analysis of 90 ancient Egyptian mummies \footnotesize{(Schuenemann \& Peltzer et al. 2017, accepted)}\\
+Mitochondrial analysis of 90 ancient Egyptian mummies \begin{footnotesize}(Schuenemann \& Peltzer et al. 2017, accepted)\end{footnotesize}\\
 $\rightarrow$ Did Haplogroup frequencies change over time?\\
-	\begin{minipage}[t]{0.5\textwidth}
-		\includegraphics[width=0.9\textwidth, center]{figures/group_sizes.png}
+\\
+	\begin{minipage}{0.5\textwidth}
+		\includegraphics[width=\textwidth]{figures/group_sizes2.png}
 	\end{minipage}
-	\begin{minipage}[t]{0.5\textwidth}
-		\includegraphics[width=0.85\textwidth, center]{figures/sunburst2.png}
+	\begin{minipage}{0.5\textwidth}
+			\includegraphics[width=\textwidth]{figures/profile.png}
 	\end{minipage}
 
-	\begin{minipage}[t]{0.5\textwidth}
-		\includegraphics[width=0.9\textwidth, center]{figures/profile.png}
+	\begin{minipage}{0.5\textwidth}
+		\includegraphics[width=\textwidth]{figures/stackedBarchart2.png}
 	\end{minipage}
-	\begin{minipage}[t]{0.5\textwidth}
-		\includegraphics[width=\textwidth, center]{figures/stackedBarchart.png}
+	\begin{minipage}{0.5\textwidth}
+		\includegraphics[width=0.8\textwidth]{figures/sunburst3.png}
 	\end{minipage}
+
 
 }
 
@@ -253,16 +235,20 @@ $\rightarrow$ Did Haplogroup frequencies change over time?\\
 		\item Provide methods for downstream analysis \\
 		(e.g. F$_{ST}$ calculations, Founder Analysis)
 		\item Offer more visualizations (e.g. geographical maps)\\
-		\\
-		%\hspace{1em}\includegraphics[width=0.5\textwidth]{figures/map.png}
-	\end{itemize}
+		\end{itemize}
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{figures/map.png}
+	\end{center}
+
 	\textbf{mitoDB \& web interface}
 	\begin{itemize}
 		\item Export/import functionality
 		\item web-based dashboard to explore database\\
-		\\
-		%\includegraphics[width=0.7\textwidth]{figures/mitodb_dashboard.png}
 	\end{itemize}
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{figures/mitodb_dashboard.png}
+	\end{center}
+
 
 }
 
