@@ -1,6 +1,7 @@
 package view.charts;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -167,6 +168,20 @@ public class StackedBar extends AChart{
     }
 
 
+    /**
+     * Returns the given String with a fixed number of letters
+     *
+     * @param string
+     * @param letters
+     * @return A String with the given length followed by ...
+     */
+    public static String getMinString(String string, int letters) {
+        if (string.length() < letters)
+            return string;
+        else
+            return string.substring(0, letters) + "\n" + string.substring(letters);
+    }
+
     /*
 
             GETTER and SETTER
@@ -175,7 +190,13 @@ public class StackedBar extends AChart{
      */
 
     public void setCategories(String[] groups){
-        xAxis.setCategories(FXCollections.observableArrayList(groups));
+
+        ObservableList categories = FXCollections.observableArrayList();
+        for(String s : groups)
+            categories.add(s);
+            //categories.add(getMinString(s, 15));
+
+        xAxis.setCategories(categories);
     }
     public List<XYChart.Series<String, Number>> getSeriesList() {
         return seriesList;

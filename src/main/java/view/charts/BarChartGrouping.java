@@ -32,7 +32,7 @@ public class BarChartGrouping extends AChart {
      * @param logClass
      */
     public BarChartGrouping(String title, String ylabel, TabPane scene, LogClass logClass) {
-        super(ylabel, null, logClass);
+        super(null, ylabel, logClass);
 
         bc = new BarChartExt<String, Number>(xAxis, yAxis);
         bc.setLegendVisible(false);

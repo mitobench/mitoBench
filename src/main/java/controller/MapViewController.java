@@ -46,11 +46,11 @@ public class MapViewController implements MapComponentInitializedListener {
 
         mapOptions.overviewMapControl(false)
                 .center(new LatLong(47.6097, -122.3331))
-                .panControl(false)
-                .rotateControl(false)
-                .scaleControl(false)
-                .streetViewControl(false)
-                .zoomControl(false)
+                .panControl(true)
+                .rotateControl(true)
+                .scaleControl(true)
+                .streetViewControl(true)
+                .zoomControl(true)
                 .zoom(2);
 
 
@@ -89,6 +89,7 @@ public class MapViewController implements MapComponentInitializedListener {
             }
 
         }
+
     }
 
 

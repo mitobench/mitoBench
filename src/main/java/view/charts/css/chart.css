@@ -1,0 +1,19 @@
+.chart-title {
+    -fx-font-size: 40pt;
+}
+
+.chart-legend {
+    -fx-font-size: 20pt;
+}
+
+.axis {
+    -fx-font-size: 5em;
+}
+
+.axis-label {
+    -fx-font-size: 20pt;
+}
+
+.chart-plot-background {
+    -fx-background-color: white;
+}

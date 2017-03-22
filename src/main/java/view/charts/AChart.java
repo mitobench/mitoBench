@@ -1,13 +1,18 @@
 package view.charts;
 
 import Logging.LogClass;
+import com.sun.java.swing.plaf.gtk.GTKConstants;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
@@ -32,14 +37,15 @@ public abstract class AChart {
 
     public AChart(String lable_xaxis, String label_yaxis, LogClass logClass){
 
-        xAxis.tickLabelFontProperty().set(Font.font(15));
+        xAxis.tickLabelFontProperty().set(Font.font(25));
         xAxis.setLabel(lable_xaxis);
         xAxis.setTickMarkVisible(false);
+        xAxis.setTickLabelRotation(50);
 
         yAxis.setTickUnit(5);
         yAxis.setLabel(label_yaxis);
         yAxis.setMinorTickVisible(false);
-        yAxis.tickLabelFontProperty().set(Font.font(15));
+        yAxis.tickLabelFontProperty().set(Font.font(25));
 
         lc = logClass;
 
@@ -77,5 +83,13 @@ public abstract class AChart {
         });
 
     }
+
+    public void setStyleSheet(Stage stage) throws MalformedURLException {
+        File file = new File("src/main/java/view/charts/css/chart.css");
+        URL url = file.toURI().toURL();
+        stage.getScene().getStylesheets().add(url.toExternalForm());
+
+    }
+
 
 }

@@ -89,6 +89,7 @@ public class VisualizationMenu {
 
         this.barPlotHaplo = new BarPlotHaplo(t.getText(), "Counts", stage, chartController,
                 tableController, logClass);
+        barPlotHaplo.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Haplogroup occurrences");
@@ -98,14 +99,16 @@ public class VisualizationMenu {
 
     }
 
-    public void initGroupBarChart(){
+    public void initGroupBarChart() throws MalformedURLException {
         LOG.info("Visualize data: Group frequency (Barchart)");
 
         Text t = new Text();
         t.setText("Number of samples per group");
         t.setFont(Font.font(25));
 
-        barChartGrouping = new BarChartGrouping(t.getText(), "", tabPane, logClass);
+        barChartGrouping = new BarChartGrouping(t.getText(), "# of Samples", tabPane, logClass);
+        barChartGrouping.setStyleSheet(stage);
+
         Tab tab = new Tab();
         tab.setId("tab_group_barchart");
         tab.setText("Bar Chart Grouping");
@@ -115,7 +118,7 @@ public class VisualizationMenu {
     }
 
 
-    public void initStackedBarchart(){
+    public void initStackedBarchart() throws MalformedURLException {
         LOG.info("Visualize data: Haplogroup frequency per group (Stacked Barchart)");
 
         Text t = new Text();
@@ -123,6 +126,7 @@ public class VisualizationMenu {
         t.setFont(Font.font(25));
 
         this.stackedBar = new StackedBar(t.getText(), tabPane, this);
+        stackedBar.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");
         tab.setText("Haplogroup frequency per group");
@@ -148,15 +152,15 @@ public class VisualizationMenu {
     }
 
 
-    private void initPieChart(String title){
+    private void initPieChart(String title) throws MalformedURLException {
         LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
 
         Text t = new Text(title);
         t.setText("Haplogroup frequency per group");
         t.setFont(Font.font(25));
 
-
         pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
+        pieChartViz.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_piechart");
         tab.setText("Pie Chart");
@@ -169,7 +173,7 @@ public class VisualizationMenu {
     }
 
 
-    private void initProfilePlot(){
+    private void initProfilePlot() throws MalformedURLException {
         LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
 
         Text t = new Text();
@@ -178,6 +182,7 @@ public class VisualizationMenu {
 
         profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Frequency in %", tabPane,
                 logClass, profilePlotID);
+        profilePlot.setStyleSheet(stage);
 
         Tab tab = new Tab();
         tab.setId("tab_profilePlot_" + profilePlotID);
@@ -272,7 +277,11 @@ public class VisualizationMenu {
                     advancedStackedBarchartDialogue.getApplyBtn().setOnAction(new EventHandler<ActionEvent>() {
                         @Override public void handle(ActionEvent e) {
                             advancedStackedBarchartDialogue.getApplyBtn();
-                            initStackedBarchart();
+                            try {
+                                initStackedBarchart();
+                            } catch (MalformedURLException e1) {
+                                e1.printStackTrace();
+                            }
 
 
                             //chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
