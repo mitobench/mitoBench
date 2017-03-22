@@ -84,6 +84,23 @@ public class FileMenu {
 
     private void addSubMenus() throws IOException {
 
+        // new project
+
+        MenuItem newProject = new MenuItem("New Project");
+        newProject.setId("menu_item_new_project");
+        newProject.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                // clear all
+                tableControllerDB.cleartable();
+                tableControllerUserBench.cleartable();
+                viz_pane.getTabs().removeAll(viz_pane.getTabs());
+                mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
+
+
+
+            }
+        });
+
 
 
         /*
@@ -243,9 +260,13 @@ public class FileMenu {
             }
         });
 
-        menuFile.getItems().addAll(importFile, importFromDB, exportFile, exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
+    /**
+     * Method to open files with specific parser.
+     * @param f
+     */
     public void openProjectFile(File f){
 
         if (f != null) {

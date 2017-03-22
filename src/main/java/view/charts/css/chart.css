@@ -1,5 +1,5 @@
 .chart-title {
-    -fx-font-size: 40pt;
+    -fx-font-size: 30pt;
 }
 
 .chart-legend {
@@ -11,9 +11,5 @@
 }
 
 .axis-label {
-    -fx-font-size: 20pt;
-}
-
-.chart-plot-background {
-    -fx-background-color: white;
+    -fx-font-size: 15pt;
 }

@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -77,7 +78,17 @@ public class StatisticsMenu {
             }
         });
 
-        menuTools.getItems().addAll(haploStats, mutations);
+
+        MenuItem clear = new MenuItem("Clear Statistics");
+        clear.setId("toolsMenu_clear");
+        clear.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                LOG.info("Close all tabs in statistic view");
+                statsTabpane.getTabs().clear();
+            }
+        });
+
+        menuTools.getItems().addAll(haploStats, mutations, new SeparatorMenuItem(), clear);
     }
 
 

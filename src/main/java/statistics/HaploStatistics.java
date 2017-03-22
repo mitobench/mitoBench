@@ -1,10 +1,14 @@
 package statistics;
 
 import Logging.LogClass;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import view.charts.ChartController;
@@ -132,11 +136,13 @@ public class HaploStatistics {
     /**
      * This method adds listener to each row in count table.
      * When cursor enters row, the corresponding line in profile plot is highlighted.
-     *
      * @param table
      * @param profilePlot
      */
     public void addListener(TableView table, ProfilePlot profilePlot){
+
+
+
         table.setRowFactory( tv -> {
             TableRow<ObservableList> row = new TableRow<>();
             row.setOnMouseEntered(event -> {

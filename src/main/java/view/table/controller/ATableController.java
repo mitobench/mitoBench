@@ -625,4 +625,19 @@ public abstract class ATableController {
     }
 
 
+    public void cleartable(){
+        // clean view.data model
+        data.removeAll(data);
+        // clean table view
+        table.getItems().removeAll(table.getItems());
+        dataTable.getMtStorage().getData().clear();
+        dataTable.getDataTable().clear();
+        table.getColumns().removeAll(table.getColumns());
+        if(groupController!=null){
+            groupController.clear();
+            groupController.clearGrouping();
+        }
+
+    }
+
 }

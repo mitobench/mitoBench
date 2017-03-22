@@ -102,15 +102,7 @@ public class TableMenu {
             public void handle(ActionEvent t) {
                 try{
                     LOG.info("Remove all data from data table.");
-                    // clean view.data model
-                    tableController.getData().removeAll(tableController.getData());
-                    // clean table view
-                    tableController.getTable().getItems().removeAll(tableController.getTable().getItems());
-                    tableController.getDataTable().getMtStorage().getData().clear();
-                    tableController.getDataTable().getDataTable().clear();
-                    tableController.getTable().getColumns().removeAll(tableController.getTable().getColumns());
-                    tableController.getGroupController().clear();
-                    groupController.clearGrouping();
+                    tableController.cleartable();
                 } catch (Exception e){
                     e.printStackTrace();
                 }

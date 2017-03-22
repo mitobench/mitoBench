@@ -3,10 +3,15 @@ package view.charts;
 import Logging.LogClass;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import statistics.HaploStatistics;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
@@ -31,13 +36,11 @@ public class ProfilePlot extends AChart {
     public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass, int uniqueID){
         super(lable_xaxis, label_yaxis, logClass);
 
-        // set autoranging to false to allow manual settings
-
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
 
         profilePlot.setTitle(title);
-
+        // this id is used to clearly assign visualization tab to statistics tab
         id = uniqueID;
         tabpaneViz = tabpane;
         setContextMenu(profilePlot, tabpaneViz);
@@ -93,23 +96,24 @@ public class ProfilePlot extends AChart {
         for(XYChart.Series series : seriesList)
             profilePlot.getData().add(series);
 
-        addListener();
-
+        addStyles();
         setMaxBoundary();
 
+        // create Haplostatistics
         if(tableController.getGroupController().groupingExists()) {
 
             HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
-
             haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
             TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
-            haploStatistics.addListener(table, this);
+
             Tab tab = new Tab();
             tab.setId("tab_table_stats_" + id);
             tab.setText("Count statistics (" + id + ")");
             tab.setContent(table);
             statsTabpane.getTabs().add(tab);
             statsTabpane.getSelectionModel().select(tab);
+
+            haploStatistics.addListener(table, this);
         }
 
         addTabPaneListener(statsTabpane, tabpaneViz);
@@ -142,34 +146,33 @@ public class ProfilePlot extends AChart {
     /**
      * This method adds a css file to the profile plot to set the line with to 2px.
      */
-    public void addListener(){
+    public void addStyles(){
         File f = new File("src/main/java/view/charts/css/ProfilePlot.css");
         profilePlot.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+        // no dots in line breaks
         profilePlot.setCreateSymbols(false);
         profilePlot.getStyleClass().add("thick-chart");
 
     }
 
 
-
     public void addTabPaneListener(TabPane pane_current, TabPane pane_to_update){
         pane_current.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
                 // parse IDs
-                String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
+                if(newTab!=null && oldTab!=null){
+                    String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
 
-                for(Tab tab : pane_to_update.getTabs()){
-                    String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
-                    if(id_tab_current.equals(id_to_update)){
-                        pane_to_update.getSelectionModel().select(tab);
+                    for(Tab tab : pane_to_update.getTabs()){
+                        String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
+                        if(id_tab_current.equals(id_to_update)){
+                            pane_to_update.getSelectionModel().select(tab);
+                        }
                     }
                 }
-
             }
         });
-
     }
 
 
