@@ -19,9 +19,10 @@ import java.util.List;
  */
 public class ARPReader implements IInputData {
     private HashMap<String, List<Entry>> map = new HashMap<>();
+    private Logger LOG;
 
     public ARPReader(String file, Logger logger) throws IOException, ARPException {
-        Logger LOG = logger;
+        LOG = logger;
         LOG.info("Read ARP file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);

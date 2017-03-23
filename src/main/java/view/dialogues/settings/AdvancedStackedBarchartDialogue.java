@@ -6,9 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.util.Callback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by neukamm on 15.02.17.

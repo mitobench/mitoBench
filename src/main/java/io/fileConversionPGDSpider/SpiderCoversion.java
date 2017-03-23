@@ -16,7 +16,7 @@ public class SpiderCoversion {
 
     public void start() throws IOException, InterruptedException {
         String dirpath = System.getProperty("user.dir");
-        ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", dirpath+"/jar/PGDSpider2.jar");
+        ProcessBuilder processBuilder = new ProcessBuilder(new String[] { "java", "-jar", dirpath+"/jar/PGDSpider2.jar"});
         Process process = processBuilder.start();
         process.waitFor();
     }

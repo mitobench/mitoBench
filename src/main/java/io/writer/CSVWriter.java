@@ -12,10 +12,12 @@ import java.util.List;
  */
 public class CSVWriter implements IOutputData {
 
+    private ObservableList<ObservableList> data;
     private TableControllerUserBench tableController;
+    private String separator = ",";
 
     public CSVWriter(TableControllerUserBench tableController){
-        ObservableList<ObservableList> data = tableController.getData();
+        this.data = tableController.getData();
         this.tableController = tableController;
     }
 
@@ -38,7 +40,6 @@ public class CSVWriter implements IOutputData {
             // write header
             String header = "";
             List<String> columns = tableController.getCurrentColumnNames();
-            String separator = ",";
             for (int i = 0; i < columns.size(); i++){
                 if(i == columns.size()-1){
                     header += columns.get(i) + "\n";

@@ -23,6 +23,8 @@ import java.util.regex.Pattern;
  */
 public class MultiFastAInput implements IInputData {
     private ArrayList<FastaEntry> fastaEntrys;
+    private BufferedReader bfr;
+    private FileReader fr;
 
     @Override
     public HashMap<String, List<Entry>> getCorrespondingData() {
@@ -41,8 +43,8 @@ public class MultiFastAInput implements IInputData {
 
         fastaEntrys = new ArrayList<FastaEntry>();
         File f = new File(fileToParse);
-        FileReader fr = new FileReader(f);
-        BufferedReader bfr = new BufferedReader(fr);
+        fr = new FileReader(f);
+        bfr = new BufferedReader(fr);
 
         String currentLine = "";
         String currHeader = "";
@@ -82,7 +84,7 @@ public class MultiFastAInput implements IInputData {
                 //Checking string for consistency properly with a regular expression
 
                 line_index++;
-                Pattern p = Pattern.compile("[ACTGRYSWKMVDHNactgryswkmndhv-]*\n*");
+                Pattern p = Pattern.compile("[ACTGRYSWKMVDHVNactgryswkmndhv-]*\n*");
                 Matcher m = p.matcher(currentLine);
                 if(m.matches()){
                     currSeq += currentLine;

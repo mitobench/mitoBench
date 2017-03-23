@@ -70,13 +70,16 @@ public class StatisticsWriter implements IOutputData{
         // write population HG writeToTable information
         for(int i = 0; i < this.haploStatistics.getNumber_of_groups() ; i++){
             int count_all_hgs = haploStatistics.countAllHGs(i);
+            for(String key : data_all.keySet()){
+                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
+                String tmp = data_list.get(i).getXValue() + "," + count_all_hgs + ",";
+                writerOutputStream.write(tmp);
+                break;
+            }
 
-            List<XYChart.Data<String, Number>> data_list = data_all.get(data_all.keySet().iterator().next());
-            String tmp = data_list.get(i).getXValue() + "," + count_all_hgs + ",";
-            writerOutputStream.write(tmp);
 
             for(int k = 0; k < keys.size(); k++){
-                data_list = data_all.get(keys.get(k));
+                List<XYChart.Data<String, Number>> data_list = data_all.get(keys.get(k));
                 if(k == keys.size()-1){
                     int val = data_list.get(i).getYValue().intValue();
                     writerOutputStream.write(val+"");

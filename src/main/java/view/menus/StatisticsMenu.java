@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -25,9 +24,11 @@ import java.io.IOException;
  */
 public class StatisticsMenu {
 
+    private final Stage stage;
     private Menu menuTools;
     private TableControllerUserBench tableController;
     private HaplotreeController treeHaploController;
+    private GroupController groupController;
     private HaploStatistics haploStatistics;
     private MutationStatistics mutationStatistics;
     private Logger LOG;
@@ -41,8 +42,8 @@ public class StatisticsMenu {
         menuTools.setId("menu_statistics");
         tableController = mitoBenchWindow.getTableControllerUserBench();
         treeHaploController = mitoBenchWindow.getTreeController();
-        GroupController groupController = mitoBenchWindow.getGroupController();
-        Stage stage = mitoBenchWindow.getPrimaryStage();
+        groupController = mitoBenchWindow.getGroupController();
+        stage = mitoBenchWindow.getPrimaryStage();
         addSubMenus(mitoBenchWindow.getTabpane_statistics(), mitoBenchWindow.getScene());
     }
 
@@ -51,7 +52,7 @@ public class StatisticsMenu {
         haploStats.setId("toolsMenu_stats_hg");
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                if(tableController.getGroupController().groupingExists()) {
+                if(tableController.getGroupController().isGroupingExists()) {
                     haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
                     HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
                     hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene, LOG);
@@ -76,17 +77,7 @@ public class StatisticsMenu {
             }
         });
 
-
-        MenuItem clear = new MenuItem("Clear Statistics");
-        clear.setId("toolsMenu_clear");
-        clear.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                LOG.info("Close all tabs in statistic view");
-                statsTabpane.getTabs().clear();
-            }
-        });
-
-        menuTools.getItems().addAll(haploStats, mutations, new SeparatorMenuItem(), clear);
+        menuTools.getItems().addAll(haploStats, mutations);
     }
 
 

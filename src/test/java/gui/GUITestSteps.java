@@ -106,21 +106,20 @@ public class GUITestSteps {
 
 
         step("Plot Stacked bar chart", () -> {
-
-            robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").
-                    clickOn("#barchart").moveTo("#plotHGfreq_item").clickOn("#plotHGfreqGroup_item");
+            robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").clickOn("#barchart").moveTo("#plotHGfreq_item").clickOn("#plotHGfreqGroup_item");
             verifyThat("#stackedBarChartDialogue", isVisible());
             robot.clickOn("#stackedBarApplyBtn");
             verifyThat("#tab_stacked_bar_chart", isVisible());
         });
-
         step("Plot Sunburstchart", () -> {
+
             robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").moveTo("#barchart").clickOn("#sunburstChart_item");
             verifyThat("#tab_sunburst", isVisible());
             robot.moveTo("#borderpane_sunburst");
         });
 
         step("Plot profile plot", () -> {
+
             robot.clickOn("#graphicsMenu").clickOn("#haplo_graphics").moveTo("#barchart").clickOn("#profilePlot");
             //verifyThat("#tab_profilePlot", isVisible());
 

@@ -7,10 +7,11 @@ import javafx.collections.ObservableList;
  * Created by neukamm on 25.11.2016.
  */
 public class Group {
+    private String name = "";
     private ObservableList<ObservableList> entries = FXCollections.observableArrayList();
 
     public Group(String name){
-        String name1 = name;
+        this.name = name;
     }
 
 

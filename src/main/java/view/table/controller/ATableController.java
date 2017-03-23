@@ -30,16 +30,16 @@ public abstract class ATableController {
     protected TableView<ObservableList> table;
 
     protected ObservableList<ObservableList> data;
-    private ObservableList<ObservableList> data_copy;
+    protected ObservableList<ObservableList> data_copy;
 
-    private DataTable dataTable;
-    private HashMap<String, Integer> column_to_index;
-    private HashMap<String, List<Entry>> table_content;
+    protected DataTable dataTable;
+    protected HashMap<String, Integer> column_to_index;
+    protected HashMap<String, List<Entry>> table_content;
     protected ATableController controller;
     protected GroupController groupController;
-    private List<String> col_names;
-    private List<String> col_names_sorted;
-    private GroupMenu groupMenu;
+    protected List<String> col_names;
+    protected List<String> col_names_sorted;
+    protected GroupMenu groupMenu;
     protected Logger LOG;
     protected LogClass logClass;
 
@@ -380,8 +380,7 @@ public abstract class ATableController {
         // if "grouping" column already exists, create groups
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
-                if(!groupController.groupingExists())
-                    groupController.createGroupByColumn(colname, "");
+                groupController.createGroupByColumn(colname, "");
                 break;
             }
         }
@@ -624,7 +623,6 @@ public abstract class ATableController {
         }
     }
 
-
     public void cleartable(){
         // clean view.data model
         data.removeAll(data);
@@ -637,7 +635,7 @@ public abstract class ATableController {
             groupController.clear();
             groupController.clearGrouping();
         }
-
     }
+
 
 }

@@ -2,6 +2,8 @@ package view.dialogues.settings;
 
 import database.DataAccessor;
 import io.datastructure.Entry;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -56,7 +58,11 @@ public class DBSearchDialogue extends APopupDialogue{
             }
         });
 
-        btnSend.setOnAction(e -> performSendAction(username, password, tablecontroller));
+        btnSend.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                performSendAction(username, password, tablecontroller);
+            }
+        });
 
     }
 
@@ -65,6 +71,16 @@ public class DBSearchDialogue extends APopupDialogue{
         return true;
     }
 
+    private boolean dataEmpty() {
+        if(data.keySet().size()==1){
+            for(String key : data.keySet()){
+                if(key==null)
+                    return true;
+            }
+        }
+
+        return false;
+    }
 
     private void performSendAction(String username, String password, ATableController tablecontroller){
         DataAccessor accessor = new DataAccessor();

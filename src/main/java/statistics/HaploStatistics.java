@@ -87,13 +87,16 @@ public class HaploStatistics {
         for(int i = 0; i < number_of_groups ; i++){
             ObservableList  entry = FXCollections.observableArrayList();
             int count_all_hgs = countAllHGs(i);
-            // add first entry
-            List<XYChart.Data<String, Number>> data_list = data_all.get(data_all.keySet().iterator().next());
-            entry.add(data_list.get(i).getXValue());
-            entry.add(count_all_hgs);
+            for(String key : data_all.keySet()){
+                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
+                entry.add(data_list.get(i).getXValue());
+                entry.add(count_all_hgs);
+                break;
+            }
+
 
             for(String key : keys){
-                data_list = data_all.get(key);
+                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
                 entry.add(data_list.get(i).getYValue().intValue());
             }
 
@@ -129,13 +132,11 @@ public class HaploStatistics {
     /**
      * This method adds listener to each row in count table.
      * When cursor enters row, the corresponding line in profile plot is highlighted.
+     *
      * @param table
      * @param profilePlot
      */
     public void addListener(TableView table, ProfilePlot profilePlot){
-
-
-
         table.setRowFactory( tv -> {
             TableRow<ObservableList> row = new TableRow<>();
             row.setOnMouseEntered(event -> {

@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -20,6 +22,7 @@ import java.util.HashMap;
  */
 public class BarChartGrouping extends AChart {
 
+    private XYChart.Series series;
     private BarChartExt<String, Number> bc;
     /**
      * Constructor which sets axes, title and context menu
@@ -53,7 +56,7 @@ public class BarChartGrouping extends AChart {
     }
 
     public void addData(HashMap<String, Integer> data) {
-        XYChart.Series series = new XYChart.Series();
+        this.series = new XYChart.Series();
         series.setName("");
 
         for(String group : data.keySet()){

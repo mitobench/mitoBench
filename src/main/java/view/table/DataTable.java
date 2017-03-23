@@ -1,6 +1,7 @@
 package view.table;
 
 import io.datastructure.Entry;
+import javafx.scene.control.TableColumn;
 
 import java.util.Arrays;
 import java.util.HashMap;

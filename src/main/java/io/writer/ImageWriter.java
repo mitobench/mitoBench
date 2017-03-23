@@ -6,6 +6,7 @@ import io.dialogues.Export.SaveAsDialogue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -19,11 +20,12 @@ import java.io.IOException;
  */
 public class ImageWriter {
 
+    private final LogClass lc;
     private final Logger LOG;
 
 
     public ImageWriter(LogClass logClass){
-        LogClass lc = logClass;
+        lc = logClass;
         LOG = lc.getLogger(this.getClass());
     }
 

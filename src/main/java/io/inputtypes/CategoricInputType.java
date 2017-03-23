@@ -12,7 +12,8 @@ public class CategoricInputType implements IInputType {
         this.type = data;
     }
 
+    public String getTypeInformation(){
+        return this.type;
+    }
 
-    @Override
-    public String getTypeInformation() { return type; }
 }

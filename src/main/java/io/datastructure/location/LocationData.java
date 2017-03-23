@@ -3,10 +3,9 @@ package io.datastructure.location;
 import view.datatypes.IData;
 
 /**
- * Created by neukamm on 22.03.17.
+ * Created by neukamm on 23.03.17.
  */
-public class LocationData implements IData{
-
+public class LocationData implements IData {
     private double longitude;
     private double latitude;
 
@@ -22,7 +21,7 @@ public class LocationData implements IData{
     }
 
     public LocationData(String toParse, int config) {
-       setParseLocationInformation(toParse);
+        setParseLocationInformation(toParse);
 
     }
 
@@ -35,6 +34,6 @@ public class LocationData implements IData{
 
     @Override
     public String getTableInformation() {
-        return latitude + "," + longitude;
+        return (latitude + "," + longitude);
     }
 }

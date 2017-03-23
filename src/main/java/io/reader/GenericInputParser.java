@@ -51,8 +51,9 @@ public class GenericInputParser implements IInputData {
                     Entry e = null;
                     if (headerType.equals("C14")) {
                         e = new Entry(headergroup[i], new RadioCarbonInputType(headerType), new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION));
-                    } if(headerType.equals("Location")){
+                    } else if(headerType.endsWith("Location")){
                         e = new Entry(headergroup[i], new LocationInputType(headerType), new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION));
+
                     }
                     else {
                         e = new Entry(headergroup[i], new CategoricInputType(headerType), new GenericInputData(splitLine[i]));

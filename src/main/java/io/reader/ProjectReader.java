@@ -65,7 +65,7 @@ public class ProjectReader {
                             for (int i = 0; i < headergroup.length; i++) {
                                 // create correct data type
                                 Entry entry;
-                                if (headertype[i].equals("C14")) {
+                                if (headertype.equals("C14")) {
                                     entry = new Entry(headergroup[i].trim(), new RadioCarbonInputType(headertype[i].trim()), new RadioCarbonData(entries[i].trim(), RadioCarbonData.PARSE_C14_DATE_INFORMATION));
                                 } else {
                                     entry = new Entry(headergroup[i].trim(), new CategoricInputType(headertype[i].trim()), new GenericInputData(entries[i].trim()));

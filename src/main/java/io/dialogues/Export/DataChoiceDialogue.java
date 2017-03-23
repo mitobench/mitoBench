@@ -16,6 +16,7 @@ public class DataChoiceDialogue {
         chd.setTitle("Choose Group");
         chd.setHeaderText("Choose group for export categorization.");
         Optional<String> result = chd.showAndWait();
+        String selected = "cancelled.";
         if (result.isPresent()) {
             this.selected = result.get();
         } else {

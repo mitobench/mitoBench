@@ -3,6 +3,8 @@ package view.dialogues.settings;
 import Logging.LogClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -52,22 +54,32 @@ public class AddToGroupDialog extends APopupDialogue{
     private void addButtonListener(Button okButton, GroupController groupController, ObservableList groupItems){
 
 
-        okButton.setOnAction(e -> {
-            // add elements to group
-            groupController.addElements(groupItems, comboBox.getValue().toString());
-            tableController.updateTable(tableController.createNewEntryListForGrouping(comboBox.getValue().toString(), "Group (Grouping)"));
-            close();
+        okButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                // add elements to group
+                groupController.addElements(groupItems, comboBox.getValue().toString());
+                tableController.updateTable(tableController.createNewEntryListForGrouping(comboBox.getValue().toString(), "Group (Grouping)"));
+                close();
 
+            }
         });
 
 
         DropShadow shadow = new DropShadow();
         //Adding the shadow when the mouse cursor is on
         okButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> okButton.setEffect(shadow));
+                new EventHandler<MouseEvent>() {
+                    @Override public void handle(MouseEvent e) {
+                        okButton.setEffect(shadow);
+                    }
+                });
         //Removing the shadow when the mouse cursor is off
         okButton.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> okButton.setEffect(null));
+                new EventHandler<MouseEvent>() {
+                    @Override public void handle(MouseEvent e) {
+                        okButton.setEffect(null);
+                    }
+                });
 
     }
 

@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
 
@@ -32,6 +33,7 @@ public class SunburstChartCreator extends AChart{
     private WeightedTreeItem<String> rootData;
     private ColorStrategyRandom colorStrategyRandom;
     private ColorStrategySectorShades colorStrategyShades;
+    private ColorStrategyGroups colorStrategyGroups;
     private Stage stage;
     private SunburstLegend myLegend;
 
@@ -56,6 +58,7 @@ public class SunburstChartCreator extends AChart{
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();
         colorStrategyShades = new ColorStrategySectorShades();
+        colorStrategyGroups = new ColorStrategyGroups();
 
         setDragAndMove();
         myLegend = new SunburstLegend(sunburstView);

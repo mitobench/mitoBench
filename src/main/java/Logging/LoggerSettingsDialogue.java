@@ -1,5 +1,7 @@
 package Logging;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
@@ -27,6 +29,7 @@ public class LoggerSettingsDialogue extends APopupDialogue{
     private Button saveLogFileBtn;
     private Button chooseFileBtn;
     private Button applyBtn;
+    private Label infoLogFile;
     private Button discardLogFile;
     private Label setFilePathLabel;
 
@@ -42,7 +45,7 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
     private void setComponents() {
 
-        Label infoLogFile = new Label("Do you want to save the log file?");
+        infoLogFile = new Label("Do you want to save the log file?");
         saveLogFileBtn = new Button("Save LOG file");
         saveLogFileBtn.setId("saveLogFileBtn");
         discardLogFile = new Button("Discard LOG file");
@@ -86,44 +89,59 @@ public class LoggerSettingsDialogue extends APopupDialogue{
     private void addButtonListener(Button applyBtn, Button chooseFileBtn) {
 
 
-        chooseFileBtn.setOnAction(e -> {
-            DirectoryChooser chooser = new DirectoryChooser();
-            chooser.setTitle("JavaFX Projects");
-            File defaultDirectory = new File(System.getProperty("user.dir"));
-            chooser.setInitialDirectory(defaultDirectory);
-            File selectedDirectory = chooser.showDialog(stage);
-            filePathLabel.setText(selectedDirectory.getAbsolutePath());
+        chooseFileBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                DirectoryChooser chooser = new DirectoryChooser();
+                chooser.setTitle("JavaFX Projects");
+                File defaultDirectory = new File(System.getProperty("user.dir"));
+                chooser.setInitialDirectory(defaultDirectory);
+                File selectedDirectory = chooser.showDialog(stage);
+                filePathLabel.setText(selectedDirectory.getAbsolutePath());
 
+            }
         });
 
 
-        applyBtn.setOnAction(e -> {
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
-            Date date = new Date();
-            String file_source = System.getProperty("user.dir") + File.separator + "mito_log_tmp.log";
-            String file_target = filePathLabel.getText() + File.separator + "mitobench_log_" + dateFormat.format(date) + ".log";
-            try {
-                Files.move(Paths.get(file_source), Paths.get(file_target));
-            } catch (IOException e1) {
-                e1.printStackTrace();
+        applyBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                //logger.updateLog4jConfiguration(filePathLabel.getText());
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
+                Date date = new Date();
+                String file_source = System.getProperty("user.dir") + File.separator + "mito_log_tmp.log";
+                String file_target = filePathLabel.getText() + File.separator + "mitobench_log_" + dateFormat.format(date) + ".log";
+                try {
+                    Files.move(Paths.get(file_source), Paths.get(file_target));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                close();
+                stage.close();
+                System.exit(0);
             }
-            close();
-            stage.close();
-            System.exit(0);
         });
 
-        saveLogFileBtn.setOnAction(e -> enableComponents());
-
-        discardLogFile.setOnAction(e -> {
-            // remove tmp log file
-            try {
-                Files.delete(Paths.get(System.getProperty("user.dir") + File.separator + "mito_log_tmp.log"));
-            } catch (IOException e1) {
-                e1.printStackTrace();
+        saveLogFileBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                enableComponents();
             }
-            close();
-            stage.close();
-            System.exit(0);
+        });
+
+        discardLogFile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // remove tmp log file
+                try {
+                    Files.delete(Paths.get(System.getProperty("user.dir") + File.separator + "mito_log_tmp.log"));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                close();
+                stage.close();
+                System.exit(0);
+            }
         });
     }
 

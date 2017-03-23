@@ -1,6 +1,5 @@
 package io.reader;
 
-import io.Exceptions.EXCELException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -25,7 +24,7 @@ public class ExcelReader implements IInputData{
 
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
-    public ExcelReader(String file, Logger logger) throws IOException, EXCELException {
+    public ExcelReader(String file, Logger logger) throws IOException {
 
         Logger LOG = logger;
         LOG.info("Read Excel file: " + file);

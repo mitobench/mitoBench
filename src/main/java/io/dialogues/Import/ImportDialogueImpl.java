@@ -15,6 +15,7 @@ import java.util.function.BiFunction;
 
 public class ImportDialogueImpl implements IImportDialogue {
 
+    private FileChooser fileChooser;
     private File selectedFile;
     private Stage stage;
 
@@ -34,9 +35,10 @@ public class ImportDialogueImpl implements IImportDialogue {
                 new FileChooser.ExtensionFilter("Multi-FastA Input (*.fa, *.fasta, *.fas)", "*.fasta", "*.fa", "*.fas"),
                 new FileChooser.ExtensionFilter("Haplogrep 2 HSD Format (*.hsd)", "*.hsd"),
                 new FileChooser.ExtensionFilter("ARP Arlequin Input Format (*.arp)", "*.arp"),
-                new FileChooser.ExtensionFilter("Excel Input Format (*.xlsx, *.xls)", "*.xlsx","*.xls"),
                 new FileChooser.ExtensionFilter("Generic Input Format (*.tsv)", "*.tsv"),
-                new FileChooser.ExtensionFilter("MitoProject Input (*.mitoproj)", "*.mitoproj"));
+                new FileChooser.ExtensionFilter("Excel Input Format (*.xlsx, *.xls)", "*.xlsx","*.xls"),
+                new FileChooser.ExtensionFilter("MitoProject Input (*.mitoproj)", "*.mitoproj")
+        );
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ImportDialogueImpl implements IImportDialogue {
     }
 
     private void show(){
-        FileChooser fileChooser = new FileChooser();
+        fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         BiFunction<FileChooser, Window, File> openFunction = FileChooser::showOpenDialog;
         selectedFile = openFunction.apply(fileChooser, stage);

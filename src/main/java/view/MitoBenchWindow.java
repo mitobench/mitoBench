@@ -5,6 +5,7 @@ import Logging.LoggerSettingsDialogue;
 import controller.HaplotreeController;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.xml.sax.SAXException;
 import controller.GroupController;
 import view.menus.*;
@@ -28,6 +30,8 @@ import java.io.IOException;
  * Created by neukamm on 03.11.16.
  */
 public class MitoBenchWindow extends Application{
+
+    private final String MITOBENCH_VERSION = "0.1";
 
     private BorderPane pane_root;
     private TableControllerUserBench tableControllerUserBench;
@@ -45,6 +49,7 @@ public class MitoBenchWindow extends Application{
     private VBox pane_table_DB;
     private Button enableDBBtn;
     private LogClass logClass;
+    private TreeView treeView;
 
 
     @Override
@@ -108,7 +113,7 @@ public class MitoBenchWindow extends Application{
 
 
         treeController = new HaplotreeController(tableControllerUserBench, logClass);
-        TreeView treeView = new TreeView(treeController.getTree());
+        treeView = new TreeView(treeController.getTree());
         treeController.setTreeView(treeView);
 
         // get all components of central part
@@ -273,10 +278,12 @@ public class MitoBenchWindow extends Application{
     private void overrideCloseSettings() {
         Platform.setImplicitExit(false);
 
-        primaryStage.setOnCloseRequest(we -> {
-            we.consume();
-            LoggerSettingsDialogue loggerSettingsDialogue =
-                    new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                we.consume();
+                LoggerSettingsDialogue loggerSettingsDialogue =
+                        new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
+            }
         });
     }
 
@@ -306,7 +313,6 @@ public class MitoBenchWindow extends Application{
     }
 
     public String getMITOBENCH_VERSION() {
-        String MITOBENCH_VERSION = "0.1";
         return MITOBENCH_VERSION;
     }
 

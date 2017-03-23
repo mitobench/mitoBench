@@ -24,16 +24,14 @@ public class StackedBar extends AChart{
 
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;
+    private TabPane tabPane;
     private final Glow glow = new Glow(.5);
     private VisualizationMenu graphicsMenu;
 
     public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
-        /*
-
-     */
-        TabPane tabPane = vBox;
+        tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
 
 
@@ -95,10 +93,13 @@ public class StackedBar extends AChart{
         for (final XYChart.Series<String, Number> series : sbc.getData()) {
             for (final XYChart.Data<String, Number> data : series.getData()) {
                 Tooltip tooltip = new Tooltip();
-                data.getNode().setOnMouseMoved(event -> {
-                    // +15 moves the tooltip 15 pixels below the mouse cursor;
-                    tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
-                    tooltip.setText(series.getName() + " | " + data.getYValue().toString() + "%");
+                data.getNode().setOnMouseMoved(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent event) {
+                        // +15 moves the tooltip 15 pixels below the mouse cursor;
+                        tooltip.show(data.getNode(), event.getScreenX(), event.getScreenY() + 15);
+                        tooltip.setText(series.getName() + " | " + data.getYValue().toString() + "%");
+                    }
                 });
                 data.getNode().setOnMouseExited(new EventHandler<MouseEvent>(){
                     @Override
@@ -159,13 +160,27 @@ public class StackedBar extends AChart{
 
         List<String> columnData = new ArrayList<>();
         for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {
-            if(sub_hgs.contains(haplo_col.getCellObservableValue(tmp).getValue()) )
+            if(sub_hgs.contains((String)haplo_col.getCellObservableValue(tmp).getValue()) )
                 columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
         }
 
         graphicsMenu.createHaploBarchart(haplo_col, columnData);
     }
 
+
+    /**
+     * Returns the given String with a fixed number of letters
+     *
+     * @param string
+     * @param letters
+     * @return A String with the given length followed by ...
+     */
+    public static String getMinString(String string, int letters) {
+        if (string.length() < letters)
+            return string;
+        else
+            return string.substring(0, letters) + "\n" + string.substring(letters);
+    }
 
     /*
 
@@ -174,7 +189,15 @@ public class StackedBar extends AChart{
 
      */
 
-    public void setCategories(String[] groups){ xAxis.setCategories(FXCollections.observableArrayList(groups)); }
+    public void setCategories(String[] groups){
+
+        ObservableList categories = FXCollections.observableArrayList();
+        for(String s : groups)
+            categories.add(s);
+            //categories.add(getMinString(s, 15));
+
+        xAxis.setCategories(categories);
+    }
     public List<XYChart.Series<String, Number>> getSeriesList() {
         return seriesList;
     }

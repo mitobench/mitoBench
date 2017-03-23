@@ -29,6 +29,8 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class IOTests {
     private InputStream is;
+    private InputStreamReader isr;
+    private BufferedReader bfr;
     private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GUITestSteps.class);
 
 
@@ -39,8 +41,8 @@ public class IOTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader bfr = new BufferedReader(isr);
+        isr = new InputStreamReader(is);
+        bfr = new BufferedReader(isr);
     }
 
 

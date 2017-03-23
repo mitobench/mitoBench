@@ -13,14 +13,15 @@ public class SaveAsDialogue extends Application {
 
     private String outFile;
     private FileChooser fileChooser = new FileChooser();
+    private FileChooser.ExtensionFilter extensionFilter;
 
     public static void main(String[] args) {
         Application.launch(args);
     }
 
     public SaveAsDialogue(FileChooser.ExtensionFilter fex){
-        FileChooser.ExtensionFilter extensionFilter = fex;
-        fileChooser.getExtensionFilters().add(extensionFilter);
+        this.extensionFilter = fex;
+        fileChooser.getExtensionFilters().add(this.extensionFilter);
     }
 
 

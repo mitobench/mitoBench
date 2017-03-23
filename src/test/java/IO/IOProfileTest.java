@@ -18,13 +18,15 @@ import static junit.framework.TestCase.assertEquals;
 public class IOProfileTest {
 
     private TableControllerUserBench tableController;
+    private LogClass logClass;
 
 
     @Before
     public void setup() throws TimeoutException {
-
-        LogClass logClass = new LogClass();
+        logClass = new LogClass();
         logClass.setUp();
+        //tableController = new TableController();
+        //tableController.init();
 
     }
 

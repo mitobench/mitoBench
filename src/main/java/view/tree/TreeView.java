@@ -20,6 +20,7 @@ public class TreeView {
     private VBox treeSearchPane;
 
     private Rectangle2D boxBounds = new Rectangle2D(500, 300, 600, 480);
+    private double ACTION_BOX_HGT = 30;
     private HaploTreeModel tree;
 
     public TreeView(HaploTreeModel tree) {
@@ -52,8 +53,7 @@ public class TreeView {
         treeSearchPane.setPadding(new Insets(10));
         treeSearchPane.setAlignment(Pos.TOP_LEFT);
         treeSearchPane.setStyle("-fx-background-color:#333333,#b1afb0;-fx-background-insets:0,1.5;-fx-opacity:.92;-fx-background-radius:0px 0px 0px 5px;");
-        double ACTION_BOX_HGT = 30;
-        treeSearchPane.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()- ACTION_BOX_HGT);
+        treeSearchPane.setPrefSize(boxBounds.getWidth(), boxBounds.getHeight()-ACTION_BOX_HGT);
         treeSearchPane.setSpacing(10);
 
         treeSearchPane.getChildren().addAll(infolabel, tree.getTree(), haploLabel, searchFieldListHaplogroup , applyBtn);

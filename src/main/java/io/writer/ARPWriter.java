@@ -6,6 +6,7 @@ import io.datastructure.arp.ArpSample;
 import io.datastructure.arp.ArpStructure;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
+import org.apache.log4j.Logger;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.BufferedWriter;
@@ -21,6 +22,8 @@ import java.util.Set;
  * Created by peltzer on 30/11/2016.
  */
 public class ARPWriter implements IOutputData {
+    private FileWriter fileWriter;
+    private BufferedWriter bfWriter;
     private String groups = "";
     private int groupSize = 0;
     private HashMap<String, String> regions;
@@ -38,8 +41,8 @@ public class ARPWriter implements IOutputData {
             file = file + ".arp";
         }
 
-        FileWriter fileWriter = new FileWriter(new File(file));
-        BufferedWriter bfWriter = new BufferedWriter(fileWriter);
+        fileWriter = new FileWriter(new File(file));
+        bfWriter = new BufferedWriter(fileWriter);
 
         getRegions();
         //Write profile first

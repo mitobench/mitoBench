@@ -16,6 +16,7 @@ import statistics.MutationStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
 import controller.GroupController;
+import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
 import model.HaploTreeModel;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 import static org.testfx.api.FxToolkit.registerPrimaryStage;
 import static org.testfx.api.FxToolkit.setupApplication;
@@ -43,9 +45,12 @@ public class GUITests extends FxRobot implements GUITestValidator {
 
     private TableControllerUserBench tableController;
     private ChartController chartController;
+    private GroupController groupController;
     private HaploTreeModel treeHaplo;
     private HaplotreeController treeController;
     private HaploStatistics haploStatistics;
+    private MutationStatistics mutationStatistics;
+    private LogClass logClass;
     private GUITestFiles testFiles;
 
     @BeforeClass
@@ -64,19 +69,19 @@ public class GUITests extends FxRobot implements GUITestValidator {
     @Before
     public void setUp() throws Exception {
 
-        LogClass logClass = new LogClass();
+        logClass = new LogClass();
         logClass.updateLog4jConfiguration(System.getProperty("user.dir") + "/mito_log_tmp.log");
         logClass.setUp();
         tableController = new TableControllerUserBench(logClass);
         chartController = new ChartController();
-        GroupController groupController = new GroupController(tableController);
+        groupController = new GroupController(tableController);
 
         treeHaplo = new HaploTreeModel("Haplo Tree");
         treeHaplo.addStructure();
         treeController = new HaplotreeController(tableController, logClass);
 
         haploStatistics = new HaploStatistics(tableController, treeController, logClass);
-        MutationStatistics mutationStatistics = new MutationStatistics(logClass);
+        mutationStatistics = new MutationStatistics(logClass);
 
         testFiles = new GUITestFiles();
         setupApplication(MitoBenchWindow.class);
