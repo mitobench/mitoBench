@@ -139,7 +139,4 @@ public class MutationStatistics {
         return hgs_per_mutation_of_current_data;
     }
 
-    public void setHgs_per_mutation_of_current_data(HashMap<String, List<String>> hgs_per_mutation_of_current_data) {
-        this.hgs_per_mutation_of_current_data = hgs_per_mutation_of_current_data;
-    }
 }

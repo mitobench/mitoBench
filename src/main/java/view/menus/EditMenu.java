@@ -20,10 +20,8 @@ import java.io.IOException;
  */
 public class EditMenu {
 
-    private final TableControllerUserBench tableController;
     private final LogClass logClass;
     private final MitoBenchWindow mito;
-    private HaplotreeController treeController;
     private Menu menuEdit;
 
 
@@ -31,9 +29,7 @@ public class EditMenu {
         menuEdit = new Menu("Edit");
         menuEdit.setId("menuEdit");
         mito = mitoBenchWindow;
-        treeController = mitoBenchWindow.getTreeController();
         logClass = mitoBenchWindow.getLogClass();
-        tableController = mitoBenchWindow.getTableControllerUserBench();
         addSubMenus();
 
     }
@@ -65,15 +61,11 @@ public class EditMenu {
 
         MenuItem filterWithMutation = new MenuItem("... enter Mutation");
         filterWithMutation.setId("filterWithMutation");
-        filterWithMutation.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        filterWithMutation.setOnAction(t -> {
 
-                DataFilteringMutationBasedDialogue dataFilteringMutationBasedDialogue =
-                        new DataFilteringMutationBasedDialogue("Mutation based data filtering", logClass, mito);
-            }
+            DataFilteringMutationBasedDialogue dataFilteringMutationBasedDialogue =
+                    new DataFilteringMutationBasedDialogue("Mutation based data filtering", logClass, mito);
         });
-
-
 
         filterData.getItems().addAll(filterTreeBased, filterWithMutation);
         menuEdit.getItems().add(filterData);
