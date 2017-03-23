@@ -159,27 +159,13 @@ public class StackedBar extends AChart{
 
         List<String> columnData = new ArrayList<>();
         for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {
-            if(sub_hgs.contains((String)haplo_col.getCellObservableValue(tmp).getValue()) )
+            if(sub_hgs.contains(haplo_col.getCellObservableValue(tmp).getValue()) )
                 columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
         }
 
         graphicsMenu.createHaploBarchart(haplo_col, columnData);
     }
 
-
-    /**
-     * Returns the given String with a fixed number of letters
-     *
-     * @param string
-     * @param letters
-     * @return A String with the given length followed by ...
-     */
-    public static String getMinString(String string, int letters) {
-        if (string.length() < letters)
-            return string;
-        else
-            return string.substring(0, letters) + "\n" + string.substring(letters);
-    }
 
     /*
 
@@ -188,15 +174,7 @@ public class StackedBar extends AChart{
 
      */
 
-    public void setCategories(String[] groups){
-
-        ObservableList categories = FXCollections.observableArrayList();
-        for(String s : groups)
-            categories.add(s);
-            //categories.add(getMinString(s, 15));
-
-        xAxis.setCategories(categories);
-    }
+    public void setCategories(String[] groups){ xAxis.setCategories(FXCollections.observableArrayList(groups)); }
     public List<XYChart.Series<String, Number>> getSeriesList() {
         return seriesList;
     }
