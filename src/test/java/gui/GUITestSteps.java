@@ -202,7 +202,7 @@ public class GUITestSteps {
     }
 
 
-    public void partFilterMutatuions() {
+    public void partFilterMutations() {
         step("Set Filter Mutations", () -> {
             robot.clickOn("#menuEdit").clickOn("#filterItem").clickOn("#filterWithMutation");
             verifyThat("#mutationFilterDialogue", isVisible());

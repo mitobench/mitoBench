@@ -16,7 +16,6 @@ import statistics.MutationStatistics;
 import view.MitoBenchWindow;
 import view.charts.ChartController;
 import controller.GroupController;
-import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
 import model.HaploTreeModel;
@@ -97,8 +96,8 @@ public class GUITests extends FxRobot implements GUITestValidator {
         steps.part5DBTest();
         //steps.partTestGrouping();
         steps.part6Statistics();
-        steps.part7CreatePlots();
-        steps.partFilterMutatuions();
+        //steps.part7CreatePlots();
+        steps.partFilterMutations();
         steps.part1TreeViewTests();
         steps.partTestMap();
         steps.part8MenuInteraction();
