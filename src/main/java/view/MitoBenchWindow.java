@@ -132,10 +132,12 @@ public class MitoBenchWindow extends Application{
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menuBar");
 
+
         EditMenu editMenu = new EditMenu(this);
+        GroupMenu groupMenu = new GroupMenu(this);
         StatisticsMenu statisticsMenu = new StatisticsMenu(this);
         FileMenu fileMenu = new FileMenu( statisticsMenu, this);
-        GroupMenu groupMenu = new GroupMenu(this);
+        AnalysisMenu analysisMenu = new AnalysisMenu(this);
         TableMenu tableMenu = new TableMenu(this);
         VisualizationMenu graphicsMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
@@ -143,6 +145,7 @@ public class MitoBenchWindow extends Application{
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
                                   editMenu.getMenuEdit() ,
                                   groupMenu.getMenuGroup(),
+                                  analysisMenu.getMenuAnalysis(),
                                   statisticsMenu.getMenuTools(),
                                   tableMenu.getMenuTable(),
                                   graphicsMenu.getMenuGraphics(),
