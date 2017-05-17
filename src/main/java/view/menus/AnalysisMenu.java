@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import org.json.JSONException;
+import statistics.HaplotypeCaller;
 import view.MitoBenchWindow;
 
 import java.io.IOException;
@@ -48,6 +50,25 @@ public class AnalysisMenu {
             }
         });
 
+
+        MenuItem assignHGs = new MenuItem("Calculate haplogroups");
+        assignHGs.setId("menuitem_calculate_haplogroups");
+        assignHGs.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+
+                try {
+                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
+                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
+                    haplotypeCaller.call();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        //menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
         menuAnalysis.getItems().add(pairwiseFst);
 
     }
