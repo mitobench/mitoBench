@@ -31,7 +31,7 @@ import java.io.IOException;
  */
 public class MitoBenchWindow extends Application{
 
-    private final String MITOBENCH_VERSION = "0.1";
+    private final String MITOBENCH_VERSION = "0.1.2";
 
     private BorderPane pane_root;
     private TableControllerUserBench tableControllerUserBench;

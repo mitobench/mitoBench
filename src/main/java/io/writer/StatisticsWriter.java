@@ -1,26 +1,26 @@
 package io.writer;
 
-import io.IOutputData;
-import javafx.scene.chart.XYChart;
-import statistics.HaploStatistics;
-
+import
+        io.IOutputData;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by neukamm on 17.01.17.
  */
 public class StatisticsWriter implements IOutputData{
 
-    private HashMap<String, List<XYChart.Data<String, Number>>> data_all;
-    private HaploStatistics haploStatistics;
-    private List<String> keys;
+    private TableView table;
+    private ObservableList<ObservableList<String>> content;
 
-    public StatisticsWriter(HaploStatistics haploStatistics){
-        this.haploStatistics = haploStatistics;
+
+    public StatisticsWriter(Tab tab) {
+        table = (TableView) tab.getContent();
+        content = table.getItems();
+
     }
 
     /**
@@ -29,73 +29,23 @@ public class StatisticsWriter implements IOutputData{
      */
     @Override
     public void writeData(String path) throws IOException {
-
-
-        if(haploStatistics != null && path.length()>0){
-            data_all = this.haploStatistics.getData_all();
-
-            keys = new ArrayList<>();
-            keys.addAll(data_all.keySet());
-            keys.remove("Others");
-            Collections.sort(keys);
-            keys.add("Others");
-
-
-            if(!path.endsWith("csv"))
-                path = path + ".csv";
-
-            write(new FileOutputStream(new File(path).getAbsoluteFile()));
-
-
-
-        }
-
-    }
-
-    public void write(OutputStream outputStream) throws IOException {
+        OutputStream outputStream = new FileOutputStream(new File(path).getAbsoluteFile());
         OutputStreamWriter writerOutputStream = new OutputStreamWriter(outputStream, "UTF-8");
-        // write header
-        writerOutputStream.write("Population , Sum, ");
-        for(int i = 0; i < keys.size(); i++){
-            if(i == keys.size()-1){
-                writerOutputStream.write(keys.get(i));
-            }
-            else {
-                String tmp = keys.get(i) + ",";
-                writerOutputStream.write(tmp);
-            }
+
+        // write column names as first line
+        for(Object col : table.getColumns()){
+            TableColumn column = (TableColumn) col;
+            writerOutputStream.write(column.getText()+",");
         }
         writerOutputStream.write("\n");
-
-        // write population HG writeToTable information
-        for(int i = 0; i < this.haploStatistics.getNumber_of_groups() ; i++){
-            int count_all_hgs = haploStatistics.countAllHGs(i);
-            for(String key : data_all.keySet()){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                String tmp = data_list.get(i).getXValue() + "," + count_all_hgs + ",";
-                writerOutputStream.write(tmp);
-                break;
+        for(ObservableList row : content){
+            for(Object cell : row){
+                writerOutputStream.write(cell + ",");
             }
-
-
-            for(int k = 0; k < keys.size(); k++){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(keys.get(k));
-                if(k == keys.size()-1){
-                    int val = data_list.get(i).getYValue().intValue();
-                    writerOutputStream.write(val+"");
-                }
-                else{
-                    int val = data_list.get(i).getYValue().intValue();
-                    writerOutputStream.write(val+"");
-                    writerOutputStream.write(",");
-                }
-
-            }
-
             writerOutputStream.write("\n");
         }
-        writerOutputStream.close();
 
+        writerOutputStream.close();
 
     }
 
