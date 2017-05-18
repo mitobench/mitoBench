@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import statistics.MutationStatistics;
 import view.MitoBenchWindow;
+import view.dialogues.information.GroupingWarningDialogue;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
 import controller.GroupController;
 import view.table.controller.TableControllerUserBench;
@@ -56,6 +57,13 @@ public class StatisticsMenu {
                     haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
                     HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
                     hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene, LOG);
+                } else {
+                    GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
+                            "No groups defined",
+                            "Please define a grouping first.",
+                            null,
+                            "groupWarning");
+
                 }
             }
         });

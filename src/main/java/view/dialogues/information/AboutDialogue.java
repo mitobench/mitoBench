@@ -15,7 +15,5 @@ public class AboutDialogue extends AbstractInformationDialogue {
         alert.getDialogPane().setGraphic(imageView);
 
         showAndWait();
-
-
     }
 }

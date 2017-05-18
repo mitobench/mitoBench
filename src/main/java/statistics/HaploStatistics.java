@@ -9,6 +9,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import view.charts.ChartController;
 import view.charts.ProfilePlot;
+import view.dialogues.information.GroupingWarningDialogue;
 import view.table.controller.TableControllerMutations;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
@@ -39,7 +40,7 @@ public class HaploStatistics {
     }
 
     /**
-     * This method gets counts for each haplogroup (per group). haplogropus are summarized to user defined "core-groups".
+     * This method gets counts for each haplogroup (per group). haplogroups are summarized to user defined "core-groups".
      * @param coreHGs user defined core HGs
      */
     public void count(String[] coreHGs){
@@ -52,6 +53,7 @@ public class HaploStatistics {
         number_of_groups = selection_groups.length;
         HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaolpgroups(selection_haplogroups, coreHGs);
         data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
+
 
 
     }
