@@ -62,7 +62,7 @@ public class MapViewController implements MapComponentInitializedListener {
 
             for (Object item : items) {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
-                String[] loc = location_col.getCellObservableValue(item).getValue().toString().split(";");
+                String[] loc = location_col.getCellObservableValue(item).getValue().toString().split(",");
                 if(loc.length==2){
                     double latitude = Double.parseDouble(loc[0]);
                     double longitude = Double.parseDouble(loc[1]);

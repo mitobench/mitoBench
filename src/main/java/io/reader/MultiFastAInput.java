@@ -1,5 +1,6 @@
 package io.reader;
 
+import database.ColumnNameMapper;
 import io.Exceptions.FastAException;
 import io.IInputData;
 import io.datastructure.Entry;

@@ -1,5 +1,6 @@
 package io.reader;
 
+import database.ColumnNameMapper;
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -28,6 +29,7 @@ public class ProjectReader {
         LOG.info("Read project file: " + infile);
         FileReader fr = new FileReader(infile);
         BufferedReader bfr = new BufferedReader(fr);
+        ColumnNameMapper mapper = new ColumnNameMapper();
         datatable = new HashMap<>();
         String currline;
         String[] headergroup = null;
@@ -66,9 +68,9 @@ public class ProjectReader {
                                 // create correct data type
                                 Entry entry;
                                 if (headertype.equals("C14")) {
-                                    entry = new Entry(headergroup[i].trim(), new RadioCarbonInputType(headertype[i].trim()), new RadioCarbonData(entries[i].trim(), RadioCarbonData.PARSE_C14_DATE_INFORMATION));
+                                    entry = new Entry(mapper.mapString(headergroup[i].trim()), new RadioCarbonInputType(headertype[i].trim()), new RadioCarbonData(entries[i].trim(), RadioCarbonData.PARSE_C14_DATE_INFORMATION));
                                 } else {
-                                    entry = new Entry(headergroup[i].trim(), new CategoricInputType(headertype[i].trim()), new GenericInputData(entries[i].trim()));
+                                    entry = new Entry(mapper.mapString(headergroup[i].trim()), new CategoricInputType(headertype[i].trim()), new GenericInputData(entries[i].trim()));
                                 }
                                 all_entries.add(entry);
                             }

@@ -1,5 +1,6 @@
 package io.reader;
 
+import database.ColumnNameMapper;
 import io.Exceptions.ARPException;
 import io.IInputData;
 import io.datastructure.Entry;
@@ -26,6 +27,7 @@ public class ARPReader implements IInputData {
         LOG.info("Read ARP file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
+        ColumnNameMapper mapper = new ColumnNameMapper();
 
 
         String currline = "";
@@ -61,8 +63,8 @@ public class ARPReader implements IInputData {
                     String id = dataSplit[0];
                     String mtseq = dataSplit[2];
                     List<Entry> entries = new ArrayList<>();
-                    Entry e = new Entry("MTSequence", new CategoricInputType("String"), new GenericInputData(mtseq));
-                    Entry e_group = new Entry("ARP-Groups (Grouping)", new CategoricInputType("String"), new GenericInputData(currGroup));
+                    Entry e = new Entry(mapper.mapString("MTSequence"), new CategoricInputType("String"), new GenericInputData(mtseq));
+                    Entry e_group = new Entry(mapper.mapString("ARP-Groups (Grouping)"), new CategoricInputType("String"), new GenericInputData(currGroup));
                     entries.add(e);
                     entries.add(e_group);
                     map.put(id, entries);

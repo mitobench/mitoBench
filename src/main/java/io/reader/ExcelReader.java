@@ -1,5 +1,6 @@
 package io.reader;
 
+import database.ColumnNameMapper;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -29,6 +30,7 @@ public class ExcelReader implements IInputData{
         Logger LOG = logger;
         LOG.info("Read Excel file: " + file);
 
+        ColumnNameMapper mapper = new ColumnNameMapper();
         String excelFilePath = file;
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
 
@@ -65,7 +67,7 @@ public class ExcelReader implements IInputData{
                     case Cell.CELL_TYPE_STRING:
                         if(i==0)
                             id = cell.getStringCellValue();
-                        e = new Entry(header.get(i), new CategoricInputType("String"), new GenericInputData(cell.getStringCellValue()));
+                        e = new Entry(mapper.mapString(header.get(i)), new CategoricInputType("String"), new GenericInputData(cell.getStringCellValue()));
                         i++;
                         break;
                 }

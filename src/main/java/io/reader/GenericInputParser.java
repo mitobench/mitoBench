@@ -1,5 +1,6 @@
 package io.reader;
 
+import database.ColumnNameMapper;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -28,6 +29,7 @@ public class GenericInputParser implements IInputData {
         LOG.info("Read generic file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
+        ColumnNameMapper mapper = new ColumnNameMapper();
         String[] headergroup = null;
         String[] headertype = null;
 
@@ -50,13 +52,13 @@ public class GenericInputParser implements IInputData {
                     String headerType = headertype[i];
                     Entry e = null;
                     if (headerType.equals("C14")) {
-                        e = new Entry(headergroup[i], new RadioCarbonInputType(headerType), new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION));
+                        e = new Entry(mapper.mapString(headergroup[i]), new RadioCarbonInputType(headerType), new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION));
                     } else if(headerType.endsWith("Location")){
-                        e = new Entry(headergroup[i], new LocationInputType(headerType), new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION));
+                        e = new Entry(mapper.mapString(headergroup[i]), new LocationInputType(headerType), new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION));
 
                     }
                     else {
-                        e = new Entry(headergroup[i], new CategoricInputType(headerType), new GenericInputData(splitLine[i]));
+                        e = new Entry(mapper.mapString(headergroup[i]), new CategoricInputType(headerType), new GenericInputData(splitLine[i]));
                     }
 
                     entries.add(e);

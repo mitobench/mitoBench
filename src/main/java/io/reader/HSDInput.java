@@ -1,5 +1,6 @@
 package io.reader;
 
+import database.ColumnNameMapper;
 import io.Exceptions.HSDException;
 import io.IInputData;
 import io.datastructure.Entry;
@@ -27,6 +28,7 @@ public class HSDInput implements IInputData {
         LOG.info("Read HSD file: " + filetoParse);
         FileReader fr = new FileReader(new File(filetoParse));
         BufferedReader bfr = new BufferedReader(fr);
+        ColumnNameMapper mapper = new ColumnNameMapper();
         map = new HashMap<>();
 
         String currline = "";
@@ -46,7 +48,7 @@ public class HSDInput implements IInputData {
 
                 String id = splitGroup[0];
                 String group = splitGroup[2];
-                Entry entry = new Entry("Haplogroup", new CategoricInputType("String"), new GenericInputData(group));
+                Entry entry = new Entry(mapper.mapString("Haplogroup"), new CategoricInputType("String"), new GenericInputData(group));
                 List<Entry> entries = new ArrayList<>();
                 entries.add(entry);
                 map.put(id, entries);
