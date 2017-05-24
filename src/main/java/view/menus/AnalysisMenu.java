@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import org.json.JSONException;
 import statistics.HaplotypeCaller;
 import view.MitoBenchWindow;
 
@@ -56,15 +55,13 @@ public class AnalysisMenu {
         assignHGs.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
-                try {
-                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
-                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
-                    haplotypeCaller.call();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
+//                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
+//                    haplotypeCaller.call();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 
             }
         });

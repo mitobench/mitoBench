@@ -29,6 +29,7 @@ public class GroupMenu {
         LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
 
         menuGroup = new Menu("Grouping");
+        menuGroup.setId("menu_grouping");
         groupController = mitoBenchWindow.getGroupController();
         tableController = mitoBenchWindow.getTableControllerUserBench();
 

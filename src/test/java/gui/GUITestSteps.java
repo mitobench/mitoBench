@@ -147,7 +147,7 @@ public class GUITestSteps {
 
     public void part2FillTable(String file){
         step("Open Project file", () -> {
-            robot.clickOn("#fileMenu").clickOn("Import");
+            robot.clickOn("#fileMenu").clickOn("#importFile");
             verifyThat("#import_dialogue_alt", isVisible());
             robot.clickOn("#textfield_path").write(file);
             robot.clickOn("#btn_open");
@@ -242,8 +242,9 @@ public class GUITestSteps {
 
 
     public void partTestGrouping(){
-        step("Calculate Statistics", () -> {
-            robot.clickOn("#menu_grouping").clickOn("#create_groups").clickOn("#group_by_column");
+        step("Calculate Grouping", () -> {
+            robot.clickOn("#menu_grouping").clickOn("#grouping").clickOn("#group_by_column").
+                    clickOn("Time Period");
         });
     }
 

@@ -47,29 +47,29 @@ public class HaplotypeCaller {
 
         File f = new File(file);
         //POST file
-        ClientResource cr = new ClientResource("https://haplogrep.uibk.ac.at/haplogrep-ws");
-        final FormDataSet fds = new FormDataSet();
-        fds.setMultipart(true);
-        final FormData fileRep = new FormData("importfile", new FileRepresentation(f, MediaType.APPLICATION_ALL));
-        fds.getEntries().add(fileRep);
-        cr.post(fds);
-
-        //Response
-        JSONArray jsonArray = new JSONArray(cr.getResponse().getEntityAsText());
-
-        // collect all ids and Haplogroups
-        List<String> ids = new ArrayList<>();
-        List<String> haplogroups = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject object = jsonArray.getJSONObject(i);
-            String id = (String) object.get("id");
-            String hg = (String) object.get("haplogroup");
-            ids.add(id);
-            haplogroups.add(hg);
-            //Status status = cr.getResponse().getStatus();
-        }
-
-        update(ids, haplogroups);
+//        ClientResource cr = new ClientResource("https://haplogrep.uibk.ac.at/haplogrep-ws");
+//        final FormDataSet fds = new FormDataSet();
+//        fds.setMultipart(true);
+//        final FormData fileRep = new FormData("importfile", new FileRepresentation(f, MediaType.APPLICATION_ALL));
+//        fds.getEntries().add(fileRep);
+//        cr.post(fds);
+//
+//        //Response
+//        JSONArray jsonArray = new JSONArray(cr.getResponse().getEntityAsText());
+//
+//        // collect all ids and Haplogroups
+//        List<String> ids = new ArrayList<>();
+//        List<String> haplogroups = new ArrayList<>();
+//        for (int i = 0; i < jsonArray.length(); i++) {
+//            JSONObject object = jsonArray.getJSONObject(i);
+//            String id = (String) object.get("id");
+//            String hg = (String) object.get("haplogroup");
+//            ids.add(id);
+//            haplogroups.add(hg);
+//            //Status status = cr.getResponse().getStatus();
+//        }
+//
+//        update(ids, haplogroups);
 
     }
 

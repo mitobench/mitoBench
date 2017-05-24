@@ -109,7 +109,7 @@ public class FileMenu {
          */
 
         MenuItem importFile = new MenuItem("Import");
-        importFile.setId("import");
+        importFile.setId("importFile");
         importFile.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 IImportDialogue importDialogue;
