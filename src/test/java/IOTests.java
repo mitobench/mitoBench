@@ -1,4 +1,3 @@
-import gui.GUITestSteps;
 import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
@@ -31,7 +30,7 @@ public class IOTests {
     private InputStream is;
     private InputStreamReader isr;
     private BufferedReader bfr;
-    private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(GUITestSteps.class);
+    private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(IOTests.class);
 
 
     private void setUp(String path) {
