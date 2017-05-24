@@ -90,7 +90,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-        steps.part4BasicStuff();
+        //steps.part4BasicStuff();
         //steps.part3AboutDialogueTests();
         //steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
         //steps.part5DBTest();
