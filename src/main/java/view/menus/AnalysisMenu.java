@@ -35,7 +35,7 @@ public class AnalysisMenu {
 
 
 
-        MenuItem pairwiseFst = new MenuItem("calculate pairwise Fst");
+        MenuItem pairwiseFst = new MenuItem("Calculate pairwise Fst");
         pairwiseFst.setId("menuitem_pairwiseFst");
         pairwiseFst.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -65,8 +65,8 @@ public class AnalysisMenu {
 
             }
         });
-        //menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
-        menuAnalysis.getItems().add(pairwiseFst);
+        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
+        //menuAnalysis.getItems().add(pairwiseFst);
 
     }
 
