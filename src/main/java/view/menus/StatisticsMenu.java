@@ -56,7 +56,7 @@ public class StatisticsMenu {
                 if(tableController.getGroupController().isGroupingExists()) {
                     haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
                     HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
-                    hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene, LOG);
+                    hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
                 } else {
                     GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
                             "No groups defined",

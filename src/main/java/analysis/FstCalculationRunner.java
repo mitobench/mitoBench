@@ -5,20 +5,16 @@ import Logging.LogClass;
 import io.dialogues.Export.DataChoiceDialogue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
-import methods.CalculatorStoneking;
+import methods.Calculator;
+import methods.Filter;
 import view.MitoBenchWindow;
 import view.table.controller.TableControllerFstValues;
-import view.table.controller.TableControllerMutations;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,30 +23,21 @@ import java.util.List;
  */
 public class FstCalculationRunner {
 
+    private final MitoBenchWindow mitobench;
     private HashMap<String, List<String>> data;
-    private String selection;
     private TableControllerFstValues tableControllerFstValues;
+    private double[][] fsts;
+    private String[] groupnames;
 
     public FstCalculationRunner(MitoBenchWindow mito) throws IOException {
-        askForGroups(mito);
-        prepareData(selection, mito.getTableControllerUserBench());
-        run(mito.getScene(), mito.getTabpane_statistics(), mito.getLogClass());
+        mitobench = mito;
+        prepareData(mito.getTableControllerUserBench());
     }
 
 
-
-    public void askForGroups(MitoBenchWindow mito) throws IOException {
-
-        List<String> columns = mito.getTableControllerUserBench().getCurrentColumnNames();
-
-        DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(columns);
-        selection = dataChoiceDialogue.getSelected();
-
-    }
-
-    public void prepareData(String selection, TableControllerUserBench tableControllerUserBench){
+    private void prepareData(TableControllerUserBench tableControllerUserBench){
         data = new HashMap<>();
-        int colIndexSelection = tableControllerUserBench.getColIndex(selection);
+        int colIndexSelection = tableControllerUserBench.getColIndex(mitobench.getGroupController().getColname_group());
         int colIndexSequence = tableControllerUserBench.getColIndex("MTSequence");
 
         ObservableList<ObservableList> table = tableControllerUserBench.getTable().getItems();
@@ -72,35 +59,38 @@ public class FstCalculationRunner {
 
     }
 
-    public void run(Scene scene, TabPane statsTabPane, LogClass logClass) throws IOException {
-        CalculatorStoneking calculateStoneking = new CalculatorStoneking();
-        calculateStoneking.calculateFst(data);
-        double[][] fsts = calculateStoneking.getFsts();
-        String[] groupnames = calculateStoneking.getGroupnames();
+    public void run(boolean runSlatkin,
+                    boolean runReynolds) throws IOException {
+
+
+        Filter filter = new Filter();
+        List<Integer> usableLoci = filter.getUsableLoci(data, 'N', 0.05);
+
+        Calculator calculater = new Calculator(usableLoci);
+        calculater.calculateFst(data);
+        fsts = calculater.getFsts();
+        groupnames = calculater.getGroupnames();
+
+
+        // todo: write result in an appropriate way
+        if(runSlatkin){
+            calculater.linearizeWithSlatkin(fsts);
+        }
+        if(runReynolds){
+            calculater.linearizeWithReynold(fsts);
+        }
 
         // init table controller
-        tableControllerFstValues = new TableControllerFstValues(logClass);
+        tableControllerFstValues = new TableControllerFstValues(mitobench.getLogClass());
         tableControllerFstValues.init();
 
-        // write results to table view
-        System.out.println("Write values to table");
-        TableView table_fst_values = writeToTable(fsts, groupnames, scene);
-        Tab tab = new Tab();
-        tab.setId("tab_fst_values");
-        tab.setText("Fst values");
-        tab.setContent(table_fst_values);
-        statsTabPane.getTabs().add(tab);
-        statsTabPane.getSelectionModel().select(tab);
-
-        logClass.getLogger(this.getClass()).info("Calculate pairwise Fst values between following groups:\n" + groupnames);
 
         // write to file
-
         Writer writer = new Writer();
         writer.writeResultsToFile("resultsFstStatistics.tsv", fsts, groupnames);
     }
 
-    private TableView writeToTable(double[][] fsts, String[] groupnames, Scene scene) {
+    public TableView writeToTable() {
 
         TableView<ObservableList> table = tableControllerFstValues.getTable();
         tableControllerFstValues.addColumn("", 0);
@@ -120,7 +110,6 @@ public class FstCalculationRunner {
             {
                 entry.add(fsts[col][j]);
             }
-
             entries.add(entry);
         }
 
@@ -134,4 +123,7 @@ public class FstCalculationRunner {
     }
 
 
+    public String[] getGroupnames() {
+        return groupnames;
+    }
 }

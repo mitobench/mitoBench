@@ -22,7 +22,6 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
     private HaploStatistics haploStatistics;
     private Scene scene;
     private TabPane statsTabPane;
-    private Logger LOG;
 
     public HGStatisticsPopupDialogue(String title, LogClass LOGClass){
         super(title, LOGClass);
@@ -31,9 +30,9 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
 
     }
 
-    public void init(HaploStatistics haploStatistics, TabPane statsTabpane, Scene scene, Logger LOG){
+    public void init(HaploStatistics haploStatistics, TabPane statsTabpane, Scene scene){
         addComponents(haploStatistics, statsTabpane, scene);
-        this.LOG = LOG;
+        this.LOG = this.logClass.getLogger(this.getClass());
         addListener();
     }
 
@@ -45,7 +44,8 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
         this.statsTabPane = statsTabPane;
         this.scene = scene;
         this.haploStatistics = haploStatistics;
-        Label label = new Label("Please enter comma separated list of haplogroups \naccording to which the haplogroups should be grouped:");
+        Label label = new Label("Please enter comma separated list of haplogroups " +
+                "\naccording to which the haplogroups should be grouped:");
         Label default_list = new Label("or use the default list:");
 
         textField = new TextField();
