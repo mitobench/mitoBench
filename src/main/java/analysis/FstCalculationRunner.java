@@ -1,19 +1,21 @@
 package analysis;
 
 import IO.Writer;
-import Logging.LogClass;
-import io.dialogues.Export.DataChoiceDialogue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import methods.Calculator;
 import methods.Filter;
 import view.MitoBenchWindow;
+import view.table.MTStorage;
 import view.table.controller.TableControllerFstValues;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,26 +26,39 @@ import java.util.List;
 public class FstCalculationRunner {
 
     private final MitoBenchWindow mitobench;
+    private final String distance_type;
+    private double gamma_a;
+    private char missing_data_character;
     private HashMap<String, List<String>> data;
     private TableControllerFstValues tableControllerFstValues;
     private double[][] fsts;
+    private double[][] fsts_slatkin=null;
+    private double[][] fsts_reynolds=null;
     private String[] groupnames;
+    private List<Integer> usableLoci;
 
-    public FstCalculationRunner(MitoBenchWindow mito) throws IOException {
+    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char missing_data_character)
+            throws IOException {
         mitobench = mito;
-        prepareData(mito.getTableControllerUserBench());
+        distance_type = type;
+        gamma_a = gamma;
+        this.missing_data_character = missing_data_character;
+
+        prepareData(mito.getTableControllerUserBench(), mitobench.getTableControllerUserBench().getDataTable().getMtStorage());
     }
 
 
-    private void prepareData(TableControllerUserBench tableControllerUserBench){
+    private void prepareData(TableControllerUserBench tableControllerUserBench, MTStorage mtStorage){
         data = new HashMap<>();
         int colIndexSelection = tableControllerUserBench.getColIndex(mitobench.getGroupController().getColname_group());
-        int colIndexSequence = tableControllerUserBench.getColIndex("MTSequence");
+        //int colIndexSequence = tableControllerUserBench.getColIndex("MTSequence");
+        int colIndexSequence = tableControllerUserBench.getColIndex("ID");
 
         ObservableList<ObservableList> table = tableControllerUserBench.getTable().getItems();
         for(ObservableList row : table){
             String group = (String)row.get(colIndexSelection);
-            String sequence = (String)row.get(colIndexSequence);
+            String id = (String)row.get(colIndexSequence);
+            String sequence = mtStorage.getData().get(id);
             if(!data.containsKey(group)){
                 List<String> sequences = new ArrayList<>();
                 sequences.add(sequence);
@@ -59,14 +74,13 @@ public class FstCalculationRunner {
 
     }
 
-    public void run(boolean runSlatkin,
-                    boolean runReynolds) throws IOException {
+    public void run(boolean runSlatkin, boolean runReynolds) throws IOException {
 
 
         Filter filter = new Filter();
-        List<Integer> usableLoci = filter.getUsableLoci(data, 'N', 0.05);
+        usableLoci = filter.getUsableLoci(data, missing_data_character, 0.05);
 
-        Calculator calculater = new Calculator(usableLoci);
+        Calculator calculater = new Calculator(usableLoci, filter.getNumberOfTotalLoci(),distance_type, gamma_a);
         calculater.calculateFst(data);
         fsts = calculater.getFsts();
         groupnames = calculater.getGroupnames();
@@ -74,10 +88,10 @@ public class FstCalculationRunner {
 
         // todo: write result in an appropriate way
         if(runSlatkin){
-            calculater.linearizeWithSlatkin(fsts);
+            fsts_slatkin = calculater.linearizeWithSlatkin(fsts);
         }
         if(runReynolds){
-            calculater.linearizeWithReynold(fsts);
+            fsts_reynolds = calculater.linearizeWithReynold(fsts);
         }
 
         // init table controller
@@ -90,7 +104,20 @@ public class FstCalculationRunner {
         writer.writeResultsToFile("resultsFstStatistics.tsv", fsts, groupnames);
     }
 
-    public TableView writeToTable() {
+
+    public void writeToTable() {
+
+        writeTable(fsts, "Fst values", "fst_values");
+//        if(fsts_slatkin != null)
+//            writeTable(fsts_slatkin, "Fst values (Slatkin)", "fst_values_slatkin");
+//        if(fsts_reynolds != null)
+//            writeTable(fsts_reynolds, "Fst values (Reynolds)", "fst_values_reynolds");
+
+
+
+    }
+
+    private void writeTable(double[][] fsts, String tab_header, String id){
 
         TableView<ObservableList> table = tableControllerFstValues.getTable();
         tableControllerFstValues.addColumn("", 0);
@@ -108,7 +135,7 @@ public class FstCalculationRunner {
             entry.add(groupnames[j]);
             for(int col=0; col<fsts[0].length; col++)
             {
-                entry.add(fsts[col][j]);
+                entry.add(round(fsts[col][j],5));
             }
             entries.add(entry);
         }
@@ -119,11 +146,31 @@ public class FstCalculationRunner {
         //FINALLY ADDED TO TableView
         table.getItems().addAll(entries);
 
-        return table;
+        Tab tab = new Tab();
+        tab.setId("tab_" + id);
+        tab.setText(tab_header);
+        tab.setContent(table);
+
+        mitobench.getTabpane_statistics().getTabs().add(tab);
+
     }
+
+
+    public static BigDecimal round(double value, int numberOfDigitsAfterDecimalPoint) {
+        BigDecimal bigDecimal = new BigDecimal(value);
+        bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
+                BigDecimal.ROUND_HALF_EVEN);
+        return bigDecimal;
+    }
+
 
 
     public String[] getGroupnames() {
         return groupnames;
     }
+
+    public double[][] getFsts() {
+        return fsts;
+    }
 }
+
