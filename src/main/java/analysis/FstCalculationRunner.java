@@ -1,19 +1,22 @@
 package analysis;
 
-import IO.Writer;
+
+import IO.writer.Writer;
+import fst.FstCalculator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import methods.Calculator;
+import javafx.scene.layout.Pane;
+
 import methods.Filter;
 import view.MitoBenchWindow;
 import view.table.MTStorage;
 import view.table.controller.TableControllerFstValues;
 import view.table.controller.TableControllerUserBench;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class FstCalculationRunner {
     private double[][] fsts_reynolds=null;
     private String[] groupnames;
     private List<Integer> usableLoci;
+    private Writer writer;
 
     public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char missing_data_character)
             throws IOException {
@@ -74,13 +78,22 @@ public class FstCalculationRunner {
 
     }
 
-    public void run(boolean runSlatkin, boolean runReynolds) throws IOException {
+    public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
 
 
         Filter filter = new Filter();
-        usableLoci = filter.getUsableLoci(data, missing_data_character, 0.05);
 
-        Calculator calculater = new Calculator(usableLoci, filter.getNumberOfTotalLoci(),distance_type, gamma_a);
+        usableLoci = filter.getUsableLoci(
+                data,
+                missing_data_character,
+                Double.parseDouble(field_level_missing_data)
+        );
+
+        FstCalculator calculater = new FstCalculator(
+                usableLoci,
+                filter.getNumberOfTotalLoci()
+        );
+
         calculater.calculateFst(data);
         fsts = calculater.getFsts();
         groupnames = calculater.getGroupnames();
@@ -91,7 +104,7 @@ public class FstCalculationRunner {
             fsts_slatkin = calculater.linearizeWithSlatkin(fsts);
         }
         if(runReynolds){
-            fsts_reynolds = calculater.linearizeWithReynold(fsts);
+            fsts_reynolds = calculater.linearizeWithReynolds(fsts);
         }
 
         // init table controller
@@ -100,14 +113,25 @@ public class FstCalculationRunner {
 
 
         // write to file
-        Writer writer = new Writer();
-        writer.writeResultsToFile("resultsFstStatistics.tsv", fsts, groupnames);
+        writer = new Writer();
+        writer.writeResultsFstToString(fsts,
+                groupnames,
+                usableLoci,
+                Double.parseDouble(field_level_missing_data)
+        );
+
+
     }
 
 
     public void writeToTable() {
 
-        writeTable(fsts, "Fst values", "fst_values");
+        writeTable(
+                fsts,
+                "Fst values",
+                "fst_values"
+        );
+
 //        if(fsts_slatkin != null)
 //            writeTable(fsts_slatkin, "Fst values (Slatkin)", "fst_values_slatkin");
 //        if(fsts_reynolds != null)
@@ -146,12 +170,21 @@ public class FstCalculationRunner {
         //FINALLY ADDED TO TableView
         table.getItems().addAll(entries);
 
+//        Tab tab = new Tab();
+//        tab.setId("tab_" + id);
+//        tab.setText(tab_header);
+//        tab.setContent(table);
+
+
+        Label textArea_result = new Label(writer.getResult_as_string());
+
         Tab tab = new Tab();
         tab.setId("tab_" + id);
         tab.setText(tab_header);
-        tab.setContent(table);
+        tab.setContent(textArea_result);
 
         mitobench.getTabpane_statistics().getTabs().add(tab);
+
 
     }
 
@@ -163,6 +196,10 @@ public class FstCalculationRunner {
         return bigDecimal;
     }
 
+
+    public void writeToFile(String path) throws IOException {
+        writer.writeResultsToFile(path+ File.separator+"mitoBench_results_fst.txt");
+    }
 
 
     public String[] getGroupnames() {
