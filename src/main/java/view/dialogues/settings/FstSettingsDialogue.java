@@ -84,7 +84,7 @@ public class FstSettingsDialogue extends APopupDialogue{
 
         comboBox_distance = new ComboBox();
         comboBox_distance.getItems().addAll(
-                "Pairwise difference",
+                "Pairwise Difference",
                 //"Percentage difference",
                 "Jukes and Cantor",
                 "Kimura 2-parameters"

@@ -1,15 +1,18 @@
 package analysis;
 
 
+import IO.reader.DistanceTypeParser;
 import IO.writer.Writer;
 import fst.FstCalculator;
+import fst.StandardAMOVA;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.Pane;
 
+import javafx.scene.text.Text;
 import methods.Filter;
 import view.MitoBenchWindow;
 import view.table.MTStorage;
@@ -89,23 +92,23 @@ public class FstCalculationRunner {
                 Double.parseDouble(field_level_missing_data)
         );
 
-        FstCalculator calculater = new FstCalculator(
-                usableLoci,
-                filter.getNumberOfTotalLoci()
-        );
+        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
 
-        calculater.calculateFst(data);
-        fsts = calculater.getFsts();
-        groupnames = calculater.getGroupnames();
+        StandardAMOVA standardAMOVA = new StandardAMOVA(usableLoci);
+        standardAMOVA.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
+        standardAMOVA.setData(data);
+
+        fsts = standardAMOVA.calculateModifiedFst();
+        groupnames = standardAMOVA.getGroupnames();
 
 
         // todo: write result in an appropriate way
-        if(runSlatkin){
-            fsts_slatkin = calculater.linearizeWithSlatkin(fsts);
-        }
-        if(runReynolds){
-            fsts_reynolds = calculater.linearizeWithReynolds(fsts);
-        }
+//        if(runSlatkin){
+//            fsts_slatkin = calculater.linearizeWithSlatkin(fsts);
+//        }
+//        if(runReynolds){
+//            fsts_reynolds = calculater.linearizeWithReynolds(fsts);
+//        }
 
         // init table controller
         tableControllerFstValues = new TableControllerFstValues(mitobench.getLogClass());
@@ -119,6 +122,8 @@ public class FstCalculationRunner {
                 usableLoci,
                 Double.parseDouble(field_level_missing_data)
         );
+
+        writer.addDistanceMatrixToResult(standardAMOVA.getDistanceCalculator().getDistancematrix_d());
 
 
     }
@@ -175,13 +180,18 @@ public class FstCalculationRunner {
 //        tab.setText(tab_header);
 //        tab.setContent(table);
 
-
-        Label textArea_result = new Label(writer.getResult_as_string());
+        ScrollPane scrollpane_result = new ScrollPane();
+        String text = writer.getResult_as_string();
+        Text t = new Text();
+        t.setText(text);
+        t.wrappingWidthProperty().bind(mitobench.getScene().widthProperty());
+        scrollpane_result.setContent(t);
+        //Label textArea_result = new Label(writer.getResult_as_string());
 
         Tab tab = new Tab();
         tab.setId("tab_" + id);
         tab.setText(tab_header);
-        tab.setContent(textArea_result);
+        tab.setContent(scrollpane_result);
 
         mitobench.getTabpane_statistics().getTabs().add(tab);
 
