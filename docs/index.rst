@@ -14,7 +14,26 @@ This is the main mitoBench documentation, where you can find information about t
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   
+   contents/prerequisites
+
+   contents/installation
+
+   contents/generalUsage
+   
+   contents/import
+    
+   contents/export
+   
+   contents/grouping
+      
+   contents/filtering
+   
+   contents/analysis   
+
+   contents/visualization  
+
+   contents/citations
 
 
 
