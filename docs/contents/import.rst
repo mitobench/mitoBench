@@ -27,5 +27,5 @@ data has to be loaded. More advanced user also can write their own query (SQL st
 .. note::
    Type * to get all data from the database.
 
-The secified data are loaded to the mitoBench in a separate table and can be added
+The secified data will be loaded to the mitoBench in a separate table and can be added
 to the main user table.

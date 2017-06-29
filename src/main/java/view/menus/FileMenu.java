@@ -17,10 +17,8 @@ import io.writer.StatisticsWriter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -139,13 +137,24 @@ public class FileMenu {
         importFromDB.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 // todo: make db query
-                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(tableControllerDB,
-                        "Database Login", logClass, mitoBenchWindow);
 
-                if(drapAndDropEventMaganer==null){
-                    drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
-                    drapAndDropEventMaganer.createEvent();
-                }
+                Tab tab = new Tab("Database Login");
+
+                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(
+                        tableControllerDB,
+                        logClass,
+                        mitoBenchWindow,
+                        tab
+                );
+
+                GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
+                tab.setContent(dialogue);
+                mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
+
+//                if(drapAndDropEventMaganer==null){
+//                    drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
+//                    drapAndDropEventMaganer.createEvent();
+//                }
 
 
             }

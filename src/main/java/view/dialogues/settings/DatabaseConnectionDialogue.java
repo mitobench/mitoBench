@@ -3,16 +3,19 @@ package view.dialogues.settings;
 import Logging.LogClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import view.MitoBenchWindow;
 import view.table.controller.ATableController;
 
 /**
  * Created by neukamm on 02.02.17.
  */
-public class DatabaseConnectionDialogue extends APopupDialogue{
+public class DatabaseConnectionDialogue {//extends APopupDialogue{
 
 
     private Button loginBtn;
@@ -23,19 +26,27 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
     private  ATableController table;
     private Boolean loggedIn = false;
     private MitoBenchWindow mitoBenchWindow;
+    private GridPane dialogGrid;
+    private LogClass logClass;
 
-    public DatabaseConnectionDialogue(ATableController tableUserDB, String title, LogClass logClass, MitoBenchWindow mito){
-        super(title, logClass);
+    public DatabaseConnectionDialogue(ATableController tableUserDB, LogClass logClass, MitoBenchWindow mito, Tab tab){
+        //super(title, logClass);
         mitoBenchWindow = mito;
         table = tableUserDB;
-        dialogGrid.setId("connect_to_database");
+        this.logClass = logClass;
         setComponents();
-        addListener();
-        show();
+        addListener(tab);
+        //show();
 
     }
 
     private void setComponents(){
+        dialogGrid = new GridPane();
+        dialogGrid.setAlignment(Pos.CENTER);
+        dialogGrid.setHgap(10);
+        dialogGrid.setVgap(10);
+        dialogGrid.setId("connect_to_database");
+
         Label title_label = new Label("Connect to database");
         title_label.setId("title_label");
         Label username_label = new Label("Username");
@@ -66,27 +77,28 @@ public class DatabaseConnectionDialogue extends APopupDialogue{
     }
 
 
-    private void addListener(){
-        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                username = usernamme_field.getText();
-                password = password_field.getText();
+    private void addListener(Tab tab){
+        loginBtn.setOnAction(e -> {
+            username = usernamme_field.getText();
+            password = password_field.getText();
 
-                //For testing and stuff
-                usernamme_field.setText("mitodbreader");
-                password_field.setText("*****************");
-                password = "LKeAFGVqSZdtr8peTPOv";
-                username = "mitodbreader";
+            //For testing and stuff
+            usernamme_field.setText("mitodbreader");
+            password_field.setText("*****************");
+            password = "LKeAFGVqSZdtr8peTPOv";
+            username = "mitodbreader";
 
-                // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("DB Search mask", mitoBenchWindow);
-                dbSearchDialogue.fillDialogue();
-                dbSearchDialogue.addButtonFunc(username, password, table);
-                dialog.close();
+            mitoBenchWindow.getTabpane_statistics().getTabs().remove(tab);
 
-            }
+            // open search mask to specify which data should be loaded
+            DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow);
+            dbSearchDialogue.fillDialogue();
+            dbSearchDialogue.addFunctionality(username, password, table);
         });
     }
 
 
+    public GridPane getDialogGrid() {
+        return dialogGrid;
+    }
 }

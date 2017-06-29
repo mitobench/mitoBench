@@ -56,4 +56,8 @@ public abstract class APopupDialogue {
     public void close(){
         dialog.close();
     }
+
+    public GridPane getDialogGrid() {
+        return dialogGrid;
+    }
 }
