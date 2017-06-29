@@ -6,6 +6,12 @@
 Welcome to mitoBench's documentation!
 =====================================
 
+
+.. image:: contents/images/mitoBenchLogo.jpg
+   :align: center
+   
+This is the main mitoBench documentation, where you can find information about the usage of this workbench.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
