@@ -67,14 +67,13 @@ public class GUITests extends FxRobot implements GUITestValidator {
             System.setProperty("java.awt.headless", "true");
         }
         System.setProperty("javafx.running", "true");
+        FxToolkit.registerPrimaryStage();
 
     }
 
     @Before
     public void setUp() throws Exception {
 
-        registerPrimaryStage();
-        setupApplication(MitoBenchWindow.class);
 
         logClass = new LogClass();
         logClass.updateLog4jConfiguration(System.getProperty("user.dir") + "/mito_log_tmp.log");
@@ -91,6 +90,7 @@ public class GUITests extends FxRobot implements GUITestValidator {
         mutationStatistics = new MutationStatistics(logClass);
 
         testFiles = new GUITestFiles();
+        FxToolkit.setupApplication(MitoBenchWindow.class);
 
     }
 
