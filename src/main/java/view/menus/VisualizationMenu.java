@@ -200,7 +200,7 @@ public class VisualizationMenu {
         LOG.info("Visualize data: Visualize all samples on map");
 
         MapViewController mapViewController = new MapViewController(tableController.getTableColumnByName("ID"),
-                tableController.getTableColumnByName("location"),
+                tableController.getTableColumnByName("Location"),
                 tableController.getTable().getItems());
 
         Tab tab = new Tab();

@@ -94,7 +94,6 @@ public class DBSearchDialogue {
         dialogGrid.add(btnSend,2,6,3,1);
         dialogGrid.add(message, 0,6,2,1);
 
-
     }
 
     public void addFunctionality(String username, String password, ATableController tablecontroller) {

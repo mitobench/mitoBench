@@ -5,14 +5,11 @@ import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.*;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import netscape.javascript.JSObject;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Created by neukamm on 17.03.17.
