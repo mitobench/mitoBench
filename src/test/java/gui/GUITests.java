@@ -3,14 +3,19 @@ package gui;
 
 import Logging.LogClass;
 import io.PhyloTreeParser;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxToolkit;
 import statistics.HaploStatistics;
 import statistics.MutationStatistics;
 import view.MitoBenchWindow;
@@ -62,11 +67,14 @@ public class GUITests extends FxRobot implements GUITestValidator {
             System.setProperty("java.awt.headless", "true");
         }
         System.setProperty("javafx.running", "true");
-        registerPrimaryStage();
+
     }
 
     @Before
     public void setUp() throws Exception {
+
+        registerPrimaryStage();
+        setupApplication(MitoBenchWindow.class);
 
         logClass = new LogClass();
         logClass.updateLog4jConfiguration(System.getProperty("user.dir") + "/mito_log_tmp.log");
@@ -83,15 +91,15 @@ public class GUITests extends FxRobot implements GUITestValidator {
         mutationStatistics = new MutationStatistics(logClass);
 
         testFiles = new GUITestFiles();
-        setupApplication(MitoBenchWindow.class);
+
     }
 
     @Test
     public void testWalkThrough() throws Exception {
         GUITestSteps steps = new GUITestSteps(this);
 
-        steps.part4BasicStuff();
-        steps.part3AboutDialogueTests();
+        //steps.part4BasicStuff();
+        //steps.part3AboutDialogueTests();
         //steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
         //steps.part5DBTest();
         //steps.partTestGrouping();
