@@ -54,6 +54,8 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20090211'
     compile group: 'com.github.jsqlparser', name: 'jsqlparser', version: '1.0'
     compile group: 'org.testfx', name: 'openjfx-monocle', version: '8u20-b26'
+    compile group: 'com.dukescript.api', name: 'leaflet4j', version: '0.7'
+    compile 'org.netbeans.html:net.java.html.boot.fx:1.4'
 }
 
 

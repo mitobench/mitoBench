@@ -18,7 +18,7 @@ public class LogClass {
      */
 
     public void setUp(){
-        String configFile = System.getProperty("user.dir") + File.separator + "src/resources/logger.properties";
+        String configFile = System.getProperty("user.dir") + File.separator + "src/main/resources/logger.properties";
         PropertyConfigurator.configure(configFile);
     }
 

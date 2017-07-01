@@ -1,6 +1,7 @@
 package view.menus;
 
 import Logging.LogClass;
+import controller.LeafletController;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,7 +21,9 @@ import controller.MapViewController;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
 
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,14 +202,27 @@ public class VisualizationMenu {
     private void initMap(String title){
         LOG.info("Visualize data: Visualize all samples on map");
 
-        MapViewController mapViewController = new MapViewController(tableController.getTableColumnByName("ID"),
-                tableController.getTableColumnByName("Location"),
-                tableController.getTable().getItems());
+//        MapViewController mapViewController = new MapViewController(tableController.getTableColumnByName("ID"),
+//                tableController.getTableColumnByName("Location"),
+//                tableController.getTable().getItems());
+
+        LeafletController mapViewController = null;
+        try {
+            mapViewController = new LeafletController(tableController.getTableColumnByName("ID"),
+                    tableController.getTableColumnByName("Location"),
+                    tableController.getTable().getItems());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         Tab tab = new Tab();
         tab.setId("tab_map");
         tab.setText("Map");
-        tab.setContent(mapViewController.getMapView());
+        tab.setContent(mapViewController.getMap());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
