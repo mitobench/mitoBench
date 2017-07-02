@@ -1,20 +1,18 @@
 package controller;
 
-import com.lynden.gmapsfx.GoogleMapView;
-import com.lynden.gmapsfx.javascript.event.UIEventType;
-import com.lynden.gmapsfx.javascript.object.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
-import leaflet.MainApp;
 import leaflet.MapView;
 import net.java.html.boot.fx.FXBrowsers;
-import net.java.html.leaflet.LatLng;
-import netscape.javascript.JSObject;
+import net.java.html.leaflet.*;
 
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
@@ -32,9 +30,11 @@ public class LeafletController {
     private final ObservableList items;
     private final MapView map;
     private final BorderPane borderPane;
+    private final ListView listView;
 
 
-    public LeafletController(TableColumn id, TableColumn location, ObservableList items) throws FileNotFoundException, URISyntaxException, MalformedURLException {
+    public LeafletController(TableColumn id, TableColumn location, ObservableList items)
+            throws FileNotFoundException, URISyntaxException, MalformedURLException {
 
         id_col = id;
         location_col = location;
@@ -47,30 +47,53 @@ public class LeafletController {
 
 
         // a regular JavaFX ListView
-        ListView<Address> listView = new ListView<>();
-        addDataToMap(listView);
+        listView = new ListView<>();
+        initMarker(listView);
 
         // we listen for the selected item and update the map accordingly
         // as a demo of how to interact between JavaFX and DukeScript
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Address>() {
             @Override
             public void changed(ObservableValue<? extends Address> ov, Address old_val, final Address new_val) {
-                FXBrowsers.runInBrowser(map.getWebView(), new Runnable() {
-                    @Override
-                    public void run() {
-                        LatLng pos = new LatLng(new_val.getLat(), new_val.getLng());
-                        map.getMap().setView(pos, 20);
-                        map.getMap().openPopup("Here is " + new_val, pos);
-                    }
+                FXBrowsers.runInBrowser(map.getWebView(), () -> {
+
+                    LatLng pos = new LatLng(new_val.getLat(), new_val.getLng());
+                    map.getMap().setView(pos, 5);
+                    map.getMap().openPopup(new_val.toString(), pos);
+                    map.getMap().latLngToLayerPoint(pos);
+
+                    Icon icon = new Icon(new IconOptions("leaflet-0.7.2/images/marker-icon.png"));
+                    Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+                    m.addTo(map.getMap());
+
                 });
             }
         });
 
         borderPane.setLeft(listView);
+        Button showAllData = new Button("Show all data");
+        borderPane.setBottom(showAllData);
+
+        showAllData.setOnAction(e -> {
+            FXBrowsers.runInBrowser(map.getWebView(), () -> {
+
+                for(Object add : listView.getItems()){
+                    Address loc = (Address) add;
+                    LatLng pos = new LatLng(loc.getLat(), loc.getLng());
+                    Icon icon = new Icon(new IconOptions("leaflet-0.7.2/images/marker-icon.png"));
+                    Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+                    m.addTo(map.getMap());
+                }
+
+            });
+        });
 
     }
 
-    private void addDataToMap(ListView<Address> listView) {
+
+
+    private void initMarker(ListView<Address> listView) {
         List<Address> marker_all = new ArrayList<>();
 
         if(location_col!=null){
@@ -88,12 +111,11 @@ public class LeafletController {
             }
 
         }
-
         listView.getItems().addAll(marker_all);
 
     }
 
-    private static class Address {
+    public static class Address {
 
         private final String name;
         private final double lat;
@@ -122,7 +144,13 @@ public class LeafletController {
 
     }
 
+
+    public MapView getMapView() {return map;}
     public BorderPane getMap() {
         return borderPane;
+    }
+
+    public ListView getListView() {
+        return listView;
     }
 }

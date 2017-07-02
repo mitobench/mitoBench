@@ -3,11 +3,10 @@ package analysis;
 
 import IO.reader.DistanceTypeParser;
 import IO.writer.Writer;
-import fst.FstCalculator;
+import fst.Linearization;
 import fst.StandardAMOVA;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
@@ -92,6 +91,7 @@ public class FstCalculationRunner {
                 Double.parseDouble(field_level_missing_data)
         );
 
+        Linearization linearization = new Linearization();
         DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
 
         StandardAMOVA standardAMOVA = new StandardAMOVA(usableLoci);
@@ -102,19 +102,6 @@ public class FstCalculationRunner {
         groupnames = standardAMOVA.getGroupnames();
 
 
-        // todo: write result in an appropriate way
-//        if(runSlatkin){
-//            fsts_slatkin = calculater.linearizeWithSlatkin(fsts);
-//        }
-//        if(runReynolds){
-//            fsts_reynolds = calculater.linearizeWithReynolds(fsts);
-//        }
-
-        // init table controller
-        tableControllerFstValues = new TableControllerFstValues(mitobench.getLogClass());
-        tableControllerFstValues.init();
-
-
         // write to file
         writer = new Writer();
         writer.writeResultsFstToString(fsts,
@@ -122,6 +109,21 @@ public class FstCalculationRunner {
                 usableLoci,
                 Double.parseDouble(field_level_missing_data)
         );
+
+
+        // todo: write result in an appropriate way
+        if(runSlatkin){
+            fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
+            writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
+        }
+        if(runReynolds){
+            fsts_reynolds = linearization.linearizeWithReynolds(fsts);
+            writer.addLinerarizedFstMatrix(fsts_reynolds, "Reynolds' distance");
+        }
+
+        // init table controller
+        tableControllerFstValues = new TableControllerFstValues(mitobench.getLogClass());
+        tableControllerFstValues.init();
 
         writer.addDistanceMatrixToResult(standardAMOVA.getDistanceCalculator().getDistancematrix_d());
 

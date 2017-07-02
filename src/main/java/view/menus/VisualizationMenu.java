@@ -225,6 +225,7 @@ public class VisualizationMenu {
         tab.setContent(mapViewController.getMap());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
+
     }
 
 
