@@ -46,7 +46,7 @@ public class CreateGroupDialog extends APopupDialogue{
                 String groupName = groupnameField.getText();
                 LOG.info("Create new group: " + groupName);
                 groupController.setOwnGroupingIsSet(true);
-                groupController.createGroupByColumn("Group", groupName);
+                groupController.createGroupByColumn("Group", groupName, true);
                 controller.updateTable(controller.createNewEntryListForGrouping(groupnameField.getText(), "Group (Grouping)"));
                 close();
             }

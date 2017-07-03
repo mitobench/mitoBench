@@ -33,11 +33,7 @@
 //import java.util.HashMap;
 //import java.util.List;
 //
-//import static junit.framework.Assert.assertTrue;
 //import static junit.framework.TestCase.assertEquals;
-//import static org.testfx.api.FxToolkit.registerPrimaryStage;
-//import static org.testfx.api.FxToolkit.setupApplication;
-//
 //
 ///**
 // * Created by peltzer on 21/12/2016.
@@ -97,17 +93,17 @@
 //    public void testWalkThrough() throws Exception {
 //        GUITestSteps steps = new GUITestSteps(this);
 //
-//        //steps.part4BasicStuff();
-//        //steps.part3AboutDialogueTests();
-//        //steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
-//        //steps.part5DBTest();
-//        //steps.partTestGrouping();
-//        //steps.part6Statistics();
-//        //steps.part7CreatePlots();
-//        //steps.partFilterMutations();
-//        //steps.part1TreeViewTests();
-//        //steps.partTestMap();
-//        //steps.part8MenuInteraction();
+//        steps.part4BasicStuff();
+//        steps.part3AboutDialogueTests();
+//        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
+//        steps.part5DBTest();
+//        steps.partTestGrouping();
+//        steps.part6Statistics();
+//        steps.part7CreatePlots();
+//        steps.partFilterMutations();
+//        steps.part1TreeViewTests();
+//        steps.partTestMap();
+//        steps.part8MenuInteraction();
 //
 //
 //    }
@@ -180,6 +176,16 @@
 //    @Override
 //    public void validateExportFile() {
 //
+//    }
+//
+//        private Path getResource(final String file) throws Exception {
+//        URL url = getClass().getResource("/" + file);
+//
+//        if (url == null) {
+//            throw new FileNotFoundException(String.format("Unable to load %s", file));
+//        } else {
+//            return Paths.get(url.toURI());
+//        }
 //    }
 //
 //

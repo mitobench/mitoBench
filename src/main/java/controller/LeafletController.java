@@ -11,8 +11,10 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
 import leaflet.MapView;
+import leaflet.MarkerIcons;
 import net.java.html.boot.fx.FXBrowsers;
 import net.java.html.leaflet.*;
+import view.table.controller.TableControllerUserBench;
 
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
@@ -27,17 +29,20 @@ public class LeafletController {
 
     private final TableColumn id_col;
     private final TableColumn location_col;
+    private final TableColumn grouping_col;
     private final ObservableList items;
     private final MapView map;
     private final BorderPane borderPane;
     private final ListView listView;
 
 
-    public LeafletController(TableColumn id, TableColumn location, ObservableList items)
+    public LeafletController(TableColumn id, TableColumn location, TableColumn grouping, ObservableList<String> items,
+                             GroupController groupController, TableControllerUserBench tableController)
             throws FileNotFoundException, URISyntaxException, MalformedURLException {
 
         id_col = id;
         location_col = location;
+        grouping_col = grouping;
         this.items = items;
 
 
@@ -63,10 +68,6 @@ public class LeafletController {
                     map.getMap().openPopup(new_val.toString(), pos);
                     map.getMap().latLngToLayerPoint(pos);
 
-                    Icon icon = new Icon(new IconOptions("leaflet-0.7.2/images/marker-icon.png"));
-                    Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
-                    m.addTo(map.getMap());
-
                 });
             }
         });
@@ -75,22 +76,28 @@ public class LeafletController {
         Button showAllData = new Button("Show all data");
         borderPane.setBottom(showAllData);
 
-        showAllData.setOnAction(e -> {
-            FXBrowsers.runInBrowser(map.getWebView(), () -> {
+        showAllData.setOnAction(e ->
 
-                for(Object add : listView.getItems()){
-                    Address loc = (Address) add;
-                    LatLng pos = new LatLng(loc.getLat(), loc.getLng());
-                    Icon icon = new Icon(new IconOptions("leaflet-0.7.2/images/marker-icon.png"));
-                    Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
-                    m.addTo(map.getMap());
-                }
+                FXBrowsers.runInBrowser(map.getWebView(), () -> {
 
-            });
-        });
+                    MarkerIcons markerIcons = new MarkerIcons(groupController, tableController);
+                    markerIcons.setItems(listView.getItems());
+
+                    if(grouping!=null){
+                        // get groups
+                        List<String> columnData = new ArrayList<>();
+                        for( Object item : items) {
+                            columnData.add(grouping.getCellObservableValue(item).getValue().toString());
+                        }
+                        markerIcons.setGroups(columnData);
+                    }
+
+                    markerIcons.addIconsToMap(map.getMap());
+
+
+                }));
 
     }
-
 
 
     private void initMarker(ListView<Address> listView) {
@@ -107,12 +114,9 @@ public class LeafletController {
 
                     marker_all.add(new Address(id, latitude, longitude));
                 }
-
             }
-
         }
         listView.getItems().addAll(marker_all);
-
     }
 
     public static class Address {

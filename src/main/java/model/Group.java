@@ -21,6 +21,7 @@ public class Group {
     }
 
     public void addElements(ObservableList<ObservableList> elements) {
+
         entries.addAll(elements);
     }
 
@@ -34,5 +35,9 @@ public class Group {
 
     public ObservableList<ObservableList> getEntries() {
         return entries;
+    }
+
+    public String getName() {
+        return name;
     }
 }

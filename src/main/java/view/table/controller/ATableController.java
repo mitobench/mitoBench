@@ -19,6 +19,7 @@ import view.menus.GroupMenu;
 import view.table.DataTable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by neukamm on 01.02.17.
@@ -94,8 +95,13 @@ public abstract class ATableController {
                 curr_colnames.add(s);
         }
 
+        curr_colnames = curr_colnames.stream().distinct().collect(Collectors.toList());
+        setColumns_to_index();
+
         // display updated table
         data = parseDataTableToObservableList(dataTable, curr_colnames);
+        // delete duplicated columns
+        col_names_sorted = col_names_sorted.stream().distinct().collect(Collectors.toList());
 
         // add columns
         for(int i = 0; i < col_names_sorted.size(); i++) {
@@ -296,6 +302,7 @@ public abstract class ATableController {
         col_names.add(colname);
         table.getColumns().addAll(col);
 
+
     }
 
 
@@ -380,7 +387,7 @@ public abstract class ATableController {
         // if "grouping" column already exists, create groups
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
-                groupController.createGroupByColumn(colname, "");
+                groupController.createGroupByColumn(colname, "", false);
                 break;
             }
         }

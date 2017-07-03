@@ -23,26 +23,17 @@ public class GroupController {
         this.tableController = tableController;
     }
 
-//    public void createInitialGrouping() {
-//        createGroupByColumn("All data", "All data");
-//        tableController.updateTable(tableController.createNewEntryListForGrouping(
-//                "All data", "All data (Grouping)"));
-//    }
 
+    public void createGroupByColumn(String colName, String gname, boolean userDefinedGroup){
 
-    private void createGroup(String groupname){
-        groupingExists = true;
-        Group g = new Group(groupname);
-        allGroups.put(groupname, g);
-    }
-
-    public void createGroupByColumn(String colName, String gname){
-        if(groupingExists)
+        if(groupingExists && !userDefinedGroup){
             clearGrouping();
+        } else if(userDefinedGroup){
+            ownGroupingIsSet=true;
+        }
+
         groupingExists = true;
 
-        if(tableController.getTableColumnByName("All data")!=null)
-            tableController.removeColumn("All data");
 
         TableColumn column = tableController.getTableColumnByName(colName);
 
@@ -62,11 +53,11 @@ public class GroupController {
                 columnData.add(entry);
                 if(group_row.containsKey(entry)){
                     ObservableList<ObservableList> tmp = group_row.get(entry);
-                    tmp.addAll((ObservableList) item);
+                    tmp.add((ObservableList) item);
                     group_row.put(entry, tmp);
                 } else {
                     ObservableList rows = FXCollections.observableArrayList();
-                    rows.addAll(item);
+                    rows.add(item);
                     group_row.put(entry, rows);
                 }
             }
@@ -75,14 +66,53 @@ public class GroupController {
                 createGroup(groupname);
                 addElements(group_row.get(groupname), groupname);
             }
-        } else {
+        } else { // group does not exist --> set up new group
             ObservableList group_data = tableController.getSelectedRows();
             tableController.addColumn(colName + " (Grouping)", 0);
             colname_group = colName + " (Grouping)";
             createGroup(gname);
             addElements(group_data, gname);
         }
+
+        updateGrouping();
     }
+
+    private void updateGrouping() {
+
+        ObservableList<ObservableList> toRemove = FXCollections.observableArrayList();
+        ObservableList<ObservableList> toAdd = FXCollections.observableArrayList();
+        int index_grouping = tableController.getColIndex("Grouping");
+            if(index_grouping!=-1){
+
+                for(String key :allGroups.keySet()){
+                    Group g = allGroups.get(key);
+                    for (ObservableList entry : g.getEntries()){
+                        int index_ID = tableController.getColIndex("ID");
+                        String id = (String)entry.get(index_ID);
+                        ObservableList<ObservableList> tableEntries =  tableController.getTable().getItems();
+                        for(ObservableList entry_curr : tableEntries){
+                            if(entry_curr.get(index_ID).equals(id)){
+                                toRemove.add(entry);
+                                toAdd.add(entry_curr);
+                            }
+                        }
+                    }
+                    g.removeElements(toRemove);
+                    g.addElements(toAdd);
+                    toRemove.clear();
+                    toAdd.clear();
+                }
+            }
+
+    }
+
+
+    private void createGroup(String groupname){
+        groupingExists = true;
+        Group g = new Group(groupname);
+        allGroups.put(groupname, g);
+    }
+
 
     public void addElement(ObservableList element, String groupname){
         allGroups.get(groupname).addElement(element);
@@ -144,5 +174,9 @@ public class GroupController {
 
     public void setGroupingExists(boolean groupingExists) {
         this.groupingExists = groupingExists;
+    }
+
+    public HashMap<String, Group> getAllGroups() {
+        return allGroups;
     }
 }

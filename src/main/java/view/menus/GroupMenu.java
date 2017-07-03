@@ -54,7 +54,7 @@ public class GroupMenu {
             colItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
                     LOG.info("Group data on column: " + colItem.getText());
-                    groupController.createGroupByColumn(colItem.getText(), "");
+                    groupController.createGroupByColumn(colItem.getText(), "", false);
                 }
             });
         }
@@ -97,7 +97,7 @@ public class GroupMenu {
             colItem.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
                     LOG.info("Create grouping on column: " + colItem.getText());
-                    groupController.createGroupByColumn(colItem.getText(), "");
+                    groupController.createGroupByColumn(colItem.getText(), "", false);
 
                 }
             });
