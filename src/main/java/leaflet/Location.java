@@ -27,4 +27,11 @@ public class Location {
         return lng;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
+
+
 }

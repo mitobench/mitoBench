@@ -127,11 +127,14 @@ public class LeafletController {
 
             for (Object item : items) {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
-                String[] loc = location_col.getCellObservableValue(item).getValue().toString().split(",");
-                if(loc.length==2){
-                    double latitude = Double.parseDouble(loc[0]);
-                    double longitude = Double.parseDouble(loc[1]);
-                    marker_all.add(new Location(id, latitude, longitude));
+                String location  = location_col.getCellObservableValue(item).getValue().toString();
+                if(!location.equals("Undefined")){
+                    String[] loc = location.split(",");
+                    if(loc.length==2){
+                        double latitude = Double.parseDouble(loc[0]);
+                        double longitude = Double.parseDouble(loc[1]);
+                        marker_all.add(new Location(id, latitude, longitude));
+                    }
                 }
             }
         }

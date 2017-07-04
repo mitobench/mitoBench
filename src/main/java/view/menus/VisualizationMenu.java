@@ -209,7 +209,6 @@ public class VisualizationMenu {
         LeafletController mapViewController = null;
         try {
             mapViewController = new LeafletController(mito,
-                    tableController.getTableColumnByName("Grouping"),
                     groupController
             );
         } catch (FileNotFoundException e) {
