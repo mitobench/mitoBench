@@ -1,16 +1,19 @@
 package leaflet;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
+import com.sun.javafx.charts.Legend;
 import controller.GroupController;
 import controller.LeafletController;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import model.Group;
 import net.java.html.leaflet.*;
+import net.java.html.leaflet.event.MouseEvent;
+import net.java.html.leaflet.event.MouseListener;
 import view.table.controller.TableControllerUserBench;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by neukamm on 03.07.17.
@@ -28,6 +31,8 @@ public class MarkerIcons {
     private String iconColViolet = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png";
     private String iconColGrey = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png";
     private String iconColBlack = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png";
+    private Color[] colorsString = new Color[]{Color.GREEN, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.VIOLET,
+    Color.GREY, Color.BLACK};
 
 
     public MarkerIcons(GroupController gC, TableControllerUserBench tb){
@@ -68,6 +73,9 @@ public class MarkerIcons {
                     .setShadowUrl("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png")
             );
             Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+            Popup popup = new Popup();
+            popup.setContent(add.toString());
+            m.bindPopup(popup);
             m.addTo(map);
         }
     }
@@ -96,8 +104,11 @@ public class MarkerIcons {
                             .setShadowUrl("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png")
                     );
                     Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+                    Popup popup = new Popup();
+                    popup.setContent(entry.get(0).toString());
+                    m.bindPopup(popup);
                     m.addTo(map);
-                    System.out.println("Add marker with color: " + colors[groupCount]);
+
                 }
             }
             groupCount++;
@@ -106,5 +117,25 @@ public class MarkerIcons {
         }
 
     }
+
+    public Legend getLegend() {
+
+        Legend legend = new Legend();
+        int colorCount = 0;
+        for (String groupName : groupController.getGroupnames()) {
+
+            Rectangle rect = new Rectangle(20,20,10, 10);
+            rect.setFill(colorsString[colorCount]);
+            rect.setStroke(colorsString[colorCount]);
+
+            Legend.LegendItem legendItem = new Legend.LegendItem(groupName, rect);
+            legend.getItems().add(legendItem);
+            colorCount++;
+        }
+
+        return legend;
+
+    }
+
 
 }
