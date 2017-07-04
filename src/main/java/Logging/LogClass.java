@@ -2,7 +2,7 @@ package Logging;
 
 import org.apache.log4j.*;
 
-import java.io.File;
+import java.net.URL;
 
 /**
  * Created by neukamm on 25.02.17.
@@ -18,8 +18,8 @@ public class LogClass {
      */
 
     public void setUp(){
-        String configFile = System.getProperty("user.dir") + File.separator + "src/main/resources/logger.properties";
-        PropertyConfigurator.configure(configFile);
+        URL url = this.getClass().getResource("/logger.properties");
+        PropertyConfigurator.configure(url.getFile());
     }
 
     /**
@@ -41,6 +41,6 @@ public class LogClass {
      */
 
     public void updateLog4jConfiguration(String logFile) {
-        System.setProperty("logfile.name", logFile);// + File.separator + "mitobench_log_" + dateFormat.format(date) + ".log");
+        System.setProperty("logfile.name", logFile);
     }
 }

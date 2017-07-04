@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -28,9 +29,8 @@ public class PieChartViz extends AChart {
     }
 
     public void setColor(Stage stage) {
-        File f = new File("src/main/java/view/charts/css/ColorsPieChart.css");
-        stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
-
+        URL url = this.getClass().getResource("/css/ColorsPieChart.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
 
         int i = 0;
         for (PieChart.Data data : chart.getData()) {

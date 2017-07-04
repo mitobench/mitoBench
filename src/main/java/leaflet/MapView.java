@@ -4,8 +4,6 @@ package leaflet;
  * Created by neukamm on 01.07.17.
  */
 
-import controller.LeafletController;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
 import net.java.html.boot.fx.FXBrowsers;
@@ -31,12 +29,11 @@ public class MapView extends StackPane {
         webView = new WebView();
         getChildren().add(webView);
 
-        // FXBrowsers loads the associated page into the WebView and runs our
-        // code.
+        // FXBrowsers loads the associated page into the WebView and runs our code.
 
         FXBrowsers.load(webView, MapView.class.getResource("/index.html"), () -> {
             // Here we define that the map is rendered to a div with id="map"
-            // in our index_GM_heatmap.html.
+            // in our index.html.
             // This can only be done after the page is loaded and the context is initialized.
             map = new Map("map");
 
@@ -46,20 +43,7 @@ public class MapView extends StackPane {
                     "https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png",
                     new TileLayerOptions().setMaxZoom(18)
             ));
-
-
-
-
-//
-//            // sample code showing how to use the Java API
-//            map.addLayer(new Circle(new LatLng(51.508, -0.11), 500,
-//                    new PathOptions().setColor("red").setFillColor("#f03").setOpacity(0.5)
-//            ).bindPopup("I am a Circle"));
-//            map.addLayer(new Polygon(new LatLng[] {
-//                    new LatLng(51.509, -0.08),
-//                    new LatLng(51.503, -0.06),
-//                    new LatLng(51.51, -0.047)
-//            }).bindPopup("I am a Polygon"));
+            
 
         });
     }

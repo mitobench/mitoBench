@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -17,10 +18,9 @@ public class ColorSchemeBarchart {
 
     public ColorSchemeBarchart(Stage stage) throws MalformedURLException {
         // set stylesheet so specify colors
-        File f = new File("src/main/java/view/charts/css/Colors.css");
-        stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 
-
+        URL url = this.getClass().getResource("/css/Colors.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
 
         colors.put("L0", "-fx-bar-fill: #ffce1b;");
         colors.put("L1", "-fx-bar-fill: #ff9030;");

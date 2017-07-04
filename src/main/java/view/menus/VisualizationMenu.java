@@ -208,12 +208,9 @@ public class VisualizationMenu {
 
         LeafletController mapViewController = null;
         try {
-            mapViewController = new LeafletController(tableController.getTableColumnByName("ID"),
-                    tableController.getTableColumnByName("Location"),
+            mapViewController = new LeafletController(mito,
                     tableController.getTableColumnByName("Grouping"),
-                    tableController.getTable().getItems(),
-                    groupController,
-                    tableController
+                    groupController
             );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
