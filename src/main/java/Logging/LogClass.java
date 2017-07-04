@@ -18,8 +18,8 @@ public class LogClass {
      */
 
     public void setUp(){
-        URL url = this.getClass().getResource("/logger.properties");
-        PropertyConfigurator.configure(url.getFile());
+        URL url = this.getClass().getResource("/logger/logger.properties");
+        PropertyConfigurator.configure(url);
     }
 
     /**
