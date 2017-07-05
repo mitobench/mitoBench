@@ -1,6 +1,7 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
+import controller.DatabaseConnectionController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -15,7 +16,8 @@ import view.table.controller.ATableController;
 /**
  * Created by neukamm on 02.02.17.
  */
-public class DatabaseConnectionDialogue {//extends APopupDialogue{
+public class DatabaseConnectionDialogue {
+    private final DatabaseConnectionController databaseConnectionController;//extends APopupDialogue{
 
 
     private Button loginBtn;
@@ -24,14 +26,15 @@ public class DatabaseConnectionDialogue {//extends APopupDialogue{
     private TextField password_field;
     private TextField usernamme_field;
     private  ATableController table;
-    private Boolean loggedIn = false;
     private MitoBenchWindow mitoBenchWindow;
     private GridPane dialogGrid;
     private LogClass logClass;
 
-    public DatabaseConnectionDialogue(ATableController tableUserDB, LogClass logClass, MitoBenchWindow mito, Tab tab){
+    public DatabaseConnectionDialogue(ATableController tableUserDB, LogClass logClass, MitoBenchWindow mito, Tab tab,
+                                      DatabaseConnectionController databaseConnectionController){
         //super(title, logClass);
         mitoBenchWindow = mito;
+        this.databaseConnectionController = databaseConnectionController;
         table = tableUserDB;
         this.logClass = logClass;
         setComponents();
@@ -90,6 +93,10 @@ public class DatabaseConnectionDialogue {//extends APopupDialogue{
 
             mitoBenchWindow.getTabpane_statistics().getTabs().remove(tab);
 
+            databaseConnectionController.setPassword(password);
+            databaseConnectionController.setUserName(username);
+            databaseConnectionController.setTable(table);
+
             // open search mask to specify which data should be loaded
             DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow);
             dbSearchDialogue.fillDialogue();
@@ -101,4 +108,19 @@ public class DatabaseConnectionDialogue {//extends APopupDialogue{
     public GridPane getDialogGrid() {
         return dialogGrid;
     }
+
+    public Button getLoginBtn() {
+        return loginBtn;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+
+
 }

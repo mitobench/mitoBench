@@ -3,6 +3,7 @@ package view.menus;
 
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
+import controller.DatabaseConnectionController;
 import io.Exceptions.*;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
@@ -26,6 +27,7 @@ import view.MitoBenchWindow;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
+import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
 import view.table.DrapAndDropEventMaganer;
 import view.table.controller.TableControllerDB;
@@ -54,6 +56,8 @@ public class FileMenu {
     private DrapAndDropEventMaganer drapAndDropEventMaganer;
     private Logger LOG;
     private LogClass logClass;
+    private DatabaseConnectionController databaseConnectionController;
+
 
     public FileMenu( StatisticsMenu toolsMenu,
                      MitoBenchWindow mitoBenchWindow)
@@ -135,21 +139,32 @@ public class FileMenu {
         MenuItem importFromDB = new MenuItem("Import Data from DB");
         importFromDB.setId("importFromDB");
         importFromDB.setOnAction(new EventHandler<ActionEvent>() {
+            // todo: make db query
             public void handle(ActionEvent t) {
-                // todo: make db query
+                if(databaseConnectionController==null){
+                    databaseConnectionController = new DatabaseConnectionController();
+                    Tab tab = new Tab("Database Login");
 
-                Tab tab = new Tab("Database Login");
-
-                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(
-                        tableControllerDB,
-                        logClass,
-                        mitoBenchWindow,
-                        tab
-                );
-
-                GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
-                tab.setContent(dialogue);
-                mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
+                    DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(
+                            tableControllerDB,
+                            logClass,
+                            mitoBenchWindow,
+                            tab,
+                            databaseConnectionController
+                    );
+                    GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
+                    tab.setContent(dialogue);
+                    mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
+                } else {
+                    // open search mask to specify which data should be loaded
+                    DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow);
+                    dbSearchDialogue.fillDialogue();
+                    dbSearchDialogue.addFunctionality(
+                            databaseConnectionController.getUserName(),
+                            databaseConnectionController.getPassword(),
+                            databaseConnectionController.getTable()
+                    );
+                }
 
 //                if(drapAndDropEventMaganer==null){
 //                    drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
