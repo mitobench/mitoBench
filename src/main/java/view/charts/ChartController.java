@@ -115,7 +115,8 @@ public class ChartController {
             for(String key : hg_core_list){
                 if(data_all.containsKey(key)) {
                     for(int i = 0; i < selection_groups.length; i++){
-                        data_all.get(key).get(i).setYValue(roundValue((data_all.get(key).get(i).getYValue().doubleValue() / numberOfElementsPerCaregory[i]) * 100));
+                        data_all.get(key).get(i).setYValue(roundValue(
+                                (data_all.get(key).get(i).getYValue().doubleValue() / numberOfElementsPerCaregory[i]) * 100));
                     }
                     stackedBar.addSeries(data_all.get(key), key);
 

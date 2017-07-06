@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,8 +53,9 @@ public class SunburstChartCreator extends AChart{
         // Create the SunburstJ Control
         sunburstView = new SunburstView();
         //sunburstView.setMinWidth(Screen.getPrimary().getVisualBounds().getWidth()/3);
-        File f = new File("src/main/java/view/charts/css/sunburstview.css");
-        stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+
+        URL url = this.getClass().getResource("/css/sunburstview.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
 
         // Create all the available color strategies once to be able to use them at runtime.
         colorStrategyRandom = new ColorStrategyRandom();

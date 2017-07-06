@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by neukamm on 15.12.16.
@@ -16,8 +17,8 @@ public class ColorSchemeStackedBarChart {
 
     public ColorSchemeStackedBarChart(Stage stage) throws MalformedURLException {
         // set stylesheet so specify colors
-        File f = new File("src/main/java/view/charts/css/Colors.css");
-        stage.getScene().getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+        URL url = this.getClass().getResource("/css/Colors.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
 
     }
 

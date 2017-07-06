@@ -2,14 +2,11 @@ package leaflet;
 
 import com.sun.javafx.charts.Legend;
 import controller.GroupController;
-import controller.LeafletController;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Group;
 import net.java.html.leaflet.*;
-import net.java.html.leaflet.event.MouseEvent;
-import net.java.html.leaflet.event.MouseListener;
 import view.table.controller.TableControllerUserBench;
 
 import java.util.HashMap;
@@ -23,6 +20,10 @@ public class MarkerIcons {
     private ObservableList items;
     private List<String> groups = null;
     private GroupController groupController;
+
+    // definition of all colours that can be used to color the marker icons
+    // (https://github.com/pointhi/leaflet-color-markers)
+    // todo: using awesome-markers ? (https://github.com/lvoogdt/Leaflet.awesome-markers)
     private String iconColGreen = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png";
     private String iconColBlue = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png";
     private String iconColRed = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png";
@@ -42,14 +43,10 @@ public class MarkerIcons {
 
     }
 
-    public void setItems(ObservableList items) {
-        this.items = items;
-    }
-
-    public void setGroups(List<String> groups) {
-        this.groups = groups;
-    }
-
+    /**
+     * This method links all icons to the map.
+     * @param map
+     */
     public void addIconsToMap(Map map) {
 
         if(groups==null){
@@ -64,31 +61,43 @@ public class MarkerIcons {
 
     }
 
+    /**
+     * This method generates marker/icon (single color = blue) if no grouping is defined.
+     * @param color
+     * @param items
+     * @param map
+     */
     private void addMarkerOneColor(String color, ObservableList items, Map map) {
-        for(Object add : items){
-            LeafletController.Address loc = (LeafletController.Address) add;
+        for(Object location : items){
+            Location loc = (Location) location;
             LatLng pos = new LatLng(loc.getLat(), loc.getLng());
+
 
             Icon icon = new Icon(new IconOptions(color)
                     .setShadowUrl("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png")
             );
+
             Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
             Popup popup = new Popup();
-            popup.setContent(add.toString());
+            popup.setContent(location.toString());
             m.bindPopup(popup);
             m.addTo(map);
         }
     }
 
-    private void addMarkerMultiColor(Map map) {
 
+    /**
+     * This method generates marker/icon in different colors for the elements in the different groups.
+     * @param map
+     */
+    private void addMarkerMultiColor(Map map) {
 
         String[] colors = new String[]{iconColGreen, iconColBlue, iconColRed, iconColOrange, iconColYellow,
                 iconColViolet, iconColGrey, iconColBlack};
 
-        // get unique group names
         int groupCount = 0;
         HashMap<String, Group> all_groups = groupController.getAllGroups();
+        // iterate over groups and generates marker/icon for each element in the group.
         for(String gName : all_groups.keySet()){
             Group g = all_groups.get(gName);
 
@@ -108,15 +117,30 @@ public class MarkerIcons {
                     popup.setContent(entry.get(0).toString());
                     m.bindPopup(popup);
                     m.addTo(map);
-
                 }
             }
             groupCount++;
-
-
         }
-
     }
+
+
+    /*
+                    SETTER and GETTER
+     */
+
+    public void setItems(ObservableList items) {
+        this.items = items;
+    }
+
+    public void setGroups(List<String> groups) {
+        this.groups = groups;
+    }
+
+
+    /**
+     * This method generates a legend (to define which color is which group) based on the grouping.
+     * @return Legend
+     */
 
     public Legend getLegend() {
 
@@ -136,6 +160,9 @@ public class MarkerIcons {
         return legend;
 
     }
+
+
+
 
 
 }

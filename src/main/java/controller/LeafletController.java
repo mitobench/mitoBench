@@ -9,12 +9,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import leaflet.Location;
 import leaflet.MapView;
 import leaflet.MarkerIcons;
 import net.java.html.boot.fx.FXBrowsers;
 import net.java.html.leaflet.*;
+import view.MitoBenchWindow;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.FileNotFoundException;
@@ -24,6 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
+ *
+ * This class controls all a actions of the map.
+ *
  * Created by neukamm on 01.07.17.
  */
 public class LeafletController {
@@ -32,21 +37,26 @@ public class LeafletController {
     private final TableColumn location_col;
     private final ObservableList items;
     private final MapView map;
-    private final BorderPane borderPane;
+    private final BorderPane mapBasicPane;
     private final ListView listView;
+    private final TableColumn grouping_col;
+    private TableControllerUserBench tableControllerUserBench;
 
 
-    public LeafletController(TableColumn id, TableColumn location, TableColumn grouping, ObservableList<String> items,
-                             GroupController groupController, TableControllerUserBench tableController)
+    public LeafletController(MitoBenchWindow mitoBenchWindow,
+                             GroupController groupController)
             throws FileNotFoundException, URISyntaxException, MalformedURLException {
 
-        id_col = id;
-        location_col = location;
-        this.items = items;
+        tableControllerUserBench = mitoBenchWindow.getTableControllerUserBench();
+        grouping_col = tableControllerUserBench.getTableColumnByName("Grouping");
+
+        id_col = tableControllerUserBench.getTableColumnByName("ID");
+        location_col = tableControllerUserBench.getTableColumnByName("Location");
+        items = tableControllerUserBench.getTable().getItems();
 
         map = new MapView();
-        borderPane = new BorderPane();
-        borderPane.setCenter(map);
+        mapBasicPane = new BorderPane();
+        mapBasicPane.setCenter(map);
 
         // a regular JavaFX ListView
         listView = new ListView<>();
@@ -54,11 +64,10 @@ public class LeafletController {
 
 
         // we listen for the selected item and update the map accordingly
-        // as a demo of how to interact between JavaFX and DukeScript
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Address>() {
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Location>() {
             @Override
-            public void changed(ObservableValue<? extends Address> ov, Address old_val, final Address new_val) {
+            public void changed(ObservableValue<? extends Location> ov, Location old_val, final Location new_val) {
                 FXBrowsers.runInBrowser(map.getWebView(), () -> {
 
                     LatLng pos = new LatLng(new_val.getLat(), new_val.getLng());
@@ -70,24 +79,23 @@ public class LeafletController {
             }
         });
 
-        borderPane.setLeft(listView);
+        mapBasicPane.setLeft(listView);
         Button showAllData = new Button("Show all data");
 
-        borderPane.setBottom(showAllData);
+        mapBasicPane.setBottom(showAllData);
 
+        // show all markers by clicking on the "show all data" button
         showAllData.setOnAction(e ->
-
                 FXBrowsers.runInBrowser(map.getWebView(), () -> {
 
-                    MarkerIcons markerIcons = new MarkerIcons(groupController, tableController);
+                    MarkerIcons markerIcons = new MarkerIcons(groupController, tableControllerUserBench);
                     markerIcons.setItems(listView.getItems());
 
-
-                    if(grouping!=null){
+                    if(grouping_col != null){
                         // get groups
                         List<String> columnData = new ArrayList<>();
                         for( Object item : items) {
-                            columnData.add(grouping.getCellObservableValue(item).getValue().toString());
+                            columnData.add(grouping_col.getCellObservableValue(item).getValue().toString());
                         }
                         markerIcons.setGroups(columnData);
                     }
@@ -98,68 +106,48 @@ public class LeafletController {
                     legend.setVertical(true);
                     VBox rightBox = new VBox();
                     rightBox.getChildren().add(legend);
-                    borderPane.setRight(rightBox);
-                }));
+                    mapBasicPane.setRight(rightBox);
+                }
+                )
+        );
 
     }
 
 
-
-    private void initMarker(ListView<Address> listView) {
-        List<Address> marker_all = new ArrayList<>();
+    /**
+     * This method initializes the markers. This means, a location is created for each sample (with location
+     * information available).
+     *
+     * @param list_locations
+     */
+    private void initMarker(ListView<Location> list_locations) {
+        List<Location> marker_all = new ArrayList<>();
 
         if(location_col!=null){
 
             for (Object item : items) {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
-                String[] loc = location_col.getCellObservableValue(item).getValue().toString().split(",");
-                if(loc.length==2){
-                    double latitude = Double.parseDouble(loc[0]);
-                    double longitude = Double.parseDouble(loc[1]);
-                    marker_all.add(new Address(id, latitude, longitude));
-
+                String location  = location_col.getCellObservableValue(item).getValue().toString();
+                if(!location.equals("Undefined")){
+                    String[] loc = location.split(",");
+                    if(loc.length==2){
+                        double latitude = Double.parseDouble(loc[0]);
+                        double longitude = Double.parseDouble(loc[1]);
+                        marker_all.add(new Location(id, latitude, longitude));
+                    }
                 }
             }
         }
-        listView.getItems().addAll(marker_all);
-    }
-
-    public static class Address {
-
-        private final String name;
-        private final double lat;
-        private final double lng;
-
-        public Address(String name, double lat, double lng) {
-            this.name = name;
-            this.lat = lat;
-            this.lng = lng;
-        }
-
-        public double getLat() {
-            return lat;
-        }
-
-        public double getLng() {
-            return lng;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-
-
+        list_locations.getItems().addAll(marker_all);
     }
 
 
-    public MapView getMapView() {return map;}
+
+    /*
+                GETTER and SETTER
+     */
     public BorderPane getMap() {
-        return borderPane;
+        return mapBasicPane;
     }
 
-    public ListView getListView() {
-        return listView;
-    }
 }

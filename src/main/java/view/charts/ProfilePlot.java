@@ -12,6 +12,7 @@ import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,8 +144,9 @@ public class ProfilePlot extends AChart {
      * This method adds a css file to the profile plot to set the line with to 2px.
      */
     public void addListener(){
-        File f = new File("src/main/java/view/charts/css/ProfilePlot.css");
-        profilePlot.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+
+        URL url = this.getClass().getResource("/css/ProfilePlot.css");
+        profilePlot.getStylesheets().add(url.toExternalForm());
         profilePlot.setCreateSymbols(false);
         profilePlot.getStyleClass().add("thick-chart");
 

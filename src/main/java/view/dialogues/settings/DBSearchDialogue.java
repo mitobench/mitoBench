@@ -147,6 +147,8 @@ public class DBSearchDialogue {
             String query;
             if(checkBox_write_own_query.isSelected()){
                 query = textfield_sql_statement_advanced.getText();
+            } else if (checkBox_get_all_data.isSelected()){
+                query = "SELECT * FROM sequence_data";
             } else {
                 query = "SELECT " + textfield_selection_table.getText() + "FROM sequence_data";
             }
