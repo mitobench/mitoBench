@@ -22,7 +22,6 @@ public class GroupMenu {
     private TableControllerUserBench tableController;
     private Menu menuGroup;
     private Menu groupByColumnItem;
-    private final Menu groupingItem;
     private Logger LOG;
 
     public GroupMenu(MitoBenchWindow mitoBenchWindow){
@@ -33,13 +32,9 @@ public class GroupMenu {
         groupController = mitoBenchWindow.getGroupController();
         tableController = mitoBenchWindow.getTableControllerUserBench();
 
-        groupingItem = new Menu("Grouping");
-        groupingItem.setId("grouping");
-
         groupByColumnItem = new Menu("Group by column");
         groupByColumnItem.setId("group_by_column");
 
-        groupingItem.getItems().add(groupByColumnItem);
 
         addSubMenus();
     }
@@ -81,7 +76,7 @@ public class GroupMenu {
             }
         });
 
-        menuGroup.getItems().addAll(groupingItem, new SeparatorMenuItem(), delGrouping);
+        menuGroup.getItems().addAll(groupByColumnItem, new SeparatorMenuItem(), delGrouping);
 
     }
 

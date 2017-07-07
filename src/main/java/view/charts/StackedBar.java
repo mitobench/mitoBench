@@ -12,6 +12,7 @@ import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import view.menus.VisualizationMenu;
+import view.table.controller.TableControllerUserBench;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ public class StackedBar extends AChart{
 
         tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
-
 
         // set autoranging to false to allow manual settings
         yAxis.setAutoRanging(false);
@@ -113,6 +113,10 @@ public class StackedBar extends AChart{
     }
 
 
+    /**
+     * This method adds a listener to each part of the bar (representing one macro-HG of group).
+     * By clicking on this part, a new barplot opens that contains only the haplogroups of the macrogroup.
+     */
     public void addListener(){
         //now you can get the nodes.
         for (XYChart.Series<String,Number> serie: sbc.getData()){
@@ -150,17 +154,36 @@ public class StackedBar extends AChart{
         }
     }
 
-    private void createSubBarPlot(XYChart.Data<String, Number> item) throws MalformedURLException {
+    /**
+     * This method gets all haplogroups that belongs to the macrogroup and are represented in a
+     * group.
+     *
+     * @param item
+     * @throws MalformedURLException
+     */
+    private void createSubBarPlot(XYChart.Data<String, Number> item)
+            throws MalformedURLException {
+
         String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
+        String group = item.getXValue();
 
         graphicsMenu.initHaploBarchart("(sub-haplogroups of HG "+ hg +")");
         TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
+        TableColumn group_col = graphicsMenu.getTableController().getTableColumnByName("Grouping");
+
         // filter haplo column, include only subgroups of selected Haplogroup
         List<String> sub_hgs = graphicsMenu.getTreeController().getTreeMap().get(hg);
 
         List<String> columnData = new ArrayList<>();
         for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {
-            if(sub_hgs.contains((String)haplo_col.getCellObservableValue(tmp).getValue()) )
+            ObservableList row = (ObservableList) tmp;
+            String hg_row = (String) haplo_col.getCellObservableValue(tmp).getValue();
+            if(hg_row.contains("+")){
+                hg_row = hg_row.split("\\+")[0];
+            }
+
+            if(sub_hgs.contains(hg_row) &&
+                    group.equals(group_col.getCellObservableValue(tmp).getValue()))
                 columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
         }
 
