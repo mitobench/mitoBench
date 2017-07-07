@@ -1,17 +1,13 @@
 package view.menus;
 
 import Logging.LogClass;
-import analysis.FstCalculationRunner;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import statistics.HaploStatistics;
-import statistics.HaplotypeCaller;
+import org.json.JSONException;
+import analysis.HaplotypeCaller;
 import view.MitoBenchWindow;
 import view.dialogues.information.GroupingWarningDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
-import view.dialogues.settings.HGStatisticsPopupDialogue;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.IOException;
@@ -65,13 +61,17 @@ public class AnalysisMenu {
         assignHGs.setId("menuitem_calculate_haplogroups");
         assignHGs.setOnAction(t -> {
 
-//                try {
-//                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
-//                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
-//                    haplotypeCaller.call();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
+                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
+                    haplotypeCaller.call();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
         });
         menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
