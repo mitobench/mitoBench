@@ -271,11 +271,15 @@ public class ChartController {
                 String group = selection_groups[i];
                 double count_others = 0.0;
 
-                for (String hg : unused_hgs) {
-                    count_others += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+                if(!group.equals("Undefined")){
+                    for (String hg : unused_hgs) {
+                        count_others += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"),
+                                tableController.getColIndex("Grouping"));
+                    }
+                    XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, count_others);
+                    data_list.add(data);
                 }
-                XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, count_others);
-                data_list.add(data);
+
 
             }
             data_all.put("Others", data_list);

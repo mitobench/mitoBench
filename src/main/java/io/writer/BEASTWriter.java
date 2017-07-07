@@ -52,9 +52,16 @@ public class BEASTWriter implements IOutputData {
         TableColumn tbclm_c14 = tblcontroller.getTableColumnByName("C14-Date");
         // write view.data
 
-        tblcontroller.getTable().getItems().stream().forEach((o)
-                -> list.put(new FastaEntry(tblcontroller.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)), (String) tbclm_c14.getCellData(o))
-        );
+        if(tbclm_c14!=null){
+            tblcontroller.getTable().getItems().stream().forEach((o)
+                    -> list.put(new FastaEntry(tblcontroller.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)), (String) tbclm_c14.getCellData(o))
+            );
+        } else {
+            tblcontroller.getTable().getItems().stream().forEach((o)
+                    -> list.put(new FastaEntry(tblcontroller.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)), "")
+            );
+        }
+
 
         return list;
     }
@@ -67,12 +74,17 @@ public class BEASTWriter implements IOutputData {
      */
     private String getC14String(String c14data) {
         String tmp = "";
-        if (c14data.equals("NA")) {
-            tmp = "_0";
+        if(!c14data.equals("")){
+            if (c14data.equals("Undefined")) {
+                tmp = "_0";
+            } else {
+                tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
+            }
+
+            return tmp;
         } else {
-            tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
+            return "";
         }
 
-        return tmp;
     }
 }

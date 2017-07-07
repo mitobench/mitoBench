@@ -79,7 +79,7 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
                     }
                     haploStatistics.count(hg_list);
 
-                    TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
+                    TableView table = haploStatistics.writeToTable(haploStatistics.getData_all());
                     Tab tab = new Tab();
                     tab.setId("tab_statistics");
                     tab.setText("Count statistics");

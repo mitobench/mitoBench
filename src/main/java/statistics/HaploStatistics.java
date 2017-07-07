@@ -49,7 +49,12 @@ public class HaploStatistics {
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = cols[1];
-        number_of_groups = selection_groups.length;
+        if(Arrays.asList(selection_groups).contains("Undefined")){
+            number_of_groups = selection_groups.length-1;
+        } else {
+            number_of_groups = selection_groups.length;
+        }
+
         HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaolpgroups(selection_haplogroups, coreHGs);
         data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
 
@@ -63,10 +68,9 @@ public class HaploStatistics {
      * This method writes count information to table in GUI.
      *
      * @param data_all
-     * @param scene
      * @return
      */
-    public TableView writeToTable(HashMap<String, List<XYChart.Data<String, Number>>>  data_all, Scene scene){
+    public TableView writeToTable(HashMap<String, List<XYChart.Data<String, Number>>>  data_all){
         List<String> keys = new ArrayList<>();
         keys.addAll(data_all.keySet());
         keys.remove("Others");

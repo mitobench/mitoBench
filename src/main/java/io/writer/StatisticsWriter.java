@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.Pane;
 
 import java.io.*;
 
@@ -17,7 +16,6 @@ import java.io.*;
 public class StatisticsWriter implements IOutputData{
 
     private TableView table;
-    //private ObservableList<ObservableList<String>> content;
     private String content="";
     private Object tab_content;
 
@@ -36,23 +34,37 @@ public class StatisticsWriter implements IOutputData{
 
     private String parseTableContent(TableView table){
         String content="";
+        int counter = 0;
         // write column names as first line
         for(Object col : table.getColumns()){
             TableColumn column = (TableColumn) col;
-            content += column.getText()+",";
+            if(counter == table.getColumns().size()-1){
+                content += column.getText();
+            } else {
+                content += column.getText()+",";
+            }
+            counter++;
         }
         content += "\n";
+        counter = 0;
         for(Object r : table.getItems()){
             ObservableList row = (ObservableList) r;
             for(Object cell : row){
-                content += cell + "," ;
+                if(counter == row.size()-1)
+                    content += cell;
+                else
+                    content += cell + ",";
+
+                counter++;
             }
             content += "\n";
+            counter=0;
         }
 
         return content;
 
     }
+
 
     /**
      * This method writes the statistics to csv file.
@@ -60,24 +72,12 @@ public class StatisticsWriter implements IOutputData{
      */
     @Override
     public void writeData(String path) throws IOException {
+        if(!path.endsWith(".csv")){
+            path += ".csv";
+        }
         OutputStream outputStream = new FileOutputStream(new File(path).getAbsoluteFile());
         OutputStreamWriter writerOutputStream = new OutputStreamWriter(outputStream, "UTF-8");
-
         writerOutputStream.write(content);
-
-//        // write column names as first line
-//        for(Object col : table.getColumns()){
-//            TableColumn column = (TableColumn) col;
-//            writerOutputStream.write(column.getText()+",");
-//        }
-//        writerOutputStream.write("\n");
-//        for(ObservableList row : content){
-//            for(Object cell : row){
-//                writerOutputStream.write(cell + ",");
-//            }
-//            writerOutputStream.write("\n");
-//        }
-//
         writerOutputStream.close();
 
     }

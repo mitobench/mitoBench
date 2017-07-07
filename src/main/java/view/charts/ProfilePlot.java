@@ -106,7 +106,7 @@ public class ProfilePlot extends AChart {
             HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
 
             haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
-            TableView table = haploStatistics.writeToTable(haploStatistics.getData_all(), scene);
+            TableView table = haploStatistics.writeToTable(haploStatistics.getData_all());
             haploStatistics.addListener(table, this);
             Tab tab = new Tab();
             tab.setId("tab_table_stats_" + id);

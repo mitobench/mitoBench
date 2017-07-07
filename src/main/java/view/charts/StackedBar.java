@@ -46,7 +46,6 @@ public class StackedBar extends AChart{
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
         sbc.setLegendSide(Side.RIGHT);
-        //sbc.setStyle("-fx-font-size: " + 20 + "px;");
 
         setContextMenu(sbc, vBox);
 
@@ -67,7 +66,16 @@ public class StackedBar extends AChart{
             series.getData().add(data.get(i));
         }
 
-        this.seriesList.add(series);
+        boolean onlyNull = true;
+        for(int i = 0; i < series.getData().size(); i++){
+            if(series.getData().get(i).getYValue().doubleValue() > 0){
+                onlyNull = false;
+            }
+        }
+
+        if(!onlyNull){
+            this.seriesList.add(series);
+        }
 
     }
 
