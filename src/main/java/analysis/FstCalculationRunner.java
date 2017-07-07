@@ -57,7 +57,6 @@ public class FstCalculationRunner {
     private void prepareData(TableControllerUserBench tableControllerUserBench, MTStorage mtStorage){
         data = new HashMap<>();
         int colIndexSelection = tableControllerUserBench.getColIndex(mitobench.getGroupController().getColname_group());
-        //int colIndexSequence = tableControllerUserBench.getColIndex("MTSequence");
         int colIndexSequence = tableControllerUserBench.getColIndex("ID");
 
         ObservableList<ObservableList> table = tableControllerUserBench.getTable().getItems();
@@ -65,14 +64,16 @@ public class FstCalculationRunner {
             String group = (String)row.get(colIndexSelection);
             String id = (String)row.get(colIndexSequence);
             String sequence = mtStorage.getData().get(id);
-            if(!data.containsKey(group)){
-                List<String> sequences = new ArrayList<>();
-                sequences.add(sequence);
-                data.put(group, sequences);
-            } else {
-                List<String> tmp = data.get(group);
-                tmp.add(sequence);
-                data.put(group, tmp);
+            if(!group.equals("Undefined")){
+                if(!data.containsKey(group)){
+                    List<String> sequences = new ArrayList<>();
+                    sequences.add(sequence);
+                    data.put(group, sequences);
+                } else {
+                    List<String> tmp = data.get(group);
+                    tmp.add(sequence);
+                    data.put(group, tmp);
+                }
             }
         }
 

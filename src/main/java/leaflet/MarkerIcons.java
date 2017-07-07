@@ -100,26 +100,29 @@ public class MarkerIcons {
         // iterate over groups and generates marker/icon for each element in the group.
         for(String gName : all_groups.keySet()){
             Group g = all_groups.get(gName);
+            if(!g.equals("Undefined")){
+                for(Object gMember : g.getEntries()){
 
-            for(Object gMember : g.getEntries()){
+                    ObservableList entry = (ObservableList) gMember;
 
-                ObservableList entry = (ObservableList) gMember;
-
-                String location = (String) entry.get(tableController.getColIndex("Location"));
-                if(!location.equals("Undefined")){
-                    String[] loc = location.split(",");
-                    LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
-                    Icon icon = new Icon(new IconOptions(colors[groupCount])
-                            .setShadowUrl("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png")
-                    );
-                    Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
-                    Popup popup = new Popup();
-                    popup.setContent(entry.get(0).toString());
-                    m.bindPopup(popup);
-                    m.addTo(map);
+                    String location = (String) entry.get(tableController.getColIndex("Location"));
+                    if(!location.equals("Undefined")){
+                        String[] loc = location.split(",");
+                        LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
+                        Icon icon = new Icon(new IconOptions(colors[groupCount])
+                                .setShadowUrl("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png")
+                        );
+                        Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+                        Popup popup = new Popup();
+                        popup.setContent(entry.get(0).toString());
+                        m.bindPopup(popup);
+                        m.addTo(map);
+                    }
                 }
+                groupCount++;
             }
-            groupCount++;
+
+
         }
     }
 
@@ -147,14 +150,15 @@ public class MarkerIcons {
         Legend legend = new Legend();
         int colorCount = 0;
         for (String groupName : groupController.getGroupnames()) {
+            if(!groupName.equals("Undefined")){
+                Rectangle rect = new Rectangle(20,20,10, 10);
+                rect.setFill(colorsString[colorCount]);
+                rect.setStroke(colorsString[colorCount]);
 
-            Rectangle rect = new Rectangle(20,20,10, 10);
-            rect.setFill(colorsString[colorCount]);
-            rect.setStroke(colorsString[colorCount]);
-
-            Legend.LegendItem legendItem = new Legend.LegendItem(groupName, rect);
-            legend.getItems().add(legendItem);
-            colorCount++;
+                Legend.LegendItem legendItem = new Legend.LegendItem(groupName, rect);
+                legend.getItems().add(legendItem);
+                colorCount++;
+            }
         }
 
         return legend;

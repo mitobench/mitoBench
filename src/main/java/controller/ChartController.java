@@ -1,8 +1,11 @@
-package view.charts;
+package controller;
 
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
+import view.charts.BarChartGrouping;
+import view.charts.BarPlotHaplo;
+import view.charts.StackedBar;
 import view.table.controller.ATableController;
 import view.table.controller.TableControllerUserBench;
 
@@ -179,14 +182,15 @@ public class ChartController {
                         List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
                         for (int i = 0; i < selection_groups.length; i++) {
                             String group = selection_groups[i];
-                            double count = 0.0;
-                            for (String hg : subHGs) {
-                                count += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+                            if(!group.equals("Undefined")){
+                                double count = 0.0;
+                                for (String hg : subHGs) {
+                                    count += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+                                }
+
+                                XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, roundValue(count));
+                                data_list.add(data);
                             }
-
-                            XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, roundValue(count));
-                            data_list.add(data);
-
                         }
                         data_all.put(key, data_list);
                     }
@@ -194,8 +198,10 @@ public class ChartController {
                     List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
                     for (int i = 0; i < selection_groups.length; i++) {
                         String group = selection_groups[i];
-                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, 0.0);
-                        data_list.add(data);
+                        if(!group.equals("Undefined")){
+                            XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, 0.0);
+                            data_list.add(data);
+                        }
                     }
                     data_all.put(hg_core, data_list);
                 }
@@ -429,25 +435,25 @@ public class ChartController {
             // iteration over grouping
             for(int i = 0; i < seletcion_groups.length; i++){
                 String group = seletcion_groups[i];
-
-                // create new hash entry for each group
-                if(!hg_to_group.containsKey(group)){
-                    hg_to_group.put(group, new ArrayList<>());
-                }
-
-                // iterate over all table view rows
-                for(int k = 0; k < selectedTableItems.size(); k++){
-                    ObservableList list = selectedTableItems.get(k);
-
-                    if(list.get( tableController.getColIndex("Grouping")).equals(group)){
-
-                        List<String> tmp = hg_to_group.get(group);
-                        tmp.add((String)list.get(tableController.getColIndex("Haplogroup")));
-                        Collections.sort(tmp);
-                        hg_to_group.put(group, tmp);
-
+                if(!group.equals("Undefined")){
+                    // create new hash entry for each group
+                    if(!hg_to_group.containsKey(group)){
+                        hg_to_group.put(group, new ArrayList<>());
                     }
 
+                    // iterate over all table view rows
+                    for(int k = 0; k < selectedTableItems.size(); k++){
+                        ObservableList list = selectedTableItems.get(k);
+
+                        if(list.get( tableController.getColIndex("Grouping")).equals(group)){
+
+                            List<String> tmp = hg_to_group.get(group);
+                            tmp.add((String)list.get(tableController.getColIndex("Haplogroup")));
+                            Collections.sort(tmp);
+                            hg_to_group.put(group, tmp);
+
+                        }
+                    }
                 }
             }
         }

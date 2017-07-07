@@ -1,7 +1,7 @@
 package view.menus;
 
 import Logging.LogClass;
-import controller.LeafletController;
+import controller.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,10 +16,7 @@ import view.MitoBenchWindow;
 import view.charts.*;
 import view.dialogues.information.GroupingWarningDialogue;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
-import controller.GroupController;
-import controller.MapViewController;
 import view.table.controller.TableControllerUserBench;
-import controller.HaplotreeController;
 
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;

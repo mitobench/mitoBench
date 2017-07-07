@@ -1,6 +1,7 @@
 package view.charts;
 
 import Logging.LogClass;
+import controller.ChartController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -11,7 +12,6 @@ import statistics.HaploStatistics;
 import view.table.controller.TableControllerUserBench;
 import controller.HaplotreeController;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,20 +67,23 @@ public class ProfilePlot extends AChart {
             if(data_all.containsKey(key)) {
                 for(int i = 0; i < selection_groups.length; i++){
                     String group = data_all.get(key).get(i).getXValue();
-                    if(!group_hg.containsKey(group)){
-                        List<XYChart.Data<String, Number>> hg = new ArrayList<>();
-                        hg.add(data_all.get(key).get(i));
-                        group_hg.put(group, hg);
-                    } else {
-                        List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
-                        hg_tmp.addAll(group_hg.get(group));
-                        hg_tmp.add(data_all.get(key).get(i));
-                        group_hg.put(group, hg_tmp);
+                    if(!group.equals("Undefined")){
+                        if(!group_hg.containsKey(group)){
+                            List<XYChart.Data<String, Number>> hg = new ArrayList<>();
+                            hg.add(data_all.get(key).get(i));
+                            group_hg.put(group, hg);
+                        } else {
+                            List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
+                            hg_tmp.addAll(group_hg.get(group));
+                            hg_tmp.add(data_all.get(key).get(i));
+                            group_hg.put(group, hg_tmp);
+                        }
+
+                        double val = data_all.get(key).get(i).getYValue().doubleValue();
+                        double val_norm = (val/number_of_elements[i])*100;
+                        data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
                     }
 
-                    double val = data_all.get(key).get(i).getYValue().doubleValue();
-                    double val_norm = (val/number_of_elements[i])*100;
-                    data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
                 }
             } else {
 

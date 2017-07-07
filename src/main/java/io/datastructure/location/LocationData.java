@@ -1,6 +1,6 @@
 package io.datastructure.location;
 
-import view.datatypes.IData;
+import io.IData;
 
 /**
  * Created by neukamm on 23.03.17.

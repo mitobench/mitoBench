@@ -1,6 +1,6 @@
 package io.datastructure.generic;
 
-import view.datatypes.IData;
+import io.IData;
 
 /**
  * Created by neukamm on 07.12.16.

@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
-import view.datatypes.IData;
+import io.IData;
 import controller.GroupController;
 import view.menus.GroupMenu;
 import view.table.DataTable;

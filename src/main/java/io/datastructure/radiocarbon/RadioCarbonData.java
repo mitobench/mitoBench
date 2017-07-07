@@ -1,6 +1,6 @@
 package io.datastructure.radiocarbon;
 
-import view.datatypes.IData;
+import io.IData;
 
 /**
  * Created by peltzer on 05/12/2016.

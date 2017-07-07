@@ -1,4 +1,4 @@
-package view.datatypes;
+package io;
 
 /**
  * Created by neukamm on 07.12.16.

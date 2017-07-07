@@ -46,8 +46,11 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
 
         ObservableList<ObservableList<String>> items = FXCollections.observableArrayList();
         for(String s : groups){
-            ObservableList data = FXCollections.observableArrayList(s);
-            items.add(data);
+            if(!s.equals("Undefined")){
+                ObservableList data = FXCollections.observableArrayList(s);
+                items.add(data);
+            }
+
         }
 
         table = new TableView();
@@ -59,6 +62,7 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
                 return new SimpleStringProperty(param.getValue().get(0).toString());
             }
         });
+
         table.getColumns().add(groupsCol);
         table.getItems().addAll(items);
         return table;

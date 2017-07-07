@@ -1,6 +1,7 @@
 package view.charts;
 
 import Logging.LogClass;
+import controller.ChartController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
@@ -13,7 +14,6 @@ import javafx.stage.Stage;
 import view.table.controller.TableControllerUserBench;
 
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;

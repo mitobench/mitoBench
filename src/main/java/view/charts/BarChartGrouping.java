@@ -60,8 +60,11 @@ public class BarChartGrouping extends AChart {
         series.setName("");
 
         for(String group : data.keySet()){
-            XYChart.Data data_node = new XYChart.Data<>(group, data.get(group));
-            series.getData().add(data_node);
+            if(!group.equals("Undefined")){
+                XYChart.Data data_node = new XYChart.Data<>(group, data.get(group));
+                series.getData().add(data_node);
+            }
+
         }
         this.bc.getData().clear();
         this.bc.getData().add(series);
