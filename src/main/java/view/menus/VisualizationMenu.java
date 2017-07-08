@@ -89,7 +89,7 @@ public class VisualizationMenu {
         t.setFont(Font.font(25));
 
         this.barPlotHaplo = new BarPlotHaplo(t.getText(), "Counts", stage, chartController,
-                tableController, logClass);
+                tableController, tabPane, logClass);
         barPlotHaplo.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
@@ -157,7 +157,6 @@ public class VisualizationMenu {
         LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
 
         Text t = new Text(title);
-        t.setText("Haplogroup frequency per group");
         t.setFont(Font.font(25));
 
         pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
@@ -419,36 +418,47 @@ public class VisualizationMenu {
             public void handle(ActionEvent t) {
                 try {
                     // makes only sense if grouping exists.
-                    if(tableController.getTableColumnByName("Grouping") != null
-                            && tableController.getTable().getItems().size() != 0 ){
+                    if(tableController.getTable().getItems().size() != 0 ){
+
+                        if(tableController.getTableColumnByName("Grouping") != null){
+                            // get selected rows
+                            ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+
+                            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
+                                    tableController.getSelectedRows());
+                            String[] selection_haplogroups = cols[0];
+                            String[] selection_groups = cols[1];
+
+                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
+                                    chartController.getCoreHGs());
+                            HashMap<String, List<XYChart.Data<String, Number>>> data_all =
+                                    chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+
+                            for(String group : groupController.getGroupnames()) {
+                                if(!group.equals("Undefined")){
+                                    initPieChart(group);
+                                    pieChartViz.createPlot(group, data_all);
+                                    pieChartViz.setColor(stage);
+                                }
+                            }
+                        } else {
+                            ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+                            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
+                                    tableController.getSelectedRows());
+                            String[] selection_haplogroups = cols[0];
+
+                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
+                                    chartController.getCoreHGs());
 
 
-                        // get selected rows
-                        ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
-                        HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
+                                initPieChart("Haplogroup frequency");
+                                pieChartViz.createPlotSingle(hgs_summed);
+                                pieChartViz.setColor(stage);
 
 
-                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
-                                tableController.getSelectedRows());
-                        String[] selection_haplogroups = cols[0];
-                        String[] selection_groups = cols[1];
 
-                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
-                                chartController.getCoreHGs());
-                        HashMap<String, List<XYChart.Data<String, Number>>> data_all =
-                              chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
-
-                        for(String group : groupController.getGroupnames()) {
-                            initPieChart(group);
-                            pieChartViz.createPlot(group, data_all);
-                            pieChartViz.setColor(stage);
                         }
-                    } else {
-                        InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                                "No groups defined",
-                                "Please define a grouping first.",
-                                null,
-                                "groupWarning");
+
                     }
 
                 } catch (Exception e) {

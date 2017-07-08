@@ -51,7 +51,7 @@ public class ProfilePlot extends AChart {
 
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] selection_haplogroups = cols[0];
-        String[] selection_groups = cols[1];
+        String[] selection_groups = removeUndefined(cols[1]);
         HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups, chartController.getCoreHGs());
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
         data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
@@ -67,22 +67,22 @@ public class ProfilePlot extends AChart {
             if(data_all.containsKey(key)) {
                 for(int i = 0; i < selection_groups.length; i++){
                     String group = data_all.get(key).get(i).getXValue();
-                    if(!group.equals("Undefined")){
-                        if(!group_hg.containsKey(group)){
-                            List<XYChart.Data<String, Number>> hg = new ArrayList<>();
-                            hg.add(data_all.get(key).get(i));
-                            group_hg.put(group, hg);
-                        } else {
-                            List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
-                            hg_tmp.addAll(group_hg.get(group));
-                            hg_tmp.add(data_all.get(key).get(i));
-                            group_hg.put(group, hg_tmp);
-                        }
 
-                        double val = data_all.get(key).get(i).getYValue().doubleValue();
-                        double val_norm = (val/number_of_elements[i])*100;
-                        data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
+                    if(!group_hg.containsKey(group)){
+                        List<XYChart.Data<String, Number>> hg = new ArrayList<>();
+                        hg.add(data_all.get(key).get(i));
+                        group_hg.put(group, hg);
+                    } else {
+                        List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
+                        hg_tmp.addAll(group_hg.get(group));
+                        hg_tmp.add(data_all.get(key).get(i));
+                        group_hg.put(group, hg_tmp);
                     }
+
+                    double val = data_all.get(key).get(i).getYValue().doubleValue();
+                    double val_norm = (val/number_of_elements[i])*100;
+                    data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
+
 
                 }
             } else {
@@ -118,6 +118,18 @@ public class ProfilePlot extends AChart {
 
         addTabPaneListener(statsTabpane, tabpaneViz);
         addTabPaneListener(tabpaneViz, statsTabpane);
+    }
+
+    private String[] removeUndefined(String[] col) {
+
+        List<String> list = new ArrayList<>();
+        for(String g : col){
+            if(!g.equals("Undefined"))
+                list.add(g);
+        }
+
+        return list.toArray(new String[list.size()]);
+
     }
 
     /**

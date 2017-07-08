@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 import view.table.controller.TableControllerUserBench;
@@ -33,7 +34,7 @@ public class BarPlotHaplo extends AChart {
 
 
     public BarPlotHaplo(String title, String ylabel, Stage stage, ChartController cc,
-                        TableControllerUserBench tc, LogClass logClass) throws MalformedURLException {
+                        TableControllerUserBench tc, TabPane tabPane, LogClass logClass) throws MalformedURLException {
 
         super("", ylabel, logClass);
 
@@ -58,6 +59,8 @@ public class BarPlotHaplo extends AChart {
         tableController.getTable().getItems().stream().forEach((o)
                 -> columnDataHG.add((String)haplo_col.getCellData(o)));
         hgs_summed = chartController.summarizeHaolpgroups(columnDataHG.stream().toArray(String[]::new), chartController.getCoreHGs());
+
+        setContextMenu(bc, tabPane);
 
 
     }

@@ -59,7 +59,7 @@ public class EditMenu {
             }
         });
 
-        MenuItem filterWithMutation = new MenuItem("... enter Mutation");
+        MenuItem filterWithMutation = new MenuItem("... haplotype filtering");
         filterWithMutation.setId("filterWithMutation");
         filterWithMutation.setOnAction(t -> {
 

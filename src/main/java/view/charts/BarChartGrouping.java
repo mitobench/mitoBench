@@ -43,7 +43,7 @@ public class BarChartGrouping extends AChart {
                 if(object.intValue()!=object.doubleValue())
                     return "";
 
-                return ""+(object.intValue());
+                return object.toString();
             }
 
             @Override public Number fromString(String string) {

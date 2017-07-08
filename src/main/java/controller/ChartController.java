@@ -523,19 +523,32 @@ public class ChartController {
     public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems){
 
 
-        TableColumn haplo_col = tableController.getTableColumnByName(names[0]);
-        TableColumn grouping_col = tableController.getTableColumnByName(names[1]);
+        String[][] res = new String[names.length][];
+        for(int i = 0; i < names.length; i++){
+            TableColumn col = tableController.getTableColumnByName(names[i]);
 
-        Set<String> columnDataHG = new HashSet<>();
-        selectedTableItems.stream().forEach((o)
-                -> columnDataHG.add((String)haplo_col.getCellData(o)));
+            Set<String> columnData = new HashSet<>();
+            selectedTableItems.stream().forEach((o)
+                    -> columnData.add((String)col.getCellData(o)));
 
-        Set<String> columnDataGroup = new HashSet<>();
-        selectedTableItems.stream().forEach((o)
-                -> columnDataGroup.add((String)grouping_col.getCellData(o)));
+            res[i] = columnData.toArray(new String[columnData.size()]);
+        }
 
-        return new String[][]{columnDataHG.toArray(new String[columnDataHG.size()]),
-                columnDataGroup.toArray(new String[columnDataGroup.size()])};
+        return res;
+
+//        TableColumn haplo_col = tableController.getTableColumnByName(names[0]);
+//        TableColumn grouping_col = tableController.getTableColumnByName(names[1]);
+//
+//        Set<String> columnDataHG = new HashSet<>();
+//        selectedTableItems.stream().forEach((o)
+//                -> columnDataHG.add((String)haplo_col.getCellData(o)));
+//
+//        Set<String> columnDataGroup = new HashSet<>();
+//        selectedTableItems.stream().forEach((o)
+//                -> columnDataGroup.add((String)grouping_col.getCellData(o)));
+//
+//        return new String[][]{columnDataHG.toArray(new String[columnDataHG.size()]),
+//                columnDataGroup.toArray(new String[columnDataGroup.size()])};
     }
 
 

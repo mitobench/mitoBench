@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by neukamm on 17.02.17.
@@ -88,6 +90,5 @@ public abstract class AChart {
         URL url = this.getClass().getResource("/css/chart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
     }
-
 
 }

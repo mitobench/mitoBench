@@ -68,7 +68,7 @@ public class StatisticsMenu {
             }
         });
 
-        MenuItem mutations = new MenuItem("Calculate mutation frequency");
+        MenuItem mutations = new MenuItem("Calculate haplotype frequency");
         mutations.setId("toolsMenu_mutation_freq");
         mutations.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {

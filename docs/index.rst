@@ -30,6 +30,8 @@ This is the main mitoBench documentation, where you can find information about t
    contents/filtering
    
    contents/analysis   
+   
+   contents/statistics
 
    contents/visualization  
 

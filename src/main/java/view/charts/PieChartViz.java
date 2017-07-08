@@ -25,7 +25,6 @@ public class PieChartViz extends AChart {
         chart = new PieChart();
         chart.setTitle(title);
         setContextMenu(chart, tabPane);
-        //chart.setStyle("-fx-fone-size: 20pt ;");
     }
 
     public void setColor(Stage stage) {
@@ -63,7 +62,6 @@ public class PieChartViz extends AChart {
     }
 
 
-
     public void createPlot(String group, HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
 
         HashMap<String, Integer> hg_count = new HashMap<>();
@@ -88,6 +86,16 @@ public class PieChartViz extends AChart {
 
         for(String hg : hg_count.keySet()){
             PieChart.Data slice = new PieChart.Data(hg, hg_count.get(hg));
+            chart.getData().add(slice);
+        }
+
+
+    }
+
+    public void createPlotSingle(HashMap<String, ArrayList> hgs_summed) {
+
+        for(String hg : hgs_summed.keySet()){
+            PieChart.Data slice = new PieChart.Data(hg, hgs_summed.get(hg).size());
             chart.getData().add(slice);
         }
 
