@@ -39,9 +39,9 @@ public class HaplotypeCaller {
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController, this.mtStorage);
         multiFastaWriter.writeData(file);
 
-        File f = new File(file);
+        //File f = new File(file);
 
-        start(f);
+        //start(file);
         //POST file
 //        ClientResource cr = new ClientResource("https://haplogrep.uibk.ac.at/haplogrep-ws");
 //        final FormDataSet fds = new FormDataSet();
@@ -69,6 +69,7 @@ public class HaplotypeCaller {
 
     }
 
+
     private void update(List<String> ids, List<String> haplogroups) {
         tableController.addColumn("Haplogroup HaploGrep2/PhyloTree17",
                 tableController.getCurrentColumnNames().size());
@@ -89,12 +90,14 @@ public class HaplotypeCaller {
     }
 
 
-    private void start(File f) throws IOException, InterruptedException {
+    private void start(String f) throws IOException, InterruptedException {
 
-        String dirpath = this.getClass().getResource("/jar/haplogrep-2.1.1.jar").toExternalForm();
+        String dirpath = System.getProperty("user.dir") +  "/jar/haplogrep-2.1.1.jar";
+        System.out.println(dirpath);
+        //String dirpath = this.getClass().getResource("/jar/haplogrep-2.1.1.jar").toExternalForm();
         String haplogrep2_jar = dirpath.split(":")[1];
         String[] command = new String[] { "java", "-jar", haplogrep2_jar,
-                "--in",f.getAbsolutePath(),
+                "--in",f,
                 "--out","/home/neukamm/",
                 "--phylotree","17"};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
@@ -104,7 +107,7 @@ public class HaplotypeCaller {
         System.out.println("Haplogroups are determined");
 
         // parse and delete temporary files
-        Files.delete(f.toPath());
+        Files.delete(new File(f).toPath());
 
     }
 }

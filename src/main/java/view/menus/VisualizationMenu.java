@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.charts.*;
-import view.dialogues.information.GroupingWarningDialogue;
+import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.AdvancedStackedBarchartDialogue;
 import view.table.controller.TableControllerUserBench;
 
@@ -324,7 +324,7 @@ public class VisualizationMenu {
                         }
                     });
                 } else {
-                    GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
+                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
                             "No groups defined",
                             "Please define a grouping first.",
                             null,
@@ -356,7 +356,7 @@ public class VisualizationMenu {
                         HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
                         sunburstChart.create(hg_to_group, chartController.getWeights(), treeMap_path_to_root, tree_root, treeView);
                     } else {
-                        GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
+                        InformationDialogue groupingWarningDialogue = new InformationDialogue(
                                 "No groups defined",
                                 "Please define a grouping first.",
                                 null,
@@ -393,7 +393,7 @@ public class VisualizationMenu {
                         profilePlot.create(tableController, treeController, chartController, logClass, scene, statsTabpane);
 
                     } else {
-                        GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
+                        InformationDialogue groupingWarningDialogue = new InformationDialogue(
                                 "No groups defined",
                                 "Please define a grouping first.",
                                 null,
@@ -444,7 +444,7 @@ public class VisualizationMenu {
                             pieChartViz.setColor(stage);
                         }
                     } else {
-                        GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
+                        InformationDialogue groupingWarningDialogue = new InformationDialogue(
                                 "No groups defined",
                                 "Please define a grouping first.",
                                 null,
@@ -493,7 +493,7 @@ public class VisualizationMenu {
                             chartController.addDataBarChart(barChartGrouping, haplo_col, null);
                             barChartGrouping.setColor(stage);
                         } else {
-                            GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
+                            InformationDialogue groupingWarningDialogue = new InformationDialogue(
                                     "No groups defined",
                                     "Please define a grouping first.",
                                     null,

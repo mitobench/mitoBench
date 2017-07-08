@@ -3,14 +3,10 @@ package view.menus;
 import Logging.LogClass;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import org.json.JSONException;
-import analysis.HaplotypeCaller;
 import view.MitoBenchWindow;
-import view.dialogues.information.GroupingWarningDialogue;
+import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import view.table.controller.TableControllerUserBench;
-
-import java.io.IOException;
 
 
 /**
@@ -48,7 +44,7 @@ public class AnalysisMenu {
 
             }
             else {
-                GroupingWarningDialogue groupingWarningDialogue = new GroupingWarningDialogue(
+                InformationDialogue groupingWarningDialogue = new InformationDialogue(
                         "No groups defined",
                         "Please define a grouping first.",
                         null,
@@ -60,18 +56,21 @@ public class AnalysisMenu {
         MenuItem assignHGs = new MenuItem("Calculate haplogroups");
         assignHGs.setId("menuitem_calculate_haplogroups");
         assignHGs.setOnAction(t -> {
-
-                try {
-                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
-                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
-                    haplotypeCaller.call();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            InformationDialogue HGNotSupportedDialogue = new InformationDialogue("",
+                    "Please use HaploGrep2 to determine Haplogroups.\n" +
+                            "The resulting hsd file can then be uploaded.", "Haplogroup calculation is not supported yet",
+                    "hgCalculationDislogue");
+//                try {
+//                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
+//                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
+//                    haplotypeCaller.call();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 
         });
         menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
