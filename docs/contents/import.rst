@@ -1,10 +1,12 @@
-# Data Import
+Data Import
+==========
 
 
 
 mitoBench provides different ways to import data.
 
-## Import via data upload
+Import via data upload
+----------------------
 
 
 mitoBench supports different file formats:
@@ -14,14 +16,21 @@ mitoBench supports different file formats:
 * Haplogrep (.hsd)
 * Excel (.xls)
 * Generic file (.tsv)
+
   To upload a generic file, the file must have a specific format:
   * The first line starts with *##* and contains the column names separated with tabs.
+
     ##<colname1>  <colname2>  ....
+
   * The second line starts with *#* and specifies the data type of the column.
     You can find a list of all possible data types in the section below.
+
     #<data type1> <data type1>  ...
+
   * Third line to end:
+
     Contains the actual data. One line per sample, tab separated.
+
 * MitoProject (.mitoproj)
 
 The uploaded data are represented in table format. Information that are in different files,
@@ -32,7 +41,7 @@ but belonging to one sample are merged into one row based on the sample name.
    identical names.
 
 
-### Data types
+**Data types**
 
 * String
 * Categorical
@@ -57,7 +66,8 @@ but belonging to one sample are merged into one row based on the sample name.
 
 
 
-## Import from mitoDB
+Import from mitoDB
+------------------
 
 To import data from mitoDB, select *File -> Import Data from DB*. This opens a
 tab in the main view where you have to enter your mitoDB login data.

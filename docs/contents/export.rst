@@ -11,19 +11,29 @@ where you can choose between different file formats:
    :align: center
 
 The supported file formats are:
+
 * Arlequin format (.arp)
+
   To export your data to arp format, please specify a column after that your data
   has to be grouped. This output file can be used as input file for your analyses
   with Arlequin.
+
 * BEAST format (.beast)
+
   This output file can be used as input file for your analyses with BEAST. The C14
   dating will be added to the header line. If your data does not have a C14 dating,
   the header of the FastA entry will only contain the sample name.
+
 * Generic format (.csv)
+
   Creates a csv file containing all data
+
 * Excel format (.xlsx)
+
   Writes all data as Excel file.
+
 * Mitoproject format (.mitoproj)
+
   Writes all (eventually filtered) data plus grouping information into a text file.
   This file can later be used to restore the session.
 
