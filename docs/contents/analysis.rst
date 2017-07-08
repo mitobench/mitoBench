@@ -28,6 +28,11 @@ This opens a dialogue to configure the analysis.
 Haplogroup
 =========
 
-To calculate the haplogroups, select *Analysis -> Calculate haplogroups*. This runs
-HaploGrep2 in the background. The haplogroups are added as new column in the table
-view and can be downloaded as hsd file as well.
+To calculate the haplogroups, select *Analysis -> Calculate haplogroups*. This
+runs
+
+* mtDNA server to create a hsd file of the selected samples
+* HaploGrep2 with the hsd file as input to calulate the haplogroups
+
+The haplogroups are added as new column in the table view and can be downloaded
+as hsd file as well.

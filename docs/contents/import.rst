@@ -45,17 +45,24 @@ but belonging to one sample are merged into one row based on the sample name.
 
 * String
 * Categorical
+
   The same as data type *String* yet
 * Location
+
   The location is expected as latitude and longitude, separated with comma.
+
   .. note::
      The decimal point has to be a point (*.*), no comma!
 
   Example: 29.2505576,18.0843603
 * C14
+
   The C14 dating information has to have the folloring format:
+
   * *cal* or *CAL* can be contained, but are not required
+
   * *AD* / *ad* or *BC* / *bc* are followed by an integer (number)
+  
   * Both *AD* / *ad* and *BC* / *bc* can be contained in the C14 data type.
 
   Example: cal AD 81-132 , AD 81-132, cal BC 37-cal AD 48
