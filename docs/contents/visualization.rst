@@ -95,11 +95,29 @@ Creates
 Grouping bar plot
 -----------------
 
+> Visualization -> Grouping -> Grouping bar chart
+
 .. note::
   Grouping needed.
 
   The grouping bar plot visualizes the sizes of the different groups.
-  Select *Visualization -> Grouping -> Grouping bar chart*.
 
 .. image:: images/barplotgrouping.png
+   :align: center
+
+
+Map view
+--------
+
+> Visualization -> Map view -> Visualize data on map
+
+.. note::
+  No Grouping needed.
+
+If the samples have some geographic information, they can be visualized on a map.
+To add all samples to the map, click on the *Show add data* button.
+In case of grouped data, the grouing is represeneted as different colours, but only
+up to 8 different colors are supported by now.
+
+.. image:: images/mapview.png
    :align: center

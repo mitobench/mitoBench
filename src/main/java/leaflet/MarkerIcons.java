@@ -96,11 +96,11 @@ public class MarkerIcons {
                 iconColViolet, iconColGrey, iconColBlack};
 
         int groupCount = 0;
-        HashMap<String, Group> all_groups = groupController.getAllGroups();
+        HashMap<String, Group> all_groups = groupController.getGroupsWithoutUndefined();
         // iterate over groups and generates marker/icon for each element in the group.
         for(String gName : all_groups.keySet()){
             Group g = all_groups.get(gName);
-            if(!g.equals("Undefined")){
+            //if(!g.equals("Undefined")){
                 for(Object gMember : g.getEntries()){
 
                     ObservableList entry = (ObservableList) gMember;
@@ -120,7 +120,7 @@ public class MarkerIcons {
                     }
                 }
                 groupCount++;
-            }
+            //}
 
 
         }

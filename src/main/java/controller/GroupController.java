@@ -179,4 +179,16 @@ public class GroupController {
     public HashMap<String, Group> getAllGroups() {
         return allGroups;
     }
+
+    public HashMap<String, Group> getGroupsWithoutUndefined() {
+        HashMap<String, Group> allGroups_new = new HashMap<>();
+
+        for(String key : allGroups.keySet()){
+            if(!key.equals("Undefined")){
+                allGroups_new.put(key, allGroups.get(key));
+            }
+        }
+
+        return allGroups_new;
+    }
 }
