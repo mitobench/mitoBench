@@ -1,13 +1,10 @@
 Data Import
 ==========
 
-
-
 mitoBench provides different ways to import data.
 
 Import via data upload
 ----------------------
-
 
 mitoBench supports different file formats:
 
@@ -62,7 +59,7 @@ but belonging to one sample are merged into one row based on the sample name.
   * *cal* or *CAL* can be contained, but are not required
 
   * *AD* / *ad* or *BC* / *bc* are followed by an integer (number)
-  
+
   * Both *AD* / *ad* and *BC* / *bc* can be contained in the C14 data type.
 
   Example: cal AD 81-132 , AD 81-132, cal BC 37-cal AD 48

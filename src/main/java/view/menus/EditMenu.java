@@ -7,10 +7,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
-import view.dialogues.settings.DataFilteringMutationBasedDialogue;
+import view.dialogues.settings.DataFilteringHaplotypeBasedDialogue;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
-import view.table.controller.TableControllerUserBench;
-import controller.HaplotreeController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -39,7 +37,7 @@ public class EditMenu {
         Menu filterData = new Menu("Filter data...");
         filterData.setId("filterItem");
 
-        MenuItem filterTreeBased = new MenuItem("... based on Haplotree");
+        MenuItem filterTreeBased = new MenuItem("... based on PhyloTree");
         filterTreeBased.setId("filterWithTree");
         filterTreeBased.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -63,8 +61,8 @@ public class EditMenu {
         filterWithMutation.setId("filterWithMutation");
         filterWithMutation.setOnAction(t -> {
 
-            DataFilteringMutationBasedDialogue dataFilteringMutationBasedDialogue =
-                    new DataFilteringMutationBasedDialogue("Mutation based data filtering", logClass, mito);
+            DataFilteringHaplotypeBasedDialogue dataFilteringMutationBasedDialogue =
+                    new DataFilteringHaplotypeBasedDialogue("Haplotype based data filtering", logClass, mito);
         });
 
         filterData.getItems().addAll(filterTreeBased, filterWithMutation);

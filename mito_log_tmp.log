@@ -1,3 +1,5 @@
-2017-07-08 16:41:05 INFO  FileMenu:29 - Read project file: /home/neukamm/IdeaProjects/MitoBench/test_files/project_with_DB.mitoproj
-2017-07-08 16:41:07 INFO  StatisticsMenu:75 - Calculate frequency per mutation
-2017-07-08 16:41:55 INFO  StatisticsMenu:75 - Calculate frequency per mutation
+2017-07-09 11:43:15 INFO  StatisticsMenu:75 - Calculate frequency per mutation
+2017-07-09 11:43:23 INFO  FileMenu:29 - Read project file: /home/neukamm/IdeaProjects/MitoBench/test_files/project_with_DB.mitoproj
+2017-07-09 11:43:28 INFO  StatisticsMenu:75 - Calculate frequency per mutation
+2017-07-09 11:44:14 INFO  FilterData:38 - Filtering mutations: include only the mutation: [C770T] and all mutations with distance d=0
+2017-07-09 11:44:26 INFO  TableMenu:86 - Reset user data table.

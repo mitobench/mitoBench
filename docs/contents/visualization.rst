@@ -7,7 +7,7 @@ within the data set and the group sizes, if data are grouped.
 Bar plot
 ---------
 
-..note::
+.. note::
   No grouping needed.
 
 A general visualization of the haplogroup occurrences in the whole data set is
@@ -20,7 +20,7 @@ the barplot (select *Visualization -> Haplogroups -> Create Barchart -> Plot Hap
 Stacked Bar plot
 ----------------
 
-..note::
+.. note::
   Grouping needed.
 
 The stacked bar plot visualizes the haplogroup frequency per group. Select
@@ -41,7 +41,7 @@ the direct comparison of the haplogroup frequency between the different groups.
 Sunburst chart
 --------------
 
-..note::
+.. note::
   Grouping needed.
 
 The sunburst chart (select *Visualization -> Haplogroups -> Create Sunburst chart*)
@@ -58,7 +58,7 @@ circle. Clicking on the most inner cicle navigates one level back.
 Profile plot
 ------------
 
-..note::
+.. note::
   Grouping needed.
 
 The profile plot visualizes the heplogroup profile per group. The x-axis represents
@@ -78,7 +78,7 @@ The tabs that belongs together are marked with the same number.
 Pie chart
 ----------
 
-..note::
+.. note::
   No Grouping needed.
 
 Selecting *Visualization -> Haplogroups -> Create Pie Chart* creates a pie chart
@@ -95,7 +95,7 @@ Creates
 Grouping bar plot
 -----------------
 
-..note::
+.. note::
   Grouping needed.
 
   The grouping bar plot visualizes the sizes of the different groups.

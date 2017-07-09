@@ -14,13 +14,13 @@ import view.MitoBenchWindow;
 /**
  * Created by neukamm on 06.03.17.
  */
-public class DataFilteringMutationBasedDialogue extends APopupDialogue {
+public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
     private final MitoBenchWindow mitoBenchWindow;
     private TextField field_mutation;
     private TextField field_distance;
     private Button btn_apply;
 
-    public DataFilteringMutationBasedDialogue(String title, LogClass logClass, MitoBenchWindow mito) {
+    public DataFilteringHaplotypeBasedDialogue(String title, LogClass logClass, MitoBenchWindow mito) {
         super(title, logClass);
         dialogGrid.setId("mutationFilterDialogue");
         mitoBenchWindow = mito;
@@ -31,7 +31,7 @@ public class DataFilteringMutationBasedDialogue extends APopupDialogue {
     }
 
     private void addComponents() {
-        Label label_enterMutation = new Label("Enter Mutation");
+        Label label_enterMutation = new Label("Enter Haplotype");
         label_enterMutation.setId("label_enterMutation");
 
         field_mutation = new TextField();
