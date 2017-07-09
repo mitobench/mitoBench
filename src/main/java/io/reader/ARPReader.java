@@ -30,7 +30,7 @@ public class ARPReader implements IInputData {
         ColumnNameMapper mapper = new ColumnNameMapper();
 
 
-        String currline = "";
+        String currline;
         boolean init = true;
         String currGroup = "";
             while ((currline = bfr.readLine()) != null) {
@@ -64,7 +64,7 @@ public class ARPReader implements IInputData {
                     String mtseq = dataSplit[2];
                     List<Entry> entries = new ArrayList<>();
                     Entry e = new Entry(mapper.mapString("MTSequence"), new CategoricInputType("String"), new GenericInputData(mtseq));
-                    Entry e_group = new Entry(mapper.mapString("ARP-Groups (Grouping)"), new CategoricInputType("String"), new GenericInputData(currGroup));
+                    Entry e_group = new Entry(mapper.mapString("ARP-Groups"), new CategoricInputType("String"), new GenericInputData(currGroup));
                     entries.add(e);
                     entries.add(e_group);
                     map.put(id, entries);

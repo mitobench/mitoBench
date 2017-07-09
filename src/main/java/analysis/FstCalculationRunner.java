@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 
 import javafx.scene.text.Text;
 import methods.Filter;
+import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.table.MTStorage;
 import view.table.controller.TableControllerFstValues;
@@ -42,6 +43,8 @@ public class FstCalculationRunner {
     private String[] groupnames;
     private List<Integer> usableLoci;
     private Writer writer;
+    private Logger LOG;
+
 
     public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char missing_data_character)
             throws IOException {
@@ -49,6 +52,7 @@ public class FstCalculationRunner {
         distance_type = type;
         gamma_a = gamma;
         this.missing_data_character = missing_data_character;
+        LOG = mito.getLogClass().getLogger(this.getClass());
 
         prepareData(mito.getTableControllerUserBench(), mitobench.getTableControllerUserBench().getDataTable().getMtStorage());
     }
@@ -83,6 +87,8 @@ public class FstCalculationRunner {
 
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
 
+        writeLog(runSlatkin, runReynolds, field_level_missing_data);
+
 
         Filter filter = new Filter();
 
@@ -112,7 +118,6 @@ public class FstCalculationRunner {
         );
 
 
-        // todo: write result in an appropriate way
         if(runSlatkin){
             fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
             writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
@@ -128,6 +133,14 @@ public class FstCalculationRunner {
 
         writer.addDistanceMatrixToResult(standardAMOVA.getDistanceCalculator().getDistancematrix_d());
 
+
+    }
+
+    private void writeLog(boolean runSlatkin, boolean runReynolds, String level_missing_data) {
+
+        LOG.info("Calculate Fst values.\nRun Slatkin: " + runSlatkin + ".\nRun Reynolds: " + runReynolds +
+        ".\nLevel of missing data: " + level_missing_data + ".\nMissing data character: " + missing_data_character +
+        ".\nGamma a value: " + gamma_a);
 
     }
 
@@ -151,32 +164,32 @@ public class FstCalculationRunner {
 
     private void writeTable(double[][] fsts, String tab_header, String id){
 
-        TableView<ObservableList> table = tableControllerFstValues.getTable();
-        tableControllerFstValues.addColumn("", 0);
-        int i = 1;
-        for(String group : groupnames){
-            tableControllerFstValues.addColumn(group, i);
-            i++;
-        }
-
-        // add data (table content)
-        // write population HG count information
-        ObservableList<ObservableList> entries = FXCollections.observableArrayList();
-        for(int j = 0; j < fsts.length ; j++){
-            ObservableList  entry = FXCollections.observableArrayList();
-            entry.add(groupnames[j]);
-            for(int col=0; col<fsts[0].length; col++)
-            {
-                entry.add(round(fsts[col][j],5));
-            }
-            entries.add(entry);
-        }
-
-
-        // clear Items in table
-        table.getItems().removeAll(table.getItems());
-        //FINALLY ADDED TO TableView
-        table.getItems().addAll(entries);
+//        TableView<ObservableList> table = tableControllerFstValues.getTable();
+//        tableControllerFstValues.addColumn("", 0);
+//        int i = 1;
+//        for(String group : groupnames){
+//            tableControllerFstValues.addColumn(group, i);
+//            i++;
+//        }
+//
+//        // add data (table content)
+//        // write population HG count information
+//        ObservableList<ObservableList> entries = FXCollections.observableArrayList();
+//        for(int j = 0; j < fsts.length ; j++){
+//            ObservableList  entry = FXCollections.observableArrayList();
+//            entry.add(groupnames[j]);
+//            for(int col=0; col<fsts[0].length; col++)
+//            {
+//                entry.add(round(fsts[col][j],5));
+//            }
+//            entries.add(entry);
+//        }
+//
+//
+//        // clear Items in table
+//        table.getItems().removeAll(table.getItems());
+//        //FINALLY ADDED TO TableView
+//        table.getItems().addAll(entries);
 
 //        Tab tab = new Tab();
 //        tab.setId("tab_" + id);

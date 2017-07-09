@@ -16,3 +16,11 @@ part will include the database view as well.
 
 mitoBench can basically be used in offline mode. However, some functionalities (such
 as the map view) need a working internet connection.
+
+
+Log of all steps
+----------------
+
+By closing mitoBench, you will be aked if you want to save a log file.
+This file conrains all steps that were performed during your analsis with mitoBench,
+which helps you to reconstruct your analysis at a later date.

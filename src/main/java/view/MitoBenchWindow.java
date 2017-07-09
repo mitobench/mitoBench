@@ -50,6 +50,7 @@ public class MitoBenchWindow extends Application{
     private Button enableDBBtn;
     private LogClass logClass;
     private TreeView treeView;
+    private boolean projectLoaded;
 
 
     @Override
@@ -65,6 +66,8 @@ public class MitoBenchWindow extends Application{
 
 
     public void continueInit(Stage stage) throws Exception {
+
+        projectLoaded = false;
 
         // init Logger
         logClass.setUp();
@@ -369,5 +372,13 @@ public class MitoBenchWindow extends Application{
 
     public VBox getPane_table_DB() {
         return pane_table_DB;
+    }
+
+    public boolean isProjectLoaded() {
+        return projectLoaded;
+    }
+
+    public void setProjectLoaded(boolean projectLoaded) {
+        this.projectLoaded = projectLoaded;
     }
 }

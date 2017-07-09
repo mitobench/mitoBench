@@ -2,6 +2,7 @@ package io.writer;
 
 import io.IOutputData;
 import javafx.collections.ObservableList;
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -21,7 +22,7 @@ import java.util.List;
 public class ExcelWriter implements IOutputData {
     private TableControllerUserBench tableController;
 
-    public ExcelWriter(TableControllerUserBench tableController) {
+    public ExcelWriter(TableControllerUserBench tableController, Logger LOG) {
 
         this.tableController = tableController;
     }

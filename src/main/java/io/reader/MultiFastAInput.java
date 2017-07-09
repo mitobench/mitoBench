@@ -1,6 +1,5 @@
 package io.reader;
 
-import database.ColumnNameMapper;
 import io.Exceptions.FastAException;
 import io.IInputData;
 import io.datastructure.Entry;
@@ -40,7 +39,7 @@ public class MultiFastAInput implements IInputData {
      * @throws IOException
      */
     public MultiFastAInput(String fileToParse, Logger LOG) throws IOException, FastAException {
-        LOG.info("Read generic file: " + fileToParse);
+        LOG.info("Read FastA file: " + fileToParse);
 
         fastaEntrys = new ArrayList<FastaEntry>();
         File f = new File(fileToParse);

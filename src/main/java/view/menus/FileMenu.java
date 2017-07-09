@@ -27,6 +27,7 @@ import view.MitoBenchWindow;
 import view.dialogues.error.ARPErrorDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
+import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
 import view.table.DrapAndDropEventMaganer;
@@ -98,9 +99,7 @@ public class FileMenu {
                 tableControllerUserBench.cleartable();
                 viz_pane.getTabs().removeAll(viz_pane.getTabs());
                 mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
-
-
-
+                mitoBenchWindow.setProjectLoaded(false);
             }
         });
 
@@ -350,7 +349,7 @@ public class FileMenu {
                 HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
 
                 tableControllerUserBench.updateTable(data_map);
-                tableControllerUserBench.loadGroups();
+                //tableControllerUserBench.loadGroups();
             }
 
             //Input is in ARP Format
@@ -367,23 +366,32 @@ public class FileMenu {
                 HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
 
                 tableControllerUserBench.updateTable(data_map);
-                tableControllerUserBench.loadGroups();
+                //tableControllerUserBench.loadGroups();
             }
 
             if(absolutePath.endsWith(".mitoproj")){
 
-                ProjectReader projectReader = new ProjectReader();
-                try {
+                if(mitoBenchWindow.isProjectLoaded()){
+                    InformationDialogue informationDialogue = new InformationDialogue(
+                            "Project already loaded",
+                            "Please clean up your analysis before \na new project can be loaded.",
+                            "Project already loaded",
+                            "projectLoadedDialogue"
+                    );
+                } else {
+                    ProjectReader projectReader = new ProjectReader();
+                    try {
 
-                    projectReader.read(f, LOG);
-                    projectReader.loadData(tableControllerUserBench);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ProjectException e) {
-                    e.printStackTrace();
+                        projectReader.read(f, LOG);
+                        projectReader.loadData(tableControllerUserBench);
+                        mitoBenchWindow.setProjectLoaded(true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ProjectException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-
-
             }
         } else {
             try {

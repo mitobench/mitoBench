@@ -2,6 +2,7 @@ package io.writer;
 
 import io.IOutputData;
 import javafx.collections.ObservableList;
+import org.apache.log4j.Logger;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.*;
@@ -16,7 +17,7 @@ public class CSVWriter implements IOutputData {
     private TableControllerUserBench tableController;
     private String separator = ",";
 
-    public CSVWriter(TableControllerUserBench tableController){
+    public CSVWriter(TableControllerUserBench tableController, Logger LOG){
         this.data = tableController.getData();
         this.tableController = tableController;
     }

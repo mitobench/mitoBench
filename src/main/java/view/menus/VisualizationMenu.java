@@ -31,50 +31,57 @@ import java.util.List;
  */
 public class VisualizationMenu {
 
-
     private MitoBenchWindow mito;
-    private Menu menuGraphics;
+    private Stage stage;
+    private Scene scene;
+
     private TableControllerUserBench tableController;
+    private ChartController chartController;
+    private HaplotreeController treeController;
+    private GroupController groupController;
+
     private BarPlotHaplo barPlotHaplo;
     private BarChartGrouping barChartGrouping;
     private StackedBar stackedBar;
     private SunburstChartCreator sunburstChart;
-    private TabPane tabPane;
-    private HashMap<String, List<String>> treeMap_path_to_root;
-    private TreeItem<String> tree_root;
     private TreeView treeView;
-    private Stage stage;
-    private ChartController chartController;
-    private HaplotreeController treeController;
     private ProfilePlot profilePlot;
-    private Scene scene;
-    private TabPane statsTabpane;
     private PieChartViz pieChartViz;
-    private GroupController groupController;
     private ColorSchemeStackedBarChart colorScheme;
+
+    private TabPane tabPane;
+    private TabPane statsTabpane;
+    private Menu menuGraphics;
+
+    private HashMap<String, List<String>> treeMap_path_to_root;
+    private int profilePlotID=1;
+    private TreeItem<String> tree_root;
+
     private Logger LOG;
     private LogClass logClass;
-    private int profilePlotID=1;
-    private MapViewController mapViewController;
 
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
 
-        mito = mitoBenchWindow;
         menuGraphics = new Menu("Visualization");
         menuGraphics.setId("graphicsMenu");
+
+        mito = mitoBenchWindow;
+        scene = mitoBenchWindow.getScene();
+        stage = mitoBenchWindow.getPrimaryStage();
+
         treeController = mitoBenchWindow.getTreeController();
         tableController = mitoBenchWindow.getTableControllerUserBench();
+        chartController = new ChartController();
+        chartController.init(tableController, treeController.getTreeMap());
+        groupController = mitoBenchWindow.getGroupController();
+
         tabPane = mitoBenchWindow.getTabpane_visualization();
         treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();
         tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
         treeView = treeController.getTree().getTree();
-        stage = mitoBenchWindow.getPrimaryStage();
-        chartController = new ChartController();
-        chartController.init(tableController, treeController.getTreeMap());
-        scene = mitoBenchWindow.getScene();
-        this.statsTabpane = mitoBenchWindow.getTabpane_statistics();
-        this.groupController = mitoBenchWindow.getGroupController();
+        statsTabpane = mitoBenchWindow.getTabpane_statistics();
+
         LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
         logClass = mitoBenchWindow.getLogClass();
         addSubMenus();
@@ -198,10 +205,6 @@ public class VisualizationMenu {
     private void initMap(String title){
         LOG.info("Visualize data: Visualize all samples on map");
 
-//        MapViewController mapViewController = new MapViewController(tableController.getTableColumnByName("ID"),
-//                tableController.getTableColumnByName("Location"),
-//                tableController.getTable().getItems());
-
         LeafletController mapViewController = null;
         try {
             mapViewController = new LeafletController(mito,
@@ -226,7 +229,6 @@ public class VisualizationMenu {
 
 
     public void clearCharts(){
-
         stackedBar = null;
         barPlotHaplo = null;
         tabPane.getTabs().clear();
@@ -237,8 +239,10 @@ public class VisualizationMenu {
 
         Menu haplo_graphics = new Menu("Haplogroups");
         haplo_graphics.setId("haplo_graphics");
+
         Menu barchart = new Menu("Create Barchart...");
         barchart.setId("barchart");
+
         Menu grouping_graphics = new Menu("Grouping");
         grouping_graphics.setId("grouping_graphics");
 
@@ -276,59 +280,55 @@ public class VisualizationMenu {
 
         MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group (Stacked Barchart)");
         plotHGfreqGroup.setId("plotHGfreqGroup_item");
-        plotHGfreqGroup.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                if(tableController.getTableColumnByName("Grouping") != null
-                        && tableController.getTable().getItems().size()!=0) {
+        plotHGfreqGroup.setOnAction(t -> {
+            if(tableController.getTableColumnByName("Grouping") != null
+                    && tableController.getTable().getItems().size()!=0) {
 
-                    String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
-                    String[] selection_haplogroups = cols[0];
-                    String[] selection_groups = cols[1];
+                String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+                String[] selection_haplogroups = cols[0];
+                String[] selection_groups = cols[1];
 
-                    AdvancedStackedBarchartDialogue advancedStackedBarchartDialogue =
-                            new AdvancedStackedBarchartDialogue("Advanced Stacked Barchart Settings", selection_groups, logClass);
+                AdvancedStackedBarchartDialogue advancedStackedBarchartDialogue =
+                        new AdvancedStackedBarchartDialogue("Advanced Stacked Barchart Settings", selection_groups, logClass);
 
-                    advancedStackedBarchartDialogue.getApplyBtn().setOnAction(new EventHandler<ActionEvent>() {
-                        @Override public void handle(ActionEvent e) {
-                            advancedStackedBarchartDialogue.getApplyBtn();
-                            try {
-                                initStackedBarchart();
-                            } catch (MalformedURLException e1) {
-                                e1.printStackTrace();
-                            }
+                advancedStackedBarchartDialogue.getApplyBtn().setOnAction(e -> {
+                    advancedStackedBarchartDialogue.getApplyBtn();
+                    try {
+                        initStackedBarchart();
+                    } catch (MalformedURLException e1) {
+                        e1.printStackTrace();
+                    }
 
 
-                            //chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
-                            chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, advancedStackedBarchartDialogue.getStackOrder());
-                            stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+                    //chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
+                    chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, advancedStackedBarchartDialogue.getStackOrder());
+                    stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
-                            // add settings
+                    // add settings
 
-                            stackedBar.addTooltip();
-                            colorScheme = null;
-                            try {
-                                colorScheme = new ColorSchemeStackedBarChart(stage);
-                            } catch (MalformedURLException e1) {
-                                e1.printStackTrace();
-                            }
+                    stackedBar.addTooltip();
+                    colorScheme = null;
+                    try {
+                        colorScheme = new ColorSchemeStackedBarChart(stage);
+                    } catch (MalformedURLException e1) {
+                        e1.printStackTrace();
+                    }
 
-                            if(selection_haplogroups.length > 20){
-                                colorScheme.setNewColors(stackedBar);
-                                stackedBar.addListener();
-                            } else {
-                                colorScheme.setNewColorsLess20(stackedBar);
-                            }
+                    if(selection_haplogroups.length > 20){
+                        colorScheme.setNewColors(stackedBar);
+                        stackedBar.addListener();
+                    } else {
+                        colorScheme.setNewColorsLess20(stackedBar);
+                    }
 
-                            advancedStackedBarchartDialogue.close();
-                        }
-                    });
-                } else {
-                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                            "No groups defined",
-                            "Please define a grouping first.",
-                            null,
-                            "groupWarning");
-                }
+                    advancedStackedBarchartDialogue.close();
+                });
+            } else {
+                InformationDialogue groupingWarningDialogue = new InformationDialogue(
+                        "No groups defined",
+                        "Please define a grouping first.",
+                        null,
+                        "groupWarning");
             }
         });
 
@@ -342,29 +342,27 @@ public class VisualizationMenu {
 
         MenuItem sunburstChartItem = new MenuItem("Create Sunburst chart...");
         sunburstChartItem.setId("sunburstChart_item");
-        sunburstChartItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
+        sunburstChartItem.setOnAction(t -> {
+            try {
 
-                    // makes only sense if grouping exists.
-                    if(tableController.getTableColumnByName("Grouping") != null
-                            && tableController.getTable().getItems().size() != 0 ){
-                        initSunburst();
-                        // get selected rows
-                        ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
-                        HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
-                        sunburstChart.create(hg_to_group, chartController.getWeights(), treeMap_path_to_root, tree_root, treeView);
-                    } else {
-                        InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                                "No groups defined",
-                                "Please define a grouping first.",
-                                null,
-                                "groupWarning");
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                // makes only sense if grouping exists.
+                if(tableController.getTableColumnByName("Grouping") != null
+                        && tableController.getTable().getItems().size() != 0 ){
+                    initSunburst();
+                    // get selected rows
+                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+                    HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
+                    sunburstChart.create(hg_to_group, chartController.getWeights(), treeMap_path_to_root, tree_root, treeView);
+                } else {
+                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
+                            "No groups defined",
+                            "Please define a grouping first.",
+                            null,
+                            "groupWarning");
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -378,30 +376,28 @@ public class VisualizationMenu {
 
         MenuItem profilePlotItem = new MenuItem("Create Profile Plot");
         profilePlotItem.setId("profilePlot");
-        profilePlotItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
-                    // makes only sense if grouping exists.
-                    if(tableController.getTableColumnByName("Grouping") != null
-                            && tableController.getTable().getItems().size() != 0 ){
-                        initProfilePlot();
-                        // get selected rows
-                        ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
-                        HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
+        profilePlotItem.setOnAction(t -> {
+            try {
+                // makes only sense if grouping exists.
+                if(tableController.getTableColumnByName("Grouping") != null
+                        && tableController.getTable().getItems().size() != 0 ){
+                    initProfilePlot();
+                    // get selected rows
+                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+                    HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
 
-                        profilePlot.create(tableController, treeController, chartController, logClass, scene, statsTabpane);
+                    profilePlot.create(tableController, treeController, chartController, logClass, scene, statsTabpane);
 
-                    } else {
-                        InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                                "No groups defined",
-                                "Please define a grouping first.",
-                                null,
-                                "groupWarning");
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } else {
+                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
+                            "No groups defined",
+                            "Please define a grouping first.",
+                            null,
+                            "groupWarning");
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -412,128 +408,120 @@ public class VisualizationMenu {
 
          */
 
-        MenuItem pieCcart = new MenuItem("Create Pie Chart");
-        pieCcart.setId("piechart");
-        pieCcart.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
-                    // makes only sense if grouping exists.
-                    if(tableController.getTable().getItems().size() != 0 ){
+        MenuItem pieChart = new MenuItem("Create Pie Chart");
+        pieChart.setId("piechart");
+        pieChart.setOnAction(t -> {
+            try {
+                // makes only sense if grouping exists.
+                if(tableController.getTable().getItems().size() != 0 ){
 
-                        if(tableController.getTableColumnByName("Grouping") != null){
-                            // get selected rows
-                            ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+                    if(tableController.getTableColumnByName("Grouping") != null){
+                        // get selected rows
 
-                            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
-                                    tableController.getSelectedRows());
-                            String[] selection_haplogroups = cols[0];
-                            String[] selection_groups = cols[1];
+                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
+                                tableController.getSelectedRows());
+                        String[] selection_haplogroups = cols[0];
+                        String[] selection_groups = cols[1];
 
-                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
-                                    chartController.getCoreHGs());
-                            HashMap<String, List<XYChart.Data<String, Number>>> data_all =
-                                    chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
+                                chartController.getCoreHGs());
+                        HashMap<String, List<XYChart.Data<String, Number>>> data_all =
+                                chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
-                            for(String group : groupController.getGroupnames()) {
-                                if(!group.equals("Undefined")){
-                                    initPieChart(group);
-                                    pieChartViz.createPlot(group, data_all);
-                                    pieChartViz.setColor(stage);
-                                }
-                            }
-                        } else {
-                            ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
-                            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
-                                    tableController.getSelectedRows());
-                            String[] selection_haplogroups = cols[0];
-
-                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
-                                    chartController.getCoreHGs());
-
-
-                                initPieChart("Haplogroup frequency");
-                                pieChartViz.createPlotSingle(hgs_summed);
+                        for(String group : groupController.getGroupnames()) {
+                            if(!group.equals("Undefined")){
+                                initPieChart(group);
+                                pieChartViz.createPlot(group, data_all);
                                 pieChartViz.setColor(stage);
-
-
-
+                            }
                         }
+                    } else {
+                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
+                                tableController.getSelectedRows());
+                        String[] selection_haplogroups = cols[0];
+
+                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
+                                chartController.getCoreHGs());
+
+                        initPieChart("Haplogroup frequency");
+                        pieChartViz.createPlotSingle(hgs_summed);
+                        pieChartViz.setColor(stage);
 
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
-
-
-
-         /*
-
-                    Plot HG frequency for each group
-
+        /*
+                Clear visualization panel
          */
 
         MenuItem clearPlotBox = new MenuItem("Clear Charts");
         clearPlotBox.setId("clear_plots");
-        clearPlotBox.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
-                    clearCharts();
+        clearPlotBox.setOnAction(t -> {
+            try {
+                clearCharts();
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
+
+          /*
+                Create grouping bar plot
+         */
 
         MenuItem grouping_barchart = new MenuItem("Grouping bar chart");
         grouping_barchart.setId("grouping_barchart_item");
-        grouping_barchart.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
-                    if(tableController.getTable().getItems().size() != 0 ) {
+        grouping_barchart.setOnAction(t -> {
+            try {
+                if(tableController.getTable().getItems().size() != 0 ) {
 
-                        TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
-                        if(haplo_col != null){
-                            initGroupBarChart();
-                            chartController.addDataBarChart(barChartGrouping, haplo_col, null);
-                            barChartGrouping.setColor(stage);
-                        } else {
-                            InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                                    "No groups defined",
-                                    "Please define a grouping first.",
-                                    null,
-                                    "groupWarning");
-                        }
+                    TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
+                    if(haplo_col != null){
+                        initGroupBarChart();
+                        chartController.addDataBarChart(barChartGrouping, haplo_col, null);
+                        barChartGrouping.setColor(stage);
+                    } else {
+                        InformationDialogue groupingWarningDialogue = new InformationDialogue(
+                                "No groups defined",
+                                "Please define a grouping first.",
+                                null,
+                                "groupWarning");
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
+
+        /*
+
+                Visualize data on map
+
+         */
         Menu maps = new Menu("Map view");
         maps.setId("maps_menu");
         MenuItem mapsItem = new MenuItem("Visualize data on map (internet connection needed)");
         mapsItem.setId("maps_item");
-        mapsItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                if(!tableController.isTableEmpty()){
-                    initMap("Map");
-                }
-
+        mapsItem.setOnAction(t -> {
+            if(!tableController.isTableEmpty()){
+                initMap("Map");
             }
+
         });
+
 
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
-        haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieCcart);
+        haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieChart);
         maps.getItems().add(mapsItem);
 
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, maps, new SeparatorMenuItem(), clearPlotBox);

@@ -84,7 +84,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
                 LOG.info("Export data into BEAST format. File: " + outfileDB);
-                BEASTWriter beastwriter = new BEASTWriter(tableController);
+                BEASTWriter beastwriter = new BEASTWriter(tableController, LOG);
                 beastwriter.writeData(outfileDB);
             }
             //CSV Output
@@ -95,7 +95,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    CSVWriter csvWriter = new CSVWriter(tableController);
+                    CSVWriter csvWriter = new CSVWriter(tableController, LOG);
                     csvWriter.writeData(outFileDB);
                     LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception e) {
@@ -110,7 +110,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    ExcelWriter excelwriter = new ExcelWriter(tableController);
+                    ExcelWriter excelwriter = new ExcelWriter(tableController, LOG);
                     excelwriter.writeData(outFileDB);
                     LOG.info("Export data into Excel format. File: " + outFileDB);
 
@@ -125,7 +125,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    ProjectWriter projectWriter = new ProjectWriter(MITOBENCH_VERSION);
+                    ProjectWriter projectWriter = new ProjectWriter(MITOBENCH_VERSION, LOG);
                     projectWriter.write(outFileDB, tableController);
                     LOG.info("Export whole project. File: " + outFileDB);
                 } catch (Exception e) {

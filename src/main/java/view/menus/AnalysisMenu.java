@@ -31,8 +31,6 @@ public class AnalysisMenu {
 
     private void addSubMenus() {
 
-
-
         MenuItem pairwiseFst = new MenuItem("Calculate pairwise Fst");
         pairwiseFst.setId("menuitem_pairwiseFst");
         pairwiseFst.setOnAction(t -> {

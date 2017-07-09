@@ -20,7 +20,8 @@ public class SpiderCoversion {
         System.out.println(dirpath);
 
         //String dirpath = this.getClass().getResource("/jar/PGDSpider2.jar").toExternalForm();
-        ProcessBuilder processBuilder = new ProcessBuilder(new String[] { "java", "-jar", dirpath.split(":")[1]});
+        //ProcessBuilder processBuilder = new ProcessBuilder(new String[] { "java", "-jar", dirpath.split(":")[1]});
+        ProcessBuilder processBuilder = new ProcessBuilder(new String[] { "java", "-jar", dirpath});
         Process process = processBuilder.start();
         process.waitFor();
     }

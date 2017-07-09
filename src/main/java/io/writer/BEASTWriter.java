@@ -3,6 +3,7 @@ package io.writer;
 import io.IOutputData;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
+import org.apache.log4j.Logger;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.BufferedWriter;
@@ -19,11 +20,13 @@ import java.util.HashMap;
  */
 public class BEASTWriter implements IOutputData {
     private TableControllerUserBench tblcontroller;
+    private Logger LOG;
     private FileWriter fileWriter;
     private BufferedWriter bfWriter;
 
-    public BEASTWriter(TableControllerUserBench tblcontroller) {
+    public BEASTWriter(TableControllerUserBench tblcontroller, Logger LOG) {
         this.tblcontroller = tblcontroller;
+        this.LOG = LOG;
     }
 
 
