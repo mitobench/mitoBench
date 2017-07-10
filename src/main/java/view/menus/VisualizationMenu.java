@@ -380,18 +380,31 @@ public class VisualizationMenu {
             try {
                 // makes only sense if grouping exists.
                 if(tableController.getTableColumnByName("Grouping") != null
+                        && tableController.getTableColumnByName("Haplogroup") != null
                         && tableController.getTable().getItems().size() != 0 ){
                     initProfilePlot();
                     // get selected rows
-                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
-                    HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
+//                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+//                    HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
 
-                    profilePlot.create(tableController, treeController, chartController, logClass, scene, statsTabpane);
+                    profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane);
 
-                } else {
+                } else if(tableController.getTableColumnByName("Grouping") == null && tableController.getTableColumnByName("Haplogroup") != null){
                     InformationDialogue groupingWarningDialogue = new InformationDialogue(
                             "No groups defined",
                             "Please define a grouping first.",
+                            null,
+                            "groupWarning");
+                } else if(tableController.getTableColumnByName("Haplogroup") == null && tableController.getTableColumnByName("Grouping") != null){
+                    InformationDialogue haplogroupWarningDialogue = new InformationDialogue(
+                            "No haplogroups",
+                            "Please assign haplogroups to your data first.",
+                            null,
+                            "haplogroupWarning");
+                } else {
+                    InformationDialogue warningDialogue = new InformationDialogue(
+                            "No groups and haplogroups defined",
+                            "Please define a grouping and add haplogroups to your data first.",
                             null,
                             "groupWarning");
                 }
@@ -423,7 +436,7 @@ public class VisualizationMenu {
                         String[] selection_haplogroups = cols[0];
                         String[] selection_groups = cols[1];
 
-                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
+                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
                                 chartController.getCoreHGs());
                         HashMap<String, List<XYChart.Data<String, Number>>> data_all =
                                 chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
@@ -440,7 +453,7 @@ public class VisualizationMenu {
                                 tableController.getSelectedRows());
                         String[] selection_haplogroups = cols[0];
 
-                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups,
+                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
                                 chartController.getCoreHGs());
 
                         initPieChart("Haplogroup frequency");

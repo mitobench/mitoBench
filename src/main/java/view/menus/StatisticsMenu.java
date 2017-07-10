@@ -53,18 +53,18 @@ public class StatisticsMenu {
         haploStats.setId("toolsMenu_stats_hg");
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                if(tableController.getGroupController().isGroupingExists()) {
+                //if(tableController.getGroupController().isGroupingExists()) {
                     haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
                     HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
                     hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
-                } else {
-                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                            "No groups defined",
-                            "Please define a grouping first.",
-                            null,
-                            "groupWarning");
-
-                }
+//                } else {
+//                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
+//                            "No groups defined",
+//                            "Please define a grouping first.",
+//                            null,
+//                            "groupWarning");
+//
+//                }
             }
         });
 

@@ -4,7 +4,6 @@ import Logging.LogClass;
 import controller.ChartController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -47,12 +46,12 @@ public class ProfilePlot extends AChart {
 
 
     public void create(TableControllerUserBench tableController, HaplotreeController treeController,
-                       ChartController chartController, LogClass logClass, Scene scene, TabPane statsTabpane){
+                       ChartController chartController, LogClass logClass, TabPane statsTabpane){
 
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = removeUndefined(cols[1]);
-        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaolpgroups(selection_haplogroups, chartController.getCoreHGs());
+        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
         data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
@@ -106,7 +105,7 @@ public class ProfilePlot extends AChart {
             HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
 
             haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
-            TableView table = haploStatistics.writeToTable(haploStatistics.getData_all());
+            TableView table = haploStatistics.writeToTable(parse(haploStatistics.getData_all()));
             haploStatistics.addListener(table, this);
             Tab tab = new Tab();
             tab.setId("tab_table_stats_" + id);
@@ -153,6 +152,27 @@ public class ProfilePlot extends AChart {
 
         this.seriesList.add(series);
     }
+
+
+    public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
+        HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
+
+        for(String group : data_all.keySet()){
+            List<XYChart.Data<String, Number>> entry = data_all.get(group);
+            HashMap<String, Integer> entry_new = new HashMap<>();
+            for(int i = 0; i < entry.size(); i++){
+                String hg = entry.get(i).getXValue();
+                int count = entry.get(i).getYValue().intValue();
+                entry_new.put(hg, count);
+            }
+            data.put(group, entry_new);
+        }
+
+        return data;
+
+    }
+
+
 
 
     /**

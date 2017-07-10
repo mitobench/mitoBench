@@ -1,9 +1,9 @@
 package statistics;
 
 import Logging.LogClass;
+import controller.GroupController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -44,8 +44,17 @@ public class HaploStatistics {
      */
     public void count(String[] coreHGs){
         ObservableList<ObservableList> tableItems = tableController.getTable().getItems();
+        boolean groupingMustBeDeleted = false;
 
         // get set of unique group and haplogroup entries
+        if(!tableController.getGroupController().isGroupingExists()) {
+            // define new group that includes all data
+            GroupController gc = tableController.getGroupController();
+            gc.createGroupByColumn("Group", "group", true);
+            tableController.updateTable(tableController.createNewEntryListForGrouping("group", "Group (Grouping)"));
+            groupingMustBeDeleted = true;
+        }
+
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = cols[1];
@@ -55,10 +64,13 @@ public class HaploStatistics {
             number_of_groups = selection_groups.length;
         }
 
-        HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaolpgroups(selection_haplogroups, coreHGs);
+        HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
         data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
 
-
+        if(groupingMustBeDeleted){
+            tableController.getGroupController().clearGrouping();
+            tableController.removeColumn("Group");
+        }
 
     }
 
@@ -67,10 +79,11 @@ public class HaploStatistics {
     /**
      * This method writes count information to table in GUI.
      *
-     * @param data_all
+     * @param data_all key : group, yalue: <HG, count>
      * @return
      */
-    public TableView writeToTable(HashMap<String, List<XYChart.Data<String, Number>>>  data_all){
+    public TableView writeToTable(HashMap<String, HashMap<String, Integer>>  data_all){
+
         List<String> keys = new ArrayList<>();
         keys.addAll(data_all.keySet());
         keys.remove("Others");
@@ -78,7 +91,7 @@ public class HaploStatistics {
         keys.add("Others");
 
         TableView<ObservableList> table = tableControllerMutations.getTable();
-        tableControllerMutations.addColumn("Groups", 0);
+        tableControllerMutations.addColumn("Group", 0);
         tableControllerMutations.addColumn("Total Number", 1);
         int k = 2;
         for(String key : keys){
@@ -86,28 +99,50 @@ public class HaploStatistics {
             k++;
         }
 
-        // add data (table content)
-        // write population HG count information
+
         ObservableList<ObservableList> entries = FXCollections.observableArrayList();
+
         for(int i = 0; i < number_of_groups ; i++){
             ObservableList  entry = FXCollections.observableArrayList();
             int count_all_hgs = countAllHGs(i);
             for(String key : data_all.keySet()){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                entry.add(data_list.get(i).getXValue());
+                HashMap<String, Integer> data_list = data_all.get(key);
+                List<String> key_set_list = new ArrayList<String>(data_list.keySet());
+                entry.add(key_set_list.get(i));
                 entry.add(count_all_hgs);
                 break;
             }
 
 
             for(String key : keys){
-                List<XYChart.Data<String, Number>> data_list = data_all.get(key);
-                entry.add(data_list.get(i).getYValue().intValue());
+                HashMap<String, Integer> data_list = data_all.get(key);
+                List<String> key_set_list = new ArrayList<String>(data_list.keySet());
+                entry.add(data_list.get(key_set_list.get(i)));
             }
 
             entries.add(entry);
 
         }
+
+//        // add data (table content)
+//        // write population HG count information
+//        ObservableList<ObservableList> entries = FXCollections.observableArrayList();
+//        for(int i = 0; i < number_of_groups ; i++){
+//            ObservableList  entry = FXCollections.observableArrayList();
+//            int count_all_hgs = countAllHGs(i);
+//
+//            entry.add("All data");
+//            entry.add(count_all_hgs);
+//
+//
+//            for(String key : keys){
+//                HashMap<String, Integer> data_list = data_all.get(key);
+//                entry.add(data_list.get("All data"));
+//            }
+//
+//            entries.add(entry);
+//
+//        }
 
         // clear Items in table
         table.getItems().removeAll(table.getItems());

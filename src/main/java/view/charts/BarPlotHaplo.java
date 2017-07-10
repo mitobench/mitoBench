@@ -58,7 +58,7 @@ public class BarPlotHaplo extends AChart {
         List<String> columnDataHG = new ArrayList<>();
         tableController.getTable().getItems().stream().forEach((o)
                 -> columnDataHG.add((String)haplo_col.getCellData(o)));
-        hgs_summed = chartController.summarizeHaolpgroups(columnDataHG.stream().toArray(String[]::new), chartController.getCoreHGs());
+        hgs_summed = chartController.summarizeHaplogroups(columnDataHG.stream().toArray(String[]::new), chartController.getCoreHGs());
 
         setContextMenu(bc, tabPane);
 

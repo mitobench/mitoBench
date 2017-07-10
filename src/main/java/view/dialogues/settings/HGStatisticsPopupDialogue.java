@@ -5,10 +5,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import org.apache.log4j.Logger;
 import statistics.HaploStatistics;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -77,9 +81,10 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
                     } else {
                         hg_list = textField.getText().split(",");
                     }
-                    haploStatistics.count(hg_list);
+                    String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+                    haploStatistics.count(hg_list_trimmed);
 
-                    TableView table = haploStatistics.writeToTable(haploStatistics.getData_all());
+                    TableView table = haploStatistics.writeToTable(parse(haploStatistics.getData_all()));
                     Tab tab = new Tab();
                     tab.setId("tab_statistics");
                     tab.setText("Count statistics");
@@ -87,7 +92,7 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
                     statsTabPane.getTabs().add(tab);
                     statsTabPane.getSelectionModel().select(tab);
 
-                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + hg_list);
+                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + hg_list_trimmed);
 
                     dialog.close();
                 }
@@ -112,6 +117,24 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
                 tp.hide();
             }
         });
+    }
+
+    public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
+        HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
+
+        for(String group : data_all.keySet()){
+            List<XYChart.Data<String, Number>> entry = data_all.get(group);
+            HashMap<String, Integer> entry_new = new HashMap<>();
+            for(int i = 0; i < entry.size(); i++){
+                String hg = entry.get(i).getXValue();
+                int count = entry.get(i).getYValue().intValue();
+               entry_new.put(hg, count);
+            }
+            data.put(group, entry_new);
+        }
+
+        return data;
+
     }
 
 }

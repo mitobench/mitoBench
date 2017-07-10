@@ -566,12 +566,22 @@ public abstract class ATableController {
 
         int count = 0;
         ObservableList<ObservableList> selection = getSelectedRows();
-        for(int i = 0; i < selection.size(); i++){
-            ObservableList list = selection.get(i);
-            if(list.get(colIndexGroup).equals(group) && list.get(colIndexHG).equals(hg)){
-                count++;
+        if(colIndexGroup == -1){
+            for(int i = 0; i < selection.size(); i++){
+                ObservableList list = selection.get(i);
+                if(list.get(colIndexHG).equals(hg)){
+                    count++;
+                }
+            }
+        } else {
+            for(int i = 0; i < selection.size(); i++){
+                ObservableList list = selection.get(i);
+                if(list.get(colIndexGroup).equals(group) && list.get(colIndexHG).equals(hg)){
+                    count++;
+                }
             }
         }
+
         return count;
     }
 
