@@ -124,26 +124,6 @@ public class HaploStatistics {
 
         }
 
-//        // add data (table content)
-//        // write population HG count information
-//        ObservableList<ObservableList> entries = FXCollections.observableArrayList();
-//        for(int i = 0; i < number_of_groups ; i++){
-//            ObservableList  entry = FXCollections.observableArrayList();
-//            int count_all_hgs = countAllHGs(i);
-//
-//            entry.add("All data");
-//            entry.add(count_all_hgs);
-//
-//
-//            for(String key : keys){
-//                HashMap<String, Integer> data_list = data_all.get(key);
-//                entry.add(data_list.get("All data"));
-//            }
-//
-//            entries.add(entry);
-//
-//        }
-
         // clear Items in table
         table.getItems().removeAll(table.getItems());
         //FINALLY ADDED TO TableView
