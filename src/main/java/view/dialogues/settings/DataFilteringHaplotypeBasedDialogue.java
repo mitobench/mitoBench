@@ -57,8 +57,8 @@ public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
 
         btn_apply.setOnAction(t -> {
 
-            HaplotypeStatistics mutationStatistics = new HaplotypeStatistics(logClass);
-            mutationStatistics.calculateMutationFrequencies(mitoBenchWindow.getTreeController().getTree().getMutations_per_hg(),
+            HaplotypeStatistics mutationStatistics = new HaplotypeStatistics(logClass,mitoBenchWindow.getPrimaryStage());
+            mutationStatistics.calculateHaplotypeFrequencies(mitoBenchWindow.getTreeController().getTree().getMutations_per_hg(),
                     mitoBenchWindow.getTableControllerUserBench().getTableColumnByName("Haplogroup"),
                     mitoBenchWindow.getTableControllerUserBench().getTable(),
                     mitoBenchWindow.getTreeController());

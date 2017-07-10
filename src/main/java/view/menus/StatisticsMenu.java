@@ -25,6 +25,7 @@ import java.io.IOException;
 public class StatisticsMenu {
 
     private final Stage stage;
+    private final MitoBenchWindow mito;
     private Menu menuTools;
     private TableControllerUserBench tableController;
     private HaplotreeController treeHaploController;
@@ -37,6 +38,7 @@ public class StatisticsMenu {
     public StatisticsMenu(MitoBenchWindow mitoBenchWindow) throws IOException {
         LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
         LOGClass =mitoBenchWindow.getLogClass();
+        mito = mitoBenchWindow;
 
         menuTools = new Menu("Statistics");
         menuTools.setId("menu_statistics");
@@ -73,9 +75,9 @@ public class StatisticsMenu {
             public void handle(ActionEvent t) {
                 LOG.info("Calculate frequency per mutation");
 
-                mutationStatistics = new HaplotypeStatistics(LOGClass);
+                mutationStatistics = new HaplotypeStatistics(LOGClass, mito.getPrimaryStage());
 
-                mutationStatistics.calculateMutationFrequencies(treeHaploController.getTree().getMutations_per_hg(),
+                mutationStatistics.calculateHaplotypeFrequencies(treeHaploController.getTree().getMutations_per_hg(),
                         tableController.getTableColumnByName("Haplogroup"), tableController.getTable(),
                         treeHaploController);
 

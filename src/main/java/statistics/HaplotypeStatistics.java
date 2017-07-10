@@ -4,11 +4,12 @@ import Logging.LogClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.table.controller.TableControllerMutations;
 import controller.HaplotreeController;
 
-import java.io.File;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -18,19 +19,21 @@ public class HaplotypeStatistics {
 
 
     private final TableControllerMutations tableController;
+    private final Stage stage;
     private Logger LOG;
 
     HashMap<String, List<String>> hgs_per_mutation_of_current_data;
 
-    public HaplotypeStatistics(LogClass LOGClass) {
+    public HaplotypeStatistics(LogClass LOGClass, Stage primaryStage) {
             tableController = new TableControllerMutations(LOGClass);
+            stage = primaryStage;
             LOG = LOGClass.getLogger(this.getClass());
             tableController.init();
     }
 
-    public void calculateMutationFrequencies(HashMap<String, String[]> mutations_per_hg,
-                                             TableColumn haplogroupCol,
-                                             TableView table, HaplotreeController treeHaploController){
+    public void calculateHaplotypeFrequencies(HashMap<String, String[]> mutations_per_hg,
+                                              TableColumn haplogroupCol,
+                                              TableView table, HaplotreeController treeHaploController){
 
         hgs_per_mutation_of_current_data = new HashMap<>();
 
@@ -85,9 +88,8 @@ public class HaplotypeStatistics {
         keys.addAll(hgs_per_mutation_of_current_data.keySet());
         Collections.sort(keys);
         TableView<ObservableList> table = tableController.getTable();
-        // todo: load file from resources
-        File f = new File("src/main/java/statistics/tableStyle.css");
-        table.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+        URL url = this.getClass().getResource("/css/tableStyle.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
 
         // add columns
         tableController.addColumn("Mutation", 0);
