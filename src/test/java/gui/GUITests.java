@@ -17,7 +17,7 @@
 //import org.testfx.api.FxRobot;
 //import org.testfx.api.FxToolkit;
 //import statistics.HaploStatistics;
-//import statistics.MutationStatistics;
+//import statistics.HaplotypeStatistics;
 //import view.MitoBenchWindow;
 //import view.charts.ChartController;
 //import controller.GroupController;
@@ -49,7 +49,7 @@
 //    private HaploTreeModel treeHaplo;
 //    private HaplotreeController treeController;
 //    private HaploStatistics haploStatistics;
-//    private MutationStatistics mutationStatistics;
+//    private HaplotypeStatistics mutationStatistics;
 //    private LogClass logClass;
 //    private GUITestFiles testFiles;
 //
@@ -82,7 +82,7 @@
 //        treeController = new HaplotreeController(tableController, logClass);
 //
 //        haploStatistics = new HaploStatistics(tableController, treeController, logClass);
-//        mutationStatistics = new MutationStatistics(logClass);
+//        mutationStatistics = new HaplotypeStatistics(logClass);
 //
 //        testFiles = new GUITestFiles();
 //        FxToolkit.setupApplication(MitoBenchWindow.class);

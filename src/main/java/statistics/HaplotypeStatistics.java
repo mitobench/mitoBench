@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by neukamm on 24.02.17.
  */
-public class MutationStatistics {
+public class HaplotypeStatistics {
 
 
     private final TableControllerMutations tableController;
@@ -22,7 +22,7 @@ public class MutationStatistics {
 
     HashMap<String, List<String>> hgs_per_mutation_of_current_data;
 
-    public MutationStatistics(LogClass LOGClass) {
+    public HaplotypeStatistics(LogClass LOGClass) {
             tableController = new TableControllerMutations(LOGClass);
             LOG = LOGClass.getLogger(this.getClass());
             tableController.init();
@@ -40,26 +40,26 @@ public class MutationStatistics {
 
         for (String hg : hgs){
 
-            String hg_tmp=hg;
+            String hg_tmp = hg;
             if(hg.contains("+")) {
                 hg_tmp = hg.split("\\+")[0];
             }
 
             List<String> hgs_pathToRoot = treeHaploController.getPathToRoot(treeHaploController.getTreeItem(hg_tmp));
-            List<String> mutations_of_hg = new ArrayList<>();
+            Set<String> mutations_of_hg = new HashSet<>();
 
             for(String hg_in_path : hgs_pathToRoot){
                 String[] muts_on_path = mutations_per_hg.get(hg_in_path.trim());
-                if(muts_on_path!=null)
-                    mutations_of_hg.addAll(Arrays.asList(muts_on_path));
+                if(muts_on_path!=null){
+                    Collections.addAll(mutations_of_hg, muts_on_path);
+                }
             }
 
             String[] mutations = mutations_per_hg.get(hg_tmp);
-            mutations_of_hg.addAll(Arrays.asList(mutations));
+            Collections.addAll(mutations_of_hg, mutations);
 
             if(mutations!=null){
                 for(String mutation : mutations_of_hg){
-
                     List<String> list = new ArrayList<>();
                     list.add(hg);
 
@@ -85,7 +85,7 @@ public class MutationStatistics {
         keys.addAll(hgs_per_mutation_of_current_data.keySet());
         Collections.sort(keys);
         TableView<ObservableList> table = tableController.getTable();
-
+        // todo: load file from resources
         File f = new File("src/main/java/statistics/tableStyle.css");
         table.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
 

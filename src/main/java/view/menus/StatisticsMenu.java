@@ -9,9 +9,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import statistics.MutationStatistics;
+import statistics.HaplotypeStatistics;
 import view.MitoBenchWindow;
-import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
 import controller.GroupController;
 import view.table.controller.TableControllerUserBench;
@@ -31,7 +30,7 @@ public class StatisticsMenu {
     private HaplotreeController treeHaploController;
     private GroupController groupController;
     private HaploStatistics haploStatistics;
-    private MutationStatistics mutationStatistics;
+    private HaplotypeStatistics mutationStatistics;
     private Logger LOG;
     private LogClass LOGClass;
 
@@ -74,7 +73,7 @@ public class StatisticsMenu {
             public void handle(ActionEvent t) {
                 LOG.info("Calculate frequency per mutation");
 
-                mutationStatistics = new MutationStatistics(LOGClass);
+                mutationStatistics = new HaplotypeStatistics(LOGClass);
 
                 mutationStatistics.calculateMutationFrequencies(treeHaploController.getTree().getMutations_per_hg(),
                         tableController.getTableColumnByName("Haplogroup"), tableController.getTable(),

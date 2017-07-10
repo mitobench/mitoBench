@@ -4,7 +4,6 @@ import io.datastructure.Entry;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 
 import javafx.scene.input.*;
 import view.table.controller.ATableController;
@@ -46,51 +45,40 @@ public class DrapAndDropEventMaganer {
         });
 
 
-        tableUserController.getTable().setOnDragExited(event -> {
-            tableUserController.getTable().setStyle("-fx-border-color: #C6C6C6;");
+        tableUserController.getTable().setOnDragExited(event -> tableUserController.getTable().setStyle("-fx-border-color: #C6C6C6;"));
 
-        });
-
-        tableUserController.getTable().setOnDragDropped(event -> {
-            mouseDragDropped();
-        });
+        tableUserController.getTable().setOnDragDropped(event -> mouseDragDropped());
 
 
 
         // manage event handler for tableDBController
 
-        tableDBController.getTable().setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                // drag was detected, start drag-and-drop gesture
-                selected = tableDBController.getTable().getSelectionModel().getSelectedItems();
-                // copy all elements to Array -> obs. list not serializable
-                List<List> data_list = new ArrayList();
-                for(int i = 0; i < selected.size(); i++){
-                    List data_copy = new ArrayList();
-                    data_copy.addAll(selected.get(i));
-                    data_list.add(data_copy);
-                }
+        tableDBController.getTable().setOnDragDetected(event -> {
+            // drag was detected, start drag-and-drop gesture
+            selected = tableDBController.getTable().getSelectionModel().getSelectedItems();
+            // copy all elements to Array -> obs. list not serializable
+            List<List> data_list = new ArrayList();
+            for(int i = 0; i < selected.size(); i++){
+                List data_copy = new ArrayList();
+                data_copy.addAll(selected.get(i));
+                data_list.add(data_copy);
+            }
 
-                if(selected !=null){
-                    Dragboard db = tableDBController.getTable().startDragAndDrop(TransferMode.ANY);
-                    ClipboardContent content = new ClipboardContent();
-                    content.put(myformat,  data_list);
-                    db.setContent(content);
-                    event.consume();
-                }
+            if(selected !=null){
+                Dragboard db = tableDBController.getTable().startDragAndDrop(TransferMode.ANY);
+                ClipboardContent content = new ClipboardContent();
+                content.put(myformat,  data_list);
+                db.setContent(content);
+                event.consume();
             }
         });
 
-        tableDBController.getTable().setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                // data is dragged over the target
-                if (event.getDragboard().hasString()){
-                    event.acceptTransferModes(TransferMode.ANY);
-                }
-                event.consume();
+        tableDBController.getTable().setOnDragOver(event -> {
+            // data is dragged over the target
+            if (event.getDragboard().hasString()){
+                event.acceptTransferModes(TransferMode.ANY);
             }
+            event.consume();
         });
 
     }
@@ -106,14 +94,11 @@ public class DrapAndDropEventMaganer {
 
 
     private void mouseDragDropped() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    addData(tableDBController, tableUserController, selected);
-                } catch (Exception ex) {
-                    Logger.getLogger(DrapAndDropEventMaganer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        Platform.runLater(() -> {
+            try {
+                addData(tableDBController, tableUserController, selected);
+            } catch (Exception ex) {
+                Logger.getLogger(DrapAndDropEventMaganer.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -125,8 +110,6 @@ public class DrapAndDropEventMaganer {
         data_obs.addAll(data);
         HashMap<String, List<Entry>> data_entries = tableFrom_controller.createNewEntryListDragAndDrop(data_obs);
         tableTo_controller.updateTable(data_entries);
-       // if(!tableTo_controller.getGroupController().isGroupingExists())
-       //     tableTo_controller.getGroupController().createInitialGrouping();
     }
 
 

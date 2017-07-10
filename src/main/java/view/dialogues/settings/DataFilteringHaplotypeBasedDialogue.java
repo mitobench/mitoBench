@@ -2,12 +2,10 @@ package view.dialogues.settings;
 
 import Logging.LogClass;
 import filtering.FilterData;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import statistics.MutationStatistics;
+import statistics.HaplotypeStatistics;
 import view.MitoBenchWindow;
 
 
@@ -59,7 +57,7 @@ public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
 
         btn_apply.setOnAction(t -> {
 
-            MutationStatistics mutationStatistics = new MutationStatistics(logClass);
+            HaplotypeStatistics mutationStatistics = new HaplotypeStatistics(logClass);
             mutationStatistics.calculateMutationFrequencies(mitoBenchWindow.getTreeController().getTree().getMutations_per_hg(),
                     mitoBenchWindow.getTableControllerUserBench().getTableColumnByName("Haplogroup"),
                     mitoBenchWindow.getTableControllerUserBench().getTable(),

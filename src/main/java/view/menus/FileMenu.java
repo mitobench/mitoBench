@@ -137,41 +137,39 @@ public class FileMenu {
 
         MenuItem importFromDB = new MenuItem("Import Data from DB");
         importFromDB.setId("importFromDB");
-        importFromDB.setOnAction(new EventHandler<ActionEvent>() {
-            // todo: make db query
-            public void handle(ActionEvent t) {
-                if(databaseConnectionController==null){
-                    databaseConnectionController = new DatabaseConnectionController();
-                    Tab tab = new Tab("Database Login");
+        // todo: make db query
+        importFromDB.setOnAction(t -> {
+            if(databaseConnectionController==null){
+                databaseConnectionController = new DatabaseConnectionController();
+                Tab tab = new Tab("Database Login");
 
-                    DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(
-                            tableControllerDB,
-                            logClass,
-                            mitoBenchWindow,
-                            tab,
-                            databaseConnectionController
-                    );
-                    GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
-                    tab.setContent(dialogue);
-                    mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
-                } else {
-                    // open search mask to specify which data should be loaded
-                    DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow);
-                    dbSearchDialogue.fillDialogue();
-                    dbSearchDialogue.addFunctionality(
-                            databaseConnectionController.getUserName(),
-                            databaseConnectionController.getPassword(),
-                            databaseConnectionController.getTable()
-                    );
-                }
-
-//                if(drapAndDropEventMaganer==null){
-//                    drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
-//                    drapAndDropEventMaganer.createEvent();
-//                }
-
-
+                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(
+                        tableControllerDB,
+                        logClass,
+                        mitoBenchWindow,
+                        tab,
+                        databaseConnectionController
+                );
+                GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
+                tab.setContent(dialogue);
+                mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
+            } else {
+                // open search mask to specify which data should be loaded
+                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow);
+                dbSearchDialogue.fillDialogue();
+                dbSearchDialogue.addFunctionality(
+                        databaseConnectionController.getUserName(),
+                        databaseConnectionController.getPassword(),
+                        databaseConnectionController.getTable()
+                );
             }
+
+            if(drapAndDropEventMaganer==null){
+                drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
+                drapAndDropEventMaganer.createEvent();
+            }
+
+
         });
 
 
@@ -182,26 +180,22 @@ public class FileMenu {
 
 
         MenuItem exportImage = new MenuItem("Export Chart");
-        exportImage.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        exportImage.setOnAction(t -> {
+            try {
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Image format (*.png)", "*.txt");
+
+                int scale = 6; //6x resolution should be enough, users should downscale if required
+                final SnapshotParameters spa = new SnapshotParameters();
+                spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
+                ImageWriter imageWriter = new ImageWriter(logClass);
                 try {
-                    FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Image format (*.png)", "*.txt");
-                    //SaveAsDialogue sad = new SaveAsDialogue(fex);
-                    //sad.start(new Stage());
-
-                    int scale = 6; //6x resolution should be enough, users should downscale if required
-                    final SnapshotParameters spa = new SnapshotParameters();
-                    spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
-                    ImageWriter imageWriter = new ImageWriter(logClass);
-                    try {
-                        imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
-                    } catch (ImageException e) {
-                        e.printStackTrace();
-                    }
-
-                } catch (Exception e) {
+                    imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
+                } catch (ImageException e) {
                     e.printStackTrace();
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -212,14 +206,12 @@ public class FileMenu {
          */
 
         MenuItem exportFile = new MenuItem("Export Data");
-        exportFile.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass);
-                try {
-                    exportDialogue.start(new Stage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        exportFile.setOnAction(t -> {
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass);
+            try {
+                exportDialogue.start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -231,38 +223,33 @@ public class FileMenu {
          */
 
         MenuItem exportFileSpider = new MenuItem("Convert files with PGDSpider");
-        exportFileSpider.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
-                    SpiderCoversion spiderCoversion = new SpiderCoversion();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+        exportFileSpider.setOnAction(t -> {
+            try {
+                SpiderCoversion spiderCoversion = new SpiderCoversion();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         });
 
 
         MenuItem exportCurrStats = new MenuItem("Export statistics");
         exportCurrStats.setId("#exportCurrentStats");
-        exportCurrStats.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        exportCurrStats.setOnAction(t -> {
 
-                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
-                SaveAsDialogue sad = new SaveAsDialogue(fex);
-                sad.start(new Stage());
-                //StatisticsWriter statisticsWriter = new StatisticsWriter(toolsMenu.getHaploStatistics());
-                StatisticsWriter statisticsWriter = new StatisticsWriter(
-                        mitoBenchWindow.getTabpane_statistics().getSelectionModel().getSelectedItem());
-                try {
-                    //statisticsWriter.writeData(sad.getOutFile());
-                    statisticsWriter.writeData(sad.getOutFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
+            SaveAsDialogue sad = new SaveAsDialogue(fex);
+            sad.start(new Stage());
+            StatisticsWriter statisticsWriter = new StatisticsWriter(
+                    mitoBenchWindow.getTabpane_statistics().getSelectionModel().getSelectedItem()
+            );
+            try {
+                statisticsWriter.writeData(sad.getOutFile());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+
         });
 
 
@@ -272,12 +259,10 @@ public class FileMenu {
 
         MenuItem exit = new MenuItem("Exit");
         exit.setId("fileMenu-exitItem");
-        exit.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                t.consume();
-                LoggerSettingsDialogue loggerSettingsDialogue =
-                        new LoggerSettingsDialogue("Log file configuration", logClass, stage);
-            }
+        exit.setOnAction(t -> {
+            t.consume();
+            LoggerSettingsDialogue loggerSettingsDialogue =
+                    new LoggerSettingsDialogue("Log file configuration", logClass, stage);
         });
 
         menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
