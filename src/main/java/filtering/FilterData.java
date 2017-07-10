@@ -21,7 +21,9 @@ public class FilterData {
     private final Logger LOG;
     private ObservableList<ObservableList> selectedRows;
 
-    public FilterData(HashMap<String, String[]> mutations_per_hg, TableControllerUserBench tableControllerUserBench, HashMap<String, List<String>> hgs_per_mutation,
+    public FilterData(HashMap<String, String[]> mutations_per_hg,
+                      TableControllerUserBench tableControllerUserBench,
+                      HashMap<String, List<String>> hgs_per_mutation,
                       LogClass logClass){
 
         tableControllerUB = tableControllerUserBench;
@@ -32,10 +34,10 @@ public class FilterData {
 
     }
 
-    public void filterMutation(String[] mutations, String distance) throws Exception {
+    public void filterHaplotype(String[] mutations, String distance) throws Exception {
 
-        LOG.info("Filtering mutations: include only the mutation: " + Arrays.toString(mutations) +
-                " and all mutations with distance d=" + distance);
+        LOG.info("Filtering mutations: include only the haplotype: " + Arrays.toString(mutations) +
+                " and all haplotype with distance d=" + distance);
 
         // filtered hgs
         List<String> filtered_hgs = new ArrayList<>();
@@ -53,21 +55,23 @@ public class FilterData {
             }
 
         // second: get all Haplogroups with 'n' mutations distance from mut(s) above
-//        for(String mut : mutations){
-//            List<String> hgs = hgs_per_mutation.get(mut);
-//            if(hgs!=null) {
-//                for (String hg : hgs) {
-//                    String[] muts_of_hg = mutations_per_hg.get(hg);
-//                    for (String key_HG : mutations_per_hg.keySet()) {
-//                        String[] muts_key = mutations_per_hg.get(key_HG);
-//                        int hamming = calculateHammingDistance(Arrays.asList(muts_of_hg), Arrays.asList(muts_key));
-//                        if (hamming <= Integer.parseInt(distance)) {
-//                            filtered_hgs.add(key_HG);
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        for(String mut : mutations){
+            List<String> hgs = hgs_per_mutation.get(mut);
+            if(hgs!=null) {
+                for (String hg : hgs) {
+                    String[] muts_of_hg = mutations_per_hg.get(hg);
+                    if(muts_of_hg!=null) {
+                        for (String key_HG : mutations_per_hg.keySet()) {
+                            String[] muts_key = mutations_per_hg.get(key_HG);
+                            int hamming = calculateHammingDistance(Arrays.asList(muts_of_hg), Arrays.asList(muts_key));
+                            if (hamming <= Integer.parseInt(distance)) {
+                                filtered_hgs.add(key_HG);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // update table with all filtered data
         if(filtered_hgs.size()!=0) {

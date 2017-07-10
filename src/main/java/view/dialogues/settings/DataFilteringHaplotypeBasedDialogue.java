@@ -58,6 +58,7 @@ public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
         btn_apply.setOnAction(t -> {
 
             HaplotypeStatistics mutationStatistics = new HaplotypeStatistics(logClass,mitoBenchWindow.getPrimaryStage());
+
             mutationStatistics.calculateHaplotypeFrequencies(mitoBenchWindow.getTreeController().getTree().getMutations_per_hg(),
                     mitoBenchWindow.getTableControllerUserBench().getTableColumnByName("Haplogroup"),
                     mitoBenchWindow.getTableControllerUserBench().getTable(),
@@ -69,7 +70,7 @@ public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
                     mutationStatistics.getHgs_per_mutation_of_current_data(),
                     logClass);
             try {
-                filterData.filterMutation(field_mutation.getText().split(","),   field_distance.getText());
+                filterData.filterHaplotype(field_mutation.getText().split(","),   field_distance.getText());
             } catch (Exception e) {
                 e.printStackTrace();
             }

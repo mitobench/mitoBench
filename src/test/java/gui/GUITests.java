@@ -2,12 +2,10 @@
 //
 //
 //import Logging.LogClass;
+//import controller.ChartController;
 //import io.PhyloTreeParser;
-//import javafx.scene.Parent;
-//import javafx.scene.Scene;
 //import javafx.scene.control.TreeItem;
 //import javafx.scene.control.TreeView;
-//import javafx.scene.layout.Region;
 //import javafx.stage.Stage;
 //import org.junit.Before;
 //import org.junit.BeforeClass;
@@ -19,7 +17,6 @@
 //import statistics.HaploStatistics;
 //import statistics.HaplotypeStatistics;
 //import view.MitoBenchWindow;
-//import view.charts.ChartController;
 //import controller.GroupController;
 //import view.table.controller.TableControllerUserBench;
 //import controller.HaplotreeController;
@@ -82,7 +79,7 @@
 //        treeController = new HaplotreeController(tableController, logClass);
 //
 //        haploStatistics = new HaploStatistics(tableController, treeController, logClass);
-//        mutationStatistics = new HaplotypeStatistics(logClass);
+//        mutationStatistics = new HaplotypeStatistics(logClass, new Stage());
 //
 //        testFiles = new GUITestFiles();
 //        FxToolkit.setupApplication(MitoBenchWindow.class);
@@ -94,16 +91,16 @@
 //        GUITestSteps steps = new GUITestSteps(this);
 //
 //        steps.part4BasicStuff();
-//        steps.part3AboutDialogueTests();
-//        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
-//        steps.part5DBTest();
-//        steps.partTestGrouping();
-//        steps.part6Statistics();
-//        steps.part7CreatePlots();
-//        steps.partFilterMutations();
-//        steps.part1TreeViewTests();
-//        steps.partTestMap();
-//        steps.part8MenuInteraction();
+////        steps.part3AboutDialogueTests();
+////        steps.part2FillTable(getResource(testFiles.getProject_file()).toString());
+////        steps.part5DBTest();
+////        steps.partTestGrouping();
+////        steps.part6Statistics();
+////        steps.part7CreatePlots();
+////        steps.partFilterMutations();
+//        //steps.part1TreeViewTests();
+//        //steps.partTestMap();
+//        //steps.part8MenuInteraction();
 //
 //
 //    }
