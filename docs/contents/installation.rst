@@ -1,4 +1,4 @@
-Installation Instructions for the EAGER Pipeline
+Installation Instructions for mitoBench
 ================================================
 
 

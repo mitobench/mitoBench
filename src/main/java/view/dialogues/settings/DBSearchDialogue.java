@@ -1,12 +1,11 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
-import database.DataAccessor;
+import controller.DatabaseConnectionController;
+import database.DatabaseAccessor;
 import io.datastructure.Entry;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import net.sf.jsqlparser.JSQLParserException;
@@ -30,6 +29,7 @@ public class DBSearchDialogue {
     private final MitoBenchWindow mito;
     private final GridPane dialogGrid;
     private final Tab tab;
+    private final DatabaseConnectionController databaseConnectionController;
     private TextField textfield_selection_table;
     private TextField textfield_sql_statement_advanced;
     private Label message;
@@ -39,10 +39,11 @@ public class DBSearchDialogue {
     private HashMap<String, List<Entry>> data;
     private LogClass logClass;
 
-    public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow){
+    public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow, DatabaseConnectionController databaseConnectionController){
         //super(title, mitoBenchWindow.getLogClass());
         logClass = mitoBenchWindow.getLogClass();
         mito = mitoBenchWindow;
+        this.databaseConnectionController = databaseConnectionController;
         dialogGrid = new GridPane();
         dialogGrid.setAlignment(Pos.CENTER);
         dialogGrid.setHgap(10);
@@ -99,7 +100,7 @@ public class DBSearchDialogue {
     public void addFunctionality(String username, String password, ATableController tablecontroller) {
 
         btnSend.setOnAction(e ->
-            performSendAction(username, password, tablecontroller)
+            performSendAction(tablecontroller, databaseConnectionController)
         );
 
 
@@ -137,12 +138,12 @@ public class DBSearchDialogue {
         return false;
     }
 
-    private void performSendAction(String username, String password, ATableController tablecontroller){
-        DataAccessor accessor = new DataAccessor();
+    private void performSendAction(ATableController tablecontroller, DatabaseConnectionController databaseConnectionController){
+        DatabaseAccessor accessor = databaseConnectionController.getDatabaseAccessor();
         try {
-            accessor.connectToDatabase("org.postgresql.Driver",
-                    "jdbc:postgresql://peltzer.com.de:5432/mitoDbTesting",
-                    username, password);
+//            accessor.connectToDatabase("org.postgresql.Driver",
+//                    "jdbc:postgresql://peltzer.com.de:5432/mitoDbTesting",
+//                    username, password);
 
             String query;
             if(checkBox_write_own_query.isSelected()){
@@ -174,8 +175,6 @@ public class DBSearchDialogue {
 
 
         } catch (SQLException e1) {
-            e1.printStackTrace();
-        } catch (ClassNotFoundException e1) {
             e1.printStackTrace();
         }
 

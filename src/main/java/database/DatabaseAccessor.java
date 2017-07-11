@@ -1,5 +1,6 @@
 package database;
 
+import io.Exceptions.FastAException;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
@@ -12,15 +13,15 @@ import java.util.List;
 /**
  * Created by neukamm on 02.02.17.
  */
-public class DataAccessor {
+public class DatabaseAccessor {
 
     // in real life, use a connection pool....
     private Connection connection ;
     private String rowID;
 
-    public DataAccessor() { }
+    public DatabaseAccessor() { }
 
-    public void connectToDatabase(String driverClassName, String dbURL, String user, String password)throws SQLException, ClassNotFoundException {
+    public void connectToDatabase(String driverClassName, String dbURL, String user, String password) throws SQLException, ClassNotFoundException, FastAException {
 
         Class.forName(driverClassName);
         connection = DriverManager.getConnection(dbURL, user, password);

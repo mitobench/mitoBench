@@ -1,6 +1,9 @@
 package controller;
 
+import database.DatabaseAccessor;
 import view.table.controller.ATableController;
+
+import java.sql.SQLException;
 
 /**
  * Created by neukamm on 05.07.17.
@@ -11,6 +14,7 @@ public class DatabaseConnectionController {
     private String userName;
     private String password;
     private ATableController table;
+    private DatabaseAccessor databaseAccessor;
 
     public DatabaseConnectionController(){}
 
@@ -44,5 +48,17 @@ public class DatabaseConnectionController {
 
     public void setTable(ATableController table) {
         this.table = table;
+    }
+
+    public void login() throws SQLException, ClassNotFoundException {
+
+        databaseAccessor = new DatabaseAccessor();
+        databaseAccessor.connectToDatabase("org.postgresql.Driver",
+                "jdbc:postgresql://peltzer.com.de:5432/mitoDbTesting",
+                userName, password);
+    }
+
+    public DatabaseAccessor getDatabaseAccessor() {
+        return databaseAccessor;
     }
 }

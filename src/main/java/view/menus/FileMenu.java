@@ -155,7 +155,7 @@ public class FileMenu {
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
             } else {
                 // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow);
+                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow, databaseConnectionController);
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addFunctionality(
                         databaseConnectionController.getUserName(),

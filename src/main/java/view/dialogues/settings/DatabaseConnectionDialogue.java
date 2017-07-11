@@ -13,6 +13,8 @@ import javafx.scene.layout.GridPane;
 import view.MitoBenchWindow;
 import view.table.controller.ATableController;
 
+import java.sql.SQLException;
+
 /**
  * Created by neukamm on 02.02.17.
  */
@@ -89,7 +91,7 @@ public class DatabaseConnectionDialogue {
             usernamme_field.setText("mitodbreader");
             password_field.setText("*****************");
             password = "LKeAFGVqSZdtr8peTPOv";
-            username = "mitodbreader";
+            username = "mitodbreaderhtr";
 
             mitoBenchWindow.getTabpane_statistics().getTabs().remove(tab);
 
@@ -97,10 +99,23 @@ public class DatabaseConnectionDialogue {
             databaseConnectionController.setUserName(username);
             databaseConnectionController.setTable(table);
 
-            // open search mask to specify which data should be loaded
-            DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow);
-            dbSearchDialogue.fillDialogue();
-            dbSearchDialogue.addFunctionality(username, password, table);
+            try {
+                databaseConnectionController.login();
+                // open search mask to specify which data should be loaded
+                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue(
+                        "SQL statement configurator",
+                        mitoBenchWindow,
+                        databaseConnectionController);
+                dbSearchDialogue.fillDialogue();
+                dbSearchDialogue.addFunctionality(username, password, table);
+
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+
         });
     }
 
