@@ -139,7 +139,7 @@ public class FileMenu {
         importFromDB.setId("importFromDB");
         // todo: make db query
         importFromDB.setOnAction(t -> {
-            if(databaseConnectionController==null){
+            if(databaseConnectionController == null || !databaseConnectionController.isLoggedIn()){
                 databaseConnectionController = new DatabaseConnectionController();
                 Tab tab = new Tab("Database Login");
 
@@ -150,6 +150,7 @@ public class FileMenu {
                         tab,
                         databaseConnectionController
                 );
+
                 GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
                 tab.setContent(dialogue);
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);

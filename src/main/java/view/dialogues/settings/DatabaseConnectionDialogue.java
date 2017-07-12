@@ -2,15 +2,12 @@ package view.dialogues.settings;
 
 import Logging.LogClass;
 import controller.DatabaseConnectionController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import io.Exceptions.DatabaseConnectionException;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import view.MitoBenchWindow;
+import view.dialogues.error.DatabaseErrorDialogue;
 import view.table.controller.ATableController;
 
 import java.sql.SQLException;
@@ -19,29 +16,30 @@ import java.sql.SQLException;
  * Created by neukamm on 02.02.17.
  */
 public class DatabaseConnectionDialogue {
-    private final DatabaseConnectionController databaseConnectionController;//extends APopupDialogue{
+    private DatabaseConnectionController databaseConnectionController;//extends APopupDialogue{
 
 
     private Button loginBtn;
     private String username;
     private String password;
-    private TextField password_field;
+    PasswordField password_field;
     private TextField usernamme_field;
     private  ATableController table;
     private MitoBenchWindow mitoBenchWindow;
     private GridPane dialogGrid;
     private LogClass logClass;
+    private String username_root;
+    private String password_root;
 
     public DatabaseConnectionDialogue(ATableController tableUserDB, LogClass logClass, MitoBenchWindow mito, Tab tab,
                                       DatabaseConnectionController databaseConnectionController){
-        //super(title, logClass);
         mitoBenchWindow = mito;
         this.databaseConnectionController = databaseConnectionController;
         table = tableUserDB;
         this.logClass = logClass;
         setComponents();
         addListener(tab);
-        //show();
+
 
     }
 
@@ -63,11 +61,8 @@ public class DatabaseConnectionDialogue {
         usernamme_field = new TextField();
         usernamme_field.setId("usernamme_field");
 
-        password_field = new TextField();
+        password_field = new PasswordField();
         password_field.setId("password_field");
-
-        usernamme_field.setText("mitodbreader");
-        password_field.setText("*****************");
 
         loginBtn = new Button("Login");
         loginBtn.setId("loginButton");
@@ -87,17 +82,12 @@ public class DatabaseConnectionDialogue {
             username = usernamme_field.getText();
             password = password_field.getText();
 
-            //For testing and stuff
-            usernamme_field.setText("mitodbreader");
-            password_field.setText("*****************");
-            password = "LKeAFGVqSZdtr8peTPOv";
-            username = "mitodbreaderhtr";
-
             mitoBenchWindow.getTabpane_statistics().getTabs().remove(tab);
 
             databaseConnectionController.setPassword(password);
             databaseConnectionController.setUserName(username);
             databaseConnectionController.setTable(table);
+
 
             try {
                 databaseConnectionController.login();
@@ -113,8 +103,10 @@ public class DatabaseConnectionDialogue {
                 e1.printStackTrace();
             } catch (ClassNotFoundException e1) {
                 e1.printStackTrace();
+            } catch (DatabaseConnectionException e1) {
+                databaseConnectionController.setLoggedIn(false);
+                DatabaseErrorDialogue databaseErrorDialogue = new DatabaseErrorDialogue();
             }
-
 
         });
     }
@@ -136,6 +128,11 @@ public class DatabaseConnectionDialogue {
         return password;
     }
 
+    public String getUsername_root() {
+        return username_root;
+    }
 
-
+    public String getPassword_root() {
+        return password_root;
+    }
 }

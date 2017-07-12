@@ -51,7 +51,8 @@ public abstract class AbstractExceptionDialogue {
     private Alert createContextAlert(String inputType){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception Dialog");
-        alert.setContentText("Something is wrong with your "+ inputType + " file, either bad format or there are wrong characters inside.");
+        alert.setContentText("Something is wrong with your "+ inputType +
+                " file, either bad format or there are wrong characters inside.");
         return alert;
     }
 }

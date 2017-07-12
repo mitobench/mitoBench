@@ -1,8 +1,13 @@
 package controller;
 
 import database.DatabaseAccessor;
+import io.Exceptions.DatabaseConnectionException;
+import io.Exceptions.FastAException;
+import io.Exceptions.IMitoException;
+import view.dialogues.error.DatabaseErrorDialogue;
 import view.table.controller.ATableController;
 
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**
@@ -10,16 +15,27 @@ import java.sql.SQLException;
  */
 public class DatabaseConnectionController {
 
-    private Boolean loggedIn;
+    private final String username_root;
+    private final String password_root;
+    private boolean loggedIn;
     private String userName;
     private String password;
     private ATableController table;
     private DatabaseAccessor databaseAccessor;
 
-    public DatabaseConnectionController(){}
+    public DatabaseConnectionController(){
+        //For testing and stuff
+        username_root = "mitodbreader";
+        password_root = "LKeAFGVqSZdtr8peTPOv";
+    }
 
-    public Boolean getLoggedIn() {
+
+    public boolean isLoggedIn() {
         return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
     public String getUserName() {
@@ -34,9 +50,6 @@ public class DatabaseConnectionController {
         return table;
     }
 
-    public void setLoggedIn(Boolean loggedIn) {
-        this.loggedIn = loggedIn;
-    }
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -50,12 +63,17 @@ public class DatabaseConnectionController {
         this.table = table;
     }
 
-    public void login() throws SQLException, ClassNotFoundException {
+    public void login() throws SQLException, ClassNotFoundException, DatabaseConnectionException {
 
         databaseAccessor = new DatabaseAccessor();
-        databaseAccessor.connectToDatabase("org.postgresql.Driver",
+        loggedIn = databaseAccessor.connectToDatabase("org.postgresql.Driver",
                 "jdbc:postgresql://peltzer.com.de:5432/mitoDbTesting",
-                userName, password);
+                username_root, password_root, userName, password);
+
+        if(!loggedIn){
+            throw new DatabaseConnectionException();
+        }
+
     }
 
     public DatabaseAccessor getDatabaseAccessor() {

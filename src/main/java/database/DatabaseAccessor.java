@@ -1,6 +1,5 @@
 package database;
 
-import io.Exceptions.FastAException;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
@@ -15,16 +14,36 @@ import java.util.List;
  */
 public class DatabaseAccessor {
 
-    // in real life, use a connection pool....
     private Connection connection ;
     private String rowID;
 
     public DatabaseAccessor() { }
 
-    public void connectToDatabase(String driverClassName, String dbURL, String user, String password) throws SQLException, ClassNotFoundException, FastAException {
+    public boolean connectToDatabase(String driverClassName, String dbURL, String username_root, String password_root,
+                                     String username, String password)
+            throws SQLException, ClassNotFoundException {
+
+        connection = null;
+        String dbUsername, dbPassword;
+        String query;
+        boolean login = false;
 
         Class.forName(driverClassName);
-        connection = DriverManager.getConnection(dbURL, user, password);
+        connection = DriverManager.getConnection(dbURL, username_root, password_root);
+        Statement stmt = connection.createStatement();
+        query = "SELECT alias, passwd FROM mitodb_users;";
+        stmt.executeQuery(query);
+        ResultSet rs = stmt.getResultSet();
+
+        while(rs.next()){
+            dbUsername = rs.getString("alias");
+            dbPassword = rs.getString("passwd");
+
+            if(dbUsername.equals(username) && dbPassword.equals(password)){
+                login = true;
+            }
+        }
+        return login;
 
     }
 
@@ -68,6 +87,5 @@ public class DatabaseAccessor {
 
         return eList;
     }
-
 
 }
