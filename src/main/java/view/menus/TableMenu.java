@@ -1,5 +1,6 @@
 package view.menus;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
@@ -43,8 +44,17 @@ public class TableMenu {
         getSelectedRows.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 try{
-                    LOG.info("Get only selected rows.");
-                    tableController.updateView(tableController.getTable().getSelectionModel().getSelectedItems());
+
+                    ObservableList<ObservableList> selection = tableController.getTable().getSelectionModel().getSelectedItems();
+                    int index_ID = tableController.getColIndex("ID");
+                    String log = "Get only selected rows: ";
+
+                    for(int i = 0; i < selection.size(); i++){
+                        log += selection.get(i).get(index_ID) + " ";
+                    }
+                    LOG.info(log);
+                    tableController.updateView(selection);
+
                 } catch (Exception e){
                     e.printStackTrace();
                 }

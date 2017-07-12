@@ -100,6 +100,7 @@ public class FileMenu {
                 viz_pane.getTabs().removeAll(viz_pane.getTabs());
                 mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
                 mitoBenchWindow.setProjectLoaded(false);
+                LOG.info("New project was created.");
             }
         });
 
@@ -154,15 +155,12 @@ public class FileMenu {
                 GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
                 tab.setContent(dialogue);
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
+
             } else {
                 // open search mask to specify which data should be loaded
                 DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow, databaseConnectionController);
                 dbSearchDialogue.fillDialogue();
-                dbSearchDialogue.addFunctionality(
-                        databaseConnectionController.getUserName(),
-                        databaseConnectionController.getPassword(),
-                        databaseConnectionController.getTable()
-                );
+                dbSearchDialogue.addFunctionality(databaseConnectionController.getTable());
             }
 
             if(drapAndDropEventMaganer==null){
@@ -227,6 +225,7 @@ public class FileMenu {
         exportFileSpider.setOnAction(t -> {
             try {
                 SpiderCoversion spiderCoversion = new SpiderCoversion();
+                LOG.info("Running PGDSpider.");
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -34,9 +34,9 @@ public class FilterData {
 
     }
 
-    public void filterHaplotype(String[] mutations, String distance) throws Exception {
+    public void filterHaplotype(String[] haplotypes, String distance) throws Exception {
 
-        LOG.info("Filtering mutations: include only the haplotype: " + Arrays.toString(mutations) +
+        LOG.info("Filter haplotypes: data set includes only the haplotype(s): " + Arrays.toString(haplotypes) +
                 " and all haplotype with distance d=" + distance);
 
         // filtered hgs
@@ -47,7 +47,7 @@ public class FilterData {
 
         //for(ObservableList row : selectedRows){
             //int index_hg_col = tableControllerUB.getColIndex("Haplogroup");
-            for(String mut : mutations) {
+            for(String mut : haplotypes) {
                 List<String> hgs = hgs_per_mutation.get(mut);
                 if(hgs!=null){
                     filtered_hgs.addAll(hgs);
@@ -55,7 +55,7 @@ public class FilterData {
             }
 
         // second: get all Haplogroups with 'n' mutations distance from mut(s) above
-        for(String mut : mutations){
+        for(String mut : haplotypes){
             List<String> hgs = hgs_per_mutation.get(mut);
             if(hgs!=null) {
                 for (String hg : hgs) {

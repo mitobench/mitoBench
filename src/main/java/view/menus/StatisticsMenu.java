@@ -73,7 +73,7 @@ public class StatisticsMenu {
         mutations.setId("toolsMenu_mutation_freq");
         mutations.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                LOG.info("Calculate frequency per mutation");
+                LOG.info("Calculate haplotype frequency");
 
                 mutationStatistics = new HaplotypeStatistics(LOGClass, mito.getPrimaryStage());
 

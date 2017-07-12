@@ -40,7 +40,6 @@ public class DBSearchDialogue {
     private LogClass logClass;
 
     public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow, DatabaseConnectionController databaseConnectionController){
-        //super(title, mitoBenchWindow.getLogClass());
         logClass = mitoBenchWindow.getLogClass();
         mito = mitoBenchWindow;
         this.databaseConnectionController = databaseConnectionController;
@@ -68,9 +67,6 @@ public class DBSearchDialogue {
         checkBox_write_own_query.setSelected(false);
         textfield_sql_statement_advanced.setEditable(false);
         textfield_sql_statement_advanced.setDisable(true);
-        //dialog.setResizable(true);
-
-        //show(600,450);
 
         // add to tab
         tab = new Tab(title);
@@ -97,7 +93,7 @@ public class DBSearchDialogue {
 
     }
 
-    public void addFunctionality(String username, String password, ATableController tablecontroller) {
+    public void addFunctionality(ATableController tablecontroller) {
 
         btnSend.setOnAction(e ->
             performSendAction(tablecontroller, databaseConnectionController)
@@ -141,9 +137,6 @@ public class DBSearchDialogue {
     private void performSendAction(ATableController tablecontroller, DatabaseConnectionController databaseConnectionController){
         DatabaseAccessor accessor = databaseConnectionController.getDatabaseAccessor();
         try {
-//            accessor.connectToDatabase("org.postgresql.Driver",
-//                    "jdbc:postgresql://peltzer.com.de:5432/mitoDbTesting",
-//                    username, password);
 
             String query;
             if(checkBox_write_own_query.isSelected()){
@@ -154,12 +147,11 @@ public class DBSearchDialogue {
                 query = "SELECT " + textfield_selection_table.getText() + "FROM sequence_data";
             }
 
-
             CCJSqlParserManager pm = new CCJSqlParserManager();
             try {
                 net.sf.jsqlparser.statement.Statement statement = pm.parse(new StringReader(query));
                 if(isQueryValid(statement)) {
-                    logClass.getLogger(this.getClass()).info("Import data from mitoDB. Query: " + query);
+                    logClass.getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: " + query);
                     data = accessor.getEntries(query);
                     message.setText("");
                     tablecontroller.updateTable(data);
@@ -171,8 +163,6 @@ public class DBSearchDialogue {
                 message.setTextFill(Color.RED);
                 message.setText("Query was not correct");
             }
-
-
 
         } catch (SQLException e1) {
             e1.printStackTrace();

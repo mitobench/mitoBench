@@ -92,7 +92,7 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
                     statsTabPane.getTabs().add(tab);
                     statsTabPane.getSelectionModel().select(tab);
 
-                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + hg_list_trimmed);
+                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
 
                     dialog.close();
                 }

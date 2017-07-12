@@ -1,10 +1,12 @@
 package analysis;
 
 
+import Logging.LogClass;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import io.writer.MultiFastaWriter;
+import org.apache.log4j.Logger;
 import org.json.*;
 import view.table.MTStorage;
 import view.table.controller.TableControllerUserBench;
@@ -23,11 +25,13 @@ import java.util.List;
 public class HaplotypeCaller {
     private TableControllerUserBench tableController;
     private MTStorage mtStorage;
+    private Logger LOG;
 
 
-    public HaplotypeCaller(TableControllerUserBench tableControllerUserBench, MTStorage mtStorage){
+    public HaplotypeCaller(TableControllerUserBench tableControllerUserBench, MTStorage mtStorage, LogClass logClass){
         this.mtStorage = mtStorage;
         this.tableController = tableControllerUserBench;
+        LOG = logClass.getLogger(this.getClass());
 
     }
 
@@ -108,6 +112,8 @@ public class HaplotypeCaller {
 
         // parse and delete temporary files
         Files.delete(new File(f).toPath());
+
+        LOG.info("Calculate Haplogroups.");
 
     }
 }

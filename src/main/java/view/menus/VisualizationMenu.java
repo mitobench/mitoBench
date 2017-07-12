@@ -89,8 +89,7 @@ public class VisualizationMenu {
 
 
     public void initHaploBarchart(String titlePart) throws MalformedURLException {
-        LOG.info("Visualize data: Haplogroup frequency (Barchart)");
-
+        LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
         Text t = new Text();
         t.setText("Haplogroup occurrences " + titlePart);
         t.setFont(Font.font(25));

@@ -8,6 +8,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import controller.ChartController;
+import org.apache.log4j.Logger;
 import view.charts.ProfilePlot;
 import view.table.controller.TableControllerMutations;
 import view.table.controller.TableControllerUserBench;
@@ -21,6 +22,7 @@ import java.util.*;
 public class HaploStatistics {
 
 
+    private final Logger LOG;
     private TableControllerUserBench tableController;
     private TableControllerMutations tableControllerMutations;
     private ChartController chartController;
@@ -36,6 +38,7 @@ public class HaploStatistics {
         chartController.init(tableController, treeHaploController.getTreeMap());
         tableControllerMutations = new TableControllerMutations(LOGClass);
         tableControllerMutations.init();
+        LOG = LOGClass.getLogger(this.getClass());
     }
 
     /**

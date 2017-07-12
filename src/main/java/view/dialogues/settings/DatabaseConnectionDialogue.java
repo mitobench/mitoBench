@@ -6,6 +6,7 @@ import io.Exceptions.DatabaseConnectionException;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.dialogues.error.DatabaseErrorDialogue;
 import view.table.controller.ATableController;
@@ -16,9 +17,8 @@ import java.sql.SQLException;
  * Created by neukamm on 02.02.17.
  */
 public class DatabaseConnectionDialogue {
-    private DatabaseConnectionController databaseConnectionController;//extends APopupDialogue{
-
-
+    private Logger LOG;
+    private DatabaseConnectionController databaseConnectionController;
     private Button loginBtn;
     private String username;
     private String password;
@@ -27,16 +27,13 @@ public class DatabaseConnectionDialogue {
     private  ATableController table;
     private MitoBenchWindow mitoBenchWindow;
     private GridPane dialogGrid;
-    private LogClass logClass;
-    private String username_root;
-    private String password_root;
 
     public DatabaseConnectionDialogue(ATableController tableUserDB, LogClass logClass, MitoBenchWindow mito, Tab tab,
                                       DatabaseConnectionController databaseConnectionController){
         mitoBenchWindow = mito;
         this.databaseConnectionController = databaseConnectionController;
         table = tableUserDB;
-        this.logClass = logClass;
+        LOG = logClass.getLogger(this.getClass());
         setComponents();
         addListener(tab);
 
@@ -97,7 +94,8 @@ public class DatabaseConnectionDialogue {
                         mitoBenchWindow,
                         databaseConnectionController);
                 dbSearchDialogue.fillDialogue();
-                dbSearchDialogue.addFunctionality(username, password, table);
+                dbSearchDialogue.addFunctionality(table);
+                LOG.info("Login to database with username " + databaseConnectionController.getUserName()+ " successful.");
 
             } catch (SQLException e1) {
                 e1.printStackTrace();
@@ -128,11 +126,4 @@ public class DatabaseConnectionDialogue {
         return password;
     }
 
-    public String getUsername_root() {
-        return username_root;
-    }
-
-    public String getPassword_root() {
-        return password_root;
-    }
 }

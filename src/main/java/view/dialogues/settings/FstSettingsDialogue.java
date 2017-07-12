@@ -16,6 +16,7 @@ import view.MitoBenchWindow;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by neukamm on 07.06.17.
@@ -166,10 +167,16 @@ public class FstSettingsDialogue extends APopupDialogue{
             @Override public void handle(ActionEvent e) {
 
                 try {
+
+
+
                     FstCalculationRunner fstCalculationRunner = new FstCalculationRunner(mito,
                             comboBox_distance.getSelectionModel().getSelectedItem().toString(),
                             Double.parseDouble(field_gamma_a.getText()),
                             field_missing_data.getText().charAt(0));
+
+                    logClass.getLogger(this.getClass()).info("Calculate pairwise Fst " +
+                            "values between following groups:\n" + Arrays.toString(fstCalculationRunner.getGroupnames()));
 
                     fstCalculationRunner.run(
                             checkbox_linearized_slatkin.isSelected(),
@@ -185,8 +192,6 @@ public class FstSettingsDialogue extends APopupDialogue{
                         fstCalculationRunner.writeToFile(field_filePathResult.getText());
                     }
 
-                    logClass.getLogger(this.getClass()).info("Calculate pairwise Fst " +
-                            "values between following groups:\n" + fstCalculationRunner.getGroupnames());
 
                     dialog.close();
 
