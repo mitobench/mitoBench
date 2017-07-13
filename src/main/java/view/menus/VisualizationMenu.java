@@ -201,7 +201,7 @@ public class VisualizationMenu {
     }
 
 
-    private void initMap(String title){
+    private void initMap(){
         LOG.info("Visualize data: Visualize all samples on map");
 
         LeafletController mapViewController = null;
@@ -524,7 +524,7 @@ public class VisualizationMenu {
         mapsItem.setId("maps_item");
         mapsItem.setOnAction(t -> {
             if(!tableController.isTableEmpty()){
-                initMap("Map");
+                initMap();
             }
 
         });

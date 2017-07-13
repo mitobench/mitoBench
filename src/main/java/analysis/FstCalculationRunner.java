@@ -5,20 +5,27 @@ import IO.reader.DistanceTypeParser;
 import IO.writer.Writer;
 import fst.Linearization;
 import fst.StandardAMOVA;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TableView;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import methods.Filter;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
+import view.charts.HeatChart;
+import view.charts.HeatMapLegend;
 import view.table.MTStorage;
 import view.table.controller.TableControllerFstValues;
 import view.table.controller.TableControllerUserBench;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -234,6 +241,50 @@ public class FstCalculationRunner {
 
     public double[][] getFsts() {
         return fsts;
+    }
+
+    public void visualizeResult() {
+
+        HeatChart heat = new HeatChart(trasposeMatrix(fsts), 0.0, 1.0);
+        heat.setTitle("Fst values");
+        heat.setXValues(groupnames);
+        heat.setYValues(groupnames);
+
+        BorderPane b = new BorderPane();
+        Image i = SwingFXUtils.toFXImage((BufferedImage) heat.getChartImage(false), null);
+        ImageView v = new ImageView(i);
+        b.setCenter(v);
+
+        HeatMapLegend legend = new HeatMapLegend(300);
+        b.setRight(legend.getRoot());
+
+        Tab tab = new Tab("Fst values");
+        tab.setId("tab_heatmap");
+        tab.setContent(b);
+
+        mitobench.getTabpane_visualization().getTabs().add(tab);
+
+
+
+    }
+
+
+    public static double[][] trasposeMatrix(double[][] matrix)
+    {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        double[][] trasposedMatrix = new double[n][m];
+
+        for(int x = 0; x < n; x++)
+        {
+            for(int y = 0; y < m; y++)
+            {
+                trasposedMatrix[x][y] = matrix[y][x];
+            }
+        }
+
+        return trasposedMatrix;
     }
 }
 

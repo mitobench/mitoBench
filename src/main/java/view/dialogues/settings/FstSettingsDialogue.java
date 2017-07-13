@@ -184,6 +184,8 @@ public class FstSettingsDialogue extends APopupDialogue{
                             field_level_missing_data.getText());
                     fstCalculationRunner.writeToTable();
 
+                    fstCalculationRunner.visualizeResult();
+
 //                    fstCalculationRunner.writeToTable(fstCalculationRunner.getFsts(),
 //                                                                fstCalculationRunner.getGroupnames(),
 //                                                                "Fst values");
