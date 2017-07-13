@@ -369,6 +369,7 @@ public class FileMenu {
 
                         projectReader.read(f, LOG);
                         projectReader.loadData(tableControllerUserBench);
+                        //tableControllerUserBench.loadGroups();
                         mitoBenchWindow.setProjectLoaded(true);
                     } catch (IOException e) {
                         e.printStackTrace();
