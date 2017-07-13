@@ -186,14 +186,13 @@ public class FstSettingsDialogue extends APopupDialogue{
 
                     fstCalculationRunner.visualizeResult();
 
-//                    fstCalculationRunner.writeToTable(fstCalculationRunner.getFsts(),
-//                                                                fstCalculationRunner.getGroupnames(),
-//                                                                "Fst values");
 
                     if(checkbox_saveLogFileBtn.isSelected()){
                         fstCalculationRunner.writeToFile(field_filePathResult.getText());
                     }
 
+
+                    LOG.info("Fst calculations finished.");
 
                     dialog.close();
 

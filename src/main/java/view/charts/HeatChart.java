@@ -1685,7 +1685,7 @@ public class HeatChart {
      * Determines what colour a heat map cell should be based upon the cell
      * values.
      */
-    private Color getCellColour(double data, double min, double max) {
+    public Color getCellColour(double data, double min, double max) {
         double range = max - min;
         double position = data - min;
 
