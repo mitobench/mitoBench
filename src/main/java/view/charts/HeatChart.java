@@ -1507,13 +1507,16 @@ public class HeatChart {
 
         for (int x=0; x<noXCells; x++) {
             for (int y=0; y<noYCells; y++) {
-                // Set colour depending on zValues.
-                heatMapGraphics.setColor(getCellColour(data[y][x], lowValue, highValue));
+                if(y >= x){
+                    // Set colour depending on zValues.
+                    heatMapGraphics.setColor(getCellColour(data[y][x], lowValue, highValue));
 
-                int cellX = x*cellSize.width;
-                int cellY = y*cellSize.height;
+                    int cellX = x*cellSize.width;
+                    int cellY = y*cellSize.height;
 
-                heatMapGraphics.fillRect(cellX, cellY, cellSize.width, cellSize.height);
+                    heatMapGraphics.fillRect(cellX, cellY, cellSize.width, cellSize.height);
+                }
+
             }
         }
 

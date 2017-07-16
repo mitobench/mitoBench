@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 /**
  * Created by neukamm on 13.07.17.
@@ -30,7 +31,20 @@ public class HeatMap extends AChart{
 
     public void createHeatMap(double[][] fsts, String[] groupnames){
 
-        HeatChart heat = new HeatChart(transposeMatrix(fsts), 0.0, 1.0);
+
+        double[] count = new double[fsts.length];
+        for (int i = 0; i < fsts.length; i++) {
+            count[i] = Arrays.stream( fsts[i]).max().getAsDouble();
+        }
+        double MAX = Arrays.stream( count).max().getAsDouble();
+
+        double[] count_min = new double[fsts.length];
+        for (int i = 0; i < fsts.length; i++) {
+            count_min[i] = Arrays.stream( fsts[i]).min().getAsDouble();
+        }
+        double MIN = Arrays.stream( count_min).min().getAsDouble();
+
+        HeatChart heat = new HeatChart(transposeMatrix(fsts), MIN, MAX);
         heat.setTitle("Fst values");
         heat.setXValues(groupnames);
         heat.setYValues(groupnames);

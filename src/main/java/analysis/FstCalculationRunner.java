@@ -3,6 +3,7 @@ package analysis;
 
 import IO.reader.DistanceTypeParser;
 import IO.writer.Writer;
+import fst.FstHudson1992;
 import fst.Linearization;
 import fst.StandardAMOVA;
 import javafx.collections.ObservableList;
@@ -107,12 +108,20 @@ public class FstCalculationRunner {
         Linearization linearization = new Linearization();
         DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
 
-        StandardAMOVA standardAMOVA = new StandardAMOVA(usableLoci);
-        standardAMOVA.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
-        standardAMOVA.setData(data);
+//        StandardAMOVA standardAMOVA = new StandardAMOVA(usableLoci);
+//        standardAMOVA.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
+//        standardAMOVA.setData(data);
+//
+//        fsts = standardAMOVA.calculateModifiedFst();
+//        groupnames = standardAMOVA.getGroupnames();
 
-        fsts = standardAMOVA.calculateModifiedFst();
-        groupnames = standardAMOVA.getGroupnames();
+
+        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);
+        fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
+        fstHudson1992.setData(data);
+
+        fsts = fstHudson1992.calculateFst();
+        groupnames = fstHudson1992.getGroupnames();
 
 
         // write to file
@@ -137,7 +146,7 @@ public class FstCalculationRunner {
         tableControllerFstValues = new TableControllerFstValues(mitobench.getLogClass());
         tableControllerFstValues.init();
 
-        writer.addDistanceMatrixToResult(standardAMOVA.getDistanceCalculator().getDistancematrix_d());
+       // writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
 
         writeLog(runSlatkin, runReynolds, field_level_missing_data);
 

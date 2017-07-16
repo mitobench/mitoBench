@@ -12,13 +12,17 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 /**
  * Created by neukamm on 13.07.17.
  */
 public class HeatMapLegend {
 
-    private final static double MIN = 0 ;
-    private final static double MAX = 1 ;
+    private static double MIN = 0 ;
+    private static double MAX = 1 ;
     private final VBox root;
     private final HeatChart heatmap;
     private int height;
@@ -26,6 +30,10 @@ public class HeatMapLegend {
 
     public HeatMapLegend(double width, HeatChart heat){
         heatmap = heat;
+
+        MAX = heat.getHighValue();
+        MIN = heat.getLowValue();
+
         Image colorScale = createColorScaleImage((int)width, 50, Orientation.HORIZONTAL);
         ImageView imageView = new ImageView(colorScale);
 
@@ -43,6 +51,7 @@ public class HeatMapLegend {
         this.width = width;
         WritableImage image = new WritableImage(width, height);
         PixelWriter pixelWriter = image.getPixelWriter();
+
         if (orientation == Orientation.HORIZONTAL) {
             for (int x=0; x<width; x++) {
                 double value = MIN + (MAX - MIN) * x / width;
@@ -72,7 +81,7 @@ public class HeatMapLegend {
             return Color.BLACK ;
         }
 
-        java.awt.Color awtColor = heatmap.getCellColour(value, 0,1);
+        java.awt.Color awtColor = heatmap.getCellColour(value, MIN,MAX);
         int r = awtColor.getRed();
         int g = awtColor.getGreen();
         int b = awtColor.getBlue();
@@ -92,7 +101,17 @@ public class HeatMapLegend {
 
         //pane.setPadding(new Insets(10,10,10,10));
 
-        double[] steps = new double[]{0.0,0.2,0.4,0.6,0.8,1.0};
+        //double[] steps = new double[]{0.0,0.2,0.4,0.6,0.8,1.0};
+        double[] steps = new double[7];
+        double add = MAX / 6.0;
+        double val = MIN;
+        steps[0] = round(val,2);
+        steps[6] = round(MAX, 2);
+        for(int d = 1; d < steps.length-1; d++){
+            steps[d] = round((val + add), 2);
+            val += add;
+
+        }
         int minWidth = width/steps.length;
         //TextField tf[] = new TextField[steps.length];
         Label tf[] = new Label[steps.length];
@@ -100,7 +119,6 @@ public class HeatMapLegend {
         pane.getChildren().add(createSpacer());
         for(int i=0;i<tf.length;i++)
         {
-
             tf[i] = new Label(""+steps[i]);
             tf[i].setAlignment(Pos.CENTER);
             tf[i].setMinWidth(minWidth);
@@ -111,21 +129,6 @@ public class HeatMapLegend {
         }
         pane.setAlignment(Pos.CENTER_RIGHT);
 
-//        HBox valuebox = new HBox();
-//        valuebox.setMaxWidth(width);
-//        //valuebox.setSpacing(30);
-//        //valuebox.setAlignment(Pos.CENTER);
-//
-//
-//
-//        double[] steps = new double[]{0.0,0.2,0.4,0.6,0.8,1.0};
-//        for(int i = 0; i < steps.length; i++){
-//            Label val_label = new Label(""+steps[i]);
-//            val_label.setPrefHeight(height/(double)10);
-//            val_label.setFont(new Font("Sans-Serif", 16));
-//            valuebox.getChildren().add(val_label);
-//        }
-
         return pane;
     }
 
@@ -135,6 +138,21 @@ public class HeatMapLegend {
         // Make it always grow or shrink according to the available space
         VBox.setVgrow(spacer, Priority.ALWAYS);
         return spacer;
+    }
+
+
+
+    /**
+     * This method rounds a double value on n digits.
+     * @param value
+     * @param numberOfDigitsAfterDecimalPoint
+     * @return double rounded
+     */
+    public double round(double value, int numberOfDigitsAfterDecimalPoint) {
+        BigDecimal bigDecimal = new BigDecimal(value);
+        bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
+                BigDecimal.ROUND_HALF_EVEN);
+        return bigDecimal.doubleValue();
     }
 
     /*
