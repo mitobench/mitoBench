@@ -4,6 +4,8 @@ Export
 Export data
 -----------
 
+> File -> Export Data
+
 To export your data, select *File -> Export Data*. This opens a export dialogue
 where you can choose between different file formats:
 
@@ -14,8 +16,8 @@ The supported file formats are:
 
 * Arlequin format (.arp)
 
-  To export your data to arp format, please specify a column after that your data
-  has to be grouped. This output file can be used as input file for your analyses
+  To export your data to arp format, please specify a column that should be used
+  for grouping. This output file can be used as input file for your analyses
   with Arlequin.
 
 * BEAST format (.beast)
@@ -26,7 +28,7 @@ The supported file formats are:
 
 * Generic format (.csv)
 
-  Creates a csv file containing all data
+  Creates a csv file containing all data displayed in the table.
 
 * Excel format (.xlsx)
 
@@ -35,7 +37,7 @@ The supported file formats are:
 * Mitoproject format (.mitoproj)
 
   Writes all (eventually filtered) data plus grouping information into a text file.
-  This file can later be used to restore the session.
+  This file can later be used to restore the current session.
 
 * File conversions via PGDSpider
 
@@ -47,10 +49,11 @@ The supported file formats are:
 Export images
 -------------
 
+> File -> Export chart
+
 Each image can be exported individually, either by right-clicking on the chart, which
-will open a 'Save as png' context menu, or via the File menu. To do the latter,
-select *File -> Export chart*. This will save the currently displayed visualization
-as png.
+will open a 'Save as png' context menu, or via the File menu (select *File -> Export chart*).
+This will save the currently displayed visualization as png with a good resolution.
 
 .. note::
    The chart will be saved with the same aspect ratio displayed in the mitoBench.
@@ -61,5 +64,7 @@ as png.
 Export statistics
 -----------------
 
+> File -> Export statistics
+
 To export calculated statistics, select *File -> Export statistics*. This will write
-the currently displayed statistics to a
+the currently displayed statistics to a comma separated file.

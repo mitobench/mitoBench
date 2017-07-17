@@ -1,10 +1,12 @@
 Data Import
 ==========
 
-mitoBench provides different ways to import data.
+mitoBench offers different ways to import data.
 
 Import via data upload
 ----------------------
+
+> File -> Import
 
 mitoBench supports different file formats:
 
@@ -17,20 +19,22 @@ mitoBench supports different file formats:
   To upload a generic file, the file must have a specific format:
   * The first line starts with *##* and contains the column names separated with tabs.
 
-    ##<colname1>  <colname2>  ....
+    ##<colname1>\t<colname2>\t....
 
   * The second line starts with *#* and specifies the data type of the column.
     You can find a list of all possible data types in the section below.
 
-    #<data type1> <data type1>  ...
+    #<data type1>\t<data type1>\t...
 
   * Third line to end:
 
     Contains the actual data. One line per sample, tab separated.
 
 * MitoProject (.mitoproj)
+    Only one project can be loaded per session.
 
-The uploaded data are represented in table format. Information that are in different files,
+
+The uploaded data are represented in table format. Information that are in different files
 but belonging to one sample are merged into one row based on the sample name.
 
 .. note::
@@ -44,6 +48,7 @@ but belonging to one sample are merged into one row based on the sample name.
 * Categorical
 
   The same as data type *String* yet
+
 * Location
 
   The location is expected as latitude and longitude, separated with comma.
@@ -52,26 +57,29 @@ but belonging to one sample are merged into one row based on the sample name.
      The decimal point has to be a point (*.*), no comma!
 
   Example: 29.2505576,18.0843603
+
 * C14
 
-  The C14 dating information has to have the folloring format:
+  The C14 dating information requires one of the following formats:
 
   * *cal* or *CAL* can be contained, but are not required
 
   * *AD* / *ad* or *BC* / *bc* are followed by an integer (number)
 
-  * Both *AD* / *ad* and *BC* / *bc* can be contained in the C14 data type.
+  * Both *AD* / *ad* and *BC* / *bc* can be contained in the C14 data type
 
   Example: cal AD 81-132 , AD 81-132, cal BC 37-cal AD 48
 
   .. note::
-     The C14 dating is represented as an average value in the data table.
-
+     The C14 dating is represented as an average value in the data table, as well as
+     the lower and upper value, if available.
 
 
 
 Import from mitoDB
 ------------------
+
+> File -> Import Data from DB
 
 To import data from mitoDB, select *File -> Import Data from DB*. This opens a
 tab in the main view where you have to enter your mitoDB login data.
@@ -86,4 +94,4 @@ data has to be loaded. More advanced user also can write their own query (SQL st
    :align: center
 
 The secified data will be loaded to the mitoBench in a separate table and can be added
-to the main user table.
+by drag and drop to the main user table.

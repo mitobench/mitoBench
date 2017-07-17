@@ -10,8 +10,10 @@ Bar plot
 .. note::
   No grouping needed.
 
-A general visualization of the haplogroup occurrences in the whole data set is
-the barplot (select *Visualization -> Haplogroups -> Create Barchart -> Plot Haplogroup frequency*) .
+  > Visualization -> Haplogroups -> Create Barchart -> Plot Haplogroup frequency
+
+A general visualization of the Haplogroup occurrences in the whole data set is
+the barplot.
 
 .. image:: images/barplothg.png
    :align: center
@@ -23,16 +25,17 @@ Stacked Bar plot
 .. note::
   Grouping needed.
 
-The stacked bar plot visualizes the haplogroup frequency per group. Select
-*Visualization -> Haplogroups -> Create Barchart -> Plot Haplogroup frequency per group*
-to create this plot. The order of the stacks can be defined by drag-and-drop the
-groups in the desired order, e.g. a chronological order.
+  > Visualization -> Haplogroups -> Create Barchart -> Plot Haplogroup frequency per group
+
+The stacked bar plot visualizes the Haplogroup frequency per group.
+The order of the stacks can be defined by drag-and-dropping the groups in the desired
+order, e.g. chronological order.
 
 .. image:: images/stackorder.png
    :align: center
 
 The stacks, which represents the groups, are placed next to each other. This offers
-the direct comparison of the haplogroup frequency between the different groups.
+the direct comparison of the Haplogroup frequency between the different groups.
 
 .. image:: images/barplotstacked.png
    :align: center
@@ -44,8 +47,9 @@ Sunburst chart
 .. note::
   Grouping needed.
 
-The sunburst chart (select *Visualization -> Haplogroups -> Create Sunburst chart*)
-is a circular representation of the haplogroups occuring in each
+  > Visualization -> Haplogroups -> Create Sunburst chart
+
+The sunburst chart is a circular representation of the Haplogroups occuring in each
 group. The different levels correspond to the levels in PhyloTree. The visualization
 can be expanded by clicking on the circle unit coming directly after the most inner
 circle. Clicking on the most inner cicle navigates one level back.
@@ -60,6 +64,8 @@ Profile plot
 
 .. note::
   Grouping needed.
+
+  > Visualization -> Haplogroups -> Create Profile plot
 
 The profile plot visualizes the heplogroup profile per group. The x-axis represents
 the haplogroups, the y-axis the frequency. This ease the comparison of the frequency
@@ -81,9 +87,11 @@ Pie chart
 .. note::
   No Grouping needed.
 
-Selecting *Visualization -> Haplogroups -> Create Pie Chart* creates a pie chart
-of the haplogroups distribution. This plot can be done on groupes as well as
-ungroup data.
+> Visualization -> Haplogroups -> Create Pie Chart
+
+The Haplogroup distribution can also be visualized as pie chart. This plot can be
+done on groupes as well as ungroup data. In case of multiple groups, one pie chart
+per goups will be created.
 
 
 Creates
@@ -115,7 +123,7 @@ Map view
   No Grouping needed.
 
 If the samples have some geographic information, they can be visualized on a map.
-To add all samples to the map, click on the *Show add data* button.
+To add all samples to the map, click on the *Add data* button.
 In case of grouped data, the grouing is represeneted as different colours, but only
 up to 8 different colors are supported by now.
 

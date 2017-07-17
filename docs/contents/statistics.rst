@@ -5,7 +5,7 @@ Statistics
 Haplogroup counts
 ----------------
 
-> *Statistics -> Count haplogroups*
+> Statistics -> Count Haplogroups
 
 This counts the Haplogroups per group or of the entire data set, if no grouping is defined.
 The result is represented as table format and can be downloaded via *File -> Export statistics*.
@@ -15,7 +15,7 @@ The result is represented as table format and can be downloaded via *File -> Exp
 Haplotype frequency
 -------------------
 
-> *Statistics -> Calculate haplotype frequency*
+> Statistics -> Calculate Haplotype frequency
 
-This calculates the occurrences and frequency of each haplotype based on the current version
-of PhyloTree. The result also contains the haplogroup assigned to the haplotype.
+This calculates the occurrence and frequency of each haplotype based on the current version
+of PhyloTree. The result also contains the Haplogroups assigned to the Haplotype.
