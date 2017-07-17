@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import view.dialogues.settings.APopupDialogue;
@@ -25,7 +26,7 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
     private final Stage stage;
     private TextField filePathLabel;
-    private TitledPane titledPane;
+    private StackPane titledPane;
     private Button saveLogFileBtn;
     private Button chooseFileBtn;
     private Button applyBtn;
@@ -78,10 +79,8 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
 
 
-        titledPane = new TitledPane();
-        titledPane.setText("LOG file configuration");
-        titledPane.setCollapsible(false);
-        titledPane.setContent(dialogGrid);
+        titledPane = new StackPane();
+        titledPane.getChildren().add(dialogGrid);
 
 
     }
