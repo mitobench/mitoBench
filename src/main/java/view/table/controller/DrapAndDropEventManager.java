@@ -1,4 +1,4 @@
-package view.table;
+package view.table.controller;
 
 import io.datastructure.Entry;
 import javafx.application.Platform;
@@ -6,9 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.scene.input.*;
-import view.table.controller.ATableController;
-import view.table.controller.TableControllerDB;
-import view.table.controller.TableControllerUserBench;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,14 +17,14 @@ import java.util.logging.Logger;
 /**
  * Created by neukamm on 02.02.17.
  */
-public class DrapAndDropEventMaganer {
+public class DrapAndDropEventManager {
 
     private TableControllerDB tableDBController;
     private TableControllerUserBench tableUserController;
     private DataFormat myformat;
     private ObservableList<ObservableList> selected;
 
-    public DrapAndDropEventMaganer(TableControllerDB tableDB, TableControllerUserBench tableUser){
+    public DrapAndDropEventManager(TableControllerDB tableDB, TableControllerUserBench tableUser){
 
         if(myformat == null){
             myformat = new DataFormat("tabledata");
@@ -98,7 +95,7 @@ public class DrapAndDropEventMaganer {
             try {
                 addData(tableDBController, tableUserController, selected);
             } catch (Exception ex) {
-                Logger.getLogger(DrapAndDropEventMaganer.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DrapAndDropEventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }

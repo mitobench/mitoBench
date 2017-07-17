@@ -20,7 +20,9 @@ import view.dialogues.settings.CreateGroupDialog;
 public class TableControllerUserBench extends ATableController {
 
     public TableControllerUserBench(LogClass logClass) {
+
         super(logClass);
+
     }
 
     public void addRowListener(Label infolabel){
@@ -71,4 +73,10 @@ public class TableControllerUserBench extends ATableController {
         });
     }
 
+
+    public void addDragAndDropFiles(MitoBenchWindow mitoBenchWindow){
+        DragAndDropManagerInput dragAndDropManagerInput = new DragAndDropManagerInput(this, mitoBenchWindow);
+        dragAndDropManagerInput.createEvent();
+
+    }
 }

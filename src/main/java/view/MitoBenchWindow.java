@@ -51,6 +51,7 @@ public class MitoBenchWindow extends Application{
     private LogClass logClass;
     private TreeView treeView;
     private boolean projectLoaded;
+    private FileMenu fileMenu;
 
 
     @Override
@@ -126,6 +127,10 @@ public class MitoBenchWindow extends Application{
         pane_root.setCenter(borderpane_center);
         pane_root.setTop(getMenuPane());
 
+
+        // add drag and drop files to data table view
+        tableControllerUserBench.addDragAndDropFiles(this);
+
         primaryStage.show();
 
     }
@@ -139,7 +144,7 @@ public class MitoBenchWindow extends Application{
         EditMenu editMenu = new EditMenu(this);
         GroupMenu groupMenu = new GroupMenu(this);
         StatisticsMenu statisticsMenu = new StatisticsMenu(this);
-        FileMenu fileMenu = new FileMenu( statisticsMenu, this);
+        fileMenu = new FileMenu( statisticsMenu, this);
         AnalysisMenu analysisMenu = new AnalysisMenu(this);
         TableMenu tableMenu = new TableMenu(this);
         VisualizationMenu graphicsMenu = new VisualizationMenu(this);
@@ -380,5 +385,13 @@ public class MitoBenchWindow extends Application{
 
     public void setProjectLoaded(boolean projectLoaded) {
         this.projectLoaded = projectLoaded;
+    }
+
+    public FileMenu getFileMenu() {
+        return fileMenu;
+    }
+
+    public void setFileMenu(FileMenu fileMenu) {
+        this.fileMenu = fileMenu;
     }
 }

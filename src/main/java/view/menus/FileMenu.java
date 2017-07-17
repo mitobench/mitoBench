@@ -30,7 +30,7 @@ import view.dialogues.error.HSDErrorDialogue;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
-import view.table.DrapAndDropEventMaganer;
+import view.table.controller.DrapAndDropEventManager;
 import view.table.controller.TableControllerDB;
 import view.table.controller.TableControllerUserBench;
 import io.dialogues.Export.ExportDialogue;
@@ -54,7 +54,7 @@ public class FileMenu {
     private StatisticsMenu toolsMenu;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
-    private DrapAndDropEventMaganer drapAndDropEventMaganer;
+    private DrapAndDropEventManager drapAndDropEventMaganer;
     private Logger LOG;
     private LogClass logClass;
     private DatabaseConnectionController databaseConnectionController;
@@ -124,7 +124,7 @@ public class FileMenu {
                 } else {
                     importDialogue = importDialogueFactory.create(stage);
                     importDialogue.start();
-                    openProjectFile(importDialogue.getSelectedFile());
+                    openFile(importDialogue.getSelectedFile());
                 }
 
             }
@@ -164,7 +164,7 @@ public class FileMenu {
             }
 
             if(drapAndDropEventMaganer==null){
-                drapAndDropEventMaganer = new DrapAndDropEventMaganer(tableControllerDB, tableControllerUserBench);
+                drapAndDropEventMaganer = new DrapAndDropEventManager(tableControllerDB, tableControllerUserBench);
                 drapAndDropEventMaganer.createEvent();
             }
 
@@ -272,7 +272,7 @@ public class FileMenu {
      * Method to open files with specific parser.
      * @param f
      */
-    public void openProjectFile(File f){
+    public void openFile(File f){
 
         if (f != null) {
             String absolutePath = f.getAbsolutePath();

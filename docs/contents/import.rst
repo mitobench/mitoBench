@@ -76,6 +76,13 @@ but belonging to one sample are merged into one row based on the sample name.
 
 
 
+
+Import via Drag and Drop
+------------------------
+
+All files mentioned in the section above can also be added by drag and dropping files into the table view of the mitoBench.
+
+
 Import from mitoDB
 ------------------
 
