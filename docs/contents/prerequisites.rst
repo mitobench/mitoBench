@@ -19,8 +19,11 @@ Mac OSX
 Windows
 ^^^^^^^
 
+mitobench was tested on Windows10, too.
+
 
 Software Requirements for mitoBench
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-mitoBench does not require any additional software, however, make sure that java8 and javafx are installed on your operating system.
+mitoBench does not require any additional software, however, make sure that java8 and javafx are installed on your
+operating system.

@@ -49,10 +49,10 @@ Sunburst chart
 
   > Visualization -> Haplogroups -> Create Sunburst chart
 
-The sunburst chart is a circular representation of the Haplogroups occuring in each
+The sunburst chart is a circular representation of the Haplogroups occurring in each
 group. The different levels correspond to the levels in PhyloTree. The visualization
 can be expanded by clicking on the circle unit coming directly after the most inner
-circle. Clicking on the most inner cicle navigates one level back.
+circle. Clicking on the most inner circle navigates one level back.
 
 
 .. image:: images/sunburstchart.png
