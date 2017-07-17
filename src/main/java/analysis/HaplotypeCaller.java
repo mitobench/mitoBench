@@ -41,7 +41,7 @@ public class HaplotypeCaller {
 
         // generate fasta file with all sequences where haplogroups have to be assigned
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController, this.mtStorage);
-        multiFastaWriter.writeData(file);
+        multiFastaWriter.writeData(file, tableController);
 
         //File f = new File(file);
 

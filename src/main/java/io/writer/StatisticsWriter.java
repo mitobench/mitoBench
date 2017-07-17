@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import view.table.controller.TableControllerUserBench;
 
 import java.io.*;
 
@@ -71,7 +72,7 @@ public class StatisticsWriter implements IOutputData{
      * @throws IOException
      */
     @Override
-    public void writeData(String path) throws IOException {
+    public void writeData(String path, TableControllerUserBench tableController) throws IOException {
         if(!path.endsWith(".csv")){
             path += ".csv";
         }

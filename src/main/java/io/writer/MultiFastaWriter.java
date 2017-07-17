@@ -1,13 +1,10 @@
 package io.writer;
 
 import io.IOutputData;
-import javafx.collections.ObservableList;
 import view.table.MTStorage;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.*;
-
-import static java.io.File.separator;
 
 /**
  * Created by neukamm on 17.05.17.
@@ -22,7 +19,7 @@ public class MultiFastaWriter implements IOutputData  {
     }
 
     @Override
-    public void writeData(String file) throws IOException {
+    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
 
         Writer writer = null;
         try {
@@ -32,7 +29,7 @@ public class MultiFastaWriter implements IOutputData  {
             writer = new BufferedWriter(new FileWriter(new File(file)));
 
             // write view.data
-            tableController.getTableColumnByName("ID");
+            this.tableController.getTableColumnByName("ID");
             String text = "";
 
             for(String id : mtStorage.getData().keySet()){

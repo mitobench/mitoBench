@@ -50,6 +50,7 @@ public class ExportDialogue extends Application {
         ButtonType csv_button = new ButtonType("CSV");
         ButtonType xlsx_button = new ButtonType("XLSX");
         ButtonType mito_button = new ButtonType("MITOPROJ");
+        ButtonType nexus_button = new ButtonType("NEXUS");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         //We disallow ID and mtSequence as entries
@@ -57,7 +58,8 @@ public class ExportDialogue extends Application {
         List<String> options = this.columnsInTable;
 
 
-        alert.getButtonTypes().setAll(arp_button, beast_button, csv_button, xlsx_button, mito_button, buttonTypeCancel);
+        alert.getButtonTypes().setAll(arp_button, beast_button, csv_button, xlsx_button, mito_button,
+                nexus_button, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
 
@@ -74,7 +76,7 @@ public class ExportDialogue extends Application {
                 LOG.info("Export data into ARP format with grouping on column '" + selection + "'. File: " + outfileDB);
                 ARPWriter arpwriter = new ARPWriter(tableController);
                 arpwriter.setGroups(selection);
-                arpwriter.writeData(outfileDB);
+                arpwriter.writeData(outfileDB, tableController);
             }
             //Beast output
         } else if (result.get() == beast_button) {
@@ -85,7 +87,7 @@ public class ExportDialogue extends Application {
                 String outfileDB = saveAsDialogue.getOutFile();
                 LOG.info("Export data into BEAST format. File: " + outfileDB);
                 BEASTWriter beastwriter = new BEASTWriter(tableController, LOG);
-                beastwriter.writeData(outfileDB);
+                beastwriter.writeData(outfileDB, tableController);
             }
             //CSV Output
         } else if (result.get() == csv_button) {
@@ -96,7 +98,7 @@ public class ExportDialogue extends Application {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
                     CSVWriter csvWriter = new CSVWriter(tableController, LOG);
-                    csvWriter.writeData(outFileDB);
+                    csvWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
@@ -110,8 +112,8 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    ExcelWriter excelwriter = new ExcelWriter(tableController, LOG);
-                    excelwriter.writeData(outFileDB);
+                    ExcelWriter excelwriter = new ExcelWriter(tableController);
+                    excelwriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into Excel format. File: " + outFileDB);
 
                 } catch (Exception e) {
@@ -119,7 +121,7 @@ public class ExportDialogue extends Application {
                 }
             }
         } else if (result.get() == mito_button) {
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("MitoBenchStarter project (*.mitoproj)", "*.mitoproj");
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("MitoBench project (*.mitoproj)", "*.mitoproj");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
             if (saveAsDialogue.getOutFile() != null) {
@@ -132,7 +134,22 @@ public class ExportDialogue extends Application {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
             }
-        } else {
+        }
+        else if (result.get() == nexus_button) {
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Nexus (*.nex)", "*.nex");
+            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+            saveAsDialogue.start(new Stage());
+            if (saveAsDialogue.getOutFile() != null) {
+                String outFileDB = saveAsDialogue.getOutFile();
+                try {
+                    NexusWriter nexusWriter = new NexusWriter();
+                    nexusWriter.writeData(outFileDB, tableController);
+                    LOG.info("Export data into Nexus format. File: " + outFileDB);
+                } catch (Exception e) {
+                    System.err.println("Caught Exception: " + e.getMessage());
+                }
+            }
+        }else {
             //TODO what happens on cancel() exactly ?
         }
     }

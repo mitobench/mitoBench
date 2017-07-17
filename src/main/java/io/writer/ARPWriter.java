@@ -6,7 +6,6 @@ import io.datastructure.arp.ArpSample;
 import io.datastructure.arp.ArpStructure;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
-import org.apache.log4j.Logger;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.BufferedWriter;
@@ -35,7 +34,7 @@ public class ARPWriter implements IOutputData {
     }
 
     @Override
-    public void writeData(String file) throws IOException {
+    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
         //Initialize properly
         if (!file.endsWith("arp")) {
             file = file + ".arp";

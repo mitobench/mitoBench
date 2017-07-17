@@ -2,7 +2,6 @@ package io.writer;
 
 import io.IOutputData;
 import javafx.collections.ObservableList;
-import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -22,13 +21,13 @@ import java.util.List;
 public class ExcelWriter implements IOutputData {
     private TableControllerUserBench tableController;
 
-    public ExcelWriter(TableControllerUserBench tableController, Logger LOG) {
+    public ExcelWriter(TableControllerUserBench tableController) {
 
         this.tableController = tableController;
     }
 
     @Override
-    public void writeData(String file) throws IOException {
+    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
         Writer writer = null;
         Workbook wb = new XSSFWorkbook();
 
@@ -46,7 +45,7 @@ public class ExcelWriter implements IOutputData {
 
         // write header
         String header = "";
-        List<String> columns = tableController.getCurrentColumnNames();
+        List<String> columns = this.tableController.getCurrentColumnNames();
         for (int i = 0; i < columns.size(); i++) {
             Cell c = row.createCell(i);
             c.setCellValue(columns.get(i));
@@ -55,7 +54,7 @@ public class ExcelWriter implements IOutputData {
 
 
         int rowcounter = 1; //Else, we loose our header here!
-        for (Object list_entry : tableController.getViewDataCurrent()) {
+        for (Object list_entry : this.tableController.getViewDataCurrent()) {
             ObservableList e = (ObservableList) list_entry;
             Row row_to_add = sheet1.createRow(rowcounter);
             rowcounter++;

@@ -31,7 +31,7 @@ public class BEASTWriter implements IOutputData {
 
 
     @Override
-    public void writeData(String file) throws IOException {
+    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
         fileWriter = new FileWriter(new File(file));
         bfWriter = new BufferedWriter(fileWriter);
         HashMap<FastaEntry, String> tmp = getSequenceData();

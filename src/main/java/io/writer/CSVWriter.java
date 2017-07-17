@@ -28,9 +28,10 @@ public class CSVWriter implements IOutputData {
      * (comma separated)
      *
      * @param file
+     * @param tableController
      * @throws Exception
      */
-    public void writeData(String file) throws IOException {
+    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
         Writer writer = null;
         try {
             if(!file.endsWith(".csv"))
@@ -40,7 +41,7 @@ public class CSVWriter implements IOutputData {
 
             // write header
             String header = "";
-            List<String> columns = tableController.getCurrentColumnNames();
+            List<String> columns = this.tableController.getCurrentColumnNames();
             for (int i = 0; i < columns.size(); i++){
                 if(i == columns.size()-1){
                     header += columns.get(i) + "\n";
@@ -51,7 +52,7 @@ public class CSVWriter implements IOutputData {
             writer.write(header);
 
             // write view.data
-            for (ObservableList entry :  tableController.getViewDataCurrent()) {
+            for (ObservableList entry :  this.tableController.getViewDataCurrent()) {
                 String text = "";
                 for(int i = 0; i < entry.size(); i++){
                     if(i == entry.size()-1){
