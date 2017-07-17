@@ -80,7 +80,7 @@ public class LeafletController {
         });
 
         mapBasicPane.setLeft(listView);
-        Button showAllData = new Button("Show all data");
+        Button showAllData = new Button("Add data");
 
         mapBasicPane.setBottom(showAllData);
 
