@@ -39,12 +39,18 @@ public class GenericInputParser implements IInputData {
             //Parse header, two line header !!
             if (currline.startsWith("##")) {
                 headergroup = currline.replace("##","").split("\t");
+                for(String s : headergroup)
+                    s.trim();
                 continue;
             } else if (currline.startsWith("#")) {
                 headertype = currline.replace("#","").split("\t");
+                for(String s : headertype)
+                    s.trim();
                 continue;
             } else {
                 String[] splitLine = currline.split("\t");
+                for(String s : splitLine)
+                    s.trim();
                 //Assume ID is always first! -> requirement
                 List<Entry> entries = new ArrayList<>();
                 //we need to take care of our different types here now, too
