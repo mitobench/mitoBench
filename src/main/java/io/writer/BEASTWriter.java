@@ -78,9 +78,7 @@ public class BEASTWriter implements IOutputData {
     private String getC14String(String c14data) {
         String tmp = "";
         if(!c14data.equals("")){
-            if (c14data.equals("Undefined")) {
-                tmp = "_0";
-            } else {
+            if (!c14data.equals("Undefined")) {
                 tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
             }
 
