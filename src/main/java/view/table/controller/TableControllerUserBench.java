@@ -2,6 +2,7 @@ package view.table.controller;
 
 
 import Logging.LogClass;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -78,5 +79,21 @@ public class TableControllerUserBench extends ATableController {
         DragAndDropManagerInput dragAndDropManagerInput = new DragAndDropManagerInput(this, mitoBenchWindow);
         dragAndDropManagerInput.createEvent();
 
+    }
+
+    public String[] getSampleNames() {
+
+        String[] ids = new String[getSelectedRows().size()];
+
+        ObservableList<ObservableList> selection = getSelectedRows();
+        int index_id = getColIndex("ID");
+
+        int i = 0;
+        for(ObservableList row : selection){
+            ids[i] = (String) row.get(index_id);
+            i++;
+        }
+
+        return ids;
     }
 }

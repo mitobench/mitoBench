@@ -34,6 +34,12 @@ The supported file formats are:
 
   Writes all data as Excel file.
 
+* Nexus format (.nex)
+
+  Writes all data into NEXUS format. This requires aligned sequences. mitoBench only
+  tests whether all sequences have the same length. It's in the user's responsibility to make
+  sure that the sequences are aligned.
+
 * Mitoproject format (.mitoproj)
 
   Writes all (eventually filtered) data plus grouping information into a text file.

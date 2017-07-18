@@ -30,7 +30,7 @@ import view.dialogues.error.HSDErrorDialogue;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
-import view.table.controller.DrapAndDropEventManager;
+import view.table.controller.DrapAndDropManagerDB;
 import view.table.controller.TableControllerDB;
 import view.table.controller.TableControllerUserBench;
 import io.dialogues.Export.ExportDialogue;
@@ -54,7 +54,7 @@ public class FileMenu {
     private StatisticsMenu toolsMenu;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
-    private DrapAndDropEventManager drapAndDropEventMaganer;
+    private DrapAndDropManagerDB drapAndDropEventMaganer;
     private Logger LOG;
     private LogClass logClass;
     private DatabaseConnectionController databaseConnectionController;
@@ -164,7 +164,7 @@ public class FileMenu {
             }
 
             if(drapAndDropEventMaganer==null){
-                drapAndDropEventMaganer = new DrapAndDropEventManager(tableControllerDB, tableControllerUserBench);
+                drapAndDropEventMaganer = new DrapAndDropManagerDB(tableControllerDB, tableControllerUserBench);
                 drapAndDropEventMaganer.createEvent();
             }
 

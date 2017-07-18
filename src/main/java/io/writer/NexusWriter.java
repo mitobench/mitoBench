@@ -1,5 +1,6 @@
 package io.writer;
 
+import com.sun.corba.se.spi.orb.Operation;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -7,7 +8,7 @@ import view.table.MTStorage;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.*;
-import java.util.List;
+import java.util.*;
 
 import static java.io.File.separator;
 
@@ -40,6 +41,8 @@ import static java.io.File.separator;
 public class NexusWriter implements IOutputData {
 
 
+    private int length;
+
     public NexusWriter(){
     }
 
@@ -47,60 +50,99 @@ public class NexusWriter implements IOutputData {
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
         Writer writer = null;
         try {
-            if(!file.endsWith(".nex"))
-                file = file + ".nex";
 
-            writer = new BufferedWriter(new FileWriter(new File(file)));
-
-            int ntax = tableController.getSelectedRows().size();
-            int nchar = 0;
-            String missing_data_symbol = "N";
-            // write header
-            String header = "#NEXUS\nBegin data;\nDimensions ntax=" + ntax + " nchar=" + nchar + ";\n" +
-                    "Format datatype=dna missing=" + missing_data_symbol + " gap=-;\nMatrix\n";
-
-            writer.write(header);
-
-            if(sequencesHaveSameLength(tableController.getDataTable().getMtStorage(),
+            MTStorage mtStorage = tableController.getDataTable().getMtStorage();
+            if(sequencesHaveSameLength(mtStorage,
                     tableController.getTableColumnByName("ID"),
-                    tableController))
+                    tableController)){
 
-            // write view.data
-            for (ObservableList entry :  tableController.getViewDataCurrent()) {
-                String text = "";
-                for(int i = 0; i < entry.size(); i++){
-                    if(i == entry.size()-1){
-                        text += entry.get(i) + "\n";
-                    } else {
-                        text += entry.get(i) + separator;
+                if(!file.endsWith(".nex"))
+                    file = file + ".nex";
+
+                writer = new BufferedWriter(new FileWriter(new File(file)));
+
+                int ntax = tableController.getSelectedRows().size();
+                int nchar = length;
+                String missing_data_symbol = "N";
+                // write header
+                String header = "#NEXUS\nBegin data;\nDimensions ntax=" + ntax + " nchar=" + nchar + ";\n" +
+                        "Format datatype=dna Interleave=yes missing=" + missing_data_symbol + " gap=-;\nMatrix\n";
+
+                writer.write(header);
+
+                // get IDs
+                String[] ids = tableController.getSampleNames();
+                int length_longest=0;
+                for(String s : ids){
+                    if(s.length() > length_longest)
+                        length_longest = s.length();
+                }
+                length_longest +=3;
+
+
+                // write IDs and sequences (50 characters of sequence per line)
+                int sequencePositionCounter = 0;
+                int maxCharactersPerLine = 70;
+
+                while (sequencePositionCounter < length){
+                    for(String id : ids){
+                        String id_extended = String.format("%-" + length_longest + "." + length_longest + "s", id);
+                        //writer.write(id_extended + "" + mtStorage.getData().get(id) + "\n");
+//
+                        if(sequencePositionCounter+maxCharactersPerLine > length){
+                            writer.write(id_extended + "" + mtStorage.getData().get(id).substring(sequencePositionCounter,
+                                    length) + "\n");
+                        } else {
+                            writer.write(id_extended + "" + mtStorage.getData().get(id).substring(sequencePositionCounter,
+                                    sequencePositionCounter+maxCharactersPerLine)+ "\n");
+                        }
                     }
+                    sequencePositionCounter += maxCharactersPerLine;
+                    writer.write("\n");
                 }
 
-                writer.write(text);
                 writer.write(";\nEnd;");
+
+
+            } else {
+                throw new Exception("Sequences do not have the same length!");
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         finally {
-
             writer.flush();
             writer.close();
         }
     }
 
+
+    /**
+     * This method iterates over all sequences and test for equal length.
+     *
+     * @param mtStorage
+     * @param id
+     * @param tableController
+     * @return
+     */
     private boolean sequencesHaveSameLength(MTStorage mtStorage, TableColumn id, TableControllerUserBench tableController) {
-        int length;
+        length = 0;
 
         for (Object row : tableController.getTable().getItems()) {
 
-                String id_val = (String) id.getCellObservableValue(row).getValue();
-                int length_seq = mtStorage.getData().get(id_val).length();
+            String id_val = (String) id.getCellObservableValue(row).getValue();
 
-
+            if(length==0){
+                length = mtStorage.getData().get(id_val).length();
+            } else{
+                if(length!=mtStorage.getData().get(id_val).length()){
+                    return false;
+                }
+            }
         }
 
-        return false;
+        return true;
     }
 
     @Override

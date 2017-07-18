@@ -398,6 +398,38 @@ public abstract class ATableController {
 
 
 
+    /**
+     * Test whether table has entries or not.
+     * @return
+     */
+
+    public boolean isTableEmpty(){
+        if(table.getItems()!=null && table.getItems().size()>0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * This method removes all entries and deletes the grouping.
+     */
+    public void cleartable(){
+        // clean view.data model
+        data.removeAll(data);
+        // clean table view
+        table.getItems().removeAll(table.getItems());
+        dataTable.getMtStorage().getData().clear();
+        dataTable.getDataTable().clear();
+        table.getColumns().removeAll(table.getColumns());
+        if(groupController!=null){
+            groupController.clear();
+            groupController.clearGrouping();
+        }
+    }
+
+
+
 
     /*
 
@@ -585,12 +617,10 @@ public abstract class ATableController {
         return count;
     }
 
+
+
     /*
-
-
-                Setter
-
-
+         Setter
 
      */
 
@@ -634,28 +664,6 @@ public abstract class ATableController {
 
     }
 
-
-    public boolean isTableEmpty(){
-        if(table.getItems()!=null && table.getItems().size()>0){
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public void cleartable(){
-        // clean view.data model
-        data.removeAll(data);
-        // clean table view
-        table.getItems().removeAll(table.getItems());
-        dataTable.getMtStorage().getData().clear();
-        dataTable.getDataTable().clear();
-        table.getColumns().removeAll(table.getColumns());
-        if(groupController!=null){
-            groupController.clear();
-            groupController.clearGrouping();
-        }
-    }
 
 
 }
