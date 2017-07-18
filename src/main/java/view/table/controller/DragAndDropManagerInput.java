@@ -1,6 +1,5 @@
 package view.table.controller;
 
-import javafx.collections.ObservableList;
 import javafx.scene.input.*;
 import view.MitoBenchWindow;
 
@@ -14,15 +13,14 @@ public class DragAndDropManagerInput {
 
     private TableControllerUserBench tableUserController;
     private DataFormat myformat;
-    private ObservableList<ObservableList> selected;
     private MitoBenchWindow mito;
 
-    public DragAndDropManagerInput(TableControllerUserBench tableUser, MitoBenchWindow mitoBenchWindow){
+    public DragAndDropManagerInput(TableControllerUserBench tablecontroller, MitoBenchWindow mitoBenchWindow){
 
         if(myformat == null){
             myformat = new DataFormat("tabledataInput");
         }
-        this.tableUserController = tableUser;
+        this.tableUserController = tablecontroller;
         mito = mitoBenchWindow;
     }
 
@@ -35,25 +33,6 @@ public class DragAndDropManagerInput {
 
 
         tableUserController.getTable().setOnDragExited(event -> tableUserController.getTable().setStyle("-fx-border-color: #C6C6C6;"));
-
-        tableUserController.getTable().setOnDragDropped(event -> mouseDragDropped());
-
-
-
-    }
-
-
-    private  void mouseDragOver(final DragEvent e) {
-        tableUserController.getTable().setStyle("-fx-border-color: #ff525e;"
-                + "-fx-border-width: 5;"
-                + "-fx-background-color: #C6C6C6;"
-                + "-fx-border-style: solid;");
-        e.acceptTransferModes(TransferMode.ANY);
-    }
-
-
-    private void mouseDragDropped() {
-
         tableUserController.getTable().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -68,6 +47,16 @@ public class DragAndDropManagerInput {
         });
 
     }
+
+
+    private  void mouseDragOver(final DragEvent e) {
+        tableUserController.getTable().setStyle("-fx-border-color: #ff525e;"
+                + "-fx-border-width: 5;"
+                + "-fx-background-color: #C6C6C6;"
+                + "-fx-border-style: solid;");
+        e.acceptTransferModes(TransferMode.ANY);
+    }
+
 
 
 }

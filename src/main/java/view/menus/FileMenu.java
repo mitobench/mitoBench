@@ -244,7 +244,7 @@ public class FileMenu {
                     mitoBenchWindow.getTabpane_statistics().getSelectionModel().getSelectedItem()
             );
             try {
-                statisticsWriter.writeData(sad.getOutFile(), tableController);
+                statisticsWriter.writeData(sad.getOutFile(), tableControllerUserBench);
             } catch (IOException e) {
                 e.printStackTrace();
             }
