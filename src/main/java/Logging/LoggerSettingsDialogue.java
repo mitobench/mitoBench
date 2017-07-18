@@ -97,7 +97,7 @@ public class LoggerSettingsDialogue extends APopupDialogue{
 
         applyBtn.setOnAction(e -> {
             //logger.updateLog4jConfiguration(filePathLabel.getText());
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
+            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
             Date date = new Date();
             String file_source = System.getProperty("user.dir") + File.separator + "mito_log_tmp.log";
             String file_target = filePathLabel.getText() + File.separator + "mitobench_log_" + dateFormat.format(date) + ".log";
@@ -116,6 +116,7 @@ public class LoggerSettingsDialogue extends APopupDialogue{
         discardLogFile.setOnAction(e -> {
             // remove tmp log file
             try {
+
                 File f = new File(System.getProperty("user.dir") + File.separator + "mito_log_tmp.log");
                 if(f.exists()){
                     f.delete();
