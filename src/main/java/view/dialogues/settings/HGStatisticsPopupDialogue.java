@@ -69,54 +69,42 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
     }
 
     public void addListener(){
-        okBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                if((textField.getText().equals("") || textField.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
-                    textField.setText("Please enter list here.");
+        okBtn.setOnAction(e -> {
+            if((textField.getText().equals("") || textField.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
+                textField.setText("Please enter list here.");
 
+            } else {
+                String[] hg_list;
+                if(default_list_checkbox.isSelected()){
+                    hg_list = haploStatistics.getChartController().getCoreHGs();
                 } else {
-                    String[] hg_list;
-                    if(default_list_checkbox.isSelected()){
-                        hg_list = haploStatistics.getChartController().getCoreHGs();
-                    } else {
-                        hg_list = textField.getText().split(",");
-                    }
-                    String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
-                    haploStatistics.count(hg_list_trimmed);
-
-                    TableView table = haploStatistics.writeToTable(parse(haploStatistics.getData_all()));
-                    Tab tab = new Tab();
-                    tab.setId("tab_statistics");
-                    tab.setText("Count statistics");
-                    tab.setContent(table);
-                    statsTabPane.getTabs().add(tab);
-                    statsTabPane.getSelectionModel().select(tab);
-
-                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
-
-                    dialog.close();
+                    hg_list = textField.getText().split(",");
                 }
+                String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+                haploStatistics.count(hg_list_trimmed);
 
+                TableView table = haploStatistics.writeToTable(parse(haploStatistics.getData_all()));
+                Tab tab = new Tab();
+                tab.setId("tab_statistics");
+                tab.setText("Count statistics");
+                tab.setContent(table);
+                statsTabPane.getTabs().add(tab);
+                statsTabPane.getSelectionModel().select(tab);
 
+                LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
+
+                dialog.close();
             }
+
+
         });
 
         Tooltip tp = new Tooltip("Default list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
-        default_list_checkbox.setOnMouseEntered(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
-                tp.show(default_list_checkbox, p.getX(), p.getY());
-            }
+        default_list_checkbox.setOnMouseEntered(event -> {
+            Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
+            tp.show(default_list_checkbox, p.getX(), p.getY());
         });
-        default_list_checkbox.setOnMouseExited(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                tp.hide();
-            }
-        });
+        default_list_checkbox.setOnMouseExited(event -> tp.hide());
     }
 
     public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {

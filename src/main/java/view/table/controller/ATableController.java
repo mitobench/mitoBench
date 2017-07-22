@@ -594,27 +594,31 @@ public abstract class ATableController {
         return groupController;
     }
 
-    public int getCountPerHG(String hg, String group, int colIndexHG, int colIndexGroup){
+    public List<String> getCountPerHG(String hg, String group, int colIndexHG, int colIndexGroup){
 
+        List<String> hgs = new ArrayList<>();
         int count = 0;
         ObservableList<ObservableList> selection = getSelectedRows();
         if(colIndexGroup == -1){
             for(int i = 0; i < selection.size(); i++){
                 ObservableList list = selection.get(i);
                 if(list.get(colIndexHG).equals(hg)){
-                    count++;
+                    hgs.add(hg);
+                    //count++;
                 }
             }
         } else {
             for(int i = 0; i < selection.size(); i++){
                 ObservableList list = selection.get(i);
                 if(list.get(colIndexGroup).equals(group) && list.get(colIndexHG).equals(hg)){
-                    count++;
+                    hgs.add(hg);
+                    //count++;
                 }
             }
         }
 
-        return count;
+        //return count;
+        return hgs;
     }
 
 

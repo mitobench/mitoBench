@@ -90,23 +90,27 @@ public class ChartController {
 
     /**
      * This method adds all data to the stacked bar chart.
-     *
-     * @param stackedBar
+     *  @param stackedBar
      * @param selection_haplogroups
      * @param selection_groups
+     * @param hgs
      */
 
-    public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, String[] selection_groups) {
+    public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, String[] selection_groups, String hgs) {
 
         // get number of elements per group
         int[] numberOfElementsPerCaregory = getNumberOfElementsPerCategory(selection_groups);
 
+        // hgs to display
+        String[] hg_list = hgs.split(",");
+
+
         // reduce haplogroups to maximum size of 20
-        if (selection_haplogroups.length >= 20) {
+        //if (selection_haplogroups.length >= 20) {
 
             stackedBar.clearData();
             stackedBar.setCategories(selection_groups);
-            HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, coreHGs);
+            HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, hg_list);
 
             HashMap<String, List<XYChart.Data<String, Number>>> data_all;
             data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups);
@@ -125,33 +129,42 @@ public class ChartController {
                 }
             }
 
-            if(data_all.containsKey("Others"))
+            if(data_all.containsKey("Others")){
+
+                for(int i = 0; i < selection_groups.length; i++){
+                    data_all.get("Others").get(i).setYValue(roundValue(
+                            (data_all.get("Others").get(i).getYValue().doubleValue() / numberOfElementsPerCaregory[i]) * 100));
+                }
+
                 stackedBar.addSeries(data_all.get("Others"), "Others");
 
-
-        } else {        // add data if less than 20 haplogroups
-
-            stackedBar.clearData();
-            stackedBar.setCategories(selection_groups);
-
-            // consider Hgs only once per group
-            if (selection_haplogroups.length != 0) {
-                for (int i = 0; i < selection_haplogroups.length; i++) {
-                    List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
-                    // fill data_list : <group(i), countHG >
-                    for (int j = 0; j < selection_groups.length; j++) {
-                        double count_per_HG = tableController.getCountPerHG(selection_haplogroups[i],
-                                selection_groups[j], tableController.getColIndex("Haplogroup"),
-                                tableController.getColIndex("Grouping"));
-
-                        double val = roundValue((count_per_HG/ numberOfElementsPerCaregory[j]) * 100);
-                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], val);
-                        data_list.add(data);
-                    }
-                    stackedBar.addSeries(data_list, selection_haplogroups[i]);
-                }
             }
-        }
+
+
+
+//        } else {        // add data if less than 20 haplogroups
+//
+//            stackedBar.clearData();
+//            stackedBar.setCategories(selection_groups);
+//
+//            // consider Hgs only once per group
+//            if (selection_haplogroups.length != 0) {
+//                for (int i = 0; i < selection_haplogroups.length; i++) {
+//                    List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
+//                    // fill data_list : <group(i), countHG >
+//                    for (int j = 0; j < selection_groups.length; j++) {
+//                        double count_per_HG = tableController.getCountPerHG(selection_haplogroups[i],
+//                                selection_groups[j], tableController.getColIndex("Haplogroup"),
+//                                tableController.getColIndex("Grouping"));
+//
+//                        double val = roundValue((count_per_HG/ numberOfElementsPerCaregory[j]) * 100);
+//                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], val);
+//                        data_list.add(data);
+//                    }
+//                    stackedBar.addSeries(data_list, selection_haplogroups[i]);
+//                }
+//            }
+//        }
     }
 
 
@@ -170,6 +183,7 @@ public class ChartController {
                                                                          String[] selection_haplogroups,
                                                                          String[] selection_groups) {
 
+
         HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<>();
 
         if(hg_core_list.size()>0){
@@ -178,14 +192,19 @@ public class ChartController {
 
                 if(hgs_summed.keySet().contains(hg_core)){
                     for (String key : hgs_summed.keySet()) {
+
                         ArrayList<String> subHGs = hgs_summed.get(key);
                         List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
                         for (int i = 0; i < selection_groups.length; i++) {
                             String group = selection_groups[i];
+
+
                             if(!group.equals("Undefined")){
                                 double count = 0.0;
                                 for (String hg : subHGs) {
-                                    count += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+
+                                    List<String> hgs = tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+                                    count += hgs.size();
                                 }
 
                                 XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, roundValue(count));
@@ -226,7 +245,7 @@ public class ChartController {
                         int count = tableController.getCountPerHG(hg,
                                 group,
                                 tableController.getColIndex("Haplogroup"),
-                                tableController.getColIndex("Grouping"));
+                                tableController.getColIndex("Grouping")).size();
                         XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, roundValue(count));
                         data_list.add(data);
 
@@ -274,7 +293,7 @@ public class ChartController {
                 if(!group.equals("Undefined")){
                     for (String hg : unused_hgs) {
                         count_others += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"),
-                                tableController.getColIndex("Grouping"));
+                                tableController.getColIndex("Grouping")).size();
                     }
                     XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(group, count_others);
                     data_list.add(data);
@@ -499,7 +518,7 @@ public class ChartController {
                         group,
                         tableController.getColIndex("Haplogroup"),
                         tableController.getColIndex("Grouping")
-                );
+                ).size();
 
                 if(count_per_HG!=0){
                     if (!hash_tmp.containsKey(hg)) {

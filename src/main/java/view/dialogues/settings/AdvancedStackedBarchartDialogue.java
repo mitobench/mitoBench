@@ -22,23 +22,37 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
     private TableView<ObservableList> table;
     private Button applyBtn;
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
+    private TextField textField_hgList;
 
 
     public AdvancedStackedBarchartDialogue(String title, String[] groups, LogClass logClass) {
         super(title, logClass);
+        dialogGrid.setId("stackedBarChartDialogue");
+
         addComponents(groups);
         allowDragAndDrop();
 
-        show();
+        show(300,300);
     }
 
     private void addComponents(String[] groups) {
-        applyBtn = new Button("Apply order");
+        applyBtn = new Button("Apply");
         applyBtn.setId("stackedBarApplyBtn");
-        dialogGrid.setId("stackedBarChartDialogue");
-        dialogGrid.add(new Label("Please choose stack order."), 0,0);
-        dialogGrid.add( setTable(groups), 0,1);
-        dialogGrid.add(applyBtn, 0,2);
+
+        Label label_stackOrder = new Label("Please choose stack order.");
+        label_stackOrder.setId("id_label_stackOrder");
+        Label label_HgList = new Label("Please choose Haplogroups.");
+        label_HgList.setId("id_label_HgList");
+
+        textField_hgList = new TextField("H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
+        textField_hgList.setId("id_textField_hgList");
+
+        dialogGrid.add(label_HgList, 0,0);
+        dialogGrid.add(textField_hgList, 0,1);
+        dialogGrid.add(new Separator(), 0,2);
+        dialogGrid.add(label_stackOrder, 0,3);
+        dialogGrid.add( setTable(groups), 0,4);
+        dialogGrid.add(applyBtn, 0,5);
 
     }
 
@@ -132,6 +146,10 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
         }
         return entries;
 
+    }
+
+    public TextField getTextField_hgList() {
+        return textField_hgList;
     }
 
     public Button getApplyBtn() {

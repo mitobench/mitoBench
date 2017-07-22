@@ -300,7 +300,13 @@ public class VisualizationMenu {
 
 
                     //chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
-                    chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, advancedStackedBarchartDialogue.getStackOrder());
+                    chartController.addDataStackedBarChart(
+                            stackedBar,
+                            selection_haplogroups,
+                            advancedStackedBarchartDialogue.getStackOrder(),
+                            advancedStackedBarchartDialogue.getTextField_hgList().getText()
+                    );
+
                     stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
                     // add settings
@@ -313,12 +319,12 @@ public class VisualizationMenu {
                         e1.printStackTrace();
                     }
 
-                    if(selection_haplogroups.length > 20){
+                    //if(selection_haplogroups.length > 20){
                         colorScheme.setNewColors(stackedBar);
                         stackedBar.addListener();
-                    } else {
-                        colorScheme.setNewColorsLess20(stackedBar);
-                    }
+//                    } else {
+//                        colorScheme.setNewColorsLess20(stackedBar);
+//                    }
 
                     advancedStackedBarchartDialogue.close();
                 });
