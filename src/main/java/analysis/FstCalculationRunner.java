@@ -96,25 +96,15 @@ public class FstCalculationRunner {
     }
 
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
-
+        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
         Filter filter = new Filter();
+        Linearization linearization = new Linearization();
 
         usableLoci = filter.getUsableLoci(
                 data,
                 missing_data_character,
                 Double.parseDouble(field_level_missing_data)
         );
-
-        Linearization linearization = new Linearization();
-        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
-
-//        StandardAMOVA standardAMOVA = new StandardAMOVA(usableLoci);
-//        standardAMOVA.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
-//        standardAMOVA.setData(data);
-//
-//        fsts = standardAMOVA.calculateModifiedFst();
-//        groupnames = standardAMOVA.getGroupnames();
-
 
         FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);
         fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
@@ -126,12 +116,14 @@ public class FstCalculationRunner {
 
         // write to file
         writer = new Writer();
-        writer.writeResultsFstToString(fsts,
+        writer.writeResultsFstToString(
+                fsts,
                 groupnames,
                 usableLoci,
                 Double.parseDouble(field_level_missing_data)
         );
 
+        writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
 
         if(runSlatkin){
             fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
@@ -146,7 +138,7 @@ public class FstCalculationRunner {
         tableControllerFstValues = new TableControllerFstValues(mitobench.getLogClass());
         tableControllerFstValues.init();
 
-       // writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
+
 
         writeLog(runSlatkin, runReynolds, field_level_missing_data);
 
@@ -166,7 +158,6 @@ public class FstCalculationRunner {
     public void writeToTable() {
 
         writeTabPane(
-                fsts,
                 "Fst values",
                 "fst_values"
         );
@@ -180,7 +171,7 @@ public class FstCalculationRunner {
 
     }
 
-    private void writeTabPane(double[][] fsts, String tab_header, String id){
+    private void writeTabPane(String tab_header, String id){
 
         ScrollPane scrollpane_result = new ScrollPane();
         String text = writer.getResult_as_string();

@@ -102,11 +102,11 @@ public class HeatMapLegend {
         //pane.setPadding(new Insets(10,10,10,10));
 
         //double[] steps = new double[]{0.0,0.2,0.4,0.6,0.8,1.0};
-        double[] steps = new double[7];
-        double add = MAX / 6.0;
+        double[] steps = new double[4];
+        double add = MAX / 3.0;
         double val = MIN;
         steps[0] = round(val,2);
-        steps[6] = round(MAX, 2);
+        steps[3] = round(MAX, 2);
         for(int d = 1; d < steps.length-1; d++){
             steps[d] = round((val + add), 2);
             val += add;
