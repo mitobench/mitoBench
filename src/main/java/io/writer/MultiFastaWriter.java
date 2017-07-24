@@ -11,10 +11,8 @@ import java.io.*;
  */
 public class MultiFastaWriter implements IOutputData  {
     private final MTStorage mtStorage;
-    private TableControllerUserBench tableController;
 
-    public MultiFastaWriter(TableControllerUserBench tableController, MTStorage mtStorage){
-        this.tableController = tableController;
+    public MultiFastaWriter(MTStorage mtStorage){
         this.mtStorage = mtStorage;
     }
 
@@ -29,7 +27,7 @@ public class MultiFastaWriter implements IOutputData  {
             writer = new BufferedWriter(new FileWriter(new File(file)));
 
             // write view.data
-            this.tableController.getTableColumnByName("ID");
+            tableController.getTableColumnByName("ID");
             String text = "";
 
             for(String id : mtStorage.getData().keySet()){

@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.table.controller.TableControllerUserBench;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,7 @@ public class ExportDialogue extends Application {
         alert.setHeaderText("We need to know which kind of output you would like to save here and your desired grouping category.");
         alert.setContentText("Choose your desired export format.");
 
+        ButtonType fasta_button = new ButtonType("FASTA");
         ButtonType arp_button = new ButtonType("ARP");
         ButtonType beast_button = new ButtonType("BEAST");
         ButtonType csv_button = new ButtonType("CSV");
@@ -58,7 +60,7 @@ public class ExportDialogue extends Application {
         List<String> options = this.columnsInTable;
 
 
-        alert.getButtonTypes().setAll(arp_button, beast_button, csv_button, xlsx_button, mito_button,
+        alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, csv_button, xlsx_button, mito_button,
                 nexus_button, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -77,6 +79,18 @@ public class ExportDialogue extends Application {
                 ARPWriter arpwriter = new ARPWriter(tableController);
                 arpwriter.setGroups(selection);
                 arpwriter.writeData(outfileDB, tableController);
+            }
+            //Beast output
+        } else  if (result.get() == fasta_button) {
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
+            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+            saveAsDialogue.start(new Stage());
+            if(saveAsDialogue.getOutFile() != null) {
+                String outfileFASTA = saveAsDialogue.getOutFile();
+                LOG.info("Export data into multi FASTA format. File: " + outfileFASTA);
+                MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage());
+                multiFastaWriter.writeData(outfileFASTA, tableController);
+
             }
             //Beast output
         } else if (result.get() == beast_button) {
