@@ -1042,7 +1042,6 @@ public class HeatChart {
      * @return true if the x-axis values will be displayed, false otherwise.
      */
     public boolean isShowXAxisValues() {
-        //TODO Could get rid of these flags and use a frequency of -1 to signal no values.
         return showXAxisValues;
     }
 

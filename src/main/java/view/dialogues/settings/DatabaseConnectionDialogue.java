@@ -3,10 +3,7 @@ package view.dialogues.settings;
 import Logging.LogClass;
 import controller.DatabaseConnectionController;
 import io.Exceptions.DatabaseConnectionException;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.dialogues.error.DatabaseErrorDialogue;
 import view.table.controller.ATableController;
@@ -16,8 +13,7 @@ import java.sql.SQLException;
 /**
  * Created by neukamm on 02.02.17.
  */
-public class DatabaseConnectionDialogue {
-    private Logger LOG;
+public class DatabaseConnectionDialogue extends ATabpaneDialogue {
     private DatabaseConnectionController databaseConnectionController;
     private Button loginBtn;
     private String username;
@@ -26,25 +22,21 @@ public class DatabaseConnectionDialogue {
     private TextField usernamme_field;
     private  ATableController table;
     private MitoBenchWindow mitoBenchWindow;
-    private GridPane dialogGrid;
 
-    public DatabaseConnectionDialogue(ATableController tableUserDB, LogClass logClass, MitoBenchWindow mito, Tab tab,
+    public DatabaseConnectionDialogue(String title, ATableController tableUserDB, LogClass logClass, MitoBenchWindow mito,
                                       DatabaseConnectionController databaseConnectionController){
+        super(title, logClass);
         mitoBenchWindow = mito;
         this.databaseConnectionController = databaseConnectionController;
         table = tableUserDB;
         LOG = logClass.getLogger(this.getClass());
         setComponents();
-        addListener(tab);
+        addListener();
 
 
     }
 
     private void setComponents(){
-        dialogGrid = new GridPane();
-        dialogGrid.setAlignment(Pos.CENTER);
-        dialogGrid.setHgap(10);
-        dialogGrid.setVgap(10);
         dialogGrid.setId("connect_to_database");
 
         Label title_label = new Label("Connect to database");
@@ -74,12 +66,12 @@ public class DatabaseConnectionDialogue {
     }
 
 
-    private void addListener(Tab tab){
+    private void addListener(){
         loginBtn.setOnAction(e -> {
             username = usernamme_field.getText();
             password = password_field.getText();
 
-            mitoBenchWindow.getTabpane_statistics().getTabs().remove(tab);
+            mitoBenchWindow.getTabpane_statistics().getTabs().remove(getTab());
 
             databaseConnectionController.setPassword(password);
             databaseConnectionController.setUserName(username);
@@ -95,6 +87,7 @@ public class DatabaseConnectionDialogue {
                         databaseConnectionController);
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addFunctionality(table);
+                mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
                 LOG.info("Login to database with username " + databaseConnectionController.getUserName()+ " successful.");
 
             } catch (SQLException e1) {
@@ -107,23 +100,6 @@ public class DatabaseConnectionDialogue {
             }
 
         });
-    }
-
-
-    public GridPane getDialogGrid() {
-        return dialogGrid;
-    }
-
-    public Button getLoginBtn() {
-        return loginBtn;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
 }

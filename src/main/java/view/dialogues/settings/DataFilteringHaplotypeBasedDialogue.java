@@ -12,7 +12,7 @@ import view.MitoBenchWindow;
 /**
  * Created by neukamm on 06.03.17.
  */
-public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
+public class DataFilteringHaplotypeBasedDialogue extends ATabpaneDialogue {
     private final MitoBenchWindow mitoBenchWindow;
     private TextField field_mutation;
     private TextField field_distance;
@@ -24,7 +24,6 @@ public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
         mitoBenchWindow = mito;
         addComponents();
         addListener();
-        show();
 
     }
 
@@ -74,7 +73,7 @@ public class DataFilteringHaplotypeBasedDialogue extends APopupDialogue {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            close();
+            mitoBenchWindow.getTabpane_statistics().getTabs().remove(getTab());
         });
 
 

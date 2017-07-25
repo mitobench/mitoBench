@@ -22,7 +22,6 @@ public class AddToGroupDialog extends APopupDialogue{
 
 
     private ComboBox comboBox;
-    private Stage dialog;
     private ATableController tableController;
 
 

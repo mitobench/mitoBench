@@ -1,8 +1,10 @@
 package database;
 
+import io.Exceptions.DatabaseConnectionException;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
+import view.dialogues.error.DatabaseErrorDialogue;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,8 +22,7 @@ public class DatabaseAccessor {
     public DatabaseAccessor() { }
 
     public boolean connectToDatabase(String driverClassName, String dbURL, String username_root, String password_root,
-                                     String username, String password)
-            throws SQLException, ClassNotFoundException {
+                                     String username, String password) throws SQLException, ClassNotFoundException {
 
         connection = null;
         String dbUsername, dbPassword;
@@ -29,21 +30,27 @@ public class DatabaseAccessor {
         boolean login = false;
 
         Class.forName(driverClassName);
-        connection = DriverManager.getConnection(dbURL, username_root, password_root);
-        Statement stmt = connection.createStatement();
-        query = "SELECT alias, passwd FROM mitodb_users;";
-        stmt.executeQuery(query);
-        ResultSet rs = stmt.getResultSet();
+        try{
+            connection = DriverManager.getConnection(dbURL, username_root, password_root);
+            Statement stmt = connection.createStatement();
+            query = "SELECT alias, passwd FROM mitodb_users;";
+            stmt.executeQuery(query);
+            ResultSet rs = stmt.getResultSet();
 
-        while(rs.next()){
-            dbUsername = rs.getString("alias");
-            dbPassword = rs.getString("passwd");
+            while(rs.next()){
+                dbUsername = rs.getString("alias");
+                dbPassword = rs.getString("passwd");
 
-            if(dbUsername.equals(username) && dbPassword.equals(password)){
-                login = true;
+                if(dbUsername.equals(username) && dbPassword.equals(password)){
+                    login = true;
+                }
             }
+            return login;
+
+        } catch (Exception e){
+            DatabaseErrorDialogue databaseErrorDialogue = new DatabaseErrorDialogue();
+            return false;
         }
-        return login;
 
     }
 

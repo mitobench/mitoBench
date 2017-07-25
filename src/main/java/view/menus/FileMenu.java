@@ -142,28 +142,26 @@ public class FileMenu {
         importFromDB.setOnAction(t -> {
             if(databaseConnectionController == null || !databaseConnectionController.isLoggedIn()){
                 databaseConnectionController = new DatabaseConnectionController();
-                Tab tab = new Tab("Database Login");
 
                 DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(
+                        "Database Login",
                         tableControllerDB,
                         logClass,
                         mitoBenchWindow,
-                        tab,
                         databaseConnectionController
                 );
 
-                GridPane dialogue = databaseConnectionDialogue.getDialogGrid();
-                tab.setContent(dialogue);
-                mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
+                mitoBenchWindow.getTabpane_statistics().getTabs().add(databaseConnectionDialogue.getTab());
 
             } else {
                 // open search mask to specify which data should be loaded
                 DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow, databaseConnectionController);
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addFunctionality(databaseConnectionController.getTable());
+                mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
             }
 
-            if(drapAndDropEventMaganer==null){
+            if(drapAndDropEventMaganer == null){
                 drapAndDropEventMaganer = new DrapAndDropManagerDB(tableControllerDB, tableControllerUserBench);
                 drapAndDropEventMaganer.createEvent();
             }

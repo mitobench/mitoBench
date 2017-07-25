@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by neukamm on 10.01.17.
  */
-public class HGStatisticsPopupDialogue extends APopupDialogue {
+public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
 
     private TextField textField;
     private Button okBtn;
@@ -30,7 +30,6 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
     public HGStatisticsPopupDialogue(String title, LogClass LOGClass){
         super(title, LOGClass);
         dialogGrid.setId("statistics_popup");
-        show();
 
     }
 
@@ -84,6 +83,9 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
                 haploStatistics.count(hg_list_trimmed);
 
                 TableView table = haploStatistics.writeToTable(parse(haploStatistics.getData_all()));
+
+                statsTabPane.getTabs().remove(getTab());
+
                 Tab tab = new Tab();
                 tab.setId("tab_statistics");
                 tab.setText("Count statistics");
@@ -93,7 +95,8 @@ public class HGStatisticsPopupDialogue extends APopupDialogue {
 
                 LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
 
-                dialog.close();
+
+
             }
 
 

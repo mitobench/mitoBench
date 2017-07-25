@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by neukamm on 15.02.17.
  */
-public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
+public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
 
     private TableView<ObservableList> table;
     private Button applyBtn;
@@ -25,14 +25,13 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
     private TextField textField_hgList;
 
 
-    public AdvancedStackedBarchartDialogue(String title, String[] groups, LogClass logClass) {
+    public SettingsDialogueStackedBarchart(String title, String[] groups, LogClass logClass) {
         super(title, logClass);
         dialogGrid.setId("stackedBarChartDialogue");
 
         addComponents(groups);
         allowDragAndDrop();
 
-        show(300,300);
     }
 
     private void addComponents(String[] groups) {
@@ -151,9 +150,10 @@ public class AdvancedStackedBarchartDialogue  extends APopupDialogue {
     public TextField getTextField_hgList() {
         return textField_hgList;
     }
-
     public Button getApplyBtn() {
         return applyBtn;
     }
+
+
 
 }

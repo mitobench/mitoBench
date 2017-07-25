@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -54,18 +55,11 @@ public class StatisticsMenu {
         haploStats.setId("toolsMenu_stats_hg");
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                //if(tableController.getGroupController().isGroupingExists()) {
-                    haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
-                    HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
-                    hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
-//                } else {
-//                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
-//                            "No groups defined",
-//                            "Please define a grouping first.",
-//                            null,
-//                            "groupWarning");
-//
-//                }
+                haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
+                HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
+                hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
+                Tab tab = hgStatisticsPopupDialogug.getTab();
+                mito.getTabpane_statistics().getTabs().add(tab);
             }
         });
 

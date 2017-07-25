@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.charts.*;
 import view.dialogues.information.InformationDialogue;
-import view.dialogues.settings.AdvancedStackedBarchartDialogue;
+import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import view.table.controller.TableControllerUserBench;
 
 import java.io.FileNotFoundException;
@@ -287,8 +287,12 @@ public class VisualizationMenu {
                 String[] selection_haplogroups = cols[0];
                 String[] selection_groups = cols[1];
 
-                AdvancedStackedBarchartDialogue advancedStackedBarchartDialogue =
-                        new AdvancedStackedBarchartDialogue("Advanced Stacked Barchart Settings", selection_groups, logClass);
+                SettingsDialogueStackedBarchart advancedStackedBarchartDialogue =
+                        new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups, logClass);
+
+                // add dialog to statsTabPane
+                Tab tab = advancedStackedBarchartDialogue.getTab();
+                mito.getTabpane_visualization().getTabs().add(tab);
 
                 advancedStackedBarchartDialogue.getApplyBtn().setOnAction(e -> {
                     advancedStackedBarchartDialogue.getApplyBtn();
@@ -326,7 +330,9 @@ public class VisualizationMenu {
 //                        colorScheme.setNewColorsLess20(stackedBar);
 //                    }
 
-                    advancedStackedBarchartDialogue.close();
+                    //advancedStackedBarchartDialogue.close();
+                    // remove tab from tabpane
+                    mito.getTabpane_visualization().getTabs().remove(tab);
                 });
             } else {
                 InformationDialogue groupingWarningDialogue = new InformationDialogue(

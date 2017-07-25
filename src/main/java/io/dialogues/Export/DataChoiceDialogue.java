@@ -12,11 +12,11 @@ public class DataChoiceDialogue {
     private String selected;
 
     public DataChoiceDialogue(List<String> options) {
+
         ChoiceDialog<String> chd = new ChoiceDialog<String>(options.get(0), options);
         chd.setTitle("Choose Group");
         chd.setHeaderText("Choose group for export categorization.");
         Optional<String> result = chd.showAndWait();
-        String selected = "cancelled.";
         if (result.isPresent()) {
             this.selected = result.get();
         } else {

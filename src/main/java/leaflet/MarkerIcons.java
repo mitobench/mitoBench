@@ -23,7 +23,8 @@ public class MarkerIcons {
 
     // definition of all colours that can be used to color the marker icons
     // (https://github.com/pointhi/leaflet-color-markers)
-    // todo: using awesome-markers ? (https://github.com/lvoogdt/Leaflet.awesome-markers)
+    // TODO: using awesome-markers ? (https://github.com/lvoogdt/Leaflet.awesome-markers)
+    // TODO: or create own markers (just dot in different colors)
     private String iconColGreen = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png";
     private String iconColBlue = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png";
     private String iconColRed = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png";

@@ -97,7 +97,7 @@
 %%   - some old versions of tetex
 %%
 %%
-%% TODO:
+%%
 %% -) Rename backgrounds back to shaded-tb shade-lr
 %% -) Rename textborder back to rounded-small (consistent naming needed!)
 %% -) Rename headershade back to shade-lr, shade-tb, shade-tb-inverse
@@ -650,7 +650,7 @@ rmargin=\baposter@basemarginright,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % These functions take no arguments
-% TODO: For headerborder==none, use (\baposter@box@name outer tnw) instead!
+% For headerborder==none, use (\baposter@box@name outer tnw) instead!
 \newcommand{\baposter@box@headershape@rectangle}{%
 	(\baposter@box@name tnw) -- (\baposter@box@name nw) -- %
 	(\baposter@box@name ne) -- (\baposter@box@name tne)%
@@ -774,7 +774,7 @@ rmargin=\baposter@basemarginright,
 	% basis.
 	\setkeys[ba]{posterbox,poster}{#1}%
 	%
-	% TODO: Move all those assignments to the key macros!
+	% Move all those assignments to the key macros!
 	% Parse Keys%
 	\colorlet{bgColorOne}{\baposter@bgColorOne}
 	\colorlet{bgColorTwo}{\baposter@bgColorTwo}
@@ -900,7 +900,7 @@ rmargin=\baposter@basemarginright,
 		%
 		%%% Upper Right Corner%
 		% if below=auto, set it to the previous box
-		% TODO: We should generalize this to the previous box of the used column,
+		% We should generalize this to the previous box of the used column,
 		%       currently we use the previous box, which might be in a different column
 		\ifthenelse{\equal{\baposter@box@below}{auto}}{%
 			\edef\baposter@box@below{\@@previousbox}
@@ -979,7 +979,7 @@ rmargin=\baposter@basemarginright,
 			%% Header%
 			\debug{Header}%
 			\debug{Header-Shape: \baposter@box@headershape, header-border: \baposter@box@headerborder (\baposter@box@headerbordernr)}%
-			% TODO: Also turn this last ifcase construct into a handler function
+			% Also turn this last ifcase construct into a handler function
 			%       We only need to determine (fill|shade)(draw|)...
 			%       \baposterHeaderDrawBackground{bgColorOne}{bgColorTwo}{borderColor}
 			%       \baposterHeaderDrawBorder{borderColor}

@@ -1,12 +1,9 @@
 package view.dialogues.settings;
 
-import Logging.LogClass;
 import controller.DatabaseConnectionController;
 import database.DatabaseAccessor;
 import io.datastructure.Entry;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
@@ -23,12 +20,10 @@ import java.util.List;
 /**
  * Created by neukamm on 09.02.17.
  */
-public class DBSearchDialogue {
+public class DBSearchDialogue extends ATabpaneDialogue{
 
 
     private final MitoBenchWindow mito;
-    private final GridPane dialogGrid;
-    private final Tab tab;
     private final DatabaseConnectionController databaseConnectionController;
     private TextField textfield_selection_table;
     private TextField textfield_sql_statement_advanced;
@@ -37,18 +32,14 @@ public class DBSearchDialogue {
     private CheckBox checkBox_write_own_query;
     private CheckBox checkBox_get_all_data;
     private HashMap<String, List<Entry>> data;
-    private LogClass logClass;
 
-    public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow, DatabaseConnectionController databaseConnectionController){
-        logClass = mitoBenchWindow.getLogClass();
+    public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow,
+                            DatabaseConnectionController databaseConnectionController){
+
+        super(title, mitoBenchWindow.getLogClass());
         mito = mitoBenchWindow;
         this.databaseConnectionController = databaseConnectionController;
-        dialogGrid = new GridPane();
-        dialogGrid.setAlignment(Pos.CENTER);
-        dialogGrid.setHgap(10);
-        dialogGrid.setVgap(10);
         dialogGrid.setId("configure_sql_query");
-
 
         checkBox_write_own_query = new CheckBox("Own SQL statement");
         checkBox_get_all_data = new CheckBox("Get all data from mitoDB");
@@ -68,10 +59,6 @@ public class DBSearchDialogue {
         textfield_sql_statement_advanced.setEditable(false);
         textfield_sql_statement_advanced.setDisable(true);
 
-        // add to tab
-        tab = new Tab(title);
-        tab.setContent(dialogGrid);
-        mitoBenchWindow.getTabpane_statistics().getTabs().add(tab);
     }
 
 
@@ -157,7 +144,7 @@ public class DBSearchDialogue {
                     tablecontroller.updateTable(data);
                     //dialog.close();
                     mito.splitTablePane(mito.getTableControllerDB());
-                    mito.getTabpane_statistics().getTabs().remove(tab);
+                    mito.getTabpane_statistics().getTabs().remove(getTab());
                 }
             } catch (JSQLParserException e) {
                 message.setTextFill(Color.RED);

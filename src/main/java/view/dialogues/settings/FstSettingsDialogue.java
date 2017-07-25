@@ -21,7 +21,7 @@ import java.util.Arrays;
 /**
  * Created by neukamm on 07.06.17.
  */
-public class FstSettingsDialogue extends APopupDialogue{
+public class FstSettingsDialogue extends ATabpaneDialogue{
 
     private Button okBtn;
     private CheckBox checkbox_linearized_slatkin;
@@ -39,7 +39,6 @@ public class FstSettingsDialogue extends APopupDialogue{
         super(title, logClass);
         dialogGrid.setId("fst_popup");
         this.LOG = this.logClass.getLogger(this.getClass());
-        show();
     }
 
     public void init(MitoBenchWindow mito){
@@ -175,15 +174,13 @@ public class FstSettingsDialogue extends APopupDialogue{
                             Double.parseDouble(field_gamma_a.getText()),
                             field_missing_data.getText().charAt(0));
 
-                    logClass.getLogger(this.getClass()).info("Calculate pairwise Fst " +
-                            "values between following groups:\n" + Arrays.toString(fstCalculationRunner.getGroupnames()));
 
                     fstCalculationRunner.run(
                             checkbox_linearized_slatkin.isSelected(),
                             checkbox_linearized_slatkin.isSelected(),
                             field_level_missing_data.getText());
-                    fstCalculationRunner.writeToTable();
 
+                    fstCalculationRunner.writeToTable();
                     fstCalculationRunner.visualizeResult();
 
 
@@ -194,7 +191,7 @@ public class FstSettingsDialogue extends APopupDialogue{
 
                     LOG.info("Fst calculations finished.");
 
-                    dialog.close();
+                    mito.getTabpane_statistics().getTabs().remove(getTab());
 
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -227,13 +224,6 @@ public class FstSettingsDialogue extends APopupDialogue{
 
             }
         });
-    }
-
-    @Override
-    protected void show(){
-        Scene dialogScene = new Scene(dialogGrid, 500, 440);
-        dialog.setScene(dialogScene);
-        dialog.show();
     }
 
 }

@@ -15,6 +15,7 @@ import model.HaploTreeModel;
 import model.TreeIterator;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
+import view.MitoBenchWindow;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.table.controller.ATableController;
 import view.table.TableSelectionFilter;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class HaplotreeController {
 
+    private MitoBenchWindow mito;
     private Logger LOG;
 
     private String[] seletcion_haplogroups;
@@ -39,10 +41,13 @@ public class HaplotreeController {
     private HashMap<String, List<String>> node_to_children;
     private view.tree.TreeView treeView;
 
-    public HaplotreeController(ATableController tableManager, LogClass logClass) throws IOException, SAXException, ParserConfigurationException {
+    public HaplotreeController(ATableController tableManager, LogClass logClass, MitoBenchWindow mito)
+            throws IOException, SAXException, ParserConfigurationException {
 
         this.tableManager = tableManager;
         LOG = logClass.getLogger(this.getClass());
+
+        this.mito = mito;
 
         treeMap = new HashMap<>();
         treeMap_leaf_to_root = new HashMap<>();
@@ -142,7 +147,8 @@ public class HaplotreeController {
                         tableManager.getColIndex("Haplogroup"), LOG);
             }
         }
-        dataFilteringTreebasedDialogue.close();
+        mito.getTabpane_statistics().getTabs().remove(dataFilteringTreebasedDialogue.getTab());
+
     }
 
 
@@ -177,8 +183,7 @@ public class HaplotreeController {
             }
 
         }
-        dataFilteringTreebasedDialogue.close();
-
+        mito.getTabpane_statistics().getTabs().remove(dataFilteringTreebasedDialogue.getTab());
     }
 
 

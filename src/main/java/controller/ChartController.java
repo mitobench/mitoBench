@@ -54,11 +54,10 @@ public class ChartController {
             }
         }
 
-
         String[] selected_data = column_data.toArray(new String[column_data.size()]);
         barPlot.clearData();
 
-        if (selected_data.length !=0) {
+        if (selected_data.length != 0) {
             barPlot.addData(tableController.getDataHist(selected_data));
         }
     }

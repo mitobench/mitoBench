@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -147,8 +148,10 @@ public class FstCalculationRunner {
     }
 
     private void writeLog(boolean runSlatkin, boolean runReynolds, String level_missing_data) {
+        LOG.getLogger(this.getClass()).info("Calculate pairwise Fst " +
+                "values between following groups:\n" + Arrays.toString(groupnames));
 
-        LOG.info("Calculate Fst values.\nRun Slatkin: " + runSlatkin + ".\nRun Reynolds: " + runReynolds +
+        LOG.info("\nRun Slatkin: " + runSlatkin + ".\nRun Reynolds: " + runReynolds +
         ".\nLevel of missing data: " + level_missing_data + ".\nMissing data character: " + missing_data_character +
         ".\nGamma a value: " + gamma_a);
 

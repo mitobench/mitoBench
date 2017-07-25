@@ -39,6 +39,7 @@ public class AnalysisMenu {
                 FstSettingsDialogue fstSettingsDialogue =
                             new FstSettingsDialogue("Fst Calculation Settings", logClass);
                 fstSettingsDialogue.init(mito);
+                mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
 
             }
             else {
