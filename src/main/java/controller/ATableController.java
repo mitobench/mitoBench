@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
 import io.IData;
+import org.controlsfx.control.table.TableFilter;
 import view.menus.GroupMenu;
 import view.table.DataTable;
 
@@ -25,13 +26,9 @@ import java.util.stream.Collectors;
  */
 public abstract class ATableController {
 
-
-
     protected TableView<ObservableList> table;
-
     protected ObservableList<ObservableList> data;
     protected ObservableList<ObservableList> data_copy;
-
     protected DataTable dataTable;
     protected HashMap<String, Integer> column_to_index;
     protected HashMap<String, List<Entry>> table_content;
@@ -115,6 +112,10 @@ public abstract class ATableController {
         setColumns_to_index();
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
+
+        // add table filter
+        TableFilter filter = new TableFilter(table);
+
     }
 
 

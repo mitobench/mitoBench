@@ -1,6 +1,5 @@
 package database;
 
-import io.Exceptions.DatabaseConnectionException;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
@@ -32,6 +31,7 @@ public class DatabaseAccessor {
         Class.forName(driverClassName);
         try{
             connection = DriverManager.getConnection(dbURL, username_root, password_root);
+            //connection = DriverManager.getConnection(dbURL, username, password);
             Statement stmt = connection.createStatement();
             query = "SELECT alias, passwd FROM mitodb_users;";
             stmt.executeQuery(query);

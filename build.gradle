@@ -49,7 +49,7 @@ dependencies {
     testCompile "org.testfx:testfx-core:4.0.+"
     compile group: 'org.webjars', name: 'leaflet', version: '1.0.3'
     compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1201-jdbc41'
-    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.0.6_20'
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.12'
     compile group: 'log4j', name: 'log4j', version: '1.2.16'
     compile group: 'org.json', name: 'json', version: '20090211'
     compile group: 'com.github.jsqlparser', name: 'jsqlparser', version: '1.0'
