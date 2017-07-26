@@ -2,8 +2,10 @@ package controller;
 
 import database.DatabaseAccessor;
 import io.Exceptions.DatabaseConnectionException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created by neukamm on 05.07.17.
@@ -70,6 +72,26 @@ public class DatabaseConnectionController {
         }
 
     }
+
+
+    public ObservableList<String> getTableAttributes(String tablename) throws SQLException {
+
+        String query;
+        Connection connection = databaseAccessor.getConnection();
+        Statement stmt = connection.createStatement();
+        query = "SELECT * FROM " + tablename;
+        stmt.executeQuery(query);
+        ResultSet rs = stmt.getResultSet();
+        ResultSetMetaData rsmd = rs.getMetaData();
+
+        ObservableList col_names = FXCollections.observableArrayList();
+        for (int i = 1; i <= rsmd.getColumnCount(); i++)
+            col_names.add(rsmd.getColumnName(i));
+
+        return col_names;
+
+    }
+
 
     public DatabaseAccessor getDatabaseAccessor() {
         return databaseAccessor;

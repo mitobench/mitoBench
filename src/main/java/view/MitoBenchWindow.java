@@ -29,7 +29,7 @@ import java.io.IOException;
 /**
  * Created by neukamm on 03.11.16.
  */
-public class MitoBenchWindow extends Application{
+public class MitoBenchWindow extends Application {
 
     private final String MITOBENCH_VERSION = "0.1.9";
 

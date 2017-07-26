@@ -36,6 +36,7 @@ import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -155,7 +156,11 @@ public class FileMenu {
             } else {
                 // open search mask to specify which data should be loaded
                 DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow, databaseConnectionController);
-                dbSearchDialogue.fillDialogue();
+                try {
+                    dbSearchDialogue.fillDialogue();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 dbSearchDialogue.addFunctionality(databaseConnectionController.getTable());
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
             }

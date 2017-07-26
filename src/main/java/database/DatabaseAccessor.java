@@ -101,4 +101,8 @@ public class DatabaseAccessor {
         return eList;
     }
 
+
+    public Connection getConnection() {
+        return connection;
+    }
 }

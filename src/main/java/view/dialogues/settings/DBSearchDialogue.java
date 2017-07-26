@@ -4,10 +4,12 @@ import controller.DatabaseConnectionController;
 import database.DatabaseAccessor;
 import io.datastructure.Entry;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.Select;
+import org.controlsfx.control.CheckComboBox;
 import view.MitoBenchWindow;
 import controller.ATableController;
 
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * Created by neukamm on 09.02.17.
  */
-public class DBSearchDialogue extends ATabpaneDialogue{
+public class DBSearchDialogue extends ATabpaneDialogue {
 
 
     private final MitoBenchWindow mito;
@@ -32,6 +34,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
     private CheckBox checkBox_write_own_query;
     private CheckBox checkBox_get_all_data;
     private HashMap<String, List<Entry>> data;
+    private CheckComboBox<String> publications;
 
     public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow,
                             DatabaseConnectionController databaseConnectionController){
@@ -62,22 +65,38 @@ public class DBSearchDialogue extends ATabpaneDialogue{
     }
 
 
-    public void fillDialogue() {
+    public void fillDialogue() throws SQLException {
         dialogGrid.add(checkBox_get_all_data, 0,0,2,1);
 
         dialogGrid.add(new Separator(), 0,1,3,1);
 
-        dialogGrid.add(new Label("select"), 0,2,1,1);
-        dialogGrid.add(textfield_selection_table, 1,2,1,1);
-        dialogGrid.add(new Label("from sequence_data"), 2,2,1,1);
+        dialogGrid.add(new Label("Choose columns to display"), 0,2,3,1);
+        dialogGrid.add(getDBColumnsPane(), 0,3,3,1);
+//        dialogGrid.add(new Label("select"), 0,2,1,1);
+//        dialogGrid.add(textfield_selection_table, 1,2,1,1);
+//        dialogGrid.add(new Label("from sequence_data"), 2,2,1,1);
 
-        dialogGrid.add(new Separator(), 0,3,3,1);
+        dialogGrid.add(new Separator(), 0,4,3,1);
 
-        dialogGrid.add(checkBox_write_own_query, 0,4,1,1);
-        dialogGrid.add(textfield_sql_statement_advanced, 0,5,3,1);
-        dialogGrid.add(btnSend,2,6,3,1);
-        dialogGrid.add(message, 0,6,2,1);
+        dialogGrid.add(checkBox_write_own_query, 0,5,1,1);
+        dialogGrid.add(textfield_sql_statement_advanced, 0,6,3,1);
+        dialogGrid.add(btnSend,2,7,3,1);
+        dialogGrid.add(message, 0,7,2,1);
 
+    }
+
+    private GridPane getDBColumnsPane() throws SQLException {
+
+
+        publications = new CheckComboBox<>(
+                databaseConnectionController.getTableAttributes("sequence_data"));
+        int row = 0;
+        GridPane columnsConfiguratorPane = new GridPane();
+        columnsConfiguratorPane.add(new Label("Choose your columns:: "), 0, row);
+        columnsConfiguratorPane.add(publications, 1, row++);
+        //columnsConfiguratorPane.add(samples, 1, row++);
+
+        return columnsConfiguratorPane;
     }
 
     public void addFunctionality(ATableController tablecontroller) {
@@ -123,6 +142,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
 
     private void performSendAction(ATableController tablecontroller, DatabaseConnectionController databaseConnectionController){
         DatabaseAccessor accessor = databaseConnectionController.getDatabaseAccessor();
+
         try {
 
             String query;
@@ -131,7 +151,12 @@ public class DBSearchDialogue extends ATabpaneDialogue{
             } else if (checkBox_get_all_data.isSelected()){
                 query = "SELECT * FROM sequence_data";
             } else {
-                query = "SELECT " + textfield_selection_table.getText() + "FROM sequence_data";
+                query = "SELECT ";
+                for(String checked_item : publications.getCheckModel().getCheckedItems())
+                    query += checked_item + ",";
+
+                query = query.substring(0, query.length()-1) + " FROM sequence_data";
+                //query = "SELECT " + textfield_selection_table.getText() + "FROM sequence_data";
             }
 
             CCJSqlParserManager pm = new CCJSqlParserManager();
@@ -162,4 +187,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
         }
 
     }
+
+
+
 }
