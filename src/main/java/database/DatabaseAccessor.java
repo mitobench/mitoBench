@@ -62,6 +62,12 @@ public class DatabaseAccessor {
     }
 
 
+    /**
+     * This method gets database entries specified by a query.
+     * @param query
+     * @return
+     * @throws SQLException
+     */
     public HashMap<String, List<Entry>> getEntries(String query) throws SQLException {
         try (
                 Statement stmnt = connection.createStatement();
