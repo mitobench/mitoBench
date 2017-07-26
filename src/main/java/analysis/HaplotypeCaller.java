@@ -9,7 +9,7 @@ import io.writer.MultiFastaWriter;
 import org.apache.log4j.Logger;
 import org.json.*;
 import view.table.MTStorage;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.File;
 import java.io.IOException;

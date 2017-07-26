@@ -8,7 +8,7 @@ import io.datastructure.radiocarbon.RadioCarbonData;
 import io.inputtypes.CategoricInputType;
 import io.inputtypes.RadioCarbonInputType;
 import org.apache.log4j.Logger;
-import view.table.controller.ATableController;
+import controller.ATableController;
 
 import java.io.*;
 import java.util.ArrayList;

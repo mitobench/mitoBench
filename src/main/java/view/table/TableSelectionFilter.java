@@ -5,7 +5,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableView;
 import org.apache.log4j.Logger;
-import view.table.controller.ATableController;
+import controller.ATableController;
 
 import java.util.Arrays;
 import java.util.function.Predicate;

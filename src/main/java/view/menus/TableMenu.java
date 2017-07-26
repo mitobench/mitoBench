@@ -8,7 +8,7 @@ import javafx.scene.control.MenuItem;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import controller.GroupController;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 
 /**

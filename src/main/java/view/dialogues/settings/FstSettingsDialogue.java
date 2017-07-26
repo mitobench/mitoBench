@@ -1,32 +1,21 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
-import analysis.FstCalculationRunner;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.DirectoryChooser;
 import view.MitoBenchWindow;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Created by neukamm on 07.06.17.
  */
-public class FstSettingsDialogue extends ATabpaneDialogue{
+public class FstSettingsDialogue extends ATabpaneDialogue {
 
     private Button okBtn;
     private CheckBox checkbox_linearized_slatkin;
     private CheckBox checkbox_linearized_reynolds;
-    private MitoBenchWindow mito;
+    private MitoBenchWindow mitobenchWindow;
     private ComboBox comboBox_distance;
     private TextField field_gamma_a;
     private TextField field_missing_data;
@@ -35,29 +24,29 @@ public class FstSettingsDialogue extends ATabpaneDialogue{
     private TextField field_filePathResult;
     private Button chooseFileBtn;
 
-    public FstSettingsDialogue(String title, LogClass logClass) {
+    public FstSettingsDialogue(String title, LogClass logClass, MitoBenchWindow mito) {
         super(title, logClass);
+
+        LOG = this.logClass.getLogger(this.getClass());
+        mitobenchWindow = mito;
+
         dialogGrid.setId("fst_popup");
-        this.LOG = this.logClass.getLogger(this.getClass());
-    }
 
-    public void init(MitoBenchWindow mito){
-        this.mito = mito;
         addComponents();
-        addListener();
     }
 
 
-
+    /**
+     * This method creates and initializes all graphical components of the Fst runner dialog.
+     */
     private void addComponents() {
 
         /*
                     Label
          */
-//        Label label_general_settings = new Label("General settings:" +
-//                "\n\t- allowed level of missing data: 5%");
+
         Label label_general_settings = new Label("");
-        Label label_lin = new Label("Optional:\n");//+"This result is only printed in the result file.");
+        Label label_lin = new Label("Optional:\n");
         Label label_distance_method = new Label("Distance method:");
         Label label_gamma_a = new Label("Gamma a value:");
         Label label_missing_data = new Label("Symbol for missing data:");
@@ -121,7 +110,7 @@ public class FstSettingsDialogue extends ATabpaneDialogue{
         chooseFileBtn.setDisable(true);
 
 
-        // general settings
+        // place components with grid layout
 
         dialogGrid.add(label_general_settings, 0,0,1,4);
         dialogGrid.add(label_distance_method, 0,5,1,1);
@@ -145,7 +134,6 @@ public class FstSettingsDialogue extends ATabpaneDialogue{
         dialogGrid.add(new Separator(), 0, 12,2,1);
 
         // save file
-        //addButtonListener(applyBtn, chooseFileBtn);
         dialogGrid.add(infoLogFile, 0,13,1,1);
         dialogGrid.add(checkbox_saveLogFileBtn, 1,13,1,1);
         //dialogGrid.add(discardLogFile, 2,13,1,1);
@@ -160,70 +148,96 @@ public class FstSettingsDialogue extends ATabpaneDialogue{
 
     }
 
-    private void addListener() {
 
-        okBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+    /**
+     *      GETTER and SETTER
+     */
 
-                try {
-
-
-
-                    FstCalculationRunner fstCalculationRunner = new FstCalculationRunner(mito,
-                            comboBox_distance.getSelectionModel().getSelectedItem().toString(),
-                            Double.parseDouble(field_gamma_a.getText()),
-                            field_missing_data.getText().charAt(0));
-
-
-                    fstCalculationRunner.run(
-                            checkbox_linearized_slatkin.isSelected(),
-                            checkbox_linearized_slatkin.isSelected(),
-                            field_level_missing_data.getText());
-
-                    fstCalculationRunner.writeToTable();
-                    fstCalculationRunner.visualizeResult();
-
-
-                    if(checkbox_saveLogFileBtn.isSelected()){
-                        fstCalculationRunner.writeToFile(field_filePathResult.getText());
-                    }
-
-
-                    LOG.info("Fst calculations finished.");
-
-                    mito.getTabpane_statistics().getTabs().remove(getTab());
-
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-
-        // add checkbox listener
-        checkbox_saveLogFileBtn.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            public void changed(ObservableValue<? extends Boolean> ov,
-                                Boolean old_val, Boolean new_val) {
-                field_filePathResult.setEditable(new_val);
-                field_filePathResult.setDisable(old_val);
-                chooseFileBtn.setDisable(old_val);
-
-            }
-
-        });
-
-
-        chooseFileBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                DirectoryChooser chooser = new DirectoryChooser();
-                chooser.setTitle("JavaFX Projects");
-                File defaultDirectory = new File(System.getProperty("user.dir"));
-                chooser.setInitialDirectory(defaultDirectory);
-                File selectedDirectory = chooser.showDialog(mito.getPrimaryStage());
-                field_filePathResult.setText(selectedDirectory.getAbsolutePath());
-
-            }
-        });
+    public Button getOkBtn() {
+        return okBtn;
     }
 
+    public void setOkBtn(Button okBtn) {
+        this.okBtn = okBtn;
+    }
+
+    public CheckBox getCheckbox_linearized_slatkin() {
+        return checkbox_linearized_slatkin;
+    }
+
+    public void setCheckbox_linearized_slatkin(CheckBox checkbox_linearized_slatkin) {
+        this.checkbox_linearized_slatkin = checkbox_linearized_slatkin;
+    }
+
+    public CheckBox getCheckbox_linearized_reynolds() {
+        return checkbox_linearized_reynolds;
+    }
+
+    public void setCheckbox_linearized_reynolds(CheckBox checkbox_linearized_reynolds) {
+        this.checkbox_linearized_reynolds = checkbox_linearized_reynolds;
+    }
+
+    public MitoBenchWindow getMitobenchWindow() {
+        return mitobenchWindow;
+    }
+
+    public void setMitobenchWindow(MitoBenchWindow mitobenchWindow) {
+        this.mitobenchWindow = mitobenchWindow;
+    }
+
+    public ComboBox getComboBox_distance() {
+        return comboBox_distance;
+    }
+
+    public void setComboBox_distance(ComboBox comboBox_distance) {
+        this.comboBox_distance = comboBox_distance;
+    }
+
+    public TextField getField_gamma_a() {
+        return field_gamma_a;
+    }
+
+    public void setField_gamma_a(TextField field_gamma_a) {
+        this.field_gamma_a = field_gamma_a;
+    }
+
+    public TextField getField_missing_data() {
+        return field_missing_data;
+    }
+
+    public void setField_missing_data(TextField field_missing_data) {
+        this.field_missing_data = field_missing_data;
+    }
+
+    public TextField getField_level_missing_data() {
+        return field_level_missing_data;
+    }
+
+    public void setField_level_missing_data(TextField field_level_missing_data) {
+        this.field_level_missing_data = field_level_missing_data;
+    }
+
+    public CheckBox getCheckbox_saveLogFileBtn() {
+        return checkbox_saveLogFileBtn;
+    }
+
+    public void setCheckbox_saveLogFileBtn(CheckBox checkbox_saveLogFileBtn) {
+        this.checkbox_saveLogFileBtn = checkbox_saveLogFileBtn;
+    }
+
+    public TextField getField_filePathResult() {
+        return field_filePathResult;
+    }
+
+    public void setField_filePathResult(TextField field_filePathResult) {
+        this.field_filePathResult = field_filePathResult;
+    }
+
+    public Button getChooseFileBtn() {
+        return chooseFileBtn;
+    }
+
+    public void setChooseFileBtn(Button chooseFileBtn) {
+        this.chooseFileBtn = chooseFileBtn;
+    }
 }

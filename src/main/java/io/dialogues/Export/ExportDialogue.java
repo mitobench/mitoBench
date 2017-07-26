@@ -10,9 +10,8 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 

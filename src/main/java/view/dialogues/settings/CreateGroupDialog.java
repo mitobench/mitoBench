@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import controller.GroupController;
-import view.table.controller.ATableController;
+import controller.ATableController;
 
 
 /**

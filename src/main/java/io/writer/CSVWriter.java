@@ -3,7 +3,7 @@ package io.writer;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.*;
 import java.util.List;

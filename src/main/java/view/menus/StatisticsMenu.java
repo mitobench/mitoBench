@@ -14,7 +14,7 @@ import statistics.HaplotypeStatistics;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGStatisticsPopupDialogue;
 import controller.GroupController;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 import statistics.HaploStatistics;
 import controller.HaplotreeController;
 

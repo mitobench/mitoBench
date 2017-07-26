@@ -16,7 +16,6 @@ import leaflet.MarkerIcons;
 import net.java.html.boot.fx.FXBrowsers;
 import net.java.html.leaflet.*;
 import view.MitoBenchWindow;
-import view.table.controller.TableControllerUserBench;
 
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;

@@ -4,7 +4,7 @@ import io.IOutputData;
 import io.datastructure.fastA.FastaEntry;
 import javafx.scene.control.TableColumn;
 import org.apache.log4j.Logger;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.BufferedWriter;
 import java.io.File;

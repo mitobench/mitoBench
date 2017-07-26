@@ -1,4 +1,4 @@
-package view.table.controller;
+package controller;
 
 import javafx.scene.input.DragEvent;
 

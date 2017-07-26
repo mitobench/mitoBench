@@ -1,3 +1,4 @@
+import javafx.application.Application;
 import view.MitoBenchWindow;
 
 /**
@@ -6,16 +7,13 @@ import view.MitoBenchWindow;
 public class MitoBenchStarter {
 
     /**
-     * just starts the main Mitobench window (so far)
+     * starts the main Mitobench window
+     *
      * @param args
      */
     public static void main(String[] args)
     {
-        new Thread() {
-            @Override
-            public void run() {javafx.application.Application.launch(MitoBenchWindow.class);
-            }
-        }.start();
+        new Thread(() -> Application.launch(MitoBenchWindow.class)).start();
 
     }
 }

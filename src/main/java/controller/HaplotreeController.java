@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
-import view.table.controller.ATableController;
 import view.table.TableSelectionFilter;
 
 import javax.xml.parsers.ParserConfigurationException;

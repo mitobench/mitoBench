@@ -38,5 +38,9 @@ public abstract class ATabpaneDialogue {
         return dialogGrid;
     }
     public Tab getTab() { return tab; }
+
+    public Logger getLOG() {
+        return LOG;
+    }
 }
 

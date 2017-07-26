@@ -6,7 +6,7 @@ import io.Exceptions.DatabaseConnectionException;
 import javafx.scene.control.*;
 import view.MitoBenchWindow;
 import view.dialogues.error.DatabaseErrorDialogue;
-import view.table.controller.ATableController;
+import controller.ATableController;
 
 import java.sql.SQLException;
 

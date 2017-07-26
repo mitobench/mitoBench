@@ -2,12 +2,7 @@ package controller;
 
 import database.DatabaseAccessor;
 import io.Exceptions.DatabaseConnectionException;
-import io.Exceptions.FastAException;
-import io.Exceptions.IMitoException;
-import view.dialogues.error.DatabaseErrorDialogue;
-import view.table.controller.ATableController;
 
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**

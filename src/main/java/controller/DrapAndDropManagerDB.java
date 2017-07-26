@@ -1,4 +1,4 @@
-package view.table.controller;
+package controller;
 
 import io.datastructure.Entry;
 import javafx.application.Platform;

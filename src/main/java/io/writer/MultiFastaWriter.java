@@ -2,7 +2,7 @@ package io.writer;
 
 import io.IOutputData;
 import view.table.MTStorage;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.*;
 

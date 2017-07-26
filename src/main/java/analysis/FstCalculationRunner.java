@@ -5,31 +5,20 @@ import IO.reader.DistanceTypeParser;
 import IO.writer.Writer;
 import fst.FstHudson1992;
 import fst.Linearization;
-import fst.StandardAMOVA;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import methods.Filter;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import view.charts.HeatChart;
 import view.charts.HeatMap;
-import view.charts.HeatMapLegend;
 import view.table.MTStorage;
-import view.table.controller.TableControllerFstValues;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerFstValues;
+import controller.TableControllerUserBench;
 
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,8 +31,8 @@ import java.util.List;
  */
 public class FstCalculationRunner {
 
-    private final MitoBenchWindow mitobench;
-    private final String distance_type;
+    private MitoBenchWindow mitobenchWindow;
+    private String distance_type;
     private double gamma_a;
     private char missing_data_character;
     private HashMap<String, List<String>> data;
@@ -57,26 +46,37 @@ public class FstCalculationRunner {
     private Logger LOG;
 
 
-    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char missing_data_character)
+    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc)
             throws IOException {
-        mitobench = mito;
+
+        mitobenchWindow = mito;
         distance_type = type;
         gamma_a = gamma;
-        this.missing_data_character = missing_data_character;
+        missing_data_character = mdc;
         LOG = mito.getLogClass().getLogger(this.getClass());
 
-        prepareData(mito.getTableControllerUserBench(), mitobench.getTableControllerUserBench().getDataTable().getMtStorage());
+        prepareData(
+                mito.getTableControllerUserBench(),
+                mito.getTableControllerUserBench().getDataTable().getMtStorage()
+        );
     }
 
 
+    /**
+     * This method extract the sample ID and the corresponding mt sequence from the current table view
+     * and stores them in groups defined by the data grouping.
+     *
+     * @param tableControllerUserBench
+     * @param mtStorage
+     */
     private void prepareData(TableControllerUserBench tableControllerUserBench, MTStorage mtStorage){
         data = new HashMap<>();
-        int colIndexSelection = tableControllerUserBench.getColIndex(mitobench.getGroupController().getColname_group());
+        int colIndexGrouping = tableControllerUserBench.getColIndex(mitobenchWindow.getGroupController().getColname_group());
         int colIndexSequence = tableControllerUserBench.getColIndex("ID");
 
         ObservableList<ObservableList> table = tableControllerUserBench.getTable().getItems();
         for(ObservableList row : table){
-            String group = (String)row.get(colIndexSelection);
+            String group = (String)row.get(colIndexGrouping);
             String id = (String)row.get(colIndexSequence);
             String sequence = mtStorage.getData().get(id);
             if(!group.equals("Undefined")){
@@ -91,11 +91,17 @@ public class FstCalculationRunner {
                 }
             }
         }
-
-
-
     }
 
+    /**
+     * This method calls the Fst calculator with the already prepared data as input.
+     * It also defines if linearization (slatkin / reynolds) has to be done.
+     *
+     * @param runSlatkin
+     * @param runReynolds
+     * @param field_level_missing_data
+     * @throws IOException
+     */
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
         DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
         Filter filter = new Filter();
@@ -107,6 +113,8 @@ public class FstCalculationRunner {
                 Double.parseDouble(field_level_missing_data)
         );
 
+
+        // calculate Fst with equation introduced by Hudson et al. (1992)
         FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);
         fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
         fstHudson1992.setData(data);
@@ -136,17 +144,20 @@ public class FstCalculationRunner {
         }
 
         // init table controller
-        tableControllerFstValues = new TableControllerFstValues(mitobench.getLogClass());
+        tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
         tableControllerFstValues.init();
-
-
 
         writeLog(runSlatkin, runReynolds, field_level_missing_data);
 
-
-
     }
 
+    /**
+     * This method reports the Fst calculation into the LOG file.
+     *
+     * @param runSlatkin
+     * @param runReynolds
+     * @param level_missing_data
+     */
     private void writeLog(boolean runSlatkin, boolean runReynolds, String level_missing_data) {
         LOG.getLogger(this.getClass()).info("Calculate pairwise Fst " +
                 "values between following groups:\n" + Arrays.toString(groupnames));
@@ -158,29 +169,19 @@ public class FstCalculationRunner {
     }
 
 
-    public void writeToTable() {
+    /**
+     * This method writes the result to the statistics pane of the mitoBench.
+     */
+    public void writeResultToMitoBench() {
 
-        writeTabPane(
-                "Fst values",
-                "fst_values"
-        );
-
-//        if(fsts_slatkin != null)
-//            writeTabPane(fsts_slatkin, "Fst values (Slatkin)", "fst_values_slatkin");
-//        if(fsts_reynolds != null)
-//            writeTabPane(fsts_reynolds, "Fst values (Reynolds)", "fst_values_reynolds");
-
-
-
-    }
-
-    private void writeTabPane(String tab_header, String id){
+        String id = "Fst values";
+        String tab_header = "fst_values";
 
         ScrollPane scrollpane_result = new ScrollPane();
         String text = writer.getResult_as_string();
         Text t = new Text();
         t.setText(text);
-        t.wrappingWidthProperty().bind(mitobench.getScene().widthProperty());
+        t.wrappingWidthProperty().bind(mitobenchWindow.getScene().widthProperty());
         scrollpane_result.setContent(t);
 
         Tab tab = new Tab();
@@ -188,41 +189,149 @@ public class FstCalculationRunner {
         tab.setText(tab_header);
         tab.setContent(scrollpane_result);
 
-        mitobench.getTabpane_statistics().getTabs().add(tab);
-
+        mitobenchWindow.getTabpane_statistics().getTabs().add(tab);
 
     }
 
 
+    /**
+     * This method visualizes the Fst values as heatmap and adds the heatmap to the
+     * visualization pane of the mitoBench.
+     */
+
     public void visualizeResult() {
 
-        HeatMap heatMap = new HeatMap("","", mitobench.getLogClass());
-        heatMap.setContextMenu(mitobench.getTabpane_visualization());
+        HeatMap heatMap = new HeatMap("","", mitobenchWindow.getLogClass());
+        heatMap.setContextMenu(mitobenchWindow.getTabpane_visualization());
         heatMap.createHeatMap(fsts, groupnames);
 
         Tab tab = new Tab("Fst values");
         tab.setId("tab_heatmap");
         tab.setContent(heatMap.getHeatMap());
 
-        mitobench.getTabpane_visualization().getTabs().add(tab);
+        mitobenchWindow.getTabpane_visualization().getTabs().add(tab);
 
     }
 
 
-
+    /**
+     * This method writes the results if the Fst calculation to a text file.
+     *
+     * @param path
+     * @throws IOException
+     */
     public void writeToFile(String path) throws IOException {
         writer.writeResultsToFile(path+ File.separator+"mitoBench_results_fst.txt");
     }
 
 
     /*
-            GETTER
+            GETTER AND SETTER
      */
+
+
+    public MitoBenchWindow getMitobenchWindow() {
+        return mitobenchWindow;
+    }
+
+    public void setMitobenchWindow(MitoBenchWindow mitobenchWindow) {
+        this.mitobenchWindow = mitobenchWindow;
+    }
+
+    public String getDistance_type() {
+        return distance_type;
+    }
+
+    public void setDistance_type(String distance_type) {
+        this.distance_type = distance_type;
+    }
+
+    public double getGamma_a() {
+        return gamma_a;
+    }
+
+    public void setGamma_a(double gamma_a) {
+        this.gamma_a = gamma_a;
+    }
+
+    public char getMissing_data_character() {
+        return missing_data_character;
+    }
+
+    public void setMissing_data_character(char missing_data_character) {
+        this.missing_data_character = missing_data_character;
+    }
+
+    public HashMap<String, List<String>> getData() {
+        return data;
+    }
+
+    public void setData(HashMap<String, List<String>> data) {
+        this.data = data;
+    }
+
+    public TableControllerFstValues getTableControllerFstValues() {
+        return tableControllerFstValues;
+    }
+
+    public void setTableControllerFstValues(TableControllerFstValues tableControllerFstValues) {
+        this.tableControllerFstValues = tableControllerFstValues;
+    }
+
+    public double[][] getFsts() {
+        return fsts;
+    }
+
+    public void setFsts(double[][] fsts) {
+        this.fsts = fsts;
+    }
+
+    public double[][] getFsts_slatkin() {
+        return fsts_slatkin;
+    }
+
+    public void setFsts_slatkin(double[][] fsts_slatkin) {
+        this.fsts_slatkin = fsts_slatkin;
+    }
+
+    public double[][] getFsts_reynolds() {
+        return fsts_reynolds;
+    }
+
+    public void setFsts_reynolds(double[][] fsts_reynolds) {
+        this.fsts_reynolds = fsts_reynolds;
+    }
 
     public String[] getGroupnames() {
         return groupnames;
     }
 
+    public void setGroupnames(String[] groupnames) {
+        this.groupnames = groupnames;
+    }
 
+    public List<Integer> getUsableLoci() {
+        return usableLoci;
+    }
+
+    public void setUsableLoci(List<Integer> usableLoci) {
+        this.usableLoci = usableLoci;
+    }
+
+    public Writer getWriter() {
+        return writer;
+    }
+
+    public void setWriter(Writer writer) {
+        this.writer = writer;
+    }
+
+    public Logger getLOG() {
+        return LOG;
+    }
+
+    public void setLOG(Logger LOG) {
+        this.LOG = LOG;
+    }
 }
 

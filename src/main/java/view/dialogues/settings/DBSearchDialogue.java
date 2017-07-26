@@ -9,7 +9,7 @@ import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.Select;
 import view.MitoBenchWindow;
-import view.table.controller.ATableController;
+import controller.ATableController;
 
 import java.io.StringReader;
 import java.sql.SQLException;

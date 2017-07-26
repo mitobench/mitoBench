@@ -18,8 +18,8 @@ import javafx.stage.WindowEvent;
 import org.xml.sax.SAXException;
 import controller.GroupController;
 import view.menus.*;
-import view.table.controller.TableControllerDB;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerDB;
+import controller.TableControllerUserBench;
 import view.tree.TreeView;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +31,7 @@ import java.io.IOException;
  */
 public class MitoBenchWindow extends Application{
 
-    private final String MITOBENCH_VERSION = "0.1.2";
+    private final String MITOBENCH_VERSION = "0.1.9";
 
     private BorderPane pane_root;
     private TableControllerUserBench tableControllerUserBench;
@@ -43,14 +43,14 @@ public class MitoBenchWindow extends Application{
     private TabPane tabpane_statistics;
     private BorderPane pane_table;
     private VBox pane_table_userBench;
-    private Label info_selected_items = new Label("");
+    private Label info_selected_items;
     private GroupController groupController;
     private SplitPane splitPane_table;
     private VBox pane_table_DB;
     private Button enableDBBtn;
     private LogClass logClass;
     private TreeView treeView;
-    private boolean projectLoaded;
+    private boolean anotherProjectLoaded;
     private FileMenu fileMenu;
 
 
@@ -59,16 +59,23 @@ public class MitoBenchWindow extends Application{
     {
         logClass = new LogClass();
         logClass.updateLog4jConfiguration(System.getProperty("user.dir") + "/mito_log_tmp.log");
-        continueInit(primaryStage);
+        info_selected_items = new Label("");
+
+        init(primaryStage);
         overrideCloseSettings();
 
 
     }
 
+    /**
+     * This method initializes all components of the mitoBench window.
+     * @param stage
+     * @throws Exception
+     */
 
-    public void continueInit(Stage stage) throws Exception {
+    public void init(Stage stage) throws Exception {
 
-        projectLoaded = false;
+        anotherProjectLoaded = false;
 
         // init Logger
         logClass.setUp();
@@ -379,12 +386,12 @@ public class MitoBenchWindow extends Application{
         return pane_table_DB;
     }
 
-    public boolean isProjectLoaded() {
-        return projectLoaded;
+    public boolean isAnotherProjectLoaded() {
+        return anotherProjectLoaded;
     }
 
-    public void setProjectLoaded(boolean projectLoaded) {
-        this.projectLoaded = projectLoaded;
+    public void setAnotherProjectLoaded(boolean anotherProjectLoaded) {
+        this.anotherProjectLoaded = anotherProjectLoaded;
     }
 
     public FileMenu getFileMenu() {

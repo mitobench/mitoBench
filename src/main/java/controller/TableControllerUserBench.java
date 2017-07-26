@@ -1,10 +1,8 @@
-package view.table.controller;
+package controller;
 
 
 import Logging.LogClass;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -40,23 +38,17 @@ public class TableControllerUserBench extends ATableController {
         final ContextMenu menu = new ContextMenu();
 
         final MenuItem addNewGropuItem = new MenuItem("Create new group");
-        addNewGropuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                CreateGroupDialog createGroupDialog =
-                        new CreateGroupDialog("", groupController, controller, logClass);
-            }
+        addNewGropuItem.setOnAction(event -> {
+            CreateGroupDialog createGroupDialog =
+                    new CreateGroupDialog("", groupController, controller, logClass);
         });
 
         final MenuItem addAllSelectedItem
                 = new MenuItem("Add to group");
-        addAllSelectedItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                AddToGroupDialog addToGroupDialog =
-                        new AddToGroupDialog("", groupController, table.getSelectionModel().getSelectedItems(),
-                                controller, logClass);
-            }
+        addAllSelectedItem.setOnAction(event -> {
+            AddToGroupDialog addToGroupDialog =
+                    new AddToGroupDialog("", groupController, table.getSelectionModel().getSelectedItems(),
+                            controller, logClass);
         });
 
         menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
@@ -66,11 +58,9 @@ public class TableControllerUserBench extends ATableController {
     }
 
     public void addButtonFunctionality(Button btn, MitoBenchWindow mitoBenchWindow){
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                mitoBenchWindow.enableBDTable();
-                btn.setVisible(false);
-            }
+        btn.setOnAction(e -> {
+            mitoBenchWindow.enableBDTable();
+            btn.setVisible(false);
         });
     }
 
@@ -81,6 +71,10 @@ public class TableControllerUserBench extends ATableController {
 
     }
 
+    /**
+     * This method returns all samples names.
+     * @return
+     */
     public String[] getSampleNames() {
 
         String[] ids = new String[getSelectedRows().size()];

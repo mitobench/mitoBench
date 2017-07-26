@@ -1,6 +1,6 @@
 package io;
 
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package view.table.controller;
+package controller;
 
 import Logging.LogClass;
 import io.datastructure.Entry;

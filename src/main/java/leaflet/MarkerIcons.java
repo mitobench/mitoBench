@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Group;
 import net.java.html.leaflet.*;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.util.HashMap;
 import java.util.List;

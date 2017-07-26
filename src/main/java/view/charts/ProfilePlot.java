@@ -8,7 +8,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 import controller.HaplotreeController;
 
 import java.net.URL;

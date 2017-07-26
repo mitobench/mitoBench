@@ -1,4 +1,4 @@
-package view.table.controller;
+package controller;
 
 import Logging.LogClass;
 import database.ColumnNameMapper;
@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
 import io.IData;
-import controller.GroupController;
 import view.menus.GroupMenu;
 import view.table.DataTable;
 

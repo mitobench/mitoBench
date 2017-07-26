@@ -16,7 +16,7 @@ import view.MitoBenchWindow;
 import view.charts.*;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;

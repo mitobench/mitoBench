@@ -10,9 +10,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import controller.GroupController;
-import view.table.controller.ATableController;
+import controller.ATableController;
 
 
 /**

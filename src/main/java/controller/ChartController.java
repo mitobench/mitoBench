@@ -6,7 +6,6 @@ import javafx.scene.control.TableColumn;
 import view.charts.BarChartGrouping;
 import view.charts.BarPlotHaplo;
 import view.charts.StackedBar;
-import view.table.controller.ATableController;
 
 import java.net.MalformedURLException;
 import java.util.*;
@@ -497,7 +496,7 @@ public class ChartController {
     public void getWeights(String[] seletcion_haplogroups, String[] seletcion_groups){
 
         // hash map
-        // Group : <HG : writeToTable>
+        // Group : <HG : writeResultToMitoBench>
         weights = new HashMap<>();
         Set<String> haplogroups = new HashSet<String>(Arrays.asList(seletcion_haplogroups));
 

@@ -10,8 +10,8 @@ import javafx.scene.control.TableView;
 import controller.ChartController;
 import org.apache.log4j.Logger;
 import view.charts.ProfilePlot;
-import view.table.controller.TableControllerMutations;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerMutations;
+import controller.TableControllerUserBench;
 import controller.HaplotreeController;
 
 import java.util.*;

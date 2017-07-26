@@ -12,7 +12,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 
 import java.net.MalformedURLException;

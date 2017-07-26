@@ -18,7 +18,7 @@
 //import statistics.HaplotypeStatistics;
 //import view.MitoBenchWindow;
 //import controller.GroupController;
-//import view.table.controller.TableControllerUserBench;
+//import controller.TableControllerUserBench;
 //import controller.HaplotreeController;
 //import model.HaploTreeModel;
 //

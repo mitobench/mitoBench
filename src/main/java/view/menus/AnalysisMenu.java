@@ -1,12 +1,13 @@
 package view.menus;
 
 import Logging.LogClass;
+import analysis.FstCalculationController;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 
 /**
@@ -37,8 +38,8 @@ public class AnalysisMenu {
 
             if(tableController.getGroupController().isGroupingExists()) {
                 FstSettingsDialogue fstSettingsDialogue =
-                            new FstSettingsDialogue("Fst Calculation Settings", logClass);
-                fstSettingsDialogue.init(mito);
+                            new FstSettingsDialogue("Fst Calculation Settings", logClass, mito);
+                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue);
                 mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
 
             }

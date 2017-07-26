@@ -1,16 +1,11 @@
 package io.writer;
 
-import com.sun.corba.se.spi.orb.Operation;
 import io.IOutputData;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import view.table.MTStorage;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.*;
-import java.util.*;
-
-import static java.io.File.separator;
 
 /**
  *

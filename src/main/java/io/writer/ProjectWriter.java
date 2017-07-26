@@ -3,7 +3,7 @@ package io.writer;
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
 import org.apache.log4j.Logger;
-import view.table.controller.TableControllerUserBench;
+import controller.TableControllerUserBench;
 
 import java.io.*;
 import java.util.Date;

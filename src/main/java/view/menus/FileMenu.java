@@ -19,7 +19,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -30,9 +29,9 @@ import view.dialogues.error.HSDErrorDialogue;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
-import view.table.controller.DrapAndDropManagerDB;
-import view.table.controller.TableControllerDB;
-import view.table.controller.TableControllerUserBench;
+import controller.DrapAndDropManagerDB;
+import controller.TableControllerDB;
+import controller.TableControllerUserBench;
 import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
@@ -99,7 +98,7 @@ public class FileMenu {
                 tableControllerUserBench.cleartable();
                 viz_pane.getTabs().removeAll(viz_pane.getTabs());
                 mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
-                mitoBenchWindow.setProjectLoaded(false);
+                mitoBenchWindow.setAnotherProjectLoaded(false);
                 LOG.info("New project was created.");
             }
         });
@@ -354,7 +353,7 @@ public class FileMenu {
 
             if(absolutePath.endsWith(".mitoproj")){
 
-                if(mitoBenchWindow.isProjectLoaded()){
+                if(mitoBenchWindow.isAnotherProjectLoaded()){
                     InformationDialogue informationDialogue = new InformationDialogue(
                             "Project already loaded",
                             "Please clean up your analysis before \na new project can be loaded.",
@@ -368,7 +367,7 @@ public class FileMenu {
                         projectReader.read(f, LOG);
                         projectReader.loadData(tableControllerUserBench);
                         //tableControllerUserBench.loadGroups();
-                        mitoBenchWindow.setProjectLoaded(true);
+                        mitoBenchWindow.setAnotherProjectLoaded(true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ProjectException e) {
