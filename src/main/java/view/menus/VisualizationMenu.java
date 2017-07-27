@@ -545,7 +545,9 @@ public class VisualizationMenu {
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
-        haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieChart);
+        //haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieChart);
+        // TODO removed sunburst chart
+        haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart);
         maps.getItems().add(mapsItem);
 
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, maps, new SeparatorMenuItem(), clearPlotBox);

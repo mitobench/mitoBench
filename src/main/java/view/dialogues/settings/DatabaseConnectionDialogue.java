@@ -18,7 +18,7 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
     private Button loginBtn;
     private String username;
     private String password;
-    PasswordField password_field;
+    private PasswordField password_field;
     private TextField usernamme_field;
     private  ATableController table;
     private MitoBenchWindow mitoBenchWindow;
@@ -47,11 +47,12 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
         Label password_label = new Label("Password");
         password_label.setId("password_label");
 
-        usernamme_field = new TextField();
+        usernamme_field = new TextField("mitotest");
         usernamme_field.setId("usernamme_field");
 
         password_field = new PasswordField();
         password_field.setId("password_field");
+        password_field.setText("$2a$10$gsy2KTn6xznKETjG1AHcMOLC.6YNtkikttyOzNBP/2B2GMQSW6m4e");
 
         loginBtn = new Button("Login");
         loginBtn.setId("loginButton");
