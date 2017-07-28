@@ -86,9 +86,7 @@ public abstract class ATableController {
         List<String> curr_colnames = getCurrentColumnNames();
 
 
-        //table.getColumns().removeAll(table.getColumns());
-        // clear Items in table
-        //table.getItems().removeAll(table.getItems());
+        table.getColumns().removeAll(table.getColumns());
 
 
         // define column order
@@ -106,14 +104,17 @@ public abstract class ATableController {
         // delete duplicated columns
         col_names_sorted = col_names_sorted.stream().distinct().collect(Collectors.toList());
 
-        filter = null;
-        table = null;
-        init();
+//        filter = null;
+//        table = null;
+//        init();
 
         // add columns
         for(int i = 0; i < col_names_sorted.size(); i++) {
             addColumn(col_names_sorted.get(i), i);
         }
+
+        // clear Items in table
+        table.getItems().removeAll(table.getItems());
 
         //FINALLY ADDED TO TableView
         table.getItems().addAll(data);
@@ -123,7 +124,7 @@ public abstract class ATableController {
         groupMenu.upateGroupItem(col_names_sorted, groupController);
 
         // add table filter
-        filter = new TableFilter(table);
+        //filter = new TableFilter(table);
 
     }
 
@@ -166,7 +167,7 @@ public abstract class ATableController {
     protected ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames){
 
         if(curr_colnames.size()==0){
-            curr_colnames = new ArrayList<String>(getCurrentColumnNames());
+            curr_colnames = new ArrayList<>(getCurrentColumnNames());
         }
 
         // set column order (ID -> MT Sequence -> Others)
@@ -251,7 +252,7 @@ public abstract class ATableController {
      * create new table entry for each selected item to easily update tableview
      * @return
      */
-    public HashMap<String, List<Entry>> createNewEntryListForGrouping(String gName, String colName){
+    public HashMap<String, List<Entry>> createNewEntryList(String gName, String colName){
 
         HashMap<String, List<Entry>> entries = new HashMap<>();
         ObservableList<ObservableList> selection = getSelectedRows();
@@ -399,7 +400,7 @@ public abstract class ATableController {
         }
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
-                groupController.createGroupByColumn(colname, "", false);
+                groupController.createGroupByColumn(colname, "");
                 break;
             }
         }
@@ -564,11 +565,18 @@ public abstract class ATableController {
     /**
      * get column index of column based on column header
      *
-     * @param key
+     * @param k
      * @return
      */
 
-    public int getColIndex(String key){
+    public int getColIndex(String k){
+
+        String key = "";
+        for(String s : column_to_index.keySet()) {
+            if (s.contains(k)) {
+                key = s;
+            }
+        }
         if(key.equals("Grouping")){
             for(String s : column_to_index.keySet()){
                 if(s.contains("Grouping")){

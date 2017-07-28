@@ -16,20 +16,13 @@ public class GroupController {
     private TableControllerUserBench tableController;
     private boolean groupingExists = false;
     private String colname_group;
-    private boolean ownGroupingIsSet = false;
 
     public GroupController(TableControllerUserBench tableController){
         this.tableController = tableController;
     }
 
 
-    public void createGroupByColumn(String colName, String gname, boolean userDefinedGroup){
-
-//        if(groupingExists && !userDefinedGroup){
-//            clearGrouping();
-//        } else if(userDefinedGroup){
-//            ownGroupingIsSet=true;
-//        }
+    public void createGroupByColumn(String colName, String gname){
 
         if(groupingExists){
             clearGrouping();
@@ -159,14 +152,6 @@ public class GroupController {
 
     public String getColname_group() {
         return colname_group;
-    }
-
-    public boolean isOwnGroupingIsSet() {
-        return ownGroupingIsSet;
-    }
-
-    public void setOwnGroupingIsSet(boolean ownGroupingIsSet) {
-        this.ownGroupingIsSet = ownGroupingIsSet;
     }
 
     public boolean isGroupingExists() {

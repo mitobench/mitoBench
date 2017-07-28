@@ -53,8 +53,8 @@ public class HaploStatistics {
         if(!tableController.getGroupController().isGroupingExists()) {
             // define new group that includes all data
             GroupController gc = tableController.getGroupController();
-            gc.createGroupByColumn("Group", "group", true);
-            tableController.updateTable(tableController.createNewEntryListForGrouping("group", "Group (Grouping)"));
+            gc.createGroupByColumn("Group", "group");
+            tableController.updateTable(tableController.createNewEntryList("group", "Group (Grouping)"));
             groupingMustBeDeleted = true;
         }
 

@@ -9,8 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 
 import view.MitoBenchWindow;
-import view.dialogues.settings.AddToGroupDialog;
-import view.dialogues.settings.CreateGroupDialog;
+import view.dialogues.settings.AddDataToColumnDialog;
+import view.dialogues.settings.AddNewColumnDialogue;
 
 
 /**
@@ -37,17 +37,17 @@ public class TableControllerUserBench extends ATableController {
 
         final ContextMenu menu = new ContextMenu();
 
-        final MenuItem addNewGropuItem = new MenuItem("Create new group");
+        final MenuItem addNewGropuItem = new MenuItem("Add new column");
         addNewGropuItem.setOnAction(event -> {
-            CreateGroupDialog createGroupDialog =
-                    new CreateGroupDialog("", groupController, controller, logClass);
+            AddNewColumnDialogue addnewColumnDialogue =
+                    new AddNewColumnDialogue("Add new column", controller, logClass);
         });
 
         final MenuItem addAllSelectedItem
-                = new MenuItem("Add to group");
+                = new MenuItem("Add/replace data");
         addAllSelectedItem.setOnAction(event -> {
-            AddToGroupDialog addToGroupDialog =
-                    new AddToGroupDialog("", groupController, table.getSelectionModel().getSelectedItems(),
+            AddDataToColumnDialog AddToColumnDialog =
+                    new AddDataToColumnDialog("",
                             controller, logClass);
         });
 
