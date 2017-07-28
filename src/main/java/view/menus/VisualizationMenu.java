@@ -132,7 +132,7 @@ public class VisualizationMenu {
         t.setText("Haplogroup frequency per group");
         t.setFont(Font.font(25));
 
-        this.stackedBar = new StackedBar(t.getText(), tabPane, this);
+        this.stackedBar = new StackedBar(t.getText(), tabPane, this, chartController, tableController);
         stackedBar.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");

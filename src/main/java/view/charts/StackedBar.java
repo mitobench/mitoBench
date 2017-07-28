@@ -1,5 +1,7 @@
 package view.charts;
 
+import controller.ChartController;
+import controller.TableControllerUserBench;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
@@ -14,6 +16,7 @@ import view.menus.VisualizationMenu;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,17 +24,23 @@ import java.util.List;
  */
 public class StackedBar extends AChart{
 
+    private final TableControllerUserBench tableController
+            ;
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;
     private TabPane tabPane;
     private final Glow glow = new Glow(.5);
     private VisualizationMenu graphicsMenu;
+    private ChartController chartController;
 
-    public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu) {
+    public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu, ChartController cc, TableControllerUserBench tc) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
         tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
+
+        chartController = cc;
+        tableController = tc;
 
         // set autoranging to false to allow manual settings
         yAxis.setAutoRanging(false);
@@ -154,14 +163,19 @@ public class StackedBar extends AChart{
         TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
         TableColumn group_col = graphicsMenu.getTableController().getTableColumnByName("Grouping");
 
-        // filter haplo column, include only subgroups of selected Haplogroup
-        List<String> sub_hgs = graphicsMenu.getTreeController().getTreeMap().get(hg);
+        // get only those haplogroups that does not already correspond to another macroHG displayed
+        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+        String[] selection_haplogroups = cols[0];
+        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
+        List<String> sub_hgs = hgs_summed.get(hg);
 
         if(sub_hgs != null){
+
             graphicsMenu.initHaploBarchart("(sub-haplogroups of HG "+ hg +")");
             List<String> columnData = new ArrayList<>();
+
             for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {
-                ObservableList row = (ObservableList) tmp;
+
                 String hg_row = (String) haplo_col.getCellObservableValue(tmp).getValue();
                 if(hg_row.contains("+")){
                     hg_row = hg_row.split("\\+")[0];

@@ -57,6 +57,7 @@ dependencies {
     compile group: 'com.dukescript.api', name: 'leaflet4j', version: '0.7'
     compile 'org.netbeans.html:net.java.html.boot.fx:1.4'
     compile group: 'org.testfx', name: 'openjfx-monocle', version: '8u76-b04'
+
 }
 
 

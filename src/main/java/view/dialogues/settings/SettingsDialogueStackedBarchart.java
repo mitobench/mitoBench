@@ -12,6 +12,7 @@ import javafx.scene.input.*;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -82,6 +83,10 @@ public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
     }
 
 
+    /**
+     * This method allows the drag and drop within a table.
+     *
+     */
     private void allowDragAndDrop(){
 
 
@@ -137,6 +142,10 @@ public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
 
     }
 
+    /**
+     * Get the order of the stacks choosen by the user.
+     * @return
+     */
     public String[] getStackOrder(){
         ObservableList<ObservableList> items = table.getItems();
         String[] entries = new String[items.size()];
