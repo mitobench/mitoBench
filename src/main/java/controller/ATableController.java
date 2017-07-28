@@ -39,6 +39,7 @@ public abstract class ATableController {
     protected GroupMenu groupMenu;
     protected Logger LOG;
     protected LogClass logClass;
+    private TableFilter filter;
 
     public ATableController(LogClass logClass){
         this.logClass = logClass;
@@ -70,8 +71,10 @@ public abstract class ATableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
+
         // update Entry structure
         updateEntryList(input);
+
 
         // add new values to existing one (DataTable)
         dataTable.update(input);
@@ -82,7 +85,11 @@ public abstract class ATableController {
         // get current col names
         List<String> curr_colnames = getCurrentColumnNames();
 
-        table.getColumns().removeAll(table.getColumns());
+
+        //table.getColumns().removeAll(table.getColumns());
+        // clear Items in table
+        //table.getItems().removeAll(table.getItems());
+
 
         // define column order
         Set<String> cols = dataTable.getDataTable().keySet();
@@ -99,13 +106,15 @@ public abstract class ATableController {
         // delete duplicated columns
         col_names_sorted = col_names_sorted.stream().distinct().collect(Collectors.toList());
 
+        filter = null;
+        table = null;
+        init();
+
         // add columns
         for(int i = 0; i < col_names_sorted.size(); i++) {
             addColumn(col_names_sorted.get(i), i);
         }
 
-        // clear Items in table
-        table.getItems().removeAll(table.getItems());
         //FINALLY ADDED TO TableView
         table.getItems().addAll(data);
 
@@ -114,7 +123,7 @@ public abstract class ATableController {
         groupMenu.upateGroupItem(col_names_sorted, groupController);
 
         // add table filter
-        TableFilter filter = new TableFilter(table);
+        filter = new TableFilter(table);
 
     }
 

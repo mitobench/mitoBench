@@ -25,18 +25,26 @@ public class GroupController {
 
     public void createGroupByColumn(String colName, String gname, boolean userDefinedGroup){
 
-        if(groupingExists && !userDefinedGroup){
+//        if(groupingExists && !userDefinedGroup){
+//            clearGrouping();
+//        } else if(userDefinedGroup){
+//            ownGroupingIsSet=true;
+//        }
+
+        if(groupingExists){
             clearGrouping();
-        } else if(userDefinedGroup){
-            ownGroupingIsSet=true;
         }
-
         groupingExists = true;
-
 
         TableColumn column = tableController.getTableColumnByName(colName);
 
-        if(column!=null){
+        if(column==null){
+            ObservableList group_data = tableController.getSelectedRows();
+            tableController.addColumn(colName + " (Grouping)", 0);
+            colname_group = colName + " (Grouping)";
+            createGroup(gname);
+            addElements(group_data, gname);
+        } else {
             if(!colName.contains("(Grouping)")){
                 tableController.changeColumnName(colName, colName+" (Grouping)");
                 colname_group = colName+" (Grouping)";
@@ -65,12 +73,6 @@ public class GroupController {
                 createGroup(groupname);
                 addElements(group_row.get(groupname), groupname);
             }
-        } else { // group does not exist --> set up new group
-            ObservableList group_data = tableController.getSelectedRows();
-            tableController.addColumn(colName + " (Grouping)", 0);
-            colname_group = colName + " (Grouping)";
-            createGroup(gname);
-            addElements(group_data, gname);
         }
 
         updateGrouping();
