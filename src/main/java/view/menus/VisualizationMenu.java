@@ -311,6 +311,9 @@ public class VisualizationMenu {
                             advancedStackedBarchartDialogue.getTextField_hgList().getText()
                     );
 
+
+                    stackedBar.setHg_user_selection(advancedStackedBarchartDialogue.getTextField_hgList().getText().split(","));
+
                     stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
                     // add settings

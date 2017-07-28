@@ -24,8 +24,6 @@ public class ChartController {
             "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
 
 
-    private HashMap<String, HashMap<String, List<String>>> corehg_group_subhg;
-
 
 
     public ChartController() {
@@ -35,7 +33,6 @@ public class ChartController {
     public void init(ATableController tableController, HashMap<String, List<String>> treeMap){
         this.tableController = tableController;
         this.treeMap = treeMap;
-        corehg_group_subhg = new HashMap<>();
     }
 
 

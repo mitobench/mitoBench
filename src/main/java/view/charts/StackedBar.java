@@ -32,6 +32,7 @@ public class StackedBar extends AChart{
     private final Glow glow = new Glow(.5);
     private VisualizationMenu graphicsMenu;
     private ChartController chartController;
+    private String[] hg_user_selection;
 
     public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu, ChartController cc, TableControllerUserBench tc) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
@@ -166,7 +167,13 @@ public class StackedBar extends AChart{
         // get only those haplogroups that does not already correspond to another macroHG displayed
         String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] selection_haplogroups = cols[0];
-        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
+
+
+        // todo: what do they want??
+        //HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
+
+        // or:
+        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_user_selection);
         List<String> sub_hgs = hgs_summed.get(hg);
 
         if(sub_hgs != null){
@@ -216,6 +223,11 @@ public class StackedBar extends AChart{
         return sbc;
     }
 
+    public String[] getHg_user_selection() {
+        return hg_user_selection;
+    }
 
-
+    public void setHg_user_selection(String[] hg_user_selection) {
+        this.hg_user_selection = hg_user_selection;
+    }
 }
