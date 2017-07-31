@@ -16,27 +16,28 @@ public class GroupController {
     private TableControllerUserBench tableController;
     private boolean groupingExists = false;
     private String colname_group;
-    private boolean ownGroupingIsSet = false;
 
     public GroupController(TableControllerUserBench tableController){
         this.tableController = tableController;
     }
 
 
-    public void createGroupByColumn(String colName, String gname, boolean userDefinedGroup){
+    public void createGroupByColumn(String colName, String gname){
 
-        if(groupingExists && !userDefinedGroup){
+        if(groupingExists){
             clearGrouping();
-        } else if(userDefinedGroup){
-            ownGroupingIsSet=true;
         }
-
         groupingExists = true;
-
 
         TableColumn column = tableController.getTableColumnByName(colName);
 
-        if(column!=null){
+        if(column==null){
+            ObservableList group_data = tableController.getSelectedRows();
+            tableController.addColumn(colName + " (Grouping)", 0);
+            colname_group = colName + " (Grouping)";
+            createGroup(gname);
+            addElements(group_data, gname);
+        } else {
             if(!colName.contains("(Grouping)")){
                 tableController.changeColumnName(colName, colName+" (Grouping)");
                 colname_group = colName+" (Grouping)";
@@ -65,12 +66,6 @@ public class GroupController {
                 createGroup(groupname);
                 addElements(group_row.get(groupname), groupname);
             }
-        } else { // group does not exist --> set up new group
-            ObservableList group_data = tableController.getSelectedRows();
-            tableController.addColumn(colName + " (Grouping)", 0);
-            colname_group = colName + " (Grouping)";
-            createGroup(gname);
-            addElements(group_data, gname);
         }
 
         updateGrouping();
@@ -81,27 +76,27 @@ public class GroupController {
         ObservableList<ObservableList> toRemove = FXCollections.observableArrayList();
         ObservableList<ObservableList> toAdd = FXCollections.observableArrayList();
         int index_grouping = tableController.getColIndex("Grouping");
-            if(index_grouping!=-1){
+        if(index_grouping!=-1){
 
-                for(String key :allGroups.keySet()){
-                    Group g = allGroups.get(key);
-                    for (ObservableList entry : g.getEntries()){
-                        int index_ID = tableController.getColIndex("ID");
-                        String id = (String)entry.get(index_ID);
-                        ObservableList<ObservableList> tableEntries =  tableController.getTable().getItems();
-                        for(ObservableList entry_curr : tableEntries){
-                            if(entry_curr.get(index_ID).equals(id)){
-                                toRemove.add(entry);
-                                toAdd.add(entry_curr);
-                            }
+            for(String key :allGroups.keySet()){
+                Group g = allGroups.get(key);
+                for (ObservableList entry : g.getEntries()){
+                    int index_ID = tableController.getColIndex("ID");
+                    String id = (String)entry.get(index_ID);
+                    ObservableList<ObservableList> tableEntries =  tableController.getTable().getItems();
+                    for(ObservableList entry_curr : tableEntries){
+                        if(entry_curr.get(index_ID).equals(id)){
+                            toRemove.add(entry);
+                            toAdd.add(entry_curr);
                         }
                     }
-                    g.removeElements(toRemove);
-                    g.addElements(toAdd);
-                    toRemove.clear();
-                    toAdd.clear();
                 }
+                g.removeElements(toRemove);
+                g.addElements(toAdd);
+                toRemove.clear();
+                toAdd.clear();
             }
+        }
 
     }
 
@@ -157,14 +152,6 @@ public class GroupController {
 
     public String getColname_group() {
         return colname_group;
-    }
-
-    public boolean isOwnGroupingIsSet() {
-        return ownGroupingIsSet;
-    }
-
-    public void setOwnGroupingIsSet(boolean ownGroupingIsSet) {
-        this.ownGroupingIsSet = ownGroupingIsSet;
     }
 
     public boolean isGroupingExists() {

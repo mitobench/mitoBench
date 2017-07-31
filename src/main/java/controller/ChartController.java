@@ -106,37 +106,37 @@ public class ChartController {
         // reduce haplogroups to maximum size of 20
         //if (selection_haplogroups.length >= 20) {
 
-            stackedBar.clearData();
-            stackedBar.setCategories(selection_groups);
-            HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, hg_list);
+        stackedBar.clearData();
+        stackedBar.setCategories(selection_groups);
+        HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, hg_list);
 
-            HashMap<String, List<XYChart.Data<String, Number>>> data_all;
-            data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+        HashMap<String, List<XYChart.Data<String, Number>>> data_all;
+        data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
-            // sort list alphabetically
-            java.util.Collections.sort(hg_core_list);
+        // sort list alphabetically
+        java.util.Collections.sort(hg_core_list);
 
-            for(String key : hg_core_list){
-                if(data_all.containsKey(key)) {
-                    for(int i = 0; i < selection_groups.length; i++){
-                        data_all.get(key).get(i).setYValue(roundValue(
-                                (data_all.get(key).get(i).getYValue().doubleValue() / numberOfElementsPerCaregory[i]) * 100));
-                    }
-                    stackedBar.addSeries(data_all.get(key), key);
-
-                }
-            }
-
-            if(data_all.containsKey("Others")){
-
+        for(String key : hg_core_list){
+            if(data_all.containsKey(key)) {
                 for(int i = 0; i < selection_groups.length; i++){
-                    data_all.get("Others").get(i).setYValue(roundValue(
-                            (data_all.get("Others").get(i).getYValue().doubleValue() / numberOfElementsPerCaregory[i]) * 100));
+                    data_all.get(key).get(i).setYValue(roundValue(
+                            (data_all.get(key).get(i).getYValue().doubleValue() / numberOfElementsPerCaregory[i]) * 100));
                 }
-
-                stackedBar.addSeries(data_all.get("Others"), "Others");
+                stackedBar.addSeries(data_all.get(key), key);
 
             }
+        }
+
+        if(data_all.containsKey("Others")){
+
+            for(int i = 0; i < selection_groups.length; i++){
+                data_all.get("Others").get(i).setYValue(roundValue(
+                        (data_all.get("Others").get(i).getYValue().doubleValue() / numberOfElementsPerCaregory[i]) * 100));
+            }
+
+            stackedBar.addSeries(data_all.get("Others"), "Others");
+
+        }
 
 
 

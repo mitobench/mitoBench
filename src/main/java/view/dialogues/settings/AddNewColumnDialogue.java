@@ -8,46 +8,47 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
-import controller.GroupController;
 import controller.ATableController;
 
 
 /**
  * Created by neukamm on 26.11.2016.
  */
-public class CreateGroupDialog extends APopupDialogue{
+public class AddNewColumnDialogue extends APopupDialogue{
 
 
-    private TextField groupnameField;
+    private final TextField dataField;
+    private TextField columnNameField;
     private ATableController controller;
 
-    public CreateGroupDialog(String title, GroupController groupController, ATableController tableController, LogClass logClass){
+    public AddNewColumnDialogue(String title, ATableController tableController, LogClass logClass){
         super(title, logClass);
         controller = tableController;
 
         // Elements
-        this.groupnameField = new TextField();
+        this.columnNameField = new TextField();
+        this.dataField = new TextField();
 
         Button okButton = new Button("OK");
-        addButtonListener(okButton, groupController);
+        addButtonListener(okButton);
 
-        dialogGrid.add(new Label("Groupname:"), 0,0);
-        dialogGrid.add(groupnameField, 1,0);
-        dialogGrid.add(okButton, 1,1);
+        dialogGrid.add(new Label("Name of column:"), 0,0);
+        dialogGrid.add(columnNameField, 1,0);
+        dialogGrid.add(new Label("Entry:"), 0, 1);
+        dialogGrid.add(dataField, 1, 1);
+        dialogGrid.add(okButton, 1,2);
         show();
 
     }
 
-    private void addButtonListener(Button okButton, GroupController groupController){
+    private void addButtonListener(Button okButton){
 
         okButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 // create new Group
-                String groupName = groupnameField.getText();
-                LOG.info("Create new group: " + groupName);
-                groupController.setOwnGroupingIsSet(true);
-                groupController.createGroupByColumn("Group", groupName, true);
-                controller.updateTable(controller.createNewEntryListForGrouping(groupnameField.getText(), "Group (Grouping)"));
+                String colName = columnNameField.getText();
+                LOG.info("Add new column: " + colName);
+                controller.updateTable(controller.createNewEntryList(dataField.getText(), colName));
                 close();
             }
         });
