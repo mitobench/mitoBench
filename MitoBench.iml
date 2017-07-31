@@ -27,14 +27,13 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.poi:poi-ooxml:3.15" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.mockito:mockito-core:2.4.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.testfx:testfx-junit:4.0.6-alpha" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.lynden:GMapsFX:2.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.restlet.jee:org.restlet.ext.html:2.2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.postgresql:postgresql:9.4-1201-jdbc41" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.controlsfx:controlsfx:8.40.12" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: log4j:log4j:1.2.16" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.json:json:20090211" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.jsqlparser:jsqlparser:1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.dukescript.api:leaflet4j:0.7" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.dukescript.api:leaflet4j:0.7.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.netbeans.html:net.java.html.boot.fx:1.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.testfx:openjfx-monocle:8u76-b04" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.javafxdata:datafx-core:8.0b5" level="project" />
@@ -52,13 +51,11 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.bytebuddy:byte-buddy-agent:1.5.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.objenesis:objenesis:2.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.testfx:testfx-core:4.0.6-alpha" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: ch.qos.logback:logback-classic:1.2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.restlet.jee:org.restlet:2.2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.findbugs:annotations:3.0.1u2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: ch.qos.logback:logback-core:1.2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: stax:stax-api:1.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.findbugs:jsr305:3.0.1" level="project" />
@@ -73,14 +70,13 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.poi:poi-ooxml:3.15" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.mockito:mockito-core:2.4.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.testfx:testfx-junit:4.0.6-alpha" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.lynden:GMapsFX:2.12.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.restlet.jee:org.restlet.ext.html:2.2.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.postgresql:postgresql:9.4-1201-jdbc41" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.controlsfx:controlsfx:8.40.12" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: log4j:log4j:1.2.16" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.json:json:20090211" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.github.jsqlparser:jsqlparser:1.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.dukescript.api:leaflet4j:0.7" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.dukescript.api:leaflet4j:0.7.7" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.netbeans.html:net.java.html.boot.fx:1.4" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.testfx:openjfx-monocle:8u76-b04" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.javafxdata:datafx-core:8.0b5" level="project" />
@@ -98,13 +94,11 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.bytebuddy:byte-buddy-agent:1.5.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.objenesis:objenesis:2.4" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.testfx:testfx-core:4.0.6-alpha" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: ch.qos.logback:logback-classic:1.2.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.restlet.jee:org.restlet:2.2.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.findbugs:annotations:3.0.1u2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: ch.qos.logback:logback-core:1.2.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: stax:stax-api:1.0.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.findbugs:jsr305:3.0.1" level="project" />
@@ -119,14 +113,13 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.poi:poi-ooxml:3.15" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:2.4.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.testfx:testfx-junit:4.0.6-alpha" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.lynden:GMapsFX:2.12.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.restlet.jee:org.restlet.ext.html:2.2.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.postgresql:postgresql:9.4-1201-jdbc41" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.controlsfx:controlsfx:8.40.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: log4j:log4j:1.2.16" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.json:json:20090211" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.github.jsqlparser:jsqlparser:1.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.dukescript.api:leaflet4j:0.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.dukescript.api:leaflet4j:0.7.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.netbeans.html:net.java.html.boot.fx:1.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.testfx:openjfx-monocle:8u76-b04" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
@@ -144,13 +137,11 @@
     <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy:1.5.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy-agent:1.5.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: ch.qos.logback:logback-classic:1.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.restlet.jee:org.restlet:2.2.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.findbugs:annotations:3.0.1u2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: ch.qos.logback:logback-core:1.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.findbugs:jsr305:3.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: stax:stax-api:1.0.1" level="project" />
