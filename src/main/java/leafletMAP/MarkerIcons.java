@@ -5,7 +5,6 @@ import controller.GroupController;
 import javafx.collections.ObservableList;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.Group;
 import net.java.html.leaflet.*;
@@ -98,6 +97,8 @@ public class MarkerIcons {
         String[] colors = new String[]{iconColGreen, iconColBlue, iconColRed, iconColOrange, iconColYellow,
                 iconColViolet, iconColGrey, iconColBlack};
 
+        String[] colors_2 = new String[]{"GREEN", "BLUE", "RED", "ORANGE", "YELLOW", "VIOLET", "GREY", "BLACK"};
+
         int groupCount = 0;
         HashMap<String, Group> all_groups = groupController.getGroupsWithoutUndefined();
         // iterate over groups and generates marker/icon for each element in the group.
@@ -115,11 +116,23 @@ public class MarkerIcons {
                         Icon icon = new Icon(new IconOptions(colors[groupCount])
                                 .setShadowUrl(getClass().getResource("/leaflet-0.7.2/images/marker-shadow.png").toExternalForm())
                         );
-                        Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+                        //Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+                        PathOptions pathOpt = new PathOptions().setColor(colors_2[groupCount]);
+                        CircleMarker m = new CircleMarker(pos,  pathOpt);
                         Popup popup = new Popup();
                         popup.setContent(entry.get(0).toString());
                         m.bindPopup(popup);
                         m.addTo(map);
+
+
+
+
+//                        Circle c = new Circle(pos, 3.0);
+//                        CircleOptions
+//                        c.addTo(map);
+
+
+
                     }
                 }
                 groupCount++;
