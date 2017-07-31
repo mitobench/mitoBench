@@ -177,4 +177,8 @@ public class GroupController {
 
         return allGroups_new;
     }
+
+    public int getNumberOfGroups(){
+        return allGroups.size();
+    }
 }

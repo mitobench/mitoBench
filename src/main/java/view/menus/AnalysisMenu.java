@@ -2,12 +2,17 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
+import analysis.PCA2;
+import analysis.PrincipalComponentAnalysis;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import org.ejml.data.DMatrixRMaj;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
+
+import java.util.List;
 
 
 /**
@@ -18,14 +23,16 @@ public class AnalysisMenu {
     private final LogClass logClass;
     private final MitoBenchWindow mito;
     private final TableControllerUserBench tableController;
+    private final StatisticsMenu statisticsMenu;
     private Menu menuAnalysis;
 
-    public AnalysisMenu(MitoBenchWindow mitoBenchWindow){
+    public AnalysisMenu(MitoBenchWindow mitoBenchWindow, StatisticsMenu statisticsMenu){
         menuAnalysis = new Menu("Analysis");
         menuAnalysis.setId("menu_analysis");
         mito = mitoBenchWindow;
         logClass = mitoBenchWindow.getLogClass();
         tableController = mitoBenchWindow.getTableControllerUserBench();
+        this.statisticsMenu = statisticsMenu;
         addSubMenus();
 
     }
@@ -53,6 +60,21 @@ public class AnalysisMenu {
         });
 
 
+        MenuItem pcaAnalysis = new MenuItem("PCA analysis");
+        pcaAnalysis.setId("menuitem_pairwiseFst");
+        pcaAnalysis.setOnAction(t -> {
+            PCA2 pca2 = new PCA2();
+            pca2.setData(statisticsMenu.getHaploStatistics().getData());
+            pca2.calculate();
+
+//            PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis();
+//            pca.setup(tableController.getGroupController().getNumberOfGroups(), 20);
+
+
+
+        });
+
+
         MenuItem assignHGs = new MenuItem("Calculate haplogroups");
         assignHGs.setId("menuitem_calculate_haplogroups");
         assignHGs.setOnAction(t -> {
@@ -73,7 +95,7 @@ public class AnalysisMenu {
 //                }
 
         });
-        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
+        menuAnalysis.getItems().addAll(pairwiseFst, pcaAnalysis, assignHGs);
         //menuAnalysis.getItems().add(pairwiseFst);
 
     }

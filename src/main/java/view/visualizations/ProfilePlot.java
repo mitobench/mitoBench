@@ -105,7 +105,7 @@ public class ProfilePlot extends AChart {
             HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
 
             haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
-            TableView table = haploStatistics.writeToTable(parse(haploStatistics.getData_all()));
+            TableView table = haploStatistics.writeToTable();
             haploStatistics.addListener(table, this);
             Tab tab = new Tab();
             tab.setId("tab_table_stats_" + id);
@@ -152,26 +152,6 @@ public class ProfilePlot extends AChart {
 
         this.seriesList.add(series);
     }
-
-
-    public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
-        HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
-
-        for(String group : data_all.keySet()){
-            List<XYChart.Data<String, Number>> entry = data_all.get(group);
-            HashMap<String, Integer> entry_new = new HashMap<>();
-            for(int i = 0; i < entry.size(); i++){
-                String hg = entry.get(i).getXValue();
-                int count = entry.get(i).getYValue().intValue();
-                entry_new.put(hg, count);
-            }
-            data.put(group, entry_new);
-        }
-
-        return data;
-
-    }
-
 
 
 

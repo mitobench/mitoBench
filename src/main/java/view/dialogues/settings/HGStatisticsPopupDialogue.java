@@ -82,7 +82,7 @@ public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
                 String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
                 haploStatistics.count(hg_list_trimmed);
 
-                TableView table = haploStatistics.writeToTable(parse(haploStatistics.getData_all()));
+                TableView table = haploStatistics.writeToTable();
 
                 statsTabPane.getTabs().remove(getTab());
 
@@ -110,22 +110,6 @@ public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
         default_list_checkbox.setOnMouseExited(event -> tp.hide());
     }
 
-    public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
-        HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
 
-        for(String group : data_all.keySet()){
-            List<XYChart.Data<String, Number>> entry = data_all.get(group);
-            HashMap<String, Integer> entry_new = new HashMap<>();
-            for(int i = 0; i < entry.size(); i++){
-                String hg = entry.get(i).getXValue();
-                int count = entry.get(i).getYValue().intValue();
-               entry_new.put(hg, count);
-            }
-            data.put(group, entry_new);
-        }
-
-        return data;
-
-    }
 
 }

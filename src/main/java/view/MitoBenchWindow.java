@@ -152,7 +152,7 @@ public class MitoBenchWindow extends Application{
         GroupMenu groupMenu = new GroupMenu(this);
         StatisticsMenu statisticsMenu = new StatisticsMenu(this);
         fileMenu = new FileMenu( statisticsMenu, this);
-        AnalysisMenu analysisMenu = new AnalysisMenu(this);
+        AnalysisMenu analysisMenu = new AnalysisMenu(this, statisticsMenu);
         TableMenu tableMenu = new TableMenu(this);
         VisualizationMenu graphicsMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
@@ -401,4 +401,6 @@ public class MitoBenchWindow extends Application{
     public void setFileMenu(FileMenu fileMenu) {
         this.fileMenu = fileMenu;
     }
+
+
 }

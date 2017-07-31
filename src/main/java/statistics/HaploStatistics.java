@@ -82,13 +82,14 @@ public class HaploStatistics {
     /**
      * This method writes count information to table in GUI.
      *
-     * @param data_all key : group, yalue: <HG, count>
      * @return
      */
-    public TableView writeToTable(HashMap<String, HashMap<String, Integer>>  data_all){
+    public TableView writeToTable(){
+
+        HashMap<String, HashMap<String, Integer>> data_all_new = parse(data_all);
 
         List<String> keys = new ArrayList<>();
-        keys.addAll(data_all.keySet());
+        keys.addAll(data_all_new.keySet());
         keys.remove("Others");
         Collections.sort(keys);
         keys.add("Others");
@@ -107,23 +108,24 @@ public class HaploStatistics {
 
         for(int i = 0; i < number_of_groups ; i++){
             ObservableList  entry = FXCollections.observableArrayList();
+
             int count_all_hgs = countAllHGs(i);
             for(String key : data_all.keySet()){
-                HashMap<String, Integer> data_list = data_all.get(key);
+                HashMap<String, Integer> data_list = data_all_new.get(key);
                 List<String> key_set_list = new ArrayList<String>(data_list.keySet());
                 entry.add(key_set_list.get(i));
                 entry.add(count_all_hgs);
                 break;
             }
 
-
             for(String key : keys){
-                HashMap<String, Integer> data_list = data_all.get(key);
-                List<String> key_set_list = new ArrayList<String>(data_list.keySet());
+                HashMap<String, Integer> data_list = data_all_new.get(key);
+                List<String> key_set_list = new ArrayList<>(data_list.keySet());
                 entry.add(data_list.get(key_set_list.get(i)));
             }
 
             entries.add(entry);
+
 
         }
 
@@ -133,6 +135,25 @@ public class HaploStatistics {
         table.getItems().addAll(entries);
 
         return table;
+
+    }
+
+
+    public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
+        HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
+
+        for(String group : data_all.keySet()){
+            List<XYChart.Data<String, Number>> entry = data_all.get(group);
+            HashMap<String, Integer> entry_new = new HashMap<>();
+            for(int i = 0; i < entry.size(); i++){
+                String hg = entry.get(i).getXValue();
+                int count = entry.get(i).getYValue().intValue();
+                entry_new.put(hg, count);
+            }
+            data.put(group, entry_new);
+        }
+
+        return data;
 
     }
 
@@ -195,6 +216,38 @@ public class HaploStatistics {
 
             return row ;
         });
+    }
+
+    public double[][] getData(){
+
+        HashMap<String, HashMap<String, Integer>> data_all_new = parse(data_all);
+        double[][] data = new double[number_of_groups][];
+
+        List<String> keys = new ArrayList<>();
+        keys.addAll(data_all_new.keySet());
+        keys.remove("Others");
+        Collections.sort(keys);
+        keys.add("Others");
+
+
+        for(int i = 0; i < number_of_groups ; i++){
+            ObservableList  entry = FXCollections.observableArrayList();
+            double[] d = new double[keys.size()];
+
+            int counter = 0;
+            for(String key : keys){
+                HashMap<String, Integer> data_list = data_all_new.get(key);
+                List<String> key_set_list = new ArrayList<>(data_list.keySet());
+                entry.add(data_list.get(key_set_list.get(i)));
+                d[counter] = data_list.get(key_set_list.get(i));
+                counter++;
+            }
+
+            data[i] = d;
+
+        }
+
+        return data;
     }
 
     public HashMap<String, List<XYChart.Data<String, Number>>> getData_all() {
