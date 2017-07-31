@@ -5,6 +5,7 @@ import controller.GroupController;
 import javafx.collections.ObservableList;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.Group;
 import net.java.html.leaflet.*;
@@ -53,7 +54,6 @@ public class MarkerIcons {
 
         if(groups==null){
             addMarkerOneColor(
-                    getClass().getResource("/leaflet-0.7.2/images/marker-icon-blue.png").toExternalForm(),
                     items,
                     map
             );
@@ -65,21 +65,17 @@ public class MarkerIcons {
 
     /**
      * This method generates marker/icon (single color = blue) if no grouping is defined.
-     * @param color
+     *
      * @param items
      * @param map
      */
-    private void addMarkerOneColor(String color, ObservableList items, Map map) {
+    private void addMarkerOneColor(ObservableList items, Map map) {
         for(Object location : items){
             Location loc = (Location) location;
             LatLng pos = new LatLng(loc.getLat(), loc.getLng());
 
-
-            Icon icon = new Icon(new IconOptions(color)
-                    .setShadowUrl(getClass().getResource("/leaflet-0.7.2/images/marker-shadow.png").toExternalForm())
-            );
-
-            Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
+            PathOptions pathOpt = new PathOptions().setColor("BLUE");
+            CircleMarker m = new CircleMarker(pos,  pathOpt);
             Popup popup = new Popup();
             popup.setContent(location.toString());
             m.bindPopup(popup);
@@ -94,8 +90,6 @@ public class MarkerIcons {
      */
     private void addMarkerMultiColor(Map map) {
 
-        String[] colors = new String[]{iconColGreen, iconColBlue, iconColRed, iconColOrange, iconColYellow,
-                iconColViolet, iconColGrey, iconColBlack};
 
         String[] colors_2 = new String[]{"GREEN", "BLUE", "RED", "ORANGE", "YELLOW", "VIOLET", "GREY", "BLACK"};
 
@@ -104,40 +98,26 @@ public class MarkerIcons {
         // iterate over groups and generates marker/icon for each element in the group.
         for(String gName : all_groups.keySet()){
             Group g = all_groups.get(gName);
-            //if(!g.equals("Undefined")){
-                for(Object gMember : g.getEntries()){
 
-                    ObservableList entry = (ObservableList) gMember;
+            for(Object gMember : g.getEntries()){
 
-                    String location = (String) entry.get(tableController.getColIndex("Location"));
-                    if(!location.equals("Undefined")){
-                        String[] loc = location.split(",");
-                        LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
-                        Icon icon = new Icon(new IconOptions(colors[groupCount])
-                                .setShadowUrl(getClass().getResource("/leaflet-0.7.2/images/marker-shadow.png").toExternalForm())
-                        );
-                        //Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
-                        PathOptions pathOpt = new PathOptions().setColor(colors_2[groupCount]);
-                        CircleMarker m = new CircleMarker(pos,  pathOpt);
-                        Popup popup = new Popup();
-                        popup.setContent(entry.get(0).toString());
-                        m.bindPopup(popup);
-                        m.addTo(map);
+                ObservableList entry = (ObservableList) gMember;
 
+                String location = (String) entry.get(tableController.getColIndex("Location"));
+                if(!location.equals("Undefined")){
+                    String[] loc = location.split(",");
+                    LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
 
+                    PathOptions pathOpt = new PathOptions().setColor(colors_2[groupCount]);
+                    CircleMarker m = new CircleMarker(pos,  pathOpt);
+                    Popup popup = new Popup();
+                    popup.setContent(entry.get(0).toString());
+                    m.bindPopup(popup);
+                    m.addTo(map);
 
-
-//                        Circle c = new Circle(pos, 3.0);
-//                        CircleOptions
-//                        c.addTo(map);
-
-
-
-                    }
                 }
-                groupCount++;
-            //}
-
+            }
+            groupCount++;
 
         }
     }
@@ -161,29 +141,23 @@ public class MarkerIcons {
      * @return Legend
      */
 
-    public Legend getLegend(
-                            double shadowWidth, double shadowHeight,
-                            double offsetX, double offsetY,
-                            double radius) {
+    public Legend getLegend() {
 
         Legend legend = new Legend();
+        legend.setVertical(false);
+
         int colorCount = 0;
         for (String groupName : groupController.getGroupnames()) {
             if(!groupName.equals("Undefined")){
-
-                Rectangle rect = new Rectangle(20,20,10, 10);
+                Rectangle rect = new Rectangle(10,10,5, 5);
                 rect.setFill(colorsString[colorCount]);
                 rect.setStroke(colorsString[colorCount]);
 
-                DropShadow e = new DropShadow();
-                e.setWidth(shadowWidth);
-                e.setHeight(shadowHeight);
-                e.setOffsetX(offsetX);
-                e.setOffsetY(offsetY);
-                e.setRadius(radius);
-                //rect.setEffect(e);
+                Circle circ = new Circle(10,10,5, colorsString[colorCount]);
+                circ.setFill(colorsString[colorCount]);
+                circ.setStroke(colorsString[colorCount]);
 
-                Legend.LegendItem legendItem = new Legend.LegendItem(groupName, rect);
+                Legend.LegendItem legendItem = new Legend.LegendItem(groupName, circ);
                 legend.getItems().add(legendItem);
                 colorCount++;
             }

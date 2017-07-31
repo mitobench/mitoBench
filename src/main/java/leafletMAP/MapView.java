@@ -130,12 +130,8 @@ public class MapView extends StackPane {
 
         markerIcons.addIconsToMap(map);
 
-        Legend legend = markerIcons.getLegend(10, 10, 5,  5, 5);
-        legend.setVertical(true);
-        VBox rightBox = new VBox();
-        rightBox.getChildren().add(legend);
-        mapBasicPane.setRight(rightBox);
-
+        Legend legend = markerIcons.getLegend();
+        mapBasicPane.setBottom(legend);
 
     }
 
