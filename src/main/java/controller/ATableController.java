@@ -112,6 +112,9 @@ public abstract class ATableController {
         setColumns_to_index();
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
+
+        // add table filter todo: not working after changing number of columns
+        //filter = new TableFilter(table);
     }
 
 
