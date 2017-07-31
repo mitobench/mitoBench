@@ -1,4 +1,4 @@
-package view.charts;
+package view.visualizations;
 
 import Logging.LogClass;
 import controller.ChartController;

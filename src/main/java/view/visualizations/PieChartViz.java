@@ -1,4 +1,4 @@
-package view.charts;
+package view.visualizations;
 
 import Logging.LogClass;
 import javafx.scene.Node;
@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 

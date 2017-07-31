@@ -1,9 +1,8 @@
-package view.charts;
+package view.visualizations;
 
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;

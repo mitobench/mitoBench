@@ -3,9 +3,9 @@ package controller;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
-import view.charts.BarChartGrouping;
-import view.charts.BarPlotHaplo;
-import view.charts.StackedBar;
+import view.visualizations.BarChartGrouping;
+import view.visualizations.BarPlotHaplo;
+import view.visualizations.StackedBar;
 
 import java.net.MalformedURLException;
 import java.util.*;

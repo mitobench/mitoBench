@@ -1,4 +1,4 @@
-package view.charts;
+package view.visualizations;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

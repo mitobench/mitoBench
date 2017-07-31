@@ -1,9 +1,11 @@
-package leaflet;
+package leafletMAP;
 
 import com.sun.javafx.charts.Legend;
 import controller.GroupController;
 import javafx.collections.ObservableList;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.Group;
 import net.java.html.leaflet.*;
@@ -24,15 +26,15 @@ public class MarkerIcons {
     // definition of all colours that can be used to color the marker icons
     // (https://github.com/pointhi/leaflet-color-markers)
     // TODO: using awesome-markers ? (https://github.com/lvoogdt/Leaflet.awesome-markers)
-    // TODO: or create own markers (just dot in different colors)
-    private String iconColGreen = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png";
-    private String iconColBlue = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png";
-    private String iconColRed = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png";
-    private String iconColOrange = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png";
-    private String iconColYellow = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png";
-    private String iconColViolet = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png";
-    private String iconColGrey = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png";
-    private String iconColBlack = "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png";
+    // TODO: or create own markers (just dots in different colors)
+    private String iconColGreen = getClass().getResource("/leaflet-0.7.2/images/marker-icon-green.png").toExternalForm();
+    private String iconColBlue = getClass().getResource("/leaflet-0.7.2/images/marker-icon-blue.png").toExternalForm();
+    private String iconColRed = getClass().getResource("/leaflet-0.7.2/images/marker-icon-red.png").toExternalForm();;
+    private String iconColOrange = getClass().getResource("/leaflet-0.7.2/images/marker-icon-orange.png").toExternalForm();
+    private String iconColYellow = getClass().getResource("/leaflet-0.7.2/images/marker-icon-yellow.png").toExternalForm();
+    private String iconColViolet = getClass().getResource("/leaflet-0.7.2/images/marker-icon-violet.png").toExternalForm();
+    private String iconColGrey = getClass().getResource("/leaflet-0.7.2/images/marker-icon-grey.png").toExternalForm();
+    private String iconColBlack = getClass().getResource("/leaflet-0.7.2/images/marker-icon-black.png").toExternalForm();
     private Color[] colorsString = new Color[]{Color.GREEN, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.VIOLET,
     Color.GREY, Color.BLACK};
 
@@ -52,7 +54,7 @@ public class MarkerIcons {
 
         if(groups==null){
             addMarkerOneColor(
-                    "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+                    getClass().getResource("/leaflet-0.7.2/images/marker-icon-blue.png").toExternalForm(),
                     items,
                     map
             );
@@ -75,7 +77,7 @@ public class MarkerIcons {
 
 
             Icon icon = new Icon(new IconOptions(color)
-                    .setShadowUrl("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png")
+                    .setShadowUrl(getClass().getResource("/leaflet-0.7.2/images/marker-shadow.png").toExternalForm())
             );
 
             Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
@@ -111,7 +113,7 @@ public class MarkerIcons {
                         String[] loc = location.split(",");
                         LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
                         Icon icon = new Icon(new IconOptions(colors[groupCount])
-                                .setShadowUrl("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png")
+                                .setShadowUrl(getClass().getResource("/leaflet-0.7.2/images/marker-shadow.png").toExternalForm())
                         );
                         Marker m = new Marker(pos, new MarkerOptions().setIcon(icon));
                         Popup popup = new Popup();
@@ -146,15 +148,27 @@ public class MarkerIcons {
      * @return Legend
      */
 
-    public Legend getLegend() {
+    public Legend getLegend(
+                            double shadowWidth, double shadowHeight,
+                            double offsetX, double offsetY,
+                            double radius) {
 
         Legend legend = new Legend();
         int colorCount = 0;
         for (String groupName : groupController.getGroupnames()) {
             if(!groupName.equals("Undefined")){
+
                 Rectangle rect = new Rectangle(20,20,10, 10);
                 rect.setFill(colorsString[colorCount]);
                 rect.setStroke(colorsString[colorCount]);
+
+                DropShadow e = new DropShadow();
+                e.setWidth(shadowWidth);
+                e.setHeight(shadowHeight);
+                e.setOffsetX(offsetX);
+                e.setOffsetY(offsetY);
+                e.setRadius(radius);
+                //rect.setEffect(e);
 
                 Legend.LegendItem legendItem = new Legend.LegendItem(groupName, rect);
                 legend.getItems().add(legendItem);

@@ -1,4 +1,4 @@
-package view.charts;
+package view.visualizations;
 
 
 import Logging.LogClass;
@@ -14,11 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
 
-import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;

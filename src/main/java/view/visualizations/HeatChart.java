@@ -18,7 +18,7 @@
  *  along with JHeatChart.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package view.charts;
+package view.visualizations;
 
 
 
@@ -34,7 +34,7 @@ import javax.imageio.stream.FileImageOutputStream;
 /**
  * The <code>HeatChart</code> class describes a chart which can display
  * 3-dimensions of values - x,y and z, where x and y are the usual 2-dimensional
- * axis and z is portrayed by colour intensity. Heat charts are sometimes known
+ * axis and z is portrayed by colour intensity. Heat visualizations are sometimes known
  * as heat maps.
  *
  * <p>
@@ -660,7 +660,7 @@ public class HeatChart {
     /**
      * Sets the String that will be used as the title of any successive
      * calls to generate a chart. The title will be displayed centralised
-     * horizontally at the top of any generated charts.
+     * horizontally at the top of any generated visualizations.
      *
      * <p>
      * If the title is set to <tt>null</tt> then no title will be displayed.
@@ -676,7 +676,7 @@ public class HeatChart {
 
     /**
      * Returns the String that will be displayed as a description of the
-     * x-axis in any generated charts.
+     * x-axis in any generated visualizations.
      *
      * @return the display label describing the x-axis.
      */
@@ -686,7 +686,7 @@ public class HeatChart {
 
     /**
      * Sets the String that will be displayed as a description of the
-     * x-axis in any generated charts. The label will be displayed
+     * x-axis in any generated visualizations. The label will be displayed
      * horizontally central of the x-axis bar.
      *
      * <p>
@@ -704,7 +704,7 @@ public class HeatChart {
 
     /**
      * Returns the String that will be displayed as a description of the
-     * y-axis in any generated charts.
+     * y-axis in any generated visualizations.
      *
      * @return the display label describing the y-axis.
      */
@@ -714,7 +714,7 @@ public class HeatChart {
 
     /**
      * Sets the String that will be displayed as a description of the
-     * y-axis in any generated charts. The label will be displayed
+     * y-axis in any generated visualizations. The label will be displayed
      * horizontally central of the y-axis bar.
      *
      * <p>
@@ -851,7 +851,7 @@ public class HeatChart {
      * Defaults to 2 pixels.
      *
      * @param axisThickness the thickness to use for the axis bars in any newly
-     * generated charts.
+     * generated visualizations.
      */
     public void setAxisThickness(int axisThickness) {
         this.axisThickness = axisThickness;

@@ -112,10 +112,6 @@ public abstract class ATableController {
         setColumns_to_index();
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
-
-        // add table filter
-        TableFilter filter = new TableFilter(table);
-
     }
 
 

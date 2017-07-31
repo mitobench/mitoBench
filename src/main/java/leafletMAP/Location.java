@@ -1,4 +1,4 @@
-package leaflet;
+package leafletMAP;
 
 /**
  *

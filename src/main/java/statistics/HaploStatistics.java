@@ -9,7 +9,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import controller.ChartController;
 import org.apache.log4j.Logger;
-import view.charts.ProfilePlot;
+import view.visualizations.ProfilePlot;
 import controller.TableControllerMutations;
 import controller.TableControllerUserBench;
 import controller.HaplotreeController;

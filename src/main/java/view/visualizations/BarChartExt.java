@@ -1,4 +1,4 @@
-package view.charts;
+package view.visualizations;
 
 /**
  * Created by neukamm on 28.11.16.

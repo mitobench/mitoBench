@@ -1,4 +1,4 @@
-package view.charts;
+package view.visualizations;
 
 
 import javafx.geometry.Orientation;
@@ -13,8 +13,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.stream.IntStream;
 
 /**
  * Created by neukamm on 13.07.17.

@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 import methods.Filter;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import view.charts.HeatMap;
+import view.visualizations.HeatMap;
 import view.table.MTStorage;
 import controller.TableControllerFstValues;
 import controller.TableControllerUserBench;

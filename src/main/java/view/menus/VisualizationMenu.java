@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import view.charts.*;
+import view.visualizations.*;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import controller.TableControllerUserBench;
@@ -204,10 +204,14 @@ public class VisualizationMenu {
     private void initMap(){
         LOG.info("Visualize data: Visualize all samples on map");
 
-        LeafletController mapViewController = null;
+        GeographicalMapController mapViewController = null;
+        GeographicalMapViz geographicalMapViz = new GeographicalMapViz();
         try {
-            mapViewController = new LeafletController(mito,
-                    groupController
+
+            mapViewController = new GeographicalMapController(
+                    mito,
+                    groupController,
+                    geographicalMapViz
             );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -220,7 +224,7 @@ public class VisualizationMenu {
         Tab tab = new Tab();
         tab.setId("tab_map");
         tab.setText("Map");
-        tab.setContent(mapViewController.getMap());
+        tab.setContent(geographicalMapViz.getMapBasicPane());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
 
