@@ -93,23 +93,20 @@ public class HeatMapLegend {
 
 
     private HBox createValuesBar() {
+        double[] steps = new double[6];
 
         HBox pane = new HBox();
-        pane.setMaxWidth(width);
+        pane.setMaxWidth(width + width/steps.length);
 
-        //pane.setPadding(new Insets(10,10,10,10));
-
-        //double[] steps = new double[]{0.0,0.2,0.4,0.6,0.8,1.0};
-        double[] steps = new double[4];
-        double add = MAX / 3.0;
+        double add = MAX / 5.0;
         double val = MIN;
         steps[0] = round(val,2);
-        steps[3] = round(MAX, 2);
+        steps[5] = round(MAX, 2);
         for(int d = 1; d < steps.length-1; d++){
             steps[d] = round((val + add), 2);
             val += add;
-
         }
+
         int minWidth = width/steps.length;
         //TextField tf[] = new TextField[steps.length];
         Label tf[] = new Label[steps.length];
@@ -118,13 +115,15 @@ public class HeatMapLegend {
         for(int i=0;i<tf.length;i++)
         {
             tf[i] = new Label(""+steps[i]);
-            tf[i].setAlignment(Pos.CENTER);
+            tf[i].setAlignment(Pos.CENTER_LEFT);
             tf[i].setMinWidth(minWidth);
             //tf[i].setEditable(false);
             pane.getChildren().add(tf[i]);
             // Add a spacer after the label
             pane.getChildren().add(createSpacer());
         }
+       // tf[0].setAlignment(Pos.CENTER_LEFT);
+       // tf[tf.length-1].setAlignment(Pos.CENTER_RIGHT);
         pane.setAlignment(Pos.CENTER_RIGHT);
 
         return pane;

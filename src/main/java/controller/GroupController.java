@@ -69,6 +69,7 @@ public class GroupController {
         }
 
         updateGrouping();
+
     }
 
     private void updateGrouping() {

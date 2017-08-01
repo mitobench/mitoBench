@@ -5,7 +5,6 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
-import sun.font.TextLabel;
 import view.MitoBenchWindow;
 
 import java.util.HashMap;
@@ -70,9 +69,11 @@ public class HaplotypeSharingVis {
 
         HeatMap heatMap_haplotypeSharing = new HeatMap("","", mito.getLogClass());
         heatMap_haplotypeSharing.setContextMenu(mito.getTabpane_visualization());
-        heatMap_haplotypeSharing.createHeatMap(data, labels, "Shared Haplotypes");
-
+        heatMap_haplotypeSharing.createHeatMap(data, labels, "Shared Haplotypes", haplotype_sharing);
         back.setCenter(heatMap_haplotypeSharing.heatMap);
+
+
+
     }
 
     public void generateInfo(){
@@ -83,15 +84,15 @@ public class HaplotypeSharingVis {
         int i = 0;
         for(String s : haplotype_sharing.keySet()){
             List<String> tmp = haplotype_sharing.get(s);
+            java.util.Collections.sort(tmp);
             Label info = new Label((tmp).toString());
             tps[i] = new TitledPane(s + "(" + tmp.size() + ")", info);
             i++;
         }
 
         accordion.getPanes().addAll(tps);
-        //accordion.setExpandedPane(tps[0]);
 
-        back.setRight(accordion);
+        //back.setRight(accordion);
 
     }
 

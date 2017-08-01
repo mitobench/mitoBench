@@ -401,6 +401,7 @@ public abstract class ATableController {
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
                 groupController.createGroupByColumn(colname, "");
+                groupController.setGroupingExists(true);
                 break;
             }
         }

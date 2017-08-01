@@ -22,11 +22,24 @@ package view.visualizations;
 
 
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import javafx.scene.text.TextAlignment;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.*;
 import javax.imageio.stream.FileImageOutputStream;
@@ -1771,6 +1784,65 @@ public class HeatChart {
             }
         }
         return min;
+    }
+
+    public BorderPane getGrid(double[][] values, String[] labels, HashMap<String, List<String>> haplotype_sharing){
+        GridPane grid = new GridPane();
+        int size = (values.length+1)*50;
+        grid.setMinSize(size, size);
+        grid.setMaxSize(size, size);
+        grid.setAlignment(Pos.CENTER);
+        //grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setHgap(1);
+        grid.setVgap(1);
+        BorderPane back = new BorderPane();
+
+        // set labels
+        for(int i = 0; i < labels.length; i++){
+            Label l = new Label(labels[i]);
+            l.setAlignment(Pos.CENTER_LEFT);
+            l.setMinWidth(Region.USE_PREF_SIZE);
+            l.setMaxWidth(Region.USE_PREF_SIZE);
+            l.setMinHeight(Region.USE_PREF_SIZE);
+            l.setMaxHeight(Region.USE_PREF_SIZE);
+            //l.setMinSize(200,30);
+            //l.setMaxSize(200,30);
+            grid.add(l, 0, i);
+
+            Label l2 = new Label(labels[i]);
+            l2.setRotate(405);
+            l2.setAlignment(Pos.CENTER_LEFT);
+            grid.add(l2, i+1, values.length+1);
+        }
+
+
+        for(int i = 0; i < values.length; i++){
+            for(int j = 0; j < values[i].length; j++){
+                javafx.scene.shape.Rectangle rec = new javafx.scene.shape.Rectangle();
+                rec.setHeight(cellSize.height);
+                rec.setWidth(cellSize.width);
+                rec.setStroke(javafx.scene.paint.Color.BLACK);
+                Color color = getCellColour(values[i][j], lowValue, highValue);
+
+                int r = color.getRed();
+                int g = color.getGreen();
+                int b = color.getBlue();
+                int a = color.getAlpha();
+                double opacity = a / 255.0 ;
+                javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.rgb(r, g, b, opacity);
+                rec.setFill(fxColor);
+                Tooltip t = new Tooltip("A Square");
+                Tooltip.install(rec, t);
+                grid.add(rec, i+1,j,1,1);
+
+            }
+
+
+        }
+
+        back.setCenter(grid);
+        return back;
+
     }
 
 }
