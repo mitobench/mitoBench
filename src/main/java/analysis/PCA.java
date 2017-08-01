@@ -3,6 +3,7 @@ package analysis;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.stat.correlation.Covariance;
 import org.jblas.ComplexDoubleMatrix;
 import org.jblas.DoubleMatrix;
@@ -70,7 +71,7 @@ public class PCA {
         DoubleMatrix mt2 = new DoubleMatrix(getResult());
 
 
-        //System.out.println(mt2.mmul(mt));
+        System.out.println(mt2.mmul(mt));
         //System.out.println(PCA.dimensionReduction(mt, 1));
 
         //print(ed);
@@ -117,16 +118,16 @@ public class PCA {
     private double[][] getResult() {
 
 
-        int size = ed.getRealEigenvalues().length;
-        double[][] result = new double[size][];
+        RealVector eigenvector0 = ed.getEigenvector(0);
+        RealVector eigenvector1 = ed.getEigenvector(1);
 
-        for(int i = 0; i < size; i++){
-            result[i] = ed.getEigenvector(i).toArray();
-        }
+        double[][] result = new double[2][];
+        result[0] = eigenvector0.toArray();
+        result[1] = eigenvector1.toArray();
 
-        double[][] data_transposed = transposeMatrix(result);
-
-        return data_transposed;
+        return result;
+        // double[][] data_transposed = transposeMatrix(result);
+        // return data_transposed;
 
     }
 

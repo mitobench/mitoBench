@@ -92,4 +92,8 @@ public class StatisticsMenu {
     public HaploStatistics getHaploStatistics() {
         return haploStatistics;
     }
+
+    public HaplotypeStatistics getMutationStatistics() {
+        return mutationStatistics;
+    }
 }

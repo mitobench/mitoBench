@@ -72,8 +72,7 @@ public class VisualizationMenu {
 
         treeController = mitoBenchWindow.getTreeController();
         tableController = mitoBenchWindow.getTableControllerUserBench();
-        chartController = new ChartController();
-        chartController.init(tableController, treeController.getTreeMap());
+        chartController = mitoBenchWindow.getChartController();
         groupController = mitoBenchWindow.getGroupController();
 
         tabPane = mitoBenchWindow.getTabpane_visualization();
@@ -287,7 +286,7 @@ public class VisualizationMenu {
             if(tableController.getTableColumnByName("Grouping") != null
                     && tableController.getTable().getItems().size()!=0) {
 
-                String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+                String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
                 String[] selection_haplogroups = cols[0];
                 String[] selection_groups = cols[1];
 
@@ -448,7 +447,7 @@ public class VisualizationMenu {
                     if(tableController.getTableColumnByName("Grouping") != null){
                         // get selected rows
 
-                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
+                        String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"},
                                 tableController.getSelectedRows());
                         String[] selection_haplogroups = cols[0];
                         String[] selection_groups = cols[1];
@@ -466,7 +465,7 @@ public class VisualizationMenu {
                             }
                         }
                     } else {
-                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
+                        String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup"},
                                 tableController.getSelectedRows());
                         String[] selection_haplogroups = cols[0];
 

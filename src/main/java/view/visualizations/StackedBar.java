@@ -165,7 +165,7 @@ public class StackedBar extends AChart{
         TableColumn group_col = graphicsMenu.getTableController().getTableColumnByName("Grouping");
 
         // get only those haplogroups that does not already correspond to another macroHG displayed
-        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+        String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] selection_haplogroups = cols[0];
 
 

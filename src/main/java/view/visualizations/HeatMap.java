@@ -29,25 +29,25 @@ public class HeatMap extends AChart{
     }
 
 
-    public void createHeatMap(double[][] fsts, String[] groupnames){
+    public void createHeatMap(double[][] values, String[] labels, String title){
 
 
-        double[] count = new double[fsts.length];
-        for (int i = 0; i < fsts.length; i++) {
-            count[i] = Arrays.stream( fsts[i]).max().getAsDouble();
+        double[] count = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            count[i] = Arrays.stream( values[i]).max().getAsDouble();
         }
         double MAX = Arrays.stream( count).max().getAsDouble();
 
-        double[] count_min = new double[fsts.length];
-        for (int i = 0; i < fsts.length; i++) {
-            count_min[i] = Arrays.stream( fsts[i]).min().getAsDouble();
+        double[] count_min = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            count_min[i] = Arrays.stream( values[i]).min().getAsDouble();
         }
         double MIN = Arrays.stream( count_min).min().getAsDouble();
 
-        HeatChart heat = new HeatChart(transposeMatrix(fsts), MIN, MAX);
-        heat.setTitle("Fst values");
-        heat.setXValues(groupnames);
-        heat.setYValues(groupnames);
+        HeatChart heat = new HeatChart(transposeMatrix(values), MIN, MAX);
+        heat.setTitle(title);
+        heat.setXValues(labels);
+        heat.setYValues(labels);
 
         Image i = SwingFXUtils.toFXImage((BufferedImage) heat.getChartImage(false), null);
         ImageView v = new ImageView(i);

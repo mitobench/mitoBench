@@ -442,7 +442,7 @@ public class ChartController {
 
 
 
-        String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+        String[][] cols = prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] seletcion_haplogroups = cols[0];
         String[] seletcion_groups = cols[1];
 
@@ -537,7 +537,7 @@ public class ChartController {
      * @param selectedTableItems
      * @return
      */
-    public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems){
+    public String[][] prepareColumnsUnique(String[] names, ObservableList<ObservableList> selectedTableItems){
 
 
         String[][] res = new String[names.length][];

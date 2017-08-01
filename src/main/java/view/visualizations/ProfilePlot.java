@@ -48,7 +48,7 @@ public class ProfilePlot extends AChart {
     public void create(TableControllerUserBench tableController, HaplotreeController treeController,
                        ChartController chartController, LogClass logClass, TabPane statsTabpane){
 
-        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+        String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = removeUndefined(cols[1]);
         HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());

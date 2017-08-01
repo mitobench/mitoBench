@@ -2,7 +2,9 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
+import analysis.HaplotypeSharing;
 import analysis.PCA;
+import controller.GroupController;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
@@ -10,6 +12,11 @@ import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
+import view.visualizations.HaplotypeSharingVis;
+import view.visualizations.HeatMap;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -21,6 +28,7 @@ public class AnalysisMenu {
     private final MitoBenchWindow mito;
     private final TableControllerUserBench tableController;
     private final StatisticsMenu statisticsMenu;
+    private final GroupController groupcontroller;
     private Menu menuAnalysis;
 
     public AnalysisMenu(MitoBenchWindow mitoBenchWindow, StatisticsMenu statisticsMenu){
@@ -30,6 +38,7 @@ public class AnalysisMenu {
         logClass = mitoBenchWindow.getLogClass();
         tableController = mitoBenchWindow.getTableControllerUserBench();
         this.statisticsMenu = statisticsMenu;
+        this.groupcontroller = mitoBenchWindow.getGroupController();
         addSubMenus();
 
     }
@@ -77,6 +86,32 @@ public class AnalysisMenu {
         });
 
 
+
+
+        MenuItem item_haplotypeSharing = new MenuItem("Haplotype sharing");
+        item_haplotypeSharing.setId("menuitem_haplotypeSharing");
+        item_haplotypeSharing.setOnAction(t -> {
+
+            HaplotypeSharing haplotypeSharing = new HaplotypeSharing(
+                    mito.getTableControllerUserBench());
+
+            HashMap<String, List<String>> res_haplotype_sharing = haplotypeSharing.generateData();
+
+            HaplotypeSharingVis haplotypeSharingVis = new HaplotypeSharingVis(mito);
+            haplotypeSharingVis.generateHeatmap(res_haplotype_sharing);
+            haplotypeSharingVis.generateInfo();
+
+            Tab tab = new Tab("Haplotype Sharing");
+            tab.setId("tab_haplotypesharing");
+            tab.setContent(haplotypeSharingVis.getBack());
+
+            mito.getTabpane_visualization().getTabs().add(tab);
+
+
+
+        });
+
+
         MenuItem assignHGs = new MenuItem("Calculate haplogroups");
         assignHGs.setId("menuitem_calculate_haplogroups");
         assignHGs.setOnAction(t -> {
@@ -97,7 +132,7 @@ public class AnalysisMenu {
 //                }
 
         });
-        menuAnalysis.getItems().addAll(pairwiseFst, pcaAnalysis, assignHGs);
+        menuAnalysis.getItems().addAll(pairwiseFst, pcaAnalysis, item_haplotypeSharing, assignHGs);
         //menuAnalysis.getItems().add(pairwiseFst);
 
     }

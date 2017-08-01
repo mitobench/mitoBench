@@ -203,7 +203,7 @@ public class FstCalculationRunner {
 
         HeatMap heatMap = new HeatMap("","", mitobenchWindow.getLogClass());
         heatMap.setContextMenu(mitobenchWindow.getTabpane_visualization());
-        heatMap.createHeatMap(fsts, groupnames);
+        heatMap.createHeatMap(fsts, groupnames, "Fst values");
 
         Tab tab = new Tab("Fst values");
         tab.setId("tab_heatmap");

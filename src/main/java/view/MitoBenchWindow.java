@@ -2,7 +2,7 @@ package view;
 
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
-import controller.HaplotreeController;
+import controller.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -16,10 +16,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.xml.sax.SAXException;
-import controller.GroupController;
 import view.menus.*;
-import controller.TableControllerDB;
-import controller.TableControllerUserBench;
 import view.tree.TreeView;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -52,6 +49,7 @@ public class MitoBenchWindow extends Application{
     private TreeView treeView;
     private boolean anotherProjectLoaded;
     private FileMenu fileMenu;
+    private ChartController chartController;
 
 
     @Override
@@ -119,6 +117,8 @@ public class MitoBenchWindow extends Application{
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerDB.getTable().prefWidthProperty().bind(scene.widthProperty());
 
+
+
         // initialize haplotree with search function
         BorderPane borderpane_center = new BorderPane();
 
@@ -126,6 +126,11 @@ public class MitoBenchWindow extends Application{
         treeController = new HaplotreeController(tableControllerUserBench, logClass, this);
         treeView = new TreeView(treeController.getTree());
         treeController.setTreeView(treeView);
+
+
+        chartController = new ChartController();
+        chartController.init(tableControllerUserBench, treeController.getTreeMap());
+
 
         // get all components of central part
         borderpane_center.setCenter(getCenterPane());
@@ -402,5 +407,7 @@ public class MitoBenchWindow extends Application{
         this.fileMenu = fileMenu;
     }
 
-
+    public ChartController getChartController() {
+        return chartController;
+    }
 }

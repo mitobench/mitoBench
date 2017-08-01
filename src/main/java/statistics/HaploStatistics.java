@@ -58,7 +58,7 @@ public class HaploStatistics {
             groupingMustBeDeleted = true;
         }
 
-        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
+        String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"}, tableItems);
         String[] selection_haplogroups = cols[0];
         String[] selection_groups = cols[1];
         if(Arrays.asList(selection_groups).contains("Undefined")){
