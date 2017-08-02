@@ -31,7 +31,7 @@ public class StatisticsMenu {
     private TableControllerUserBench tableController;
     private HaplotreeController treeHaploController;
     private GroupController groupController;
-    private HaploStatistics haploStatistics;
+    private HaploStatistics haploStatistics ;
     private HaplotypeStatistics mutationStatistics;
     private Logger LOG;
     private LogClass LOGClass;
@@ -55,9 +55,8 @@ public class StatisticsMenu {
         haploStats.setId("toolsMenu_stats_hg");
         haploStats.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                haploStatistics = new HaploStatistics(tableController, treeHaploController, LOGClass);
                 HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
-                hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane, scene);
+                hgStatisticsPopupDialogug.init(mito);
                 Tab tab = hgStatisticsPopupDialogug.getTab();
                 mito.getTabpane_statistics().getTabs().add(tab);
             }

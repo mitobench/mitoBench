@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.xml.sax.SAXException;
+import statistics.HaploStatistics;
 import view.menus.*;
 import view.tree.TreeView;
 
@@ -410,4 +411,5 @@ public class MitoBenchWindow extends Application{
     public ChartController getChartController() {
         return chartController;
     }
+
 }

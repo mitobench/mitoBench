@@ -12,6 +12,8 @@ import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
+import view.dialogues.settings.HGStatisticsPopupDialogue;
+import view.dialogues.settings.PcaPopupDialogue;
 import view.visualizations.HaplotypeSharingVis;
 import view.visualizations.HeatMap;
 
@@ -69,19 +71,12 @@ public class AnalysisMenu {
         MenuItem pcaAnalysis = new MenuItem("PCA analysis");
         pcaAnalysis.setId("menuitem_pairwiseFst");
         pcaAnalysis.setOnAction(t -> {
-            PCA pca2 = new PCA();
-            pca2.setData(statisticsMenu.getHaploStatistics().getData());
-            pca2.calculate();
-            pca2.plot();
+            // PCA needs haplotype statistics!!
 
-            Tab tab = new Tab();
-            tab.setId("tab_pca_plot");
-            tab.setContent(pca2.getPca_plot().getSc());
-            mito.getTabpane_visualization().getTabs().add(tab);
-//            PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis();
-//            pca.setup(tableController.getGroupController().getNumberOfGroups(), 20);
-
-
+            PcaPopupDialogue pcaPopupDialogue = new PcaPopupDialogue("PCA configuration", logClass);
+            pcaPopupDialogue.init(mito);
+            Tab tab_stats = pcaPopupDialogue.getTab();
+            mito.getTabpane_statistics().getTabs().add(tab_stats);
 
         });
 

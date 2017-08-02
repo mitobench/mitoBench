@@ -13,9 +13,9 @@ public class ScatterPlot {
     }
 
 
-    public void create(int lowerbound_x, int lowerbound_y, int upperbound_x, int upperbound_y){
+    public void create(double lowerbound_x, double lowerbound_y, double upperbound_x, double upperbound_y){
         final NumberAxis xAxis = new NumberAxis(lowerbound_x, upperbound_x, 1);
-        final NumberAxis yAxis = new NumberAxis(lowerbound_y, upperbound_y, 100);
+        final NumberAxis yAxis = new NumberAxis(lowerbound_y, upperbound_y, 1);
         sc = new ScatterChart<Number,Number>(xAxis,yAxis);
         xAxis.setLabel("PC 1");
         yAxis.setLabel("PC 2");

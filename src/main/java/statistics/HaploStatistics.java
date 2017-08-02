@@ -126,7 +126,6 @@ public class HaploStatistics {
 
             entries.add(entry);
 
-
         }
 
         // clear Items in table
@@ -139,6 +138,12 @@ public class HaploStatistics {
     }
 
 
+    /**
+     * Parse chart data to array format.
+     *
+     * @param data_all
+     * @return
+     */
     public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
         HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
 
@@ -218,6 +223,19 @@ public class HaploStatistics {
         });
     }
 
+    /**
+     *
+     *      GETTER AND SETTER
+     *
+     *
+     */
+
+
+
+    /**
+     * Get only count values in array (matrix) format.
+     * @return
+     */
     public double[][] getData(){
 
         HashMap<String, HashMap<String, Integer>> data_all_new = parse(data_all);
@@ -248,6 +266,28 @@ public class HaploStatistics {
         }
 
         return data;
+    }
+
+
+    /**
+     * Get frequencies of haplogroups per group.
+     *
+     * @return matrix with frequencies
+     */
+    public double[][] getFrequencies(){
+
+        double[][] data = getData();
+
+        for(int i = 0; i < number_of_groups ; i++){
+            int count_all_hgs_group = countAllHGs(i);
+
+            for(int j = 0; j < data[i].length; j++){
+                data[i][j] = data[i][j] / (double)count_all_hgs_group;
+            }
+        }
+
+        return data;
+
     }
 
     public HashMap<String, List<XYChart.Data<String, Number>>> getData_all() {

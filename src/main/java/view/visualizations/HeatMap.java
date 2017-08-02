@@ -2,10 +2,12 @@ package view.visualizations;
 
 import Logging.LogClass;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Pos;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -28,9 +30,9 @@ public class HeatMap extends AChart{
     }
 
 
-    public void createHeatMap(double[][] values, String[] labels, String title,
-                              HashMap<String, List<String>> haplotype_sharing){
-
+//    public void createHeatMap(double[][] values, String[] labels, String title,
+//                              HashMap<String, List<String>> haplotype_sharing){
+public void createHeatMap(double[][] values, String[] labels, String title){
 
 
 
@@ -53,14 +55,14 @@ public class HeatMap extends AChart{
 
         Image i = SwingFXUtils.toFXImage((BufferedImage) heat.getChartImage(false), null);
         ImageView v = new ImageView(i);
-        //heatMap.setCenter(v);
-        heatMap.setCenter(heat.getGrid(values, labels, haplotype_sharing));
+        heatMap.setCenter(v);
+        //heatMap.setCenter(heat.getGrid(values, labels, haplotype_sharing));
 
-//        HeatMapLegend legend = new HeatMapLegend(v.getImage().getWidth(), heat);
-//        VBox heatmap = legend.getRoot();
-//        heatMap.setAlignment(heatmap, Pos.TOP_CENTER);
-//
-//        heatMap.setBottom(heatmap);
+        HeatMapLegend legend = new HeatMapLegend(v.getImage().getWidth(), heat);
+        VBox heatmap = legend.getRoot();
+        heatMap.setAlignment(heatmap, Pos.TOP_CENTER);
+
+        heatMap.setBottom(heatmap);
 
     }
 

@@ -69,7 +69,8 @@ public class HaplotypeSharingVis {
 
         HeatMap heatMap_haplotypeSharing = new HeatMap("","", mito.getLogClass());
         heatMap_haplotypeSharing.setContextMenu(mito.getTabpane_visualization());
-        heatMap_haplotypeSharing.createHeatMap(data, labels, "Shared Haplotypes", haplotype_sharing);
+        //heatMap_haplotypeSharing.createHeatMap(data, labels, "Shared Haplotypes", haplotype_sharing);
+        heatMap_haplotypeSharing.createHeatMap(data, labels, "Shared Haplotypes");
         back.setCenter(heatMap_haplotypeSharing.heatMap);
 
 
