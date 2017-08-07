@@ -4,6 +4,7 @@ import Logging.LogClass;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TabPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -11,10 +12,13 @@ import java.net.URL;
 
 public class ScatterPlot extends AChart{
 
+    private final TabPane tabPaneStats;
     private ScatterChart<Number, Number> sc;
 
-    public ScatterPlot(Stage stage, LogClass logClass){
+    public ScatterPlot(Stage stage, LogClass logClass, TabPane tabpane_statistics){
         super("", "",logClass);
+        tabPaneStats = tabpane_statistics;
+
 
         //URL url = this.getClass().getResource("/css/ColorsPCA.css");
         //stage.getScene().getStylesheets().add(url.toExternalForm());
@@ -29,6 +33,8 @@ public class ScatterPlot extends AChart{
         xAxis.setLabel("PC 1");
         yAxis.setLabel("PC 2");
         sc.setTitle("PCA");
+
+        setContextMenu(getSc(), tabPaneStats);
 
     }
 

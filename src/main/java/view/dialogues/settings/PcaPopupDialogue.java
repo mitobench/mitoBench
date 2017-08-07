@@ -123,7 +123,7 @@ public class PcaPopupDialogue extends AHGDialogue{
 
                 pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
                 double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
-                pca_analysis.plot(result_pca, group_color, mito.getPrimaryStage(), logClass);
+                pca_analysis.plot(result_pca, group_color, mito.getPrimaryStage(), logClass, mito.getTabpane_statistics());
 
                 Tab tab_pca = new Tab("PCA");
                 tab_pca.setId("tab_pca_plot");

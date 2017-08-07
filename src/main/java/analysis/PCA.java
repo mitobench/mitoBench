@@ -1,6 +1,7 @@
 package analysis;
 
 import Logging.LogClass;
+import javafx.scene.control.TabPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.commons.math3.linear.EigenDecomposition;
@@ -73,8 +74,8 @@ public class PCA {
 
 
 
-    public void plot(double[][] result_pca, HashMap<String, Color> group_color, Stage stage, LogClass logClass) {
-        pca_plot = new ScatterPlot(stage,logClass);
+    public void plot(double[][] result_pca, HashMap<String, Color> group_color, Stage stage, LogClass logClass, TabPane tabpane_statistics) {
+        pca_plot = new ScatterPlot(stage, logClass, tabpane_statistics);
         groups = group_color.keySet().toArray(new String[group_color.keySet().size()]);
 
         double[] pc1 = result_pca[0];
