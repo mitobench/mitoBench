@@ -1,5 +1,8 @@
 package analysis;
 
+import Logging.LogClass;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -14,6 +17,7 @@ public class PCA {
 
     private ScatterPlot pca_plot;
     private int numberOfDimensions = 2;
+    private String[] groups;
 
     public PCA(){}
 
@@ -69,8 +73,9 @@ public class PCA {
 
 
 
-    public void plot(double[][] result_pca) {
-        pca_plot = new ScatterPlot();
+    public void plot(double[][] result_pca, HashMap<String, Color> group_color, Stage stage, LogClass logClass) {
+        pca_plot = new ScatterPlot(stage,logClass);
+        groups = group_color.keySet().toArray(new String[group_color.keySet().size()]);
 
         double[] pc1 = result_pca[0];
         double[] pc2 = result_pca[1];
@@ -87,15 +92,19 @@ public class PCA {
                 upperbound_y.getAsDouble()+0.5
         );
 
-        pca_plot.addSeries("Regions", pc1, pc2);
+
+        // filter out groups and assign specific colors
+        for(int i = 0; i < groups.length; i++){
+            pca_plot.addSeries(groups[i], group_color.get(groups[i]), pc1[i], pc2[i]);
+        }
+
 
 
     }
 
-
-
-
-
+    public void setGroups(String[] groups) {
+        this.groups = groups;
+    }
 
     public static double[][] transposeMatrix(double [][] m){
         double[][] temp = new double[m[0].length][m.length];
