@@ -146,13 +146,15 @@ public class PcaPopupDialogue extends AHGDialogue{
      * parse the colors set for grouping
      */
     private void parseColors() {
+        String name = "";
         for (Node child : grid_colors_group.getChildren()) {
             // get index from child
-            String name = "";
+            System.out.println(child.getId());
             if(child.getId()==null){
                 // todo: set id to all children
             } else if(child.getId().startsWith("group_id_")){
-                name = child.getAccessibleText();
+                TextField t = (TextField) child;
+                name = t.getText();
             } else if(child.getId().startsWith("group_color_")){
                 ColorPicker colorPicker = (ColorPicker) child;
                 group_color.put(name, colorPicker.getValue());
@@ -238,9 +240,7 @@ public class PcaPopupDialogue extends AHGDialogue{
 
         for(String group : groupnames){
             ColorPicker colorPicker = new ColorPicker();
-            CheckComboBox combo = new CheckComboBox();
-            combo.setId("group_color_"+row2);
-            combo.getItems().addAll(groupnames);
+            colorPicker.setId("group_color_"+row2);
 
             TextField text_field = new TextField(group);
             text_field.setId("group_id_"+row2);
@@ -262,13 +262,15 @@ public class PcaPopupDialogue extends AHGDialogue{
         row2=0;
         grid_colors_group.getChildren().clear();
         ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setId("group_color_"+row2);
 
         CheckComboBox combo = new CheckComboBox();
         combo.getItems().addAll(groupnames);
-        combo.setId("group_color_"+row2);
+        combo.setId("group_id_"+row2);
 
         TextField field_text = new TextField("Name");
-        field_text.setId("group_id_"+row2);
+        field_text.setId("newGroupName_id");
+
 
         btn_add = new Button("Add more");
         addBtnAddEvent(btn_add);

@@ -1,6 +1,7 @@
 package view.visualizations;
 
 import Logging.LogClass;
+import javafx.scene.Node;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -32,7 +33,7 @@ public class ScatterPlot extends AChart{
         sc = new ScatterChart<Number,Number>(xAxis,yAxis);
         xAxis.setLabel("PC 1");
         yAxis.setLabel("PC 2");
-        sc.setTitle("PCA");
+        sc.setTitle("");
 
         setContextMenu(getSc(), tabPaneStats);
 
@@ -44,21 +45,19 @@ public class ScatterPlot extends AChart{
         XYChart.Series series = new XYChart.Series();
         series.setName(name);
 
-       // for( int i = 0; i < pc1.length; i++){
-            series.getData().add(new XYChart.Data(pc1, pc2));
-       // }
+        series.getData().add(new XYChart.Data(pc1, pc2));
+
 
         sc.getData().add(series);
-        series.getNode().setStyle("-fx-background-color:" + " " + color);
 
-//        Node line = series.getNode().lookup(".chart-line-symbol");
-//
-//        String rgb = String.format("%d, %d, %d",
-//                (int) (color.getRed() * 255),
-//                (int) (color.getGreen() * 255),
-//                (int) (color.getBlue() * 255));
-//
-//        line.setStyle("-fx-stroke: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "); ");
+        Node line = series.getNode().lookup("default-color0");
+
+        String rgb = String.format("%d, %d, %d",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+
+        line.setStyle("-fx-stroke: rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "); ");
 
 
     }

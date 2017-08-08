@@ -11,9 +11,6 @@ import javafx.scene.layout.VBox;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 /**
  * Created by neukamm on 13.07.17.
  */
@@ -32,7 +29,7 @@ public class HeatMap extends AChart{
 
 //    public void createHeatMap(double[][] values, String[] labels, String title,
 //                              HashMap<String, List<String>> haplotype_sharing){
-public void createHeatMap(double[][] values, String[] labels, String title){
+    public void createHeatMap(double[][] values, String[] labels, String title){
 
 
 

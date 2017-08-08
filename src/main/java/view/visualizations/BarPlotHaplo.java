@@ -2,8 +2,6 @@ package view.visualizations;
 
 import Logging.LogClass;
 import controller.ChartController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -29,7 +27,6 @@ public class BarPlotHaplo extends AChart {
     private final HashMap<String, ArrayList> hgs_summed;
     private final Stage stage;
     private XYChart.Series series;
-    private ColorSchemeBarchart colorSchemeBarchart;
     private BarChartExt<String, Number> bc;
 
 
@@ -70,36 +67,17 @@ public class BarPlotHaplo extends AChart {
         series = new XYChart.Series();
         series.setName("");
 
-        colorSchemeBarchart = new ColorSchemeBarchart(stage);
+        URL url = this.getClass().getResource("/css/Colors.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
+
         for (String haplo : data.keySet()) {
             XYChart.Data<String, Number> d = new XYChart.Data(haplo, data.get(haplo).intValue());
-
-            //series.getData().add(setColor(d, hgs_summed));
             series.getData().add(d);
         }
 
         this.bc.getData().clear();
         this.bc.getData().add(series);
 
-    }
-
-    private XYChart.Data setColor(XYChart.Data<String, Number> d, HashMap<String, ArrayList> hgs_summed) {
-
-        d.nodeProperty().addListener(new ChangeListener<Node>() {
-            @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, Node newNode) {
-                if (newNode != null) {
-
-                    for(String key : hgs_summed.keySet()){
-                        ArrayList hg_sub = hgs_summed.get(key);
-                        if(hg_sub.contains(d.getXValue())){
-                            newNode = colorSchemeBarchart.setColor(newNode, key);
-                        }
-                    }
-                }
-            }
-        });
-
-        return d;
     }
 
 
