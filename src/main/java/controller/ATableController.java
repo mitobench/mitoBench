@@ -640,7 +640,6 @@ public abstract class ATableController {
     }
 
 
-
     /*
          Setter
      */

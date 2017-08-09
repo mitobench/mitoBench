@@ -47,32 +47,26 @@ public class HaploStatistics {
      */
     public void count(String[] coreHGs){
         ObservableList<ObservableList> tableItems = tableController.getTable().getItems();
-        boolean groupingMustBeDeleted = false;
 
         // get set of unique group and haplogroup entries
         if(!tableController.getGroupController().isGroupingExists()) {
-            // define new group that includes all data
-            GroupController gc = tableController.getGroupController();
-            gc.createGroupByColumn("Group", "group");
-            tableController.updateTable(tableController.createNewEntryList("group", "Group (Grouping)"));
-            groupingMustBeDeleted = true;
-        }
+            number_of_groups=1;
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableItems);
+            String[] selection_haplogroups = cols[0];
+            HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
+            data_all = chartController.assignHGsNoGrouping(hgs_summarized, selection_haplogroups);
 
-        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
-        String[] selection_haplogroups = cols[0];
-        String[] selection_groups = cols[1];
-        if(Arrays.asList(selection_groups).contains("Undefined")){
-            number_of_groups = selection_groups.length-1;
         } else {
+
+
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
+            String[] selection_haplogroups = cols[0];
+            String[] selection_groups = cols[1];
+
             number_of_groups = selection_groups.length;
-        }
+            HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
+            data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
 
-        HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
-        data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
-
-        if(groupingMustBeDeleted){
-            tableController.getGroupController().clearGrouping();
-            tableController.removeColumn("Group");
         }
 
     }
