@@ -33,8 +33,8 @@ public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
 
     }
 
-    public void init(HaploStatistics haploStatistics, TabPane statsTabpane, Scene scene){
-        addComponents(haploStatistics, statsTabpane, scene);
+    public void init(HaploStatistics haploStatistics, TabPane statsTabpane){
+        addComponents(haploStatistics, statsTabpane);
         this.LOG = this.logClass.getLogger(this.getClass());
         addListener();
     }
@@ -43,9 +43,8 @@ public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
      * This method adds all components to dialogue.
      * @param haploStatistics
      */
-    private void addComponents(HaploStatistics haploStatistics, TabPane statsTabPane, Scene scene){
+    private void addComponents(HaploStatistics haploStatistics, TabPane statsTabPane){
         this.statsTabPane = statsTabPane;
-        this.scene = scene;
         this.haploStatistics = haploStatistics;
         Label label = new Label("Please enter comma separated list of haplogroups " +
                 "\naccording to which the haplogroups should be grouped:");

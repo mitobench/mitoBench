@@ -34,7 +34,9 @@ public class PieChartViz extends AChart {
             String hg = data.getName();
             Node node = data.getNode();
             node.getStyleClass().remove("default-color" + (i % 8));
-            node.getStyleClass().add("default-color"+hg);
+            node.getStyleClass().add("default-color"+i);
+//            node.getStyleClass().remove("default-color" + (i % 8));
+//            node.getStyleClass().add("default-color"+hg);
             i++;
         }
 
@@ -46,10 +48,13 @@ public class PieChartViz extends AChart {
             if (node instanceof Label && ((Label) node).getGraphic() != null) {
                 String hg = ((Label) node).getText();
                 ((Label) node).getGraphic().getStyleClass().remove("default-color" + (j % 8));
-                ((Label) node).getGraphic().getStyleClass().add("default-color" + hg);
+                ((Label) node).getGraphic().getStyleClass().add("default-color" + j);
+//                ((Label) node).getGraphic().getStyleClass().remove("default-color" + (j % 8));
+//                ((Label) node).getGraphic().getStyleClass().add("default-color" + hg);
             }
             j++;
         }
+
 
 
     }

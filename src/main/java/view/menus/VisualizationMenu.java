@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
+import view.dialogues.settings.PieChartSettingsDialogue;
 import view.visualizations.*;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
@@ -22,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -431,12 +433,12 @@ public class VisualizationMenu {
             }
         });
 
-        /*
+       /*
 
 
-        Pie Chart
+                        Pie Chart
 
-         */
+       */
 
         MenuItem pieChart = new MenuItem("Create Pie Chart");
         pieChart.setId("piechart");
@@ -445,41 +447,75 @@ public class VisualizationMenu {
                 // makes only sense if grouping exists.
                 if(tableController.getTable().getItems().size() != 0 ){
 
-                    if(tableController.getTableColumnByName("Grouping") != null){
-                        // get selected rows
+                    PieChartSettingsDialogue pieChartSettingsDialogue =
+                            new PieChartSettingsDialogue("Advanced Piechart Settings", logClass);
 
-                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
-                                tableController.getSelectedRows());
-                        String[] selection_haplogroups = cols[0];
-                        String[] selection_groups = cols[1];
+                    // add dialog to statsTabPane
+                    Tab tab = pieChartSettingsDialogue.getTab();
+                    mito.getTabpane_visualization().getTabs().add(tab);
 
-                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
-                                chartController.getCoreHGs());
-                        HashMap<String, List<XYChart.Data<String, Number>>> data_all =
-                                chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
-                        for(String group : groupController.getGroupnames()) {
-                            if(!group.equals("Undefined")){
-                                initPieChart(group);
-                                pieChartViz.createPlot(group, data_all);
+                    pieChartSettingsDialogue.getApplyBtn().setOnAction(e -> {
+
+                        String[] hg_list;
+                        if(pieChartSettingsDialogue.getDefault_list_checkbox().isSelected()){
+                            hg_list = chartController.getCoreHGs();
+                        } else {
+                            hg_list = pieChartSettingsDialogue.getTextField_hgList().getText().split(",");
+                        }
+                        String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+
+
+                        if(tableController.getTableColumnByName("Grouping") != null){
+                            // get selected rows
+                            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
+                                    tableController.getSelectedRows());
+                            String[] selection_haplogroups = cols[0];
+                            String[] selection_groups = cols[1];
+
+
+                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
+                                    hg_list_trimmed);
+                            HashMap<String, List<XYChart.Data<String, Number>>> data_all =
+                                    chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+
+                            for(String group : groupController.getGroupnames()) {
+                                if(!group.equals("Undefined")){
+                                    try {
+                                        initPieChart(group);
+                                    } catch (MalformedURLException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    pieChartViz.createPlot(group, data_all);
+                                    pieChartViz.setColor(stage);
+                                }
+                            }
+                        } else {
+
+                            if(tableController.getTableColumnByName("Haplogroup") != null){
+                                String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
+                                        tableController.getSelectedRows());
+                                String[] selection_haplogroups = cols[0];
+
+                                HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
+                                        hg_list_trimmed);
+
+                                try {
+                                    initPieChart("Haplogroup frequency");
+                                } catch (MalformedURLException e1) {
+                                    e1.printStackTrace();
+                                }
+                                pieChartViz.createPlotSingle(hgs_summed);
                                 pieChartViz.setColor(stage);
                             }
                         }
-                    } else {
 
-                        if(tableController.getTableColumnByName("Haplogroup") != null){
-                            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
-                                    tableController.getSelectedRows());
-                            String[] selection_haplogroups = cols[0];
+                        // remove tab from tabpane
+                        mito.getTabpane_visualization().getTabs().remove(tab);
+                    });
 
-                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
-                                    chartController.getCoreHGs());
 
-                            initPieChart("Haplogroup frequency");
-                            pieChartViz.createPlotSingle(hgs_summed);
-                            pieChartViz.setColor(stage);
-                        }
-                    }
+
                 }
 
             } catch (Exception e) {
