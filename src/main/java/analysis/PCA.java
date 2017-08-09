@@ -1,6 +1,7 @@
 package analysis;
 
 import Logging.LogClass;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TabPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -31,8 +32,7 @@ public class PCA {
         //create real matrix
         RealMatrix realMatrix = MatrixUtils.createRealMatrix(values_meanCorrected);
 
-        //create covariance matrix of points, then find eigen vectors
-
+        //create covariance matrix of points, then find eigenvectors
         Covariance covariance = new Covariance(realMatrix);
         RealMatrix covarianceMatrix = covariance.getCovarianceMatrix();
         EigenDecomposition ed = new EigenDecomposition(covarianceMatrix);
@@ -57,6 +57,12 @@ public class PCA {
 
     }
 
+    /**
+     * Subtract mean (of row) from all values in this row.
+     *
+     * @param values
+     * @return
+     */
     private double[][] subtractMean(double[][] values) {
 
         for(int i = 0; i < values.length; i++){
@@ -70,14 +76,22 @@ public class PCA {
     }
 
 
+    /**
+     * Plot adjusted values.
+     *
+     *  @param result_pca
+     * @param group_color
+     * @param stage
+     * @param logClass
+     * @param tabpane_statistics
+     * @param group_members
+     */
+    public void plot(double[][] result_pca, HashMap<String, Color> group_color, Stage stage, LogClass logClass,
+                     TabPane tabpane_statistics, HashMap<String, ObservableList<String>> group_members) {
 
-
-
-
-    public void plot(double[][] result_pca, HashMap<String, Color> group_color, Stage stage, LogClass logClass, TabPane tabpane_statistics) {
         pca_plot = new ScatterPlot(stage, logClass, tabpane_statistics);
-        groups = group_color.keySet().toArray(new String[group_color.keySet().size()]);
-
+        //groups = group_color.keySet().toArray(new String[group_color.keySet().size()]);
+        groups = group_members.keySet().toArray(new String[group_members.keySet().size()]);
         double[] pc1 = result_pca[0];
         double[] pc2 = result_pca[1];
 
@@ -96,24 +110,48 @@ public class PCA {
 
         // filter out groups and assign specific colors
         for(int i = 0; i < groups.length; i++){
-            pca_plot.addSeries(groups[i], group_color.get(groups[i]), pc1[i], pc2[i]);
+            double[] pc1_group = getSubArray(pc1, 0, 0);
+            double[] pc2_group = getSubArray(pc1, 0, 0);
+
+            pca_plot.addSeries(groups[i], group_color.get(groups[i]), pc1_group, pc2_group);
         }
 
-
-
     }
 
-    public void setGroups(String[] groups) {
-        this.groups = groups;
+    /**
+     * Get sub array.
+     * @param pc
+     * @param start
+     * @param end
+     * @return
+     */
+    private double[] getSubArray(double[] pc, int start, int end) {
+        return Arrays.copyOfRange(pc, start, end);
     }
 
-    public static double[][] transposeMatrix(double [][] m){
+
+    /**
+     * Transpose matrix.
+     *
+     * @param m
+     * @return
+     */
+    private static double[][] transposeMatrix(double [][] m){
         double[][] temp = new double[m[0].length][m.length];
         for (int i = 0; i < m.length; i++)
             for (int j = 0; j < m[0].length; j++)
                 temp[j][i] = m[i][j];
         return temp;
 
+    }
+
+
+    /**
+     * GETTER AND SETTER
+     *
+     */
+    public void setGroups(String[] groups) {
+        this.groups = groups;
     }
 
     private double[][] getEigenvectors(EigenDecomposition ed, int numberOfEigenvectors) {

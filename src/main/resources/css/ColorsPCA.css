@@ -1,3 +1,8 @@
+.chart-vertical-zero-line,
+.chart-horizontal-zero-line  {
+    -fx-stroke: transparent;
+}
+
 .chart-symbol { /* solid circle */
     -fx-background-color: #f9d900;
     -fx-background-radius: 5px;
