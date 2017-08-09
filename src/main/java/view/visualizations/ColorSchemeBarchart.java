@@ -18,7 +18,7 @@ public class ColorSchemeBarchart {
     public ColorSchemeBarchart(Stage stage) throws MalformedURLException {
         // set stylesheet so specify colors
 
-        URL url = this.getClass().getResource("/css/Colors.css");
+        URL url = this.getClass().getResource("/css/ColorsStackedBarChart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
 
         colors.put("L0", "-fx-bar-fill: #ffce1b;");

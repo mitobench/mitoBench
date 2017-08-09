@@ -407,7 +407,7 @@ public class ChartController {
                 sizes.add(count);
                 if(count_to_hg.containsKey(count)){
                     List tmp = count_to_hg.get(count);
-                    tmp.add(key);
+                    tmp.add(key.trim());
                     count_to_hg.put(count, tmp);
                 } else {
                     count_to_hg.put(count,  Arrays.asList(key));
@@ -419,10 +419,10 @@ public class ChartController {
 
         List<String> hgs_sorted = new ArrayList<>();
         for(int i = 0; i < sizes.size(); i++){
-            hgs_sorted.add(i, count_to_hg.get(sizes.get(i)).get(0));
+            hgs_sorted.add(i, count_to_hg.get(sizes.get(i)).get(0).trim());
             if(count_to_hg.get(sizes.get(i)).size() > 1){
                 for(int j = 1; j < count_to_hg.get(sizes.get(i)).size(); j++){
-                    hgs_sorted.add((i+j),  count_to_hg.get(sizes.get(i)).get(j));
+                    hgs_sorted.add((i+j),  count_to_hg.get(sizes.get(i)).get(j).trim());
                     i += j;
 
                 }
