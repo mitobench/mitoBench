@@ -11,6 +11,7 @@ import javafx.scene.control.MenuItem;
 import view.MitoBenchWindow;
 import view.dialogues.settings.AddDataToColumnDialog;
 import view.dialogues.settings.AddNewColumnDialogue;
+import view.dialogues.settings.DeleteColumnDialogue;
 
 
 /**
@@ -46,12 +47,19 @@ public class TableControllerUserBench extends ATableController {
         final MenuItem addAllSelectedItem
                 = new MenuItem("Add/replace data");
         addAllSelectedItem.setOnAction(event -> {
-            AddDataToColumnDialog AddToColumnDialog =
-                    new AddDataToColumnDialog("",
+            AddDataToColumnDialog AddToColumnDialog = new AddDataToColumnDialog("",
                             controller, logClass);
         });
 
-        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem);
+
+        final MenuItem deleteColumn = new MenuItem("Delete column");
+        deleteColumn.setOnAction(event -> {
+            DeleteColumnDialogue deleteColumnDialogue = new DeleteColumnDialogue("Delete column", controller, logClass);
+
+        });
+
+
+        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, deleteColumn);
         table.setContextMenu(menu);
 
 
