@@ -2,7 +2,6 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
-import analysis.PCA;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
@@ -57,24 +56,6 @@ public class AnalysisMenu {
         });
 
 
-        MenuItem pcaAnalysis = new MenuItem("PCA analysis");
-        pcaAnalysis.setId("menuitem_pairwiseFst");
-        pcaAnalysis.setOnAction(t -> {
-            PCA pca2 = new PCA();
-            pca2.setData(statisticsMenu.getHaploStatistics().getData());
-            pca2.calculate();
-            pca2.plot();
-
-            Tab tab = new Tab();
-            tab.setId("tab_pca_plot");
-            tab.setContent(pca2.getPca_plot().getSc());
-            mito.getTabpane_visualization().getTabs().add(tab);
-//            PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis();
-//            pca.setup(tableController.getGroupController().getNumberOfGroups(), 20);
-
-
-
-        });
 
 
         MenuItem assignHGs = new MenuItem("Calculate haplogroups");
@@ -97,7 +78,7 @@ public class AnalysisMenu {
 //                }
 
         });
-        menuAnalysis.getItems().addAll(pairwiseFst, pcaAnalysis, assignHGs);
+        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
         //menuAnalysis.getItems().add(pairwiseFst);
 
     }

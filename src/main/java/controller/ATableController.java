@@ -425,6 +425,11 @@ public abstract class ATableController {
      * This method removes all entries and deletes the grouping.
      */
     public void cleartable(){
+        column_to_index.clear();
+        col_names.clear();
+        table_content.clear();
+        if(col_names_sorted!=null)
+            col_names_sorted.clear();
         // clean view.data model
         data.removeAll(data);
         // clean table view
@@ -432,6 +437,7 @@ public abstract class ATableController {
         dataTable.getMtStorage().getData().clear();
         dataTable.getDataTable().clear();
         table.getColumns().removeAll(table.getColumns());
+
         if(groupController!=null){
             groupController.clear();
             groupController.clearGrouping();

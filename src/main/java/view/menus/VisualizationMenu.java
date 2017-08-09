@@ -466,17 +466,19 @@ public class VisualizationMenu {
                             }
                         }
                     } else {
-                        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
-                                tableController.getSelectedRows());
-                        String[] selection_haplogroups = cols[0];
 
-                        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
-                                chartController.getCoreHGs());
+                        if(tableController.getTableColumnByName("Haplogroup") != null){
+                            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
+                                    tableController.getSelectedRows());
+                            String[] selection_haplogroups = cols[0];
 
-                        initPieChart("Haplogroup frequency");
-                        pieChartViz.createPlotSingle(hgs_summed);
-                        pieChartViz.setColor(stage);
+                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
+                                    chartController.getCoreHGs());
 
+                            initPieChart("Haplogroup frequency");
+                            pieChartViz.createPlotSingle(hgs_summed);
+                            pieChartViz.setColor(stage);
+                        }
                     }
                 }
 
