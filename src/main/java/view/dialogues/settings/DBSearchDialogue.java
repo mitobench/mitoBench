@@ -67,16 +67,16 @@ public class DBSearchDialogue extends ATabpaneDialogue{
 
         dialogGrid.add(new Separator(), 0,1,3,1);
 
-        dialogGrid.add(new Label("select"), 0,2,1,1);
-        dialogGrid.add(textfield_selection_table, 1,2,1,1);
-        dialogGrid.add(new Label("from sequence_data"), 2,2,1,1);
-
-        dialogGrid.add(new Separator(), 0,3,3,1);
-
-        dialogGrid.add(checkBox_write_own_query, 0,4,1,1);
-        dialogGrid.add(textfield_sql_statement_advanced, 0,5,3,1);
-        dialogGrid.add(btnSend,2,6,3,1);
-        dialogGrid.add(message, 0,6,2,1);
+//        dialogGrid.add(new Label("select"), 0,2,1,1);
+//        dialogGrid.add(textfield_selection_table, 1,2,1,1);
+//        dialogGrid.add(new Label("from sequence_data"), 2,2,1,1);
+//
+//        dialogGrid.add(new Separator(), 0,3,3,1);
+//
+//        dialogGrid.add(checkBox_write_own_query, 0,4,1,1);
+//        dialogGrid.add(textfield_sql_statement_advanced, 0,5,3,1);
+        dialogGrid.add(btnSend,2,2,3,1);
+        dialogGrid.add(message, 0,3,2,1);
 
     }
 

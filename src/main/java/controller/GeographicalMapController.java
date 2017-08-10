@@ -43,7 +43,7 @@ public class GeographicalMapController {
         grouping_col = tableControllerUserBench.getTableColumnByName("Grouping");
         id_col = tableControllerUserBench.getTableColumnByName("ID");
         location_col = tableControllerUserBench.getTableColumnByName("Location");
-        items = tableControllerUserBench.getTable().getItems();
+        items = tableControllerUserBench.getSelectedRows();
 
 
 
