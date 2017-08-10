@@ -89,6 +89,7 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addFunctionality(table);
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
+                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(dbSearchDialogue.getTab());
                 LOG.info("Login to database with username " + databaseConnectionController.getUserName()+ " successful.");
 
             } catch (SQLException e1) {

@@ -190,6 +190,7 @@ public class FstCalculationRunner {
         tab.setContent(scrollpane_result);
 
         mitobenchWindow.getTabpane_statistics().getTabs().add(tab);
+        mitobenchWindow.getTabpane_statistics().getSelectionModel().select(tab);
 
     }
 
@@ -210,6 +211,7 @@ public class FstCalculationRunner {
         tab.setContent(heatMap.getHeatMap());
 
         mitobenchWindow.getTabpane_visualization().getTabs().add(tab);
+        mitobenchWindow.getTabpane_visualization().getSelectionModel().select(tab);
 
     }
 

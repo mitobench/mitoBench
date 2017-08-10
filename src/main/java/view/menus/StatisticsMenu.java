@@ -60,6 +60,7 @@ public class StatisticsMenu {
                 hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane);
                 Tab tab = hgStatisticsPopupDialogug.getTab();
                 mito.getTabpane_statistics().getTabs().add(tab);
+                mito.getTabpane_statistics().getSelectionModel().select(tab);
             }
         });
 

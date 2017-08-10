@@ -44,23 +44,52 @@ public class ProfilePlot extends AChart {
     }
 
 
-
+    /**
+     * Create profile plot.
+     *
+     * @param tableController
+     * @param treeController
+     * @param chartController
+     * @param logClass
+     * @param statsTabpane
+     */
     public void create(TableControllerUserBench tableController, HaplotreeController treeController,
                        ChartController chartController, LogClass logClass, TabPane statsTabpane){
 
-        String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
-        String[] selection_haplogroups = cols[0];
-        String[] selection_groups = removeUndefined(cols[1]);
-        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
-        data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+        String[] selection_groups;
+        int[] number_of_elements;
+
+        if(!tableController.getGroupController().isGroupingExists()){
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
+            String[] selection_haplogroups = cols[0];
+            selection_groups = new String[]{"All data"};
+
+            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
+
+            data_all = chartController.assignHGsNoGrouping(hgs_summed, selection_haplogroups);
+            number_of_elements = new int[]{selection_haplogroups.length};
+
+        } else {
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+            String[] selection_haplogroups = cols[0];
+            selection_groups = removeUndefined(cols[1]);
+
+            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
+            data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+
+            number_of_elements = chartController.getNumberOfElementsPerCategory(selection_groups);
+        }
+
+
+
+
 
         // sort list alphabetically
         List<String> hg_core_curr = chartController.getHg_core_list();
         java.util.Collections.sort(hg_core_curr);
 
         HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();
-        int[] number_of_elements = chartController.getNumberOfElementsPerCategory(selection_groups);
 
         for(String key : hg_core_curr){
             if(data_all.containsKey(key)) {
@@ -100,20 +129,18 @@ public class ProfilePlot extends AChart {
 
         setMaxBoundary();
 
-        if(tableController.getGroupController().isGroupingExists()) {
+        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, chartController,logClass);
 
-            HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, chartController,logClass);
+        haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
+        TableView table = haploStatistics.writeToTable();
+        haploStatistics.addListener(table, this);
+        Tab tab = new Tab();
+        tab.setId("tab_table_stats_" + id);
+        tab.setText("Count statistics (" + id + ")");
+        tab.setContent(table);
+        statsTabpane.getTabs().add(tab);
+        statsTabpane.getSelectionModel().select(tab);
 
-            haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
-            TableView table = haploStatistics.writeToTable();
-            haploStatistics.addListener(table, this);
-            Tab tab = new Tab();
-            tab.setId("tab_table_stats_" + id);
-            tab.setText("Count statistics (" + id + ")");
-            tab.setContent(table);
-            statsTabpane.getTabs().add(tab);
-            statsTabpane.getSelectionModel().select(tab);
-        }
 
         addTabPaneListener(statsTabpane, tabpaneViz);
         addTabPaneListener(tabpaneViz, statsTabpane);
@@ -168,21 +195,22 @@ public class ProfilePlot extends AChart {
     }
 
 
+    /**
+     * Add listener to tab pane
+     * @param pane_current
+     * @param pane_to_update
+     */
 
     public void addTabPaneListener(TabPane pane_current, TabPane pane_to_update){
-        pane_current.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+        pane_current.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
 
-            @Override
-            public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
+            if (newTab != null && oldTab != null) {
+                String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
 
-                if (newTab != null && oldTab != null) {
-                    String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
-
-                    for(Tab tab : pane_to_update.getTabs()){
-                        String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
-                        if(id_tab_current.equals(id_to_update)){
-                            pane_to_update.getSelectionModel().select(tab);
-                        }
+                for(Tab tab : pane_to_update.getTabs()){
+                    String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
+                    if(id_tab_current.equals(id_to_update)){
+                        pane_to_update.getSelectionModel().select(tab);
                     }
                 }
             }

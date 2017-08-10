@@ -47,6 +47,7 @@ public class EditMenu {
                             new DataFilteringTreebasedDialogue("Tree based data filtering",
                             logClass, mito);
                     mito.getTabpane_statistics().getTabs().add(dataFilteringWithListDialogue.getTab());
+                    mito.getTabpane_statistics().getSelectionModel().select(dataFilteringWithListDialogue.getTab());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (SAXException e) {
@@ -65,6 +66,7 @@ public class EditMenu {
             DataFilteringHaplotypeBasedDialogue dataFilteringMutationBasedDialogue =
                     new DataFilteringHaplotypeBasedDialogue("Haplotype based data filtering", logClass, mito);
             mito.getTabpane_statistics().getTabs().add(dataFilteringMutationBasedDialogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(dataFilteringMutationBasedDialogue.getTab());
         });
 
         filterData.getItems().addAll(filterTreeBased, filterWithMutation);

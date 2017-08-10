@@ -93,7 +93,12 @@ public class ChartController {
     public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, String[] selection_groups, String hgs) {
 
         // get number of elements per group
-        int[] numberOfElementsPerCaregory = getNumberOfElementsPerCategory(selection_groups);
+        int[] numberOfElementsPerCaregory;
+        if(selection_groups.length==1){
+            numberOfElementsPerCaregory=new int[]{selection_haplogroups.length};
+        } else {
+            numberOfElementsPerCaregory = getNumberOfElementsPerCategory(selection_groups);
+        }
 
         // hgs to display
         String[] hg_list = hgs.split(",");
@@ -107,7 +112,11 @@ public class ChartController {
         HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, hg_list);
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
-        data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+        if(numberOfElementsPerCaregory.length==1){
+            data_all = assignHGsNoGrouping(hgs_summed, selection_haplogroups);
+        } else {
+            data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups);
+        }
 
         // sort list alphabetically
         java.util.Collections.sort(hg_core_list);

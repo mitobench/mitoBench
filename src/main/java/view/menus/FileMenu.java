@@ -151,6 +151,7 @@ public class FileMenu {
                 );
 
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(databaseConnectionDialogue.getTab());
+                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(databaseConnectionDialogue.getTab());
 
             } else {
                 // open search mask to specify which data should be loaded
@@ -158,6 +159,7 @@ public class FileMenu {
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addFunctionality(databaseConnectionController.getTable());
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
+                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(dbSearchDialogue.getTab());
             }
 
 //            if(drapAndDropEventMaganer == null){

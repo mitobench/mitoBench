@@ -45,6 +45,7 @@ public class AnalysisMenu {
                             new FstSettingsDialogue("Fst Calculation Settings", logClass, mito);
                 FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue);
                 mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
+                mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
 
             }
             else {
@@ -89,6 +90,7 @@ public class AnalysisMenu {
             pcaPopupDialogue.init(mito);
             Tab tab_stats = pcaPopupDialogue.getTab();
             mito.getTabpane_statistics().getTabs().add(tab_stats);
+            mito.getTabpane_statistics().getSelectionModel().select(tab_stats);
 
         });
 

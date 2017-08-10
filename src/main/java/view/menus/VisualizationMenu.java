@@ -285,12 +285,22 @@ public class VisualizationMenu {
         MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group (Stacked Barchart)");
         plotHGfreqGroup.setId("plotHGfreqGroup_item");
         plotHGfreqGroup.setOnAction(t -> {
-            if(tableController.getTableColumnByName("Grouping") != null
-                    && tableController.getTable().getItems().size()!=0) {
+            if(//tableController.getTableColumnByName("Grouping") != null &&
+                tableController.getTable().getItems().size()!=0) {
 
-                String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
-                String[] selection_haplogroups = cols[0];
-                String[] selection_groups = cols[1];
+                String[] selection_groups;
+                String[] selection_haplogroups;
+
+                if(!tableController.getGroupController().isGroupingExists()) {
+                    String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
+                    selection_haplogroups = cols[0];
+                    selection_groups = new String[]{"All data"};
+                } else {
+                    String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+                    selection_haplogroups = cols[0];
+                    selection_groups = cols[1];
+                }
+
 
                 SettingsDialogueStackedBarchart advancedStackedBarchartDialogue =
                         new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups, logClass);
@@ -298,6 +308,7 @@ public class VisualizationMenu {
                 // add dialog to statsTabPane
                 Tab tab = advancedStackedBarchartDialogue.getTab();
                 mito.getTabpane_visualization().getTabs().add(tab);
+                mito.getTabpane_visualization().getSelectionModel().select(tab);
 
                 advancedStackedBarchartDialogue.getApplyBtn().setOnAction(e -> {
                     advancedStackedBarchartDialogue.getApplyBtn();
@@ -397,8 +408,8 @@ public class VisualizationMenu {
         profilePlotItem.setOnAction(t -> {
             try {
                 // makes only sense if grouping exists.
-                if(tableController.getTableColumnByName("Grouping") != null
-                        && tableController.getTableColumnByName("Haplogroup") != null
+                if(//tableController.getTableColumnByName("Grouping") != null &&
+                      tableController.getTableColumnByName("Haplogroup") != null
                         && tableController.getTable().getItems().size() != 0 ){
                     initProfilePlot();
                     // get selected rows
@@ -407,13 +418,15 @@ public class VisualizationMenu {
 
                     profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane);
 
-                } else if(tableController.getTableColumnByName("Grouping") == null && tableController.getTableColumnByName("Haplogroup") != null){
-                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                            "No groups defined",
-                            "Please define a grouping first.",
-                            null,
-                            "groupWarning");
-                } else if(tableController.getTableColumnByName("Haplogroup") == null && tableController.getTableColumnByName("Grouping") != null){
+                }
+//                else if(tableController.getTableColumnByName("Grouping") == null && tableController.getTableColumnByName("Haplogroup") != null){
+//                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
+//                            "No groups defined",
+//                            "Please define a grouping first.",
+//                            null,
+//                            "groupWarning");
+//                }
+                else if(tableController.getTableColumnByName("Haplogroup") == null && tableController.getTableColumnByName("Grouping") != null){
                     InformationDialogue haplogroupWarningDialogue = new InformationDialogue(
                             "No haplogroups",
                             "Please assign haplogroups to your data first.",
@@ -452,6 +465,7 @@ public class VisualizationMenu {
                     // add dialog to statsTabPane
                     Tab tab = pieChartSettingsDialogue.getTab();
                     mito.getTabpane_visualization().getTabs().add(tab);
+                    mito.getTabpane_visualization().getSelectionModel().select(tab);
 
 
                     pieChartSettingsDialogue.getApplyBtn().setOnAction(e -> {
