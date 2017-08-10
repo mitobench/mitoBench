@@ -145,6 +145,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
                     //dialog.close();
                     mito.splitTablePane(mito.getTableControllerDB());
                     mito.getTabpane_statistics().getTabs().remove(getTab());
+                    mito.getTableControllerDB().addFilter();
                 }
             } catch (JSQLParserException e) {
                 message.setTextFill(Color.RED);

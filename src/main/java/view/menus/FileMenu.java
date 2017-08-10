@@ -160,10 +160,10 @@ public class FileMenu {
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
             }
 
-            if(drapAndDropEventMaganer == null){
-                drapAndDropEventMaganer = new DrapAndDropManagerDB(tableControllerDB, tableControllerUserBench);
-                drapAndDropEventMaganer.createEvent();
-            }
+//            if(drapAndDropEventMaganer == null){
+//                drapAndDropEventMaganer = new DrapAndDropManagerDB(tableControllerDB, tableControllerUserBench);
+//                drapAndDropEventMaganer.createEvent();
+//            }
 
 
         });

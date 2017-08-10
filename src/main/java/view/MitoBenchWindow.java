@@ -114,6 +114,7 @@ public class MitoBenchWindow extends Application{
 
         tableControllerDB = new TableControllerDB(logClass);
         tableControllerDB.init();
+        //tableControllerDB.addFilter();
         tableControllerDB.getTable().setId("dbtable");
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
