@@ -4,7 +4,7 @@ Export
 Export data
 -----------
 
-> File -> Export Data
+  > File -> Export Data
 
 To export your data, select *File -> Export Data*. This opens a export dialogue
 where you can choose between different file formats:
@@ -13,6 +13,9 @@ where you can choose between different file formats:
    :align: center
 
 The supported file formats are:
+
+* MultiFastA (.fasta)
+  Writes all mt sequences into a multiFastA file
 
 * Arlequin format (.arp)
 
@@ -55,7 +58,7 @@ The supported file formats are:
 Export images
 -------------
 
-> File -> Export chart
+  > File -> Export chart
 
 Each image can be exported individually, either by right-clicking on the chart, which
 will open a 'Save as png' context menu, or via the File menu (select *File -> Export chart*).
@@ -70,7 +73,7 @@ This will save the currently displayed visualization as png with a good resoluti
 Export statistics
 -----------------
 
-> File -> Export statistics
+  > File -> Export statistics
 
 To export calculated statistics, select *File -> Export statistics*. This will write
 the currently displayed statistics to a comma separated file.

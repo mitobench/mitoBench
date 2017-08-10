@@ -7,9 +7,6 @@ within the data set and the group sizes, if data are grouped.
 Bar plot
 ---------
 
-.. note::
-  No grouping needed.
-
   > Visualization -> Haplogroups -> Create Barchart -> Plot Haplogroup frequency
 
 A general visualization of the Haplogroup occurrences in the whole data set is
@@ -22,8 +19,6 @@ the barplot.
 Stacked Bar plot
 ----------------
 
-.. note::
-  Grouping needed.
 
   > Visualization -> Haplogroups -> Create Barchart -> Plot Haplogroup frequency per group
 
@@ -41,29 +36,10 @@ the direct comparison of the Haplogroup frequency between the different groups.
    :align: center
 
 
-Sunburst chart
---------------
-
-.. note::
-  Grouping needed.
-
-  > Visualization -> Haplogroups -> Create Sunburst chart
-
-The sunburst chart is a circular representation of the Haplogroups occurring in each
-group. The different levels correspond to the levels in PhyloTree. The visualization
-can be expanded by clicking on the circle unit coming directly after the most inner
-circle. Clicking on the most inner circle navigates one level back.
-
-
-.. image:: images/sunburstchart.png
-   :align: center
-
 
 Profile plot
 ------------
 
-.. note::
-  Grouping needed.
 
   > Visualization -> Haplogroups -> Create Profile plot
 
@@ -84,17 +60,13 @@ The tabs that belongs together are marked with the same number.
 Pie chart
 ----------
 
-.. note::
-  No Grouping needed.
 
-> Visualization -> Haplogroups -> Create Pie Chart
+  > Visualization -> Haplogroups -> Create Pie Chart
 
 The Haplogroup distribution can also be visualized as pie chart. This plot can be
 done on groupes as well as ungroup data. In case of multiple groups, one pie chart
 per goups will be created.
 
-
-Creates
 
 .. image:: images/piechart.png
    :align: center
@@ -103,12 +75,10 @@ Creates
 Grouping bar plot
 -----------------
 
-> Visualization -> Grouping -> Grouping bar chart
+  > Visualization -> Grouping -> Grouping bar chart
 
-.. note::
-  Grouping needed.
 
-  The grouping bar plot visualizes the sizes of the different groups.
+The grouping bar plot visualizes the sizes of the different groups.
 
 .. image:: images/barplotgrouping.png
    :align: center
@@ -117,10 +87,7 @@ Grouping bar plot
 Map view
 --------
 
-> Visualization -> Map view -> Visualize data on map
-
-.. note::
-  No Grouping needed.
+  > Visualization -> Map view -> Visualize data on map
 
 If the samples have some geographic information, they can be visualized on a map.
 To add all samples to the map, click on the *Add data* button.

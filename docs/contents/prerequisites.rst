@@ -19,7 +19,7 @@ Mac OSX
 Windows
 ^^^^^^^
 
-mitobench was tested on Windows10, too.
+mitobench was tested on Windows10, too. It works very well, just the LOG file cannot be saved in the end. 
 
 
 Software Requirements for mitoBench

@@ -17,9 +17,19 @@ mitoBench can be used in offline mode. However, some features (such
 as the map view) require a working internet connection.
 
 
+
+Table
+------
+
+It is possible to add and delete columns to the table as well as adding and replacing data by right-clicking on the table. Adding a new column requires a default value. This value can replaced easily later. 
+
 Log file
 --------
 
 By closing mitoBench, you will be asked if you want to save a log file.
 This file contains all steps that were done during your analysis with mitoBench,
 which helps you to reconstruct your analysis at a later date.
+
+
+
+

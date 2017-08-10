@@ -6,7 +6,7 @@ mitoBench offers different ways to import data.
 Import via data upload
 ----------------------
 
-> File -> Import
+  > File -> Import
 
 mitoBench supports different file formats:
 
@@ -86,7 +86,7 @@ All files mentioned in the section above can also be added by drag and dropping 
 Import from mitoDB
 ------------------
 
-> File -> Import Data from DB
+  > File -> Import Data from DB
 
 To import data from mitoDB, select *File -> Import Data from DB*. This opens a
 tab in the main view where you have to enter your mitoDB login data.
@@ -94,11 +94,10 @@ tab in the main view where you have to enter your mitoDB login data.
 .. image:: images/mitoDB_login.png
    :align: center
 
-After login successfully, the user can set up a database query to specify which
-data has to be loaded. More advanced user also can write their own query (SQL statement).
+After login successfully, the user can set up a database query. Currently, it is only pssible to get all data from the database, which are several thousand mt Genomes including metadata from the 1000 genomes project (phase 3). This configuration panel will more sophisticated in future. 
+
 
 .. image:: images/mitoDB_query.png
    :align: center
 
-The specified data will be loaded to the mitoBench in a separate table and can be added
-by drag and drop to the main user table.
+The specified data will be loaded to the mitoBench in a separate table. By right-clicking on a column, a filter pops up to configure the data search.

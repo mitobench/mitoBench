@@ -5,7 +5,7 @@ Filtering
 Haplogroup based filtering
 --------------------------
 
-> Edit -> Filter data ... -> ... based on PhyloTree
+  > Edit -> Filter data ... -> ... based on PhyloTree
 
 To filter out haplogroups that you don't want to include into your analysis, the
 haplogroup based filtering provides two different ways:
@@ -28,7 +28,7 @@ list of Haplogroups in the text field below the tree representation.
 Haplotype based filtering
 --------------------------
 
-> Edit -> Filter data ... -> ... haplotype filtering
+  > Edit -> Filter data ... -> ... haplotype filtering
 
 Another way to filter data is the haplotype based filtering. You can enter one or
 multiple Haplotypes (as comma-separated list). This filters out all samples that
@@ -37,5 +37,5 @@ do not have this haplotype.
 You can also specify a distance value d. This will include all Haplotypes
 with the distance d to the specified ones.
 
-.. image:: images/haplotypefiltering.png
+.. image:: images/haplotypeFiltering.png
    :align: center
