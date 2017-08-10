@@ -30,12 +30,11 @@ public class HaploStatistics {
     private int number_of_groups;
 
 
-    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController,
+    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController, ChartController chartController,
                            LogClass LOGClass){
 
         this.tableController = tableController;
-        chartController = new ChartController();
-        chartController.init(tableController, treeHaploController.getTreeMap());
+        this.chartController = chartController;
         tableControllerMutations = new TableControllerMutations(LOGClass);
         tableControllerMutations.init();
         LOG = LOGClass.getLogger(this.getClass());
@@ -212,6 +211,24 @@ public class HaploStatistics {
         });
     }
 
+
+    public double[][] getFrequencies(){
+
+        double[][] data = getData();
+
+        for(int i = 0; i < number_of_groups ; i++){
+            int count_all_hgs_group = countAllHGs(i);
+
+            for(int j = 0; j < data[i].length; j++){
+                data[i][j] = data[i][j] / (double)count_all_hgs_group;
+            }
+        }
+
+        return data;
+
+    }
+
+    
     public double[][] getData(){
 
         HashMap<String, HashMap<String, Integer>> data_all_new = parse(data_all);

@@ -74,8 +74,7 @@ public class VisualizationMenu {
 
         treeController = mitoBenchWindow.getTreeController();
         tableController = mitoBenchWindow.getTableControllerUserBench();
-        chartController = new ChartController();
-        chartController.init(tableController, treeController.getTreeMap());
+        chartController = mitoBenchWindow.getChartController();
         groupController = mitoBenchWindow.getGroupController();
 
         tabPane = mitoBenchWindow.getTabpane_visualization();

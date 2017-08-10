@@ -9,6 +9,7 @@ import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
+import view.dialogues.settings.PcaPopupDialogue;
 
 
 /**
@@ -78,7 +79,22 @@ public class AnalysisMenu {
 //                }
 
         });
-        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs);
+
+        MenuItem pcaAnalysis = new MenuItem("PCA analysis");
+        pcaAnalysis.setId("menuitem_pairwiseFst");
+        pcaAnalysis.setOnAction(t -> {
+            // PCA needs haplotype statistics!!
+
+            PcaPopupDialogue pcaPopupDialogue = new PcaPopupDialogue("PCA configuration", logClass);
+            pcaPopupDialogue.init(mito);
+            Tab tab_stats = pcaPopupDialogue.getTab();
+            mito.getTabpane_statistics().getTabs().add(tab_stats);
+
+        });
+
+
+
+        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs, pcaAnalysis);
         //menuAnalysis.getItems().add(pairwiseFst);
 
     }
