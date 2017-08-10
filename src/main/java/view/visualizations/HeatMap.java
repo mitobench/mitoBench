@@ -32,7 +32,6 @@ public class HeatMap extends AChart{
     public void createHeatMap(double[][] values, String[] labels, String title){
 
 
-
         double[] count = new double[values.length];
         for (int i = 0; i < values.length; i++) {
             count[i] = Arrays.stream( values[i]).max().getAsDouble();

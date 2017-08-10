@@ -102,7 +102,7 @@ public class ProfilePlot extends AChart {
 
         if(tableController.getGroupController().isGroupingExists()) {
 
-            HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, logClass);
+            HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, chartController, logClass);
 
             haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
             TableView table = haploStatistics.writeToTable();

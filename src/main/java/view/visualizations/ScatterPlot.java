@@ -8,6 +8,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+
 import java.net.URL;
 
 public class ScatterPlot extends AChart{
@@ -37,12 +38,14 @@ public class ScatterPlot extends AChart{
 
     }
 
-    public void addSeries(String name, Color color, double[] pc1, double[] pc2){
+    public void addSeries(String name, Color color, double[] pc1, double[] pc2, String[] groupOrder){
         XYChart.Series series = new XYChart.Series();
         series.setName(name);
 
-        for(int i = 0; i < pc1.length; i++)
-            series.getData().add(new XYChart.Data(pc1[i], pc2[i]));
+        for(int i = 0; i < pc1.length; i++){
+            XYChart.Data data = new XYChart.Data(pc1[i], pc2[i]);
+            series.getData().add(data);
+        }
 
         sc.getData().add(series);
 

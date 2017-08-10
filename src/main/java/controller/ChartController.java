@@ -22,6 +22,7 @@ public class ChartController {
     private List<String> hg_core_list;
     private String[] coreHGs = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
             "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
+    private String[] groupOrder;
 
 
 
@@ -180,7 +181,8 @@ public class ChartController {
     public HashMap<String, List<XYChart.Data<String, Number>>> assignHGs(HashMap<String, ArrayList> hgs_summed,
                                                                          String[] selection_haplogroups,
                                                                          String[] selection_groups) {
-
+        groupOrder = new String[selection_groups.length];
+        groupOrder = selection_groups.clone();
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<>();
 
@@ -581,5 +583,7 @@ public class ChartController {
         return hg_core_list;
     }
 
-
+    public String[] getGroupOrder() {
+        return groupOrder;
+    }
 }
