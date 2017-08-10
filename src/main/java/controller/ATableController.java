@@ -343,6 +343,12 @@ public abstract class ATableController {
     }
 
     public void removeColumn(String colName) {
+        // remove grouping
+        if(colName.contains("(Grouping)")){
+            groupController.clearGrouping();
+        }
+        colName = colName.split("\\(")[0].trim();
+
         // remove from tableview
         for(TableColumn col : table.getColumns()){
             if(col.getText().equals(colName)){

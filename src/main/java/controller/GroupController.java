@@ -137,8 +137,6 @@ public class GroupController {
             tableController.cleanColnames();
             tableController.cleanTableContent("(Grouping)");
             colname_group=null;
-            if(tableController.getTableColumnByName("All data")!=null)
-                tableController.removeColumn("All data");
         }
     }
 
