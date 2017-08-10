@@ -35,10 +35,6 @@ public class ChartController {
     }
 
 
-
-
-
-    // todo: do this better!
     /**
      *
      * @param barPlot

@@ -29,20 +29,28 @@ public class HeatMap extends AChart{
     }
 
 
-    public void createHeatMap(double[][] fsts, String[] groupnames){
-
+    /**
+     * Create image with heatmap and legend
+     * @param fsts
+     * @param groupnames
+     * @param min
+     * @param max
+     */
+    public void createHeatMap(double[][] fsts, String[] groupnames, double min, double max){
 
         double[] count = new double[fsts.length];
         for (int i = 0; i < fsts.length; i++) {
             count[i] = Arrays.stream( fsts[i]).max().getAsDouble();
         }
         double MAX = Arrays.stream( count).max().getAsDouble();
+        //double MAX = max;
 
         double[] count_min = new double[fsts.length];
         for (int i = 0; i < fsts.length; i++) {
             count_min[i] = Arrays.stream( fsts[i]).min().getAsDouble();
         }
         double MIN = Arrays.stream( count_min).min().getAsDouble();
+        //double MIN = min;
 
         HeatChart heat = new HeatChart(transposeMatrix(fsts), MIN, MAX);
         heat.setTitle("Fst values");
@@ -60,6 +68,12 @@ public class HeatMap extends AChart{
 
     }
 
+    /**
+     * Transpose matrix.
+     *
+     * @param matrix
+     * @return
+     */
     public static double[][] transposeMatrix(double[][] matrix) {
         int m = matrix.length;
         int n = matrix[0].length;
@@ -77,11 +91,14 @@ public class HeatMap extends AChart{
         return transposedMatrix;
     }
 
+
+    /**
+     *  SETTER AND GETTER
+     *
+     */
     public BorderPane getHeatMap() {
         return heatMap;
     }
-
-
     public void setContextMenu(TabPane tab){
         setContextMenu(heatMap, tab);
     }

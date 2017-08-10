@@ -3,7 +3,6 @@ package leafletMAP;
 import com.sun.javafx.charts.Legend;
 import controller.GroupController;
 import javafx.collections.ObservableList;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;

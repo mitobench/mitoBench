@@ -590,7 +590,6 @@ public class VisualizationMenu {
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
         //haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieChart);
-        // TODO removed sunburst chart
         haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart);
         maps.getItems().add(mapsItem);
 
