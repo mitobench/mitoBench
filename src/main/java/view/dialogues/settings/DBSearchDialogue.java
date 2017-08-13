@@ -131,7 +131,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
             } else if (checkBox_get_all_data.isSelected()){
                 //query = "SELECT * FROM sequence_data";
                 query = "SELECT * FROM samples s " +
-                        "INNER JOIN publications p on s.publications = p.mitodb_publications_id " +
+                        "INNER JOIN publications p on s.publications_id = p.mitodb_publications_id " +
                         "INNER JOIN technical_information t on s.technicalinfo_id = t.technical_info_id";
             } else {
                 query = "SELECT " + textfield_selection_table.getText() + "FROM sequence_data";
