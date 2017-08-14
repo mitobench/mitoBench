@@ -128,7 +128,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'mitoBench.tex', 'mitoBench Documentation',
-     'Judith Neukamm', 'manual'),
+     'Judith Neukamm \& Alexander Peltzer', 'manual'),
 ]
 
 
