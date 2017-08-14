@@ -690,6 +690,16 @@ public abstract class ATableController {
 
     }
 
-
-
+//
+//    public HashMap<String,List<Entry>> parseDBData(HashMap<String, List<Entry>> data){
+//
+//        List<Entry> entries = data.get(null);
+//        HashMap<String,List<Entry>> parsedData = new HashMap<>();
+//
+//        for(Entry e : entries){
+//            parsedData.put(e.getIdentifier(), e);
+//        }
+//
+//    };
+//
 }

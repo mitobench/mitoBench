@@ -144,6 +144,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
                     logClass.getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: " + query);
                     data = accessor.getEntries(query);
                     message.setText("");
+                    //HashMap<String, List<Entry>> parsedData = tablecontroller.parseDBData(data);
                     tablecontroller.updateTable(data);
                     //dialog.close();
                     mito.splitTablePane(mito.getTableControllerDB());
