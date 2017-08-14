@@ -46,12 +46,12 @@ The supported file formats are:
 * Mitoproject format (.mitoproj)
 
   Writes all (eventually filtered) data plus grouping information into a text file.
-  This file can later be used to restore the current session.
+  This file can later be used to restore the current session/project.
 
 * File conversions via PGDSpider
 
   For more advanced file conversions, PGDSpider can be run directly from mitoBench
-  via *File -> Convert files with PGDSpider*. However, mitoBench does not support
+  via *File -> Convert files with PGDSpider*. However, mitoBench currently does not support
   any file preparing to ease the usage of PGDSpider.
 
 
