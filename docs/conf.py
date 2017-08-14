@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'mitoBench'
-copyright = '2017, Judith Neukamm'
-author = 'Judith Neukamm'
+copyright = '2017, Judith Neukamm and Alexander Peltzer'
+author = 'Judith Neukamm, Alexander Peltzer'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
