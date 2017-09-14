@@ -16,6 +16,10 @@ public class ColumnNameMapper {
                 return "MTSequence";
             case "haplogroup":
                 return "Haplogroup";
+            case "sequence_fasta":
+                return "MTSequence";
+            case "haplogroup_current_phylotree_haplogrep2":
+                return "Haplogroup";
             case "continent":
                 return "Continent";
             case "country":
