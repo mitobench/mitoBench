@@ -3,6 +3,7 @@ package view.visualizations;
 import Logging.LogClass;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
+import io.writer.PDFExporter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -55,29 +56,37 @@ public abstract class AChart {
 
         //adding a context menu item to the chart
         final MenuItem saveAsPng = new MenuItem("Save as png");
-        saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-                ImageWriter imageWriter = new ImageWriter(lc);
-                try {
-                    imageWriter.saveImage(node);
-                } catch (ImageException e) {
-                    e.printStackTrace();
-                }
+        saveAsPng.setOnAction(event -> {
+            ImageWriter imageWriter = new ImageWriter(lc);
+            try {
+                imageWriter.saveImage(node);
+            } catch (ImageException e) {
+                e.printStackTrace();
             }
         });
 
+
+        final MenuItem saveAsPdf = new MenuItem("Save as pdf");
+        saveAsPdf.setOnAction(event -> {
+
+            PDFExporter pdfExporter = new PDFExporter(node, new Stage(), lc);
+            pdfExporter.print();
+
+        });
+
+
+
+        //final ContextMenu menu = new ContextMenu(saveAsPng, saveAsPdf);
         final ContextMenu menu = new ContextMenu(saveAsPng);
 
-        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                if (MouseButton.SECONDARY.equals(event.getButton())) {
-                    menu.show(pane, event.getScreenX(), event.getScreenY());
-                }
+        node.setOnMouseClicked(event -> {
+            if (MouseButton.SECONDARY.equals(event.getButton())) {
+                menu.show(pane, event.getScreenX(), event.getScreenY());
             }
         });
 
-    }
 
+    }
     public void setStyleSheet(Stage stage) throws MalformedURLException {
         URL url = this.getClass().getResource("/css/chart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
