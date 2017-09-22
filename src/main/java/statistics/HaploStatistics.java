@@ -30,12 +30,13 @@ public class HaploStatistics {
     private int number_of_groups;
 
 
-    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController,
+    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController, ChartController chartController,
                            LogClass LOGClass){
 
         this.tableController = tableController;
-        chartController = new ChartController();
-        chartController.init(tableController, treeHaploController.getTreeMap());
+        //chartController = new ChartController();
+        this.chartController = chartController;
+        //chartController.init(tableController, treeHaploController.getTreeMap());
         tableControllerMutations = new TableControllerMutations(LOGClass);
         tableControllerMutations.init();
         LOG = LOGClass.getLogger(this.getClass());

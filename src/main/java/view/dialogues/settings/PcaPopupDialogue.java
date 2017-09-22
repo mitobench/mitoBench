@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -125,7 +126,7 @@ public class PcaPopupDialogue extends AHGDialogue{
                 //parseColors();
                 parseGroups();
                 // calculate PCA
-                PCA pca_analysis = new PCA();
+                PCA pca_analysis = new PCA(mito.getChartController());
 
                 pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
                 double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
@@ -344,7 +345,6 @@ public class PcaPopupDialogue extends AHGDialogue{
         String name = "";
         for (Node child : grid_colors_group.getChildren()) {
             // get index from child
-            System.out.println(child.getId());
             if(child.getId()==null){
                 // todo: set id to all children
             } else if(child.getId().startsWith("group_id_")){
@@ -362,7 +362,6 @@ public class PcaPopupDialogue extends AHGDialogue{
         String name = "";
         for (Node child : grid_colors_group.getChildren()) {
             // get index from child
-            System.out.println(child.getId());
             if(child.getId()==null){
                 // todo: set id to all children
             } else if(child.getId().startsWith("group_id_")){
