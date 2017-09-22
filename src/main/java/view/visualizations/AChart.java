@@ -3,15 +3,13 @@ package view.visualizations;
 import Logging.LogClass;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import io.writer.PDFExporter;
 import javafx.scene.Node;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -55,26 +53,34 @@ public abstract class AChart {
 
         //adding a context menu item to the chart
         final MenuItem saveAsPng = new MenuItem("Save as png");
-        saveAsPng.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent event) {
-                ImageWriter imageWriter = new ImageWriter(lc);
-                try {
-                    imageWriter.saveImage(node);
-                } catch (ImageException e) {
-                    e.printStackTrace();
-                }
+        saveAsPng.setOnAction(event -> {
+            ImageWriter imageWriter = new ImageWriter(lc);
+            try {
+                imageWriter.saveImage(node);
+            } catch (ImageException e) {
+                e.printStackTrace();
             }
         });
 
-        final ContextMenu menu = new ContextMenu(saveAsPng);
 
-        node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                if (MouseButton.SECONDARY.equals(event.getButton())) {
-                    menu.show(pane, event.getScreenX(), event.getScreenY());
-                }
+        final MenuItem saveAsPdf = new MenuItem("Save as pdf");
+        saveAsPdf.setOnAction(event -> {
+
+            PDFExporter pdfExporter = new PDFExporter(node, new Stage(), lc);
+            pdfExporter.print();
+
+        });
+
+
+
+        final ContextMenu menu = new ContextMenu(saveAsPng, saveAsPdf);
+
+        node.setOnMouseClicked(event -> {
+            if (MouseButton.SECONDARY.equals(event.getButton())) {
+                menu.show(pane, event.getScreenX(), event.getScreenY());
             }
         });
+
 
     }
 
