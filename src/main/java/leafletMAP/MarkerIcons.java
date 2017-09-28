@@ -3,6 +3,7 @@ package leafletMAP;
 import com.sun.javafx.charts.Legend;
 import controller.GroupController;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -10,6 +11,7 @@ import model.Group;
 import net.java.html.leaflet.*;
 import controller.TableControllerUserBench;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,8 +93,16 @@ public class MarkerIcons {
 
 
         String[] colors_2 = new String[]{"GREEN", "BLUE", "RED", "ORANGE", "YELLOW", "VIOLET", "GREY", "BLACK"};
+        TableColumn id_col = tableController.getTableColumnByName("ID");
+        List<String> columnData = new ArrayList<>();
+        for (Object item : tableController.getTable().getItems()) {
+            ObservableList item_list = (ObservableList) item;
+            columnData.add((String) id_col.getCellObservableValue(item_list).getValue());
+        }
+
 
         int groupCount = 0;
+
         HashMap<String, Group> all_groups = groupController.getGroupsWithoutUndefined();
         // iterate over groups and generates marker/icon for each element in the group.
         for(String gName : all_groups.keySet()){
@@ -103,7 +113,8 @@ public class MarkerIcons {
                 ObservableList entry = (ObservableList) gMember;
 
                 String location = (String) entry.get(tableController.getColIndex("Location"));
-                if(!location.equals("Undefined")){
+                String id = (String) entry.get(tableController.getColIndex("ID"));
+                if(!location.equals("Undefined") && columnData.contains(id)){
                     String[] loc = location.split(",");
                     LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
 

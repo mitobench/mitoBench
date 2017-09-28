@@ -43,7 +43,7 @@ public class MapView extends StackPane {
     private GroupController groupController;
 
     public MapView(GroupController groupController, TableControllerUserBench tc, TableColumn location_col, ObservableList items,
-                   TableColumn id_col, TableColumn grouing_col, BorderPane mapBasicPane)
+                   TableColumn id_col, TableColumn grouping_col, BorderPane mapBasicPane)
             throws MalformedURLException, FileNotFoundException, URISyntaxException {
 
         this.tableController = tc;
@@ -51,7 +51,7 @@ public class MapView extends StackPane {
         this.location_col = location_col;
         this.id_col = id_col;
         this.items = items;
-        this.grouping_col = grouing_col;
+        this.grouping_col = grouping_col;
         this.mapBasicPane = mapBasicPane;
         // we define a regular JavaFX WebView that DukeScript can use for rendering
         webView = new WebView();
