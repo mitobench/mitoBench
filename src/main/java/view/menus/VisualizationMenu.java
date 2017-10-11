@@ -43,6 +43,7 @@ public class VisualizationMenu {
     private GroupController groupController;
 
     private BarPlotHaplo barPlotHaplo;
+    private BarPlotHaplo2 barPlotHaplo2;
     private BarChartGrouping barChartGrouping;
     private StackedBar stackedBar;
     private SunburstChartCreator sunburstChart;
@@ -102,6 +103,33 @@ public class VisualizationMenu {
         tab.setId("tab_haplo_barchart");
         tab.setText("Haplogroup occurrences");
         tab.setContent(barPlotHaplo.getBarChart());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
+
+    }
+
+    public void initHaploBarchart2(String titlePart) throws MalformedURLException {
+        LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
+        Text t = new Text();
+        t.setText("Haplogroup occurrences " + titlePart);
+        t.setFont(Font.font(25));
+
+        this.barPlotHaplo2 = new BarPlotHaplo2(
+                t.getText(),
+                "Number of samples",
+                "Occurrences of haplogroups",
+                stage,
+                chartController,
+                tableController,
+                tabPane,
+                logClass
+        );
+
+        barPlotHaplo2.setStyleSheet(stage);
+        Tab tab = new Tab();
+        tab.setId("tab_haplo_barchart");
+        tab.setText("Haplogroup occurrences");
+        tab.setContent(barPlotHaplo2.getBarChart());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
 
@@ -265,7 +293,8 @@ public class VisualizationMenu {
                         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
 
                         if(haplo_col!=null){
-                            initHaploBarchart("(all data)");
+                            //initHaploBarchart("(all data)");
+                            initHaploBarchart2("(all data)");
                             createHaploBarchart(haplo_col, null);
                         }
                     }
@@ -610,7 +639,7 @@ public class VisualizationMenu {
     }
 
     public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
-        chartController.addDataBarChart(barPlotHaplo, haplo_col, columnData);
+        chartController.addDataBarChart(barPlotHaplo2, haplo_col, columnData);
     }
 
 

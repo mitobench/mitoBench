@@ -496,6 +496,49 @@ public abstract class ATableController {
     }
 
 
+
+
+    /**
+     * This method counts occurrences of haplotypes within selected view.data
+     * return as hash map to plot it easily
+     *
+     * @return
+     */
+    public HashMap<Integer, List<String>> getDataHist2(String[] data){
+        HashMap<String, Integer> haplo_to_count = new HashMap<>();
+        HashMap<Integer, List<String>> haplo_occurrences = new HashMap<>();
+
+        for(String haplogroup : data){
+            if(haplo_to_count.containsKey(haplogroup)){
+                haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
+            } else {
+                haplo_to_count.put(haplogroup,1);
+            }
+        }
+
+
+        for(String key_hg : haplo_to_count.keySet()){
+            int count = haplo_to_count.get(key_hg);
+
+            if(haplo_occurrences.keySet().contains(count)){
+                List<String> hgs = haplo_occurrences.get(count);
+                hgs.add(key_hg);
+                haplo_occurrences.put(count, hgs);
+            } else {
+                List<String> hgs = new ArrayList<>();
+                hgs.add(key_hg);
+                haplo_occurrences.put(count, hgs);
+            }
+        }
+
+
+
+
+        return  haplo_occurrences;
+    }
+
+
+
     /**
      * This method returns a table column of specific column name
      *

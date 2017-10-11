@@ -5,6 +5,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
 import view.visualizations.BarChartGrouping;
 import view.visualizations.BarPlotHaplo;
+import view.visualizations.BarPlotHaplo2;
 import view.visualizations.StackedBar;
 
 import java.net.MalformedURLException;
@@ -78,6 +79,29 @@ public class ChartController {
 
         if (selected_data.length !=0) {
             barPlot.addData(tableController.getDataHist(selected_data));
+        }
+    }
+
+    /**
+     *
+     * @param barPlot
+     * @param column
+     */
+    public void addDataBarChart(BarPlotHaplo2 barPlot, TableColumn column, List<String> column_data) throws MalformedURLException {
+
+        if(column_data == null){
+            column_data = new ArrayList<>();
+            for (Object item : tableController.getTable().getItems()) {
+                column_data.add((String)column.getCellObservableValue(item).getValue());
+            }
+        }
+
+
+        String[] selected_data = column_data.toArray(new String[column_data.size()]);
+        barPlot.clearData();
+
+        if (selected_data.length !=0) {
+            barPlot.addData(tableController.getDataHist2(selected_data));
         }
     }
 

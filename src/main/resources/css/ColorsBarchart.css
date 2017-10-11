@@ -1,2 +1,5 @@
 /* define color for main haplogroups*/
 .default-color0.chart-bar { -fx-bar-fill: #6692ff; }
+.onHover{
+    -fx-background-color: #59b4ff;
+}
