@@ -2,6 +2,7 @@ package io.writer;
 
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
+import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
 
@@ -15,16 +16,22 @@ import java.util.List;
  * Created by neukamm on 09.12.2016.
  */
 public class ProjectWriter {
+    private final ObservableList<ObservableList> data;
+    private final Logger log;
     private String MITOBENCH_VERSION;
 
 
-    public ProjectWriter(String mitoVersion, Logger LOG){ MITOBENCH_VERSION = mitoVersion;}
+    public ProjectWriter(String mitoVersion, Logger LOG, ObservableList<ObservableList> dataToExport){
+        MITOBENCH_VERSION = mitoVersion;
+        this.data = dataToExport;
+        this.log = LOG;
+    }
 
 
     public void write(String outfile, TableControllerUserBench tableController) throws IOException, ProjectException {
 
         //Initialize properly
-        if (!outfile.endsWith("mitoproj")) {
+        if (!outfile.endsWith(".mitoproj")) {
             outfile =outfile+ ".mitoproj";
         }
 
@@ -40,7 +47,7 @@ public class ProjectWriter {
             writer.write(header);
 
             // write all data table information as Entry List
-            HashMap<String, List<Entry>> tableData = tableController.getTable_content();
+            HashMap<String, List<Entry>> tableData = tableController.getTable_content(data);
 
             writer.write("<datatable\n");
             for(String sample_id : tableData.keySet()){

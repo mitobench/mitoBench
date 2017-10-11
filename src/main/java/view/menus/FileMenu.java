@@ -203,9 +203,9 @@ public class FileMenu {
                         EXPORT DIALOGUE
          */
 
-        MenuItem exportFile = new MenuItem("Export Data");
+        MenuItem exportFile = new MenuItem("Export all Data");
         exportFile.setOnAction(t -> {
-            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass);
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass, true);
             try {
                 exportDialogue.start(new Stage());
             } catch (Exception e) {
@@ -213,6 +213,16 @@ public class FileMenu {
             }
         });
 
+
+        MenuItem exportSelectedData = new MenuItem("Export selected Data");
+        exportSelectedData.setOnAction(t -> {
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass, false);
+            try {
+                exportDialogue.start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
 
 
@@ -264,7 +274,8 @@ public class FileMenu {
                     new LoggerSettingsDialogue("Log file configuration", logClass, stage);
         });
 
-        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
+                exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
     /**

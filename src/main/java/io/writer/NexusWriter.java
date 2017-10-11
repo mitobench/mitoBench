@@ -1,6 +1,7 @@
 package io.writer;
 
 import io.IOutputData;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import view.table.MTStorage;
 import controller.TableControllerUserBench;
@@ -36,9 +37,11 @@ import java.io.*;
 public class NexusWriter implements IOutputData {
 
 
+    private final ObservableList<ObservableList> data;
     private int length;
 
-    public NexusWriter(){
+    public NexusWriter(ObservableList<ObservableList> dataToExport){
+        this.data = dataToExport;
     }
 
     @Override
@@ -48,15 +51,14 @@ public class NexusWriter implements IOutputData {
 
             MTStorage mtStorage = tableController.getDataTable().getMtStorage();
             if(sequencesHaveSameLength(mtStorage,
-                    tableController.getTableColumnByName("ID"),
-                    tableController)){
+                    tableController.getTableColumnByName("ID"))){
 
                 if(!file.endsWith(".nex"))
                     file = file + ".nex";
 
                 writer = new BufferedWriter(new FileWriter(new File(file)));
 
-                int ntax = tableController.getSelectedRows().size();
+                int ntax = data.size();
                 int nchar = length;
                 String missing_data_symbol = "N";
                 // write header
@@ -66,7 +68,7 @@ public class NexusWriter implements IOutputData {
                 writer.write(header);
 
                 // get IDs
-                String[] ids = tableController.getSampleNames();
+                String[] ids = tableController.getSampleNames(data);
                 int length_longest=0;
                 for(String s : ids){
                     if(s.length() > length_longest)
@@ -118,13 +120,12 @@ public class NexusWriter implements IOutputData {
      *
      * @param mtStorage
      * @param id
-     * @param tableController
      * @return
      */
-    private boolean sequencesHaveSameLength(MTStorage mtStorage, TableColumn id, TableControllerUserBench tableController) {
+    private boolean sequencesHaveSameLength(MTStorage mtStorage, TableColumn id) {
         length = 0;
 
-        for (Object row : tableController.getTable().getItems()) {
+        for (Object row : data) {
 
             String id_val = (String) id.getCellObservableValue(row).getValue();
 

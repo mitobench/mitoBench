@@ -82,12 +82,13 @@ public class TableControllerUserBench extends ATableController {
     /**
      * This method returns all samples names.
      * @return
+     * @param data
      */
-    public String[] getSampleNames() {
+    public String[] getSampleNames(ObservableList<ObservableList> data) {
 
         String[] ids = new String[getSelectedRows().size()];
 
-        ObservableList<ObservableList> selection = getSelectedRows();
+        ObservableList<ObservableList> selection = data;
         int index_id = getColIndex("ID");
 
         int i = 0;

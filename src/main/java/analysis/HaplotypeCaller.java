@@ -39,8 +39,8 @@ public class HaplotypeCaller {
 
         String file = "/home/neukamm/Desktop/testmultifasta.fa";
 
-        // generate fasta file with all sequences where haplogroups have to be assigned
-        MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage);
+        // generate fasta file with all sequences for which haplogroups have to be determined
+        MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getData());
         multiFastaWriter.writeData(file, tableController);
 
         //File f = new File(file);

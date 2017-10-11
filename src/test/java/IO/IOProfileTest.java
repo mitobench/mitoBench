@@ -33,7 +33,7 @@ public class IOProfileTest {
     @Test
     public void arp_profile_Test() {
 
-        ARPWriter arpWriter = new ARPWriter(tableController);
+        ARPWriter arpWriter = new ARPWriter(tableController, tableController.getSelectedRows());
 
         String name = "path/to/file.arp";
         String numberofsamples = "5";

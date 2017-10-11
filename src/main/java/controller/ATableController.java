@@ -464,6 +464,16 @@ public abstract class ATableController {
     }
 
 
+    public HashMap<String, List<Entry>> getTable_content(ObservableList<ObservableList> data) {
+        HashMap<String, List<Entry>> content_tmp = new HashMap<>();
+        for(ObservableList entry : data){
+            if(table_content.keySet().contains(entry.get(0))){
+                content_tmp.put((String)entry.get(0), table_content.get(entry.get(0)));
+            }
+        }
+        return content_tmp;
+    }
+
 
     /**
      * This method counts occurrences of haplotypes within selected view.data

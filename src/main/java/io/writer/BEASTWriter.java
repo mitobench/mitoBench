@@ -2,6 +2,7 @@ package io.writer;
 
 import io.IOutputData;
 import io.datastructure.fastA.FastaEntry;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
@@ -10,37 +11,62 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by peltzer on 07/12/2016.
- * This method should produce a multiFastA output file with corresponding ID + C14 Dating information (where applicable). If nothing is given for a certain individual in terms of dating information,
+ * This method should produce a multiFastA output file with corresponding ID + C14 Dating information (where applicable).
+ * If nothing is given for a certain individual in terms of dating information,
  * we produce output in the form of
  * <ID>_0 (whereas we use year zero == 2000 after julian calender to be more precise.
  */
 public class BEASTWriter implements IOutputData {
-    private TableControllerUserBench tblcontroller;
+    private final ObservableList<ObservableList> data;
+    private TableControllerUserBench tableController;
     private Logger LOG;
     private FileWriter fileWriter;
     private BufferedWriter bfWriter;
 
-    public BEASTWriter(TableControllerUserBench tblcontroller, Logger LOG) {
-        this.tblcontroller = tblcontroller;
+    public BEASTWriter(TableControllerUserBench tblcontroller, Logger LOG, ObservableList<ObservableList> dataToExport) {
+        this.tableController = tblcontroller;
         this.LOG = LOG;
+        this.data = dataToExport;
     }
-
 
     @Override
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
-        fileWriter = new FileWriter(new File(file));
-        bfWriter = new BufferedWriter(fileWriter);
-        HashMap<FastaEntry, String> tmp = getSequenceData();
-        for (FastaEntry key : tmp.keySet()) {
-            String c14date = tmp.get(key);
-            bfWriter.write(">" + key.getHeader() + getC14String(c14date) + "\n" + key.getSequence() + "\n");
+        fileWriter = null;
+        try {
+            if(!(file.endsWith(".beast")))
+                file = file + ".beast";
+
+            fileWriter = new FileWriter(new File(file));
+            bfWriter = new BufferedWriter(fileWriter);
+            HashMap<FastaEntry, String> tmp = getSequenceData();
+
+            List<String> ids = new ArrayList<>();
+            for(int i = 0; i < data.size(); i++){
+                ids.add((String)data.get(i).get(0));
+            }
+
+            for (FastaEntry key : tmp.keySet()) {
+                if(ids.contains(key.getHeader())){
+                    String c14date = tmp.get(key);
+                    bfWriter.write(">" + key.getHeader() + getC14String(c14date) + "\n" + key.getSequence() + "\n");
+                }
+            }
+
+        }catch (Exception ex) {
+            ex.printStackTrace();
         }
-        bfWriter.flush();
-        bfWriter.close();
+        finally {
+
+            fileWriter.flush();
+            fileWriter.close();
+        }
+
     }
 
     @Override
@@ -51,17 +77,17 @@ public class BEASTWriter implements IOutputData {
 
     private HashMap<FastaEntry, String> getSequenceData() {
         HashMap<FastaEntry, String> list = new HashMap<>();
-        TableColumn tbclm_id = tblcontroller.getTableColumnByName("ID");
-        TableColumn tbclm_c14 = tblcontroller.getTableColumnByName("C14-Date");
+        TableColumn tbclm_id = tableController.getTableColumnByName("ID");
+        TableColumn tbclm_c14 = tableController.getTableColumnByName("C14-Date");
         // write view.data
 
         if(tbclm_c14!=null){
-            tblcontroller.getTable().getItems().stream().forEach((o)
-                    -> list.put(new FastaEntry(tblcontroller.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)), (String) tbclm_c14.getCellData(o))
+            tableController.getTable().getItems().stream().forEach((o)
+                    -> list.put(new FastaEntry(tableController.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)), (String) tbclm_c14.getCellData(o))
             );
         } else {
-            tblcontroller.getTable().getItems().stream().forEach((o)
-                    -> list.put(new FastaEntry(tblcontroller.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)), "")
+            tableController.getTable().getItems().stream().forEach((o)
+                    -> list.put(new FastaEntry(tableController.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)), "")
             );
         }
 
