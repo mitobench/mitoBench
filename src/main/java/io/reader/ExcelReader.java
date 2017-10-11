@@ -65,9 +65,10 @@ public class ExcelReader implements IInputData{
 
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
-                        if(i==0)
+                        String colname = mapper.mapString(header.get(i));
+                        if(colname.equals("ID"))
                             id = cell.getStringCellValue();
-                        e = new Entry(mapper.mapString(header.get(i)), new CategoricInputType("String"), new GenericInputData(cell.getStringCellValue()));
+                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(cell.getStringCellValue()));
                         i++;
                         break;
                 }
@@ -77,6 +78,7 @@ public class ExcelReader implements IInputData{
 
 
         }
+
 
         workbook.close();
         inputStream.close();
