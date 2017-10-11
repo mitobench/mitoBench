@@ -47,7 +47,7 @@ the haplogroups, the y-axis the frequency. This enables the comparison of the fr
 of one HG in different groups.
 
 In addition, the represented data is provided in a table format next to the visualization panel.
-Hovering over the rows hilights the corresponding line in the profile plot.
+Hovering over the rows highlights the corresponding line in the profile plot.
 
 Tabs relying on each other are marked with the same automatically increasing number.
 

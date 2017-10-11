@@ -55,7 +55,7 @@ Haplogroups
 
   > Analysis -> Calculate haplogroups
 
-The Haplogroups are detemined by HaploGrep2 based on the FastA sequence. This
+The Haplogroups are determined by HaploGrep2 based on the FastA sequence. This
 functionality is just provided in the beta version of Haplogrep2.
 
 The calculated haplogroups are added as new column in the table view and can be

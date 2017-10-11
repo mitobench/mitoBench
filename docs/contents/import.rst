@@ -14,6 +14,9 @@ mitoBench supports different file formats:
 * Arlequin (.arp)
 * Haplogrep (.hsd)
 * Excel (.xls)
+
+  * First row will be used as header
+
 * Generic file (.tsv)
 
   To upload a generic file, the file must have a specific format:
@@ -34,7 +37,7 @@ mitoBench supports different file formats:
     Only one project can be imported per session.
 
 
-The imported information is represented in table format. If e.g. samples have been imported from differen tfiles, they are merged into one row based on the sample name. 
+The imported information is represented in table format. If e.g. samples have been imported from different files, they are merged into one row based on the sample name.
 
 .. note::
    To merge information from different files, make sure that the samples have
@@ -93,7 +96,7 @@ tab in the main view where you have to enter your mitoDB login data.
 .. image:: images/mitoDB_login.png
    :align: center
 
-After  a successful login, the user can set up a database query. Currently, it is only pssible to get all data from the database, which are several thousand mt Genomes including metadata from the 1000 genomes project (phase 3). This configuration panel will be more sophisticated in future and allow user defined querys / more complex queries.
+After  a successful login, the user can set up a database query. Currently, it is only possible to get all data from the database, which are several thousand mt Genomes including metadata from the 1000 genomes project (phase 3). This configuration panel will be more sophisticated in future and allow user defined queries / more complex queries.
 
 
 .. image:: images/mitoDB_query.png
