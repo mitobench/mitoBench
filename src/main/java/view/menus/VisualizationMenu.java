@@ -96,9 +96,15 @@ public class VisualizationMenu {
         t.setText("Haplogroup occurrences " + titlePart);
         t.setFont(Font.font(25));
 
-        this.barPlotHaplo = new BarPlotHaplo(t.getText(), "Counts", stage, chartController,
-                tableController, tabPane, logClass);
-        barPlotHaplo.setStyleSheet(stage);
+        this.barPlotHaplo = new BarPlotHaplo(
+                t.getText(),
+                "Counts",
+                stage,
+                tableController,
+                tabPane,
+                logClass
+        );
+        //barPlotHaplo.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Haplogroup occurrences");
@@ -119,13 +125,12 @@ public class VisualizationMenu {
                 "Number of samples",
                 "Occurrences of haplogroups",
                 stage,
-                chartController,
                 tableController,
                 tabPane,
                 logClass
         );
 
-        barPlotHaplo2.setStyleSheet(stage);
+        //barPlotHaplo2.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Haplogroup occurrences");
@@ -283,7 +288,7 @@ public class VisualizationMenu {
 
          */
 
-        MenuItem plotHGfreq = new MenuItem("Plot haplogroup frequency");
+        MenuItem plotHGfreq = new MenuItem("Plot haplogroup frequency as barchart");
         plotHGfreq.setId("plotHGfreq_item");
         plotHGfreq.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -293,9 +298,30 @@ public class VisualizationMenu {
                         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
 
                         if(haplo_col!=null){
-                            //initHaploBarchart("(all data)");
-                            initHaploBarchart2("(all data)");
+                            initHaploBarchart("(all data)");
                             createHaploBarchart(haplo_col, null);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        MenuItem plotHGfreqHist = new MenuItem("Plot haplogroup frequency as histogram");
+        plotHGfreqHist.setId("plotHGfreq_item");
+        plotHGfreqHist.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                try {
+
+                    if(tableController.getTable().getItems().size() != 0 ){
+                        TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
+
+                        if(haplo_col!=null){
+                            initHaploBarchart2("(all data)");
+                            createHaploBarchart2(haplo_col, null);
                         }
                     }
 
@@ -630,7 +656,7 @@ public class VisualizationMenu {
 
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
-        barchart.getItems().addAll(plotHGfreq, plotHGfreqGroup);
+        barchart.getItems().addAll(plotHGfreq, plotHGfreqHist, plotHGfreqGroup);
         //haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieChart);
         haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart);
         maps.getItems().add(mapsItem);
@@ -639,6 +665,10 @@ public class VisualizationMenu {
     }
 
     public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
+        chartController.addDataBarChart(barPlotHaplo, haplo_col, columnData);
+    }
+
+    public void createHaploBarchart2(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
         chartController.addDataBarChart(barPlotHaplo2, haplo_col, columnData);
     }
 

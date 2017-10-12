@@ -77,9 +77,6 @@ public class BarChartGrouping extends AChart {
         URL url = this.getClass().getResource("/css/ColorsBarchart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
 
-        for (Node node : this.bc.lookupAll(".series")) {
-            node.getStyleClass().remove("default-color0");
-        }
     }
 
     /**

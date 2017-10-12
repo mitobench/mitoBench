@@ -5,8 +5,6 @@ import controller.ChartController;
 import controller.TableControllerUserBench;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -26,26 +24,23 @@ import java.util.List;
 
 public class BarPlotHaplo2 extends AChart {
 
-    private final ChartController chartController;
     private final TableControllerUserBench tableController;
-   // private final HashMap<String, ArrayList> hgs_summed;
     private final Stage stage;
     private XYChart.Series series;
     private BarChartExt<String, Number> bc;
 
 
-    public BarPlotHaplo2(String title, String ylabel, String xLabel, Stage stage, ChartController cc,
+    public BarPlotHaplo2(String title, String ylabel, String xLabel, Stage stage,
                          TableControllerUserBench tc, TabPane tabPane, LogClass logClass) throws MalformedURLException {
 
         super(xLabel, ylabel, logClass);
 
         this.stage = stage;
 
-        bc = new BarChartExt<String, Number>(xAxis, yAxis);
+        bc = new BarChartExt<>(xAxis, yAxis);
         bc.setLegendVisible(false);
         bc.setTitle(title);
 
-        chartController = cc;
         tableController = tc;
 
         URL url = this.getClass().getResource("/css/ColorsBarchart.css");
@@ -55,7 +50,6 @@ public class BarPlotHaplo2 extends AChart {
         List<String> columnDataHG = new ArrayList<>();
         tableController.getTable().getItems().stream().forEach((o)
                 -> columnDataHG.add((String)haplo_col.getCellData(o)));
-        //hgs_summed = chartController.summarizeHaplogroups(columnDataHG.stream().toArray(String[]::new), chartController.getCoreHGs());
 
         setContextMenu(bc, tabPane);
 
