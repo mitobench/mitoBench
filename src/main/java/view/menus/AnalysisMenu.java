@@ -2,13 +2,13 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
+import controller.HGListController;
+import javafx.scene.control.*;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
+import view.dialogues.settings.HGListDisalogue;
 import view.dialogues.settings.PcaPopupDialogue;
 
 
@@ -35,6 +35,23 @@ public class AnalysisMenu {
     }
 
     private void addSubMenus() {
+
+
+        CustomMenuItem defineHGList = new CustomMenuItem(new Label("Define Haplogroup list"));
+        defineHGList.setId("menuitem_hg_list");
+        defineHGList.setOnAction(t -> {
+
+            HGListDisalogue hgListDisalogue = new HGListDisalogue("Custom Haplogroup list", logClass);
+            HGListController hgListController = new HGListController(hgListDisalogue, mito.getChartController(), mito);
+            mito.getTabpane_statistics().getTabs().add(hgListDisalogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(hgListDisalogue.getTab());
+
+
+        });
+
+        Tooltip tooltip_hglist = new Tooltip("This list will be used al default list for all analyses and visualizations " +
+                "within this project.");
+        Tooltip.install(defineHGList.getContent(), tooltip_hglist);
 
         MenuItem pairwiseFst = new MenuItem("Calculate pairwise Fst");
         pairwiseFst.setId("menuitem_pairwiseFst");
@@ -94,11 +111,7 @@ public class AnalysisMenu {
 
         });
 
-
-
-        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs, pcaAnalysis);
-        //menuAnalysis.getItems().add(pairwiseFst);
-
+        menuAnalysis.getItems().addAll(defineHGList, pairwiseFst, assignHGs, pcaAnalysis);
     }
 
     public Menu getMenuAnalysis() {

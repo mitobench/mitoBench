@@ -358,7 +358,8 @@ public class VisualizationMenu {
 
 
                 SettingsDialogueStackedBarchart advancedStackedBarchartDialogue =
-                        new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups, logClass);
+                        new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups,
+                                logClass, mito);
 
                 // add dialog to statsTabPane
                 Tab tab = advancedStackedBarchartDialogue.getTab();
@@ -382,7 +383,15 @@ public class VisualizationMenu {
                             advancedStackedBarchartDialogue.getTextField_hgList().getText()
                     );
 
-                    stackedBar.setHg_user_selection(advancedStackedBarchartDialogue.getTextField_hgList().getText().split(","));
+                    String[] hg_list;
+                    if(advancedStackedBarchartDialogue.getDefault_list_checkbox().isSelected()){
+                        hg_list = mito.getChartController().getCoreHGs();
+                    } else {
+                        hg_list = advancedStackedBarchartDialogue.getTextField_hgList().getText().split(",");
+                    }
+
+
+                    stackedBar.setHg_user_selection(hg_list);
 
                     stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
