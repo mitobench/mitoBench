@@ -28,11 +28,11 @@ public class ProjectWriter {
     }
 
 
-    public void write(String outfile, TableControllerUserBench tableController) throws IOException, ProjectException {
+    public void write(String outfile, TableControllerUserBench tableController, String[] user_defined_hg_list) throws IOException, ProjectException {
 
         //Initialize properly
         if (!outfile.endsWith(".mitoproj")) {
-            outfile =outfile+ ".mitoproj";
+            outfile = outfile + ".mitoproj";
         }
 
         Date date = new Date();
@@ -42,7 +42,8 @@ public class ProjectWriter {
 
             // write header
             // This has been generated with MitoBenchStarter version XYZ, do not edit manually unless you know what you are doing.
-            String header = "# This file has been generated with MitoBenchStarter version " + MITOBENCH_VERSION + " and contains all information of a MitoBenchStarter project\n# Created on  "+ date.toString()
+            String header = "# This file has been generated with MitoBenchStarter version " + MITOBENCH_VERSION +
+                    " and contains all information of a MitoBenchStarter project\n# Created on  "+ date.toString()
                     + "\n# Please do NOT edit manually unless you know what you are doing.\n\n";
             writer.write(header);
 
@@ -82,6 +83,17 @@ public class ProjectWriter {
 
             writer.write(">\n");
 
+            if(user_defined_hg_list!=null){
+                writer.write("<haplogroupList\n");
+                writer.write("\t");
+                for(String hg : user_defined_hg_list){
+                    writer.write(hg + ",");
+                }
+
+                writer.write("\n>\n");
+
+            }
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -93,4 +105,5 @@ public class ProjectWriter {
         }
 
     }
+
 }

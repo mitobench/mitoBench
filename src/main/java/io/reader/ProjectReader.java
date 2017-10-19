@@ -1,5 +1,6 @@
 package io.reader;
 
+import controller.ChartController;
 import database.ColumnNameMapper;
 import io.Exceptions.ProjectException;
 import io.datastructure.Entry;
@@ -22,6 +23,7 @@ public class ProjectReader {
 
 
     private HashMap<String, List<Entry>> datatable;
+    private String[] hgs_user_defined;
 
     public ProjectReader(){}
 
@@ -77,6 +79,11 @@ public class ProjectReader {
                             datatable.put(key, all_entries);
                         }
                     }
+                } else if (currline.startsWith("<haplogroupList")){
+                    while (!(currline = bfr.readLine()).equals(">")) {
+                        currline = currline.substring(1);
+                        hgs_user_defined = currline.split(",");
+                    }
                 }
             }
         }
@@ -84,10 +91,11 @@ public class ProjectReader {
 
 
 
-    public void loadData(ATableController tableController){
+    public void loadData(ATableController tableController, ChartController chartController){
 
         tableController.updateTable(datatable);
         tableController.loadGroups();
+        chartController.setCustomHGList(hgs_user_defined);
 
     }
 
