@@ -126,11 +126,12 @@ public class ChartController {
         }
 
         // hgs to display
-        String[] hg_list = hgs.split(",");
-
-
-        // reduce haplogroups to maximum size of 20
-        //if (selection_haplogroups.length >= 20) {
+        String[] hg_list;
+        if(hgs.equals("")){
+            hg_list = coreHGs;
+        } else {
+            hg_list = hgs.split(",");
+        }
 
         stackedBar.clearData();
         stackedBar.setCategories(selection_groups);

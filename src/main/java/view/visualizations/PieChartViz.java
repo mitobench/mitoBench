@@ -96,8 +96,11 @@ public class PieChartViz extends AChart {
     }
 
     public void createPlotSingle(HashMap<String, ArrayList> hgs_summed) {
+        List<String> labels = new ArrayList<>();
+        labels.addAll(hgs_summed.keySet());
+        Collections.sort(labels);
 
-        for(String hg : hgs_summed.keySet()){
+        for(String hg : labels){
             PieChart.Data slice = new PieChart.Data(hg, hgs_summed.get(hg).size());
             chart.getData().add(slice);
         }
