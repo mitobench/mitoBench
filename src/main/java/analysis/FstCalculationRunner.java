@@ -44,9 +44,13 @@ public class FstCalculationRunner {
     private List<Integer> usableLoci;
     private Writer writer;
     private Logger LOG;
+    private int numberOfPermutations;
+    private double[][] pvalues;
+    private double significance;
 
 
-    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc)
+    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc, int numberOfPermutations,
+                                double significance)
             throws IOException {
 
         mitobenchWindow = mito;
@@ -54,6 +58,8 @@ public class FstCalculationRunner {
         gamma_a = gamma;
         missing_data_character = mdc;
         LOG = mito.getLogClass().getLogger(this.getClass());
+        this.numberOfPermutations = numberOfPermutations;
+        this.significance = significance;
 
         prepareData(
                 mito.getTableControllerUserBench(),
@@ -115,11 +121,12 @@ public class FstCalculationRunner {
 
 
         // calculate Fst with equation introduced by Hudson et al. (1992)
-        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);
+        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
         fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
         fstHudson1992.setData(data);
 
         fsts = fstHudson1992.calculateFst();
+        pvalues = fstHudson1992.calculatePermutedFST();
         groupnames = fstHudson1992.getGroupnames();
 
 
@@ -127,9 +134,11 @@ public class FstCalculationRunner {
         writer = new Writer();
         writer.writeResultsFstToString(
                 fsts,
+                pvalues,
                 groupnames,
                 usableLoci,
-                Double.parseDouble(field_level_missing_data)
+                Double.parseDouble(field_level_missing_data),
+                significance
         );
 
         writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
