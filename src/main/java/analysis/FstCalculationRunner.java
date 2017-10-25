@@ -109,54 +109,54 @@ public class FstCalculationRunner {
      * @throws IOException
      */
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
-        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
-        Filter filter = new Filter();
-        Linearization linearization = new Linearization();
-
-        usableLoci = filter.getUsableLoci(
-                data,
-                missing_data_character,
-                Double.parseDouble(field_level_missing_data)
-        );
-
-
-        // calculate Fst with equation introduced by Hudson et al. (1992)
-        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
-        fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
-        fstHudson1992.setData(data);
-
-        fsts = fstHudson1992.calculateFst();
-        pvalues = fstHudson1992.calculatePermutedFST();
-        groupnames = fstHudson1992.getGroupnames();
-
-
-        // write to file
-        writer = new Writer();
-        writer.writeResultsFstToString(
-                fsts,
-                pvalues,
-                groupnames,
-                usableLoci,
-                Double.parseDouble(field_level_missing_data),
-                significance
-        );
-
-        writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
-
-        if(runSlatkin){
-            fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
-            writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
-        }
-        if(runReynolds){
-            fsts_reynolds = linearization.linearizeWithReynolds(fsts);
-            writer.addLinerarizedFstMatrix(fsts_reynolds, "Reynolds' distance");
-        }
-
-        // init table controller
-        tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
-        tableControllerFstValues.init();
-
-        writeLog(runSlatkin, runReynolds, field_level_missing_data);
+//        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
+//        Filter filter = new Filter();
+//        Linearization linearization = new Linearization();
+//
+//        usableLoci = filter.getUsableLoci(
+//                data,
+//                missing_data_character,
+//                Double.parseDouble(field_level_missing_data)
+//        );
+//
+//
+//        // calculate Fst with equation introduced by Hudson et al. (1992)
+//        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
+//        fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
+//        fstHudson1992.setData(data);
+//
+//        fsts = fstHudson1992.calculateFst();
+//        pvalues = fstHudson1992.calculatePermutedFST();
+//        groupnames = fstHudson1992.getGroupnames();
+//
+//
+//        // write to file
+//        writer = new Writer();
+//        writer.writeResultsFstToString(
+//                fsts,
+//                pvalues,
+//                groupnames,
+//                usableLoci,
+//                Double.parseDouble(field_level_missing_data),
+//                significance
+//        );
+//
+//        writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
+//
+//        if(runSlatkin){
+//            fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
+//            writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
+//        }
+//        if(runReynolds){
+//            fsts_reynolds = linearization.linearizeWithReynolds(fsts);
+//            writer.addLinerarizedFstMatrix(fsts_reynolds, "Reynolds' distance");
+//        }
+//
+//        // init table controller
+//        tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
+//        tableControllerFstValues.init();
+//
+//        writeLog(runSlatkin, runReynolds, field_level_missing_data);
 
     }
 

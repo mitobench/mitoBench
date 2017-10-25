@@ -15,12 +15,12 @@ public class DatabaseErrorDialogue {
 
         Alert alert = createContextAlert();
 
-        Label label = new Label("The exception stacktrace was:");
+        //Label label = new Label("The exception stacktrace was:");
 
 
         GridPane expContent = new GridPane();
         expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
+        //expContent.add(label, 0, 0);
 
         // Set expandable Exception into the dialog pane.
         alert.getDialogPane().setExpandableContent(expContent);
@@ -30,7 +30,7 @@ public class DatabaseErrorDialogue {
     private Alert createContextAlert(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception Dialog");
-        alert.setContentText("Your username or password is not correct.\n Please try again.");
+        alert.setContentText("Your username or password is not correct or the server cannot be reached.\nPlease try again.");
         return alert;
     }
 }

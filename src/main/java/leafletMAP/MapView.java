@@ -20,6 +20,7 @@ import net.java.html.leaflet.*;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +100,7 @@ public class MapView extends StackPane {
             for (Object item : items) {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
                 String location  = location_col.getCellObservableValue(item).getValue().toString();
+
                 if(!location.equals("Undefined")){
                     String[] loc = location.split(",");
                     if(loc.length==2){
@@ -134,6 +136,7 @@ public class MapView extends StackPane {
         mapBasicPane.setBottom(legend);
 
     }
+
 
 
     public Map getMap() {

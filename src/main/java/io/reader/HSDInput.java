@@ -48,14 +48,30 @@ public class HSDInput implements IInputData {
 
                 String id = splitGroup[0];
                 String group = splitGroup[2];
+                String type = getHaplotypes(splitGroup);
                 Entry entry = new Entry(mapper.mapString("Haplogroup"), new CategoricInputType("String"), new GenericInputData(group));
+                Entry entry2 = new Entry(mapper.mapString("Haplotype"), new CategoricInputType("String"), new GenericInputData(type));
                 List<Entry> entries = new ArrayList<>();
                 entries.add(entry);
+                entries.add(entry2);
                 map.put(id, entries);
             }
         }
     }
 
+
+    private String getHaplotypes(String[] splitGroup){
+        String types = "";
+        for(int i = 3; i < splitGroup.length; i++){
+            if(i<splitGroup.length-1){
+                types += splitGroup[i]+",";
+            } else {
+                types += splitGroup[i];
+            }
+        }
+        return types;
+
+    }
 
 
     @Override
