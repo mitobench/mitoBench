@@ -67,16 +67,16 @@ public class DBSearchDialogue extends ATabpaneDialogue{
 
         dialogGrid.add(new Separator(), 0,1,3,1);
 
-        dialogGrid.add(new Label("select"), 0,2,1,1);
-        dialogGrid.add(textfield_selection_table, 1,2,1,1);
-        dialogGrid.add(new Label("from sequence_data"), 2,2,1,1);
-
-        dialogGrid.add(new Separator(), 0,3,3,1);
-
-        dialogGrid.add(checkBox_write_own_query, 0,4,1,1);
-        dialogGrid.add(textfield_sql_statement_advanced, 0,5,3,1);
-        dialogGrid.add(btnSend,2,6,3,1);
-        dialogGrid.add(message, 0,6,2,1);
+//        dialogGrid.add(new Label("select"), 0,2,1,1);
+//        dialogGrid.add(textfield_selection_table, 1,2,1,1);
+//        dialogGrid.add(new Label("from sequence_data"), 2,2,1,1);
+//
+//        dialogGrid.add(new Separator(), 0,3,3,1);
+//
+//        dialogGrid.add(checkBox_write_own_query, 0,4,1,1);
+//        dialogGrid.add(textfield_sql_statement_advanced, 0,5,3,1);
+        dialogGrid.add(btnSend,2,2,3,1);
+        dialogGrid.add(message, 0,3,2,1);
 
     }
 
@@ -129,7 +129,10 @@ public class DBSearchDialogue extends ATabpaneDialogue{
             if(checkBox_write_own_query.isSelected()){
                 query = textfield_sql_statement_advanced.getText();
             } else if (checkBox_get_all_data.isSelected()){
-                query = "SELECT * FROM sequence_data";
+                //query = "SELECT * FROM sequence_data";
+                query = "SELECT * FROM samples s " +
+                        "INNER JOIN publications p on s.publications_id = p.mitodb_publications_id " +
+                        "INNER JOIN technical_information t on s.technicalinfo_id = t.technical_info_id";
             } else {
                 query = "SELECT " + textfield_selection_table.getText() + "FROM sequence_data";
             }
@@ -145,6 +148,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
                     //dialog.close();
                     mito.splitTablePane(mito.getTableControllerDB());
                     mito.getTabpane_statistics().getTabs().remove(getTab());
+                    mito.getTableControllerDB().addFilter();
                 }
             } catch (JSQLParserException e) {
                 message.setTextFill(Color.RED);

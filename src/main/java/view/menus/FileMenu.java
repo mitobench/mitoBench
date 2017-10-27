@@ -151,6 +151,7 @@ public class FileMenu {
                 );
 
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(databaseConnectionDialogue.getTab());
+                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(databaseConnectionDialogue.getTab());
 
             } else {
                 // open search mask to specify which data should be loaded
@@ -158,12 +159,13 @@ public class FileMenu {
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addFunctionality(databaseConnectionController.getTable());
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
+                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(dbSearchDialogue.getTab());
             }
 
-            if(drapAndDropEventMaganer == null){
-                drapAndDropEventMaganer = new DrapAndDropManagerDB(tableControllerDB, tableControllerUserBench);
-                drapAndDropEventMaganer.createEvent();
-            }
+//            if(drapAndDropEventMaganer == null){
+//                drapAndDropEventMaganer = new DrapAndDropManagerDB(tableControllerDB, tableControllerUserBench);
+//                drapAndDropEventMaganer.createEvent();
+//            }
 
 
         });
@@ -201,9 +203,10 @@ public class FileMenu {
                         EXPORT DIALOGUE
          */
 
-        MenuItem exportFile = new MenuItem("Export Data");
+        MenuItem exportFile = new MenuItem("Export all Data");
         exportFile.setOnAction(t -> {
-            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass);
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
+                    mitoBenchWindow.getChartController(), true);
             try {
                 exportDialogue.start(new Stage());
             } catch (Exception e) {
@@ -211,6 +214,17 @@ public class FileMenu {
             }
         });
 
+
+        MenuItem exportSelectedData = new MenuItem("Export selected Data");
+        exportSelectedData.setOnAction(t -> {
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
+                    mitoBenchWindow.getChartController(), false);
+            try {
+                exportDialogue.start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
 
 
@@ -262,7 +276,8 @@ public class FileMenu {
                     new LoggerSettingsDialogue("Log file configuration", logClass, stage);
         });
 
-        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
+        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
+                exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
     /**
@@ -365,7 +380,7 @@ public class FileMenu {
                     try {
 
                         projectReader.read(f, LOG);
-                        projectReader.loadData(tableControllerUserBench);
+                        projectReader.loadData(tableControllerUserBench, mitoBenchWindow.getChartController());
                         //tableControllerUserBench.loadGroups();
                         mitoBenchWindow.setAnotherProjectLoaded(true);
                     } catch (IOException e) {

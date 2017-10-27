@@ -34,9 +34,7 @@ public class HaploStatistics {
                            LogClass LOGClass){
 
         this.tableController = tableController;
-        //chartController = new ChartController();
         this.chartController = chartController;
-        //chartController.init(tableController, treeHaploController.getTreeMap());
         tableControllerMutations = new TableControllerMutations(LOGClass);
         tableControllerMutations.init();
         LOG = LOGClass.getLogger(this.getClass());
@@ -48,32 +46,26 @@ public class HaploStatistics {
      */
     public void count(String[] coreHGs){
         ObservableList<ObservableList> tableItems = tableController.getTable().getItems();
-        boolean groupingMustBeDeleted = false;
 
         // get set of unique group and haplogroup entries
         if(!tableController.getGroupController().isGroupingExists()) {
-            // define new group that includes all data
-            GroupController gc = tableController.getGroupController();
-            gc.createGroupByColumn("Group", "group");
-            tableController.updateTable(tableController.createNewEntryList("group", "Group (Grouping)"));
-            groupingMustBeDeleted = true;
-        }
+            number_of_groups=1;
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableItems);
+            String[] selection_haplogroups = cols[0];
+            HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
+            data_all = chartController.assignHGsNoGrouping(hgs_summarized, selection_haplogroups);
 
-        String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"}, tableItems);
-        String[] selection_haplogroups = cols[0];
-        String[] selection_groups = cols[1];
-        if(Arrays.asList(selection_groups).contains("Undefined")){
-            number_of_groups = selection_groups.length-1;
         } else {
+
+
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
+            String[] selection_haplogroups = cols[0];
+            String[] selection_groups = cols[1];
+
             number_of_groups = selection_groups.length;
-        }
+            HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
+            data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
 
-        HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
-        data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
-
-        if(groupingMustBeDeleted){
-            tableController.getGroupController().clearGrouping();
-            tableController.removeColumn("Group");
         }
 
     }
@@ -127,6 +119,7 @@ public class HaploStatistics {
 
             entries.add(entry);
 
+
         }
 
         // clear Items in table
@@ -139,12 +132,6 @@ public class HaploStatistics {
     }
 
 
-    /**
-     * Parse chart data to array format.
-     *
-     * @param data_all
-     * @return
-     */
     public HashMap<String, HashMap<String, Integer>> parse(HashMap<String, List<XYChart.Data<String, Number>>> data_all) {
         HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
 
@@ -224,19 +211,24 @@ public class HaploStatistics {
         });
     }
 
-    /**
-     *
-     *      GETTER AND SETTER
-     *
-     *
-     */
 
+    public double[][] getFrequencies(){
 
+        double[][] data = getData();
 
-    /**
-     * Get only count values in array (matrix) format.
-     * @return
-     */
+        for(int i = 0; i < number_of_groups ; i++){
+            int count_all_hgs_group = countAllHGs(i);
+
+            for(int j = 0; j < data[i].length; j++){
+                data[i][j] = data[i][j] / (double)count_all_hgs_group;
+            }
+        }
+
+        return data;
+
+    }
+
+    
     public double[][] getData(){
 
         HashMap<String, HashMap<String, Integer>> data_all_new = parse(data_all);
@@ -267,28 +259,6 @@ public class HaploStatistics {
         }
 
         return data;
-    }
-
-
-    /**
-     * Get frequencies of haplogroups per group.
-     *
-     * @return matrix with frequencies
-     */
-    public double[][] getFrequencies(){
-
-        double[][] data = getData();
-
-        for(int i = 0; i < number_of_groups ; i++){
-            int count_all_hgs_group = countAllHGs(i);
-
-            for(int j = 0; j < data[i].length; j++){
-                data[i][j] = data[i][j] / (double)count_all_hgs_group;
-            }
-        }
-
-        return data;
-
     }
 
     public HashMap<String, List<XYChart.Data<String, Number>>> getData_all() {

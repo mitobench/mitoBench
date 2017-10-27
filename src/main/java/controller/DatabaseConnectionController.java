@@ -19,7 +19,7 @@ public class DatabaseConnectionController {
     private DatabaseAccessor databaseAccessor;
 
     public DatabaseConnectionController(){
-        //For testing and stuff
+        //For accessing database
         username_root = "mitodbreader";
         password_root = "LKeAFGVqSZdtr8peTPOv";
     }

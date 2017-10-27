@@ -43,6 +43,8 @@
 .default-color17.chart-pie { -fx-pie-color: #065a83; }/* T2 */
 .default-color18.chart-pie { -fx-pie-color: darkgrey; }/* H */
 .default-color19.chart-pie { -fx-pie-color: grey; }/* HV */
+.default-color20.chart-pie { -fx-pie-color: #4f4f4f; }/* HV */
+.default-color21.chart-pie { -fx-pie-color: rgba(0, 0, 0, 0.98); }/* others */
 
 .chart-pie-label {
     -fx-fone-size: 17pt ;

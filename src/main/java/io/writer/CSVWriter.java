@@ -17,9 +17,10 @@ public class CSVWriter implements IOutputData {
     private TableControllerUserBench tableController;
     private String separator = ",";
 
-    public CSVWriter(TableControllerUserBench tableController, Logger LOG){
-        this.data = tableController.getData();
+    public CSVWriter(TableControllerUserBench tableController, Logger LOG, ObservableList<ObservableList> dataToExport){
+        this.data = dataToExport;
         this.tableController = tableController;
+
     }
 
 
@@ -37,6 +38,9 @@ public class CSVWriter implements IOutputData {
             if(!file.endsWith(".csv"))
                 file = file + ".csv";
 
+            int index_id = tableController.getColIndex("ID");
+            int index_mt = tableController.getColIndex("MTSequence");
+
             writer = new BufferedWriter(new FileWriter(new File(file)));
 
             // write header
@@ -52,14 +56,25 @@ public class CSVWriter implements IOutputData {
             writer.write(header);
 
             // write view.data
-            for (ObservableList entry :  this.tableController.getViewDataCurrent()) {
+            for (ObservableList entry :  this.data) {
                 String text = "";
                 for(int i = 0; i < entry.size(); i++){
-                    if(i == entry.size()-1){
-                        text += entry.get(i) + "\n";
+                    if(i==index_mt){
+                        String mt_seq = tableController.getDataTable().getMtStorage().getData().get(entry.get(index_id));
+                        if(i == entry.size()-1){
+                            text += mt_seq + "\n";
+                        } else {
+                            text += mt_seq + separator;
+                        }
+
                     } else {
-                        text += entry.get(i) + separator;
+                        if(i == entry.size()-1){
+                            text += entry.get(i) + "\n";
+                        } else {
+                            text += entry.get(i) + separator;
+                        }
                     }
+
 
                 }
                 writer.write(text);

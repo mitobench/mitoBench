@@ -70,7 +70,7 @@ public class GenericInputParser implements IInputData {
                     entries.add(e);
                 }
                 //Now add with ID to hashmap
-                map.put(splitLine[0], entries);
+                map.put(splitLine[0].trim(), entries);
             }
         }
     }

@@ -6,7 +6,7 @@ mitoBench offers different ways to import data.
 Import via data upload
 ----------------------
 
-> File -> Import
+  > File -> Import
 
 mitoBench supports different file formats:
 
@@ -14,6 +14,9 @@ mitoBench supports different file formats:
 * Arlequin (.arp)
 * Haplogrep (.hsd)
 * Excel (.xls)
+
+  * First row will be used as header
+
 * Generic file (.tsv)
 
   To upload a generic file, the file must have a specific format:
@@ -31,15 +34,14 @@ mitoBench supports different file formats:
     Contains the actual data. One line per sample, tab separated.
 
 * MitoProject (.mitoproj)
-    Only one project can be loaded per session.
+    Only one project can be imported per session.
 
 
-The uploaded data are represented in table format. Information that are in different files
-but belonging to one sample are merged into one row based on the sample name.
+The imported information is represented in table format. If e.g. samples have been imported from different files, they are merged into one row based on the sample name.
 
 .. note::
    To merge information from different files, make sure that the samples have
-   identical names.
+   identical names/identifiers!
 
 
 **Data types**
@@ -86,7 +88,7 @@ All files mentioned in the section above can also be added by drag and dropping 
 Import from mitoDB
 ------------------
 
-> File -> Import Data from DB
+  > File -> Import Data from DB
 
 To import data from mitoDB, select *File -> Import Data from DB*. This opens a
 tab in the main view where you have to enter your mitoDB login data.
@@ -94,11 +96,10 @@ tab in the main view where you have to enter your mitoDB login data.
 .. image:: images/mitoDB_login.png
    :align: center
 
-After login successfully, the user can set up a database query to specify which
-data has to be loaded. More advanced user also can write their own query (SQL statement).
+After  a successful login, the user can set up a database query. Currently, it is only possible to get all data from the database, which are several thousand mt Genomes including metadata from the 1000 genomes project (phase 3). This configuration panel will be more sophisticated in future and allow user defined queries / more complex queries.
+
 
 .. image:: images/mitoDB_query.png
    :align: center
 
-The specified data will be loaded to the mitoBench in a separate table and can be added
-by drag and drop to the main user table.
+The specified data will be imported to the mitoBench in a separate table. By right-clicking on a column, a filter pops up to configure the search.

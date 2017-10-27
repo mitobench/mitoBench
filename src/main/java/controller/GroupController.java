@@ -138,8 +138,6 @@ public class GroupController {
             tableController.cleanColnames();
             tableController.cleanTableContent("(Grouping)");
             colname_group=null;
-            if(tableController.getTableColumnByName("All data")!=null)
-                tableController.removeColumn("All data");
         }
     }
 
@@ -178,6 +176,18 @@ public class GroupController {
 
         return allGroups_new;
     }
+
+
+    public String getGroupOfElement(String member){
+        for(String groupname : allGroups.keySet()){
+            Group group = allGroups.get(groupname);
+            if(group.getEntries().contains(member)){
+                return groupname;
+            }
+        }
+        return null;
+    }
+
 
     public int getNumberOfGroups(){
         return allGroups.size();

@@ -83,9 +83,9 @@ public class DatabaseAccessor {
         Entry e;
         for(int i = 1; i < rsmd.getColumnCount(); i++){
             String col = rsmd.getColumnName(i);
-            if(col.equals("id")){
+            if(col.equals("mitodb_sample_id")){
                 rowID = rs.getString(i);
-            } else if(!col.equals("mitodb_entry_identifier")) {
+            } else {
               String data_string = rs.getString(i);
               e = new Entry(col, new CategoricInputType("String"), new GenericInputData(data_string));
               eList.add(e);

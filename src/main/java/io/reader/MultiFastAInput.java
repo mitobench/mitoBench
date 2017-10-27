@@ -94,7 +94,7 @@ public class MultiFastAInput implements IInputData {
             }
         }
 
-        if(currSeq.length() != seq_length){
+        if(currSeq.length() != seq_length && seq_length!=0){
             throw new FastAException("Your sequence lengths do not match each other. Please ensure that you performed a multiple sequence alignment of your FastA entries first, before using them here.");
         } else {
             FastaEntry faentry = new FastaEntry(currSeq, currHeader);

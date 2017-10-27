@@ -4,12 +4,15 @@ import Logging.LogClass;
 import io.Exceptions.ImageException;
 import io.writer.ImageWriter;
 import io.writer.PDFExporter;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -73,7 +76,8 @@ public abstract class AChart {
 
 
 
-        final ContextMenu menu = new ContextMenu(saveAsPng, saveAsPdf);
+        //final ContextMenu menu = new ContextMenu(saveAsPng, saveAsPdf);
+        final ContextMenu menu = new ContextMenu(saveAsPng);
 
         node.setOnMouseClicked(event -> {
             if (MouseButton.SECONDARY.equals(event.getButton())) {
@@ -83,7 +87,6 @@ public abstract class AChart {
 
 
     }
-
     public void setStyleSheet(Stage stage) throws MalformedURLException {
         URL url = this.getClass().getResource("/css/chart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());

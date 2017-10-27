@@ -7,8 +7,8 @@ Haplogroup counts
 
 > Statistics -> Count Haplogroups
 
-This counts the Haplogroups per group or of the entire data set, if no grouping is defined.
-The result is represented as table format and can be downloaded via *File -> Export statistics*.
+This counts the Haplogroups per group - or of the entire data set - if no grouping is defined.
+The result is represented in a table format and can be exported via *File -> Export statistics*.
 
 
 

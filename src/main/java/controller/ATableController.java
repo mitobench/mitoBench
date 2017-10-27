@@ -343,6 +343,12 @@ public abstract class ATableController {
     }
 
     public void removeColumn(String colName) {
+        // remove grouping
+        if(colName.contains("(Grouping)")){
+            groupController.clearGrouping();
+        }
+        colName = colName.split("\\(")[0].trim();
+
         // remove from tableview
         for(TableColumn col : table.getColumns()){
             if(col.getText().equals(colName)){
@@ -426,6 +432,11 @@ public abstract class ATableController {
      * This method removes all entries and deletes the grouping.
      */
     public void cleartable(){
+        column_to_index.clear();
+        col_names.clear();
+        table_content.clear();
+        if(col_names_sorted!=null)
+            col_names_sorted.clear();
         // clean view.data model
         data.removeAll(data);
         // clean table view
@@ -433,6 +444,7 @@ public abstract class ATableController {
         dataTable.getMtStorage().getData().clear();
         dataTable.getDataTable().clear();
         table.getColumns().removeAll(table.getColumns());
+
         if(groupController!=null){
             groupController.clear();
             groupController.clearGrouping();
@@ -452,6 +464,16 @@ public abstract class ATableController {
         return table_content;
     }
 
+
+    public HashMap<String, List<Entry>> getTable_content(ObservableList<ObservableList> data) {
+        HashMap<String, List<Entry>> content_tmp = new HashMap<>();
+        for(ObservableList entry : data){
+            if(table_content.keySet().contains(entry.get(0))){
+                content_tmp.put((String)entry.get(0), table_content.get(entry.get(0)));
+            }
+        }
+        return content_tmp;
+    }
 
 
     /**
@@ -473,6 +495,49 @@ public abstract class ATableController {
 
         return  haplo_to_count;
     }
+
+
+
+
+    /**
+     * This method counts occurrences of haplotypes within selected view.data
+     * return as hash map to plot it easily
+     *
+     * @return
+     */
+    public HashMap<Integer, List<String>> getDataHist2(String[] data){
+        HashMap<String, Integer> haplo_to_count = new HashMap<>();
+        HashMap<Integer, List<String>> haplo_occurrences = new HashMap<>();
+
+        for(String haplogroup : data){
+            if(haplo_to_count.containsKey(haplogroup)){
+                haplo_to_count.put(haplogroup, haplo_to_count.get(haplogroup)+1);
+            } else {
+                haplo_to_count.put(haplogroup,1);
+            }
+        }
+
+
+        for(String key_hg : haplo_to_count.keySet()){
+            int count = haplo_to_count.get(key_hg);
+
+            if(haplo_occurrences.keySet().contains(count)){
+                List<String> hgs = haplo_occurrences.get(count);
+                hgs.add(key_hg);
+                haplo_occurrences.put(count, hgs);
+            } else {
+                List<String> hgs = new ArrayList<>();
+                hgs.add(key_hg);
+                haplo_occurrences.put(count, hgs);
+            }
+        }
+
+
+
+
+        return  haplo_occurrences;
+    }
+
 
 
     /**
@@ -635,7 +700,6 @@ public abstract class ATableController {
     }
 
 
-
     /*
          Setter
      */
@@ -680,6 +744,16 @@ public abstract class ATableController {
 
     }
 
-
-
+//
+//    public HashMap<String,List<Entry>> parseDBData(HashMap<String, List<Entry>> data){
+//
+//        List<Entry> entries = data.get(null);
+//        HashMap<String,List<Entry>> parsedData = new HashMap<>();
+//
+//        for(Entry e : entries){
+//            parsedData.put(e.getIdentifier(), e);
+//        }
+//
+//    };
+//
 }

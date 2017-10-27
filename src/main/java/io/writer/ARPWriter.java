@@ -5,6 +5,7 @@ import io.datastructure.arp.ArpProfile;
 import io.datastructure.arp.ArpSample;
 import io.datastructure.arp.ArpStructure;
 import io.datastructure.fastA.FastaEntry;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import controller.TableControllerUserBench;
 
@@ -21,6 +22,7 @@ import java.util.Set;
  * Created by peltzer on 30/11/2016.
  */
 public class ARPWriter implements IOutputData {
+    private final ObservableList<ObservableList> data;
     private FileWriter fileWriter;
     private BufferedWriter bfWriter;
     private String groups = "";
@@ -29,14 +31,15 @@ public class ARPWriter implements IOutputData {
     private TableControllerUserBench tableController;
 
 
-    public ARPWriter(TableControllerUserBench tableController) {
+    public ARPWriter(TableControllerUserBench tableController, ObservableList<ObservableList> data) {
         this.tableController = tableController;
+        this.data = data;
     }
 
     @Override
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
         //Initialize properly
-        if (!file.endsWith("arp")) {
+        if (!file.endsWith(".arp")) {
             file = file + ".arp";
         }
 
@@ -67,7 +70,7 @@ public class ARPWriter implements IOutputData {
     private void getNumberofGroups() {
         Set<String> setme = new HashSet<>();
         TableColumn tbclm = tableController.getTableColumnByName(groups);
-        tableController.getTable().getItems().stream().forEach((o)
+        data.stream().forEach((o)
                 -> setme.add((String) tbclm.getCellData(o)));
         this.groupSize = setme.size();
     }
@@ -79,7 +82,7 @@ public class ARPWriter implements IOutputData {
         TableColumn tbclm_id = tableController.getTableColumnByName("ID");
         // write view.data
 
-        tableController.getTable().getItems().stream().forEach((o)
+        data.stream().forEach((o)
                 -> list.add(new FastaEntry(tableController.getDataTable().getMtStorage().getData().get(tbclm_id.getCellData(o)), (String) tbclm_id.getCellData(o)))
         );
 
@@ -91,7 +94,7 @@ public class ARPWriter implements IOutputData {
         TableColumn tbclm_region = tableController.getTableColumnByName(groups);
         TableColumn tbclm_id = tableController.getTableColumnByName("ID");
 
-        tableController.getTable().getItems().stream().forEach(o
+        data.stream().forEach(o
                 -> hmp.put(tbclm_id.getCellData(o), tbclm_region.getCellData(o)));
 
         this.regions = hmp;

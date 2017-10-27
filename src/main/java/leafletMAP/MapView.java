@@ -20,6 +20,7 @@ import net.java.html.leaflet.*;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class MapView extends StackPane {
     private GroupController groupController;
 
     public MapView(GroupController groupController, TableControllerUserBench tc, TableColumn location_col, ObservableList items,
-                   TableColumn id_col, TableColumn grouing_col, BorderPane mapBasicPane)
+                   TableColumn id_col, TableColumn grouping_col, BorderPane mapBasicPane)
             throws MalformedURLException, FileNotFoundException, URISyntaxException {
 
         this.tableController = tc;
@@ -51,7 +52,7 @@ public class MapView extends StackPane {
         this.location_col = location_col;
         this.id_col = id_col;
         this.items = items;
-        this.grouping_col = grouing_col;
+        this.grouping_col = grouping_col;
         this.mapBasicPane = mapBasicPane;
         // we define a regular JavaFX WebView that DukeScript can use for rendering
         webView = new WebView();
@@ -99,6 +100,7 @@ public class MapView extends StackPane {
             for (Object item : items) {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
                 String location  = location_col.getCellObservableValue(item).getValue().toString();
+
                 if(!location.equals("Undefined")){
                     String[] loc = location.split(",");
                     if(loc.length==2){
@@ -134,6 +136,7 @@ public class MapView extends StackPane {
         mapBasicPane.setBottom(legend);
 
     }
+
 
 
     public Map getMap() {

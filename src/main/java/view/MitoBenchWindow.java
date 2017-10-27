@@ -16,7 +16,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.xml.sax.SAXException;
-import statistics.HaploStatistics;
 import view.menus.*;
 import view.tree.TreeView;
 
@@ -113,12 +112,11 @@ public class MitoBenchWindow extends Application{
 
         tableControllerDB = new TableControllerDB(logClass);
         tableControllerDB.init();
+        //tableControllerDB.addFilter();
         tableControllerDB.getTable().setId("dbtable");
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerDB.getTable().prefWidthProperty().bind(scene.widthProperty());
-
-
 
         // initialize haplotree with search function
         BorderPane borderpane_center = new BorderPane();
@@ -128,10 +126,8 @@ public class MitoBenchWindow extends Application{
         treeView = new TreeView(treeController.getTree());
         treeController.setTreeView(treeView);
 
-
         chartController = new ChartController();
         chartController.init(tableControllerUserBench, treeController.getTreeMap());
-
 
         // get all components of central part
         borderpane_center.setCenter(getCenterPane());
@@ -408,8 +404,10 @@ public class MitoBenchWindow extends Application{
         this.fileMenu = fileMenu;
     }
 
+
     public ChartController getChartController() {
         return chartController;
     }
+
 
 }

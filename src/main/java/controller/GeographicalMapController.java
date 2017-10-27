@@ -15,6 +15,7 @@ import view.visualizations.GeographicalMapViz;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -43,7 +44,7 @@ public class GeographicalMapController {
         grouping_col = tableControllerUserBench.getTableColumnByName("Grouping");
         id_col = tableControllerUserBench.getTableColumnByName("ID");
         location_col = tableControllerUserBench.getTableColumnByName("Location");
-        items = tableControllerUserBench.getTable().getItems();
+        items = tableControllerUserBench.getSelectedRows();
 
 
 
@@ -71,6 +72,7 @@ public class GeographicalMapController {
         geographicalMapViz.setLeft(map.getListView());
 
     }
+
 
 
 }

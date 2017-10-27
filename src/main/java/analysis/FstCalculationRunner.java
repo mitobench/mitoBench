@@ -44,9 +44,13 @@ public class FstCalculationRunner {
     private List<Integer> usableLoci;
     private Writer writer;
     private Logger LOG;
+    private int numberOfPermutations;
+    private double[][] pvalues;
+    private double significance;
 
 
-    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc)
+    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc, int numberOfPermutations,
+                                double significance)
             throws IOException {
 
         mitobenchWindow = mito;
@@ -54,6 +58,8 @@ public class FstCalculationRunner {
         gamma_a = gamma;
         missing_data_character = mdc;
         LOG = mito.getLogClass().getLogger(this.getClass());
+        this.numberOfPermutations = numberOfPermutations;
+        this.significance = significance;
 
         prepareData(
                 mito.getTableControllerUserBench(),
@@ -103,51 +109,54 @@ public class FstCalculationRunner {
      * @throws IOException
      */
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
-        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
-        Filter filter = new Filter();
-        Linearization linearization = new Linearization();
-
-        usableLoci = filter.getUsableLoci(
-                data,
-                missing_data_character,
-                Double.parseDouble(field_level_missing_data)
-        );
-
-
-        // calculate Fst with equation introduced by Hudson et al. (1992)
-        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);
-        fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
-        fstHudson1992.setData(data);
-
-        fsts = fstHudson1992.calculateFst();
-        groupnames = fstHudson1992.getGroupnames();
-
-
-        // write to file
-        writer = new Writer();
-        writer.writeResultsFstToString(
-                fsts,
-                groupnames,
-                usableLoci,
-                Double.parseDouble(field_level_missing_data)
-        );
-
-        writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
-
-        if(runSlatkin){
-            fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
-            writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
-        }
-        if(runReynolds){
-            fsts_reynolds = linearization.linearizeWithReynolds(fsts);
-            writer.addLinerarizedFstMatrix(fsts_reynolds, "Reynolds' distance");
-        }
-
-        // init table controller
-        tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
-        tableControllerFstValues.init();
-
-        writeLog(runSlatkin, runReynolds, field_level_missing_data);
+//        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
+//        Filter filter = new Filter();
+//        Linearization linearization = new Linearization();
+//
+//        usableLoci = filter.getUsableLoci(
+//                data,
+//                missing_data_character,
+//                Double.parseDouble(field_level_missing_data)
+//        );
+//
+//
+//        // calculate Fst with equation introduced by Hudson et al. (1992)
+//        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
+//        fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
+//        fstHudson1992.setData(data);
+//
+//        fsts = fstHudson1992.calculateFst();
+//        pvalues = fstHudson1992.calculatePermutedFST();
+//        groupnames = fstHudson1992.getGroupnames();
+//
+//
+//        // write to file
+//        writer = new Writer();
+//        writer.writeResultsFstToString(
+//                fsts,
+//                pvalues,
+//                groupnames,
+//                usableLoci,
+//                Double.parseDouble(field_level_missing_data),
+//                significance
+//        );
+//
+//        writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
+//
+//        if(runSlatkin){
+//            fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
+//            writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
+//        }
+//        if(runReynolds){
+//            fsts_reynolds = linearization.linearizeWithReynolds(fsts);
+//            writer.addLinerarizedFstMatrix(fsts_reynolds, "Reynolds' distance");
+//        }
+//
+//        // init table controller
+//        tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
+//        tableControllerFstValues.init();
+//
+//        writeLog(runSlatkin, runReynolds, field_level_missing_data);
 
     }
 
@@ -190,6 +199,7 @@ public class FstCalculationRunner {
         tab.setContent(scrollpane_result);
 
         mitobenchWindow.getTabpane_statistics().getTabs().add(tab);
+        mitobenchWindow.getTabpane_statistics().getSelectionModel().select(tab);
 
     }
 
@@ -203,13 +213,14 @@ public class FstCalculationRunner {
 
         HeatMap heatMap = new HeatMap("","", mitobenchWindow.getLogClass());
         heatMap.setContextMenu(mitobenchWindow.getTabpane_visualization());
-        heatMap.createHeatMap(fsts, groupnames, "");
+        heatMap.createHeatMap(fsts, groupnames, 0.0, 1.0);
 
         Tab tab = new Tab("Fst values");
         tab.setId("tab_heatmap");
         tab.setContent(heatMap.getHeatMap());
 
         mitobenchWindow.getTabpane_visualization().getTabs().add(tab);
+        mitobenchWindow.getTabpane_visualization().getSelectionModel().select(tab);
 
     }
 

@@ -160,7 +160,7 @@ public class DataTable {
             for(String key : data.keySet()){
                 if(!key.equals("ID")){
                     String[] d = data.get(key);
-                    data.put(key.trim(), append(d, "Undefined"));
+                    data.put(key, append(d, "Undefined"));
                 }
             }
         } else {
@@ -169,7 +169,7 @@ public class DataTable {
                 if(!key.equals("ID")){
                     String[] newCol = new String[data.size()];
                     Arrays.fill(newCol, "");
-                    data.put(key.trim(),  newCol);
+                    data.put(key,  newCol);
                 }
             }
         }

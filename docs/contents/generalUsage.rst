@@ -2,7 +2,7 @@ General Usage
 =============
 
 
-The mitoBench can be used to upload and convert files and to manipulate, analyse and
+The mitoBench can be used to upload and convert files and to manipulate, analyze and
 visualize mitochondrial data.
 
 The main window is split into three parts. The upper part contains a visualization
@@ -14,8 +14,14 @@ part will include the database view as well.
    :align: center
 
 mitoBench can be used in offline mode. However, some features (such
-as the map view) require a working internet connection.
+as the map view and the DB import) require a working internet connection. The faster - the better.
 
+
+
+Table
+------
+
+It is possible to add and delete columns to the table as well as adding and replacing data by right-clicking on the table. Adding a new column requires a default value. This value can replaced easily later. 
 
 Log file
 --------
@@ -23,3 +29,7 @@ Log file
 By closing mitoBench, you will be asked if you want to save a log file.
 This file contains all steps that were done during your analysis with mitoBench,
 which helps you to reconstruct your analysis at a later date.
+
+
+
+

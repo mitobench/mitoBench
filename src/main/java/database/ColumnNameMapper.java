@@ -14,7 +14,17 @@ public class ColumnNameMapper {
         switch(colNameDB){
             case "sequence":
                 return "MTSequence";
+            case "ID":
+                return "ID";
+            case "id":
+                return "ID";
+            case "Identifier":
+                return "ID";
             case "haplogroup":
+                return "Haplogroup";
+            case "sequence_fasta":
+                return "MTSequence";
+            case "haplogroup_current_phylotree_haplogrep2":
                 return "Haplogroup";
             case "continent":
                 return "Continent";

@@ -1,9 +1,11 @@
 package io.dialogues.Export;
 
 import Logging.LogClass;
+import controller.ChartController;
 import io.writer.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -19,22 +21,33 @@ import java.util.Optional;
  * Created by peltzer on 30/11/2016.
  */
 public class ExportDialogue extends Application {
+    private final String[] userdefinedHGlist;
     private List<String> columnsInTable = FXCollections.observableArrayList("option1", "option2", "option3");
     private TableControllerUserBench tableController;
     private String MITOBENCH_VERSION;
+    private ObservableList<ObservableList> dataToExport;
     //TODO this should come from the class instantiation...
     private Logger LOG;
+
 
 
     public static void main(String[] args) {
         Application.launch(args);
     }
 
-    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion, LogClass logClass) {
+    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion, LogClass logClass,
+                          ChartController chartController, boolean exportAllData) {
+
         LOG = logClass.getLogger(this.getClass());
         this.tableController = tableManager;
         this.columnsInTable = tableManager.getCurrentColumnNames();
         this.MITOBENCH_VERSION = mitoVersion;
+        this.userdefinedHGlist = chartController.getCustomHGList();
+        if(exportAllData){
+            dataToExport = tableController.getTable().getItems();
+        } else {
+            dataToExport = tableController.getTable().getSelectionModel().getSelectedItems();
+        }
     }
 
 
@@ -75,7 +88,7 @@ public class ExportDialogue extends Application {
             if(saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
                 LOG.info("Export data into ARP format with grouping on column '" + selection + "'. File: " + outfileDB);
-                ARPWriter arpwriter = new ARPWriter(tableController);
+                ARPWriter arpwriter = new ARPWriter(tableController, dataToExport);
                 arpwriter.setGroups(selection);
                 arpwriter.writeData(outfileDB, tableController);
             }
@@ -87,7 +100,7 @@ public class ExportDialogue extends Application {
             if(saveAsDialogue.getOutFile() != null) {
                 String outfileFASTA = saveAsDialogue.getOutFile();
                 LOG.info("Export data into multi FASTA format. File: " + outfileFASTA);
-                MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage());
+                MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(), dataToExport);
                 multiFastaWriter.writeData(outfileFASTA, tableController);
 
             }
@@ -99,7 +112,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
                 LOG.info("Export data into BEAST format. File: " + outfileDB);
-                BEASTWriter beastwriter = new BEASTWriter(tableController, LOG);
+                BEASTWriter beastwriter = new BEASTWriter(tableController, LOG, dataToExport);
                 beastwriter.writeData(outfileDB, tableController);
             }
             //CSV Output
@@ -110,7 +123,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    CSVWriter csvWriter = new CSVWriter(tableController, LOG);
+                    CSVWriter csvWriter = new CSVWriter(tableController, LOG, dataToExport);
                     csvWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception e) {
@@ -125,7 +138,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    ExcelWriter excelwriter = new ExcelWriter(tableController);
+                    ExcelWriter excelwriter = new ExcelWriter(tableController, dataToExport);
                     excelwriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into Excel format. File: " + outFileDB);
 
@@ -140,8 +153,8 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    ProjectWriter projectWriter = new ProjectWriter(MITOBENCH_VERSION, LOG);
-                    projectWriter.write(outFileDB, tableController);
+                    ProjectWriter projectWriter = new ProjectWriter(MITOBENCH_VERSION, LOG, dataToExport);
+                    projectWriter.write(outFileDB, tableController, this.userdefinedHGlist);
                     LOG.info("Export whole project. File: " + outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
@@ -155,7 +168,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    NexusWriter nexusWriter = new NexusWriter();
+                    NexusWriter nexusWriter = new NexusWriter(dataToExport);
                     nexusWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into Nexus format. File: " + outFileDB);
                 } catch (Exception e) {

@@ -1,7 +1,14 @@
-Pairwise Fst values
-===================
+Analyses
+=========
 
-> Analysis -> Calculate pairwise Fst
+Pairwise Fst values
+-------------------
+
+
+.. note::
+  This implementation is just a prototype. The results might be incorrect.
+
+  > Analysis -> Calculate pairwise Fst
 
 This calculates the pairwise Fst values based on the approach of Hudson et al.
 Advanced settings are provided by the configuration dialogue.
@@ -41,15 +48,35 @@ visualized as heatmap.
 
 
 Haplogroups
-===========
+-----------
 
 .. note::
   Not working yet!
 
-> Analysis -> Calculate haplogroups
+  > Analysis -> Calculate haplogroups
 
-The Haplogroups are detemined by HaploGrep2 based on the FastA sequence. This
+The Haplogroups are determined by HaploGrep2 based on the FastA sequence. This
 functionality is just provided in the beta version of Haplogrep2.
 
 The calculated haplogroups are added as new column in the table view and can be
 downloaded as hsd file as well.
+
+
+
+
+PCA
+----
+
+  > Analysis -> PCA analysis
+
+The principal component analysis requires a grouping of the data and the haplogroups. Both can be set in the configuration pane.
+The colouring can either be set like the groups (each group gets one color)
+
+.. image:: images/pcaConfig.png
+   :align: center
+
+
+or several groups can be assigned to one color
+
+.. image:: images/pcaConfig2.png
+   :align: center

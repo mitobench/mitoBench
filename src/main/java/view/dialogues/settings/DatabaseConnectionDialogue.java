@@ -19,7 +19,7 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
     private String username;
     private String password;
     private PasswordField password_field;
-    private TextField usernamme_field;
+    private TextField username_field;
     private  ATableController table;
     private MitoBenchWindow mitoBenchWindow;
 
@@ -47,11 +47,14 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
         Label password_label = new Label("Password");
         password_label.setId("password_label");
 
-        usernamme_field = new TextField("mitotest");
-        usernamme_field.setId("usernamme_field");
+        username_field = new TextField();
+        username_field.setId("username_field");
 
         password_field = new PasswordField();
         password_field.setId("password_field");
+
+        // test user
+        username_field.setText("mitotest");
         password_field.setText("$2a$10$gsy2KTn6xznKETjG1AHcMOLC.6YNtkikttyOzNBP/2B2GMQSW6m4e");
 
         loginBtn = new Button("Login");
@@ -59,7 +62,7 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
 
         dialogGrid.add(title_label, 0,0,2,1);
         dialogGrid.add(username_label,0,1,1,1);
-        dialogGrid.add(usernamme_field,1,1,1,1);
+        dialogGrid.add(username_field,1,1,1,1);
         dialogGrid.add(password_label,0,2,1,1);
         dialogGrid.add(password_field,1,2,1,1);
         dialogGrid.add(loginBtn,1,3,2,1);
@@ -69,7 +72,7 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
 
     private void addListener(){
         loginBtn.setOnAction(e -> {
-            username = usernamme_field.getText();
+            username = username_field.getText();
             password = password_field.getText();
 
             mitoBenchWindow.getTabpane_statistics().getTabs().remove(getTab());
@@ -89,6 +92,7 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
                 dbSearchDialogue.fillDialogue();
                 dbSearchDialogue.addFunctionality(table);
                 mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
+                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(dbSearchDialogue.getTab());
                 LOG.info("Login to database with username " + databaseConnectionController.getUserName()+ " successful.");
 
             } catch (SQLException e1) {

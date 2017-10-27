@@ -163,11 +163,16 @@ public class StackedBar extends AChart{
 
         TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
         TableColumn group_col = graphicsMenu.getTableController().getTableColumnByName("Grouping");
+        String[] selection_haplogroups;
+        if(group_col==null){
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
+            selection_haplogroups = cols[0];
+        } else{
+            // get only those haplogroups that does not already correspond to another macroHG displayed
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+            selection_haplogroups = cols[0];
 
-        // get only those haplogroups that does not already correspond to another macroHG displayed
-        String[][] cols = chartController.prepareColumnsUnique(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
-        String[] selection_haplogroups = cols[0];
-
+        }
 
         // todo: what do they want??
         //HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
@@ -188,9 +193,16 @@ public class StackedBar extends AChart{
                     hg_row = hg_row.split("\\+")[0];
                 }
 
-                if(sub_hgs.contains(hg_row) &&
-                        group.equals(group_col.getCellObservableValue(tmp).getValue()))
-                    columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
+                if(group_col==null){
+                    if(sub_hgs.contains(hg_row))
+                        columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
+                } else {
+                    if(sub_hgs.contains(hg_row) &&
+                            group.equals(group_col.getCellObservableValue(tmp).getValue()))
+                        columnData.add((String)haplo_col.getCellObservableValue(tmp).getValue());
+                }
+
+
             }
 
             graphicsMenu.createHaploBarchart(haplo_col, columnData);
