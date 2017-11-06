@@ -21,7 +21,7 @@ public class DatabaseConnectionController {
     public DatabaseConnectionController(){
         //For accessing database
         username_root = "mitodbreader";
-        password_root = "LKeAFGVqSZdtr8peTPOv";
+        password_root = "$MitoRead17";
     }
 
 
@@ -62,7 +62,7 @@ public class DatabaseConnectionController {
 
         databaseAccessor = new DatabaseAccessor();
         loggedIn = databaseAccessor.connectToDatabase("org.postgresql.Driver",
-                "jdbc:postgresql://peltzer.com.de:5432/mitoDbTesting",
+                "jdbc:postgresql://mpi-mitodb.server.shh.mpg.de:5432/mitodb",
                 username_root, password_root, userName, password);
 
         if(!loggedIn){
