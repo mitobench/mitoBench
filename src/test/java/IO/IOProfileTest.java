@@ -30,7 +30,7 @@ public class IOProfileTest {
 
     }
 
-    @Test
+    /*@Test
     public void arp_profile_Test() {
 
         ARPWriter arpWriter = new ARPWriter(tableController, tableController.getSelectedRows());
@@ -69,7 +69,7 @@ public class IOProfileTest {
 //        String sample_tmp = multiHeader + samples;
 //        assertEquals(sample_tmp, arpSample.getARPSample());
 
-    }
+    }*/
 
 
 
