@@ -11,8 +11,13 @@ Import via data upload
 mitoBench supports different file formats:
 
 * Multi-FastA (.fasta, .fa, .fas)
+
+  To upload fasta files, please align them before with an aligner of your choice.
+
 * Arlequin (.arp)
 * Haplogrep (.hsd)
+
+  The HDS file has to be tab separated. Comma or space - separated files cannot be read. HaploGrep2 automatically creates tab-separated files.
 * Excel (.xls)
 
   * First row will be used as header
@@ -85,7 +90,7 @@ Import via Drag and Drop
 All files mentioned in the section above can also be added by drag and dropping files into the table view of the mitoBench.
 
 
-Import from mitoDB
+Import from mitoDB (currently not possible)
 ------------------
 
   > File -> Import Data from DB

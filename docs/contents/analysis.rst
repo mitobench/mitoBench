@@ -6,10 +6,12 @@ Project based Haplogroup list
 
   > Analysis -> Define Haplogroup List
 
-This allows the useru to specify a list of Haplogroups for a project. The list will be applied whenever the user is asked for, i.e. some visualization methods, Haplogroup counting and PCA analysis. This list is also stored in the mito-project file and automatically loaded when opening the project file again.
+This allows the useru to specify a list of Haplogroups for a project. The list will be applied whenever the user is asked
+for, i.e. some visualization methods, Haplogroup counting and PCA analysis. This list is also stored in the mito-project
+file and automatically loaded when opening the project file again.
 
 
-Pairwise Fst values
+Pairwise Fst values (not yet public available, still in testing process)
 -------------------
 
   > Analysis -> Calculate pairwise Fst
@@ -62,11 +64,8 @@ visualized as heatmap.
 
 
 
-Haplogroups
+Haplogroups (not yet public available, still in developing process)
 -----------
-
-.. note::
-  Not working yet!
 
   > Analysis -> Calculate haplogroups
 
@@ -79,19 +78,24 @@ downloaded as hsd file as well.
 
 
 
-PCA
+PCA (not yet public available, still in testing process)
 ----
 
   > Analysis -> PCA analysis
 
-The principal component analysis requires a grouping of the data and the haplogroups. Both can be set in the configuration pane.
+The principal component analysis requires a grouping of the data and the haplogroups. A basic grouping of the data has to be done
+previously. The Haplogroups can be set in the configuration pane.
 The colouring can either be set like the groups (each group gets one color)
 
 .. image:: images/pcaConfig.png
    :align: center
 
 
-or several groups can be assigned to one color. In the text field, the user can specify a name. The color is set by the tool.
+or several groups can be assigned to one color. In the text field, the user can specify a name. The color is chosen by the tool.
 
 .. image:: images/pcaConfig2.png
    :align: center
+
+
+The result will be shown as a 2-dimensional plot in the visualization pane, and the counts used for the calculation in the
+statistics pane.
