@@ -4,10 +4,16 @@ Export
 Export data
 -----------
 
-  > File -> Export Data
+It is possible to export all data shown in the data table via
 
-To export your data, select *File -> Export Data*. This opens a export dialogue
-where you can choose between different file formats:
+  > File -> Export all Data
+
+Moreover, only a selection can be stored via
+
+  > File -> Export selected Data
+
+
+Both options open a export dialogue where you can choose between different file formats:
 
 .. image:: images/export_data.png
    :align: center
@@ -62,7 +68,9 @@ Export images
 
 Each image can be exported individually, either by right-clicking on the chart, which
 will open a 'Save as png' context menu, or via the File menu (select *File -> Export chart*).
-This will save the currently displayed visualization as png with a good resolution.
+This will save the currently displayed visualization as png with a good resolution. Unfortunately, it is not possible to
+save the figure as a vector graphic so far. The export to pdf also does not result in a higher resolution than the png file.
+
 
 .. note::
    The chart will be saved with the same aspect ratio displayed in the mitoBench.

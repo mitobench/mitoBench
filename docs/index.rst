@@ -24,11 +24,15 @@ This is the main mitoBench documentation, where you can find information about t
    contents/import
     
    contents/export
+
+   contents/fileconversion
    
    contents/grouping
       
    contents/filtering
-   
+
+   contents/tableOption
+
    contents/analysis   
    
    contents/statistics
