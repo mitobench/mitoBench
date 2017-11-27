@@ -63,7 +63,7 @@ public class PcaPopupDialogue extends AHGDialogue {
         }
 
         okBtn = new Button("OK");
-        checkbox_use_grouping_for_colors = new CheckBox("Set new grouping for coloring");
+        checkbox_use_grouping_for_colors = new CheckBox("Assign one colour to more than one group");
         addCheckboxColoringListener(checkbox_use_grouping_for_colors);
 
         default_list_checkbox = new CheckBox("Use default list");
@@ -183,7 +183,7 @@ public class PcaPopupDialogue extends AHGDialogue {
             combo.getItems().addAll(groupnames);
             comboBoxes.add(combo);
 
-            TextField field_text = new TextField("Groupname");
+            TextField field_text = new TextField("New groupname");
             field_text.setId("group_id_"+row2);
 
             btn_add = new Button("Add more");
@@ -265,7 +265,7 @@ public class PcaPopupDialogue extends AHGDialogue {
         comboBoxes.add(combo);
 
 
-        TextField field_text = new TextField("Groupname");
+        TextField field_text = new TextField("New groupname");
         field_text.setId("group_id_");
 
 
