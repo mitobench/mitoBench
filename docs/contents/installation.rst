@@ -1,4 +1,8 @@
 Installation Instructions for mitoBench
 ================================================
 
-You should have received a Download Link for the most current version of mitoBench. Download the file and run it.
+The current version of mitoBench can be downloaded from the Github repository
+
+https://github.com/Integrative-Transcriptomics/MitoBench/releases
+
+Download the file and run it.
