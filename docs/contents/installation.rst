@@ -1,4 +1,5 @@
 Installation Instructions for mitoBench
 ================================================
 
-You should have received a Download Link for the most current version of mitoBench. Download the file and run it.
+The tool can be downloaded from `MitoBench's GitHub page <https://github.com/Integrative-Transcriptomics/MitoBench/releases>`_ .
+After downloading the JAR file, you can start the application via double click on most operating systems (OSX, Windows and Linux) via a simple double click. If not, please `install Java <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`_ on your workstation.
