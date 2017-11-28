@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.haifengl:smile-core:1.3.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.haifengl/smile-core/1.3.1/d83e8226a293b69761da671560466e101e2b2b7b/smile-core-1.3.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.haifengl/smile-core/1.3.1/a63e491b72d061403aad5102e184fc2aea5c52fb/smile-core-1.3.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
