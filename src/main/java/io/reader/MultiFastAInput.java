@@ -56,6 +56,7 @@ public class MultiFastAInput implements IInputData {
         int seq_length = 0;
 
         while ((currentLine = bfr.readLine()) != null) {
+            currentLine = currentLine.trim();
             if (!currHeader.equals("") && currentLine.startsWith(">")) {
                 if(seq_length_should_be_equal){
                     seq_length = currSeq.length();
