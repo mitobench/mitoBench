@@ -64,6 +64,7 @@ public class BEASTWriter implements IOutputData {
         finally {
 
             fileWriter.flush();
+            bfWriter.close();
             fileWriter.close();
         }
 

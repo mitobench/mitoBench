@@ -63,6 +63,12 @@ public class HaploStatistics {
             String[] selection_groups = cols[1];
 
             number_of_groups = selection_groups.length;
+
+            for(String s : selection_groups){
+                if(s.equals("Undefined"))
+                    number_of_groups = selection_groups.length-1;
+            }
+            
             HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
             data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
 

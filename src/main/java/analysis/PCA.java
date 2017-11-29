@@ -116,6 +116,7 @@ public class PCA {
 
 
         // filter out groups and assign specific colors
+
         if(groups.length!=0){
             for(int i = 0; i < groups.length; i++){
                 List<Integer> indexes = new ArrayList<>();
@@ -130,26 +131,30 @@ public class PCA {
                 double[] pc1_group = getSubArray(pc1, Collections.min(indexes), Collections.max(indexes));
                 double[] pc2_group = getSubArray(pc2, Collections.min(indexes), Collections.max(indexes));
 
+                String[] members_array = members.toArray(new String[members.size()]);
                 pca_plot.addSeries(
                         groups[i],
-                        group_color.get(groups[i]),
                         pc1_group,
                         pc2_group,
-                        getSubArray(groups,Collections.min(indexes), Collections.max(indexes)));
+                        members_array//getSubArray(members_array,Collections.min(indexes), Collections.max(indexes))
+                        //getSubArray(groups,Collections.min(indexes), Collections.max(indexes))
+                        );
             }
 
         } else {
             for(int i = 0; i < groupOrder.length; i++){
 
-                double[] pc1_group = getSubArray(pc1, i, i+1);
-                double[] pc2_group = getSubArray(pc2, i, i+1);
+                double[] pc1_group = getSubArray(pc1, i, i);
+                double[] pc2_group = getSubArray(pc2, i, i);
 
                 pca_plot.addSeries(
                         groupOrder[i],
-                        group_color.get(groupOrder[i]),
+                        //group_color.get(groupOrder[i]),
                         pc1_group,
                         pc2_group,
-                        getSubArray(groupOrder, i, i+1));
+                        groupOrder
+                        //getSubArray(groupOrder, i, i+1)
+                        );
             }
         }
 
@@ -166,7 +171,7 @@ public class PCA {
         if(start==end){
             return new double[]{pc[start]};
         }
-        return Arrays.copyOfRange(pc, start, end);
+        return Arrays.copyOfRange(pc, start, end+1);
     }
 
 
@@ -178,7 +183,10 @@ public class PCA {
      * @return
      */
     private String[] getSubArray(String[] pc, int start, int end) {
-        return Arrays.copyOfRange(pc, start, end);
+        if(start==end){
+            return new String[]{pc[start]};
+        }
+        return Arrays.copyOfRange(pc, start, end+1);
     }
 
 

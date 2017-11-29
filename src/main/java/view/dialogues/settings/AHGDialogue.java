@@ -104,7 +104,10 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
 
         Tooltip tp = new Tooltip("Default list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
         default_list_checkbox.setOnMouseEntered(event -> {
-            Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
+            Point2D p = default_list_checkbox.localToScreen(
+                    default_list_checkbox.getLayoutBounds().getMaxX(),
+                    default_list_checkbox.getLayoutBounds().getMaxY());
+
             tp.show(default_list_checkbox, p.getX(), p.getY());
         });
         default_list_checkbox.setOnMouseExited(event -> tp.hide());

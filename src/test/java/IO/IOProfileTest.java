@@ -27,8 +27,6 @@ public class IOProfileTest {
     public void setup() throws TimeoutException {
         logClass = new LogClass();
         logClass.setUp();
-        //tableController = new TableController();
-        //tableController.init();
 
     }
 

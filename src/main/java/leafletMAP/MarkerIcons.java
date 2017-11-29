@@ -38,6 +38,7 @@ public class MarkerIcons {
     private String iconColBlack = getClass().getResource("/leaflet-0.7.2/images/marker-icon-black.png").toExternalForm();
     private Color[] colorsString = new Color[]{Color.GREEN, Color.BLUE, Color.RED, Color.ORANGE, Color.YELLOW, Color.VIOLET,
     Color.GREY, Color.BLACK};
+    private double radius = 2.0;
 
 
     public MarkerIcons(GroupController gC, TableControllerUserBench tb){

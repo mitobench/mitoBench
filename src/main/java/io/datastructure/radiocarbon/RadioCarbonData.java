@@ -41,9 +41,16 @@ public class RadioCarbonData implements IData {
             String removed_ad = removed_cal.replace("AD", "").replace("ad", "").trim();
             String[] split = removed_ad.split("-");
             try {
-                lower_limit = Integer.parseInt(split[0].trim());
-                upper_limit = Integer.parseInt(split[1].trim());
-                this.average = lower_limit + ((upper_limit - lower_limit) / 2);
+                if(split.length==1){
+                    upper_limit = Integer.parseInt(split[0].trim());
+                    this.average = upper_limit;
+                } else {
+                    lower_limit = Integer.parseInt(split[0].trim());
+                    upper_limit = Integer.parseInt(split[1].trim());
+                    this.average = lower_limit + ((upper_limit - lower_limit) / 2);
+                }
+
+
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }

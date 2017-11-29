@@ -30,6 +30,8 @@ public class PcaPopupDialogue extends AHGDialogue {
     private Button btn_remove;
     private CheckBox checkbox_use_grouping_for_colors;
     private List<CheckComboBox> comboBoxes;
+    private List<TextField> textfields_with_groupnames = new ArrayList<>();
+    private List<CheckComboBox> checkComboBox_with_groupmembers = new ArrayList<>();
 
     public PcaPopupDialogue(String title, LogClass logClass) {
 
@@ -129,7 +131,14 @@ public class PcaPopupDialogue extends AHGDialogue {
                 PCA pca_analysis = new PCA(mito.getChartController());
                 pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
                 double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
-                pca_analysis.plot(result_pca, group_color, mito.getPrimaryStage(), logClass, mito.getTabpane_statistics(), group_members);
+                parseGroups();
+                pca_analysis.plot(
+                        result_pca,
+                        group_color,
+                        mito.getPrimaryStage(),
+                        logClass,
+                        mito.getTabpane_statistics(),
+                        group_members);
 
                 Tab tab_pca = new Tab("PCA");
                 tab_pca.setId("tab_pca_plot");
@@ -197,6 +206,8 @@ public class PcaPopupDialogue extends AHGDialogue {
             grid_colors_group.add(btn_remove, 3, row2, 1,1);
 
             row2++;
+            this.checkComboBox_with_groupmembers.add(combo);
+            this.textfields_with_groupnames.add(field_text);
         }
     }
 
@@ -353,7 +364,7 @@ public class PcaPopupDialogue extends AHGDialogue {
     }
 
 
-    private void parseGroups() {
+    public void parseGroups() {
         String name = "";
         for (Node child : grid_colors_group.getChildren()) {
             // get index from child
@@ -368,6 +379,8 @@ public class PcaPopupDialogue extends AHGDialogue {
             }
         }
     }
+
+
 
 
 }
