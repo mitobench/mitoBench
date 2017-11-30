@@ -26,13 +26,14 @@ public class ScatterPlot extends AChart{
     }
 
 
-    public void create(double lowerbound_x, double lowerbound_y, double upperbound_x, double upperbound_y){
+    public void create(double lowerbound_x, double lowerbound_y, double upperbound_x, double upperbound_y, String x_label,
+                       String y_label, String title){
         final NumberAxis xAxis = new NumberAxis(lowerbound_x, upperbound_x, 1);
         final NumberAxis yAxis = new NumberAxis(lowerbound_y, upperbound_y, 1);
         sc = new ScatterChart<>(xAxis,yAxis);
-        xAxis.setLabel("PC 1");
-        yAxis.setLabel("PC 2");
-        sc.setTitle("");
+        xAxis.setLabel(x_label);
+        yAxis.setLabel(y_label);
+        sc.setTitle(title);
 
         setContextMenu(getSc(), tabPaneStats);
 

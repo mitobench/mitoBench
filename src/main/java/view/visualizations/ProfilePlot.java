@@ -31,8 +31,6 @@ public class ProfilePlot extends AChart {
     public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass, int uniqueID){
         super(lable_xaxis, label_yaxis, logClass);
 
-        // set autoranging to false to allow manual settings
-
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
 
@@ -136,14 +134,14 @@ public class ProfilePlot extends AChart {
         haploStatistics.addListener(table, this);
         Tab tab = new Tab();
         tab.setId("tab_table_stats_" + id);
-        tab.setText("Count statistics (" + id + ")");
+        tab.setText("Count statistics (pp " + id + ")");
         tab.setContent(table);
         statsTabpane.getTabs().add(tab);
         statsTabpane.getSelectionModel().select(tab);
 
 
-        addTabPaneListener(statsTabpane, tabpaneViz);
-        addTabPaneListener(tabpaneViz, statsTabpane);
+        //addTabPaneListener(statsTabpane, tabpaneViz);
+        //addTabPaneListener(tabpaneViz, statsTabpane);
     }
 
     private String[] removeUndefined(String[] col) {

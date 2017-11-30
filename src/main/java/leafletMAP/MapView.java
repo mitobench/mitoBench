@@ -12,7 +12,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import net.java.html.boot.fx.FXBrowsers;
 import net.java.html.leaflet.*;
@@ -20,7 +19,6 @@ import net.java.html.leaflet.*;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +63,7 @@ public class MapView extends StackPane {
         initMarker(listView);
 
         // FXBrowsers loads the associated page into the WebView and runs our code.
-        FXBrowsers.load(webView, MapView.class.getResource("/index.html"), () -> {
+        FXBrowsers.load(webView, MapView.class.getResource("/leaflet-0.7.2/index.html"), () -> {
             // Here we define that the map is rendered to a div with id="map"
             // in our index.html.
             // This can only be done after the page is loaded and the context is initialized.

@@ -22,6 +22,7 @@ public class AnalysisMenu {
     private final TableControllerUserBench tableController;
     private final StatisticsMenu statisticsMenu;
     private Menu menuAnalysis;
+    private int pcaID=1;
 
     public AnalysisMenu(MitoBenchWindow mitoBenchWindow, StatisticsMenu statisticsMenu){
         menuAnalysis = new Menu("Analysis");
@@ -84,17 +85,6 @@ public class AnalysisMenu {
                     "Please use HaploGrep2 to determine Haplogroups.\n" +
                             "The resulting hsd file can then be uploaded.", "Haplogroup calculation is not supported yet",
                     "hgCalculationDislogue");
-//                try {
-//                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
-//                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
-//                    haplotypeCaller.call();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
 
         });
 
@@ -103,15 +93,17 @@ public class AnalysisMenu {
         pcaAnalysis.setOnAction(t -> {
             // PCA needs haplotype statistics!!
 
-            PcaPopupDialogue pcaPopupDialogue = new PcaPopupDialogue("PCA configuration", logClass);
+            PcaPopupDialogue pcaPopupDialogue = new PcaPopupDialogue("PCA configuration", logClass, pcaID);
             pcaPopupDialogue.init(mito);
             Tab tab_stats = pcaPopupDialogue.getTab();
             mito.getTabpane_statistics().getTabs().add(tab_stats);
             mito.getTabpane_statistics().getSelectionModel().select(tab_stats);
+            pcaID++;
 
         });
 
-        menuAnalysis.getItems().addAll(defineHGList, pairwiseFst, assignHGs, pcaAnalysis);
+        //menuAnalysis.getItems().addAll(defineHGList, pairwiseFst, assignHGs, pcaAnalysis);
+        menuAnalysis.getItems().addAll(defineHGList, pcaAnalysis);
     }
 
     public Menu getMenuAnalysis() {

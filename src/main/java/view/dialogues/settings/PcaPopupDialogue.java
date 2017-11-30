@@ -32,13 +32,15 @@ public class PcaPopupDialogue extends AHGDialogue {
     private List<CheckComboBox> comboBoxes;
     private List<TextField> textfields_with_groupnames = new ArrayList<>();
     private List<CheckComboBox> checkComboBox_with_groupmembers = new ArrayList<>();
+    private int id;
 
-    public PcaPopupDialogue(String title, LogClass logClass) {
+    public PcaPopupDialogue(String title, LogClass logClass, int pcaID) {
 
         super(title, logClass);
         group_color = new HashMap<>();
         group_members = new HashMap<>();
         comboBoxes = new ArrayList<>();
+        id = pcaID;
     }
 
     @Override
@@ -118,8 +120,8 @@ public class PcaPopupDialogue extends AHGDialogue {
                 statsTabPane.getTabs().remove(getTab());
 
                 Tab tab = new Tab();
-                tab.setId("tab_statistics");
-                tab.setText("Count statistics");
+                tab.setId("tab_statistics_" + id);
+                tab.setText("Count statistics (pca " + id + ")");
                 tab.setContent(table);
                 statsTabPane.getTabs().add(tab);
                 statsTabPane.getSelectionModel().select(tab);
@@ -134,16 +136,17 @@ public class PcaPopupDialogue extends AHGDialogue {
                 parseGroups();
                 pca_analysis.plot(
                         result_pca,
-                        group_color,
                         mito.getPrimaryStage(),
                         logClass,
                         mito.getTabpane_statistics(),
                         group_members);
 
-                Tab tab_pca = new Tab("PCA");
-                tab_pca.setId("tab_pca_plot");
+                Tab tab_pca = new Tab("PCA (pca " + id + ")");
+                tab_pca.setId("tab_pca_plot_" + id);
                 tab_pca.setContent(pca_analysis.getPca_plot().getSc());
                 mito.getTabpane_visualization().getTabs().add(tab_pca);
+                mito.getTabpane_visualization().getSelectionModel().select(tab_pca);
+
                 LOG.info("Calculate PCA");
             }
 
@@ -156,7 +159,6 @@ public class PcaPopupDialogue extends AHGDialogue {
         });
         default_list_checkbox.setOnMouseExited(event -> tp.hide());
     }
-
 
 
     /**

@@ -226,7 +226,7 @@ public class VisualizationMenu {
 
         Tab tab = new Tab();
         tab.setId("tab_profilePlot_" + profilePlotID);
-        tab.setText("Profile Plot (" + profilePlotID + ")");
+        tab.setText("Profile Plot (pp " + profilePlotID + ")");
         tab.setContent(profilePlot.getPlot());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
@@ -476,20 +476,9 @@ public class VisualizationMenu {
                       tableController.getTableColumnByName("Haplogroup") != null
                         && tableController.getTable().getItems().size() != 0 ){
                     initProfilePlot();
-                    // get selected rows
-//                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
-//                    HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
-
                     profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane);
 
                 }
-//                else if(tableController.getTableColumnByName("Grouping") == null && tableController.getTableColumnByName("Haplogroup") != null){
-//                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
-//                            "No groups defined",
-//                            "Please define a grouping first.",
-//                            null,
-//                            "groupWarning");
-//                }
                 else if(tableController.getTableColumnByName("Haplogroup") == null && tableController.getTableColumnByName("Grouping") != null){
                     InformationDialogue haplogroupWarningDialogue = new InformationDialogue(
                             "No haplogroups",
@@ -662,11 +651,9 @@ public class VisualizationMenu {
 
         });
 
-
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqHist, plotHGfreqGroup);
-        //haplo_graphics.getItems().addAll(barchart, sunburstChartItem, profilePlotItem, pieChart);
         haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart);
         maps.getItems().add(mapsItem);
 

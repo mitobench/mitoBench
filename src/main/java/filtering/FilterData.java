@@ -15,6 +15,7 @@ import java.util.List;
  * Created by neukamm on 06.03.17.
  */
 public class FilterData {
+
     private final HashMap<String, List<String>> hgs_per_mutation;
     private final HashMap<String, String[]> mutations_per_hg;
     private final TableControllerUserBench tableControllerUB;
@@ -44,15 +45,12 @@ public class FilterData {
         ObservableList<ObservableList> filtered_data = FXCollections.observableArrayList();
 
         // first: filter samples from table with this mutation(s)
-
-        //for(ObservableList row : selectedRows){
-            //int index_hg_col = tableControllerUB.getColIndex("Haplogroup");
-            for(String mut : haplotypes) {
-                List<String> hgs = hgs_per_mutation.get(mut);
-                if(hgs!=null){
-                    filtered_hgs.addAll(hgs);
-                }
+        for(String mut : haplotypes) {
+            List<String> hgs = hgs_per_mutation.get(mut);
+            if(hgs!=null){
+                filtered_hgs.addAll(hgs);
             }
+        }
 
         // second: get all Haplogroups with 'n' mutations distance from mut(s) above
         for(String mut : haplotypes){
@@ -88,6 +86,14 @@ public class FilterData {
         }
     }
 
+
+    /**
+     * Calculate number of different haplotypes between two lists of haplotypes.
+     *
+     * @param muts1
+     * @param muts2
+     * @return
+     */
     private int calculateHammingDistance(List<String> muts1, List<String> muts2){
 
         int hammingDist = 0;

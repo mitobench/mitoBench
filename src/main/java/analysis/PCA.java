@@ -57,9 +57,6 @@ public class PCA {
 
         return resultPCA_tmp.getData();
 
-
-
-
     }
 
     /**
@@ -85,17 +82,15 @@ public class PCA {
      * Plot adjusted values.
      *
      *  @param result_pca
-     * @param group_color
      * @param stage
      * @param logClass
      * @param tabpane_statistics
      * @param group_members
      */
-    public void plot(double[][] result_pca, HashMap<String, Color> group_color, Stage stage, LogClass logClass,
+    public void plot(double[][] result_pca, Stage stage, LogClass logClass,
                      TabPane tabpane_statistics, HashMap<String, ObservableList<String>> group_members) {
 
         pca_plot = new ScatterPlot(stage, logClass, tabpane_statistics);
-        //groups = group_color.keySet().toArray(new String[group_color.keySet().size()]);
         groups = group_members.keySet().toArray(new String[group_members.keySet().size()]);
         double[] pc1 = result_pca[0];
         double[] pc2 = result_pca[1];
@@ -111,12 +106,14 @@ public class PCA {
                 lowerbound_x.getAsDouble()-0.5,
                 lowerbound_y.getAsDouble()-0.5,
                 upperbound_x.getAsDouble()+0.5,
-                upperbound_y.getAsDouble()+0.5
+                upperbound_y.getAsDouble()+0.5,
+                "PC1",
+                "PC2",
+                ""
         );
 
 
         // filter out groups and assign specific colors
-
         if(groups.length!=0){
             for(int i = 0; i < groups.length; i++){
                 List<Integer> indexes = new ArrayList<>();
@@ -136,8 +133,7 @@ public class PCA {
                         groups[i],
                         pc1_group,
                         pc2_group,
-                        members_array//getSubArray(members_array,Collections.min(indexes), Collections.max(indexes))
-                        //getSubArray(groups,Collections.min(indexes), Collections.max(indexes))
+                        members_array
                         );
             }
 
@@ -149,11 +145,9 @@ public class PCA {
 
                 pca_plot.addSeries(
                         groupOrder[i],
-                        //group_color.get(groupOrder[i]),
                         pc1_group,
                         pc2_group,
-                        groupOrder
-                        //getSubArray(groupOrder, i, i+1)
+                        new String[]{groupOrder[i]}
                         );
             }
         }
@@ -174,20 +168,6 @@ public class PCA {
         return Arrays.copyOfRange(pc, start, end+1);
     }
 
-
-    /**
-     * Get sub array.
-     * @param pc
-     * @param start
-     * @param end
-     * @return
-     */
-    private String[] getSubArray(String[] pc, int start, int end) {
-        if(start==end){
-            return new String[]{pc[start]};
-        }
-        return Arrays.copyOfRange(pc, start, end+1);
-    }
 
 
     /**
