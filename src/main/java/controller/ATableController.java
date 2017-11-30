@@ -12,8 +12,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import org.apache.log4j.Logger;
 import io.IData;
+import org.apache.log4j.Logger;
 import view.menus.GroupMenu;
 import view.table.DataTable;
 
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  */
 public abstract class ATableController {
 
+    protected final Logger LOG;
     protected TableView<ObservableList> table;
     protected ObservableList<ObservableList> data;
     protected ObservableList<ObservableList> data_copy;
@@ -36,7 +37,6 @@ public abstract class ATableController {
     protected List<String> col_names;
     protected List<String> col_names_sorted;
     protected GroupMenu groupMenu;
-    protected Logger LOG;
     protected LogClass logClass;
 
     public ATableController(LogClass logClass){

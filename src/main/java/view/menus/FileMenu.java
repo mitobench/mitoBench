@@ -276,7 +276,10 @@ public class FileMenu {
                     new LoggerSettingsDialogue("Log file configuration", logClass, stage);
         });
 
-        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
+//        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
+//                exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
+
+        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, exportFile, exportSelectedData,
                 exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
