@@ -1,0 +1,28 @@
+
+\documentclass[english]{gcb17abstract}
+
+\title{mitoBench \& mitoDB: Novel interactive methods for population genetics on mitochondrial DNA}
+
+
+\author{
+Judith Neukamm$^{1,3*}$, Alexander Peltzer$^{1,2,3*}$, Wolfgang Haak$^{2}$, and Kay Nieselt$^{3}$\\ \bigskip
+{\normalsize\normalfont\itshape 1 Institute for Archaeological Sciences, Archaeo- and Paleogenetics, University of Tuebingen, Germany. \\2 Max Planck Institute for the Science of Human History, Jena, Germany. \\3 Integrative Transcriptomics, Center for Bioinformatics (ZBIT), University of Tuebingen, Germany. \\$*$These authors contributed equally to the study.}
+}
+
+
+\begin{document}
+\maketitle 
+
+Despite the availability of modern next generation sequencing technologies and therefore nuclear human genomes, for many applications and population genetics studies, the sequencing and analysis of mitochondrial DNA (mtDNA) is still common. Especially in the research field of ancient DNA, mtDNA is often the only proxy available to study extinct populations and their relationship with modern populations. 
+
+A plethora of methods for the analysis of mtDNA exist that address questions in population genetics, phylogeny and others. However, these tools typically rely on different file formats and often require manual interaction with the data for downstream analysis. Ultimately, these steps can be cumbersome, especially for non-bioinformaticians with an increased risk of errors during the analysis. 
+
+Our ultimate aim is to provide a central reference database for population genetics studies on complete mitogenomes that can be easily accessed both via a web interface and the accompanying mitoBench application, enabling users to perform typical analysis procedures much faster and more conveniently than before.
+
+Here, we present mitoBench and mitoDB. MitoBench is a workbench to interactively analyse and visualize mitochondrial genomes with a focus on population genetics. The graphical user interface is kept simple, to accommodate even users without further prior knowledge on computational methods. Furthermore, it shows additional information such as metadata and statistics. Currently, mitoBench offers automatic file conversion tools to connect the workbench with common analysis methods such as BEAST \cite{bouckaert2014beast}, Arlequin \cite{excoffier2005arlequin} and others. It also provides basic downstream analysis methods to investigate correlations between populations, such as principal component and FST analysis.
+
+MitoDB aims at providing a large reference panel of modern and ancient mitogenomes for population genetics. The current prototype provides a basis of several thousand complete mitogenomes from the 1000 Genomes project \cite{10002015global} and is constantly extended. The whole system is implemented to be a free web-service that provides interactive and exploratory access to the database itself. 
+ 
+
+\bibliography{example}
+\end{document}

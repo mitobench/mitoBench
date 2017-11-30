@@ -38,28 +38,32 @@ public class GroupMenu {
         addSubMenus();
     }
 
+    /**
+     * Add all submenus to menu item
+     */
     private void addSubMenus(){
-
 
         groupByColumnItem.getItems().removeAll(groupByColumnItem.getItems());
         for(String col : tableController.getCurrentColumnNames() ){
             MenuItem colItem = new MenuItem(col);
             groupByColumnItem.getItems().add(colItem);
             colItem.setOnAction(t -> {
-                LOG.info("Group data on column: " + colItem.getText());
-                groupController.createGroupByColumn(colItem.getText(), "");
+                if(!colItem.getText().contains("(Grouping)")){
+                    groupController.clearGrouping();
+                    groupController.createGroupByColumn(colItem.getText(), "");
+                    LOG.info("Group data on column: " + colItem.getText());
+                }
+
             });
         }
-
 
 
         MenuItem delGrouping = new MenuItem("Delete grouping");
         delGrouping.setId("delGrouping");
         delGrouping.setOnAction(t -> {
+            groupController.clearGrouping();
             LOG.info("Delete grouping on column '" + groupController.getColname_group() + "' with groups "
                     + Arrays.toString(groupController.getGroupnames().toArray()));
-
-            groupController.clearGrouping();
         });
 
         menuGroup.getItems().addAll(groupByColumnItem, new SeparatorMenuItem(), delGrouping);
@@ -76,9 +80,11 @@ public class GroupMenu {
             MenuItem colItem = new MenuItem(col);
             groupByColumnItem.getItems().add(colItem);
             colItem.setOnAction(t -> {
-                LOG.info("Create grouping on column: " + colItem.getText());
-                groupController.createGroupByColumn(colItem.getText(), "");
-
+                if(!colItem.getText().contains("(Grouping)")){
+                    groupController.clearGrouping();
+                    groupController.createGroupByColumn(colItem.getText(), "");
+                    LOG.info("Create grouping on column: " + colItem.getText());
+                }
             });
         }
     }

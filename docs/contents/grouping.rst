@@ -1,8 +1,7 @@
 Grouping
 ========
 
-Many analysis tools require grouping of the data. Moreover, grouping allows to
-compare e.g. different time periods or different locations. mitoBench is flexible in terms of grouping - you can basically define any criterion in the table for grouping.
+Many analysis tools require grouping of the data. Moreover, grouping allows comparing e.g. different time periods or different locations. mitoBench is flexible in terms of grouping - you can basically define any criterion in the table for grouping.
 
 
 - Grouping by column

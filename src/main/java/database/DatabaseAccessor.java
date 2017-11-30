@@ -48,7 +48,7 @@ public class DatabaseAccessor {
             return login;
 
         } catch (Exception e){
-            DatabaseErrorDialogue databaseErrorDialogue = new DatabaseErrorDialogue();
+            //DatabaseErrorDialogue databaseErrorDialogue = new DatabaseErrorDialogue();
             return false;
         }
 

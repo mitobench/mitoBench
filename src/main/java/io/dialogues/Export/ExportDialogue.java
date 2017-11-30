@@ -1,6 +1,7 @@
 package io.dialogues.Export;
 
 import Logging.LogClass;
+import controller.ChartController;
 import io.writer.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -20,6 +21,7 @@ import java.util.Optional;
  * Created by peltzer on 30/11/2016.
  */
 public class ExportDialogue extends Application {
+    private final String[] userdefinedHGlist;
     private List<String> columnsInTable = FXCollections.observableArrayList("option1", "option2", "option3");
     private TableControllerUserBench tableController;
     private String MITOBENCH_VERSION;
@@ -33,11 +35,14 @@ public class ExportDialogue extends Application {
         Application.launch(args);
     }
 
-    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion, LogClass logClass, boolean exportAllData) {
+    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion, LogClass logClass,
+                          ChartController chartController, boolean exportAllData) {
+
         LOG = logClass.getLogger(this.getClass());
         this.tableController = tableManager;
         this.columnsInTable = tableManager.getCurrentColumnNames();
         this.MITOBENCH_VERSION = mitoVersion;
+        this.userdefinedHGlist = chartController.getCustomHGList();
         if(exportAllData){
             dataToExport = tableController.getTable().getItems();
         } else {
@@ -149,7 +154,7 @@ public class ExportDialogue extends Application {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
                     ProjectWriter projectWriter = new ProjectWriter(MITOBENCH_VERSION, LOG, dataToExport);
-                    projectWriter.write(outFileDB, tableController);
+                    projectWriter.write(outFileDB, tableController, this.userdefinedHGlist);
                     LOG.info("Export whole project. File: " + outFileDB);
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());

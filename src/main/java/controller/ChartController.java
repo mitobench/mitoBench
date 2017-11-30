@@ -23,6 +23,7 @@ public class ChartController {
     private List<String> hg_core_list;
     private String[] coreHGs = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
             "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
+    private String[] customHGList;
     private String[] groupOrder;
 
 
@@ -125,11 +126,12 @@ public class ChartController {
         }
 
         // hgs to display
-        String[] hg_list = hgs.split(",");
-
-
-        // reduce haplogroups to maximum size of 20
-        //if (selection_haplogroups.length >= 20) {
+        String[] hg_list;
+        if(hgs.equals("")){
+            hg_list = coreHGs;
+        } else {
+            hg_list = hgs.split(",");
+        }
 
         stackedBar.clearData();
         stackedBar.setCategories(selection_groups);
@@ -729,5 +731,13 @@ public class ChartController {
 
     public String[] getGroupOrder() {
         return groupOrder;
+    }
+
+    public String[] getCustomHGList() {
+        return customHGList;
+    }
+
+    public void setCustomHGList(String[] customHGList) {
+        this.customHGList = customHGList;
     }
 }

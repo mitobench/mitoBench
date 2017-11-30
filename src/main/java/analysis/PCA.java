@@ -57,9 +57,6 @@ public class PCA {
 
         return resultPCA_tmp.getData();
 
-
-
-
     }
 
     /**
@@ -85,17 +82,15 @@ public class PCA {
      * Plot adjusted values.
      *
      *  @param result_pca
-     * @param group_color
      * @param stage
      * @param logClass
      * @param tabpane_statistics
      * @param group_members
      */
-    public void plot(double[][] result_pca, HashMap<String, Color> group_color, Stage stage, LogClass logClass,
+    public void plot(double[][] result_pca, Stage stage, LogClass logClass,
                      TabPane tabpane_statistics, HashMap<String, ObservableList<String>> group_members) {
 
         pca_plot = new ScatterPlot(stage, logClass, tabpane_statistics);
-        //groups = group_color.keySet().toArray(new String[group_color.keySet().size()]);
         groups = group_members.keySet().toArray(new String[group_members.keySet().size()]);
         double[] pc1 = result_pca[0];
         double[] pc2 = result_pca[1];
@@ -111,7 +106,10 @@ public class PCA {
                 lowerbound_x.getAsDouble()-0.5,
                 lowerbound_y.getAsDouble()-0.5,
                 upperbound_x.getAsDouble()+0.5,
-                upperbound_y.getAsDouble()+0.5
+                upperbound_y.getAsDouble()+0.5,
+                "PC1",
+                "PC2",
+                ""
         );
 
 
@@ -130,26 +128,27 @@ public class PCA {
                 double[] pc1_group = getSubArray(pc1, Collections.min(indexes), Collections.max(indexes));
                 double[] pc2_group = getSubArray(pc2, Collections.min(indexes), Collections.max(indexes));
 
+                String[] members_array = members.toArray(new String[members.size()]);
                 pca_plot.addSeries(
                         groups[i],
-                        group_color.get(groups[i]),
                         pc1_group,
                         pc2_group,
-                        getSubArray(groups,Collections.min(indexes), Collections.max(indexes)));
+                        members_array
+                        );
             }
 
         } else {
             for(int i = 0; i < groupOrder.length; i++){
 
-                double[] pc1_group = getSubArray(pc1, i, i+1);
-                double[] pc2_group = getSubArray(pc2, i, i+1);
+                double[] pc1_group = getSubArray(pc1, i, i);
+                double[] pc2_group = getSubArray(pc2, i, i);
 
                 pca_plot.addSeries(
                         groupOrder[i],
-                        group_color.get(groupOrder[i]),
                         pc1_group,
                         pc2_group,
-                        getSubArray(groupOrder, i, i+1));
+                        new String[]{groupOrder[i]}
+                        );
             }
         }
 
@@ -166,20 +165,9 @@ public class PCA {
         if(start==end){
             return new double[]{pc[start]};
         }
-        return Arrays.copyOfRange(pc, start, end);
+        return Arrays.copyOfRange(pc, start, end+1);
     }
 
-
-    /**
-     * Get sub array.
-     * @param pc
-     * @param start
-     * @param end
-     * @return
-     */
-    private String[] getSubArray(String[] pc, int start, int end) {
-        return Arrays.copyOfRange(pc, start, end);
-    }
 
 
     /**

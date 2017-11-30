@@ -87,7 +87,16 @@ public class PieChartViz extends AChart {
             }
         }
 
-        for(String hg : hg_count.keySet()){
+        List<String> labels = new ArrayList<>();
+        labels.addAll(hg_count.keySet());
+        Collections.sort(labels);
+        if(labels.contains("Others")){
+            labels.remove("Others");
+            labels.add("Others");
+        }
+
+
+        for(String hg : labels){
             PieChart.Data slice = new PieChart.Data(hg, hg_count.get(hg));
             chart.getData().add(slice);
         }
@@ -96,8 +105,16 @@ public class PieChartViz extends AChart {
     }
 
     public void createPlotSingle(HashMap<String, ArrayList> hgs_summed) {
+        List<String> labels = new ArrayList<>();
+        labels.addAll(hgs_summed.keySet());
+        Collections.sort(labels);
 
-        for(String hg : hgs_summed.keySet()){
+        if(labels.contains("Others")){
+            labels.remove("Others");
+            labels.add("Others");
+        }
+
+        for(String hg : labels){
             PieChart.Data slice = new PieChart.Data(hg, hgs_summed.get(hg).size());
             chart.getData().add(slice);
         }

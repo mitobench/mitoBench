@@ -56,6 +56,7 @@ public class MultiFastAInput implements IInputData {
         int seq_length = 0;
 
         while ((currentLine = bfr.readLine()) != null) {
+            currentLine = currentLine.trim();
             if (!currHeader.equals("") && currentLine.startsWith(">")) {
                 if(seq_length_should_be_equal){
                     seq_length = currSeq.length();
@@ -76,13 +77,12 @@ public class MultiFastAInput implements IInputData {
             }
 
             if (currentLine.startsWith(">") && (init == 0)) { //then we have a header (first header)
-                currHeader = currentLine.replace(">","");
+                currHeader = currentLine.replace(">", "");
                 init = -1;
                 line_index++;
                 continue;
             } else { // we have sequence
                 //Checking string for consistency properly with a regular expression
-
                 line_index++;
                 Pattern p = Pattern.compile("[ACTGRYSWKMVDHVNactgryswkmndhv-]*\n*");
                 Matcher m = p.matcher(currentLine);

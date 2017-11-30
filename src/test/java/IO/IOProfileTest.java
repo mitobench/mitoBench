@@ -4,6 +4,8 @@ import Logging.LogClass;
 import io.datastructure.arp.ArpProfile;
 import io.datastructure.arp.ArpStructure;
 import io.writer.ARPWriter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.junit.Before;
 import org.junit.Test;
 import controller.TableControllerUserBench;
@@ -25,15 +27,15 @@ public class IOProfileTest {
     public void setup() throws TimeoutException {
         logClass = new LogClass();
         logClass.setUp();
-        //tableController = new TableController();
-        //tableController.init();
 
     }
 
     /*@Test
     public void arp_profile_Test() {
 
-        ARPWriter arpWriter = new ARPWriter(tableController, tableController.getSelectedRows());
+        ObservableList<ObservableList> data = FXCollections.observableArrayList();
+
+        ARPWriter arpWriter = new ARPWriter(tableController, data);
 
         String name = "path/to/file.arp";
         String numberofsamples = "5";

@@ -7,7 +7,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -30,16 +29,18 @@ public class PcaPopupDialogue extends AHGDialogue {
     private int row2;
     private Button btn_remove;
     private CheckBox checkbox_use_grouping_for_colors;
-    private List<String> usedGroups;
     private List<CheckComboBox> comboBoxes;
+    private List<TextField> textfields_with_groupnames = new ArrayList<>();
+    private List<CheckComboBox> checkComboBox_with_groupmembers = new ArrayList<>();
+    private int id;
 
-    public PcaPopupDialogue(String title, LogClass logClass) {
+    public PcaPopupDialogue(String title, LogClass logClass, int pcaID) {
 
         super(title, logClass);
         group_color = new HashMap<>();
         group_members = new HashMap<>();
-        usedGroups = new ArrayList<>();
         comboBoxes = new ArrayList<>();
+        id = pcaID;
     }
 
     @Override
@@ -54,10 +55,19 @@ public class PcaPopupDialogue extends AHGDialogue {
                 "\naccording to which the haplogroups should be grouped:");
         default_list = new Label("or use the default list:");
 
-        textField = new TextField();
+        textField_hglist = new TextField();
+
+        if(haploStatistics.getChartController().getCustomHGList()!=null) {
+            if (haploStatistics.getChartController().getCustomHGList().length != 0) {
+                String hgs = "";
+                for(String s : haploStatistics.getChartController().getCustomHGList())
+                    hgs += s + ",";
+                textField_hglist.setText(hgs.substring(0, hgs.length()-1));
+            }
+        }
 
         okBtn = new Button("OK");
-        checkbox_use_grouping_for_colors = new CheckBox("Set new grouping for coloring");
+        checkbox_use_grouping_for_colors = new CheckBox("Assign one colour to more than one group");
         addCheckboxColoringListener(checkbox_use_grouping_for_colors);
 
         default_list_checkbox = new CheckBox("Use default list");
@@ -73,14 +83,11 @@ public class PcaPopupDialogue extends AHGDialogue {
 
         int row=0;
 
-        //addColoringGridpaneOwnGrouping(grid_colors_group);
-
         dialogGrid.add(label, 0,row,3,1);
-        dialogGrid.add(textField, 0,++row,3,1);
+        dialogGrid.add(textField_hglist, 0,++row,3,1);
         dialogGrid.add(default_list,0,++row,1,1);
         dialogGrid.add(default_list_checkbox,1,row,1,1);
         dialogGrid.add(new Separator(), 0, ++row, 3, 1);
-        //dialogGrid.add(new Label("Assign colors"), 0, ++row, 1,1);
         dialogGrid.add(checkbox_use_grouping_for_colors, 0,++row, 1,1);
         dialogGrid.add(grid_colors_group, 0, ++row, 2,1);
         dialogGrid.add(new Separator(), 0, ++row, 3, 1);
@@ -93,8 +100,8 @@ public class PcaPopupDialogue extends AHGDialogue {
     public void addEvents(){
 
         okBtn.setOnAction(e -> {
-            if((textField.getText().equals("") || textField.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
-                textField.setText("Please enter list here.");
+            if((textField_hglist.getText().equals("") || textField_hglist.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
+                textField_hglist.setText("Please enter list here.");
 
             } else {
 
@@ -103,7 +110,7 @@ public class PcaPopupDialogue extends AHGDialogue {
                 if(default_list_checkbox.isSelected()){
                     hg_list = haploStatistics.getChartController().getCoreHGs();
                 } else {
-                    hg_list = textField.getText().split(",");
+                    hg_list = textField_hglist.getText().split(",");
                 }
                 String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
                 haploStatistics.count(hg_list_trimmed);
@@ -113,29 +120,33 @@ public class PcaPopupDialogue extends AHGDialogue {
                 statsTabPane.getTabs().remove(getTab());
 
                 Tab tab = new Tab();
-                tab.setId("tab_statistics");
-                tab.setText("Count statistics");
+                tab.setId("tab_statistics_" + id);
+                tab.setText("Count statistics (pca " + id + ")");
                 tab.setContent(table);
                 statsTabPane.getTabs().add(tab);
                 statsTabPane.getSelectionModel().select(tab);
 
                 LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
 
-                //
 
-                //parseColors();
-                parseGroups();
                 // calculate PCA
                 PCA pca_analysis = new PCA(mito.getChartController());
-
                 pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
                 double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
-                pca_analysis.plot(result_pca, group_color, mito.getPrimaryStage(), logClass, mito.getTabpane_statistics(), group_members);
+                parseGroups();
+                pca_analysis.plot(
+                        result_pca,
+                        mito.getPrimaryStage(),
+                        logClass,
+                        mito.getTabpane_statistics(),
+                        group_members);
 
-                Tab tab_pca = new Tab("PCA");
-                tab_pca.setId("tab_pca_plot");
+                Tab tab_pca = new Tab("PCA (pca " + id + ")");
+                tab_pca.setId("tab_pca_plot_" + id);
                 tab_pca.setContent(pca_analysis.getPca_plot().getSc());
                 mito.getTabpane_visualization().getTabs().add(tab_pca);
+                mito.getTabpane_visualization().getSelectionModel().select(tab_pca);
+
                 LOG.info("Calculate PCA");
             }
 
@@ -148,7 +159,6 @@ public class PcaPopupDialogue extends AHGDialogue {
         });
         default_list_checkbox.setOnMouseExited(event -> tp.hide());
     }
-
 
 
     /**
@@ -168,9 +178,7 @@ public class PcaPopupDialogue extends AHGDialogue {
      */
     private void addBtnAddEvent(Button btn_add){
 
-        btn_add.setOnAction(e -> {
-            addColoringRow();
-        });
+        btn_add.setOnAction(e -> addColoringRow());
     }
 
 
@@ -179,7 +187,6 @@ public class PcaPopupDialogue extends AHGDialogue {
     private void addColoringRow(){
 
         if(groupnames.size() != 0){
-            ColorPicker colorPicker = new ColorPicker();
             CheckComboBox combo = new CheckComboBox();
             combo.setId("group_members_"+row2);
 
@@ -187,7 +194,7 @@ public class PcaPopupDialogue extends AHGDialogue {
             combo.getItems().addAll(groupnames);
             comboBoxes.add(combo);
 
-            TextField field_text = new TextField("Groupname");
+            TextField field_text = new TextField("New groupname");
             field_text.setId("group_id_"+row2);
 
             btn_add = new Button("Add more");
@@ -197,11 +204,12 @@ public class PcaPopupDialogue extends AHGDialogue {
 
             grid_colors_group.add(field_text, 0, row2,1,1);
             grid_colors_group.add(combo, 1, row2,1,1);
-            //grid_colors_group.add(colorPicker, 2, row2,1,1);
             grid_colors_group.add(btn_add, 2, row2, 1,1);
             grid_colors_group.add(btn_remove, 3, row2, 1,1);
 
             row2++;
+            this.checkComboBox_with_groupmembers.add(combo);
+            this.textfields_with_groupnames.add(field_text);
         }
     }
 
@@ -228,7 +236,7 @@ public class PcaPopupDialogue extends AHGDialogue {
 
 
     /**
-     * Display this grispane if user just want to color existing grouping
+     * Display this gridpane if user just want to color existing grouping
      *
      * @param grid_colors_group
      */
@@ -270,7 +278,7 @@ public class PcaPopupDialogue extends AHGDialogue {
         comboBoxes.add(combo);
 
 
-        TextField field_text = new TextField("Groupname");
+        TextField field_text = new TextField("New groupname");
         field_text.setId("group_id_");
 
 
@@ -358,7 +366,7 @@ public class PcaPopupDialogue extends AHGDialogue {
     }
 
 
-    private void parseGroups() {
+    public void parseGroups() {
         String name = "";
         for (Node child : grid_colors_group.getChildren()) {
             // get index from child
@@ -373,6 +381,8 @@ public class PcaPopupDialogue extends AHGDialogue {
             }
         }
     }
+
+
 
 
 }

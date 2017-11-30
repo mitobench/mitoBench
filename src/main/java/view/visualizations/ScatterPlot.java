@@ -1,13 +1,13 @@
 package view.visualizations;
 
 import Logging.LogClass;
+import javafx.collections.ObservableList;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TabPane;
-import javafx.scene.paint.Color;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
-
 
 import java.net.URL;
 
@@ -26,28 +26,37 @@ public class ScatterPlot extends AChart{
     }
 
 
-    public void create(double lowerbound_x, double lowerbound_y, double upperbound_x, double upperbound_y){
+    public void create(double lowerbound_x, double lowerbound_y, double upperbound_x, double upperbound_y, String x_label,
+                       String y_label, String title){
         final NumberAxis xAxis = new NumberAxis(lowerbound_x, upperbound_x, 1);
         final NumberAxis yAxis = new NumberAxis(lowerbound_y, upperbound_y, 1);
         sc = new ScatterChart<>(xAxis,yAxis);
-        xAxis.setLabel("PC 1");
-        yAxis.setLabel("PC 2");
-        sc.setTitle("");
+        xAxis.setLabel(x_label);
+        yAxis.setLabel(y_label);
+        sc.setTitle(title);
 
         setContextMenu(getSc(), tabPaneStats);
 
     }
 
-    public void addSeries(String name, Color color, double[] pc1, double[] pc2, String[] groupOrder){
+    public void addSeries(String name, double[] pc1, double[] pc2, String[] names){
         XYChart.Series series = new XYChart.Series();
         series.setName(name);
 
         for(int i = 0; i < pc1.length; i++){
-            XYChart.Data data = new XYChart.Data(pc1[i], pc2[i]);
+            XYChart.Data<Number, Number> data = new XYChart.Data(pc1[i], pc2[i]);
             series.getData().add(data);
         }
 
         sc.getData().add(series);
+        int i = 0;
+        ObservableList<XYChart.Data<Number, Number>> data_list = series.getData();
+        for (XYChart.Data<Number, Number> d : data_list) {
+            Tooltip tip = new Tooltip(names[i]);
+            Tooltip.install(d.getNode(), tip);
+            i++;
+        }
+
 
     }
 

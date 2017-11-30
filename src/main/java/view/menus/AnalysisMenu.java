@@ -2,13 +2,13 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
+import controller.HGListController;
+import javafx.scene.control.*;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
+import view.dialogues.settings.HGListDisalogue;
 import view.dialogues.settings.PcaPopupDialogue;
 
 
@@ -22,6 +22,7 @@ public class AnalysisMenu {
     private final TableControllerUserBench tableController;
     private final StatisticsMenu statisticsMenu;
     private Menu menuAnalysis;
+    private int pcaID=1;
 
     public AnalysisMenu(MitoBenchWindow mitoBenchWindow, StatisticsMenu statisticsMenu){
         menuAnalysis = new Menu("Analysis");
@@ -35,6 +36,23 @@ public class AnalysisMenu {
     }
 
     private void addSubMenus() {
+
+
+        CustomMenuItem defineHGList = new CustomMenuItem(new Label("Define Haplogroup list"));
+        defineHGList.setId("menuitem_hg_list");
+        defineHGList.setOnAction(t -> {
+
+            HGListDisalogue hgListDisalogue = new HGListDisalogue("Custom Haplogroup list", logClass);
+            HGListController hgListController = new HGListController(hgListDisalogue, mito.getChartController(), mito);
+            mito.getTabpane_statistics().getTabs().add(hgListDisalogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(hgListDisalogue.getTab());
+
+
+        });
+
+        Tooltip tooltip_hglist = new Tooltip("This list will be used al default list for all analyses and visualizations " +
+                "within this project.");
+        Tooltip.install(defineHGList.getContent(), tooltip_hglist);
 
         MenuItem pairwiseFst = new MenuItem("Calculate pairwise Fst");
         pairwiseFst.setId("menuitem_pairwiseFst");
@@ -67,17 +85,6 @@ public class AnalysisMenu {
                     "Please use HaploGrep2 to determine Haplogroups.\n" +
                             "The resulting hsd file can then be uploaded.", "Haplogroup calculation is not supported yet",
                     "hgCalculationDislogue");
-//                try {
-//                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(mito.getTableControllerUserBench(),
-//                            mito.getTableControllerUserBench().getDataTable().getMtStorage());
-//                    haplotypeCaller.call();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
 
         });
 
@@ -86,19 +93,17 @@ public class AnalysisMenu {
         pcaAnalysis.setOnAction(t -> {
             // PCA needs haplotype statistics!!
 
-            PcaPopupDialogue pcaPopupDialogue = new PcaPopupDialogue("PCA configuration", logClass);
+            PcaPopupDialogue pcaPopupDialogue = new PcaPopupDialogue("PCA configuration", logClass, pcaID);
             pcaPopupDialogue.init(mito);
             Tab tab_stats = pcaPopupDialogue.getTab();
             mito.getTabpane_statistics().getTabs().add(tab_stats);
             mito.getTabpane_statistics().getSelectionModel().select(tab_stats);
+            pcaID++;
 
         });
 
-
-
-        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs, pcaAnalysis);
-        //menuAnalysis.getItems().add(pairwiseFst);
-
+        //menuAnalysis.getItems().addAll(defineHGList, pairwiseFst, assignHGs, pcaAnalysis);
+        menuAnalysis.getItems().addAll(defineHGList, pcaAnalysis);
     }
 
     public Menu getMenuAnalysis() {

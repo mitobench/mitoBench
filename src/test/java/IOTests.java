@@ -1,3 +1,4 @@
+import Logging.LogClass;
 import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
@@ -10,6 +11,7 @@ import io.reader.ARPReader;
 import io.reader.GenericInputParser;
 import io.reader.HSDInput;
 import io.reader.MultiFastAInput;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -30,10 +32,14 @@ public class IOTests {
     private InputStream is;
     private InputStreamReader isr;
     private BufferedReader bfr;
-    private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(IOTests.class);
+    private LogClass logClass;
+    private Logger LOG;
 
 
     private void setUp(String path) {
+        logClass = new LogClass();
+        logClass.setUp();
+        LOG = logClass.getLogger(this.getClass());
         URL url = getClass().getResource(path);
         try {
             is = url.openStream();

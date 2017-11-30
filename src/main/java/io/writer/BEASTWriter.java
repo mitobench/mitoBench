@@ -39,8 +39,8 @@ public class BEASTWriter implements IOutputData {
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
         fileWriter = null;
         try {
-            if(!(file.endsWith(".beast")))
-                file = file + ".beast";
+            if(!(file.endsWith(".fasta") || !file.endsWith(".fa") || file.endsWith(".fas")))
+                file = file + ".beast.fasta";
 
             fileWriter = new FileWriter(new File(file));
             bfWriter = new BufferedWriter(fileWriter);
@@ -64,6 +64,7 @@ public class BEASTWriter implements IOutputData {
         finally {
 
             fileWriter.flush();
+            bfWriter.close();
             fileWriter.close();
         }
 
@@ -105,7 +106,8 @@ public class BEASTWriter implements IOutputData {
         String tmp = "";
         if(!c14data.equals("")){
             if (!c14data.equals("Undefined")) {
-                tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
+                //tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
+                tmp = "_" + Math.abs(2000 - Double.parseDouble(c14data)); // years before present
             }
 
             return tmp;

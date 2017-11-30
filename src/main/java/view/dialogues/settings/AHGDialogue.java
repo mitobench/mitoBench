@@ -12,7 +12,7 @@ import java.util.Arrays;
 public abstract class AHGDialogue extends ATabpaneDialogue{
 
 
-    protected TextField textField;
+    protected TextField textField_hglist;
     protected Button okBtn;
     protected CheckBox default_list_checkbox;
     protected HaploStatistics haploStatistics;
@@ -49,7 +49,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
                 "\naccording to which the haplogroups should be grouped:");
         default_list = new Label("or use the default list:");
 
-        textField = new TextField();
+        textField_hglist = new TextField();
 
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
@@ -61,7 +61,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
         default_list_checkbox.setSelected(false);
 
         dialogGrid.add(label, 0,row,3,1);
-        dialogGrid.add(textField, 0,++row,3,1);
+        dialogGrid.add(textField_hglist, 0,++row,3,1);
         dialogGrid.add(default_list,0,++row,1,1);
         dialogGrid.add(default_list_checkbox,1,row,1,1);
 
@@ -71,15 +71,15 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
 
     public void addEvents(){
         okBtn.setOnAction(e -> {
-            if((textField.getText().equals("") || textField.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
-                textField.setText("Please enter list here.");
+            if((textField_hglist.getText().equals("") || textField_hglist.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
+                textField_hglist.setText("Please enter list here.");
 
             } else {
                 String[] hg_list;
                 if(default_list_checkbox.isSelected()){
                     hg_list = haploStatistics.getChartController().getCoreHGs();
                 } else {
-                    hg_list = textField.getText().split(",");
+                    hg_list = textField_hglist.getText().split(",");
                 }
                 String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
                 haploStatistics.count(hg_list_trimmed);
@@ -104,7 +104,10 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
 
         Tooltip tp = new Tooltip("Default list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
         default_list_checkbox.setOnMouseEntered(event -> {
-            Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
+            Point2D p = default_list_checkbox.localToScreen(
+                    default_list_checkbox.getLayoutBounds().getMaxX(),
+                    default_list_checkbox.getLayoutBounds().getMaxY());
+
             tp.show(default_list_checkbox, p.getX(), p.getY());
         });
         default_list_checkbox.setOnMouseExited(event -> tp.hide());

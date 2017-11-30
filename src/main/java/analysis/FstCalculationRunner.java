@@ -34,7 +34,7 @@ public class FstCalculationRunner {
     private MitoBenchWindow mitobenchWindow;
     private String distance_type;
     private double gamma_a;
-    private char missing_data_character;
+    private String missing_data_character;
     private HashMap<String, List<String>> data;
     private TableControllerFstValues tableControllerFstValues;
     private double[][] fsts;
@@ -44,16 +44,22 @@ public class FstCalculationRunner {
     private List<Integer> usableLoci;
     private Writer writer;
     private Logger LOG;
+    private int numberOfPermutations;
+    private double[][] pvalues;
+    private double significance;
 
 
-    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc)
+    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc, int numberOfPermutations,
+                                double significance)
             throws IOException {
 
         mitobenchWindow = mito;
         distance_type = type;
         gamma_a = gamma;
-        missing_data_character = mdc;
+        missing_data_character = String.valueOf(mdc);
         LOG = mito.getLogClass().getLogger(this.getClass());
+        this.numberOfPermutations = numberOfPermutations;
+        this.significance = significance;
 
         prepareData(
                 mito.getTableControllerUserBench(),
@@ -109,22 +115,32 @@ public class FstCalculationRunner {
 
         usableLoci = filter.getUsableLoci(
                 data,
-                missing_data_character,
+                'N',//missing_data_character,
                 Double.parseDouble(field_level_missing_data)
         );
 
 
         // calculate Fst with equation introduced by Hudson et al. (1992)
-        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);
-        fstHudson1992.setDistanceParameter(distanceTypeParser.parse(distance_type), gamma_a);
+        //FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
+        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);//, distanceTypeParser.parse(distance_type), gamma_a);
         fstHudson1992.setData(data);
 
         fsts = fstHudson1992.calculateFst();
+       // pvalues = fstHudson1992.calculatePermutedFST();
         groupnames = fstHudson1992.getGroupnames();
 
 
         // write to file
         writer = new Writer();
+//        writer.writeResultsFstToString(
+//                fsts,
+//                pvalues,
+//                groupnames,
+//                usableLoci,
+//                Double.parseDouble(field_level_missing_data),
+//                significance
+//        );
+
         writer.writeResultsFstToString(
                 fsts,
                 groupnames,
@@ -256,11 +272,11 @@ public class FstCalculationRunner {
         this.gamma_a = gamma_a;
     }
 
-    public char getMissing_data_character() {
+    public String getMissing_data_character() {
         return missing_data_character;
     }
 
-    public void setMissing_data_character(char missing_data_character) {
+    public void setMissing_data_character(String missing_data_character) {
         this.missing_data_character = missing_data_character;
     }
 

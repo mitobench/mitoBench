@@ -23,6 +23,8 @@ public class FstSettingsDialogue extends ATabpaneDialogue {
     private CheckBox checkbox_saveLogFileBtn;
     private TextField field_filePathResult;
     private Button chooseFileBtn;
+    private TextField field_numberOfPermutations;
+    private TextField field_significance;
 
     public FstSettingsDialogue(String title, LogClass logClass, MitoBenchWindow mito) {
         super(title, logClass);
@@ -45,7 +47,6 @@ public class FstSettingsDialogue extends ATabpaneDialogue {
                     Label
          */
 
-        Label label_general_settings = new Label("");
         Label label_lin = new Label("Optional:\n");
         Label label_distance_method = new Label("Distance method:");
         Label label_gamma_a = new Label("Gamma a value:");
@@ -53,6 +54,8 @@ public class FstSettingsDialogue extends ATabpaneDialogue {
         Label label_allowed_level_of_missing_data = new Label("allowed level of missing data:");
         Label infoLogFile = new Label("Do you want to save the result?");
         Label setFilePathLabel = new Label("File location");
+        Label label_numberOfPermutations = new Label("Number of permutations");
+        Label label_significance = new Label("Significance p-value");
 
          /*
                     Checkbox
@@ -96,7 +99,8 @@ public class FstSettingsDialogue extends ATabpaneDialogue {
         field_level_missing_data = new TextField("0.05");
         field_filePathResult = new TextField(System.getProperty("user.dir"));
         field_filePathResult.setDisable(true);
-
+        field_numberOfPermutations = new TextField("10");
+        field_significance = new TextField("0.05");
 
          /*
                    Button
@@ -111,40 +115,43 @@ public class FstSettingsDialogue extends ATabpaneDialogue {
 
 
         // place components with grid layout
+        int row=0;
+        dialogGrid.add(label_distance_method, 0,row,1,1);
+        dialogGrid.add(comboBox_distance, 1,row,1,1);
+        dialogGrid.add(label_gamma_a, 0,++row,1,1);
+        dialogGrid.add(field_gamma_a, 1,row,1,1);
+        dialogGrid.add(label_numberOfPermutations, 0,++row,1,1);
+        dialogGrid.add(field_numberOfPermutations, 1,row,1,1);
+        dialogGrid.add(label_missing_data, 0,++row,1,1);
+        dialogGrid.add(field_missing_data, 1,row,1,1);
+        dialogGrid.add(label_allowed_level_of_missing_data, 0,++row,1,1);
+        dialogGrid.add(field_level_missing_data, 1,row,1,1);
+        dialogGrid.add(label_significance, 0,++row,1,1);
+        dialogGrid.add(field_significance, 1,row,1,1);
 
-        dialogGrid.add(label_general_settings, 0,0,1,4);
-        dialogGrid.add(label_distance_method, 0,5,1,1);
-        dialogGrid.add(comboBox_distance, 1,5,1,1);
-        dialogGrid.add(label_gamma_a, 0,6,1,1);
-        dialogGrid.add(field_gamma_a, 1,6,1,1);
-        dialogGrid.add(label_missing_data, 0,7,1,1);
-        dialogGrid.add(field_missing_data, 1,7,1,1);
-        dialogGrid.add(label_allowed_level_of_missing_data, 0,8,1,1);
-        dialogGrid.add(field_level_missing_data, 1,8,1,1);
-
-        dialogGrid.add(new Separator(), 0, 9,2,1);
+        dialogGrid.add(new Separator(), 0, ++row,2,1);
 
 
         // linearization
 
-        dialogGrid.add(label_lin,0,10,1,2);
-        dialogGrid.add(checkbox_linearized_slatkin, 1,10,1,1);
-        dialogGrid.add(checkbox_linearized_reynolds,1,11,1,1);
+        dialogGrid.add(label_lin,0,++row,1,2);
+        dialogGrid.add(checkbox_linearized_slatkin, 1,row,1,1);
+        dialogGrid.add(checkbox_linearized_reynolds,1,++row,1,1);
 
-        dialogGrid.add(new Separator(), 0, 12,2,1);
+        dialogGrid.add(new Separator(), 0, ++row,2,1);
 
         // save file
-        dialogGrid.add(infoLogFile, 0,13,1,1);
-        dialogGrid.add(checkbox_saveLogFileBtn, 1,13,1,1);
+        dialogGrid.add(infoLogFile, 0,++row,1,1);
+        dialogGrid.add(checkbox_saveLogFileBtn, 1,row,1,1);
         //dialogGrid.add(discardLogFile, 2,13,1,1);
 
-        dialogGrid.add(setFilePathLabel, 0,14,1,1);
-        dialogGrid.add(field_filePathResult, 0,15,1,1);
-        dialogGrid.add(chooseFileBtn, 1,15,1,1);
+        dialogGrid.add(setFilePathLabel, 0,++row,1,1);
+        dialogGrid.add(field_filePathResult, 0,++row,1,1);
+        dialogGrid.add(chooseFileBtn, 1,row,1,1);
 
-        dialogGrid.add(new Separator(), 0, 16,2,1);
+        dialogGrid.add(new Separator(), 0, ++row,2,1);
 
-        dialogGrid.add(okBtn,1,17,1,1);
+        dialogGrid.add(okBtn,1,++row,1,1);
 
     }
 
@@ -239,5 +246,21 @@ public class FstSettingsDialogue extends ATabpaneDialogue {
 
     public void setChooseFileBtn(Button chooseFileBtn) {
         this.chooseFileBtn = chooseFileBtn;
+    }
+
+    public TextField getField_numberOfPermutations() {
+        return field_numberOfPermutations;
+    }
+
+    public void setField_numberOfPermutations(TextField field_numberOfPermutations) {
+        this.field_numberOfPermutations = field_numberOfPermutations;
+    }
+
+    public TextField getField_significance() {
+        return field_significance;
+    }
+
+    public void setField_significance(TextField field_significance) {
+        this.field_significance = field_significance;
     }
 }

@@ -43,10 +43,8 @@ public class DataFilteringHaplotypeBasedDialogue extends ATabpaneDialogue {
 
         dialogGrid.add(label_enterMutation, 0,0,1,1);
         dialogGrid.add(field_mutation,1,0,1,1);
-
         dialogGrid.add(label_distance, 0,2,1,1);
         dialogGrid.add(field_distance, 1,2,1,1);
-
         dialogGrid.add(btn_apply, 0, 3,2,1);
 
 

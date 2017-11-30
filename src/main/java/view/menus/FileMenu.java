@@ -205,7 +205,8 @@ public class FileMenu {
 
         MenuItem exportFile = new MenuItem("Export all Data");
         exportFile.setOnAction(t -> {
-            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass, true);
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
+                    mitoBenchWindow.getChartController(), true);
             try {
                 exportDialogue.start(new Stage());
             } catch (Exception e) {
@@ -216,7 +217,8 @@ public class FileMenu {
 
         MenuItem exportSelectedData = new MenuItem("Export selected Data");
         exportSelectedData.setOnAction(t -> {
-            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass, false);
+            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
+                    mitoBenchWindow.getChartController(), false);
             try {
                 exportDialogue.start(new Stage());
             } catch (Exception e) {
@@ -378,7 +380,7 @@ public class FileMenu {
                     try {
 
                         projectReader.read(f, LOG);
-                        projectReader.loadData(tableControllerUserBench);
+                        projectReader.loadData(tableControllerUserBench, mitoBenchWindow.getChartController());
                         //tableControllerUserBench.loadGroups();
                         mitoBenchWindow.setAnotherProjectLoaded(true);
                     } catch (IOException e) {

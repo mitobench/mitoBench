@@ -1,18 +1,12 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import statistics.HaploStatistics;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 
 /**
@@ -20,7 +14,7 @@ import java.util.List;
  */
 public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
 
-    private TextField textField;
+    private TextField textField_hglist;
     private Button okBtn;
     private CheckBox default_list_checkbox;
     private HaploStatistics haploStatistics;
@@ -50,8 +44,15 @@ public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
                 "\naccording to which the haplogroups should be grouped:");
         Label default_list = new Label("or use the default list:");
 
-        textField = new TextField();
-
+        textField_hglist = new TextField();
+        if(haploStatistics.getChartController().getCustomHGList()!=null) {
+            if (haploStatistics.getChartController().getCustomHGList().length != 0) {
+                String hgs = "";
+                for(String s : haploStatistics.getChartController().getCustomHGList())
+                    hgs += s + ",";
+                textField_hglist.setText(hgs.substring(0, hgs.length()-1));
+            }
+        }
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
 
@@ -60,7 +61,7 @@ public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
         default_list_checkbox.setSelected(false);
 
         dialogGrid.add(label, 0,0,3,1);
-        dialogGrid.add(textField, 0,1,3,1);
+        dialogGrid.add(textField_hglist, 0,1,3,1);
         dialogGrid.add(default_list,0,2,1,1);
         dialogGrid.add(default_list_checkbox,1,2,1,1);
         dialogGrid.add(okBtn,2,3,1,1);
@@ -68,15 +69,15 @@ public class HGStatisticsPopupDialogue extends ATabpaneDialogue {
 
     public void addListener(){
         okBtn.setOnAction(e -> {
-            if((textField.getText().equals("") || textField.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
-                textField.setText("Please enter list here.");
+            if((textField_hglist.getText().equals("") || textField_hglist.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
+                textField_hglist.setText("Please enter list here.");
 
             } else {
                 String[] hg_list;
                 if(default_list_checkbox.isSelected()){
                     hg_list = haploStatistics.getChartController().getCoreHGs();
                 } else {
-                    hg_list = textField.getText().split(",");
+                    hg_list = textField_hglist.getText().split(",");
                 }
                 String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
                 haploStatistics.count(hg_list_trimmed);

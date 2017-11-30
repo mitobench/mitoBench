@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
 import io.IData;
-import org.controlsfx.control.table.TableFilter;
 import view.menus.GroupMenu;
 import view.table.DataTable;
 
@@ -39,7 +38,6 @@ public abstract class ATableController {
     protected GroupMenu groupMenu;
     protected Logger LOG;
     protected LogClass logClass;
-    private TableFilter filter;
 
     public ATableController(LogClass logClass){
         this.logClass = logClass;
@@ -104,10 +102,6 @@ public abstract class ATableController {
         // delete duplicated columns
         col_names_sorted = col_names_sorted.stream().distinct().collect(Collectors.toList());
 
-//        filter = null;
-//        table = null;
-//        init();
-
         // add columns
         for(int i = 0; i < col_names_sorted.size(); i++) {
             addColumn(col_names_sorted.get(i), i);
@@ -122,9 +116,6 @@ public abstract class ATableController {
         setColumns_to_index();
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
-
-        // add table filter
-        //filter = new TableFilter(table);
 
     }
 
@@ -303,13 +294,11 @@ public abstract class ATableController {
     public void addColumn(String colname, int j){
 
         TableColumn col = new TableColumn(colname);
-        col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                return new SimpleStringProperty(param.getValue().get(j).toString());
-            }
-        });
+        col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param
+                -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
         col_names.add(colname);
+        col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
         table.getColumns().addAll(col);
 
 
@@ -407,6 +396,7 @@ public abstract class ATableController {
         for(String colname : getCurrentColumnNames()){
             if(colname.contains("(Grouping)")){
                 groupController.createGroupByColumn(colname, "");
+                groupController.setGroupingExists(true);
                 break;
             }
         }
@@ -585,42 +575,7 @@ public abstract class ATableController {
         return names;
     }
 
-    /**
-     *
-     * This method parses the current table view to a view.data - table representation (ObservableList<ObservableList<String>>)
-     * which can be used for output purposes for example.
-     *
-     * @return
-     */
-    public ObservableList<ObservableList<String>> getViewDataCurrent() {
 
-        TableView tableView = this.getTable();
-
-        ObservableList<ObservableList<String>> all = FXCollections.observableArrayList();
-        ObservableList<TableColumn> columns = tableView.getColumns();
-
-        for (Object row : tableView.getItems()) {
-            String id = "";
-            ObservableList<String> values = FXCollections.observableArrayList();
-            for (TableColumn column : columns) {
-                String val = (String) column.getCellObservableValue(row).getValue();
-                if(column.getText().equals("MTSequence")) {
-                    values.add(dataTable.getMtStorage().getData().get(id));
-                } else if(column.getText().equals("ID")){
-                    id = val;
-                    values.add((String) column.getCellObservableValue(row).getValue());
-                } else {
-                    values.add((String) column.getCellObservableValue(row).getValue());
-                }
-
-            }
-            all.add(values);
-        }
-
-        return all;
-
-
-    }
 
     /**
      * get column index of column based on column header
@@ -674,14 +629,12 @@ public abstract class ATableController {
     public List<String> getCountPerHG(String hg, String group, int colIndexHG, int colIndexGroup){
 
         List<String> hgs = new ArrayList<>();
-        int count = 0;
         ObservableList<ObservableList> selection = getSelectedRows();
         if(colIndexGroup == -1){
             for(int i = 0; i < selection.size(); i++){
                 ObservableList list = selection.get(i);
                 if(list.get(colIndexHG).equals(hg)){
                     hgs.add(hg);
-                    //count++;
                 }
             }
         } else {
@@ -689,12 +642,10 @@ public abstract class ATableController {
                 ObservableList list = selection.get(i);
                 if(list.get(colIndexGroup).equals(group) && list.get(colIndexHG).equals(hg)){
                     hgs.add(hg);
-                    //count++;
                 }
             }
         }
 
-        //return count;
         return hgs;
     }
 
@@ -743,16 +694,6 @@ public abstract class ATableController {
 
     }
 
-//
-//    public HashMap<String,List<Entry>> parseDBData(HashMap<String, List<Entry>> data){
-//
-//        List<Entry> entries = data.get(null);
-//        HashMap<String,List<Entry>> parsedData = new HashMap<>();
-//
-//        for(Entry e : entries){
-//            parsedData.put(e.getIdentifier(), e);
-//        }
-//
-//    };
-//
+
+
 }
