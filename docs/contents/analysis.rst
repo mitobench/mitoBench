@@ -25,7 +25,7 @@ This calculates the pairwise Fst values based on the approach of Hudson et al.
 Advanced settings are provided by the configuration dialogue.
 
 .. image:: images/Fst_settings.png
-:align: center
+    :align: center
 
 
 * Distance method:
@@ -94,17 +94,17 @@ previously. The Haplogroups can be set in the configuration pane.
 The coloring can either be set like the groups (each group gets one color)
 
 .. image:: images/pcaConfig.png
-:align: center
+    :align: center
 
 
 or several groups can be assigned to one color. In the text field, the user can specify a name. The color is chosen by the tool.
 
 .. image:: images/pcaConfig2.png
-:align: center
+    :align: center
 
 
 The result will be shown as a 2-dimensional plot in the visualization pane, and the counts used for the calculation in the
 statistics pane. Hovering over the data point opens gives information about the represented group.
 
 .. image:: images/pca_plot.png
-:align: center
+    :align: center

@@ -17,7 +17,7 @@ via a tree representation of the current version of PhyloTree.
 list of Haplogroups in the text field below the tree representation.
 
 .. image:: images/phylotreefiltering.png
-:align: center
+    :  align: center
 
 .. note::
 The last filtering step can be redone via *Table -> Reset table*.
@@ -38,4 +38,4 @@ You can also specify a distance value d. This will include all Haplotypes
 with the distance d to the specified ones.
 
 .. image:: images/haplotypeFiltering.png
-:align: center
+    :align: center

@@ -11,7 +11,7 @@ represents the samples in a table format. After logging in to the database, this
 part will include the database view as well.
 
 .. image:: images/window.png
-:align: center
+    :align: center
 
 mitoBench can be used in offline mode. However, some features (such
 as the map view and the DB import) require a working internet connection. The faster - the better.
