@@ -114,12 +114,12 @@ To import data from mitoDB, select *File -> Import Data from DB*. This opens a
 tab in the main view where you have to enter your mitoDB login data.
 
 .. image:: images/mitoDB_login.png
-:align: center
+  :align: center
 
 After a successful login, the user can set up a database query. Currently, it is only possible to get all data from the database, which are several thousand mt Genomes including metadata from the 1000 genomes project (phase 3). This configuration panel will be more sophisticated in future and allow user-defined queries / more complex queries.
 
 
 .. image:: images/mitoDB_query.png
-:align: center
+  :align: center
 
 The specified data will be imported to the mitoBench in a separate table. By right-clicking on a column, a filter pops up to configure the search.
