@@ -22,11 +22,13 @@ import java.util.Optional;
  */
 public class ExportDialogue extends Application {
     private final String[] userdefinedHGlist;
+    private final LogClass logClass;
+    private final boolean exportAllData;
+    private final ChartController cc;
     private List<String> columnsInTable = FXCollections.observableArrayList("option1", "option2", "option3");
     private TableControllerUserBench tableController;
     private String MITOBENCH_VERSION;
     private ObservableList<ObservableList> dataToExport;
-    //TODO this should come from the class instantiation...
     private Logger LOG;
 
 
@@ -39,6 +41,9 @@ public class ExportDialogue extends Application {
                           ChartController chartController, boolean exportAllData) {
 
         LOG = logClass.getLogger(this.getClass());
+        this.logClass = logClass;
+        this.exportAllData = exportAllData;
+        this.cc = chartController;
         this.tableController = tableManager;
         this.columnsInTable = tableManager.getCurrentColumnNames();
         this.MITOBENCH_VERSION = mitoVersion;
@@ -65,6 +70,7 @@ public class ExportDialogue extends Application {
         ButtonType xlsx_button = new ButtonType("XLSX");
         ButtonType mito_button = new ButtonType("MITOPROJ");
         ButtonType nexus_button = new ButtonType("NEXUS");
+        ButtonType phylip_button = new ButtonType("PHYLIP");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         //We disallow ID and mtSequence as entries
@@ -73,7 +79,7 @@ public class ExportDialogue extends Application {
 
 
         alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, csv_button, xlsx_button, mito_button,
-                nexus_button, buttonTypeCancel);
+                nexus_button, phylip_button, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
 
@@ -92,7 +98,7 @@ public class ExportDialogue extends Application {
                 arpwriter.setGroups(selection);
                 arpwriter.writeData(outfileDB, tableController);
             }
-            //Beast output
+            //fasta output
         } else  if (result.get() == fasta_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
@@ -146,7 +152,9 @@ public class ExportDialogue extends Application {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
             }
-        } else if (result.get() == mito_button) {
+        }
+        // project output
+        else if (result.get() == mito_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("MitoBench project (*.mitoproj)", "*.mitoproj");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
@@ -161,6 +169,7 @@ public class ExportDialogue extends Application {
                 }
             }
         }
+        // nexus output
         else if (result.get() == nexus_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Nexus (*.nex)", "*.nex");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
@@ -175,6 +184,27 @@ public class ExportDialogue extends Application {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
             }
+        }// phylip output
+        else if (result.get() == phylip_button) {
+
+            // open new config window
+            PhylipSettingsDialogue phylipSettingsDialogue  = new PhylipSettingsDialogue("Phylip format configuration", logClass,
+                    dataToExport, tableController, MITOBENCH_VERSION, cc, exportAllData);
+
+
+//            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Phylip (*.phylip)", "*.phylip");
+//            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+//            saveAsDialogue.start(new Stage());
+//            if (saveAsDialogue.getOutFile() != null) {
+//                String outFileDB = saveAsDialogue.getOutFile();
+//                try {
+//                    PhyLipWriter phyLipWriter = new PhyLipWriter(dataToExport, "relaxed", false);
+//                    phyLipWriter.writeData(outFileDB, tableController);
+//                    LOG.info("Export data into Phylip format. File: " + outFileDB);
+//                } catch (Exception e) {
+//                    System.err.println("Caught Exception: " + e.getMessage());
+//                }
+//            }
         }else {
             //TODO what happens on cancel() exactly ?
         }
