@@ -3,8 +3,10 @@ package analysis;
 
 import IO.reader.DistanceTypeParser;
 import IO.writer.Writer;
+import fst.FstHamilton;
 import fst.FstHudson1992;
 import fst.Linearization;
+import fst.StandardAMOVA;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -115,20 +117,33 @@ public class FstCalculationRunner {
 
         usableLoci = filter.getUsableLoci(
                 data,
-                'N',//missing_data_character,
+                "N",//missing_data_character,
                 Double.parseDouble(field_level_missing_data)
         );
 
 
         // calculate Fst with equation introduced by Hudson et al. (1992)
         //FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
-        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);//, distanceTypeParser.parse(distance_type), gamma_a);
-        fstHudson1992.setData(data);
+        //FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);//, distanceTypeParser.parse(distance_type), gamma_a);
+        //fstHudson1992.setData(data);
 
-        fsts = fstHudson1992.calculateFst();
-       // pvalues = fstHudson1992.calculatePermutedFST();
-        groupnames = fstHudson1992.getGroupnames();
+//        fsts = fstHudson1992.calculateFst();
+//        // pvalues = fstHudson1992.calculatePermutedFST();
+//        groupnames = fstHudson1992.getGroupnames();
 
+
+        // Calculate fst value according "Population genetics", Matthew B. Hamilton
+        StandardAMOVA standardAMOVA = new StandardAMOVA(usableLoci,
+                0,
+                significance,
+                distanceTypeParser.parse("Pairwise Difference"),
+                0.05
+        );
+        standardAMOVA.setData(data);
+
+
+        fsts = standardAMOVA.calculateFst();
+        double[][] pval = standardAMOVA.calculatePermutatedFst();
 
         // write to file
         writer = new Writer();
@@ -143,12 +158,15 @@ public class FstCalculationRunner {
 
         writer.writeResultsFstToString(
                 fsts,
-                groupnames,
+                pval,
+                standardAMOVA.getGroupnames(),
                 usableLoci,
-                Double.parseDouble(field_level_missing_data)
+                0.05,
+                significance
         );
 
-        writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
+        groupnames = standardAMOVA.getGroupnames();
+        writer.addDistanceMatrixToResult(standardAMOVA.getDistanceCalculator().getDistancematrix_d());
 
         if(runSlatkin){
             fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
