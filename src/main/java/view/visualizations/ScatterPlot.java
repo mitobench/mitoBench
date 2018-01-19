@@ -49,13 +49,13 @@ public class ScatterPlot extends AChart{
         }
 
         sc.getData().add(series);
-        int i = 0;
-        ObservableList<XYChart.Data<Number, Number>> data_list = series.getData();
-        for (XYChart.Data<Number, Number> d : data_list) {
-            Tooltip tip = new Tooltip(names[i]);
-            Tooltip.install(d.getNode(), tip);
-            i++;
-        }
+//        int i = 0;
+//        ObservableList<XYChart.Data<Number, Number>> data_list = series.getData();
+//        for (XYChart.Data<Number, Number> d : data_list) {
+//            Tooltip tip = new Tooltip(names[i]);
+//            Tooltip.install(d.getNode(), tip);
+//            i++;
+//        }
 
 
     }

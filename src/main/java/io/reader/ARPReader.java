@@ -55,7 +55,8 @@ public class ARPReader implements IInputData {
                 }
                 if(currline.isEmpty() | currline.startsWith("}") |  currline.startsWith("SampleSize=") |
                    currline.startsWith("SampleData") | currline.startsWith("Title") | currline.startsWith("NbSamples") |
-                   currline.startsWith("DataType") | currline.startsWith("LocusSeparator") | currline.startsWith("MissingData") |
+                        currline.startsWith("GameticPhase") |  currline.startsWith("RecessiveData") |
+                        currline.startsWith("DataType") | currline.startsWith("LocusSeparator") | currline.startsWith("MissingData") |
                    currline.startsWith("GenotypicData") | currline.startsWith("[Data]") | currline.startsWith("[[Samples]]")) {
                     continue;
                 } else {

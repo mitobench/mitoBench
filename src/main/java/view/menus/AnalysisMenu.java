@@ -61,7 +61,7 @@ public class AnalysisMenu {
             if(tableController.getGroupController().isGroupingExists()) {
                 FstSettingsDialogue fstSettingsDialogue =
                             new FstSettingsDialogue("Fst Calculation Settings", logClass, mito);
-                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue);
+                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue, tableController.getGroupController().getGroupnames());
                 mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
                 mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
 

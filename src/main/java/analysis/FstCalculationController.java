@@ -5,13 +5,14 @@ import view.dialogues.settings.FstSettingsDialogue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class
 FstCalculationController {
 
     private final FstSettingsDialogue dialog;
 
-    public FstCalculationController(FstSettingsDialogue fstSettingsDialogue){
+    public FstCalculationController(FstSettingsDialogue fstSettingsDialogue, Set<String> groupnames){
         dialog = fstSettingsDialogue;
         addListener();
     }
@@ -44,9 +45,9 @@ FstCalculationController {
                 fstCalculationRunner.visualizeResult();
 
 
-                if(dialog.getCheckbox_saveLogFileBtn().isSelected()){
-                    fstCalculationRunner.writeToFile(dialog.getField_filePathResult().getText());
-                }
+                //if(dialog.getCheckbox_saveLogFileBtn().isSelected()){
+                //    fstCalculationRunner.writeToFile(dialog.getField_filePathResult().getText());
+                //}
 
 
                 dialog.getLOG().info("Fst calculations finished.");
