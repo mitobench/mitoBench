@@ -107,7 +107,7 @@ public class BEASTWriter implements IOutputData {
         if(!c14data.equals("")){
             if (!c14data.equals("Undefined")) {
                 //tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
-                tmp = "_" + Math.abs(2000 - Double.parseDouble(c14data)); // years before present
+                tmp = "_" + Math.abs(2017 - Double.parseDouble(c14data)); // years before present
             }
 
             return tmp;

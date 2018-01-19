@@ -1,18 +1,10 @@
 package analysis;
 
-
-import IO.reader.DistanceTypeParser;
-import IO.writer.Writer;
-import fst.FstHamilton;
-import fst.FstHudson1992;
-import fst.Linearization;
-import fst.StandardAMOVA;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 
 import javafx.scene.text.Text;
-import methods.Filter;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.visualizations.HeatMap;
@@ -44,7 +36,6 @@ public class FstCalculationRunner {
     private double[][] fsts_reynolds=null;
     private String[] groupnames;
     private List<Integer> usableLoci;
-    private Writer writer;
     private Logger LOG;
     private int numberOfPermutations;
     private double[][] pvalues;
@@ -110,72 +101,20 @@ public class FstCalculationRunner {
      * @param field_level_missing_data
      * @throws IOException
      */
-    public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
-        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
-        Filter filter = new Filter();
-        Linearization linearization = new Linearization();
+    public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) {
 
-        usableLoci = filter.getUsableLoci(
+        FstCalculator fstCalculator = new FstCalculator(
                 data,
-                "N",//missing_data_character,
-                Double.parseDouble(field_level_missing_data)
-        );
-
-
-        // calculate Fst with equation introduced by Hudson et al. (1992)
-        //FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
-        //FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);//, distanceTypeParser.parse(distance_type), gamma_a);
-        //fstHudson1992.setData(data);
-
-//        fsts = fstHudson1992.calculateFst();
-//        // pvalues = fstHudson1992.calculatePermutedFST();
-//        groupnames = fstHudson1992.getGroupnames();
-
-
-        // Calculate fst value according "Population genetics", Matthew B. Hamilton
-        StandardAMOVA standardAMOVA = new StandardAMOVA(usableLoci,
-                0,
-                significance,
-                distanceTypeParser.parse("Pairwise Difference"),
-                0.05
-        );
-        standardAMOVA.setData(data);
-
-
-        fsts = standardAMOVA.calculateFst();
-        double[][] pval = standardAMOVA.calculatePermutatedFst();
-
-        // write to file
-        writer = new Writer();
-//        writer.writeResultsFstToString(
-//                fsts,
-//                pvalues,
-//                groupnames,
-//                usableLoci,
-//                Double.parseDouble(field_level_missing_data),
-//                significance
-//        );
-
-        writer.writeResultsFstToString(
-                fsts,
-                pval,
-                standardAMOVA.getGroupnames(),
-                usableLoci,
-                0.05,
+                "N",
+                "Pairwise Difference",
+                Double.parseDouble(field_level_missing_data),
+                numberOfPermutations,
+                gamma_a,
                 significance
-        );
+                );
 
-        groupnames = standardAMOVA.getGroupnames();
-        writer.addDistanceMatrixToResult(standardAMOVA.getDistanceCalculator().getDistancematrix_d());
+        fstCalculator.runCalculations();
 
-        if(runSlatkin){
-            fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
-            writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
-        }
-        if(runReynolds){
-            fsts_reynolds = linearization.linearizeWithReynolds(fsts);
-            writer.addLinerarizedFstMatrix(fsts_reynolds, "Reynolds' distance");
-        }
 
         // init table controller
         tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
@@ -212,7 +151,7 @@ public class FstCalculationRunner {
         String tab_header = "fst_values";
 
         ScrollPane scrollpane_result = new ScrollPane();
-        String text = writer.getResult_as_string();
+        String text = writer.getResultString();
         Text t = new Text();
         t.setText(text);
         t.wrappingWidthProperty().bind(mitobenchWindow.getScene().widthProperty());
