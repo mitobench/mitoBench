@@ -102,8 +102,8 @@ public class AnalysisMenu {
 
         });
 
-        menuAnalysis.getItems().addAll(defineHGList, pairwiseFst, assignHGs, pcaAnalysis);
-        //menuAnalysis.getItems().addAll(defineHGList, pcaAnalysis);
+        //menuAnalysis.getItems().addAll(defineHGList, pairwiseFst, assignHGs, pcaAnalysis);
+        menuAnalysis.getItems().addAll(defineHGList, pcaAnalysis);
     }
 
     public Menu getMenuAnalysis() {

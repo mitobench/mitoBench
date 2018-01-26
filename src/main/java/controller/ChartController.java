@@ -1,8 +1,10 @@
 package controller;
 
+import io.Exceptions.HaplogroupException;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
+import view.dialogues.error.HaplogroupErrorDialogure;
 import view.visualizations.BarChartGrouping;
 import view.visualizations.BarPlotHaplo;
 import view.visualizations.BarPlotHaplo2;
@@ -474,8 +476,6 @@ public class ChartController {
      */
     public HashMap<String, List<String>> getHG_to_group(ObservableList<ObservableList> selectedTableItems ){
 
-
-
         String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
         String[] seletcion_haplogroups = cols[0];
         String[] seletcion_groups = cols[1];
@@ -571,21 +571,30 @@ public class ChartController {
      * @param selectedTableItems
      * @return
      */
-    public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems){
+    public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems) {
 
+        List tmp = new ArrayList<>(Arrays.asList(names));
+        if(tmp.contains("Haplogroup") && !tableController.getCurrentColumnNames().contains("Haplogroup")){
 
-        String[][] res = new String[names.length][];
-        for(int i = 0; i < names.length; i++){
-            TableColumn col = tableController.getTableColumnByName(names[i]);
+            HaplogroupException haplogroupException = new HaplogroupException("No haplogroups defined!");
+            HaplogroupErrorDialogure haplogroupErrorDialogure = new HaplogroupErrorDialogure(haplogroupException);
 
-            Set<String> columnData = new HashSet<>();
-            selectedTableItems.stream().forEach((o)
-                    -> columnData.add((String)col.getCellData(o)));
+        } else {
+            String[][] res = new String[names.length][];
+            for(int i = 0; i < names.length; i++){
+                TableColumn col = tableController.getTableColumnByName(names[i]);
 
-            res[i] = columnData.toArray(new String[columnData.size()]);
+                Set<String> columnData = new HashSet<>();
+                selectedTableItems.stream().forEach((o)
+                        -> columnData.add((String)col.getCellData(o)));
+
+                res[i] = columnData.toArray(new String[columnData.size()]);
+            }
+
+            return res;
+
         }
-
-        return res;
+        return null;
 
     }
 

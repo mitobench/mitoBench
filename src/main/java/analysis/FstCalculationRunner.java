@@ -1,7 +1,7 @@
 package analysis;
 
-import IO.writer.Writer;
-import Main.FstCalculator;
+//import Main.FstCalculator;
+import fst.FstHudson1992;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -15,7 +15,6 @@ import controller.TableControllerFstValues;
 import controller.TableControllerUserBench;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +41,8 @@ public class FstCalculationRunner {
     private int numberOfPermutations;
     private double[][] pvalues;
     private double significance;
-    private FstCalculator fstCalculator;
+    private FstHudson1992 fstCalculator;
+    // private FstCalculator fstCalculator;
 
 
     public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc, int numberOfPermutations,
@@ -105,17 +105,18 @@ public class FstCalculationRunner {
      */
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
 
-        fstCalculator = new FstCalculator(
-                data,
-                "N",
-                Double.parseDouble(field_level_missing_data),
-                "Pairwise Difference",
-                numberOfPermutations,
-                gamma_a,
-                significance
-                );
+        fstCalculator = new FstHudson1992(usableLoci);
+//        fstCalculator = new FstCalculator(
+//                data,
+//                "N",
+//                Double.parseDouble(field_level_missing_data),
+//                "Pairwise Difference",
+//                numberOfPermutations,
+//                gamma_a,
+//                significance
+//                );
 
-        fsts = fstCalculator.runCaclulations();
+        //fsts = fstCalculator.runCaclulations();
         groupnames = fstCalculator.getGroupnames();
 
 
@@ -154,7 +155,7 @@ public class FstCalculationRunner {
         String tab_header = "fst_values";
 
         ScrollPane scrollpane_result = new ScrollPane();
-        String text = fstCalculator.getResultString();
+        String text = "";//fstCalculator.getResultString();
         Text t = new Text();
         t.setText(text);
         t.wrappingWidthProperty().bind(mitobenchWindow.getScene().widthProperty());
