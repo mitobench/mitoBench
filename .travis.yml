@@ -12,4 +12,5 @@ deploy:
   file: build/libs/MitoBench-$version.jar
   skip_cleanup: true
   on:
+    tags: true
     repo: Integrative-Transcriptomics/MitoBench
