@@ -9,7 +9,7 @@ deploy:
   provider: releases
   api_key:
     secure: FL6/zoook5P1rv1lnLmwL3ImGAg29ptkOWnE0eUPBHadgHHg36ycPO48bwUA2PckoAkCcs1T+jP2J0MHgnBU2R9Rj+r7cELyal6tlEtoOVhii0w00bl6kIBDq0ODpdIMrRT+dbhIp/WL0tRzYN4v7BBmgpoPMCmqhh6s2Vnmm5WFAP4WVXbPBpZXbq1dwhAwIFlzHLusNyCRGdkQ9nDZCqTT21ec9hFBvuxCr8rcEVm52pOjtchznroBawUm5JwzepzDbirqH/yltan/XQzg1YMplnx1V87w2++G03cpsBqW+SvQAVZJR+YDf6SrzW1AztPSj+Cox0/QTOZU/LKBxA6yntMajMOrPq0A+Tvt3tTR8WX7VN8xRhRpX5chVot8x1DjCCvBwpQi5KuELsbenVakh0jO1LiWP9Fp5LNsM1zj7hpRuyBn7tvxWkaxwa4z9lDLF2ED8FFAEOMLb1eK4anA8bBNWQQtQyz2YvxBGLmJY94lZaHiEmBBGELI5Knkb+H2iiG/2u+ZX6AuC2asgdR/rJI1fwJgn1XT/8sCercZAZ1Brhvo9339LRGE8RU6SYOGTw0RkhG4R+Cb9v2Fab38QP7wK2VgfBFSPuEbxhSADfahJfuDNl6HS8DjFrBnDqSB/n9KPnphWIcJJ5H5q/PCQSv2/KIpb3xc+h//kVE=
-  file: build/libs/MitoBench-0.1.13.jar
+  file: build/libs/MitoBench-$version.jar
   skip_cleanup: true
   on:
     repo: Integrative-Transcriptomics/MitoBench
