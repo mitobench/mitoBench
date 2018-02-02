@@ -226,7 +226,11 @@ public class HaploStatistics {
             int count_all_hgs_group = countAllHGs(i);
 
             for(int j = 0; j < data[i].length; j++){
-                data[i][j] = data[i][j] / (double)count_all_hgs_group;
+                if(count_all_hgs_group==0){
+                    data[i][j] = 0.0;
+                } else {
+                    data[i][j] = data[i][j] / (double)count_all_hgs_group;
+                }
             }
         }
 

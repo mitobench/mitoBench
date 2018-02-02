@@ -27,12 +27,12 @@ public class PcaPopupDialogue extends AHGDialogue {
     private Set<String> groupnames;
     private GridPane grid_colors_group;
     private int row2;
-    private Button btn_remove;
     private CheckBox checkbox_use_grouping_for_colors;
     private List<CheckComboBox> comboBoxes;
     private List<TextField> textfields_with_groupnames = new ArrayList<>();
     private List<CheckComboBox> checkComboBox_with_groupmembers = new ArrayList<>();
     private int id;
+    private Button btn_del;
 
     public PcaPopupDialogue(String title, LogClass logClass, int pcaID) {
 
@@ -199,13 +199,13 @@ public class PcaPopupDialogue extends AHGDialogue {
 
             btn_add = new Button("Add more");
             addBtnAddEvent(btn_add);
-            btn_remove = new Button("Delete");
-            addBtnDelEvent(btn_remove);
+            btn_del = new Button("Delete");
+            addBtnDelEvent(btn_del);
 
             grid_colors_group.add(field_text, 0, row2,1,1);
             grid_colors_group.add(combo, 1, row2,1,1);
             grid_colors_group.add(btn_add, 2, row2, 1,1);
-            grid_colors_group.add(btn_remove, 3, row2, 1,1);
+            grid_colors_group.add(btn_del, 3, row2, 1,1);
 
             row2++;
             this.checkComboBox_with_groupmembers.add(combo);
@@ -283,12 +283,15 @@ public class PcaPopupDialogue extends AHGDialogue {
 
 
         btn_add = new Button("Add more");
+        btn_del = new Button("Delete");
         addBtnAddEvent(btn_add);
+        addBtnDelEvent(btn_del);
 
         grid_colors_group.add(field_text, 0, row2,1,1);
         grid_colors_group.add(combo, 1, row2,1,1);
         //grid_colors_group.add(colorPicker, 2, row2,1,1);
         grid_colors_group.add(btn_add, 2, row2, 1,1);
+        grid_colors_group.add(btn_del, 3, row2, 1,1);
 
         row2++;
     }
