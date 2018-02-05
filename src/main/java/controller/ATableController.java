@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import io.IData;
 import org.apache.log4j.Logger;
+import org.apache.poi.util.SystemOutLogger;
 import view.menus.GroupMenu;
 import view.table.DataTable;
 
@@ -28,7 +29,7 @@ public abstract class ATableController {
     protected final Logger LOG;
     protected TableView<ObservableList> table;
     protected ObservableList<ObservableList> data;
-    protected ObservableList<ObservableList> data_copy;
+    protected ObservableList<ObservableList> data_initial;
     protected DataTable dataTable;
     protected HashMap<String, Integer> column_to_index;
     protected HashMap<String, List<Entry>> table_content;
@@ -38,6 +39,8 @@ public abstract class ATableController {
     protected List<String> col_names_sorted;
     protected GroupMenu groupMenu;
     protected LogClass logClass;
+    protected Deque<HashMap<String, List<Entry>>> data_versions = new LinkedList();
+
 
     public ATableController(LogClass logClass){
         this.logClass = logClass;
@@ -52,13 +55,14 @@ public abstract class ATableController {
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         data = FXCollections.observableArrayList();
-        data_copy = FXCollections.observableArrayList();
+        data_initial = FXCollections.observableArrayList();
         col_names = new ArrayList<>();
 
         dataTable = new DataTable();
         column_to_index = new HashMap<>();
         this.controller = this;
         table_content = new HashMap<>();
+        data_versions = new LinkedList<>();
     }
 
     /**
@@ -83,9 +87,7 @@ public abstract class ATableController {
         // get current col names
         List<String> curr_colnames = getCurrentColumnNames();
 
-
         table.getColumns().removeAll(table.getColumns());
-
 
         // define column order
         Set<String> cols = dataTable.getDataTable().keySet();
@@ -98,7 +100,7 @@ public abstract class ATableController {
         setColumns_to_index();
 
         // display updated table
-        data = parseDataTableToObservableList(dataTable, curr_colnames);
+        data = parseDataTableToObservableList(dataTable, curr_colnames, input.keySet());
         // delete duplicated columns
         col_names_sorted = col_names_sorted.stream().distinct().collect(Collectors.toList());
 
@@ -106,6 +108,8 @@ public abstract class ATableController {
         for(int i = 0; i < col_names_sorted.size(); i++) {
             addColumn(col_names_sorted.get(i), i);
         }
+
+        updateVersion();
 
         // clear Items in table
         table.getItems().removeAll(table.getItems());
@@ -117,6 +121,19 @@ public abstract class ATableController {
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
 
+
+
+    }
+
+    private void updateVersion() {
+
+        if(data_versions.size()>=4){
+            data_versions.removeFirst();
+            data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
+
+        } else {
+            data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
+        }
     }
 
 
@@ -148,14 +165,17 @@ public abstract class ATableController {
         }
     }
 
+
     /**
-     * This method parses the view.data table to a representation that can be displayed by the table view
+     *  This method parses the view.data table to a representation that can be displayed by the table view
      * (ObservableList<ObservableList> )
      *
      * @param dataTable
+     * @param curr_colnames
+     * @param ids
      * @return
      */
-    protected ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames){
+    protected ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames, Set<String> ids){
 
         if(curr_colnames.size()==0){
             curr_colnames = new ArrayList<>(getCurrentColumnNames());
@@ -201,7 +221,12 @@ public abstract class ATableController {
                 String value = data_tmp[i][j];
                 row.add(value);
             }
-            parsedData.add(row);
+            if(ids.size()==0){
+                parsedData.add(row);
+            } else if(ids.contains(row.get(0))){
+                parsedData.add(row);
+            }
+
         }
 
         return parsedData;
@@ -213,12 +238,19 @@ public abstract class ATableController {
      * @param newItems
      */
     public void updateView(ObservableList<ObservableList> newItems){
+
+        // update version
+        updateVersion();
+
         ObservableList<ObservableList> new_items_copy = FXCollections.observableArrayList();
         new_items_copy = copyData(newItems);
-        data_copy = copyData(data);
+        if(data_initial==null){
+            data_initial = copyData(data);
+        }
         data.removeAll(data);
         data.addAll(new_items_copy);
         this.table.setItems(data);
+
     }
 
 
@@ -280,28 +312,24 @@ public abstract class ATableController {
         return entries;
     }
 
-    /**
-     * set table to old/initial state
-     *
-     */
-    public void resetTable() {
-        data.removeAll(data);
-        for(ObservableList item : data_copy){
-            data.add(item);
-        }
-    }
 
+    /**
+     * Add new column to table
+     *
+     * @param colname
+     * @param j
+     */
     public void addColumn(String colname, int j){
 
-        TableColumn col = new TableColumn(colname);
-        col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param
-                -> new SimpleStringProperty(param.getValue().get(j).toString()));
+        if(!getCurrentColumnNames().contains(colname)){
+            TableColumn col = new TableColumn(colname);
+            col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param
+                    -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
-        col_names.add(colname);
-        col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
-        table.getColumns().addAll(col);
-
-
+            col_names.add(colname);
+            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
+            table.getColumns().addAll(col);
+        }
     }
 
 
@@ -309,6 +337,12 @@ public abstract class ATableController {
         this.groupMenu = groupMenu;
     }
 
+    /**
+     * Changes the name of the column
+     *
+     * @param oldname
+     * @param newname
+     */
     public void changeColumnName(String oldname, String newname) {
 
         for (TableColumn col : table.getColumns()){
@@ -331,7 +365,15 @@ public abstract class ATableController {
         }
     }
 
+    /**
+     * Removes column from table
+     *
+     * @param colName
+     */
     public void removeColumn(String colName) {
+
+        updateVersion();
+
         // remove grouping
         if(colName.contains("(Grouping)")){
             groupController.clearGrouping();
@@ -349,7 +391,7 @@ public abstract class ATableController {
         // remove from data
         ObservableList<ObservableList> data_new = FXCollections.observableArrayList();
         int index = getColIndex(colName);
-        for(ObservableList list : data){
+        for(ObservableList list : table.getItems()){
             list.remove(index);
             data_new.add(list);
         }
@@ -359,14 +401,35 @@ public abstract class ATableController {
         cleanColnames();
         col_names_sorted.remove(colName);
         setColumns_to_index();
-        table.getItems().removeAll(table.getItems());
-        cleanTableContent(colName);
-        resetTable();
+        //table.getItems().removeAll(table.getItems());
+
+        // remove column from datable content
+        updateTableContent(colName);
+
+        data.removeAll(data);
+        for(ObservableList item : data_new){
+            data.add(item);
+        }
+        updateEntriesTableContent(getColumnData(getTableColumnByName("ID")));
         updateTable(table_content);
 
     }
 
-    public void cleanTableContent(String group_colname){
+    private void updateEntriesTableContent(List<String> ids) {
+
+        HashMap<String, List<Entry>> newTableContent = new HashMap<>();
+        for(String key : table_content.keySet()){
+            if(ids.contains(key)){
+                newTableContent.put(key, table_content.get(key));
+            }
+        }
+
+        table_content.clear();
+        table_content = newTableContent;
+    }
+
+
+    public void updateTableContent(String group_colname){
         for(String key : table_content.keySet()){
             for(Entry e : table_content.get(key)){
                 if(e.getIdentifier().equals(group_colname)){
@@ -382,8 +445,6 @@ public abstract class ATableController {
                 }
             }
         }
-
-
     }
 
 
@@ -695,5 +756,33 @@ public abstract class ATableController {
     }
 
 
+    public void resetToUnfilteredData(){
+        if(data_versions.size()>1){
+            //data_versions.removeLast();
+            HashMap<String, List<Entry>> data_tmp = data_versions.getLast();
+            if (data_tmp.equals(table.getItems())){
+                data_versions.removeLast();
+                data_tmp = data_versions.getLast();
+            }
+            data_versions.removeLast();
+            updateTable(data_tmp);
 
+        }
+    }
+
+    private List<String> getColumnData(TableColumn column){
+
+        List<String> columnData = new ArrayList<>();
+        for (ObservableList item : table.getItems()) {
+            columnData.add((String) column.getCellObservableValue(item).getValue());
+        }
+
+        return columnData;
+    }
+
+
+    public void cleanVersions() {
+
+        data_versions = new LinkedList<>();
+    }
 }

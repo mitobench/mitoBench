@@ -136,7 +136,7 @@ public class GroupController {
             allGroups.clear();
             tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
             tableController.cleanColnames();
-            tableController.cleanTableContent("(Grouping)");
+            tableController.updateTableContent("(Grouping)");
             colname_group=null;
         }
     }
