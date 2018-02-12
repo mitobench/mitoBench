@@ -2,14 +2,18 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
+import analysis.HaplotypeCaller;
 import controller.HGListController;
 import javafx.scene.control.*;
+import org.json.JSONException;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
 import view.dialogues.settings.HGListDisalogue;
 import view.dialogues.settings.PcaPopupDialogue;
+
+import java.io.IOException;
 
 
 /**
@@ -81,10 +85,20 @@ public class AnalysisMenu {
         MenuItem assignHGs = new MenuItem("Calculate haplogroups");
         assignHGs.setId("menuitem_calculate_haplogroups");
         assignHGs.setOnAction(t -> {
-            InformationDialogue HGNotSupportedDialogue = new InformationDialogue("",
-                    "Please use HaploGrep2 to determine Haplogroups.\n" +
-                            "The resulting hsd file can then be uploaded.", "Haplogroup calculation is not supported yet",
-                    "hgCalculationDislogue");
+            HaplotypeCaller haplotypeCaller = new HaplotypeCaller(tableController, logClass);
+            try {
+                haplotypeCaller.call();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            InformationDialogue HGNotSupportedDialogue = new InformationDialogue("",
+//                    "Please use HaploGrep2 to determine Haplogroups.\n" +
+//                            "The resulting hsd file can then be uploaded.", "Haplogroup calculation is not supported yet",
+//                    "hgCalculationDislogue");
 
         });
 
