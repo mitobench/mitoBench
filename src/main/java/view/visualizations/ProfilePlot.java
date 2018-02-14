@@ -13,6 +13,7 @@ import controller.HaplotreeController;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class ProfilePlot extends AChart {
      * @param statsTabpane
      */
     public void create(TableControllerUserBench tableController, HaplotreeController treeController,
-                       ChartController chartController, LogClass logClass, TabPane statsTabpane){
+                       ChartController chartController, LogClass logClass, TabPane statsTabpane, String[] hg_list){
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
         String[] selection_groups;
@@ -63,7 +64,7 @@ public class ProfilePlot extends AChart {
             String[] selection_haplogroups = cols[0];
             selection_groups = new String[]{"All data"};
 
-            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
+            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_list);
 
             data_all = chartController.assignHGsNoGrouping(hgs_summed, selection_haplogroups);
             number_of_elements = new int[]{selection_haplogroups.length};
@@ -73,7 +74,7 @@ public class ProfilePlot extends AChart {
             String[] selection_haplogroups = cols[0];
             selection_groups = removeUndefined(cols[1]);
 
-            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
+            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_list);
             data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
             number_of_elements = chartController.getNumberOfElementsPerCategory(selection_groups);
@@ -84,7 +85,7 @@ public class ProfilePlot extends AChart {
 
 
         // sort list alphabetically
-        List<String> hg_core_curr = chartController.getHg_core_list();
+        List<String> hg_core_curr = Arrays.asList(hg_list);
         java.util.Collections.sort(hg_core_curr);
 
         HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();

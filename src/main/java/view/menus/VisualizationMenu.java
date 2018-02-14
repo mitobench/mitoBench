@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
+import view.dialogues.settings.HGlistProfilePlot;
 import view.dialogues.settings.PieChartSettingsDialogue;
 import view.visualizations.*;
 import view.dialogues.information.InformationDialogue;
@@ -475,8 +476,25 @@ public class VisualizationMenu {
                 if(//tableController.getTableColumnByName("Grouping") != null &&
                       tableController.getTableColumnByName("Haplogroup") != null
                         && tableController.getTable().getItems().size() != 0 ){
-                    initProfilePlot();
-                    profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane);
+
+
+                    HGlistProfilePlot hGlistProfilePlot = new HGlistProfilePlot("Profile plot configuration", logClass, mito);
+                    hGlistProfilePlot.init();
+                    // add dialog to statsTabPane
+                    Tab tab = hGlistProfilePlot.getTab();
+                    mito.getTabpane_visualization().getTabs().add(tab);
+                    mito.getTabpane_visualization().getSelectionModel().select(tab);
+
+                    hGlistProfilePlot.getOkBtn().setOnAction(e -> {
+                        try {
+                            initProfilePlot();
+                            profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHGsForProfilelotVis());
+                        } catch (MalformedURLException e1) {
+                            e1.printStackTrace();
+
+                        }
+                    });
+
 
                 }
                 else if(tableController.getTableColumnByName("Haplogroup") == null && tableController.getTableColumnByName("Grouping") != null){
@@ -513,7 +531,7 @@ public class VisualizationMenu {
                 if(tableController.getTable().getItems().size() != 0 ){
 
                     PieChartSettingsDialogue pieChartSettingsDialogue =
-                            new PieChartSettingsDialogue("Advanced Piechart Settings", logClass);
+                            new PieChartSettingsDialogue("Advanced Piechart Settings", logClass, mito);
 
                     // add dialog to statsTabPane
                     Tab tab = pieChartSettingsDialogue.getTab();

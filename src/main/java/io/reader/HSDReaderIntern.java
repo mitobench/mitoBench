@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class HSDReaderIntern implements IInputData {
 
                 String id = splitGroup[0];
                 String group = splitGroup[2];
-                String quality = Double.parseDouble(splitGroup[3])*100 + "%";
+                String quality = round(Double.parseDouble(splitGroup[3])*100,2) + "%";
                 String polys_not_found = splitGroup[4];
                 String polys_found = splitGroup[5];
                 String polys_remaining = splitGroup[6];
@@ -81,6 +82,19 @@ public class HSDReaderIntern implements IInputData {
 //
 //    }
 
+
+    /**
+     * This method rounds a double value on n digits.
+     * @param value
+     * @param numberOfDigitsAfterDecimalPoint
+     * @return double rounded
+     */
+    public double round(double value, int numberOfDigitsAfterDecimalPoint) {
+        BigDecimal bigDecimal = new BigDecimal(value);
+        bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
+                BigDecimal.ROUND_HALF_EVEN);
+        return bigDecimal.doubleValue();
+    }
 
     @Override
     public HashMap<String, List<Entry>> getCorrespondingData() {

@@ -9,6 +9,7 @@ import io.inputtypes.CategoricInputType;
 import io.reader.HSDInput;
 import io.reader.HSDReaderIntern;
 import io.writer.MultiFastaWriter;
+import org.apache.commons.collections4.bag.SynchronizedSortedBag;
 import org.apache.log4j.Logger;
 import org.json.*;
 import view.table.MTStorage;
@@ -58,6 +59,7 @@ public class HaplotypeCaller {
         try {
             HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
             tableController.updateTable(hsd_reader.getCorrespondingData());
+            Files.delete(new File("haplogroups.hsd").toPath());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (HSDException e) {
@@ -70,7 +72,7 @@ public class HaplotypeCaller {
 
     private void start(String f) throws IOException, InterruptedException {
 
-        String dirpath = System.getProperty("user.dir") +  "/jar/haplogrep-2.2-beta.jar";
+        String dirpath = System.getProperty("user.dir") +  File.separator + "jar"+ File.separator +"haplogrep-2.2-beta.jar";
         System.out.println(dirpath);
         //String dirpath = this.getClass().getResource("/jar/haplogrep-2.1.1.jar").toExternalForm();
         String haplogrep2_jar = dirpath.split(":")[1];
@@ -83,9 +85,12 @@ public class HaplotypeCaller {
         Process process = processBuilder.start();
         process.waitFor();
 
+        while (process.isAlive()){
+            // wait until haplogroups are calculated
+        }
         System.out.println("Haplogroups are determined");
 
-        // parse and delete temporary files
+        //delete temporary fasta file
         Files.delete(new File(f).toPath());
 
         LOG.info("Calculate Haplogroups.");

@@ -53,7 +53,7 @@ public class PcaPopupDialogue extends AHGDialogue {
 
         label = new Label("Please enter comma separated list of haplogroups " +
                 "\naccording to which the haplogroups should be grouped:");
-        default_list = new Label("or use the default list:");
+        default_list = new Label("or use the example list:");
 
         textField_hglist = new TextField();
 
@@ -70,7 +70,7 @@ public class PcaPopupDialogue extends AHGDialogue {
         checkbox_use_grouping_for_colors = new CheckBox("Assign one colour to more than one group");
         addCheckboxColoringListener(checkbox_use_grouping_for_colors);
 
-        default_list_checkbox = new CheckBox("Use default list");
+        default_list_checkbox = new CheckBox("Use example list");
         default_list_checkbox.setId("checkbox_hg_default_selection");
         default_list_checkbox.setSelected(false);
 

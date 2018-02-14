@@ -2,6 +2,7 @@ package view.dialogues.settings;
 
 import Logging.LogClass;
 import javafx.scene.control.*;
+import view.MitoBenchWindow;
 
 public class PieChartSettingsDialogue  extends ATabpaneDialogue {
 
@@ -11,19 +12,20 @@ public class PieChartSettingsDialogue  extends ATabpaneDialogue {
     private CheckBox default_list_checkbox;
 
 
-    public PieChartSettingsDialogue(String title, LogClass logClass) {
+    public PieChartSettingsDialogue(String title, LogClass logClass, MitoBenchWindow mito) {
         super(title, logClass);
         dialogGrid.setId("piechart_popup");
 
-        addComponents();
+        addComponents(mito);
     }
 
 
     /**
      * This method adds all components to dialogue.
      *
+     * @param mito
      */
-    private void addComponents(){
+    private void addComponents(MitoBenchWindow mito){
         applyBtn = new Button("Apply");
         applyBtn.setId("stackedBarApplyBtn");
 
@@ -32,6 +34,15 @@ public class PieChartSettingsDialogue  extends ATabpaneDialogue {
         Label default_list = new Label("or use the default list:");
 
         textField = new TextField();
+
+        if(mito.getChartController().getCustomHGList()!=null) {
+            if (mito.getChartController().getCustomHGList().length != 0) {
+                String hgs = "";
+                for(String s : mito.getChartController().getCustomHGList())
+                    hgs += s + ",";
+                textField.setText(hgs.substring(0, hgs.length()-1));
+            }
+        }
 
 
         default_list_checkbox = new CheckBox("Use default list");
