@@ -100,7 +100,7 @@ public class MapView extends StackPane {
                 String location  = location_col.getCellObservableValue(item).getValue().toString();
 
                 if(!location.equals("Undefined")){
-                    String[] loc = location.split(",");
+                    String[] loc = location.split(";");
                     if(loc.length==2){
                         double latitude = Double.parseDouble(loc[0]);
                         double longitude = Double.parseDouble(loc[1]);

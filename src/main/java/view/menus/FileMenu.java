@@ -335,7 +335,17 @@ public class FileMenu {
 
             if (absolutePath.endsWith(".tsv")) {
                 try {
-                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG);
+                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, "\t");
+                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
+                    tableControllerUserBench.updateTable(data_map);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (absolutePath.endsWith(".csv")) {
+                try {
+                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, ",");
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
                 } catch (IOException e) {

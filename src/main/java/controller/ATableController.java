@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import io.IData;
 import org.apache.log4j.Logger;
-import org.apache.poi.util.SystemOutLogger;
 import view.menus.GroupMenu;
 import view.table.DataTable;
 
@@ -40,6 +39,7 @@ public abstract class ATableController {
     protected GroupMenu groupMenu;
     protected LogClass logClass;
     protected Deque<HashMap<String, List<Entry>>> data_versions = new LinkedList();
+
 
 
     public ATableController(LogClass logClass){
@@ -76,7 +76,6 @@ public abstract class ATableController {
 
         // update Entry structure
         updateEntryList(input);
-
 
         // add new values to existing one (DataTable)
         dataTable.update(input);
@@ -778,6 +777,18 @@ public abstract class ATableController {
         }
 
         return columnData;
+    }
+
+    public HashMap<String, String> getHeadertypes(){
+        HashMap<String, String> res = new HashMap<>();
+        for(String key : table_content.keySet()){
+            List<Entry> e_list = table_content.get(key);
+            for(Entry e : e_list){
+                res.put(e.getIdentifier(), e.getType().getTypeInformation());
+            }
+        }
+
+        return res;
     }
 
 

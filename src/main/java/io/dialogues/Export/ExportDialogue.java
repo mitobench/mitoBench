@@ -67,6 +67,7 @@ public class ExportDialogue extends Application {
         ButtonType arp_button = new ButtonType("ARP");
         ButtonType beast_button = new ButtonType("BEAST");
         ButtonType csv_button = new ButtonType("CSV");
+        ButtonType tsv_button = new ButtonType("TSV");
         ButtonType xlsx_button = new ButtonType("XLSX");
         ButtonType mito_button = new ButtonType("MITOPROJ");
         ButtonType nexus_button = new ButtonType("NEXUS");
@@ -78,7 +79,7 @@ public class ExportDialogue extends Application {
         List<String> options = this.columnsInTable;
 
 
-        alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, csv_button, xlsx_button, mito_button,
+        alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, csv_button, tsv_button, xlsx_button, mito_button,
                 nexus_button, phylip_button, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -129,7 +130,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    CSVWriter csvWriter = new CSVWriter(tableController, LOG, dataToExport);
+                    GenericWriter csvWriter = new GenericWriter(tableController, LOG, dataToExport, ",");
                     csvWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception e) {
@@ -137,7 +138,22 @@ public class ExportDialogue extends Application {
                 }
             }
             //XLSX output
-        } else if (result.get() == xlsx_button) {
+        } else if (result.get() == tsv_button) {
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Tab Separated Values (*.tsv)", "*.tsv");
+            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+            saveAsDialogue.start(new Stage());
+            if (saveAsDialogue.getOutFile() != null) {
+                String outFileDB = saveAsDialogue.getOutFile();
+                try {
+                    GenericWriter csvWriter = new GenericWriter(tableController, LOG, dataToExport, "\t");
+                    csvWriter.writeData(outFileDB, tableController);
+                    LOG.info("Export data into TSV format. File: " + outFileDB);
+                } catch (Exception e) {
+                    System.err.println("Caught Exception: " + e.getMessage());
+                }
+            }
+            //XLSX output
+        }else if (result.get() == xlsx_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Microsoft Excel (*.xlsx)", "*.xlsx");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
