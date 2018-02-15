@@ -12,6 +12,7 @@ import io.writer.MultiFastaWriter;
 import org.apache.commons.collections4.bag.SynchronizedSortedBag;
 import org.apache.log4j.Logger;
 import org.json.*;
+import view.MitoBenchWindow;
 import view.table.MTStorage;
 import controller.TableControllerUserBench;
 
@@ -49,13 +50,10 @@ public class HaplotypeCaller {
 
         start(file);
 
-        update();
-
-
     }
 
 
-    private void update() {
+    public void update() {
         try {
             HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
             tableController.updateTable(hsd_reader.getCorrespondingData());
@@ -77,7 +75,8 @@ public class HaplotypeCaller {
         //String dirpath = this.getClass().getResource("/jar/haplogrep-2.1.1.jar").toExternalForm();
         String haplogrep2_jar = dirpath.split(":")[1];
         String[] command = new String[] { "java", "-jar", haplogrep2_jar,
-                "--format fasta",
+                "--format",
+                "fasta",
                 "--in",f,
                 "--out", "haplogroups.hsd",
                 "--phylotree","17"};

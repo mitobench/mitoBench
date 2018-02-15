@@ -2,6 +2,7 @@ package view;
 
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
+import analysis.ProgressBarHandler;
 import controller.*;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -19,6 +20,7 @@ import org.xml.sax.SAXException;
 import view.menus.*;
 import view.tree.TreeView;
 
+import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
@@ -50,6 +52,7 @@ public class MitoBenchWindow extends Application{
     private boolean anotherProjectLoaded;
     private FileMenu fileMenu;
     private ChartController chartController;
+    private ProgressBarHandler progressBarhandler;
 
 
     @Override
@@ -136,7 +139,6 @@ public class MitoBenchWindow extends Application{
         pane_root.setCenter(borderpane_center);
         pane_root.setTop(getMenuPane());
 
-
         // add drag and drop files to data table view
         tableControllerUserBench.addDragAndDropFiles(this);
 
@@ -148,6 +150,9 @@ public class MitoBenchWindow extends Application{
     {
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menuBar");
+
+        ProgressBar bar = new ProgressBar();
+        bar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
 
 
         EditMenu editMenu = new EditMenu(this);
@@ -168,6 +173,7 @@ public class MitoBenchWindow extends Application{
                                   graphicsMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 
+
         tableControllerUserBench.addGroupmenu(groupMenu);
         tableControllerDB.addGroupmenu(groupMenu);
         return menuBar;
@@ -184,6 +190,7 @@ public class MitoBenchWindow extends Application{
         return splitpane_center;
 
     }
+
 
     /**
      *
@@ -213,23 +220,26 @@ public class MitoBenchWindow extends Application{
         String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " rows are selected";
         info_selected_items.setText(info_text);
 
-        BorderPane topbar = new BorderPane();
-        enableDBBtn = new Button("Enable DB table");
-        enableDBBtn.setVisible(false);
-        tableControllerUserBench.addButtonFunctionality(enableDBBtn, this);
-        topbar.setLeft(label);
-        topbar.setRight(enableDBBtn);
+        HBox hbox = new HBox();
+        Region filler = new Region(); HBox.setHgrow(filler, Priority.ALWAYS);
+
+        progressBarhandler = new ProgressBarHandler();
+        progressBarhandler.create();
+
+        hbox.getChildren().addAll(label, filler, progressBarhandler.getProgressBar());
 
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTablePane");
         pane_table_userBench = new VBox();
         pane_table_userBench.setSpacing(10);
         pane_table_userBench.setPadding(new Insets(20, 10, 10, 10));
-        pane_table_userBench.getChildren().addAll(topbar, tableControllerUserBench.getTable(), info_selected_items);
+        pane_table_userBench.getChildren().addAll(hbox, tableControllerUserBench.getTable(), info_selected_items);
         pane_table.setCenter(pane_table_userBench);
 
         return pane_table;
     }
+
+
 
 
     public void splitTablePane(TableControllerDB tableControllerDB){
@@ -409,5 +419,11 @@ public class MitoBenchWindow extends Application{
         return chartController;
     }
 
+    public ProgressBarHandler getProgressBarhandler() {
+        return progressBarhandler;
+    }
 
+    public void setProgressBarhandler(ProgressBarHandler progressBarhandler) {
+        this.progressBarhandler = progressBarhandler;
+    }
 }

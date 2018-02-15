@@ -2,8 +2,12 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
+import analysis.FstCalculationRunner;
 import analysis.HaplotypeCaller;
 import controller.HGListController;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import org.json.JSONException;
 import view.MitoBenchWindow;
@@ -65,7 +69,7 @@ public class AnalysisMenu {
             if(tableController.getGroupController().isGroupingExists()) {
                 FstSettingsDialogue fstSettingsDialogue =
                             new FstSettingsDialogue("Fst Calculation Settings", logClass, mito);
-                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue, tableController.getGroupController().getGroupnames());
+                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue, mito);
                 mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
                 mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
 
@@ -86,19 +90,21 @@ public class AnalysisMenu {
         assignHGs.setId("menuitem_calculate_haplogroups");
         assignHGs.setOnAction(t -> {
             HaplotypeCaller haplotypeCaller = new HaplotypeCaller(tableController, logClass);
-            try {
-                haplotypeCaller.call();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-//            InformationDialogue HGNotSupportedDialogue = new InformationDialogue("",
-//                    "Please use HaploGrep2 to determine Haplogroups.\n" +
-//                            "The resulting hsd file can then be uploaded.", "Haplogroup calculation is not supported yet",
-//                    "hgCalculationDislogue");
+
+            Task task = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    haplotypeCaller.call();
+                    return true;
+                }
+            };
+            mito.getProgressBarhandler().activate(task.progressProperty());
+            task.setOnSucceeded((EventHandler<Event>) event -> {
+                haplotypeCaller.update();
+                mito.getProgressBarhandler().stop();
+            });
+
+            new Thread(task).start();
 
         });
 
