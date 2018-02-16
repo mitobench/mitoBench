@@ -61,7 +61,7 @@ public class AddDataToColumnDialog extends APopupDialogue{
                 // add elements to group
 
                 //groupController.addElements(groupItems, comboBox.getValue().toString());
-                tableController.updateTable(tableController.createNewEntryList(entry_field.getText(), comboBox.getValue().toString()));
+                tableController.updateTable(tableController.createNewEntryList(entry_field.getText(), comboBox.getValue().toString(), false));
                 close();
 
 

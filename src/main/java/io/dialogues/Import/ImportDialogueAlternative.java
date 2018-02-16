@@ -1,5 +1,6 @@
 package io.dialogues.Import;
 
+import controller.FileReaderController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -21,10 +22,10 @@ public class ImportDialogueAlternative {
     private VBox box_background;
     private TextField textField_filepath;
     private Button openBtn;
-    private FileMenu fileMenu;
+    private FileReaderController fileReaderController;
 
-    public ImportDialogueAlternative(FileMenu fm){
-        fileMenu = fm;
+    public ImportDialogueAlternative(FileReaderController fc){
+        fileReaderController = fc;
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(new Stage());
@@ -48,7 +49,7 @@ public class ImportDialogueAlternative {
         openBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                fileMenu.openFile(new File(textField_filepath.getText()));
+                fileReaderController.openFile(new File(textField_filepath.getText()));
                 stage.close();
             }
         });

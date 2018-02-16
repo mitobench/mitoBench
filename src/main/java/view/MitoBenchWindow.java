@@ -10,9 +10,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -23,6 +25,7 @@ import view.tree.TreeView;
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.net.URL;
 
 
 /**
@@ -53,6 +56,7 @@ public class MitoBenchWindow extends Application{
     private FileMenu fileMenu;
     private ChartController chartController;
     private ProgressBarHandler progressBarhandler;
+    private FileReaderController fileReaderController;
 
 
     @Override
@@ -94,6 +98,8 @@ public class MitoBenchWindow extends Application{
         primaryStage.setMaximized(true);
         primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
 
+
+
         // bind width and height to scene to enable resizing
         pane_root.prefHeightProperty().bind(scene.heightProperty());
         pane_root.prefWidthProperty().bind(scene.widthProperty());
@@ -121,6 +127,8 @@ public class MitoBenchWindow extends Application{
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerDB.getTable().prefWidthProperty().bind(scene.widthProperty());
 
+        fileReaderController = new FileReaderController(tableControllerUserBench, logClass, this);
+
         // initialize haplotree with search function
         BorderPane borderpane_center = new BorderPane();
 
@@ -137,13 +145,29 @@ public class MitoBenchWindow extends Application{
 
         // set all components to main window
         pane_root.setCenter(borderpane_center);
-        pane_root.setTop(getMenuPane());
+        pane_root.setTop(getTopPane());
 
         // add drag and drop files to data table view
         tableControllerUserBench.addDragAndDropFiles(this);
 
+
+
         primaryStage.show();
 
+    }
+
+    private VBox getTopPane() throws Exception {
+        VBox topPane = new VBox();
+
+        topPane.getChildren().addAll(getMenuPane(), getToolbarpane());
+
+        return topPane;
+
+    }
+
+    private ToolBar getToolbarpane() {
+        Toolbarpane toolBar = new Toolbarpane(fileReaderController, this);
+        return toolBar;
     }
 
     private MenuBar getMenuPane() throws Exception
@@ -153,7 +177,6 @@ public class MitoBenchWindow extends Application{
 
         ProgressBar bar = new ProgressBar();
         bar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-
 
         EditMenu editMenu = new EditMenu(this);
         GroupMenu groupMenu = new GroupMenu(this);
@@ -425,5 +448,9 @@ public class MitoBenchWindow extends Application{
 
     public void setProgressBarhandler(ProgressBarHandler progressBarhandler) {
         this.progressBarhandler = progressBarhandler;
+    }
+
+    public FileReaderController getFileReaderController() {
+        return fileReaderController;
     }
 }

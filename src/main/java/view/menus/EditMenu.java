@@ -66,7 +66,7 @@ public class EditMenu {
         });
 
 
-        Menu unfilterData = new Menu("Unfilter data...");
+        MenuItem unfilterData = new MenuItem("Redo...");
         unfilterData.setId("unfilterItem");
         unfilterData.setOnAction(t -> {
             mito.getTableControllerUserBench().resetToUnfilteredData();

@@ -124,6 +124,7 @@ public abstract class ATableController {
 
     }
 
+
     private void updateVersion() {
 
         if(data_versions.size()>=4){
@@ -137,6 +138,7 @@ public abstract class ATableController {
 
 
     protected void updateEntryList(HashMap<String, List<Entry>> input_new) {
+
 
         for(String key_new : input_new.keySet()){
             if(table_content.containsKey(key_new)){
@@ -274,20 +276,43 @@ public abstract class ATableController {
      * create new table entry for each selected item to easily update tableview
      * @return
      */
-    public HashMap<String, List<Entry>> createNewEntryList(String gName, String colName){
+    public HashMap<String, List<Entry>> createNewEntryList(String textfield, String colName, boolean getAllRows){
+        if(textfield.equals(""))
+            textfield="Undefined";
 
         HashMap<String, List<Entry>> entries = new HashMap<>();
-        ObservableList<ObservableList> selection = getSelectedRows();
+        ObservableList<ObservableList> selection;
+        if(getAllRows){
+            selection = table.getItems();
 
-        for(int i = 0; i < selection.size(); i++){
-            String rowName = selection.get(i).get(getColIndex("ID")).toString();
-            List<Entry> eList = new ArrayList<>();
-            Entry e = new Entry(colName, new CategoricInputType("String"), new GenericInputData(gName));
-            eList.add(e);
-            entries.put(rowName, eList);
+            for(int i = 0; i < selection.size(); i++){
+                String rowName = selection.get(i).get(getColIndex("ID")).toString();
+                List<Entry> eList = new ArrayList<>();
+                Entry e = new Entry(colName, new CategoricInputType("String"), new GenericInputData(textfield));
+                eList.add(e);
+                entries.put(rowName, eList);
+            }
+
+            return entries;
+
+        } else {
+            selection = getSelectedRows();
+
+            for(int i = 0; i < selection.size(); i++){
+                String rowName = selection.get(i).get(getColIndex("ID")).toString();
+                List<Entry> e_list = table_content.get(rowName);
+                for(Entry e : e_list){
+                    if(e.getIdentifier().equals(colName)){
+                        Entry e_new = new Entry(e.getIdentifier(), e.getType(), new GenericInputData(textfield));
+                        table_content.remove(e);
+                        e_list.remove(e);
+                        e_list.add(e_new);
+                        table_content.put(rowName, e_list);
+                    }
+                }
+            }
+            return table_content;
         }
-
-        return entries;
     }
 
 
@@ -795,5 +820,21 @@ public abstract class ATableController {
     public void cleanVersions() {
 
         data_versions = new LinkedList<>();
+    }
+
+    public void copyColumn(String s, String newColname) {
+        for(String key : table_content.keySet()){
+            List<Entry> e_list = table_content.get(key);
+            Entry e_copy=null;
+            for(Entry e : e_list){
+                if(e.getIdentifier().equals(s)){
+                     e_copy = new Entry(newColname, e.getType(), e.getData());
+                }
+            }
+            e_list.add(e_copy);
+        }
+
+        updateTable(table_content);
+
     }
 }

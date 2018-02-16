@@ -239,11 +239,10 @@ public class VisualizationMenu {
     private void initMap(){
         LOG.info("Visualize data: Visualize all samples on map");
 
-        GeographicalMapController mapViewController = null;
         GeographicalMapViz geographicalMapViz = new GeographicalMapViz();
         try {
 
-            mapViewController = new GeographicalMapController(
+            GeographicalMapController mapViewController = new GeographicalMapController(
                     mito,
                     groupController,
                     geographicalMapViz

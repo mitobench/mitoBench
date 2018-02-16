@@ -11,6 +11,7 @@ import javafx.scene.control.MenuItem;
 import view.MitoBenchWindow;
 import view.dialogues.settings.AddDataToColumnDialog;
 import view.dialogues.settings.AddNewColumnDialogue;
+import view.dialogues.settings.CopyColumnDialogue;
 import view.dialogues.settings.DeleteColumnDialogue;
 
 
@@ -58,8 +59,15 @@ public class TableControllerUserBench extends ATableController {
 
         });
 
+        final MenuItem copyColumn = new MenuItem("Copy column");
+        copyColumn.setOnAction(event -> {
+            CopyColumnDialogue deleteColumnDialogue = new CopyColumnDialogue("Copy column", controller, logClass);
 
-        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, deleteColumn);
+        });
+
+
+
+        menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, copyColumn,  deleteColumn);
         table.setContextMenu(menu);
 
 
