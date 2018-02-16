@@ -31,7 +31,7 @@ public class BarPlotHaplo extends AChart {
 
 
     public BarPlotHaplo(String title, String ylabel, Stage stage,
-                        TableControllerUserBench tc, TabPane tabPane, LogClass logClass) throws MalformedURLException {
+                        TableControllerUserBench tc, TabPane tabPane, LogClass logClass) {
 
         super("", ylabel, logClass);
 

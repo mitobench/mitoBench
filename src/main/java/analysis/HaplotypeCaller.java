@@ -72,7 +72,6 @@ public class HaplotypeCaller {
 
         String dirpath = System.getProperty("user.dir") +  File.separator + "jar"+ File.separator +"haplogrep-2.2-beta.jar";
         System.out.println(dirpath);
-        //String dirpath = this.getClass().getResource("/jar/haplogrep-2.1.1.jar").toExternalForm();
         String haplogrep2_jar = dirpath.split(":")[1];
         String[] command = new String[] { "java", "-jar", haplogrep2_jar,
                 "--format",

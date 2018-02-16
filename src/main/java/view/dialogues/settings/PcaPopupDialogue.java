@@ -5,6 +5,9 @@ import analysis.PCA;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -33,6 +36,8 @@ public class PcaPopupDialogue extends AHGDialogue {
     private List<CheckComboBox> checkComboBox_with_groupmembers = new ArrayList<>();
     private int id;
     private Button btn_del;
+    private PCA pca_analysis;
+    private String[] hg_list_trimmed;
 
     public PcaPopupDialogue(String title, LogClass logClass, int pcaID) {
 
@@ -105,59 +110,74 @@ public class PcaPopupDialogue extends AHGDialogue {
 
             } else {
 
-                // calculate hg count statistics
-                String[] hg_list;
-                if(default_list_checkbox.isSelected()){
-                    hg_list = haploStatistics.getChartController().getCoreHGs();
-                } else {
-                    hg_list = textField_hglist.getText().split(",");
-                }
-                String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
-                haploStatistics.count(hg_list_trimmed);
 
-                TableView table = haploStatistics.writeToTable();
+                Task task1 = new Task() {
+                    @Override
+                    protected Object call() {
+                        // calculate hg count statistics
+                        String[] hg_list;
+                        if(default_list_checkbox.isSelected()){
+                            hg_list = haploStatistics.getChartController().getCoreHGs();
+                        } else {
+                            hg_list = textField_hglist.getText().split(",");
+                        }
+                        hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+                        haploStatistics.count(hg_list_trimmed);
 
-                statsTabPane.getTabs().remove(getTab());
+                        // calculate PCA
+                        pca_analysis = new PCA(mito.getChartController());
+                        pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
 
-                Tab tab = new Tab();
-                tab.setId("tab_statistics_" + id);
-                tab.setText("Count statistics (pca " + id + ")");
-                tab.setContent(table);
-                statsTabPane.getTabs().add(tab);
-                statsTabPane.getSelectionModel().select(tab);
+                        parseGroups();
 
-                LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
+                        return true;
+                    }
+                };
+                mito.getProgressBarhandler().activate(task1.progressProperty());
+                task1.setOnSucceeded((EventHandler<Event>) event -> {
+                    TableView table = haploStatistics.writeToTable();
+
+                    statsTabPane.getTabs().remove(getTab());
+
+                    Tab tab = new Tab();
+                    tab.setId("tab_statistics_" + id);
+                    tab.setText("Count statistics (pca " + id + ")");
+                    tab.setContent(table);
+                    statsTabPane.getTabs().add(tab);
+                    statsTabPane.getSelectionModel().select(tab);
+
+                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
+                    double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
+                    pca_analysis.plot(
+                            result_pca,
+                            mito.getPrimaryStage(),
+                            logClass,
+                            mito.getTabpane_statistics(),
+                            group_members);
+
+                    Tab tab_pca = new Tab("PCA (pca " + id + ")");
+                    tab_pca.setId("tab_pca_plot_" + id);
+                    tab_pca.setContent(pca_analysis.getPca_plot().getSc());
+                    mito.getTabpane_visualization().getTabs().add(tab_pca);
+                    mito.getTabpane_visualization().getSelectionModel().select(tab_pca);
+
+                    LOG.info("Calculate PCA");
 
 
-                // calculate PCA
-                PCA pca_analysis = new PCA(mito.getChartController());
-                pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
-                double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
-                parseGroups();
-                pca_analysis.plot(
-                        result_pca,
-                        mito.getPrimaryStage(),
-                        logClass,
-                        mito.getTabpane_statistics(),
-                        group_members);
+                    mito.getProgressBarhandler().stop();
+                });
 
-                Tab tab_pca = new Tab("PCA (pca " + id + ")");
-                tab_pca.setId("tab_pca_plot_" + id);
-                tab_pca.setContent(pca_analysis.getPca_plot().getSc());
-                mito.getTabpane_visualization().getTabs().add(tab_pca);
-                mito.getTabpane_visualization().getSelectionModel().select(tab_pca);
+                new Thread(task1).start();
 
-                LOG.info("Calculate PCA");
             }
-
         });
 
-//        Tooltip tp = new Tooltip("Default list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
-//        default_list_checkbox.setOnMouseEntered(event -> {
-//            Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
-//            tp.show(default_list_checkbox, p.getX(), p.getY());
-//        });
-//        default_list_checkbox.setOnMouseExited(event -> tp.hide());
+        Tooltip tp = new Tooltip("Example list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
+        default_list_checkbox.setOnMouseEntered(event -> {
+            Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
+            tp.show(default_list_checkbox, p.getX(), p.getY());
+        });
+        default_list_checkbox.setOnMouseExited(event -> tp.hide());
     }
 
 

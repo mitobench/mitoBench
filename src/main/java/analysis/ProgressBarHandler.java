@@ -17,8 +17,8 @@ public class ProgressBarHandler {
     }
 
     public void activate(ObservableValue task){
-        progressBar.setProgress(0);
         progressBar.progressProperty().unbind();
+        progressBar.setProgress(0);
         progressBar.progressProperty().bind(task);
 
     }
