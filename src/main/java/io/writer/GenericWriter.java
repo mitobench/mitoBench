@@ -76,7 +76,7 @@ public class GenericWriter implements IOutputData {
                 headertypes += colname_to_type.get(colname) + delimiter;
             }
 
-            writer.write("#" + headertypes.substring(0, headertypes.length()-2) + "\n");
+            writer.write("#" + headertypes.substring(0, headertypes.length()-1) + "\n");
 
             // write view.data
             for (ObservableList entry :  this.data) {

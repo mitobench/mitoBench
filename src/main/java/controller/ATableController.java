@@ -813,6 +813,7 @@ public abstract class ATableController {
             }
         }
 
+        res.put("ID", "String");
         return res;
     }
 
