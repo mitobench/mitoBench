@@ -1,7 +1,8 @@
+.. _templategenerator-label:
+
 TemplateGenerator
 =================
 
-.. _templategenerator-label:
 
 How to prepare your data for database import
 ---------------------------------------------
