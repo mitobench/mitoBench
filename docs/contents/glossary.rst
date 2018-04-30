@@ -88,6 +88,7 @@ Descent system.
 Social norms that define, where the couple lives after marriage
 
 **subsistence**
+The action or fact of maintaining or supporting oneself, especially at a minimal level.
 
 **clan**
 Clan to which the individual corresponds.
@@ -113,13 +114,10 @@ Publication
 digital object identifier of the publication
 
 **author**
-	"First author of the paper, following the PubMed citation style. Surname
- followed by first capital letter of given name(s), separated by space. Several given names are not separated.
-
-Full list of authors can be accessed via doi or title/date of the publication"
+First author of the paper, following the PubMed citation style. Surname followed by first capital letter of given name(s), separated by space. Several given names are not separated. Full list of authors can be accessed via doi or title/date of the publication.
 
 **publication_date**
-publication year / date of submission
+publication year / date of submission.
 
 **title**
 Title of the publication.
@@ -134,7 +132,7 @@ What kind of publication is it?
 published or not?
 
 **publication_comments**
-can link information to a newer version
+can link information to a newer version.
 
 
 Technical Info
@@ -142,7 +140,7 @@ Technical Info
 
 **mt_sequence**
 Sequence itself, given as separate fasta file, or included in the excel upload file.
-The sequence has to follow the GenBank submission guidelines."
+The sequence has to follow the GenBank submission guidelines.
 
 **percentage of N's**
 Percentage of the genome reconstructed
