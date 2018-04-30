@@ -248,7 +248,7 @@ User Info
 ----------
 
 **user_alias**
-Alias given by the system (Set manually)
+Alias given by the system (Set automatically)
 
 **user_first_name**
 First/given name of user
