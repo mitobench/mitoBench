@@ -28,39 +28,54 @@ public class RadioCarbonData implements IData {
 
 
     private void parseC14Information(String toParseThis) {
-        //ignore anything called "cal", "CAL" or similar
-        String removed_cal = toParseThis.replaceAll("cal|CAL", "").trim();
-        //check for AD/BC information
-        if ((removed_cal.contains("BC") && removed_cal.contains("AD")) | (removed_cal.contains("ad") && removed_cal.contains("bc"))) { //Special case, we have -BC and +AD dates here
-            String removed_adbc = removed_cal.replace("AD", "").replace("ad", "").replace("BC", "").replace("bc", "").trim().replaceAll(" ", "");
-            String[] split = removed_adbc.split("-");//cal BC 44-cal AD 16
-            lower_limit = -Integer.parseInt(split[0].trim());
-            upper_limit = Integer.parseInt(split[1].trim());
-            this.average = Math.abs(lower_limit - upper_limit) / 2 + lower_limit;
-        } else if (removed_cal.contains("AD") | removed_cal.contains("ad")) {
-            String removed_ad = removed_cal.replace("AD", "").replace("ad", "").trim();
-            String[] split = removed_ad.split("-");
-            try {
-                if(split.length==1){
-                    upper_limit = Integer.parseInt(split[0].trim());
-                    this.average = upper_limit;
-                } else {
-                    lower_limit = Integer.parseInt(split[0].trim());
-                    upper_limit = Integer.parseInt(split[1].trim());
-                    this.average = lower_limit + ((upper_limit - lower_limit) / 2);
+        // check if date is calibrated or not
+        if(toParseThis.contains("+/-")){
+            // parse uncalibrated date
+            String year = toParseThis.split("\\+")[0];
+            String interval = toParseThis.split("-")[1];
+            // calculate year BC / AD
+            int year_tmp = 1950 - Integer.parseInt(year);
+
+            lower_limit = year_tmp - Integer.parseInt(interval);
+            upper_limit = year_tmp + Integer.parseInt(interval);
+            average = year_tmp;
+
+
+        } else { // parse calibrated date
+            //ignore anything called "cal", "CAL" or similar
+            String removed_cal = toParseThis.replaceAll("cal|CAL", "").trim();
+            //check for AD/BC information
+            if ((removed_cal.contains("BC") && removed_cal.contains("AD")) | (removed_cal.contains("ad") && removed_cal.contains("bc"))) { //Special case, we have -BC and +AD dates here
+                String removed_adbc = removed_cal.replace("AD", "").replace("ad", "").replace("BC", "").replace("bc", "").trim().replaceAll(" ", "");
+                String[] split = removed_adbc.split("-");//cal BC 44-cal AD 16
+                lower_limit = -Integer.parseInt(split[0].trim());
+                upper_limit = Integer.parseInt(split[1].trim());
+                this.average = Math.abs(lower_limit - upper_limit) / 2 + lower_limit;
+            } else if (removed_cal.contains("AD") | removed_cal.contains("ad")) {
+                String removed_ad = removed_cal.replace("AD", "").replace("ad", "").trim();
+                String[] split = removed_ad.split("-");
+                try {
+                    if (split.length == 1) {
+                        upper_limit = Integer.parseInt(split[0].trim());
+                        this.average = upper_limit;
+                    } else {
+                        lower_limit = Integer.parseInt(split[0].trim());
+                        upper_limit = Integer.parseInt(split[1].trim());
+                        this.average = lower_limit + ((upper_limit - lower_limit) / 2);
+                    }
+
+
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
+            } else if (removed_cal.contains("BC") | removed_cal.contains("bc")) {
+                String removed_bc = removed_cal.replace("BC", "").replace("bc", "").trim();
+                String[] split = removed_bc.split("-");
 
-
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
+                lower_limit = -Integer.parseInt(split[0].trim());
+                upper_limit = -Integer.parseInt(split[1].trim());
+                this.average = lower_limit + (Math.abs(lower_limit) - Math.abs(upper_limit)) / 2;
             }
-        } else if (removed_cal.contains("BC") | removed_cal.contains("bc")) {
-            String removed_bc = removed_cal.replace("BC", "").replace("bc", "").trim();
-            String[] split = removed_bc.split("-");
-
-            lower_limit = -Integer.parseInt(split[0].trim());
-            upper_limit = -Integer.parseInt(split[1].trim());
-            this.average = lower_limit + (Math.abs(lower_limit) - Math.abs(upper_limit)) / 2;
         }
     }
 

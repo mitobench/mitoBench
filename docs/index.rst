@@ -40,6 +40,10 @@ This is the main mitoBench documentation, where you can find information about t
    contents/visualization  
 
    contents/citations
+   
+   contents/mitoDB
+   
+   contents/TemplateGenerator
 
 
 

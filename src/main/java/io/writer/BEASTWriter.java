@@ -79,7 +79,7 @@ public class BEASTWriter implements IOutputData {
     private HashMap<FastaEntry, String> getSequenceData() {
         HashMap<FastaEntry, String> list = new HashMap<>();
         TableColumn tbclm_id = tableController.getTableColumnByName("ID");
-        TableColumn tbclm_c14 = tableController.getTableColumnByName("C14-Date");
+        TableColumn tbclm_c14 = tableController.getTableColumnByName("C14");
         // write view.data
 
         if(tbclm_c14!=null){
@@ -107,7 +107,7 @@ public class BEASTWriter implements IOutputData {
         if(!c14data.equals("")){
             if (!c14data.equals("Undefined")) {
                 //tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
-                tmp = "_" + Math.abs(1950 - Double.parseDouble(c14data)); // years before present
+                tmp = "_" + Math.abs(2018 - Double.parseDouble(c14data)); // years before present
             }
 
             return tmp;
