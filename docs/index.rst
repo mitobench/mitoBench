@@ -41,6 +41,8 @@ This is the main mitoBench documentation, where you can find information about t
 
    contents/citations
 
+   contents/glossary
+
 
 
 Indices and tables
