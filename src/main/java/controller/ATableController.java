@@ -89,6 +89,7 @@ public abstract class ATableController {
         table.getColumns().removeAll(table.getColumns());
 
         // define column order
+
         Set<String> cols = dataTable.getDataTable().keySet();
         for(String s : cols) {
             if(!curr_colnames.contains(s.trim()))
@@ -182,16 +183,28 @@ public abstract class ATableController {
             curr_colnames = new ArrayList<>(getCurrentColumnNames());
         }
 
-        // set column order (ID -> MT Sequence -> Others)
+        // set default column order (ID -> Haplogroup -> Population -> Geo location (Sample origin) --> others)
         col_names_sorted = new ArrayList<>();
         if(curr_colnames.contains("ID")){
             col_names_sorted.add("ID");
             curr_colnames.remove("ID");
         }
-        if(curr_colnames.contains("MTSequence")){
-            col_names_sorted.add("MTSequence");
-            curr_colnames.remove("MTSequence");
+
+        if(curr_colnames.contains("Haplogroup")){
+            col_names_sorted.add("Haplogroup");
+            curr_colnames.remove("Haplogroup");
         }
+
+        if(curr_colnames.contains("Population")){
+            col_names_sorted.add("Population");
+            curr_colnames.remove("Population");
+        }
+
+        if(curr_colnames.contains("Sample origin latitude")){
+            col_names_sorted.add("Location");
+            curr_colnames.remove("Location");
+        }
+
         Collections.sort(curr_colnames);
         col_names_sorted.addAll(curr_colnames);
 
