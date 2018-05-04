@@ -15,7 +15,6 @@ import view.visualizations.GeographicalMapViz;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 
 /**
  *
@@ -27,10 +26,11 @@ import java.text.DecimalFormat;
 public class GeographicalMapController {
 
     private final TableColumn id_col;
-    private final TableColumn location_col;
+    private final TableColumn sampling_latitude_col;
     private final ObservableList items;
     private final MapView map;
     private final TableColumn grouping_col;
+    private final TableColumn sampling_longitude_col;
     private TableControllerUserBench tableControllerUserBench;
 
 
@@ -43,12 +43,13 @@ public class GeographicalMapController {
 
         grouping_col = tableControllerUserBench.getTableColumnByName("Grouping");
         id_col = tableControllerUserBench.getTableColumnByName("ID");
-        location_col = tableControllerUserBench.getTableColumnByName("Location");
+        sampling_latitude_col = tableControllerUserBench.getTableColumnByName("Latitude (Sampling)");
+        sampling_longitude_col = tableControllerUserBench.getTableColumnByName("Longitude (Sampling)");
         items = tableControllerUserBench.getSelectedRows();
 
 
 
-        map = new MapView(groupController, tableControllerUserBench, location_col, items, id_col, grouping_col, geographicalMapViz.getMapBasicPane());
+        map = new MapView(groupController, tableControllerUserBench, sampling_latitude_col, sampling_longitude_col, items, id_col, grouping_col, geographicalMapViz.getMapBasicPane());
         geographicalMapViz.setCenter(map);
 
 

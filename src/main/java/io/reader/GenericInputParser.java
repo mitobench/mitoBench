@@ -64,12 +64,24 @@ public class GenericInputParser implements IInputData {
                     String headerType = headertype[i];
                     Entry e = null;
                     if (headerType.equals("C14")) {
-                        e = new Entry(mapper.mapString(headergroup[i]), new RadioCarbonInputType(headerType), new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION));
+                        e = new Entry(
+                                mapper.mapString(headergroup[i]),
+                                new RadioCarbonInputType(headerType),
+                                new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION)
+                        );
                     } else if(headerType.endsWith("Location")){
-                        e = new Entry(mapper.mapString(headergroup[i]), new LocationInputType(headerType), new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION));
+                        e = new Entry(
+                                mapper.mapString(headergroup[i]),
+                                new LocationInputType(headerType),
+                                new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION)
+                        );
                     }
                     else {
-                        e = new Entry(mapper.mapString(headergroup[i]), new CategoricInputType(headerType), new GenericInputData(splitLine[i]));
+                        e = new Entry(
+                                mapper.mapString(headergroup[i]),
+                                new CategoricInputType(headerType),
+                                new GenericInputData(splitLine[i])
+                        );
                     }
 
                     entries.add(e);

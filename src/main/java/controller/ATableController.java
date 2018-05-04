@@ -235,12 +235,7 @@ public abstract class ATableController {
                 String value = data_tmp[i][j];
                 row.add(value);
             }
-            if(ids.size()==0){
-                parsedData.add(row);
-            } else if(ids.contains(row.get(0))){
-                parsedData.add(row);
-            }
-
+            parsedData.add(row);
         }
 
         return parsedData;
