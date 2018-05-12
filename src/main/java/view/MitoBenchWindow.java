@@ -453,4 +453,5 @@ public class MitoBenchWindow extends Application{
     public FileReaderController getFileReaderController() {
         return fileReaderController;
     }
+
 }

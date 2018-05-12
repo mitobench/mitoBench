@@ -39,7 +39,7 @@ public abstract class ATableController {
     protected GroupMenu groupMenu;
     protected LogClass logClass;
     protected Deque<HashMap<String, List<Entry>>> data_versions = new LinkedList();
-
+    protected String[] customColumnOrder=null;
 
 
     public ATableController(LogClass logClass){
@@ -73,7 +73,6 @@ public abstract class ATableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
-
         // update Entry structure
         updateEntryList(input);
 
@@ -89,6 +88,9 @@ public abstract class ATableController {
         table.getColumns().removeAll(table.getColumns());
 
         // define column order
+        if(customColumnOrder == null){
+
+        }
 
         Set<String> cols = dataTable.getDataTable().keySet();
         for(String s : cols) {
@@ -100,7 +102,8 @@ public abstract class ATableController {
         setColumns_to_index();
 
         // display updated table
-        data = parseDataTableToObservableList(dataTable, curr_colnames, input.keySet());
+
+        data = parseDataTableToObservableList(dataTable, curr_colnames, input.keySet(), customColumnOrder);
         // delete duplicated columns
         col_names_sorted = col_names_sorted.stream().distinct().collect(Collectors.toList());
 
@@ -120,8 +123,6 @@ public abstract class ATableController {
         setColumns_to_index();
 
         groupMenu.upateGroupItem(col_names_sorted, groupController);
-
-
 
     }
 
@@ -175,38 +176,62 @@ public abstract class ATableController {
      * @param dataTable
      * @param curr_colnames
      * @param ids
+     * @param order
      * @return
      */
-    protected ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable, List<String> curr_colnames, Set<String> ids){
+    protected ObservableList<ObservableList> parseDataTableToObservableList(DataTable dataTable,
+                                                                            List<String> curr_colnames,
+                                                                            Set<String> ids,
+                                                                            String[] order){
 
         if(curr_colnames.size()==0){
             curr_colnames = new ArrayList<>(getCurrentColumnNames());
         }
-
-        // set default column order (ID -> Haplogroup -> Population -> Geo location (Sample origin) --> others)
         col_names_sorted = new ArrayList<>();
-        if(curr_colnames.contains("ID")){
-            col_names_sorted.add("ID");
-            curr_colnames.remove("ID");
+        if(order==null){
+            // set default column order (ID -> Haplogroup -> Population -> Geo location (Sample origin) --> others)
+            if(curr_colnames.contains("ID")){
+                col_names_sorted.add("ID");
+                curr_colnames.remove("ID");
+            }
+
+            if(curr_colnames.contains("Haplogroup")){
+                col_names_sorted.add("Haplogroup");
+                curr_colnames.remove("Haplogroup");
+            }
+
+            if(curr_colnames.contains("Population")){
+                col_names_sorted.add("Population");
+                curr_colnames.remove("Population");
+            }
+
+            if(curr_colnames.contains("Latitude (Sampling)")){
+                col_names_sorted.add("Latitude (Sampling)");
+                curr_colnames.remove("Latitude (Sampling)");
+            }
+
+            if(curr_colnames.contains("Longitude (Sampling)")){
+                col_names_sorted.add("Longitude (Sampling)");
+                curr_colnames.remove("Longitude (Sampling)");
+            }
+
+
+            Collections.sort(curr_colnames);
+            col_names_sorted.addAll(curr_colnames);
+
+        } else {
+            // set user defined order
+            List<String> curr_colnames_copy = new ArrayList<>(curr_colnames);
+            for(String colname : order){
+                if(curr_colnames_copy.contains(colname)){
+                    col_names_sorted.add(colname);
+                    curr_colnames_copy.remove(colname);
+                }
+            }
+            col_names_sorted.addAll(curr_colnames_copy);
         }
 
-        if(curr_colnames.contains("Haplogroup")){
-            col_names_sorted.add("Haplogroup");
-            curr_colnames.remove("Haplogroup");
-        }
 
-        if(curr_colnames.contains("Population")){
-            col_names_sorted.add("Population");
-            curr_colnames.remove("Population");
-        }
-
-        if(curr_colnames.contains("Sample origin latitude")){
-            col_names_sorted.add("Location");
-            curr_colnames.remove("Location");
-        }
-
-        Collections.sort(curr_colnames);
-        col_names_sorted.addAll(curr_colnames);
 
 
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
@@ -846,4 +871,11 @@ public abstract class ATableController {
         updateTable(table_content);
 
     }
+
+
+    public void setCustomColumnOrder(String[] customColumnOrder) {
+        this.customColumnOrder = customColumnOrder;
+        //updateTable(null);
+    }
 }
+

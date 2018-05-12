@@ -49,7 +49,7 @@ public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
                 "\n according to which the haplogroups should be grouped:") ;
         label_HgList.setId("id_label_HgList");
 
-        Label default_list = new Label("or use the exmaple list:");
+        Label default_list = new Label("or use the example list:");
 
         textField_hgList = new TextField();
         textField_hgList.setId("id_textField_hgList");

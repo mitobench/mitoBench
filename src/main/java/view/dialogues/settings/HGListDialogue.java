@@ -6,14 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 
-public class HGListDisalogue extends ATabpaneDialogue {
+public class HGListDialogue extends ATabpaneDialogue {
 
 
     private TextField textField_hgList;
     private Label label_info;
     private Button button_apply_list;
 
-    public HGListDisalogue(String title, LogClass logClass) {
+    public HGListDialogue(String title, LogClass logClass) {
         super(title, logClass);
 
         LOG = this.logClass.getLogger(this.getClass());
@@ -23,7 +23,7 @@ public class HGListDisalogue extends ATabpaneDialogue {
 
     private void addComponents() {
 
-        label_info = new Label("You can define you own list of haplogroups here.\nExample: H,HV,R0\n\nThis list will " +
+        label_info = new Label("You can define your own list of haplogroups here.\nExample: H,HV,R0\n\nThis list will " +
                 " be set in all your analysis and visualization steps as default.");
 
         textField_hgList = new TextField();
