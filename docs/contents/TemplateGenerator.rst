@@ -8,7 +8,12 @@ How to prepare your data for database import
 ---------------------------------------------
 
 The TemplateGenerator helps you to prepare your data for the database import.
-Link to download: :download:`TemplateGenerator <jar/TemplateGenerator.jar>`
+Link to download:
+Current version: :download:`TemplateGenerator <jar/TemplateGenerator_v0.2.jar>`
+
+
+Previous releases: :download:`TemplateGenerator <jar/TemplateGenerator_v0.2.jar>`
+
 
 Requirements: Java Version 1.8 or higher and JavaFX.
 
