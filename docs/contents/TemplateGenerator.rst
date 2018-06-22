@@ -9,7 +9,7 @@ How to prepare your data for database import
 
 The TemplateGenerator helps you to prepare your data for the database import.
 
-Current version: :download:`TemplateGenerator v0.2 <jar/TemplateGenerator_v0.2.jar>`
+Current version: :download:`TemplateGenerator v0.3 <jar/TemplateGenerator_v0.3.jar>`
 
 Requirements: Java Version 1.8 or higher and JavaFX.
 
@@ -28,4 +28,5 @@ In the case of the (multi)fasta file, the header line must match the name / valu
 
 
 Previous releases: :download:`TemplateGenerator v0.1 <jar/TemplateGenerator.jar>`
+:download:`TemplateGenerator v0.2 <jar/TemplateGenerator_v0.2.jar>`
 
