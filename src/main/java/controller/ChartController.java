@@ -574,7 +574,7 @@ public class ChartController {
     public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems) {
 
         List tmp = new ArrayList<>(Arrays.asList(names));
-        if(tmp.contains("Haplogroup") && !tableController.getCurrentColumnNames().contains("Haplogroup")){
+        if(tmp.contains("Haplogroup") && !conraintHGCol(tableController.getCurrentColumnNames())){
 
             HaplogroupException haplogroupException = new HaplogroupException("No haplogroups defined!");
             HaplogroupErrorDialogure haplogroupErrorDialogure = new HaplogroupErrorDialogure(haplogroupException);
@@ -595,6 +595,17 @@ public class ChartController {
 
         }
         return null;
+
+    }
+
+    private boolean conraintHGCol(List<String> currentColumnNames){
+        for (String s : currentColumnNames){
+            if(s.contains("Haplogroup")){
+                return true;
+            }
+        }
+
+        return false;
 
     }
 

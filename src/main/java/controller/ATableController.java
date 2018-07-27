@@ -205,14 +205,25 @@ public abstract class ATableController {
                 curr_colnames.remove("Population");
             }
 
-            if(curr_colnames.contains("Latitude (Sampling)")){
-                col_names_sorted.add("Latitude (Sampling)");
-                curr_colnames.remove("Latitude (Sampling)");
+            if(curr_colnames.contains("Latitude (Sampling origin)")){
+                col_names_sorted.add("Latitude (Sampling origin)");
+                curr_colnames.remove("Latitude (Sampling origin)");
             }
 
-            if(curr_colnames.contains("Longitude (Sampling)")){
-                col_names_sorted.add("Longitude (Sampling)");
-                curr_colnames.remove("Longitude (Sampling)");
+            if(curr_colnames.contains("Longitude (Sampling origin)")){
+                col_names_sorted.add("Longitude (Sampling origin)");
+                curr_colnames.remove("Longitude (Sampling origin)");
+            }
+
+
+            if(curr_colnames.contains("Latitude (Sample origin)")){
+                col_names_sorted.add("Latitude (Sample origin)");
+                curr_colnames.remove("Latitude (Sample origin)");
+            }
+
+            if(curr_colnames.contains("Longitude (Sample origin)")){
+                col_names_sorted.add("Longitude (Sample origin)");
+                curr_colnames.remove("Longitude (Sample origin)");
             }
 
 
