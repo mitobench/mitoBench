@@ -73,6 +73,12 @@ public abstract class ATableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
+        String groupname=null;
+        if(groupController.groupingExists()){
+            groupname=groupController.getColname_group().replace(" (Grouping)", "");
+            groupController.clearGrouping();
+        }
+
         // update Entry structure
         updateEntryList(input);
 
@@ -122,7 +128,8 @@ public abstract class ATableController {
 
         setColumns_to_index();
 
-        groupMenu.upateGroupItem(col_names_sorted, groupController);
+        if(groupname!=null)
+            groupController.createGroupByColumn(groupname,"");
 
     }
 
@@ -508,7 +515,7 @@ public abstract class ATableController {
                     IData d = e.getData();
                     IInputType type = e.getType();
                     table_content.get(key).remove(e);
-                    table_content.get(key).add(new Entry(id.split(" \\(")[0].trim(), type, d));
+                    table_content.get(key).add(new Entry(id.replace(" (Grouping)",""), type, d));
                     break;
                 }
             }
@@ -519,7 +526,7 @@ public abstract class ATableController {
     public void loadGroups(){
 
         // if "grouping" column already exists, create groups
-        if(groupController.isGroupingExists()){
+        if(groupController.groupingExists()){
             groupController.clearGrouping();
         }
         for(String colname : getCurrentColumnNames()){

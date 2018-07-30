@@ -129,19 +129,21 @@ public class ColumnNameMapper {
             case "sampling_comments":
                 return "Comments (sampling)";
             case "sample_origin_latitude":
-                return "Latitude (Sample origin)";
+                return "Latitude (Sample)";
             case "sample_origin_longitude":
-                return "Longitude (Sample origin)";
+                return "Longitude (Sample)";
             case "sample_origin_geographic_area_m49":
-                return "Geographic Area (Sample origin)";
+                return "Geographic Area (Sample)";
             case "sample_origin_subregion_m49":
-                return "Subregion (Sample origin)";
+                return "Subregion (Sample)";
             case "sample_origin_country_m49":
-                return "Country (Sample origin)";
+                return "Country (Sample)";
             case "sample_origin_city":
-                return "City (Sample origin)";
+                return "City (Sample)";
             case "user_email":
                 return "Submitter (Email)";
+            case "user_firstname":
+                return "User Firstname";
 
         }
 

@@ -16,9 +16,6 @@ import javafx.scene.web.WebView;
 import net.java.html.boot.fx.FXBrowsers;
 import net.java.html.leaflet.*;
 
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +41,7 @@ public class MapView extends StackPane {
 
     public MapView(GroupController groupController, TableControllerUserBench tc, TableColumn sampling_latitude_col,
                    TableColumn sampling_longitude_col, ObservableList items,
-                   TableColumn id_col, TableColumn grouping_col, BorderPane mapBasicPane)
-            throws MalformedURLException, FileNotFoundException, URISyntaxException {
+                   TableColumn id_col, TableColumn grouping_col, BorderPane mapBasicPane) {
 
         this.tableController = tc;
         this.groupController = groupController;

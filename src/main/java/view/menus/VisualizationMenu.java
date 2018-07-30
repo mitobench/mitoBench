@@ -20,9 +20,7 @@ import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import controller.TableControllerUserBench;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -240,20 +238,12 @@ public class VisualizationMenu {
         LOG.info("Visualize data: Visualize all samples on map");
 
         GeographicalMapViz geographicalMapViz = new GeographicalMapViz();
-        try {
 
-            GeographicalMapController mapViewController = new GeographicalMapController(
-                    mito,
-                    groupController,
-                    geographicalMapViz
-            );
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        GeographicalMapController mapViewController = new GeographicalMapController(
+                mito,
+                groupController,
+                geographicalMapViz
+        );
 
         Tab tab = new Tab();
         tab.setId("tab_map");
@@ -346,7 +336,7 @@ public class VisualizationMenu {
                 String[] selection_groups;
                 String[] selection_haplogroups;
 
-                if(!tableController.getGroupController().isGroupingExists()) {
+                if(!tableController.getGroupController().groupingExists()) {
                     String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
                     selection_haplogroups = cols[0];
                     selection_groups = new String[]{"All data"};

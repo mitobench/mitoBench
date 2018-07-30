@@ -2,8 +2,6 @@ package view.visualizations;
 
 import Logging.LogClass;
 import controller.ChartController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -59,7 +57,7 @@ public class ProfilePlot extends AChart {
         String[] selection_groups;
         int[] number_of_elements;
 
-        if(!tableController.getGroupController().isGroupingExists()){
+        if(!tableController.getGroupController().groupingExists()){
             String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
             String[] selection_haplogroups = cols[0];
             selection_groups = new String[]{"All data"};

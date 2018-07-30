@@ -47,7 +47,7 @@ public class AnalysisMenu {
         pairwiseFst.setId("menuitem_pairwiseFst");
         pairwiseFst.setOnAction(t -> {
 
-            if(tableController.getGroupController().isGroupingExists()) {
+            if(tableController.getGroupController().groupingExists()) {
                 FstSettingsDialogue fstSettingsDialogue =
                             new FstSettingsDialogue("Fst Calculation Settings", logClass, mito);
                 FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue, mito);

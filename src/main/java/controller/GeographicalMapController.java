@@ -36,15 +36,14 @@ public class GeographicalMapController {
 
     public GeographicalMapController(MitoBenchWindow mitoBenchWindow,
                                      GroupController groupController,
-                                     GeographicalMapViz geographicalMapViz)
-            throws FileNotFoundException, URISyntaxException, MalformedURLException {
+                                     GeographicalMapViz geographicalMapViz) {
 
         tableControllerUserBench = mitoBenchWindow.getTableControllerUserBench();
 
         grouping_col = tableControllerUserBench.getTableColumnByName("Grouping");
         id_col = tableControllerUserBench.getTableColumnByName("ID");
-        sampling_latitude_col = tableControllerUserBench.getTableColumnByName("Latitude (Sampling)");
-        sampling_longitude_col = tableControllerUserBench.getTableColumnByName("Longitude (Sampling)");
+        sampling_latitude_col = tableControllerUserBench.getTableColumnByName("Latitude (Sample)");
+        sampling_longitude_col = tableControllerUserBench.getTableColumnByName("Longitude (Sample)");
         items = tableControllerUserBench.getSelectedRows();
 
 
