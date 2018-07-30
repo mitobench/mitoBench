@@ -22,10 +22,6 @@ public class GeographicalMapViz {
         return mapBasicPane;
     }
 
-    public void setMapBasicPane(BorderPane mapBasicPane) {
-        this.mapBasicPane = mapBasicPane;
-    }
-
     public void setCenter(MapView center) {
         this.mapBasicPane.setCenter(center);
     }

@@ -29,7 +29,6 @@ FstCalculationController {
      */
     public void addListener(){
 
-
         dialog.getOkBtn().setOnAction(e -> {
             Task task = createTask();
             mito.getProgressBarhandler().activate(task.progressProperty());
@@ -47,8 +46,6 @@ FstCalculationController {
                 mito.getProgressBarhandler().stop();
             });
             new Thread(task).start();
-
-
         });
 
         // add checkbox listener

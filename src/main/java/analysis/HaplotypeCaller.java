@@ -3,25 +3,16 @@ package analysis;
 
 import Logging.LogClass;
 import io.Exceptions.HSDException;
-import io.datastructure.Entry;
-import io.datastructure.generic.GenericInputData;
-import io.inputtypes.CategoricInputType;
 import io.reader.HSDInput;
-import io.reader.HSDReaderIntern;
 import io.writer.MultiFastaWriter;
-import org.apache.commons.collections4.bag.SynchronizedSortedBag;
 import org.apache.log4j.Logger;
 import org.json.*;
-import view.MitoBenchWindow;
 import view.table.MTStorage;
 import controller.TableControllerUserBench;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 /**
@@ -31,6 +22,7 @@ public class HaplotypeCaller {
     private TableControllerUserBench tableController;
     private MTStorage mtStorage;
     private Logger LOG;
+    private String phylotreeVersion = "17";
 
 
     public HaplotypeCaller(TableControllerUserBench tableControllerUserBench, LogClass logClass){
@@ -55,8 +47,9 @@ public class HaplotypeCaller {
 
     public void update() {
         try {
-            HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
-            tableController.updateTable(hsd_reader.getCorrespondingData());
+            //HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
+            HSDInput hsdInput = new HSDInput("haplogroups.hsd", LOG);
+            tableController.updateTable(hsdInput.getCorrespondingData());
             Files.delete(new File("haplogroups.hsd").toPath());
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,27 +64,26 @@ public class HaplotypeCaller {
     private void start(String f) throws IOException, InterruptedException {
 
         String dirpath = System.getProperty("user.dir") +  File.separator + "jar"+ File.separator +"haplogrep-2.2-beta.jar";
-        System.out.println(dirpath);
-        String haplogrep2_jar = dirpath.split(":")[1];
-        String[] command = new String[] { "java", "-jar", haplogrep2_jar,
+        //String haplogrep2_jar = dirpath.split("/")[1];
+        String[] command = new String[] { "java", "-jar", dirpath,
                 "--format",
                 "fasta",
                 "--in",f,
                 "--out", "haplogroups.hsd",
-                "--phylotree","17"};
+                "--phylotree", phylotreeVersion};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         process.waitFor();
-
-        while (process.isAlive()){
-            // wait until haplogroups are calculated
-        }
+//
+//        while (process.isAlive()){
+//            // wait until haplogroups are calculated
+//        }
         System.out.println("Haplogroups are determined");
 
         //delete temporary fasta file
         Files.delete(new File(f).toPath());
 
-        LOG.info("Calculate Haplogroups.");
+        LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.2-beta");
 
     }
 }
