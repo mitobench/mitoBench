@@ -8,6 +8,6 @@
 
 This is the main repository for MitoBench. MitoBench is a tool aimed at helping researchers to organize, visualize and maintain their mitochondrial datasets. Some functionality is aimed towards generating population genetics statistics with additional visualization e.g. used for the [Ancient Egyptian Mummy project](https://www.nature.com/articles/ncomms15694) which served as the motivation to build this tool. 
 
-[Documentation can be found here](https://readthedocs.org/projects/mitobench) and will be updated soon.
+[Documentation can be found here](https://readthedocs.org/projects/mitobench) and will be constantly updated during development and release phase. 
 
-Development team currently includes Judith Neukamm and Alexander Peltzer. 
+Development team currently includes [Judith Neukamm](https://github.com/JudithNeukamm) and [Alexander Peltzer](https://github.com/apeltzer). 
