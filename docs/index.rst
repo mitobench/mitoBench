@@ -45,6 +45,12 @@ This is the main mitoBench documentation, where you can find information about t
    
    contents/TemplateGenerator
 
+   contents/mitoDB
+
+   contents/TemplateGenerator
+
+   contents/glossary
+
 
 
 Indices and tables
