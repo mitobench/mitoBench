@@ -13,15 +13,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
+import view.dialogues.settings.HGlistProfilePlot;
 import view.dialogues.settings.PieChartSettingsDialogue;
 import view.visualizations.*;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import controller.TableControllerUserBench;
 
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -238,22 +237,13 @@ public class VisualizationMenu {
     private void initMap(){
         LOG.info("Visualize data: Visualize all samples on map");
 
-        GeographicalMapController mapViewController = null;
         GeographicalMapViz geographicalMapViz = new GeographicalMapViz();
-        try {
 
-            mapViewController = new GeographicalMapController(
-                    mito,
-                    groupController,
-                    geographicalMapViz
-            );
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        GeographicalMapController mapViewController = new GeographicalMapController(
+                mito,
+                groupController,
+                geographicalMapViz
+        );
 
         Tab tab = new Tab();
         tab.setId("tab_map");
@@ -346,7 +336,7 @@ public class VisualizationMenu {
                 String[] selection_groups;
                 String[] selection_haplogroups;
 
-                if(!tableController.getGroupController().isGroupingExists()) {
+                if(!tableController.getGroupController().groupingExists()) {
                     String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
                     selection_haplogroups = cols[0];
                     selection_groups = new String[]{"All data"};
@@ -475,8 +465,25 @@ public class VisualizationMenu {
                 if(//tableController.getTableColumnByName("Grouping") != null &&
                       tableController.getTableColumnByName("Haplogroup") != null
                         && tableController.getTable().getItems().size() != 0 ){
-                    initProfilePlot();
-                    profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane);
+
+
+                    HGlistProfilePlot hGlistProfilePlot = new HGlistProfilePlot("Profile plot configuration", logClass, mito);
+                    hGlistProfilePlot.init();
+                    // add dialog to statsTabPane
+                    Tab tab = hGlistProfilePlot.getTab();
+                    mito.getTabpane_visualization().getTabs().add(tab);
+                    mito.getTabpane_visualization().getSelectionModel().select(tab);
+
+                    hGlistProfilePlot.getOkBtn().setOnAction(e -> {
+                        try {
+                            initProfilePlot();
+                            profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHGsForProfilelotVis());
+                        } catch (MalformedURLException e1) {
+                            e1.printStackTrace();
+
+                        }
+                    });
+
 
                 }
                 else if(tableController.getTableColumnByName("Haplogroup") == null && tableController.getTableColumnByName("Grouping") != null){
@@ -513,7 +520,7 @@ public class VisualizationMenu {
                 if(tableController.getTable().getItems().size() != 0 ){
 
                     PieChartSettingsDialogue pieChartSettingsDialogue =
-                            new PieChartSettingsDialogue("Advanced Piechart Settings", logClass);
+                            new PieChartSettingsDialogue("Advanced Piechart Settings", logClass, mito);
 
                     // add dialog to statsTabPane
                     Tab tab = pieChartSettingsDialogue.getTab();

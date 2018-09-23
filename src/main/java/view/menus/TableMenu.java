@@ -82,25 +82,6 @@ public class TableMenu {
 
 
 
-        /*
-                        Reset table
-
-         */
-
-        MenuItem resetTable = new MenuItem("Reset table");
-        resetTable.setId("reset_item");
-        resetTable.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
-                    tableController.resetTable();
-                    LOG.info("Reset user data table.");
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
 
         /*
                         Clear table
@@ -119,7 +100,7 @@ public class TableMenu {
             }
         });
 
-        menuTable.getItems().addAll(getSelectedRows, selectAllRows, resetTable, cleanTable);
+        menuTable.getItems().addAll(getSelectedRows, selectAllRows, cleanTable);
     }
 
 

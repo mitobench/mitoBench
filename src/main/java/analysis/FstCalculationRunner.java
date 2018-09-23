@@ -1,16 +1,11 @@
 package analysis;
 
-
-import IO.reader.DistanceTypeParser;
-import IO.writer.Writer;
-import fst.FstHudson1992;
-import fst.Linearization;
+import Main.FstCalculator;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 
 import javafx.scene.text.Text;
-import methods.Filter;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.visualizations.HeatMap;
@@ -19,7 +14,6 @@ import controller.TableControllerFstValues;
 import controller.TableControllerUserBench;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,16 +36,15 @@ public class FstCalculationRunner {
     private double[][] fsts_reynolds=null;
     private String[] groupnames;
     private List<Integer> usableLoci;
-    private Writer writer;
     private Logger LOG;
     private int numberOfPermutations;
     private double[][] pvalues;
     private double significance;
+    private FstCalculator fstCalculator;
 
 
     public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc, int numberOfPermutations,
-                                double significance)
-            throws IOException {
+                                double significance) {
 
         mitobenchWindow = mito;
         distance_type = type;
@@ -109,55 +102,21 @@ public class FstCalculationRunner {
      * @throws IOException
      */
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
-        DistanceTypeParser distanceTypeParser = new DistanceTypeParser();
-        Filter filter = new Filter();
-        Linearization linearization = new Linearization();
 
-        usableLoci = filter.getUsableLoci(
+        //fstCalculator = new FstHudson1992(usableLoci);
+        fstCalculator = new FstCalculator(
                 data,
-                'N',//missing_data_character,
-                Double.parseDouble(field_level_missing_data)
-        );
+                "N",
+                Double.parseDouble(field_level_missing_data),
+                "Pairwise Difference",
+                numberOfPermutations,
+                gamma_a,
+                significance
+                );
 
+        fsts = fstCalculator.runCaclulations();
+        groupnames = fstCalculator.getGroupnames();
 
-        // calculate Fst with equation introduced by Hudson et al. (1992)
-        //FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci, numberOfPermutations, significance);
-        FstHudson1992 fstHudson1992 = new FstHudson1992(usableLoci);//, distanceTypeParser.parse(distance_type), gamma_a);
-        fstHudson1992.setData(data);
-
-        fsts = fstHudson1992.calculateFst();
-       // pvalues = fstHudson1992.calculatePermutedFST();
-        groupnames = fstHudson1992.getGroupnames();
-
-
-        // write to file
-        writer = new Writer();
-//        writer.writeResultsFstToString(
-//                fsts,
-//                pvalues,
-//                groupnames,
-//                usableLoci,
-//                Double.parseDouble(field_level_missing_data),
-//                significance
-//        );
-
-        writer.writeResultsFstToString(
-                fsts,
-                groupnames,
-                usableLoci,
-                Double.parseDouble(field_level_missing_data)
-        );
-
-        writer.addDistanceMatrixToResult(fstHudson1992.getDistanceCalculator().getDistancematrix_d());
-
-        if(runSlatkin){
-            fsts_slatkin = linearization.linearizeWithSlatkin(fsts);
-            writer.addLinerarizedFstMatrix(fsts_slatkin, "Slatkin's linearized Fsts");
-        }
-        if(runReynolds){
-            fsts_reynolds = linearization.linearizeWithReynolds(fsts);
-            writer.addLinerarizedFstMatrix(fsts_reynolds, "Reynolds' distance");
-        }
 
         // init table controller
         tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
@@ -194,7 +153,7 @@ public class FstCalculationRunner {
         String tab_header = "fst_values";
 
         ScrollPane scrollpane_result = new ScrollPane();
-        String text = writer.getResult_as_string();
+        String text = fstCalculator.getResultString();
         Text t = new Text();
         t.setText(text);
         t.wrappingWidthProperty().bind(mitobenchWindow.getScene().widthProperty());
@@ -235,12 +194,12 @@ public class FstCalculationRunner {
     /**
      * This method writes the results if the Fst calculation to a text file.
      *
-     * @param path
+     * @param
      * @throws IOException
      */
-    public void writeToFile(String path) throws IOException {
-        writer.writeResultsToFile(path+ File.separator+"mitoBench_results_fst.txt");
-    }
+    //public void writeToFile(String path) throws IOException {
+    //    writer.writeResultsToFile(path+ File.separator+"mitoBench_results_fst.txt");
+    //}
 
 
     /*
@@ -334,14 +293,6 @@ public class FstCalculationRunner {
 
     public void setUsableLoci(List<Integer> usableLoci) {
         this.usableLoci = usableLoci;
-    }
-
-    public Writer getWriter() {
-        return writer;
-    }
-
-    public void setWriter(Writer writer) {
-        this.writer = writer;
     }
 
     public Logger getLOG() {

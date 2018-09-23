@@ -49,7 +49,7 @@ public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
                 "\n according to which the haplogroups should be grouped:") ;
         label_HgList.setId("id_label_HgList");
 
-        Label default_list = new Label("or use the default list:");
+        Label default_list = new Label("or use the example list:");
 
         textField_hgList = new TextField();
         textField_hgList.setId("id_textField_hgList");
@@ -64,7 +64,7 @@ public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
         }
 
 
-        default_list_checkbox = new CheckBox("Use default list");
+        default_list_checkbox = new CheckBox("Use example list");
         default_list_checkbox.setId("checkbox_hg_default_selection");
         default_list_checkbox.setSelected(false);
 

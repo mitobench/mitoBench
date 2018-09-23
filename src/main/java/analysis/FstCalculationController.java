@@ -1,18 +1,26 @@
 package analysis;
 
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.stage.DirectoryChooser;
+import view.MitoBenchWindow;
 import view.dialogues.settings.FstSettingsDialogue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class
 FstCalculationController {
 
     private final FstSettingsDialogue dialog;
+    private final MitoBenchWindow mito;
+    private FstCalculationRunner fstCalculationRunner;
 
-    public FstCalculationController(FstSettingsDialogue fstSettingsDialogue){
+    public FstCalculationController(FstSettingsDialogue fstSettingsDialogue, MitoBenchWindow mito){
         dialog = fstSettingsDialogue;
+        this.mito = mito;
         addListener();
     }
 
@@ -21,41 +29,23 @@ FstCalculationController {
      */
     public void addListener(){
 
-
         dialog.getOkBtn().setOnAction(e -> {
+            Task task = createTask();
+            mito.getProgressBarhandler().activate(task.progressProperty());
 
-            try {
-
-                FstCalculationRunner fstCalculationRunner = new FstCalculationRunner(dialog.getMitobenchWindow(),
-                        dialog.getComboBox_distance().getSelectionModel().getSelectedItem().toString(),
-                        Double.parseDouble(dialog.getField_gamma_a().getText()),
-                        dialog.getField_missing_data().getText().charAt(0),
-                        Integer.parseInt(dialog.getField_numberOfPermutations().getText()),
-                        Double.parseDouble(dialog.getField_significance().getText()));
-
-
-
-                fstCalculationRunner.run(
-                        dialog.getCheckbox_linearized_slatkin().isSelected(),
-                        dialog.getCheckbox_linearized_slatkin().isSelected(),
-                        dialog.getField_level_missing_data().getText());
-
+            task.setOnSucceeded((EventHandler<Event>) event -> {
                 fstCalculationRunner.writeResultToMitoBench();
                 fstCalculationRunner.visualizeResult();
 
-
                 if(dialog.getCheckbox_saveLogFileBtn().isSelected()){
-                    fstCalculationRunner.writeToFile(dialog.getField_filePathResult().getText());
+                    fstCalculationRunner.writeResultToMitoBench();
                 }
 
-
                 dialog.getLOG().info("Fst calculations finished.");
-
                 dialog.getMitobenchWindow().getTabpane_statistics().getTabs().remove(dialog.getTab());
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+                mito.getProgressBarhandler().stop();
+            });
+            new Thread(task).start();
         });
 
         // add checkbox listener
@@ -76,6 +66,33 @@ FstCalculationController {
             dialog.getField_filePathResult().setText(selectedDirectory.getAbsolutePath());
 
         });
+
+    }
+
+
+    public Task createTask(){
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                fstCalculationRunner = new FstCalculationRunner(dialog.getMitobenchWindow(),
+                        dialog.getComboBox_distance().getSelectionModel().getSelectedItem().toString(),
+                        Double.parseDouble(dialog.getField_gamma_a().getText()),
+                        dialog.getField_missing_data().getText().charAt(0),
+                        Integer.parseInt(dialog.getField_numberOfPermutations().getText()),
+                        Double.parseDouble(dialog.getField_significance().getText()));
+
+
+
+                fstCalculationRunner.run(
+                        dialog.getCheckbox_linearized_slatkin().isSelected(),
+                        dialog.getCheckbox_linearized_slatkin().isSelected(),
+                        dialog.getField_level_missing_data().getText());
+
+
+
+                return true;
+            }
+        };
 
     }
 }

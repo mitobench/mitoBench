@@ -68,7 +68,7 @@ public class AboutDialogue {
         dialogGrid.add(textArea_message, 0, ++row, 3,1);
         dialogGrid.add(link, 0, ++row, 3,1);
         dialogGrid.add(new Separator(), 0,++row, 3,1);
-        dialogGrid.add(new Label("Development team currently includes Judith Neukamm (judith.neukamm@uni-tuebingen.de)\n" +
+        dialogGrid.add(new Label("Development team currently includes Judith Neukamm (judith.neukamm@uzh.ch)\n" +
                 "and Alexander Peltzer."), 0,++row,3,1);
 
     }

@@ -34,6 +34,7 @@ public class ARPReader implements IInputData {
         boolean init = true;
         String currGroup = "";
             while ((currline = bfr.readLine()) != null) {
+                currline = currline.trim();
             if(init){
                 init = false;
                 //check if format is indeed ARP format
@@ -44,7 +45,7 @@ public class ARPReader implements IInputData {
                 }
 
             } else {
-                if(currline.contains("SampleName=")){
+                if(currline.contains("SampleName")){
                     //then we are inside the view.data block
                     String[] split = currline.split("\"");
                     currGroup = split[1];
@@ -53,15 +54,19 @@ public class ARPReader implements IInputData {
                 if(currline.contains("[[Structure]]")){
                     break; //Then we are done with actual view.data, grouping is parsed differently by us...
                 }
-                if(currline.isEmpty() | currline.startsWith("}") |  currline.startsWith("SampleSize=") |
+                if(currline.isEmpty() | currline.startsWith("}") |  currline.startsWith("SampleSize") |
                    currline.startsWith("SampleData") | currline.startsWith("Title") | currline.startsWith("NbSamples") |
-                   currline.startsWith("DataType") | currline.startsWith("LocusSeparator") | currline.startsWith("MissingData") |
+                        currline.startsWith("GameticPhase") |  currline.startsWith("RecessiveData") |
+                        currline.startsWith("DataType") | currline.startsWith("LocusSeparator") | currline.startsWith("MissingData") |
                    currline.startsWith("GenotypicData") | currline.startsWith("[Data]") | currline.startsWith("[[Samples]]")) {
                     continue;
                 } else {
                     String[] dataSplit = currline.split("\t");
-                    String id = dataSplit[0];
-                    String mtseq = dataSplit[2];
+                    int array_index = 0;
+                    while(dataSplit[array_index].length() == 0)
+                        array_index++;
+                    String id = dataSplit[array_index];
+                    String mtseq = dataSplit[array_index+2];
                     List<Entry> entries = new ArrayList<>();
                     Entry e = new Entry(mapper.mapString("MTSequence"), new CategoricInputType("String"), new GenericInputData(mtseq));
                     Entry e_group = new Entry(mapper.mapString("ARP-Groups"), new CategoricInputType("String"), new GenericInputData(currGroup));

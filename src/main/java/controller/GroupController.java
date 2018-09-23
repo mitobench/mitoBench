@@ -134,9 +134,9 @@ public class GroupController {
         if(groupingExists){
             groupingExists = false;
             allGroups.clear();
-            tableController.changeColumnName(colname_group, colname_group.split("\\(")[0]);
+            tableController.changeColumnName(colname_group, colname_group.replace("(Grouping)",""));
             tableController.cleanColnames();
-            tableController.cleanTableContent("(Grouping)");
+            tableController.updateTableContent("(Grouping)");
             colname_group=null;
         }
     }
@@ -153,7 +153,7 @@ public class GroupController {
         return colname_group;
     }
 
-    public boolean isGroupingExists() {
+    public boolean groupingExists() {
         return groupingExists;
     }
 

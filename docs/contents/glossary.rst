@@ -1,7 +1,8 @@
 .. _glossary-label:
 
 Glossary
-=========
+--------- 
+
 
 This is the mitoDB glossary. A more detailed version can be found here:
 https://docs.google.com/spreadsheets/d/18BsU3wdWvpE5emqy7TUBUO5Si-m-X368D1b-E4s_n5g/edit?usp=sharing

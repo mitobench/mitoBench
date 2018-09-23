@@ -1,7 +1,7 @@
 package controller;
 
 import view.MitoBenchWindow;
-import view.dialogues.settings.HGListDisalogue;
+import view.dialogues.settings.HGListDialogue;
 
 import java.util.Arrays;
 
@@ -9,25 +9,25 @@ public class HGListController {
 
     private final ChartController chartcontroller;
     private final MitoBenchWindow mito;
-    private HGListDisalogue hgListDisalogue;
+    private HGListDialogue hgListDialogue;
 
-    public HGListController(HGListDisalogue hgListDisalogue, ChartController chartController, MitoBenchWindow mito){
-        this.hgListDisalogue = hgListDisalogue;
+    public HGListController(HGListDialogue hgListDialogue, ChartController chartController, MitoBenchWindow mito){
+        this.hgListDialogue = hgListDialogue;
         this.chartcontroller = chartController;
         this.mito = mito;
         addListener();
     }
 
     private void addListener() {
-        hgListDisalogue.getButton_apply_list().setOnAction(e -> {
-            //hgListDisalogue.getTextField_hgList().clear();
+        hgListDialogue.getButton_apply_list().setOnAction(e -> {
+            //hgListDialogue.getTextField_hgList().clear();
 
-            String[] hglist = hgListDisalogue.getTextField_hgList().getText().split(",");
+            String[] hglist = hgListDialogue.getTextField_hgList().getText().split(",");
             Arrays.stream(hglist).map(String::trim).toArray(unused -> hglist);
             chartcontroller.setCustomHGList(hglist);
 
-            mito.getTabpane_statistics().getTabs().remove(hgListDisalogue.getTab());
-            hgListDisalogue.getLOG().info("Custom HG list set.");
+            mito.getTabpane_statistics().getTabs().remove(hgListDialogue.getTab());
+            hgListDialogue.getLOG().info("Custom HG list set.");
         });
     }
 

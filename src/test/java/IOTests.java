@@ -125,7 +125,7 @@ public class IOTests {
         HashMap output = null;
 
         try {
-            GenericInputParser gi = new GenericInputParser(getClass().getResource(path).getPath(), LOG);
+            GenericInputParser gi = new GenericInputParser(getClass().getResource(path).getPath(), LOG, "\t");
             output = gi.getCorrespondingData();
         } catch (IOException e) {
             e.printStackTrace();

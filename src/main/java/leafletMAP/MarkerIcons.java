@@ -116,7 +116,7 @@ public class MarkerIcons {
                 String location = (String) entry.get(tableController.getColIndex("Location"));
                 String id = (String) entry.get(tableController.getColIndex("ID"));
                 if(!location.equals("Undefined") && columnData.contains(id)){
-                    String[] loc = location.split(",");
+                    String[] loc = location.split(";");
                     LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
 
                     PathOptions pathOpt = new PathOptions().setColor(colors_2[groupCount]);

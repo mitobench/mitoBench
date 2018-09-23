@@ -2,13 +2,18 @@ package view.menus;
 
 import Logging.LogClass;
 import analysis.FstCalculationController;
+import analysis.HaplotypeCaller;
 import controller.HGListController;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
+import view.dialogues.settings.ColumnOrderDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
-import view.dialogues.settings.HGListDisalogue;
+import view.dialogues.settings.HGListDialogue;
 import view.dialogues.settings.PcaPopupDialogue;
 
 
@@ -23,6 +28,7 @@ public class AnalysisMenu {
     private final StatisticsMenu statisticsMenu;
     private Menu menuAnalysis;
     private int pcaID=1;
+    private Menu menuSettings;
 
     public AnalysisMenu(MitoBenchWindow mitoBenchWindow, StatisticsMenu statisticsMenu){
         menuAnalysis = new Menu("Analysis");
@@ -37,31 +43,14 @@ public class AnalysisMenu {
 
     private void addSubMenus() {
 
-
-        CustomMenuItem defineHGList = new CustomMenuItem(new Label("Define Haplogroup list"));
-        defineHGList.setId("menuitem_hg_list");
-        defineHGList.setOnAction(t -> {
-
-            HGListDisalogue hgListDisalogue = new HGListDisalogue("Custom Haplogroup list", logClass);
-            HGListController hgListController = new HGListController(hgListDisalogue, mito.getChartController(), mito);
-            mito.getTabpane_statistics().getTabs().add(hgListDisalogue.getTab());
-            mito.getTabpane_statistics().getSelectionModel().select(hgListDisalogue.getTab());
-
-
-        });
-
-        Tooltip tooltip_hglist = new Tooltip("This list will be used al default list for all analyses and visualizations " +
-                "within this project.");
-        Tooltip.install(defineHGList.getContent(), tooltip_hglist);
-
         MenuItem pairwiseFst = new MenuItem("Calculate pairwise Fst");
         pairwiseFst.setId("menuitem_pairwiseFst");
         pairwiseFst.setOnAction(t -> {
 
-            if(tableController.getGroupController().isGroupingExists()) {
+            if(tableController.getGroupController().groupingExists()) {
                 FstSettingsDialogue fstSettingsDialogue =
                             new FstSettingsDialogue("Fst Calculation Settings", logClass, mito);
-                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue);
+                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue, mito);
                 mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
                 mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
 
@@ -81,10 +70,22 @@ public class AnalysisMenu {
         MenuItem assignHGs = new MenuItem("Calculate haplogroups");
         assignHGs.setId("menuitem_calculate_haplogroups");
         assignHGs.setOnAction(t -> {
-            InformationDialogue HGNotSupportedDialogue = new InformationDialogue("",
-                    "Please use HaploGrep2 to determine Haplogroups.\n" +
-                            "The resulting hsd file can then be uploaded.", "Haplogroup calculation is not supported yet",
-                    "hgCalculationDislogue");
+            HaplotypeCaller haplotypeCaller = new HaplotypeCaller(tableController, logClass);
+
+            Task task = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    haplotypeCaller.call();
+                    return true;
+                }
+            };
+            mito.getProgressBarhandler().activate(task.progressProperty());
+            task.setOnSucceeded((EventHandler<Event>) event -> {
+                haplotypeCaller.update();
+                mito.getProgressBarhandler().stop();
+            });
+
+            new Thread(task).start();
 
         });
 
@@ -102,8 +103,41 @@ public class AnalysisMenu {
 
         });
 
-        //menuAnalysis.getItems().addAll(defineHGList, pairwiseFst, assignHGs, pcaAnalysis);
-        menuAnalysis.getItems().addAll(defineHGList, pcaAnalysis);
+        CustomMenuItem defineHGList = new CustomMenuItem(new Label("Define Haplogroup list"));
+        defineHGList.setId("menuitem_hg_list");
+        defineHGList.setOnAction(t -> {
+
+            HGListDialogue hgListDialogue = new HGListDialogue("Custom Haplogroup list", logClass);
+            HGListController hgListController = new HGListController(hgListDialogue, mito.getChartController(), mito);
+            mito.getTabpane_statistics().getTabs().add(hgListDialogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(hgListDialogue.getTab());
+
+
+        });
+
+        Tooltip tooltip_hglist = new Tooltip("This list will be used al default list for all analyses and " +
+                "visualizations within this project.");
+        Tooltip.install(defineHGList.getContent(), tooltip_hglist);
+
+
+        CustomMenuItem defineColumnOrder = new CustomMenuItem(new Label("Define Column Order"));
+        defineColumnOrder.setId("menuitem_column_order");
+        defineColumnOrder.setOnAction(t -> {
+            ColumnOrderDialogue columnOrderDialogue = new ColumnOrderDialogue("Custom Column Order",
+                    logClass, mito);
+
+            mito.getTabpane_statistics().getTabs().add(columnOrderDialogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(columnOrderDialogue.getTab());
+
+        });
+
+
+        menuSettings = new Menu("General Settings");
+        menuSettings.setId("menu_settings");
+
+        menuSettings.getItems().addAll(defineHGList, defineColumnOrder);
+
+        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs, pcaAnalysis, menuSettings);
     }
 
     public Menu getMenuAnalysis() {

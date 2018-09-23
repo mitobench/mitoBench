@@ -43,7 +43,7 @@ public class HelpMenu {
 
 
          /*
-                        About MitoBenchStarter
+                        About starter.MitoBenchStarter
 
          */
 

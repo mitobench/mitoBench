@@ -1,7 +1,6 @@
 package statistics;
 
 import Logging.LogClass;
-import controller.GroupController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
@@ -48,7 +47,7 @@ public class HaploStatistics {
         ObservableList<ObservableList> tableItems = tableController.getTable().getItems();
 
         // get set of unique group and haplogroup entries
-        if(!tableController.getGroupController().isGroupingExists()) {
+        if(!tableController.getGroupController().groupingExists()) {
             number_of_groups=1;
             String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableItems);
             String[] selection_haplogroups = cols[0];
@@ -226,7 +225,11 @@ public class HaploStatistics {
             int count_all_hgs_group = countAllHGs(i);
 
             for(int j = 0; j < data[i].length; j++){
-                data[i][j] = data[i][j] / (double)count_all_hgs_group;
+                if(count_all_hgs_group==0){
+                    data[i][j] = 0.0;
+                } else {
+                    data[i][j] = data[i][j] / (double)count_all_hgs_group;
+                }
             }
         }
 

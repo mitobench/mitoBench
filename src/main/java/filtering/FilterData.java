@@ -35,7 +35,7 @@ public class FilterData {
 
     }
 
-    public void filterHaplotype(String[] haplotypes, String distance) throws Exception {
+    public void filterHaplotype(String[] haplotypes, String distance) {
 
         LOG.info("Filter haplotypes: data set includes only the haplotype(s): " + Arrays.toString(haplotypes) +
                 " and all haplotype with distance d=" + distance);

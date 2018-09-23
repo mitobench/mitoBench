@@ -48,7 +48,7 @@ public class AddNewColumnDialogue extends APopupDialogue{
                 // create new Group
                 String colName = columnNameField.getText();
                 LOG.info("Add new column: " + colName);
-                controller.updateTable(controller.createNewEntryList(dataField.getText(), colName));
+                controller.updateTable(controller.createNewEntryList(dataField.getText(), colName, true));
                 close();
             }
         });

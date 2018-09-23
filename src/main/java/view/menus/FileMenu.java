@@ -3,7 +3,7 @@ package view.menus;
 
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
-import controller.DatabaseConnectionController;
+import controller.*;
 import io.Exceptions.*;
 import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
@@ -29,9 +29,6 @@ import view.dialogues.error.HSDErrorDialogue;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
-import controller.DrapAndDropManagerDB;
-import controller.TableControllerDB;
-import controller.TableControllerUserBench;
 import io.dialogues.Export.ExportDialogue;
 
 import java.io.File;
@@ -43,6 +40,7 @@ import java.util.*;
  */
 public class FileMenu {
 
+    private final FileReaderController fileReaderController;
     private TabPane viz_pane;
     private Menu menuFile;
     private TableControllerUserBench tableControllerUserBench;
@@ -82,6 +80,8 @@ public class FileMenu {
         this.logClass = mitoBenchWindow.getLogClass();
         addSubMenus();
 
+        fileReaderController = mitoBenchWindow.getFileReaderController();
+
     }
 
 
@@ -91,16 +91,14 @@ public class FileMenu {
 
         MenuItem newProject = new MenuItem("New Project");
         newProject.setId("menu_item_new_project");
-        newProject.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                // clear all
-                tableControllerDB.cleartable();
-                tableControllerUserBench.cleartable();
-                viz_pane.getTabs().removeAll(viz_pane.getTabs());
-                mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
-                mitoBenchWindow.setAnotherProjectLoaded(false);
-                LOG.info("New project was created.");
-            }
+        newProject.setOnAction(t -> {
+            // clear all
+            tableControllerDB.cleartable();
+            tableControllerUserBench.cleartable();
+            viz_pane.getTabs().removeAll(viz_pane.getTabs());
+            mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
+            mitoBenchWindow.setAnotherProjectLoaded(false);
+            LOG.info("New project was created.");
         });
 
 
@@ -117,13 +115,13 @@ public class FileMenu {
 
                 if(isJUnitTest()){
 
-                    ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fm);
+                    ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fileReaderController);
                     importDialogueAlternative.getFile();
 
                 } else {
                     importDialogue = importDialogueFactory.create(stage);
                     importDialogue.start();
-                    openFile(importDialogue.getSelectedFile());
+                    fileReaderController.openFile(importDialogue.getSelectedFile());
                 }
 
             }
@@ -205,25 +203,31 @@ public class FileMenu {
 
         MenuItem exportFile = new MenuItem("Export all Data");
         exportFile.setOnAction(t -> {
-            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
-                    mitoBenchWindow.getChartController(), true);
-            try {
-                exportDialogue.start(new Stage());
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(tableControllerUserBench.getTable().getItems().size() != 0){
+                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
+                        mitoBenchWindow.getChartController(), true);
+                try {
+                    exportDialogue.start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
         });
 
 
         MenuItem exportSelectedData = new MenuItem("Export selected Data");
         exportSelectedData.setOnAction(t -> {
-            ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
-                    mitoBenchWindow.getChartController(), false);
-            try {
-                exportDialogue.start(new Stage());
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(tableControllerUserBench.getTable().getItems().size() != 0){
+                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
+                        mitoBenchWindow.getChartController(), false);
+                try {
+                    exportDialogue.start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
         });
 
 
@@ -279,130 +283,10 @@ public class FileMenu {
 //        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
 //                exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
 
-        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, exportFile, exportSelectedData,
+        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
                 exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
-    /**
-     * Method to open files with specific parser.
-     * @param f
-     */
-    public void openFile(File f){
-
-        if (f != null) {
-            String absolutePath = f.getAbsolutePath();
-
-            //Input is FastA
-            if (absolutePath.endsWith(".fasta") || absolutePath.endsWith(".fas") || absolutePath.endsWith(".fa")) {
-
-                MultiFastAInput multiFastAInput = null;
-                try {
-                    try {
-                        multiFastAInput = new MultiFastAInput(f.getPath(), LOG);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } catch (FastAException e) {
-                    FastAErrorDialogue fastAErrorDialogue = new FastAErrorDialogue(e);
-                }
-                HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
-                tableControllerUserBench.updateTable(input_multifasta);
-            }
-
-            //Input is HSD Format
-            if (absolutePath.endsWith(".hsd")) {
-                try {
-                    HSDInput hsdInputParser = null;
-                    try {
-                        hsdInputParser = new HSDInput(f.getPath(), LOG);
-                    } catch (HSDException e) {
-                        HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
-                    }
-                    HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
-                    tableControllerUserBench.updateTable(data_map);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            //Input is Generic Format
-
-            if (absolutePath.endsWith(".tsv")) {
-                try {
-                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG);
-                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                    tableControllerUserBench.updateTable(data_map);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            //Input is Excel Format
-
-            if (absolutePath.endsWith(".xlsx") || absolutePath.endsWith(".xls")) {
-                ExcelReader excelReader = null;
-                try {
-                    excelReader = new ExcelReader(f.getPath(), LOG);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
-
-                tableControllerUserBench.updateTable(data_map);
-                //tableControllerUserBench.loadGroups();
-            }
-
-            //Input is in ARP Format
-
-            if(absolutePath.endsWith(".arp")){
-                ARPReader arpreader = null;
-                try {
-                    arpreader = new ARPReader(f.getPath(), LOG);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ARPException e) {
-                    ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
-                }
-                HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
-
-                tableControllerUserBench.updateTable(data_map);
-                //tableControllerUserBench.loadGroups();
-            }
-
-            if(absolutePath.endsWith(".mitoproj")){
-
-                if(mitoBenchWindow.isAnotherProjectLoaded()){
-                    InformationDialogue informationDialogue = new InformationDialogue(
-                            "Project already loaded",
-                            "Please clean up your analysis before \na new project can be loaded.",
-                            "Project already loaded",
-                            "projectLoadedDialogue"
-                    );
-                } else {
-                    ProjectReader projectReader = new ProjectReader();
-                    try {
-
-                        projectReader.read(f, LOG);
-                        projectReader.loadData(tableControllerUserBench, mitoBenchWindow.getChartController());
-                        //tableControllerUserBench.loadGroups();
-                        mitoBenchWindow.setAnotherProjectLoaded(true);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ProjectException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        } else {
-            try {
-                // do nothing
-            }catch (Exception e ) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-    }
 
 
     public Menu getMenuFile() {

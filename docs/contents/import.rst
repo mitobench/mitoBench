@@ -92,9 +92,9 @@ The decimal point has to be a point (*.*), no comma!
 
   Example: cal AD 81-132 , AD 81-132, cal BC 37-cal AD 48
 
+
   .. note::
-The C14 dating is represented as an average value in the data table, as well as
-     the lower and upper value, if available.
+The C14 dating is represented as an average value in the data table, as well as the lower and upper value, if available.
 
 
 

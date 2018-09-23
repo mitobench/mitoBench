@@ -1,8 +1,6 @@
 package view.menus;
 
 import Logging.LogClass;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import org.xml.sax.SAXException;
@@ -39,25 +37,23 @@ public class EditMenu {
 
         MenuItem filterTreeBased = new MenuItem("... based on PhyloTree");
         filterTreeBased.setId("filterWithTree");
-        filterTreeBased.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        filterTreeBased.setOnAction(t -> {
 
-                try {
-                    DataFilteringTreebasedDialogue dataFilteringWithListDialogue =
-                            new DataFilteringTreebasedDialogue("Tree based data filtering",
-                            logClass, mito);
-                    mito.getTabpane_statistics().getTabs().add(dataFilteringWithListDialogue.getTab());
-                    mito.getTabpane_statistics().getSelectionModel().select(dataFilteringWithListDialogue.getTab());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
-                    e.printStackTrace();
-                }
-
+            try {
+                DataFilteringTreebasedDialogue dataFilteringWithListDialogue =
+                        new DataFilteringTreebasedDialogue("Tree based data filtering",
+                        logClass, mito);
+                mito.getTabpane_statistics().getTabs().add(dataFilteringWithListDialogue.getTab());
+                mito.getTabpane_statistics().getSelectionModel().select(dataFilteringWithListDialogue.getTab());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
             }
-        });
+
+          });
 
         MenuItem filterWithMutation = new MenuItem("... haplotype filtering");
         filterWithMutation.setId("filterWithMutation");
@@ -69,8 +65,17 @@ public class EditMenu {
             mito.getTabpane_statistics().getSelectionModel().select(dataFilteringMutationBasedDialogue.getTab());
         });
 
+
+        MenuItem unfilterData = new MenuItem("Redo...");
+        unfilterData.setId("unfilterItem");
+        unfilterData.setOnAction(t -> {
+            mito.getTableControllerUserBench().resetToUnfilteredData();
+
+        });
+
+
         filterData.getItems().addAll(filterTreeBased, filterWithMutation);
-        menuEdit.getItems().add(filterData);
+        menuEdit.getItems().addAll(filterData, unfilterData);
 
     }
 

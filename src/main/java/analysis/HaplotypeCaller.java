@@ -2,9 +2,8 @@ package analysis;
 
 
 import Logging.LogClass;
-import io.datastructure.Entry;
-import io.datastructure.generic.GenericInputData;
-import io.inputtypes.CategoricInputType;
+import io.Exceptions.HSDException;
+import io.reader.HSDInput;
 import io.writer.MultiFastaWriter;
 import org.apache.log4j.Logger;
 import org.json.*;
@@ -14,9 +13,6 @@ import controller.TableControllerUserBench;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 /**
@@ -26,10 +22,11 @@ public class HaplotypeCaller {
     private TableControllerUserBench tableController;
     private MTStorage mtStorage;
     private Logger LOG;
+    private String phylotreeVersion = "17";
 
 
-    public HaplotypeCaller(TableControllerUserBench tableControllerUserBench, MTStorage mtStorage, LogClass logClass){
-        this.mtStorage = mtStorage;
+    public HaplotypeCaller(TableControllerUserBench tableControllerUserBench, LogClass logClass){
+        this.mtStorage = tableControllerUserBench.getDataTable().getMtStorage();
         this.tableController = tableControllerUserBench;
         LOG = logClass.getLogger(this.getClass());
 
@@ -37,83 +34,56 @@ public class HaplotypeCaller {
 
     public void call() throws JSONException, IOException, InterruptedException {
 
-        String file = "/home/neukamm/Desktop/testmultifasta.fa";
+        String file = "multifasta.fa";
 
         // generate fasta file with all sequences for which haplogroups have to be determined
-        MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getData());
+        MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getSelectedRows());
         multiFastaWriter.writeData(file, tableController);
 
-        //File f = new File(file);
-
-        //start(file);
-        //POST file
-//        ClientResource cr = new ClientResource("https://haplogrep.uibk.ac.at/haplogrep-ws");
-//        final FormDataSet fds = new FormDataSet();
-//        fds.setMultipart(true);
-//        final FormData fileRep = new FormData("importfile", new FileRepresentation(f, MediaType.APPLICATION_ALL));
-//        fds.getEntries().add(fileRep);
-//        cr.post(fds);
-//
-//        //Response
-//        JSONArray jsonArray = new JSONArray(cr.getResponse().getEntityAsText());
-//
-//        // collect all ids and Haplogroups
-//        List<String> ids = new ArrayList<>();
-//        List<String> haplogroups = new ArrayList<>();
-//        for (int i = 0; i < jsonArray.length(); i++) {
-//            JSONObject object = jsonArray.getJSONObject(i);
-//            String id = (String) object.get("id");
-//            String hg = (String) object.get("haplogroup");
-//            ids.add(id);
-//            haplogroups.add(hg);
-//            //Status status = cr.getResponse().getStatus();
-//        }
-
-        //update(ids, haplogroups);
+        start(file);
 
     }
 
 
-    private void update(List<String> ids, List<String> haplogroups) {
-        tableController.addColumn("Haplogroup HaploGrep2/PhyloTree17",
-                tableController.getCurrentColumnNames().size());
-
-        HashMap<String, List<Entry>> map = new HashMap<>();
-
-        for(int i = 0; i < ids.size(); i++){
-            Entry entry = new Entry("Haplogroup HaploGrep2/PhyloTree17",
-                                             new CategoricInputType("String"),
-                                             new GenericInputData(haplogroups.get(i)));
-            List<Entry> entries = new ArrayList<>();
-            entries.add(entry);
-            map.put(ids.get(i), entries);
+    public void update() {
+        try {
+            //HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
+            HSDInput hsdInput = new HSDInput("haplogroups.hsd", LOG);
+            tableController.updateTable(hsdInput.getCorrespondingData());
+            Files.delete(new File("haplogroups.hsd").toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (HSDException e) {
+            e.printStackTrace();
         }
 
-        tableController.updateTable(map);
 
     }
 
 
     private void start(String f) throws IOException, InterruptedException {
 
-        String dirpath = System.getProperty("user.dir") +  "/jar/haplogrep-2.1.1.jar";
-        System.out.println(dirpath);
-        //String dirpath = this.getClass().getResource("/jar/haplogrep-2.1.1.jar").toExternalForm();
-        String haplogrep2_jar = dirpath.split(":")[1];
-        String[] command = new String[] { "java", "-jar", haplogrep2_jar,
+        String dirpath = System.getProperty("user.dir") +  File.separator + "jar"+ File.separator +"haplogrep-2.2-beta.jar";
+        //String haplogrep2_jar = dirpath.split("/")[1];
+        String[] command = new String[] { "java", "-jar", dirpath,
+                "--format",
+                "fasta",
                 "--in",f,
-                "--out","/home/neukamm/",
-                "--phylotree","17"};
+                "--out", "haplogroups.hsd",
+                "--phylotree", phylotreeVersion};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         process.waitFor();
-
+//
+//        while (process.isAlive()){
+//            // wait until haplogroups are calculated
+//        }
         System.out.println("Haplogroups are determined");
 
-        // parse and delete temporary files
+        //delete temporary fasta file
         Files.delete(new File(f).toPath());
 
-        LOG.info("Calculate Haplogroups.");
+        LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.2-beta");
 
     }
 }

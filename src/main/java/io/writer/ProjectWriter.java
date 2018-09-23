@@ -41,9 +41,9 @@ public class ProjectWriter {
             writer = new BufferedWriter(new FileWriter(outfile));
 
             // write header
-            // This has been generated with MitoBenchStarter version XYZ, do not edit manually unless you know what you are doing.
-            String header = "# This file has been generated with MitoBenchStarter version " + MITOBENCH_VERSION +
-                    " and contains all information of a MitoBenchStarter project\n# Created on  "+ date.toString()
+            // This has been generated with starter.MitoBenchStarter version XYZ, do not edit manually unless you know what you are doing.
+            String header = "# This file has been generated with starter.MitoBenchStarter version " + MITOBENCH_VERSION +
+                    " and contains all information of a starter.MitoBenchStarter project\n# Created on  "+ date.toString()
                     + "\n# Please do NOT edit manually unless you know what you are doing.\n\n";
             writer.write(header);
 

@@ -25,7 +25,7 @@ public class GenericInputParser implements IInputData {
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
 
-    public GenericInputParser(String file, Logger LOG) throws IOException {
+    public GenericInputParser(String file, Logger LOG, String delimiter) throws IOException {
         LOG.info("Read generic file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
@@ -38,17 +38,23 @@ public class GenericInputParser implements IInputData {
         while ((currline = bfr.readLine()) != null) {
             //Parse header, two line header !!
             if (currline.startsWith("##")) {
-                headergroup = currline.replace("##","").split("\t");
-                for(String s : headergroup)
+                headergroup = currline.replace("##","").split(delimiter);
+                for(int i = 0; i < headergroup.length; i++){
+                    String s = headergroup[i];
+                    if(s.contains("(Grouping)"))
+                        s = s.replace("(Grouping)", "");
                     s.trim();
+                    headergroup[i] = s;
+                }
+
                 continue;
             } else if (currline.startsWith("#")) {
-                headertype = currline.replace("#","").split("\t");
+                headertype = currline.replace("#","").split(delimiter);
                 for(String s : headertype)
                     s.trim();
                 continue;
             } else {
-                String[] splitLine = currline.split("\t");
+                String[] splitLine = currline.split(delimiter);
                 for(String s : splitLine)
                     s.trim();
                 //Assume ID is always first! -> requirement
@@ -58,13 +64,24 @@ public class GenericInputParser implements IInputData {
                     String headerType = headertype[i];
                     Entry e = null;
                     if (headerType.equals("C14")) {
-                        e = new Entry(mapper.mapString(headergroup[i]), new RadioCarbonInputType(headerType), new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION));
+                        e = new Entry(
+                                mapper.mapString(headergroup[i]),
+                                new RadioCarbonInputType(headerType),
+                                new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION)
+                        );
                     } else if(headerType.endsWith("Location")){
-                        e = new Entry(mapper.mapString(headergroup[i]), new LocationInputType(headerType), new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION));
-
+                        e = new Entry(
+                                mapper.mapString(headergroup[i]),
+                                new LocationInputType(headerType),
+                                new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION)
+                        );
                     }
                     else {
-                        e = new Entry(mapper.mapString(headergroup[i]), new CategoricInputType(headerType), new GenericInputData(splitLine[i]));
+                        e = new Entry(
+                                mapper.mapString(headergroup[i]),
+                                new CategoricInputType(headerType),
+                                new GenericInputData(splitLine[i])
+                        );
                     }
 
                     entries.add(e);

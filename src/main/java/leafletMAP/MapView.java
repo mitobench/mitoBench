@@ -16,9 +16,6 @@ import javafx.scene.web.WebView;
 import net.java.html.boot.fx.FXBrowsers;
 import net.java.html.leaflet.*;
 
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,21 +30,23 @@ public class MapView extends StackPane {
     private final WebView webView;
     private final TableControllerUserBench tableController;
     private final ListView listView;
-    private final TableColumn location_col;
     private final ObservableList items;
     private final TableColumn id_col;
     private final TableColumn grouping_col;
     private final BorderPane mapBasicPane;
+    private final TableColumn latitude_col;
+    private final TableColumn longitude_col;
     private Map map;
     private GroupController groupController;
 
-    public MapView(GroupController groupController, TableControllerUserBench tc, TableColumn location_col, ObservableList items,
-                   TableColumn id_col, TableColumn grouping_col, BorderPane mapBasicPane)
-            throws MalformedURLException, FileNotFoundException, URISyntaxException {
+    public MapView(GroupController groupController, TableControllerUserBench tc, TableColumn sampling_latitude_col,
+                   TableColumn sampling_longitude_col, ObservableList items,
+                   TableColumn id_col, TableColumn grouping_col, BorderPane mapBasicPane) {
 
         this.tableController = tc;
         this.groupController = groupController;
-        this.location_col = location_col;
+        this.latitude_col = sampling_latitude_col;
+        this.longitude_col = sampling_longitude_col;
         this.id_col = id_col;
         this.items = items;
         this.grouping_col = grouping_col;
@@ -93,19 +92,15 @@ public class MapView extends StackPane {
     private void initMarker(ListView<Location> list_locations) {
         List<Location> marker_all = new ArrayList<>();
 
-        if(location_col!=null){
+        if(latitude_col != null && longitude_col != null){
 
             for (Object item : items) {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
-                String location  = location_col.getCellObservableValue(item).getValue().toString();
+                String latitude  = latitude_col.getCellObservableValue(item).getValue().toString();
+                String longitude  = longitude_col.getCellObservableValue(item).getValue().toString();
 
-                if(!location.equals("Undefined")){
-                    String[] loc = location.split(",");
-                    if(loc.length==2){
-                        double latitude = Double.parseDouble(loc[0]);
-                        double longitude = Double.parseDouble(loc[1]);
-                        marker_all.add(new Location(id, latitude, longitude));
-                    }
+                if(!latitude.equals("Undefined") && !longitude.equals("Undefined") ){
+                    marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude)));
                 }
             }
         }
