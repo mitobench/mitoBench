@@ -39,11 +39,7 @@ public class TableSelectionFilter {
             FilteredList<ObservableList> filteredData = new FilteredList<>(masterData_selection, p -> true);
 
             // 2. Set the haplogroupFilter Predicate whenever the haplogroupFilter changes.
-            filteredData.setPredicate(new Predicate<ObservableList>(){
-                public boolean test(ObservableList t){
-                    return Arrays.stream(haplogroups).anyMatch(t.get(columnIndexhaplo)::equals);
-                }
-            });
+            filteredData.setPredicate(t -> Arrays.stream(haplogroups).anyMatch(t.get(columnIndexhaplo)::equals));
 
             // 3. Wrap the FilteredList in a SortedList.
             SortedList<ObservableList> sortedData = new SortedList<>(filteredData);

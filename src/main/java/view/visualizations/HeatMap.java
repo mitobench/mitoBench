@@ -102,4 +102,9 @@ public class HeatMap extends AChart{
     public void setContextMenu(TabPane tab){
         setContextMenu(heatMap, tab);
     }
+
+    @Override
+    protected void layoutChartChildren(double v, double v1, double v2, double v3) {
+
+    }
 }

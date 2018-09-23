@@ -2,6 +2,7 @@ package view.visualizations;
 
 import controller.ChartController;
 import controller.TableControllerUserBench;
+import controller.VisualizationController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
@@ -33,8 +34,10 @@ public class StackedBar extends AChart{
     private VisualizationMenu graphicsMenu;
     private ChartController chartController;
     private String[] hg_user_selection;
+    private VisualizationController visualizationController;
 
-    public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu, ChartController cc, TableControllerUserBench tc) {
+    public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu, ChartController cc, TableControllerUserBench tc,
+                      VisualizationController visualizationController) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
         tabPane = vBox;
@@ -54,6 +57,8 @@ public class StackedBar extends AChart{
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
         sbc.setLegendSide(Side.RIGHT);
+
+        this.visualizationController = visualizationController;
 
         setContextMenu(sbc, vBox);
 
@@ -183,7 +188,7 @@ public class StackedBar extends AChart{
 
         if(sub_hgs != null){
 
-            graphicsMenu.initHaploBarchart("(sub-haplogroups of HG "+ hg +")");
+            visualizationController.initHaploBarchart("(sub-haplogroups of HG "+ hg +")");
             List<String> columnData = new ArrayList<>();
 
             for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {
@@ -207,8 +212,6 @@ public class StackedBar extends AChart{
 
             graphicsMenu.createHaploBarchart(haplo_col, columnData);
         }
-
-
     }
 
 
@@ -241,5 +244,11 @@ public class StackedBar extends AChart{
 
     public void setHg_user_selection(String[] hg_user_selection) {
         this.hg_user_selection = hg_user_selection;
+    }
+
+
+    @Override
+    protected void layoutChartChildren(double v, double v1, double v2, double v3) {
+
     }
 }

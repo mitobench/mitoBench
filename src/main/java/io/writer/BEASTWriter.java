@@ -24,15 +24,17 @@ import java.util.List;
  */
 public class BEASTWriter implements IOutputData {
     private final ObservableList<ObservableList> data;
+    private final int year;
     private TableControllerUserBench tableController;
     private Logger LOG;
     private FileWriter fileWriter;
     private BufferedWriter bfWriter;
 
-    public BEASTWriter(TableControllerUserBench tblcontroller, Logger LOG, ObservableList<ObservableList> dataToExport) {
+    public BEASTWriter(TableControllerUserBench tblcontroller, Logger LOG, ObservableList<ObservableList> dataToExport, int year) {
         this.tableController = tblcontroller;
         this.LOG = LOG;
         this.data = dataToExport;
+        this.year = year;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class BEASTWriter implements IOutputData {
             for (FastaEntry key : tmp.keySet()) {
                 if(ids.contains(key.getHeader())){
                     String c14date = tmp.get(key);
-                    bfWriter.write(">" + key.getHeader() + getC14String(c14date) + "\n" + key.getSequence() + "\n");
+                    bfWriter.write(">" + key.getHeader() + getC14String(c14date, year) + "\n" + key.getSequence() + "\n");
                 }
             }
 
@@ -100,14 +102,15 @@ public class BEASTWriter implements IOutputData {
      * Performs deduction of year 2000 correctly.
      *
      * @param c14data
+     * @param year
      * @return
      */
-    private String getC14String(String c14data) {
+    private String getC14String(String c14data, int year) {
         String tmp = "";
         if(!c14data.equals("")){
             if (!c14data.equals("Undefined")) {
                 //tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
-                tmp = "_" + Math.abs(2018 - Double.parseDouble(c14data)); // years before present
+                tmp = "_" + Math.abs(year - Double.parseDouble(c14data)); // years before present
             }
 
             return tmp;

@@ -134,8 +134,16 @@ public class DBSearchDialogue extends ATabpaneDialogue{
                         "INNER JOIN publications p on s.publications_id = p.mitodb_publications_id " +
                         "INNER JOIN technical_information t on s.technicalinfo_id = t.technical_info_id";
             } else {
-                query = "SELECT " + textfield_selection_table.getText() + "FROM sequence_data";
+                query = "SELECT " + textfield_selection_table.getText() + "FROM mitodb_users";
             }
+//            query = "select * from samples s " +
+//                    "INNER JOIN publications p on s.publications_id = p.mitodb_publications_id " +
+//                    "INNER JOIN mitodb_users u on s.submitter = u.uid;";
+
+            query = "SELECT * FROM sequences s " +
+                    "INNER JOIN stats USING (accession_id) " +
+                    "INNER JOIN meta m on s.accession_id=m.accession_id;";
+
 
             CCJSqlParserManager pm = new CCJSqlParserManager();
             try {
@@ -159,11 +167,11 @@ public class DBSearchDialogue extends ATabpaneDialogue{
             e1.printStackTrace();
         }
 
-        try {
-            accessor.shutdown();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
+//        try {
+//            accessor.shutdown();
+//        } catch (SQLException e1) {
+//            e1.printStackTrace();
+//        }
 
     }
 }

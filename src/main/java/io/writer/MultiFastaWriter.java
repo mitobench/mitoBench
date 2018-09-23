@@ -27,7 +27,7 @@ public class MultiFastaWriter implements IOutputData  {
         Writer writer = null;
         try {
             if(!(file.endsWith(".fa") ||file.endsWith(".fasta") || file.endsWith(".fna")))
-                file = file + ".fa";
+                file = file + ".fasta";
 
             writer = new BufferedWriter(new FileWriter(new File(file)));
 

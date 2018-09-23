@@ -33,35 +33,104 @@ public class HSDInput implements IInputData {
         ColumnNameMapper mapper = new ColumnNameMapper();
         map = new HashMap<>();
 
-        String currline = "";
+        String currline;
         boolean init = true;
 
+        String[] header = bfr.readLine().split("\t");
+
+
+        int polys_not_found_index = -1;
+        int polys_found_index = -1;
+        int polys_remaining_index = -1;
+        int acc_in_remainings_index = -1;
+        int input_sample_index = -1;
+
+        int id_index = -1;
+        int group_index = -1;
+        int quality_index = -1;
+
+        for (int i = 0; i < header.length; i++){
+            switch (header[i]) {
+                case "SampleID":  id_index = i;
+                    break;
+                case "Haplogroup":  group_index = i;
+                    break;
+                //case "Polymorphisms":  polys_found_index = i;
+                //    break;
+                case "Found_Polys":  polys_found_index = i;
+                    break;
+                case "Overall_Rank":  quality_index = i;
+                    break;
+                case "Not_Found_Polys":  polys_not_found_index = i;
+                    break;
+                case "Remaining_Polys":  polys_remaining_index = i;
+                    break;
+                case "AAC_In_Remainings":  acc_in_remainings_index = i;
+                    break;
+                case "Input_Sample":  input_sample_index = i;
+                    break;
+            }
+        }
+
+
         while ((currline = bfr.readLine()) != null) {
-            if(currline.startsWith("SampleID") && init){
-                init = false;
-                continue; //Skip header
-            } else {
+            if(!header[0].equals("SampleID") && init){
                 if(init){
                     throw new HSDException("This is probably not a HSD input format file, as the header is missing.");
                 }
+            } else {
+
                 String[] splitGroup = currline.split("\t");
 
-                String id = splitGroup[0];
-                String group = splitGroup[2];
-                String quality = round(Double.parseDouble(splitGroup[3])*100,2) + "%";
-                String polys_not_found = splitGroup[4];
-                String polys_found = splitGroup[5];
-                String polys_remaining = splitGroup[6];
-                String acc_in_remainings = splitGroup[7];
-                String input_sample = splitGroup[8];
+                String polys_not_found = "Undefined";
+                String polys_found = "Undefined";
+                String polys_remaining = "Undefined";
+                String acc_in_remainings = "Undefined";
+                String input_sample = "Undefined";
+                String id = "Undefined";
+                String group = "Undefined";
+                String quality = "Undefined";
 
-                Entry entry = new Entry(mapper.mapString("Haplogroup"), new CategoricInputType("String"), new GenericInputData(group));
-                Entry entry2 = new Entry(mapper.mapString("Haplotype"), new CategoricInputType("String"), new GenericInputData(polys_found));
-                Entry entry_HGqual = new Entry("Haplogrep Quality", new CategoricInputType("String"), new GenericInputData(quality));
+                if(id_index!=-1){
+                    id = splitGroup[id_index].trim();
+                }
+                if(group_index!=-1){
+                    group = splitGroup[group_index].trim();
+                }
+                if(quality_index!=-1){
+                    quality = round(Double.parseDouble(splitGroup[quality_index])*100,2);
+                }
+                if(polys_not_found_index!=-1) {
+                    polys_not_found = splitGroup[polys_not_found_index].trim();
+                }
+                if(polys_found_index!=-1){
+                    polys_found = splitGroup[polys_found_index].trim();
+                }
+                if(polys_remaining_index!=-1) {
+                    polys_remaining = splitGroup[polys_remaining_index].trim();
+                }
+                if(acc_in_remainings_index!=-1) {
+                    acc_in_remainings = splitGroup[acc_in_remainings_index].trim();
+                }
+                if(input_sample_index!=-1) {
+                    input_sample = splitGroup[input_sample_index].trim();
+                }
+
+
                 List<Entry> entries = new ArrayList<>();
+                Entry entry = new Entry(mapper.mapString("Haplogroup"), new CategoricInputType("String"), new GenericInputData(group));
+                if(!polys_found.equals("Undefined")){
+                    Entry entry2 = new Entry(mapper.mapString("Haplotype"), new CategoricInputType("String"), new GenericInputData(polys_found));
+                    entries.add(entry2);
+                }
+                if(!quality.equals("Undefined")){
+                    Entry entry_HGqual = new Entry("Haplogrep Quality", new CategoricInputType("String"), new GenericInputData(quality));
+                    entries.add(entry_HGqual);
+                }
+
+
                 entries.add(entry);
-                entries.add(entry2);
-                entries.add(entry_HGqual);
+
                 map.put(id, entries);
             }
         }
@@ -74,11 +143,18 @@ public class HSDInput implements IInputData {
      * @param numberOfDigitsAfterDecimalPoint
      * @return double rounded
      */
-    public double round(double value, int numberOfDigitsAfterDecimalPoint) {
-        BigDecimal bigDecimal = new BigDecimal(value);
-        bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
-                BigDecimal.ROUND_HALF_EVEN);
-        return bigDecimal.doubleValue();
+    public String round(double value, int numberOfDigitsAfterDecimalPoint) {
+        if(Double.isNaN(value))
+            return "Nan";
+        else if (Double.isInfinite(value))
+            return "Inf";
+        else {
+            BigDecimal bigDecimal = new BigDecimal(value);
+            bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
+                    BigDecimal.ROUND_HALF_EVEN);
+            return bigDecimal.doubleValue()+"%";
+        }
+
     }
 
 

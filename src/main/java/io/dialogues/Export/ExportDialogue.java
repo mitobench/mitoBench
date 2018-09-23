@@ -30,6 +30,7 @@ public class ExportDialogue extends Application {
     private String MITOBENCH_VERSION;
     private ObservableList<ObservableList> dataToExport;
     private Logger LOG;
+    private int year=2018;
 
 
 
@@ -119,7 +120,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outfileDB = saveAsDialogue.getOutFile();
                 LOG.info("Export data into BEAST format. File: " + outfileDB);
-                BEASTWriter beastwriter = new BEASTWriter(tableController, LOG, dataToExport);
+                BEASTWriter beastwriter = new BEASTWriter(tableController, LOG, dataToExport, year);
                 beastwriter.writeData(outfileDB, tableController);
             }
             //CSV Output

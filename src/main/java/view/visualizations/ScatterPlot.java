@@ -44,7 +44,7 @@ public class ScatterPlot extends AChart{
         series.setName(name);
 
         for(int i = 0; i < pc1.length; i++){
-            XYChart.Data<Number, Number> data = new XYChart.Data(pc1[i], pc2[i]);
+            XYChart.Data<Number, Number> data = new XYChart.Data(pc1[i], pc2[i]*(-1));
             series.getData().add(data);
         }
 
@@ -71,5 +71,8 @@ public class ScatterPlot extends AChart{
     }
 
 
+    @Override
+    protected void layoutChartChildren(double v, double v1, double v2, double v3) {
 
+    }
 }

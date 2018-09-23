@@ -6,26 +6,16 @@ import analysis.ProgressBarHandler;
 import controller.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import org.xml.sax.SAXException;
 import view.menus.*;
 import view.tree.TreeView;
-
-import javax.swing.*;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.net.URL;
 
 
 /**
@@ -104,20 +94,17 @@ public class MitoBenchWindow extends Application{
         pane_root.prefHeightProperty().bind(scene.heightProperty());
         pane_root.prefWidthProperty().bind(scene.widthProperty());
 
+        enableDBBtn = new Button("Show DB");
+        enableDBBtn.setVisible(false);
+
+
         // initialize table
         tableControllerUserBench = new TableControllerUserBench(logClass);
         tableControllerUserBench.init();
         tableControllerUserBench.addRowListener(info_selected_items);
         tableControllerUserBench.getTable().setId("mainEntryTable");
         tableControllerUserBench.createContextMenu();
-
-        // init group controller
-        groupController = new GroupController(tableControllerUserBench);
-        tableControllerUserBench.setGroupController(groupController);
-
-        // this binding is responsible for binding table to main window
-        tableControllerUserBench.getTable().prefHeightProperty().bind(scene.heightProperty());
-        tableControllerUserBench.getTable().prefWidthProperty().bind(scene.widthProperty());
+        tableControllerUserBench.addButtonFunctionality(enableDBBtn, this);
 
         tableControllerDB = new TableControllerDB(logClass);
         tableControllerDB.init();
@@ -126,6 +113,17 @@ public class MitoBenchWindow extends Application{
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
         tableControllerDB.getTable().prefWidthProperty().bind(scene.widthProperty());
+
+
+        // init group controller
+        groupController = new GroupController(tableControllerUserBench);
+        tableControllerUserBench.setGroupController(groupController);
+        tableControllerDB.setGroupController(groupController);
+
+        // this binding is responsible for binding table to main window
+        tableControllerUserBench.getTable().prefHeightProperty().bind(scene.heightProperty());
+        tableControllerUserBench.getTable().prefWidthProperty().bind(scene.widthProperty());
+
 
         fileReaderController = new FileReaderController(tableControllerUserBench, logClass, this);
 
@@ -149,8 +147,6 @@ public class MitoBenchWindow extends Application{
 
         // add drag and drop files to data table view
         tableControllerUserBench.addDragAndDropFiles(this);
-
-
 
         primaryStage.show();
 
@@ -184,7 +180,7 @@ public class MitoBenchWindow extends Application{
         fileMenu = new FileMenu( statisticsMenu, this);
         AnalysisMenu analysisMenu = new AnalysisMenu(this, statisticsMenu);
         TableMenu tableMenu = new TableMenu(this);
-        VisualizationMenu graphicsMenu = new VisualizationMenu(this);
+        VisualizationMenu visualizationMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
@@ -193,7 +189,7 @@ public class MitoBenchWindow extends Application{
                                   analysisMenu.getMenuAnalysis(),
                                   statisticsMenu.getMenuTools(),
                                   tableMenu.getMenuTable(),
-                                  graphicsMenu.getMenuGraphics(),
+                                  visualizationMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 
 
@@ -204,8 +200,7 @@ public class MitoBenchWindow extends Application{
 
 
 
-    public SplitPane  getCenterPane() throws ParserConfigurationException, SAXException, IOException {
-
+    public SplitPane  getCenterPane() {
         SplitPane splitpane_center = new SplitPane();
         splitpane_center.setOrientation(Orientation.VERTICAL);
         // add table and vis/statistics pane
@@ -237,7 +232,7 @@ public class MitoBenchWindow extends Application{
      *
      *  @return
      */
-    private BorderPane configureTablePane() throws IOException, SAXException, ParserConfigurationException
+    private BorderPane configureTablePane()
     {
         final Label label = new Label("User table");
         String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " rows are selected";
@@ -249,7 +244,7 @@ public class MitoBenchWindow extends Application{
         progressBarhandler = new ProgressBarHandler();
         progressBarhandler.create();
 
-        hbox.getChildren().addAll(label, filler, progressBarhandler.getProgressBar());
+        hbox.getChildren().addAll(label, filler, progressBarhandler.getProgressBar(), enableDBBtn);
 
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTablePane");
@@ -331,12 +326,10 @@ public class MitoBenchWindow extends Application{
     private void overrideCloseSettings() {
         Platform.setImplicitExit(false);
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                we.consume();
-                LoggerSettingsDialogue loggerSettingsDialogue =
-                        new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
-            }
+        primaryStage.setOnCloseRequest(we -> {
+            we.consume();
+            LoggerSettingsDialogue loggerSettingsDialogue =
+                    new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
         });
     }
 
