@@ -13,6 +13,7 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.stat.correlation.Covariance;
 import view.visualizations.ScatterPlot;
 
+
 import java.util.*;
 
 
@@ -94,7 +95,10 @@ public class PCA {
         groups = group_members.keySet().toArray(new String[group_members.keySet().size()]);
         double[] pc1 = result_pca[0];
         double[] pc2 = result_pca[1];
-        String[] groupOrder = chartController.getGroupOrder();
+        //String[] groupOrder = chartController.getGroupOrder();
+        String[] groupOrder = new String[]{"PPP", "PP", "RP", "TRO", "EGYPA", "EGY", "MRT", "TUN", "ESH", "MAR", "SDN", "ETH", "BFA",
+                "CMR", "GIN", "SYR", "IRN", "IRQ", "TUR", "GEO", "YEM", "KWT","ARE","LBN","ISR","OMN","ARM","SAU","PAK","QAT","JOR","SVN",
+                "HUN","ITA","FRA","SRB","ENG","FRO","FIN","NOR","SWE","ESP","ISL"};
 
 
         OptionalDouble lowerbound_x = Arrays.stream(pc1).min();

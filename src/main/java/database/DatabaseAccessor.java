@@ -3,7 +3,6 @@ package database;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
-import view.dialogues.error.DatabaseErrorDialogue;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,22 +29,25 @@ public class DatabaseAccessor {
 
         Class.forName(driverClassName);
         try{
-            connection = DriverManager.getConnection(dbURL, username_root, password_root);
-            //connection = DriverManager.getConnection(dbURL, username, password);
-            Statement stmt = connection.createStatement();
-            query = "SELECT alias, passwd FROM mitodb_users;";
-            stmt.executeQuery(query);
-            ResultSet rs = stmt.getResultSet();
+            //connection = DriverManager.getConnection(dbURL, username_root, password_root);
+            connection = DriverManager.getConnection(dbURL);
+            //connection = DriverManager.getConnection(dbURL, "mitodbreader", "$MitoRead17");
+//            Statement stmt = connection.createStatement();
+//            query = "SELECT user_alias, passwd FROM mitodb_users;";
+//            stmt.executeQuery(query);
+//            ResultSet rs = stmt.getResultSet();
+//
+//            while(rs.next()){
+//                dbUsername = rs.getString("user_alias");
+//                dbPassword = rs.getString("passwd");
+//
+//                if(dbUsername.equals(username) && dbPassword.equals(password)){
+//                    login = true;
+//                }
+//            }
+//            return login;
+            return true;
 
-            while(rs.next()){
-                dbUsername = rs.getString("alias");
-                dbPassword = rs.getString("passwd");
-
-                if(dbUsername.equals(username) && dbPassword.equals(password)){
-                    login = true;
-                }
-            }
-            return login;
 
         } catch (Exception e){
             //DatabaseErrorDialogue databaseErrorDialogue = new DatabaseErrorDialogue();
@@ -66,7 +68,8 @@ public class DatabaseAccessor {
         try (
                 Statement stmnt = connection.createStatement();
                 ResultSet rs = stmnt.executeQuery(query)
-        ){
+        )
+        {
             HashMap<String, List<Entry>> data = new HashMap<>();
             while (rs.next()) {
                 List entries = getTableData(rs);
@@ -83,7 +86,7 @@ public class DatabaseAccessor {
         Entry e;
         for(int i = 1; i < rsmd.getColumnCount(); i++){
             String col = rsmd.getColumnName(i);
-            if(col.equals("mitodb_sample_id")){
+            if(col.equals("accession_id")){
                 rowID = rs.getString(i);
             } else {
               String data_string = rs.getString(i);

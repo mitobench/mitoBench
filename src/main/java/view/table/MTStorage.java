@@ -21,21 +21,8 @@ public class MTStorage implements IDataStorage {
         return mtSequences;
     }
 
-    public void setMTStorage(DataTable table){
 
-        // iterate over rows
-        // get ID and
-
-        String[] ids = table.getDataTable().get("ID");
-        String[] seqs = table.getDataTable().get("MTSequence");
-
-        for(int i = 0; i < ids.length; i++){
-            String seq = seqs[i];
-            if(!mtSequences.containsKey(ids[i]))
-                mtSequences.put(ids[i], seq);
-        }
-
-
-
+    public void addEntry(String key, String mtSeq) {
+        mtSequences.put(key,mtSeq);
     }
 }

@@ -5,14 +5,12 @@ import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import controller.*;
 import io.Exceptions.*;
-import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
 import io.dialogues.Import.ImportDialogueAlternative;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
 import io.fileConversionPGDSpider.SpiderCoversion;
-import io.reader.*;
 import io.writer.ImageWriter;
 import io.writer.StatisticsWriter;
 import javafx.event.ActionEvent;
@@ -23,15 +21,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import view.dialogues.error.ARPErrorDialogue;
-import view.dialogues.error.FastAErrorDialogue;
-import view.dialogues.error.HSDErrorDialogue;
-import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
 import io.dialogues.Export.ExportDialogue;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -109,22 +102,20 @@ public class FileMenu {
 
         MenuItem importFile = new MenuItem("Import");
         importFile.setId("importFile");
-        importFile.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                IImportDialogue importDialogue;
+        importFile.setOnAction(t -> {
+            IImportDialogue importDialogue;
 
-                if(isJUnitTest()){
+            if(isJUnitTest()){
 
-                    ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fileReaderController);
-                    importDialogueAlternative.getFile();
+                ImportDialogueAlternative importDialogueAlternative = new ImportDialogueAlternative(fileReaderController);
+                importDialogueAlternative.getFile();
 
-                } else {
-                    importDialogue = importDialogueFactory.create(stage);
-                    importDialogue.start();
-                    fileReaderController.openFile(importDialogue.getSelectedFile());
-                }
-
+            } else {
+                importDialogue = importDialogueFactory.create(stage);
+                importDialogue.start();
+                fileReaderController.openFile(importDialogue.getSelectedFile());
             }
+
         });
 
 

@@ -4,8 +4,6 @@ import Logging.LogClass;
 import io.datastructure.Entry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import org.controlsfx.control.table.TableFilter;
 import view.MitoBenchWindow;
@@ -27,6 +25,10 @@ public class TableControllerDB extends ATableController {
 
     public void addFilter(){
         TableFilter filter = new TableFilter(table);
+        //TableFilter<ObservableList> tableFilter = TableFilter.forTableView(table).lazy(true).apply();
+//        tableFilter.unSelectAllValues(origCol);
+//        tableFilter.selectValue(origCol,"ABQ");
+//        tableFilter.executeFilter();
     }
 
     public void addButtonFunctionality(Button addAllBtn, Button addSelectedBtn, Button disableBtn, MitoBenchWindow mitoBenchWindow) {

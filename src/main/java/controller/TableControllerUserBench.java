@@ -65,11 +65,8 @@ public class TableControllerUserBench extends ATableController {
 
         });
 
-
-
         menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, copyColumn,  deleteColumn);
         table.setContextMenu(menu);
-
 
     }
 

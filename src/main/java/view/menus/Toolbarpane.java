@@ -54,7 +54,8 @@ public class Toolbarpane extends ToolBar {
         openFileBtn.setTooltip(new Tooltip("Import file"));
         saveprojectBtn.setTooltip(new Tooltip("Export all data"));
         goBackBtn.setTooltip(new Tooltip("Go one filtering step back"));
-        this.getItems().addAll(openFileBtn, saveprojectBtn, goBackBtn);
+        //this.getItems().addAll(openFileBtn, saveprojectBtn, goBackBtn);
+        this.getItems().addAll(openFileBtn, saveprojectBtn);
     }
 
 

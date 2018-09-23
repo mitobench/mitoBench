@@ -55,8 +55,13 @@ public class GenericInputParser implements IInputData {
                 continue;
             } else {
                 String[] splitLine = currline.split(delimiter);
-                for(String s : splitLine)
-                    s.trim();
+                for(int i = 0; i < splitLine.length; i++){
+                    splitLine[i].trim();
+                    if(splitLine[i].equals("")){
+                        splitLine[i] = "Undefined";
+                    }
+                }
+
                 //Assume ID is always first! -> requirement
                 List<Entry> entries = new ArrayList<>();
                 //we need to take care of our different types here now, too

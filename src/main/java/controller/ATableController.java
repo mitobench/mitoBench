@@ -150,6 +150,13 @@ public abstract class ATableController {
 
 
         for(String key_new : input_new.keySet()){
+            if(key_new==null){
+                List<Entry> elist = input_new.get(key_new);
+                for (Entry e : elist){
+                    if (e.getIdentifier().equals("accession_id"))
+                        key_new = e.getData().getTableInformation();
+                }
+            }
             if(table_content.containsKey(key_new)){
                 // update entry
                 List<Entry> entries = table_content.get(key_new);
@@ -255,31 +262,33 @@ public abstract class ATableController {
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
 
         HashMap<String, String[]> data_hash = dataTable.getDataTable();
+        if(data_hash.size()!=0){
+            String[][] data_tmp = new String[dataTable.getDataTable().get("ID").length][dataTable.getDataTable().keySet().size()];
 
-        String[][] data_tmp = new String[dataTable.getDataTable().get("ID").length][dataTable.getDataTable().keySet().size()];
-
-        int m = 0;
-        for(String col : col_names_sorted){
-            String[] col_entry = data_hash.get(col);
-            for(int j = 0; j < col_entry.length; j++){
-                String e = col_entry[j];
-                if(e != null){
-                    data_tmp[j][m] = col_entry[j];
-                } else {
-                    data_tmp[j][m] = "Undefined";
+            int m = 0;
+            for(String col : col_names_sorted){
+                String[] col_entry = data_hash.get(col);
+                for(int j = 0; j < col_entry.length; j++){
+                    String e = col_entry[j];
+                    if(e != null && !e.equals("null")){
+                        data_tmp[j][m] = col_entry[j];
+                    } else {
+                        data_tmp[j][m] = "Undefined";
+                    }
                 }
+                m++;
             }
-            m++;
+
+            for(int i = 0 ; i < data_tmp.length; i++){
+                ObservableList row = FXCollections.observableArrayList();
+                for(int j = 0 ; j < data_tmp[i].length; j++){
+                    String value = data_tmp[i][j];
+                    row.add(value);
+                }
+                parsedData.add(row);
+            }
         }
 
-        for(int i = 0 ; i < data_tmp.length; i++){
-            ObservableList row = FXCollections.observableArrayList();
-            for(int j = 0 ; j < data_tmp[i].length; j++){
-                String value = data_tmp[i][j];
-                row.add(value);
-            }
-            parsedData.add(row);
-        }
 
         return parsedData;
     }
@@ -294,7 +303,7 @@ public abstract class ATableController {
         // update version
         updateVersion();
 
-        ObservableList<ObservableList> new_items_copy = FXCollections.observableArrayList();
+        ObservableList<ObservableList> new_items_copy;
         new_items_copy = copyData(newItems);
         if(data_initial==null){
             data_initial = copyData(data);

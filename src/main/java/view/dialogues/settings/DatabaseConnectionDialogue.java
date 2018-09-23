@@ -54,8 +54,8 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
         password_field.setId("password_field");
 
         // test user
-        username_field.setText("mitodbreader");
-        password_field.setText("$MitoRead17");
+        username_field.setText("mitotest");
+        password_field.setText("$2a$10$gsy2KTn6xznKETjG1AHcMOLC.6YNtkikttyOzNBP/2B2GMQSW6m4e");
 
         loginBtn = new Button("Login");
         loginBtn.setId("loginButton");

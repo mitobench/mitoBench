@@ -66,19 +66,17 @@ public class StatisticsMenu {
 
         MenuItem mutations = new MenuItem("Calculate haplotype frequency");
         mutations.setId("toolsMenu_mutation_freq");
-        mutations.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                LOG.info("Calculate haplotype frequency");
+        mutations.setOnAction(t -> {
+            LOG.info("Calculate haplotype frequency");
 
-                mutationStatistics = new HaplotypeStatistics(LOGClass, mito.getPrimaryStage());
+            mutationStatistics = new HaplotypeStatistics(LOGClass, mito.getPrimaryStage());
 
-                mutationStatistics.calculateHaplotypeFrequencies(treeHaploController.getTree().getMutations_per_hg(),
-                        tableController.getTableColumnByName("Haplogroup"), tableController.getTable(),
-                        treeHaploController);
+            mutationStatistics.calculateHaplotypeFrequencies(treeHaploController.getTree().getMutations_per_hg(),
+                    tableController.getTableColumnByName("Haplogroup"), tableController.getTable(),
+                    treeHaploController);
 
-                mutationStatistics.writeToTable(statsTabpane);
+            mutationStatistics.writeToTable(statsTabpane);
 
-            }
         });
 
         menuTools.getItems().addAll(haploStats, mutations);

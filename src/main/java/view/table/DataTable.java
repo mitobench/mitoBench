@@ -67,18 +67,7 @@ public class DataTable {
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
-                    String mtSeq = entry.getData().getTableInformation();
-                    String mtseq_short;
-                    if(mtSeq.length() > 5 ){
-                        mtseq_short = mtSeq.substring(0,5)+"...";
-                    } else {
-                        mtseq_short = mtSeq;
-                    }
-
-                    // store original mt seq
-                    columnEntries[getRowPosition(key)] = mtSeq;
-                    mtStorage.setMTStorage(this);
-                    columnEntries[getRowPosition(key)] = mtseq_short;
+                    setSequenceMap(entry, key, columnEntries);
 
                 } else {
                     columnEntries[rowPosition] = entry.getData().getTableInformation();
@@ -95,23 +84,29 @@ public class DataTable {
                 String[] columnEntries = data.get(columnName);
 
                 if(columnName.equals("MTSequence")){
-                    String mtSeq = entry.getData().getTableInformation();
-                    String mtseq_short;
-                    if(mtSeq.length() > 5 ){
-                        mtseq_short = mtSeq.substring(0,5)+"...";
-                    } else {
-                        mtseq_short = mtSeq;
-                    }
-
-                    columnEntries[getRowPosition(key)] = mtSeq;
-                    mtStorage.setMTStorage(this);
-                    columnEntries[getRowPosition(key)] = mtseq_short;
+                    setSequenceMap(entry, key, columnEntries);
                 } else {
                     columnEntries[getRowPosition(key)] = entry.getData().getTableInformation();
                 }
 
             }
         }
+    }
+
+    private void setSequenceMap(Entry entry, String key, String[] columnEntries){
+        String mtSeq = entry.getData().getTableInformation();
+        String mtseq_short;
+        if(mtSeq.length() > 5 ){
+            mtseq_short = mtSeq.substring(0,5)+"...";
+        } else {
+            mtseq_short = mtSeq;
+        }
+
+        // store original mt seq
+        columnEntries[getRowPosition(key)] = mtSeq;
+        //mtStorage.setMTStorage(this);
+        mtStorage.addEntry(key, mtSeq);
+        columnEntries[getRowPosition(key)] = mtseq_short;
     }
 
     /**

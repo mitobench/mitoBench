@@ -5,7 +5,10 @@ import controller.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.text.Font;
@@ -32,6 +35,7 @@ import java.util.List;
  */
 public class VisualizationMenu {
 
+    private final VisualizationController visualizationController;
     private MitoBenchWindow mito;
     private Stage stage;
     private Scene scene;
@@ -45,7 +49,7 @@ public class VisualizationMenu {
     private BarPlotHaplo2 barPlotHaplo2;
     private BarChartGrouping barChartGrouping;
     private StackedBar stackedBar;
-    private SunburstChartCreator sunburstChart;
+    //private SunburstChartCreator sunburstChart;
     private TreeView treeView;
     private ProfilePlot profilePlot;
     private PieChartViz pieChartViz;
@@ -72,197 +76,201 @@ public class VisualizationMenu {
         scene = mitoBenchWindow.getScene();
         stage = mitoBenchWindow.getPrimaryStage();
 
+        logClass = mitoBenchWindow.getLogClass();
+
         treeController = mitoBenchWindow.getTreeController();
         tableController = mitoBenchWindow.getTableControllerUserBench();
         chartController = mitoBenchWindow.getChartController();
         groupController = mitoBenchWindow.getGroupController();
-
         tabPane = mitoBenchWindow.getTabpane_visualization();
+
+        visualizationController = new VisualizationController(
+                mitoBenchWindow
+        );
+
         treeMap_path_to_root = treeController.getTreeMap_leaf_to_root();
         tree_root = treeController.deepcopy(treeController.getTree().getTree().getRoot());
         treeView = treeController.getTree().getTree();
         statsTabpane = mitoBenchWindow.getTabpane_statistics();
 
-        LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
-        logClass = mitoBenchWindow.getLogClass();
+
+
+        treeView = visualizationController.getTreeView();
+        tree_root = visualizationController.getTree_root();
+
         addSubMenus();
     }
 
 
-    public void initHaploBarchart(String titlePart) throws MalformedURLException {
-        LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
-        Text t = new Text();
-        t.setText("Haplogroup occurrences " + titlePart);
-        t.setFont(Font.font(25));
+//    public void initHaploBarchart(String titlePart) {
+//        LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
+//        Text t = new Text();
+//        t.setText("Haplogroup occurrences " + titlePart);
+//        t.setFont(Font.font(25));
+//
+//        this.barPlotHaplo = new BarPlotHaplo(
+//                t.getText(),
+//                "Counts",
+//                stage,
+//                tableController,
+//                tabPane,
+//                logClass
+//        );
+//        //barPlotHaplo.setStyleSheet(stage);
+//        Tab tab = new Tab();
+//        tab.setId("tab_haplo_barchart");
+//        tab.setText("Haplogroup occurrences");
+//        tab.setContent(barPlotHaplo.getBarChart());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//
+//    }
 
-        this.barPlotHaplo = new BarPlotHaplo(
-                t.getText(),
-                "Counts",
-                stage,
-                tableController,
-                tabPane,
-                logClass
-        );
-        //barPlotHaplo.setStyleSheet(stage);
-        Tab tab = new Tab();
-        tab.setId("tab_haplo_barchart");
-        tab.setText("Haplogroup occurrences");
-        tab.setContent(barPlotHaplo.getBarChart());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
+//    public void initHaploBarchart2(String titlePart) throws MalformedURLException {
+//        LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
+//        Text t = new Text();
+//        t.setText("Haplogroup occurrences " + titlePart);
+//        t.setFont(Font.font(25));
+//
+//        this.barPlotHaplo2 = new BarPlotHaplo2(
+//                t.getText(),
+//                "Number of samples",
+//                "Occurrences of haplogroups",
+//                stage,
+//                tableController,
+//                tabPane,
+//                logClass
+//        );
+//
+//        //barPlotHaplo2.setStyleSheet(stage);
+//        Tab tab = new Tab();
+//        tab.setId("tab_haplo_barchart");
+//        tab.setText("Haplogroup occurrences");
+//        tab.setContent(barPlotHaplo2.getBarChart());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//
+//    }
+//
+//    public void initGroupBarChart() throws MalformedURLException {
+//        LOG.info("Visualize data: Group frequency (Barchart)");
+//
+//        Text t = new Text();
+//        t.setText("Number of samples per group");
+//        t.setFont(Font.font(25));
+//
+//        barChartGrouping = new BarChartGrouping(t.getText(), "# of Samples", tabPane, logClass);
+//        barChartGrouping.setStyleSheet(stage);
+//
+//        Tab tab = new Tab();
+//        tab.setId("tab_group_barchart");
+//        tab.setText("Bar Chart Grouping");
+//        tab.setContent(barChartGrouping.getBarChart());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//    }
 
-    }
+//
+//    public void initStackedBarchart() throws MalformedURLException {
+//        LOG.info("Visualize data: Haplogroup frequency per group (Stacked Barchart)");
+//
+//        Text t = new Text();
+//        t.setText("Haplogroup frequency per group");
+//        t.setFont(Font.font(25));
+//
+//        this.stackedBar = new StackedBar(t.getText(), tabPane, this, chartController, tableController);
+//        stackedBar.setStyleSheet(stage);
+//        Tab tab = new Tab();
+//        tab.setId("tab_stacked_bar_chart");
+//        tab.setText("Haplogroup frequency per group");
+//        tab.setContent(stackedBar.getSbc());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//
+//    }
 
-    public void initHaploBarchart2(String titlePart) throws MalformedURLException {
-        LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
-        Text t = new Text();
-        t.setText("Haplogroup occurrences " + titlePart);
-        t.setFont(Font.font(25));
-
-        this.barPlotHaplo2 = new BarPlotHaplo2(
-                t.getText(),
-                "Number of samples",
-                "Occurrences of haplogroups",
-                stage,
-                tableController,
-                tabPane,
-                logClass
-        );
-
-        //barPlotHaplo2.setStyleSheet(stage);
-        Tab tab = new Tab();
-        tab.setId("tab_haplo_barchart");
-        tab.setText("Haplogroup occurrences");
-        tab.setContent(barPlotHaplo2.getBarChart());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-
-    }
-
-    public void initGroupBarChart() throws MalformedURLException {
-        LOG.info("Visualize data: Group frequency (Barchart)");
-
-        Text t = new Text();
-        t.setText("Number of samples per group");
-        t.setFont(Font.font(25));
-
-        barChartGrouping = new BarChartGrouping(t.getText(), "# of Samples", tabPane, logClass);
-        barChartGrouping.setStyleSheet(stage);
-
-        Tab tab = new Tab();
-        tab.setId("tab_group_barchart");
-        tab.setText("Bar Chart Grouping");
-        tab.setContent(barChartGrouping.getBarChart());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-    }
-
-
-    public void initStackedBarchart() throws MalformedURLException {
-        LOG.info("Visualize data: Haplogroup frequency per group (Stacked Barchart)");
-
-        Text t = new Text();
-        t.setText("Haplogroup frequency per group");
-        t.setFont(Font.font(25));
-
-        this.stackedBar = new StackedBar(t.getText(), tabPane, this, chartController, tableController);
-        stackedBar.setStyleSheet(stage);
-        Tab tab = new Tab();
-        tab.setId("tab_stacked_bar_chart");
-        tab.setText("Haplogroup frequency per group");
-        tab.setContent(stackedBar.getSbc());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-
-    }
-
-    private void initSunburst(){
-        LOG.info("Visualize data: Sunburst Chart");
-
-        sunburstChart = new SunburstChartCreator(stage, tabPane, logClass);
-        Tab tab = new Tab();
-        tab.setId("tab_sunburst");
-        tab.setText("Sunburst Chart");
-        sunburstChart.getBorderPane().prefHeightProperty().bind(stage.heightProperty());
-        sunburstChart.getBorderPane().prefWidthProperty().bind(stage.widthProperty());
-        tab.setContent(sunburstChart.getBorderPane());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-
-    }
-
-
-    private void initPieChart(String title) throws MalformedURLException {
-        LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
-
-        Text t = new Text(title);
-        t.setFont(Font.font(25));
-
-        pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
-        pieChartViz.setStyleSheet(stage);
-        Tab tab = new Tab();
-        tab.setId("tab_piechart");
-        tab.setText("Pie Chart");
-        pieChartViz.getChart().prefHeightProperty().bind(stage.heightProperty());
-        pieChartViz.getChart().prefWidthProperty().bind(stage.widthProperty());
-        tab.setContent(pieChartViz.getChart());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-
-    }
+//    private void initSunburst(){
+//        LOG.info("Visualize data: Sunburst Chart");
+//
+//        sunburstChart = new SunburstChartCreator(stage, tabPane, logClass);
+//        Tab tab = new Tab();
+//        tab.setId("tab_sunburst");
+//        tab.setText("Sunburst Chart");
+//        sunburstChart.getBorderPane().prefHeightProperty().bind(stage.heightProperty());
+//        sunburstChart.getBorderPane().prefWidthProperty().bind(stage.widthProperty());
+//        tab.setContent(sunburstChart.getBorderPane());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//
+//    }
 
 
-    private void initProfilePlot() throws MalformedURLException {
-        LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
-
-        Text t = new Text();
-        t.setText("Haplogroup profile");
-        t.setFont(Font.font(100));
-
-        profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Frequency in %", tabPane,
-                logClass, profilePlotID);
-        profilePlot.setStyleSheet(stage);
-
-        Tab tab = new Tab();
-        tab.setId("tab_profilePlot_" + profilePlotID);
-        tab.setText("Profile Plot (pp " + profilePlotID + ")");
-        tab.setContent(profilePlot.getPlot());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-        profilePlotID++;
-
-    }
+//    private void initPieChart(String title) throws MalformedURLException {
+//        LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
+//
+//        Text t = new Text(title);
+//        t.setFont(Font.font(25));
+//
+//        pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
+//        pieChartViz.setStyleSheet(stage);
+//        Tab tab = new Tab();
+//        tab.setId("tab_piechart");
+//        tab.setText("Pie Chart");
+//        pieChartViz.getChart().prefHeightProperty().bind(stage.heightProperty());
+//        pieChartViz.getChart().prefWidthProperty().bind(stage.widthProperty());
+//        tab.setContent(pieChartViz.getChart());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//
+//    }
 
 
-    private void initMap(){
-        LOG.info("Visualize data: Visualize all samples on map");
-
-        GeographicalMapViz geographicalMapViz = new GeographicalMapViz();
-
-        GeographicalMapController mapViewController = new GeographicalMapController(
-                mito,
-                groupController,
-                geographicalMapViz
-        );
-
-        Tab tab = new Tab();
-        tab.setId("tab_map");
-        tab.setText("Map");
-        tab.setContent(geographicalMapViz.getMapBasicPane());
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
-
-    }
-
-
-    public void clearCharts(){
-        stackedBar = null;
-        barPlotHaplo = null;
-        tabPane.getTabs().clear();
-    }
+//    private void initProfilePlot() throws MalformedURLException {
+//        LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
+//
+//        Text t = new Text();
+//        t.setText("Haplogroup profile");
+//        t.setFont(Font.font(100));
+//
+//        profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Frequency in %", tabPane,
+//                logClass, profilePlotID);
+//        profilePlot.setStyleSheet(stage);
+//
+//        Tab tab = new Tab();
+//        tab.setId("tab_profilePlot_" + profilePlotID);
+//        tab.setText("Profile Plot (pp " + profilePlotID + ")");
+//        tab.setContent(profilePlot.getPlot());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//        profilePlotID++;
+//
+//    }
 
 
-    private void addSubMenus() {
+//    private void initMap(){
+//        LOG.info("Visualize data: Visualize all samples on map");
+//
+//        GeographicalMapViz geographicalMapViz = new GeographicalMapViz();
+//
+//        GeographicalMapController mapViewController = new GeographicalMapController(
+//                mito,
+//                groupController,
+//                geographicalMapViz
+//        );
+//
+//        Tab tab = new Tab();
+//        tab.setId("tab_map");
+//        tab.setText("Map");
+//        tab.setContent(geographicalMapViz.getMapBasicPane());
+//        tabPane.getTabs().add(tab);
+//        tabPane.getSelectionModel().select(tab);
+//
+//    }
+
+
+
+
+    public void addSubMenus() {
 
         Menu haplo_graphics = new Menu("Haplogroups");
         haplo_graphics.setId("haplo_graphics");
@@ -273,6 +281,25 @@ public class VisualizationMenu {
         Menu grouping_graphics = new Menu("Grouping");
         grouping_graphics.setId("grouping_graphics");
 
+          /*
+
+                Visualize data on map
+
+         */
+        Menu maps = new Menu("Map view");
+        maps.setId("maps_menu");
+        MenuItem mapsItem = new MenuItem("Visualize data on map (internet connection needed)");
+        mapsItem.setId("maps_item");
+        mapsItem.setOnAction(t -> {
+            if(!tableController.isTableEmpty()){
+                visualizationController.initMap();
+            }
+
+        });
+
+        Menu options = new Menu("Options");
+        options.setId("menu_options");
+
         /*
                         Plot HG frequency
 
@@ -280,22 +307,20 @@ public class VisualizationMenu {
 
         MenuItem plotHGfreq = new MenuItem("Plot haplogroup frequency as barchart");
         plotHGfreq.setId("plotHGfreq_item");
-        plotHGfreq.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try {
+        plotHGfreq.setOnAction(t -> {
+            try {
 
-                    if(tableController.getTable().getItems().size() != 0 ){
-                        TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
+                if(tableController.getTable().getItems().size() != 0 ){
+                    TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
 
-                        if(haplo_col!=null){
-                            initHaploBarchart("(all data)");
-                            createHaploBarchart(haplo_col, null);
-                        }
+                    if(haplo_col!=null){
+                        visualizationController.initHaploBarchart("(all data)");
+                        createHaploBarchart(haplo_col, null);
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -310,7 +335,7 @@ public class VisualizationMenu {
                         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
 
                         if(haplo_col!=null){
-                            initHaploBarchart2("(all data)");
+                            visualizationController.initHaploBarchart2("(all data)");
                             createHaploBarchart2(haplo_col, null);
                         }
                     }
@@ -359,12 +384,12 @@ public class VisualizationMenu {
                 advancedStackedBarchartDialogue.getApplyBtn().setOnAction(e -> {
                     advancedStackedBarchartDialogue.getApplyBtn();
                     try {
-                        initStackedBarchart();
+                        visualizationController.initStackedBarchart(this);
                     } catch (MalformedURLException e1) {
                         e1.printStackTrace();
                     }
 
-
+                    stackedBar = visualizationController.getStackedBar();
                     //chartController.addDataStackedBarChart(stackedBar, selection_haplogroups, selection_groups);
                     chartController.addDataStackedBarChart(
                             stackedBar,
@@ -425,29 +450,29 @@ public class VisualizationMenu {
 
         MenuItem sunburstChartItem = new MenuItem("Create Sunburst chart...");
         sunburstChartItem.setId("sunburstChart_item");
-        sunburstChartItem.setOnAction(t -> {
-            try {
-
-                // makes only sense if grouping exists.
-                if(tableController.getTableColumnByName("Grouping") != null
-                        && tableController.getTable().getItems().size() != 0 ){
-                    initSunburst();
-                    // get selected rows
-                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
-                    HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
-                    sunburstChart.create(hg_to_group, chartController.getWeights(), treeMap_path_to_root, tree_root, treeView);
-                } else {
-                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                            "No groups defined",
-                            "Please define a grouping first.",
-                            null,
-                            "groupWarning");
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+//        sunburstChartItem.setOnAction(t -> {
+//            try {
+//
+//                // makes only sense if grouping exists.
+//                if(tableController.getTableColumnByName("Grouping") != null
+//                        && tableController.getTable().getItems().size() != 0 ){
+//                    visualizationController.initSunburst();
+//                    // get selected rows
+//                    ObservableList<ObservableList> selectedTableItems = tableController.getSelectedRows();
+//                    HashMap<String, List<String>> hg_to_group = chartController.getHG_to_group(selectedTableItems);
+//                    sunburstChart.create(hg_to_group, chartController.getWeights(), treeMap_path_to_root, tree_root, treeView);
+//                } else {
+//                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
+//                            "No groups defined",
+//                            "Please define a grouping first.",
+//                            null,
+//                            "groupWarning");
+//                }
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
 
 
 
@@ -476,7 +501,8 @@ public class VisualizationMenu {
 
                     hGlistProfilePlot.getOkBtn().setOnAction(e -> {
                         try {
-                            initProfilePlot();
+                            visualizationController.initProfilePlot();
+                            profilePlot = visualizationController.getProfilePlot();
                             profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHGsForProfilelotVis());
                         } catch (MalformedURLException e1) {
                             e1.printStackTrace();
@@ -555,10 +581,12 @@ public class VisualizationMenu {
                             for(String group : groupController.getGroupnames()) {
                                 if(!group.equals("Undefined")){
                                     try {
-                                        initPieChart(group);
+                                        visualizationController.initPieChart(group);
                                     } catch (MalformedURLException e1) {
                                         e1.printStackTrace();
                                     }
+
+                                    pieChartViz = visualizationController.getPieChartViz();
                                     pieChartViz.createPlot(group, data_all);
                                     pieChartViz.setColor(stage);
                                 }
@@ -574,10 +602,11 @@ public class VisualizationMenu {
                                         hg_list_trimmed);
 
                                 try {
-                                    initPieChart("Haplogroup frequency");
+                                    visualizationController.initPieChart("Haplogroup frequency");
                                 } catch (MalformedURLException e1) {
                                     e1.printStackTrace();
                                 }
+                                pieChartViz = visualizationController.getPieChartViz();
                                 pieChartViz.createPlotSingle(hgs_summed);
                                 pieChartViz.setColor(stage);
                             }
@@ -604,7 +633,7 @@ public class VisualizationMenu {
         clearPlotBox.setId("clear_plots");
         clearPlotBox.setOnAction(t -> {
             try {
-                clearCharts();
+                visualizationController.clearCharts();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -624,7 +653,8 @@ public class VisualizationMenu {
 
                     TableColumn haplo_col = tableController.getTableColumnByName("Grouping");
                     if(haplo_col != null){
-                        initGroupBarChart();
+                        visualizationController.initGroupBarChart();
+                        barChartGrouping = visualizationController.getBarChartGrouping();
                         chartController.addDataBarChart(barChartGrouping, haplo_col, null);
                         barChartGrouping.setColor(stage);
                     } else {
@@ -641,37 +671,50 @@ public class VisualizationMenu {
             }
         });
 
+        MenuItem showTickLabels = new CheckMenuItem("Show label (x axis)");
+        showTickLabels.setId("menuItem_showLabel");
+        ((CheckMenuItem) showTickLabels).setSelected(true);
 
-        /*
-
-                Visualize data on map
-
-         */
-        Menu maps = new Menu("Map view");
-        maps.setId("maps_menu");
-        MenuItem mapsItem = new MenuItem("Visualize data on map (internet connection needed)");
-        mapsItem.setId("maps_item");
-        mapsItem.setOnAction(t -> {
-            if(!tableController.isTableEmpty()){
-                initMap();
-            }
-
+        showTickLabels.setOnAction(t -> {
+//            if(((CheckMenuItem) showTickLabels).isSelected()){
+//                String id = this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getId();
+//                Chart c = (Chart)this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getContent();
+//                if (id.contains("stacked_bar_chart")){
+//                    StackedBar ac = (StackedBar) c;
+//                    ac.showLabelXAxis();
+//                }
+//
+//                System.out.println(id + " now selected");
+//            } else if (!((CheckMenuItem) showTickLabels).isSelected()){
+//                String id = this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getId();
+//                Chart c = (Chart)this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getContent();
+//                if (id.contains("stacked_bar_chart")){
+//                    StackedBar ac = (StackedBar) c;
+//                    ac.hideLabelXAxis();
+//                }
+//                System.out.println(id+ " now NOT selected");
+//            }
         });
+
+
 
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqHist, plotHGfreqGroup);
         haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart);
         maps.getItems().add(mapsItem);
+        options.getItems().addAll(showTickLabels, clearPlotBox);
 
-        menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, maps, new SeparatorMenuItem(), clearPlotBox);
+        menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, maps, new SeparatorMenuItem(), options);
     }
 
     public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
+        barPlotHaplo = visualizationController.getBarPlotHaplo();
         chartController.addDataBarChart(barPlotHaplo, haplo_col, columnData);
     }
 
     public void createHaploBarchart2(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
+        barPlotHaplo2 = visualizationController.getBarPlotHaplo2();
         chartController.addDataBarChart(barPlotHaplo2, haplo_col, columnData);
     }
 
