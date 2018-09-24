@@ -1,7 +1,7 @@
 # MitoBench
 
 [![Build Status](https://travis-ci.org/Integrative-Transcriptomics/MitoBench.svg?branch=master)](https://travis-ci.org/Integrative-Transcriptomics/MitoBench)
-[![codecov](https://codecov.io/gh/Integrative-Transcriptomics/MitoBench/branch/master/graph/badge.svg?token=j5AgZQV3HJ)](https://codecov.io/gh/apeltzer/MitoBench)
+[![codecov](https://codecov.io/gh/Integrative-Transcriptomics/MitoBench/branch/master/graph/badge.svg)](https://codecov.io/gh/Integrative-Transcriptomics/MitoBench)
 [![dependencies Status](https://david-dm.org/thomasjo/atom-latex/status.svg)](https://david-dm.org/thomasjo/atom-latex)
 [![DOI](https://zenodo.org/badge/72427990.svg)](https://zenodo.org/badge/latestdoi/72427990)
 [![Documentation Status](https://readthedocs.org/projects/mitobench/badge/?version=latest)](http://mitobench.readthedocs.io/en/latest/?badge=latest)
