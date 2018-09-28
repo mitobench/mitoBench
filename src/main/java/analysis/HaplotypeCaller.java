@@ -33,7 +33,7 @@ public class HaplotypeCaller {
 
     }
 
-    public void call() throws JSONException, IOException, InterruptedException {
+    public void call() throws IOException, InterruptedException {
 
         String file = "multifasta.fasta";
 
@@ -66,16 +66,14 @@ public class HaplotypeCaller {
 
     private void start(String f) throws IOException, InterruptedException {
 
-        URL url = this.getClass().getResource("/jars/haplogrep-2.2-beta.jar");
-        String dirpath = url.getPath();//System.getProperty("user.dir") +  File.separator + "jar"+ File.separator +"haplogrep-2.2-beta.jar";
-        //String haplogrep2_jar = dirpath.split("/")[1];
+        URL url = this.getClass().getResource("/jars/haplogrep-2.1.15.jar");
+        String dirpath = url.getPath();
         System.out.println(url.getPath());
         String[] command = new String[] { "java", "-jar", dirpath,
                 "--format",
                 "fasta",
                 "--in",f,
-                "--out", "haplogroups.hsd",
-                "--phylotree", phylotreeVersion};
+                "--out", "haplogroups.hsd"};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         process.waitFor();
@@ -86,7 +84,7 @@ public class HaplotypeCaller {
         System.out.println("Haplogroups are determined");
 
         //delete temporary fasta file
-        //Files.delete(new File(f).toPath());
+        Files.delete(new File(f).toPath());
 
         LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.2-beta");
 
