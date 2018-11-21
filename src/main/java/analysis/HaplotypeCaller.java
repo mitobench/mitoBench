@@ -33,47 +33,65 @@ public class HaplotypeCaller {
 
     }
 
-    public void call() throws IOException, InterruptedException {
-
+    public void call(String lineage) throws IOException, InterruptedException {
         String file = "multifasta.fasta";
+        System.out.println(file);
 
         // generate fasta file with all sequences for which haplogroups have to be determined
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getSelectedRows());
         multiFastaWriter.writeData(file, tableController);
 
-        start(file);
+        start(file, lineage);
 
     }
 
 
     public void update() {
+
+        //HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
+        HSDInput hsdInput = null;
         try {
-            //HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
-            HSDInput hsdInput = new HSDInput("haplogroups.hsd", LOG);
-            tableController.updateTable(hsdInput.getCorrespondingData());
-            Files.delete(new File("haplogroups.hsd").toPath());
-            Files.delete(new File("haplogrep.log").toPath());
-            Files.delete(new File("multifasta.fasta").toPath());
+            hsdInput = new HSDInput("haplogroups.hsd", LOG);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (HSDException e) {
             e.printStackTrace();
         }
+        tableController.updateTable(hsdInput.getCorrespondingData());
+
 
 
     }
 
+    public void deleteTmpFiles() {
 
-    private void start(String f) throws IOException, InterruptedException {
+        try {
+            if (Files.exists(new File("haplogroups.hsd").toPath()))
+                Files.delete(new File("haplogroups.hsd").toPath());
 
-        URL url = this.getClass().getResource("/jars/haplogrep-2.1.15.jar");
+            if (Files.exists(new File("multifasta.fasta").toPath()))
+                Files.delete(new File("multifasta.fasta").toPath());
+
+            if (Files.exists(new File("haplogroups.hsd_lineage.txt").toPath()))
+                Files.delete(new File("haplogroups.hsd_lineage.txt").toPath());
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void start(String f, String linegae) throws IOException, InterruptedException {
+
+        URL url = this.getClass().getResource("/jars/haplogrep-2.1.16.jar");
         String dirpath = url.getPath();
-        System.out.println(url.getPath());
         String[] command = new String[] { "java", "-jar", dirpath,
-                "--format",
-                "fasta",
+                "--format", "fasta",
                 "--in",f,
-                "--out", "haplogroups.hsd"};
+                "--out", "haplogroups.hsd",
+                linegae};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
         process.waitFor();
@@ -86,7 +104,7 @@ public class HaplotypeCaller {
         //delete temporary fasta file
         Files.delete(new File(f).toPath());
 
-        LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.2-beta");
+        LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.1.15");
 
     }
 }

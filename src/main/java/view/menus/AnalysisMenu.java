@@ -75,13 +75,14 @@ public class AnalysisMenu {
             Task task = new Task() {
                 @Override
                 protected Object call() throws Exception {
-                    haplotypeCaller.call();
+                    haplotypeCaller.call("");
                     return true;
                 }
             };
             mito.getProgressBarhandler().activate(task.progressProperty());
             task.setOnSucceeded((EventHandler<Event>) event -> {
                 haplotypeCaller.update();
+                haplotypeCaller.deleteTmpFiles();
                 mito.getProgressBarhandler().stop();
             });
 

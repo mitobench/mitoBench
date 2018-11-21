@@ -1,18 +1,21 @@
 package view.menus;
 
 import Logging.LogClass;
+import analysis.HaplotypeCaller;
+import com.sun.javafx.iio.ImageLoaderFactory;
 import controller.*;
-import javafx.collections.ObservableList;
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.chart.Chart;
-import javafx.scene.chart.StackedBarChart;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
@@ -23,11 +26,15 @@ import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import controller.TableControllerUserBench;
 
+import java.io.*;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.sun.org.apache.xerces.internal.utils.SecuritySupport.getResourceAsStream;
 
 
 /**
@@ -625,6 +632,68 @@ public class VisualizationMenu {
             }
         });
 
+        // Tree visualization of samples (according haplogrep2)
+        MenuItem samples_haplo_tree = new MenuItem("Create Sample Tree");
+        samples_haplo_tree.setId("menuitem_sampletree");
+        samples_haplo_tree.setOnAction(t -> {
+            try {
+                if(tableController.getTable().getItems().size() != 0 ) {
+
+                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(tableController, logClass);
+                    Task task = new Task() {
+                        @Override
+                        protected Object call() throws Exception {
+                            haplotypeCaller.call("--lineage");
+                            return true;
+                        }
+                    };
+
+                    mito.getProgressBarhandler().activate(task.progressProperty());
+                    task.setOnSucceeded((EventHandler<Event>) event -> {
+                        haplotypeCaller.deleteTmpFiles();
+                        mito.getProgressBarhandler().stop();
+
+                        // read graphviz file
+
+                        SampleTree sampleTree = new SampleTree("","", mito.getLogClass());
+                        try {
+                            sampleTree.start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Tab sampleTree_tab = new Tab();
+                        ScrollPane scrollPane_samples_tree = new ScrollPane();
+
+                        ImageView imageView = new ImageView(sampleTree.getImg());
+
+                        scrollPane_samples_tree.setContent(imageView);
+                        sampleTree_tab.setContent(scrollPane_samples_tree);
+
+                        mito.getTabpane_visualization().getTabs().add(sampleTree_tab);
+
+                        // delete tmp file
+                        try {
+                            Files.delete(new File("haplogroups.hsd.dot").toPath());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+
+                    });
+
+                    new Thread(task).start();
+
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         /*
                 Clear visualization panel
          */
@@ -701,7 +770,7 @@ public class VisualizationMenu {
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqHist, plotHGfreqGroup);
-        haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart);
+        haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart, samples_haplo_tree);
         maps.getItems().add(mapsItem);
         options.getItems().addAll(showTickLabels, clearPlotBox);
 
@@ -725,4 +794,5 @@ public class VisualizationMenu {
     public TableControllerUserBench getTableController() { return tableController; }
     public HaplotreeController getTreeController() { return treeController; }
     public LogClass getLogClass() { return logClass; }
+
 }

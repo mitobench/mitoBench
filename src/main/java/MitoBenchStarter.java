@@ -1,3 +1,4 @@
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import view.MitoBenchWindow;
 
@@ -13,6 +14,7 @@ public class MitoBenchStarter {
      */
     public static void main(String[] args)
     {
+        SvgImageLoaderFactory.install();
         new Thread(() -> Application.launch(MitoBenchWindow.class)).start();
 
     }
