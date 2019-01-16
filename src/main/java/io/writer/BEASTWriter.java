@@ -81,7 +81,7 @@ public class BEASTWriter implements IOutputData {
     private HashMap<FastaEntry, String> getSequenceData() {
         HashMap<FastaEntry, String> list = new HashMap<>();
         TableColumn tbclm_id = tableController.getTableColumnByName("ID");
-        TableColumn tbclm_c14 = tableController.getTableColumnByName("C14");
+        TableColumn tbclm_c14 = tableController.getTableColumnByName("C14-Date");
         // write view.data
 
         if(tbclm_c14!=null){

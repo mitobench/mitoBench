@@ -62,14 +62,14 @@ public class MitoBenchWindow extends Application{
         overrideCloseSettings();
 
 
-//        // test country code
+        // test country code
 //        ReverseGeocoder geocoder = new ReverseGeocoder();
 //        Object[] array_country = geocoder.countries().toArray();
 //        for(Object c : array_country){
 //            Country country = (Country) c;
 //            System.out.println(country.continent() +"|"+ country.iso3() +" | "+ country.name());
 //        }
-//
+
 //
 //        geocoder.getCountry(53.12, 48.37).ifPresent(country -> {
 //            //System.out.println(country.iso());        // GB

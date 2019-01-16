@@ -61,6 +61,7 @@ public class DataTable {
         for(Entry entry : input){
 
             String columnName = entry.getIdentifier();
+            columnName = columnName.replace("\t","");
 
             // if column exists:
             if(columnExists(columnName)){
@@ -126,7 +127,6 @@ public class DataTable {
      * @return
      */
     private int getRowPosition(String rowID){
-
         if(data.get("ID") != null){
             String[] id_col = data.get("ID");
             for(int i = 0; i < id_col.length; i++){

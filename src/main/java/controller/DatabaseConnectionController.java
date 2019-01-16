@@ -20,8 +20,8 @@ public class DatabaseConnectionController {
 
     public DatabaseConnectionController(){
         //For accessing database
-        username_root = "mitotest";
-        password_root = "$2a$10$gsy2KTn6xznKETjG1AHcMOLC.6YNtkikttyOzNBP/2B2GMQSW6m4e";
+        username_root = "mito_user";
+        password_root = "a4cxkghaZ";
     }
 
 
@@ -61,9 +61,9 @@ public class DatabaseConnectionController {
     public void login() throws SQLException, ClassNotFoundException, DatabaseConnectionException {
 
         databaseAccessor = new DatabaseAccessor();
-        loggedIn = databaseAccessor.connectToDatabase("org.postgresql.Driver",
-                "jdbc:postgresql://localhost:5432/mitodb",
-                username_root, password_root, userName, password);
+        loggedIn = true;//databaseAccessor.connectToDatabase("org.postgresql.Driver",
+                //"jdbc:postgres://mito_user:a4cxkghaZ@db:5432/mito_db",
+                //username_root, password_root);
 
         if(!loggedIn){
             throw new DatabaseConnectionException();

@@ -1,13 +1,20 @@
 package database;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
+import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by neukamm on 02.02.17.
@@ -19,8 +26,24 @@ public class DatabaseAccessor {
 
     public DatabaseAccessor() { }
 
-    public boolean connectToDatabase(String driverClassName, String dbURL, String username_root, String password_root,
-                                     String username, String password) throws SQLException, ClassNotFoundException {
+    public boolean connectToDatabase(String driverClassName, String dbURL, String username_root, String password_root) throws ClassNotFoundException {
+
+
+        try {
+
+            final HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            for (int i = 0; i < response.getBody().getArray().length(); i++){
+                JSONObject map = (JSONObject) response.getBody().getArray().get(i);
+                Set<String> keys = map.keySet();
+                System.out.println();
+            }
+
+            System.out.println();
+
+
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
 
         connection = null;
         String dbUsername, dbPassword;
@@ -29,8 +52,8 @@ public class DatabaseAccessor {
 
         Class.forName(driverClassName);
         try{
-            //connection = DriverManager.getConnection(dbURL, username_root, password_root);
-            connection = DriverManager.getConnection(dbURL);
+            connection = DriverManager.getConnection(dbURL, username_root, password_root);
+           // connection = DriverManager.getConnection(dbURL);
             //connection = DriverManager.getConnection(dbURL, "mitodbreader", "$MitoRead17");
 //            Statement stmt = connection.createStatement();
 //            query = "SELECT user_alias, passwd FROM mitodb_users;";

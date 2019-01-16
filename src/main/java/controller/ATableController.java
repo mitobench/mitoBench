@@ -382,7 +382,8 @@ public abstract class ATableController {
         ColumnNameMapper mapper = new ColumnNameMapper();
         for(int i = 0; i < items.size(); i++) {
             ObservableList item = items.get(i);
-            String rowName = items.get(i).get(getColIndex("ID")).toString();
+            int index_id = getColIndex("ID");
+            String rowName = items.get(i).get(index_id).toString();
             List<Entry> eList = new ArrayList<>();
             List<String> colnames = getCurrentColumnNames();
             for(int k = 0; k < item.size(); k++){

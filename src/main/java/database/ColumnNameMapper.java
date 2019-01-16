@@ -18,7 +18,7 @@ public class ColumnNameMapper {
             case "mt_sequence":
                 return "MTSequence";
             case "user_email":
-                return "Submitter (Email)";
+                return "Submitter Email";
             case "user_firstname":
                 return "Submitter firstname";
             case "user_surname":
@@ -30,7 +30,7 @@ public class ColumnNameMapper {
             case "data_type":
                 return "Data Type";
             case "labsample_id":
-                return "Labsample ID";
+                return "Labsample Ident";
             case "sex":
                 return "Sex";
             case "age":
@@ -47,18 +47,20 @@ public class ColumnNameMapper {
                 return "Latitude (TMA inferred)";
             case "geographic_info_tma_inferred_longitude":
                 return "Longitude (TMA inferred)";
-            case "geographic_info_tma_inferred_region_m49":
+            case "geographic_info_tma_inferred_region":
                 return "Geographic Area (TMA inferred)";
-            case "geographic_info_tma_inferred_subregion_m49":
+            case "geographic_info_tma_inferred_subregion":
                 return "Subregion (TMA inferred)";
-            case "geographic_info_tma_inferred_intermediate_region_m49":
+            case "geographic_info_tma_inferred_intermediate_region":
                 return "Intermediate region (TMA inferred)";
             case "geographic_info_tma_inferred_city":
                 return "City (TMA inferred)";
-            case "geographic_info_tma_inferred_country_m49":
+            case "geographic_info_tma_inferred_country":
                 return "Country (TMA inferred)";
             case "marriage_rules":
                 return "Marriage Rules";
+            case "marriage_system":
+                return "Marriage System";
             case "descent_system":
                 return "Descent System";
             case "residence_system":
@@ -81,8 +83,8 @@ public class ColumnNameMapper {
                 return "Journal";
             case "title":
                 return "Publication Title";
-            case "reference_type":
-                return "Publication Reference Type";
+            case "publication_type":
+                return "Publication Type";
             case "publication_status":
                 return "Publication Status";
             case "publication_comments":
@@ -105,56 +107,68 @@ public class ColumnNameMapper {
                 return "Mean depth of Coverage";
             case "std_dev_coverage":
                 return "Standard Deviation depth of Coverage";
-            case "calibrated_date":
-                return "Calibrated Date";
-            case "uncalibrated_date":
-                return "Radiocarbon Date";
+            case "calibrated_date_range_from":
+                return "Calibrated Date lower limit";
+            case "calibrated_date_range_to":
+                return "Calibrated Date upper limit";
+            case "c14_age_bp":
+                return "C14 Radiocarbon Date";
+            case "indirect_contextual_date":
+                return "Indirect contextual Date";
+            case "radiocarbon_lab_code":
+                return "Lab code of radiocarbon dating";
+            case "dating_comments":
+                return "Dating comments";
             case "reference_genome":
                 return "Reference Gnome";
             case "starting_np":
                 return "Starting position";
             case "ending_np":
                 return "Ending position";
-            case "sampling_origin_latitude":
+            case "sampling_latitude":
                 return "Latitude (Sampling)";
-            case "sampling_origin_longitude":
+            case "sampling_longitude":
                 return "Longitude (Sampling)";
-            case "sampling_origin_region_m49":
+            case "sampling_region":
                 return "Geographic Area (sampling)";
-            case "sampling_origin_subregion_m49":
+            case "sampling_subregion":
                 return "Subregion (sampling)";
-            case "Sampling_origin_intermediate_region_m49":
+            case "sampling_intermediate_region":
                 return "Intermediate region (sampling)";
-            case "sampling_origin_country_m49":
+            case "sampling_country":
                 return "Country (sampling)";
-            case "sampling_origin_city":
+            case "sampling_city":
                 return "City (sampling)";
-            case "sampling_comments":
-                return "Comments (sampling)";
             case "sample_origin_latitude":
                 return "Latitude (Sample)";
             case "sample_origin_longitude":
                 return "Longitude (Sample)";
-            case "sample_origin_region_m49":
+            case "sample_origin_region":
                 return "Geographic Area (Sample)";
-            case "sample_origin_subregion_m49":
+            case "sample_origin_subregion":
                 return "Subregion (Sample)";
-            case "sample_origin_intermediate_region_m49":
+            case "sample_origin_intermediate_region":
                 return "Intermediate region (Sample)";
-            case "sample_origin_country_m49":
+            case "sample_origin_country":
                 return "Country (Sample)";
             case "sample_origin_city":
                 return "City (Sample)";
             case "haplotype_current_versions":
                 return "Haplotype";
+            case "quality_haplotype_current_version":
+                return "Haplotype Quality";
             case "haplogroup_current_versions":
                 return "Haplogroup";
             case "macro_haplogroup":
                 return "Macro Haplogroup";
-            case "percentage_n":
+            case "percentage_N":
                 return "Percentage of N";
             case "completeness":
                 return "Completeness";
+            case "sequence_versions":
+                return "Sequence versions";
+            case "comments_sequence_version":
+                return "Sequence version comments";
 
         }
 

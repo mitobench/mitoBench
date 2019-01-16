@@ -40,7 +40,7 @@ public class GenericInputParser implements IInputData {
             if (currline.startsWith("##")) {
                 headergroup = currline.replace("##","").split(delimiter);
                 for(int i = 0; i < headergroup.length; i++){
-                    String s = headergroup[i];
+                    String s = headergroup[i].replace("\t","");
                     if(s.contains("(Grouping)"))
                         s = s.replace("(Grouping)", "");
                     s.trim();
@@ -50,8 +50,10 @@ public class GenericInputParser implements IInputData {
                 continue;
             } else if (currline.startsWith("#")) {
                 headertype = currline.replace("#","").split(delimiter);
-                for(String s : headertype)
-                    s.trim();
+                for(String s : headertype){
+                    s.trim().replace("\t","");
+                }
+
                 continue;
             } else {
                 String[] splitLine = currline.split(delimiter);

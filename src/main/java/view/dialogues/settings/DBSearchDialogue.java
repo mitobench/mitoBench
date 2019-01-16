@@ -1,20 +1,26 @@
 package view.dialogues.settings;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import controller.DatabaseConnectionController;
+import database.ColumnNameMapper;
 import database.DatabaseAccessor;
+import database.JsonDataParser;
 import io.datastructure.Entry;
+import io.datastructure.generic.GenericInputData;
+import io.inputtypes.CategoricInputType;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
-import net.sf.jsqlparser.JSQLParserException;
-import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.Select;
+import org.json.JSONObject;
 import view.MitoBenchWindow;
 import controller.ATableController;
 
-import java.io.StringReader;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -31,7 +37,7 @@ public class DBSearchDialogue extends ATabpaneDialogue{
     private Button btnSend;
     private CheckBox checkBox_write_own_query;
     private CheckBox checkBox_get_all_data;
-    private HashMap<String, List<Entry>> data;
+    private JsonDataParser jsonDataParser = new JsonDataParser();
 
     public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow,
                             DatabaseConnectionController databaseConnectionController){
@@ -101,77 +107,24 @@ public class DBSearchDialogue extends ATabpaneDialogue{
                 textfield_sql_statement_advanced.clear());
     }
 
-    private boolean isQueryValid(net.sf.jsqlparser.statement.Statement statement) {
-        // todo: verify user input
-        if (statement instanceof Select) {
-            return true;
-        }
-       return false;
-
-    }
-
-    private boolean dataEmpty() {
-        if(data.keySet().size()==1){
-            for(String key : data.keySet()){
-                if(key==null)
-                    return true;
-            }
-        }
-
-        return false;
-    }
 
     private void performSendAction(ATableController tablecontroller, DatabaseConnectionController databaseConnectionController){
-        DatabaseAccessor accessor = databaseConnectionController.getDatabaseAccessor();
         try {
 
-            String query;
-            if(checkBox_write_own_query.isSelected()){
-                query = textfield_sql_statement_advanced.getText();
-            } else if (checkBox_get_all_data.isSelected()){
-                //query = "SELECT * FROM sequence_data";
-                query = "SELECT * FROM samples s " +
-                        "INNER JOIN publications p on s.publications_id = p.mitodb_publications_id " +
-                        "INNER JOIN technical_information t on s.technicalinfo_id = t.technical_info_id";
-            } else {
-                query = "SELECT " + textfield_selection_table.getText() + "FROM mitodb_users";
-            }
-//            query = "select * from samples s " +
-//                    "INNER JOIN publications p on s.publications_id = p.mitodb_publications_id " +
-//                    "INNER JOIN mitodb_users u on s.submitter = u.uid;";
+            final HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            HashMap<String, List<Entry>> data_map = jsonDataParser.getData(response);
 
-            query = "SELECT * FROM sequences s " +
-                    "INNER JOIN stats USING (accession_id) " +
-                    "INNER JOIN meta m on s.accession_id=m.accession_id;";
+            logClass.getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
+            tablecontroller.updateTable(data_map);
+            mito.splitTablePane(mito.getTableControllerDB());
+            mito.getTabpane_statistics().getTabs().remove(getTab());
+            mito.getTableControllerDB().addFilter();
 
 
-            CCJSqlParserManager pm = new CCJSqlParserManager();
-            try {
-                net.sf.jsqlparser.statement.Statement statement = pm.parse(new StringReader(query));
-                if(isQueryValid(statement)) {
-                    logClass.getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: " + query);
-                    data = accessor.getEntries(query);
-                    message.setText("");
-                    tablecontroller.updateTable(data);
-                    //dialog.close();
-                    mito.splitTablePane(mito.getTableControllerDB());
-                    mito.getTabpane_statistics().getTabs().remove(getTab());
-                    mito.getTableControllerDB().addFilter();
-                }
-            } catch (JSQLParserException e) {
-                message.setTextFill(Color.RED);
-                message.setText("Query was not correct");
-            }
-
-        } catch (SQLException e1) {
+        } catch (UnirestException e1) {
             e1.printStackTrace();
         }
 
-//        try {
-//            accessor.shutdown();
-//        } catch (SQLException e1) {
-//            e1.printStackTrace();
-//        }
-
     }
+
 }
