@@ -104,7 +104,7 @@ public class SqlQueryBuilderWindow {
 //
 //                }
 
-               // mito.getTableControllerDB().updateTable(databaseQueryHandler.getGenerellData("meta?or=(sample_origin_region.eq.Asia,sample_origin_region.eq.Europe)"));
+               //mito.getTableControllerDB().updateTable(databaseQueryHandler.getGenerellData("meta?or=(sample_origin_region.eq.Asia,sample_origin_region.eq.Europe)"));
                 mito.splitTablePane(mito.getTableControllerDB());
                 mito.getTableControllerDB().addFilter();
                 stage.close();

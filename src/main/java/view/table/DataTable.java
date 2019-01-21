@@ -107,7 +107,8 @@ public class DataTable {
         columnEntries[getRowPosition(key)] = mtSeq;
         //mtStorage.setMTStorage(this);
         mtStorage.addEntry(key, mtSeq);
-        columnEntries[getRowPosition(key)] = mtseq_short;
+        //columnEntries[getRowPosition(key)] = mtseq_short;
+        columnEntries[getRowPosition(key)] = mtSeq;
     }
 
     /**

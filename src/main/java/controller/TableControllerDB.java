@@ -25,10 +25,6 @@ public class TableControllerDB extends ATableController {
 
     public void addFilter(){
         TableFilter filter = new TableFilter(table);
-        //TableFilter<ObservableList> tableFilter = TableFilter.forTableView(table).lazy(true).apply();
-//        tableFilter.unSelectAllValues(origCol);
-//        tableFilter.selectValue(origCol,"ABQ");
-//        tableFilter.executeFilter();
     }
 
     public void addButtonFunctionality(Button addAllBtn, Button addSelectedBtn, Button disableBtn, MitoBenchWindow mitoBenchWindow) {

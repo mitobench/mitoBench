@@ -17,8 +17,19 @@ public class DatabaseQueryHandler {
 
     public HashMap<String, List<Entry>> getAllData() {
         try {
-            final HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences").asJson();
+            HttpResponse<JsonNode> response2 = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
             HashMap<String, List<Entry>> data_map = jsonDataParser.getData(response);
+            HashMap<String, List<Entry>> data_map2 = jsonDataParser.getData(response2);
+            for(String k : data_map.keySet()){
+                List<Entry> entry_data_map = data_map.get(k);
+                List<Entry> entry_data_map2 = data_map2.get(k);
+                for(Entry e : entry_data_map2)
+                    entry_data_map.add(e);
+
+                data_map.put(k, entry_data_map);
+            }
+
             return data_map;
         } catch (UnirestException e) {
             e.printStackTrace();

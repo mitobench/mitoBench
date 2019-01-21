@@ -85,7 +85,7 @@ public class HaplotypeCaller {
 
     private void start(String f, String linegae) throws IOException, InterruptedException {
 
-        URL url = this.getClass().getResource("/jars/haplogrep-2.1.16.jar");
+        URL url = this.getClass().getResource("/jars/haplogrep-2.1.18.jar");
         String dirpath = url.getPath();
         String[] command = new String[] { "java", "-jar", dirpath,
                 "--format", "fasta",
@@ -104,7 +104,7 @@ public class HaplotypeCaller {
         //delete temporary fasta file
         Files.delete(new File(f).toPath());
 
-        LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.1.15");
+        LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.1.18");
 
     }
 }
