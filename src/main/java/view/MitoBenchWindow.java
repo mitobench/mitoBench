@@ -14,8 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import uk.recurse.geocoding.reverse.Country;
-import uk.recurse.geocoding.reverse.ReverseGeocoder;
 import view.menus.*;
 import view.tree.TreeView;
 
@@ -25,7 +23,7 @@ import view.tree.TreeView;
  */
 public class MitoBenchWindow extends Application{
 
-    private final String MITOBENCH_VERSION = "0.1.9";
+    private final String MITOBENCH_VERSION = "1.0-beta";
 
     private BorderPane pane_root;
     private TableControllerUserBench tableControllerUserBench;
@@ -62,28 +60,6 @@ public class MitoBenchWindow extends Application{
         overrideCloseSettings();
 
 
-        // test country code
-//        ReverseGeocoder geocoder = new ReverseGeocoder();
-//        Object[] array_country = geocoder.countries().toArray();
-//        for(Object c : array_country){
-//            Country country = (Country) c;
-//            System.out.println(country.continent() +"|"+ country.iso3() +" | "+ country.name());
-//        }
-
-//
-//        geocoder.getCountry(53.12, 48.37).ifPresent(country -> {
-//            //System.out.println(country.iso());        // GB
-//            System.out.println(country.iso3());       // GBR
-//            //System.out.println(country.isoNumeric()); // 826
-//            System.out.println(country.name());       // United Kingdom
-////            System.out.println(country.area());       // 244820.0
-////            System.out.println(country.population()); // 62348447
-//            System.out.println(country.continent());  // EU
-////            List<Locale> locales = country.locales();
-////            System.out.println(locales.get(0));       // en_GB
-////            System.out.println(locales.get(1));       // cy_GB
-////            System.out.println(locales.get(2));       // gd
-//        });
 
     }
 

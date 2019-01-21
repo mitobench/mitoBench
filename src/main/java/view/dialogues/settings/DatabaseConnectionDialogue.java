@@ -81,18 +81,19 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
             databaseConnectionController.setUserName(username);
             databaseConnectionController.setTable(table);
 
-
             try {
                 databaseConnectionController.login();
                 // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue(
-                        "SQL statement configurator",
-                        mitoBenchWindow,
-                        databaseConnectionController);
-                dbSearchDialogue.fillDialogue();
-                dbSearchDialogue.addFunctionality(table);
-                mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
-                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(dbSearchDialogue.getTab());
+
+
+//                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue(
+//                        "SQL statement configurator",
+//                        mitoBenchWindow,
+//                        databaseConnectionController);
+//                dbSearchDialogue.fillDialogue();
+//                dbSearchDialogue.addFunctionality(table);
+//                //mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
+//                //mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(dbSearchDialogue.getTab());
                 LOG.info("Login to database with username " + databaseConnectionController.getUserName()+ " successful.");
 
             } catch (SQLException e1) {
@@ -103,7 +104,6 @@ public class DatabaseConnectionDialogue extends ATabpaneDialogue {
                 databaseConnectionController.setLoggedIn(false);
                 DatabaseErrorDialogue databaseErrorDialogue = new DatabaseErrorDialogue();
             }
-
         });
     }
 

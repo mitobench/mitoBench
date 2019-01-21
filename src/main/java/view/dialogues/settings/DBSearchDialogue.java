@@ -1,51 +1,46 @@
 package view.dialogues.settings;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import controller.DatabaseConnectionController;
-import database.ColumnNameMapper;
-import database.DatabaseAccessor;
-import database.JsonDataParser;
+import database.DatabaseQueryHandler;
 import io.datastructure.Entry;
-import io.datastructure.generic.GenericInputData;
-import io.inputtypes.CategoricInputType;
 import javafx.scene.control.*;
-import net.sf.jsqlparser.statement.select.Select;
-import org.json.JSONObject;
+import javafx.scene.layout.Pane;
 import view.MitoBenchWindow;
 import controller.ATableController;
+import Logging.LogClass;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 
 /**
  * Created by neukamm on 09.02.17.
  */
-public class DBSearchDialogue extends ATabpaneDialogue{
+public class DBSearchDialogue extends ATabpaneDialogue {
 
 
-    private final MitoBenchWindow mito;
-    private final DatabaseConnectionController databaseConnectionController;
+    private MitoBenchWindow mito;
+    private DatabaseConnectionController databaseConnectionController;
     private TextField textfield_selection_table;
     private TextField textfield_sql_statement_advanced;
     private Label message;
     private Button btnSend;
     private CheckBox checkBox_write_own_query;
     private CheckBox checkBox_get_all_data;
-    private JsonDataParser jsonDataParser = new JsonDataParser();
+    private LogClass logClass;
+
 
     public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow,
                             DatabaseConnectionController databaseConnectionController){
-
         super(title, mitoBenchWindow.getLogClass());
+
+
+        logClass = mitoBenchWindow.getLogClass();
+
+
         mito = mitoBenchWindow;
         this.databaseConnectionController = databaseConnectionController;
-        dialogGrid.setId("configure_sql_query");
+        //dialogGrid.setId("configure_sql_query");
 
         checkBox_write_own_query = new CheckBox("Own SQL statement");
         checkBox_get_all_data = new CheckBox("Get all data from mitoDB");
@@ -69,27 +64,29 @@ public class DBSearchDialogue extends ATabpaneDialogue{
 
 
     public void fillDialogue() {
-        dialogGrid.add(checkBox_get_all_data, 0,0,2,1);
 
-        dialogGrid.add(new Separator(), 0,1,3,1);
+        TabPane base = new TabPane();
 
-//        dialogGrid.add(new Label("select"), 0,2,1,1);
-//        dialogGrid.add(textfield_selection_table, 1,2,1,1);
-//        dialogGrid.add(new Label("from sequence_data"), 2,2,1,1);
-//
-//        dialogGrid.add(new Separator(), 0,3,3,1);
-//
-//        dialogGrid.add(checkBox_write_own_query, 0,4,1,1);
-//        dialogGrid.add(textfield_sql_statement_advanced, 0,5,3,1);
-        dialogGrid.add(btnSend,2,2,3,1);
-        dialogGrid.add(message, 0,3,2,1);
+        Tab tab_geo = new Tab();
+        tab_geo.setText("Geo filter");
+
+        Tab tab_getall = new Tab();
+        tab_geo.setText("Get all");
+
+        base.getTabs().addAll(tab_getall, tab_geo);
+
+        int rowindex=0;
+        dialogGrid.add(checkBox_get_all_data, 0,rowindex,2,1);
+        dialogGrid.add(new Separator(), 0,++rowindex,3,1);
+        dialogGrid.add(btnSend,2,++rowindex,3,1);
+        dialogGrid.add(message, 0,++rowindex,2,1);
 
     }
 
     public void addFunctionality(ATableController tablecontroller) {
 
         btnSend.setOnAction(e ->
-            performSendAction(tablecontroller, databaseConnectionController)
+            performSendAction(tablecontroller)
         );
 
 
@@ -108,11 +105,13 @@ public class DBSearchDialogue extends ATabpaneDialogue{
     }
 
 
-    private void performSendAction(ATableController tablecontroller, DatabaseConnectionController databaseConnectionController){
-        try {
+    private void performSendAction(ATableController tablecontroller){
 
-            final HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
-            HashMap<String, List<Entry>> data_map = jsonDataParser.getData(response);
+        DatabaseQueryHandler databaseQueryHandler = new DatabaseQueryHandler();
+        if(nothingSelected()){
+            System.out.println("Nothing selected!");
+        } else if(checkBox_get_all_data.isSelected()){
+            HashMap<String, List<Entry>> data_map = databaseQueryHandler.getAllData();
 
             logClass.getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
             tablecontroller.updateTable(data_map);
@@ -120,11 +119,21 @@ public class DBSearchDialogue extends ATabpaneDialogue{
             mito.getTabpane_statistics().getTabs().remove(getTab());
             mito.getTableControllerDB().addFilter();
 
+        } else if(!checkBox_get_all_data.isSelected()){
 
-        } catch (UnirestException e1) {
-            e1.printStackTrace();
         }
 
+
+    }
+
+
+
+    private boolean nothingSelected() {
+
+        if(!checkBox_get_all_data.isSelected())
+            return true;
+        else
+            return false;
     }
 
 }

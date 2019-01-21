@@ -7,9 +7,7 @@ import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class JsonDataParser {
 
@@ -25,7 +23,7 @@ public class JsonDataParser {
         for (int i = 0; i < response.getBody().getArray().length(); i++){
             JSONObject map = (JSONObject) response.getBody().getArray().get(i);
             String accession = (String) map.get("accession_id");
-            data_map.put(accession,getEntries(map, mapper));
+            data_map.put(accession, getEntries(map, mapper));
         }
 
         return data_map;
@@ -45,7 +43,7 @@ public class JsonDataParser {
         for (String key : json_data_map.keySet()){
             String d = json_data_map.get(key).toString();
             Entry e;
-            // don't publish user password
+            // don't publish user password and alias
             if (!key.equals("user_password") && !key.equals("user_alias")){
                 e = new Entry(mapper.mapString(key), new CategoricInputType("String"), new GenericInputData(d));
                 entries.add(e);
@@ -53,5 +51,21 @@ public class JsonDataParser {
         }
 
         return entries;
+    }
+
+    public Set<String> getSet(HttpResponse<JsonNode> response) {
+
+        Set<String> regions = new HashSet<>();
+
+        for (int i = 0; i < response.getBody().getArray().length(); i++){
+            JSONObject map = (JSONObject) response.getBody().getArray().get(i);
+            for(String k : map.keySet())
+                regions.add(map.get(k).toString());
+        }
+
+        regions.remove("null");
+        regions.remove("Undefined");
+
+        return regions;
     }
 }
