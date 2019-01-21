@@ -511,6 +511,8 @@ public class VisualizationMenu {
                             visualizationController.initProfilePlot();
                             profilePlot = visualizationController.getProfilePlot();
                             profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHGsForProfilelotVis());
+                            // remove tab from tabpane
+                            mito.getTabpane_visualization().getTabs().remove(tab);
                         } catch (MalformedURLException e1) {
                             e1.printStackTrace();
 
