@@ -24,6 +24,7 @@ import view.MitoBenchWindow;
 import view.dialogues.settings.DBSearchDialogue;
 import view.dialogues.settings.DatabaseConnectionDialogue;
 import io.dialogues.Export.ExportDialogue;
+import view.dialogues.settings.NewProjectWarning;
 import view.dialogues.settings.SqlQueryBuilderWindow;
 
 import java.io.IOException;
@@ -87,13 +88,11 @@ public class FileMenu {
         MenuItem newProject = new MenuItem("New Project");
         newProject.setId("menu_item_new_project");
         newProject.setOnAction(t -> {
-            // clear all
-            tableControllerDB.cleartable();
-            tableControllerUserBench.cleartable();
-            viz_pane.getTabs().removeAll(viz_pane.getTabs());
-            mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
-            mitoBenchWindow.setAnotherProjectLoaded(false);
-            LOG.info("New project was created.");
+            // ask if project should be saved
+            NewProjectWarning newProjectWarning = new NewProjectWarning("Warning!", mitoBenchWindow.getLogClass(),
+                    mitoBenchWindow);
+
+
         });
 
 

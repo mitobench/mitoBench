@@ -8,17 +8,18 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.table.TableFilter;
 import org.controlsfx.control.textfield.TextFields;
 import view.MitoBenchWindow;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -57,16 +58,18 @@ public class SqlQueryBuilderWindow {
 
     public void fillWindow(){
 
-        TabPane configurator_tabs = new TabPane();
-        configurator_tabs.setSide(Side.LEFT);
-        configurator_tabs.setRotateGraphic(true);
-        configurator_tabs.setTabMinHeight(100);
-        configurator_tabs.setTabMaxHeight(100);
-        configurator_tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        configurator_tabs.getTabs().addAll(fillLocationTab(), fillPublicationTab(), fillSampleInfoTab());
-        root.setCenter(configurator_tabs);
 
+//        TabPane configurator_tabs = new TabPane();
+//        configurator_tabs.setSide(Side.LEFT);
+//        configurator_tabs.setRotateGraphic(true);
+//        configurator_tabs.setTabMinHeight(100);
+//        configurator_tabs.setTabMaxHeight(100);
+//        configurator_tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+//
+//        configurator_tabs.getTabs().addAll(fillLocationTab(), fillPublicationTab(), fillSampleInfoTab());
+//        root.setCenter(configurator_tabs);
+//
         HBox bottom = new HBox();
         btn_getData = new Button("Send");
         checkBox_SelectAllData = new CheckBox("Get all data from DB");
@@ -75,41 +78,76 @@ public class SqlQueryBuilderWindow {
         bottom.setPadding(new Insets(10,10,10,10));
         bottom.getChildren().addAll(checkBox_SelectAllData, region1, btn_getData);
 
+        Label database_filtering_explanation = new Label("To filter data, right-click on the column name.\nSearch field is case sensitive.");
+        database_filtering_explanation.setPadding(new Insets(10,10,10,10));
+
+        HashMap<String, List<Entry>> data_map = databaseQueryHandler.getMetaData();
+        mito.getLogClass().getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
+        mito.getTableControllerDB().updateTable(data_map);
+        TableView table = mito.getTableControllerDB().getTable();
+        TableFilter filter = new TableFilter(table);
+
+        root.setTop(database_filtering_explanation);
+        root.setCenter(mito.getTableControllerDB().getTable());
         root.setBottom(bottom);
 
     }
 
     public void addAction(){
-
-
         btn_getData.setOnAction(e -> {
-            if (checkBox_SelectAllData.isSelected()) {
+            if(checkBox_SelectAllData.isSelected()){
 
                 HashMap<String, List<Entry>> data_map = databaseQueryHandler.getAllData();
+                mito.getTableControllerUserBench().updateTable(data_map);
 
-                mito.getLogClass().getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
-                mito.getTableControllerDB().updateTable(data_map);
-                mito.splitTablePane(mito.getTableControllerDB());
-
-                mito.getTableControllerDB().addFilter();
-                stage.close();
             } else {
-                // build query
+                int index_accession_id = mito.getTableControllerDB().getColIndex("ID");
+                TableView search_content = mito.getTableControllerDB().getTable();
+                Set<String> accession_ids = new HashSet<>();
 
-                // location
-                ObservableList<String> checked_regions = controll_sample_region.getCheckModel().getCheckedItems();
+                for(int i = 0; i < search_content.getItems().size(); i++){
+                    Object row = search_content.getItems().get(i);
+                    List<String> list = (List<String>) row;
+                    accession_ids.add(list.get(index_accession_id));
+                }
 
-//                for(String s : checked_regions){
-//                    mito.getTableControllerDB().updateTable(databaseQueryHandler.getGenerellData("meta?or=(sample_origin_region=eq." + s));
-//
-//                }
-
-               //mito.getTableControllerDB().updateTable(databaseQueryHandler.getGenerellData("meta?or=(sample_origin_region.eq.Asia,sample_origin_region.eq.Europe)"));
-                mito.splitTablePane(mito.getTableControllerDB());
-                mito.getTableControllerDB().addFilter();
-                stage.close();
+                mito.getTableControllerUserBench().updateTable(databaseQueryHandler.getGenerellData(accession_ids));
             }
+
+            stage.close();
+            mito.getTableControllerDB().cleartable();
+
         });
+
+
+//        btn_getData.setOnAction(e -> {
+//            if (checkBox_SelectAllData.isSelected()) {
+//
+//                HashMap<String, List<Entry>> data_map = databaseQueryHandler.getAllData();
+//
+//                mito.getLogClass().getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
+//                mito.getTableControllerDB().updateTable(data_map);
+               // mito.splitTablePane(mito.getTableControllerDB());
+//
+//                mito.getTableControllerDB().addFilter();
+//                stage.close();
+//            } else {
+//                // build query
+//
+//                // location
+//                ObservableList<String> checked_regions = controll_sample_region.getCheckModel().getCheckedItems();
+//
+////                for(String s : checked_regions){
+////                    mito.getTableControllerDB().updateTable(databaseQueryHandler.getGenerellData("meta?or=(sample_origin_region=eq." + s));
+////
+////                }
+//
+//               //mito.getTableControllerDB().updateTable(databaseQueryHandler.getGenerellData("meta?or=(sample_origin_region.eq.Asia,sample_origin_region.eq.Europe)"));
+//                mito.splitTablePane(mito.getTableControllerDB());
+//                mito.getTableControllerDB().addFilter();
+//                stage.close();
+//            }
+//        });
 
 
 

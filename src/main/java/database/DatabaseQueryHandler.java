@@ -17,20 +17,11 @@ public class DatabaseQueryHandler {
 
     public HashMap<String, List<Entry>> getAllData() {
         try {
-            HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences").asJson();
-            HttpResponse<JsonNode> response2 = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
-            HashMap<String, List<Entry>> data_map = jsonDataParser.getData(response);
-            HashMap<String, List<Entry>> data_map2 = jsonDataParser.getData(response2);
-            for(String k : data_map.keySet()){
-                List<Entry> entry_data_map = data_map.get(k);
-                List<Entry> entry_data_map2 = data_map2.get(k);
-                for(Entry e : entry_data_map2)
-                    entry_data_map.add(e);
+            HttpResponse<JsonNode> response_sequences = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences").asJson();
+            HttpResponse<JsonNode> response_metadata = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
 
-                data_map.put(k, entry_data_map);
-            }
+            return  combineResults(response_metadata, response_sequences);
 
-            return data_map;
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -42,9 +33,7 @@ public class DatabaseQueryHandler {
 
         try {
             HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta?select="+attr).asJson();
-
             Set<String> data = jsonDataParser.getSet(response);
-
             return data;
 
         } catch (UnirestException e) {
@@ -54,10 +43,19 @@ public class DatabaseQueryHandler {
         return null;
     }
 
-    public HashMap<String, List<Entry>> getGenerellData(String query){
+    public HashMap<String, List<Entry>> getGenerellData(Set<String> ids){
         try {
-            HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/" + query).asJson();
-            return jsonDataParser.getData(response);
+
+            String query = "";
+            for(String acc : ids) {
+                query += "accession_id.eq." + acc + ",";
+            }
+            query = query.substring(0, query.length()-1);
+
+            HttpResponse<JsonNode> response_meta = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta?or=(" + query +");").asJson();
+            HttpResponse<JsonNode> response_sequences = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences?or=(" + query +");").asJson();
+
+            return combineResults(response_meta, response_sequences);
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -65,4 +63,33 @@ public class DatabaseQueryHandler {
         return null;
     }
 
+    public HashMap<String, List<Entry>> getMetaData() {
+        try {
+            HttpResponse<JsonNode> response_metadata = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            HashMap<String, List<Entry>> data_map_metadata = jsonDataParser.getData(response_metadata);
+
+
+            return data_map_metadata;
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private  HashMap<String, List<Entry>> combineResults(HttpResponse<JsonNode> response_meta, HttpResponse<JsonNode> response_sequences){
+        HashMap<String, List<Entry>> data_map_sequences = jsonDataParser.getData(response_sequences);
+        HashMap<String, List<Entry>> data_map_metadata = jsonDataParser.getData(response_meta);
+
+        for(String k : data_map_sequences.keySet()){
+            List<Entry> entry_data_map_sequences = data_map_sequences.get(k);
+            List<Entry> entry_data_map_meta = data_map_metadata.get(k);
+            for(Entry e : entry_data_map_meta)
+                entry_data_map_sequences.add(e);
+
+            data_map_sequences.put(k, entry_data_map_sequences);
+        }
+
+        return data_map_sequences;
+    }
 }

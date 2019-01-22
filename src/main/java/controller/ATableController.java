@@ -121,8 +121,8 @@ public abstract class ATableController {
         updateVersion();
 
         // clear Items in table
-        table.getItems().removeAll(table.getItems());
-
+        //table.getItems().removeAll(table.getItems());
+        table.setItems(FXCollections.observableArrayList());
         //FINALLY ADDED TO TableView
         table.getItems().addAll(data);
 
@@ -412,7 +412,7 @@ public abstract class ATableController {
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
             col_names.add(colname);
-            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
+            //col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             table.getColumns().addAll(col);
         }
     }
@@ -575,7 +575,7 @@ public abstract class ATableController {
         // clean view.data model
         data.removeAll(data);
         // clean table view
-        table.getItems().removeAll(table.getItems());
+        table.setItems(null);//getItems().clear();//removeAll(table.getItems());
         dataTable.getMtStorage().getData().clear();
         dataTable.getDataTable().clear();
         table.getColumns().removeAll(table.getColumns());

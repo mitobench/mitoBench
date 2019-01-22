@@ -120,7 +120,7 @@ public class ColumnNameMapper {
             case "dating_comments":
                 return "Dating comments";
             case "reference_genome":
-                return "Reference Gnome";
+                return "Reference Genome";
             case "starting_np":
                 return "Starting position";
             case "ending_np":
