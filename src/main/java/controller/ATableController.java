@@ -93,10 +93,6 @@ public abstract class ATableController {
 
         table.getColumns().removeAll(table.getColumns());
 
-        // define column order
-        if(customColumnOrder == null){
-
-        }
 
         Set<String> cols = dataTable.getDataTable().keySet();
         for(String s : cols) {
@@ -154,7 +150,7 @@ public abstract class ATableController {
                 List<Entry> elist = input_new.get(key_new);
                 for (Entry e : elist){
                     if (e.getIdentifier().equals("accession_id"))
-                        key_new = e.getData().getTableInformation();
+                        key_new = e.getData().getTableInformation().replace("\"","");
                 }
             }
             if(table_content.containsKey(key_new)){

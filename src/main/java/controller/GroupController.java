@@ -192,4 +192,14 @@ public class GroupController {
     public int getNumberOfGroups(){
         return allGroups.size();
     }
+
+    public int getGroupSize(String group){
+        if(allGroups.size()>0){
+            return allGroups.get(group).getSize();
+        } else {
+            return tableController.getSelectedRows().size();
+        }
+
+
+    }
 }

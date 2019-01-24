@@ -35,7 +35,8 @@ public class HaplotypeCaller {
 
     public void call(String lineage) throws IOException, InterruptedException {
         String file = "multifasta.fasta";
-        System.out.println(file);
+        System.out.println("Writing fasta sequences to " + file);
+        //System.out.println(file);
 
         // generate fasta file with all sequences for which haplogroups have to be determined
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getSelectedRows());
@@ -93,6 +94,7 @@ public class HaplotypeCaller {
                 "--out", "haplogroups.hsd",
                 linegae};
         ProcessBuilder processBuilder = new ProcessBuilder(command);
+        System.out.println("Start haploGrep ....");
         Process process = processBuilder.start();
         process.waitFor();
 //

@@ -83,7 +83,7 @@ public class MitoBenchWindow extends Application{
 
         // set stage properties
         primaryStage = stage;
-        primaryStage.setTitle("Mito Bench");
+        primaryStage.setTitle("mitoBench");
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
         primaryStage.setMaximized(true);

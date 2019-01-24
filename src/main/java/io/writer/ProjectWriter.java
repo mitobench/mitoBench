@@ -76,7 +76,7 @@ public class ProjectWriter {
                 writer.write(sample_id + "\t");
                 for(Entry e : tableData.get(sample_id)){
                     if(!e.getIdentifier().equals("ID"))
-                        writer.write(e.getData().getTableInformation() + "\t" );
+                        writer.write(e.getData().getTableInformation().replace("\"","") + "\t" );
                 }
                 writer.write("\n");
             }

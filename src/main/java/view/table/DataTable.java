@@ -71,7 +71,7 @@ public class DataTable {
                     setSequenceMap(entry, key, columnEntries);
 
                 } else {
-                    columnEntries[rowPosition] = entry.getData().getTableInformation();
+                    columnEntries[rowPosition] = entry.getData().getTableInformation().replace("\"","");
                 }
 
             } else {
@@ -87,7 +87,7 @@ public class DataTable {
                 if(columnName.equals("MTSequence")){
                     setSequenceMap(entry, key, columnEntries);
                 } else {
-                    columnEntries[getRowPosition(key)] = entry.getData().getTableInformation();
+                    columnEntries[getRowPosition(key)] = entry.getData().getTableInformation().replace("\"","");
                 }
 
             }
@@ -95,7 +95,7 @@ public class DataTable {
     }
 
     private void setSequenceMap(Entry entry, String key, String[] columnEntries){
-        String mtSeq = entry.getData().getTableInformation();
+        String mtSeq = entry.getData().getTableInformation().replace("\"","");;
         String mtseq_short;
         if(mtSeq.length() > 5 ){
             mtseq_short = mtSeq.substring(0,5)+"...";
@@ -108,7 +108,7 @@ public class DataTable {
         //mtStorage.setMTStorage(this);
         mtStorage.addEntry(key, mtSeq);
         //columnEntries[getRowPosition(key)] = mtseq_short;
-        columnEntries[getRowPosition(key)] = mtSeq;
+        //columnEntries[getRowPosition(key)] = mtSeq;
     }
 
     /**

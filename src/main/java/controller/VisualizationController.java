@@ -39,7 +39,6 @@ public class VisualizationController {
 
     private TabPane tabPane;
     private TabPane statsTabpane;
-    private Menu menuGraphics;
 
     private HashMap<String, List<String>> treeMap_path_to_root;
     private int profilePlotID=1;
@@ -145,7 +144,7 @@ public class VisualizationController {
         t.setText("Haplogroup frequency per group");
         t.setFont(Font.font(25));
 
-        this.stackedBar = new StackedBar(t.getText(), tabPane, visualizationMenu, chartController, tableController, this);
+        this.stackedBar = new StackedBar(t.getText(), tabPane, visualizationMenu, chartController, tableController, this, groupController);
         stackedBar.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");
@@ -313,11 +312,7 @@ public class VisualizationController {
     public TabPane getStatsTabpane() {
         return statsTabpane;
     }
-
-    public Menu getMenuGraphics() {
-        return menuGraphics;
-    }
-
+    
     public HashMap<String, List<String>> getTreeMap_path_to_root() {
         return treeMap_path_to_root;
     }
