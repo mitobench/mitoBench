@@ -100,13 +100,13 @@ public class ColumnNameMapper {
             case "extraction_protocol":
                 return "Extraction Protocol";
             case "minimum_coverage":
-                return "Minimum Depth of Coverage";
+                return "Coverage (Min. depth)";
             case "maximum_coverage":
-                return "Maximum Depth of Coverage";
+                return "Coverage (Max. depth)";
             case "mean_coverage":
-                return "Mean depth of Coverage";
+                return "Coverage (mean)";
             case "std_dev_coverage":
-                return "Standard Deviation depth of Coverage";
+                return "Coverage (SD)";
             case "calibrated_date_range_from":
                 return "Calibrated Date lower limit";
             case "calibrated_date_range_to":
@@ -161,7 +161,7 @@ public class ColumnNameMapper {
                 return "Haplogroup";
             case "macro_haplogroup":
                 return "Macro Haplogroup";
-            case "percentage_N":
+            case "percentage_n":
                 return "Percentage of N";
             case "completeness":
                 return "Completeness";
@@ -169,6 +169,10 @@ public class ColumnNameMapper {
                 return "Sequence versions";
             case "comments_sequence_version":
                 return "Sequence version comments";
+            case "comments":
+                return "General comments";
+            case "meta_info_id":
+                return "Accession ID (MitoBench)";
 
         }
 

@@ -236,9 +236,16 @@ public abstract class ATableController {
                 curr_colnames.remove("Longitude (Sample origin)");
             }
 
+            boolean containsSeq = false;
+            if(curr_colnames.contains("MTSequence")){
+                curr_colnames.remove("MTSequence");
+                containsSeq = true;
+            }
 
             Collections.sort(curr_colnames);
             col_names_sorted.addAll(curr_colnames);
+            if(containsSeq)
+                col_names_sorted.add("MTSequence");
 
         } else {
             // set user defined order
@@ -249,6 +256,7 @@ public abstract class ATableController {
                     curr_colnames_copy.remove(colname);
                 }
             }
+
             col_names_sorted.addAll(curr_colnames_copy);
         }
 
@@ -408,6 +416,7 @@ public abstract class ATableController {
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
             col_names.add(colname);
+            col.prefWidthProperty().bind(table.widthProperty().multiply(0.07));
             //col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             table.getColumns().addAll(col);
         }

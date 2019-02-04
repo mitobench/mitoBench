@@ -31,7 +31,8 @@ public class DatabaseAccessor {
 
         try {
 
-            final HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            //final HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            final HttpResponse<JsonNode> response = Unirest.get("http://mitodb.org/meta").asJson();
             for (int i = 0; i < response.getBody().getArray().length(); i++){
                 JSONObject map = (JSONObject) response.getBody().getArray().get(i);
                 Set<String> keys = map.keySet();

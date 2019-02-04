@@ -10,17 +10,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+
+
 public class DatabaseQueryHandler {
 
     private JsonDataParser jsonDataParser = new JsonDataParser();
 
 
+
     public HashMap<String, List<Entry>> getAllData() {
+
+
         try {
-            HttpResponse<JsonNode> response_sequences = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences").asJson();
-            HttpResponse<JsonNode> response_metadata = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            HttpResponse<JsonNode> response_metadata = Unirest.get("http://mitodb.org/meta").asJson();
+            HttpResponse<JsonNode> response_sequences = Unirest.get("http://mitodb.org/sequences").asJson();
+            //HttpResponse<JsonNode> response_metadata = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            //HttpResponse<JsonNode> response_sequences = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences").asJson();
 
             return  combineResults(response_metadata, response_sequences);
+            //return jsonDataParser.getData(response_sequences);
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -28,6 +36,8 @@ public class DatabaseQueryHandler {
 
         return null;
     }
+
+
 
     public Set<String> getLocationData(String attr){
 

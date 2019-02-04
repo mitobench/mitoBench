@@ -9,6 +9,9 @@ import view.MitoBenchWindow;
 import controller.ATableController;
 import Logging.LogClass;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,6 +32,8 @@ public class DBSearchDialogue extends ATabpaneDialogue {
     private CheckBox checkBox_get_all_data;
     private LogClass logClass;
 
+    private Connection connection ;
+
 
     public DBSearchDialogue(String title, MitoBenchWindow mitoBenchWindow,
                             DatabaseConnectionController databaseConnectionController){
@@ -36,7 +41,6 @@ public class DBSearchDialogue extends ATabpaneDialogue {
 
 
         logClass = mitoBenchWindow.getLogClass();
-
 
         mito = mitoBenchWindow;
         this.databaseConnectionController = databaseConnectionController;
@@ -61,6 +65,7 @@ public class DBSearchDialogue extends ATabpaneDialogue {
         textfield_sql_statement_advanced.setDisable(true);
 
     }
+
 
 
     public void fillDialogue() {

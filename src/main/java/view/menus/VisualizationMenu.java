@@ -4,7 +4,6 @@ import Logging.LogClass;
 import analysis.HaplotypeCaller;
 import com.sun.javafx.iio.ImageLoaderFactory;
 import controller.*;
-import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;

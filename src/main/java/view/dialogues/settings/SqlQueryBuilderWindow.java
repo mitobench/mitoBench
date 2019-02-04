@@ -85,7 +85,7 @@ public class SqlQueryBuilderWindow {
         mito.getLogClass().getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
         mito.getTableControllerDB().updateTable(data_map);
         TableView table = mito.getTableControllerDB().getTable();
-        TableFilter filter = new TableFilter(table);
+        //TableFilter filter = new TableFilter(table);
 
         root.setTop(database_filtering_explanation);
         root.setCenter(mito.getTableControllerDB().getTable());
