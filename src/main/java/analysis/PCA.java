@@ -1,10 +1,8 @@
 package analysis;
 
 import Logging.LogClass;
-import controller.ChartController;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TabPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
@@ -19,13 +17,11 @@ import java.util.*;
 
 public class PCA {
 
-    private final ChartController chartController;
     private ScatterPlot pca_plot;
     private int numberOfDimensions = 2;
     private String[] groups;
 
-    public PCA(ChartController cc){
-        chartController = cc;
+    public PCA(){
 
     }
 

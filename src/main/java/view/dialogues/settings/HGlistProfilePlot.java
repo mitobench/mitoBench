@@ -3,7 +3,6 @@ package view.dialogues.settings;
 import Logging.LogClass;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
-import statistics.HaploStatistics;
 import view.MitoBenchWindow;
 
 import java.util.Arrays;
@@ -14,8 +13,6 @@ public class HGlistProfilePlot extends ATabpaneDialogue {
     private TextField textField_hglist;
     private Button okBtn;
     private CheckBox example_hg_list_checkbox;
-    private HaploStatistics haploStatistics;
-    private TabPane statsTabPane;
 
     public HGlistProfilePlot(String title, LogClass LOGClass, MitoBenchWindow mito){
         super(title, LOGClass);

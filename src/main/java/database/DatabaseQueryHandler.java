@@ -17,18 +17,17 @@ public class DatabaseQueryHandler {
     private JsonDataParser jsonDataParser = new JsonDataParser();
 
 
-
+    /**
+     * add all data from database to mitoBench.
+     *
+     * @return all data from database
+     */
     public HashMap<String, List<Entry>> getAllData() {
-
-
         try {
             HttpResponse<JsonNode> response_metadata = Unirest.get("http://mitodb.org/meta").asJson();
             HttpResponse<JsonNode> response_sequences = Unirest.get("http://mitodb.org/sequences").asJson();
-            //HttpResponse<JsonNode> response_metadata = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
-            //HttpResponse<JsonNode> response_sequences = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences").asJson();
 
             return  combineResults(response_metadata, response_sequences);
-            //return jsonDataParser.getData(response_sequences);
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -38,22 +37,13 @@ public class DatabaseQueryHandler {
     }
 
 
-
-    public Set<String> getLocationData(String attr){
-
-        try {
-            HttpResponse<JsonNode> response = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta?select="+attr).asJson();
-            Set<String> data = jsonDataParser.getSet(response);
-            return data;
-
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public HashMap<String, List<Entry>> getGenerellData(Set<String> ids){
+    /**
+     * Get data based on user-filtering.
+     *
+     * @param ids
+     * @return
+     */
+    public HashMap<String, List<Entry>> getFilteredData(Set<String> ids){
         try {
 
             String query = "";
@@ -62,8 +52,8 @@ public class DatabaseQueryHandler {
             }
             query = query.substring(0, query.length()-1);
 
-            HttpResponse<JsonNode> response_meta = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta?or=(" + query +");").asJson();
-            HttpResponse<JsonNode> response_sequences = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/sequences?or=(" + query +");").asJson();
+            HttpResponse<JsonNode> response_meta = Unirest.get("http://mitodb.org/meta?or=(" + query +");").asJson();
+            HttpResponse<JsonNode> response_sequences = Unirest.get("http://mitodb.org/sequences?or=(" + query +");").asJson();
 
             return combineResults(response_meta, response_sequences);
 
@@ -73,9 +63,13 @@ public class DatabaseQueryHandler {
         return null;
     }
 
+    /**
+     * Get only meta data to show in filtering window.
+     * @return
+     */
     public HashMap<String, List<Entry>> getMetaData() {
         try {
-            HttpResponse<JsonNode> response_metadata = Unirest.get("http://ec2-54-173-159-49.compute-1.amazonaws.com:3000/meta").asJson();
+            HttpResponse<JsonNode> response_metadata = Unirest.get("http://mitodb.org/meta").asJson();
             HashMap<String, List<Entry>> data_map_metadata = jsonDataParser.getData(response_metadata);
 
 
@@ -87,6 +81,13 @@ public class DatabaseQueryHandler {
         return null;
     }
 
+    /**
+     * Combine (based on selection) meta data and sequences.
+     *
+     * @param response_meta
+     * @param response_sequences
+     * @return single dataset including both meta data and sequences
+     */
     private  HashMap<String, List<Entry>> combineResults(HttpResponse<JsonNode> response_meta, HttpResponse<JsonNode> response_sequences){
         HashMap<String, List<Entry>> data_map_sequences = jsonDataParser.getData(response_sequences);
         HashMap<String, List<Entry>> data_map_metadata = jsonDataParser.getData(response_meta);

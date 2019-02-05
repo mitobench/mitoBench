@@ -10,18 +10,8 @@ public class LocationData implements IData {
     private double latitude;
 
     //Type Handlers
-    public static final int DEFAULT = 0;
     public static final int PARSE_LOCATION_INFORMATION = 1;
 
-    public LocationData(String toParse) {
-        if(!toParse.equals("Undefined")){
-            String[] location = toParse.split(";");
-            latitude = Double.parseDouble(location[0]);
-            longitude = Double.parseDouble(location[1]);
-        }
-
-
-    }
 
     public LocationData(String toParse, int config) {
         setParseLocationInformation(toParse);

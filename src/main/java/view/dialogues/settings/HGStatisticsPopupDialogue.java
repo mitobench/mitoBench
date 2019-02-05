@@ -2,7 +2,6 @@ package view.dialogues.settings;
 
 import Logging.LogClass;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
 

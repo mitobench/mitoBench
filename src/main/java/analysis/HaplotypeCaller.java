@@ -6,8 +6,7 @@ import io.Exceptions.HSDException;
 import io.reader.HSDInput;
 import io.writer.MultiFastaWriter;
 import org.apache.log4j.Logger;
-import org.json.*;
-import view.table.MTStorage;
+import model.MTStorage;
 import controller.TableControllerUserBench;
 
 import java.io.File;

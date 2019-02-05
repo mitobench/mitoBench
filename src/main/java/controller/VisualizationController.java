@@ -20,7 +20,6 @@ public class VisualizationController {
     private final Logger LOG;
     private MitoBenchWindow mito;
     private Stage stage;
-    private Scene scene;
 
     private TableControllerUserBench tableController;
     private ChartController chartController;
@@ -31,11 +30,9 @@ public class VisualizationController {
     private BarPlotHaplo2 barPlotHaplo2;
     private BarChartGrouping barChartGrouping;
     private StackedBar stackedBar;
-   // private SunburstChartCreator sunburstChart;
     private TreeView treeView;
     private ProfilePlot profilePlot;
     private PieChartViz pieChartViz;
-    private ColorSchemeStackedBarChart colorScheme;
 
     private TabPane tabPane;
     private TabPane statsTabpane;
@@ -155,21 +152,6 @@ public class VisualizationController {
 
     }
 
-//    private void initSunburst(){
-//        LOG.info("Visualize data: Sunburst Chart");
-//
-//        sunburstChart = new SunburstChartCreator(stage, tabPane, logClass);
-//        Tab tab = new Tab();
-//        tab.setId("tab_sunburst");
-//        tab.setText("Sunburst Chart");
-//        sunburstChart.getBorderPane().prefHeightProperty().bind(stage.heightProperty());
-//        sunburstChart.getBorderPane().prefWidthProperty().bind(stage.widthProperty());
-//        tab.setContent(sunburstChart.getBorderPane());
-//        tabPane.getTabs().add(tab);
-//        tabPane.getSelectionModel().select(tab);
-//
-//    }
-
 
     public void initPieChart(String title) throws MalformedURLException {
         LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
@@ -253,10 +235,6 @@ public class VisualizationController {
         return stage;
     }
 
-    public Scene getScene() {
-        return scene;
-    }
-
     public TableControllerUserBench getTableController() {
         return tableController;
     }
@@ -299,10 +277,6 @@ public class VisualizationController {
 
     public PieChartViz getPieChartViz() {
         return pieChartViz;
-    }
-
-    public ColorSchemeStackedBarChart getColorScheme() {
-        return colorScheme;
     }
 
     public TabPane getTabPane() {

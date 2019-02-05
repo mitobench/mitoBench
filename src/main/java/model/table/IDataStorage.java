@@ -1,4 +1,4 @@
-package view.table;
+package model.table;
 
 import java.util.HashMap;
 

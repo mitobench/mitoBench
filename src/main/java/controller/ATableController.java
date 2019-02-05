@@ -15,7 +15,7 @@ import javafx.util.Callback;
 import io.IData;
 import org.apache.log4j.Logger;
 import view.menus.GroupMenu;
-import view.table.DataTable;
+import model.table.DataTable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -117,7 +117,6 @@ public abstract class ATableController {
         updateVersion();
 
         // clear Items in table
-        //table.getItems().removeAll(table.getItems());
         table.setItems(FXCollections.observableArrayList());
         //FINALLY ADDED TO TableView
         table.getItems().addAll(data);

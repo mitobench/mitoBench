@@ -1,7 +1,5 @@
 package view.dialogues.information;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
@@ -26,7 +24,7 @@ public class AboutDialogue {
     private final ImageView imageView;
     private Hyperlink link;
 
-    public AboutDialogue(String title, String message, String headertext, String id) {
+    public AboutDialogue(String title, String message) {
 
         dialog = new Stage();
         dialog.setTitle(title);

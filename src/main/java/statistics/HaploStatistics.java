@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import view.visualizations.ProfilePlot;
 import controller.TableControllerMutations;
 import controller.TableControllerUserBench;
-import controller.HaplotreeController;
 
 import java.util.*;
 
@@ -29,7 +28,7 @@ public class HaploStatistics {
     private int number_of_groups;
 
 
-    public HaploStatistics(TableControllerUserBench tableController, HaplotreeController treeHaploController, ChartController chartController,
+    public HaploStatistics(TableControllerUserBench tableController, ChartController chartController,
                            LogClass LOGClass){
 
         this.tableController = tableController;

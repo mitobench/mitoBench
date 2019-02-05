@@ -8,7 +8,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -109,7 +108,6 @@ public class MitoBenchWindow extends Application{
 
         tableControllerDB = new TableControllerDB(logClass);
         tableControllerDB.init();
-        //tableControllerDB.addFilter();
         tableControllerDB.getTable().setId("dbtable");
         // this binding is responsible for binding table to main window
         tableControllerDB.getTable().prefHeightProperty().bind(scene.heightProperty());
@@ -260,38 +258,6 @@ public class MitoBenchWindow extends Application{
 
 
 
-
-    public void splitTablePane(TableControllerDB tableControllerDB){
-        splitPane_table = new SplitPane();
-        splitPane_table.setOrientation(Orientation.HORIZONTAL);
-
-        final Label label = new Label("Database");
-
-        pane_table_DB = new VBox();
-        HBox topPanel = new HBox();
-        topPanel.setSpacing(10);
-
-        HBox buttonHBox = new HBox();
-        buttonHBox.setSpacing(10);
-        buttonHBox.setAlignment(Pos.TOP_RIGHT);
-        Button addAllBtn = new Button("Add all");
-        Button addSelectedBtn = new Button("Add selected");
-        Button disableBtn = new Button("Disable DB table");
-        disableBtn.setId("btn_disable_db_table");
-        tableControllerDB.addButtonFunctionality(addAllBtn, addSelectedBtn, disableBtn, this);
-
-        buttonHBox.getChildren().addAll(addAllBtn, addSelectedBtn, disableBtn);
-        topPanel.getChildren().addAll(label, buttonHBox);
-
-        pane_table_DB.setSpacing(10);
-        pane_table_DB.setPadding(new Insets(20, 10, 10, 10));
-        pane_table_DB.getChildren().addAll(topPanel, tableControllerDB.getTable());
-        pane_table.getChildren().remove(pane_table_userBench);
-        pane_table.setCenter(splitPane_table);
-
-        splitPane_table.getItems().addAll(pane_table_userBench, pane_table_DB);
-
-    }
 
 
     /**

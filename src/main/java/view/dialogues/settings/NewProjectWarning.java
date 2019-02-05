@@ -74,7 +74,6 @@ public class NewProjectWarning extends APopupDialogue {
 
 
     private void resetProject(){
-        mito.getTableControllerDB().cleartable();
         mito.getTableControllerUserBench().cleartable();
         mito.getTabpane_visualization().getTabs().removeAll(mito.getTabpane_visualization().getTabs());
         mito.getTabpane_statistics().getTabs().removeAll(mito.getTabpane_statistics().getTabs());

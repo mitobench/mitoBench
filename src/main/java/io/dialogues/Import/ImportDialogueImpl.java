@@ -42,11 +42,6 @@ public class ImportDialogueImpl implements IImportDialogue {
     }
 
     @Override
-    public boolean isFileSelected() {
-        return selectedFile != null;
-    }
-
-    @Override
     public File getSelectedFile() {
         return selectedFile;
     }

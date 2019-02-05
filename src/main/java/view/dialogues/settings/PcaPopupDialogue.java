@@ -2,8 +2,6 @@ package view.dialogues.settings;
 
 import Logging.LogClass;
 import analysis.PCA;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -83,19 +81,10 @@ public class PcaPopupDialogue extends AHGDialogue {
         grid_colors_group.setHgap(4);
         grid_colors_group.setVgap(4);
         groupnames = new HashSet<>();
-        //groupnames.addAll(mito.getGroupController().getGroupnames());
         Set<String> mySet = new HashSet<String>(Arrays.asList(new String[]{"PPP", "PP", "RP", "TRO", "EGYPA", "EGY", "MRT", "TUN", "ESH", "MAR", "SDN", "ETH", "BFA",
                 "CMR", "GIN", "SYR", "IRN", "IRQ", "TUR", "GEO", "YEM", "KWT","ARE","LBN","ISR","OMN","ARM","SAU","PAK","QAT","JOR","SVN",
                 "HUN","ITA","FRA","SRB","ENG","FRO","FIN","NOR","SWE","ESP","ISL"}));
         groupnames.addAll(mySet);
-//        Set<String> set = new HashSet<>();
-//        set.add("Ancient");
-//        set.add("sub-Saharan Africa");
-//        set.add("North Africa");
-//        set.add("Near East");
-//        set.add("Europe");
-//
-//        groupnames.addAll(set);
         row2=0;
 
         int row=0;
@@ -137,7 +126,7 @@ public class PcaPopupDialogue extends AHGDialogue {
                         haploStatistics.count(hg_list_trimmed);
 
                         // calculate PCA
-                        pca_analysis = new PCA(mito.getChartController());
+                        pca_analysis = new PCA();
                         //pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
                         pca_analysis.setGroups(new String[]{"PPP", "PP", "RP", "TRO", "EGYPA", "EGY", "MRT", "TUN", "ESH", "MAR", "SDN", "ETH", "BFA",
                                 "CMR", "GIN", "SYR", "IRN", "IRQ", "TUR", "GEO", "YEM", "KWT","ARE","LBN","ISR","OMN","ARM","SAU","PAK","QAT","JOR","SVN",
@@ -163,6 +152,7 @@ public class PcaPopupDialogue extends AHGDialogue {
 
                     LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
 
+                    //TODO !!!!!
                     double[][] values=new double[][]{
                             {0.068,0.068,0.045,0.114,0.023,0.0,0.0,0.0,0.023,0.0,0.091,0.023,0.0,0.0,0.023,0.114,0.0,0.159,0.091,0.114,0.0,0.045,0}, // ppp
                             {0.036,0.107,0.036,0.071,0.000,0.000,0.000,0.000,0.036,0.000,0.000,0.036,0.000,0.000,0.036,0.036,0.000,0.214,0.036,0.250,0.107,0.000,0.000},//pp

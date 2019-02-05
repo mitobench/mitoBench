@@ -3,7 +3,7 @@ package io.writer;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import view.table.MTStorage;
+import model.MTStorage;
 import controller.TableControllerUserBench;
 
 import java.io.*;

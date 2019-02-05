@@ -1,4 +1,6 @@
-package view.table;
+package model;
+
+import model.table.IDataStorage;
 
 import java.util.HashMap;
 

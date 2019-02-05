@@ -4,7 +4,6 @@ import controller.FileReaderController;
 import io.dialogues.Export.ExportDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
-import io.dialogues.Import.ImportDialogueAlternative;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -54,7 +53,6 @@ public class Toolbarpane extends ToolBar {
         openFileBtn.setTooltip(new Tooltip("Import file"));
         saveprojectBtn.setTooltip(new Tooltip("Export all data"));
         goBackBtn.setTooltip(new Tooltip("Go one filtering step back"));
-        //this.getItems().addAll(openFileBtn, saveprojectBtn, goBackBtn);
         this.getItems().addAll(openFileBtn, saveprojectBtn);
     }
 
@@ -87,29 +85,6 @@ public class Toolbarpane extends ToolBar {
             mito.getTableControllerUserBench().resetToUnfilteredData();
         });
     }
-
-    /**
-     * This method tests based on a user defined System.property whether java is in
-     * testing mode.
-     *
-     * @return
-     */
-    public static boolean isJUnitTest() {
-        Properties props = System.getProperties();
-        Enumeration e = props.propertyNames();
-
-        while (e.hasMoreElements()) {
-            String key = (String) e.nextElement();
-            if(key.startsWith("javafx.running")){
-                if(props.getProperty("javafx.running").equals("true")){
-                    return true;
-                }
-
-            }
-        }
-        return false;
-    }
-
 
 
 

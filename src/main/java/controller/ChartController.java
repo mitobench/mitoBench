@@ -21,7 +21,6 @@ public class ChartController {
     private ATableController tableController;
     private List<String> used_hgs;
     private HashMap<String, List<String>> treeMap;
-    private HashMap<String, HashMap<String, Double>> weights;
     private List<String> hg_core_list;
     private String[] coreHGs = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
             "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
@@ -170,32 +169,6 @@ public class ChartController {
             stackedBar.addSeries(data_all.get("Others"), "Others");
 
         }
-
-
-
-//        } else {        // add data if less than 20 haplogroups
-//
-//            stackedBar.clearData();
-//            stackedBar.setCategories(selection_groups);
-//
-//            // consider Hgs only once per group
-//            if (selection_haplogroups.length != 0) {
-//                for (int i = 0; i < selection_haplogroups.length; i++) {
-//                    List<XYChart.Data<String, Number>> data_list = new ArrayList<XYChart.Data<String, Number>>();
-//                    // fill data_list : <group(i), countHG >
-//                    for (int j = 0; j < selection_groups.length; j++) {
-//                        double count_per_HG = tableController.getCountPerHG(selection_haplogroups[i],
-//                                selection_groups[j], tableController.getColIndex("Haplogroup"),
-//                                tableController.getColIndex("Grouping"));
-//
-//                        double val = roundValue((count_per_HG/ numberOfElementsPerCaregory[j]) * 100);
-//                        XYChart.Data<String, Number> data = new XYChart.Data<String, Number>(selection_groups[j], val);
-//                        data_list.add(data);
-//                    }
-//                    stackedBar.addSeries(data_list, selection_haplogroups[i]);
-//                }
-//            }
-//        }
     }
 
 
@@ -470,100 +443,7 @@ public class ChartController {
     }
 
 
-    /**
-     * This method assigns to each group the haplogroups which occurs within this group
-     * @return
-     */
-    public HashMap<String, List<String>> getHG_to_group(ObservableList<ObservableList> selectedTableItems ){
 
-        String[][] cols = prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
-        String[] seletcion_haplogroups = cols[0];
-        String[] seletcion_groups = cols[1];
-
-
-        // parse selection to tablefilter
-        HashMap<String, List<String>> hg_to_group = new HashMap<>();
-
-
-        if (seletcion_haplogroups.length != 0) {
-
-            // iteration over grouping
-            for(int i = 0; i < seletcion_groups.length; i++){
-                String group = seletcion_groups[i];
-                if(!group.equals("Undefined")){
-                    // create new hash entry for each group
-                    if(!hg_to_group.containsKey(group)){
-                        hg_to_group.put(group, new ArrayList<>());
-                    }
-
-                    // iterate over all table view rows
-                    for(int k = 0; k < selectedTableItems.size(); k++){
-                        ObservableList list = selectedTableItems.get(k);
-
-                        if(list.get( tableController.getColIndex("Grouping")).equals(group)){
-
-                            List<String> tmp = hg_to_group.get(group);
-                            tmp.add((String)list.get(tableController.getColIndex("Haplogroup")));
-                            Collections.sort(tmp);
-                            hg_to_group.put(group, tmp);
-
-                        }
-                    }
-                }
-            }
-        }
-        getWeights(seletcion_haplogroups, seletcion_groups);
-        return hg_to_group;
-
-
-
-    }
-
-
-    /**
-     * This method iterates over groups and their corresponding haplogroups and counts the occurrences per haplogroup
-     * per group. Counts are later used as weights for sunburst chart
-     *
-     * @param seletcion_haplogroups unique list of haplogroups
-     * @param seletcion_groups  unique list of groups
-     */
-    public void getWeights(String[] seletcion_haplogroups, String[] seletcion_groups){
-
-        // hash map
-        // Group : <HG : writeResultToMitoBench>
-        weights = new HashMap<>();
-        Set<String> haplogroups = new HashSet<String>(Arrays.asList(seletcion_haplogroups));
-
-        // get weights
-        for(int i = 0; i < seletcion_groups.length; i++) {
-            String group = seletcion_groups[i];
-            if (!weights.containsKey(group)) {
-                weights.put(group, new HashMap<String, Double>());
-            }
-            HashMap<String, Double> hash_tmp = weights.get(group);
-
-            for(String hg : haplogroups){
-
-                // get number of occurrences of this hg within this group
-                int count_per_HG = tableController.getCountPerHG(
-                        hg,
-                        group,
-                        tableController.getColIndex("Haplogroup"),
-                        tableController.getColIndex("Grouping")
-                ).size();
-
-                if(count_per_HG!=0){
-                    if (!hash_tmp.containsKey(hg)) {
-                        hash_tmp.put(hg, (double)count_per_HG);
-                    } else {
-                        hash_tmp.put(hg, hash_tmp.get(hg) + 1);
-                    }
-                }
-
-            }
-
-        }
-    }
     /**
      * This method gets all entries of column "Haplogroups" and "Grouping" as set of unique entries.
      *
@@ -610,10 +490,6 @@ public class ChartController {
     }
 
 
-    public HashMap<String, HashMap<String, Double>> getWeights() {
-        return weights;
-    }
-
     public String[] getCoreHGs() {
         return coreHGs;
     }
@@ -624,8 +500,6 @@ public class ChartController {
 
 
     public HashMap<String, List<XYChart.Data<String, Number>>> assignHGsNoGrouping(HashMap<String, ArrayList> hgs_summed, String[] selection_haplogroups) {
-
-
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<>();
 

@@ -6,20 +6,15 @@ package controller;
 
 import Logging.LogClass;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import model.HaploTreeModel;
 import model.TreeIterator;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
-import view.table.TableSelectionFilter;
+import model.table.TableSelectionFilter;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +36,7 @@ public class HaplotreeController {
     private view.tree.TreeView treeView;
 
     public HaplotreeController(ATableController tableManager, LogClass logClass, MitoBenchWindow mito)
-            throws IOException, SAXException, ParserConfigurationException {
+            throws IOException{
 
         this.tableManager = tableManager;
         LOG = logClass.getLogger(this.getClass());
@@ -65,39 +60,28 @@ public class HaplotreeController {
      * @param
      * @param dataFilteringTreebasedDialogue
      */
-    public void setKeyEvents(DataFilteringTreebasedDialogue dataFilteringTreebasedDialogue) throws IOException, SAXException, ParserConfigurationException{
+    public void setKeyEvents(DataFilteringTreebasedDialogue dataFilteringTreebasedDialogue){
 
-        treeView.getApplyBtn().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent paramT) {
-                if (tableManager.getTable().getItems().size() > 0){
-                    if(treeView.getSearchFieldListHaplogroup().getText().equals("")){
-                        applyFilterFunction(dataFilteringTreebasedDialogue);
-                    } else {
-                        applyFilterFunctionList(dataFilteringTreebasedDialogue);
-                    }
-                }
-            }
-        });
-
-        tree.getTree().setOnKeyPressed(new EventHandler<KeyEvent>(){
-            @Override
-            public void handle(KeyEvent ke)
-            {
-                if (ke.getCode().equals(KeyCode.ENTER)) {
+        treeView.getApplyBtn().setOnAction(paramT -> {
+            if (tableManager.getTable().getItems().size() > 0){
+                if(treeView.getSearchFieldListHaplogroup().getText().equals("")){
                     applyFilterFunction(dataFilteringTreebasedDialogue);
-                }
-            }
-        });
-
-        treeView.getSearchFieldListHaplogroup().setOnKeyPressed(new EventHandler<KeyEvent>(){
-            @Override
-            public void handle(KeyEvent ke)
-            {
-                if (ke.getCode().equals(KeyCode.ENTER))
-                {
+                } else {
                     applyFilterFunctionList(dataFilteringTreebasedDialogue);
                 }
+            }
+        });
+
+        tree.getTree().setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                applyFilterFunction(dataFilteringTreebasedDialogue);
+            }
+        });
+
+        treeView.getSearchFieldListHaplogroup().setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER))
+            {
+                applyFilterFunctionList(dataFilteringTreebasedDialogue);
             }
         });
 

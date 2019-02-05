@@ -14,7 +14,6 @@ public class ColumnNameMapper {
         switch(colNameDB){
             case "accession_id":
                 return "ID";
-                //return "Accession ID";
             case "mt_sequence":
                 return "MTSequence";
             case "user_email":

@@ -53,19 +53,4 @@ public class JsonDataParser {
         return entries;
     }
 
-    public Set<String> getSet(HttpResponse<JsonNode> response) {
-
-        Set<String> regions = new HashSet<>();
-
-        for (int i = 0; i < response.getBody().getArray().length(); i++){
-            JSONObject map = (JSONObject) response.getBody().getArray().get(i);
-            for(String k : map.keySet())
-                regions.add(map.get(k).toString());
-        }
-
-        regions.remove("null");
-        regions.remove("Undefined");
-
-        return regions;
-    }
 }

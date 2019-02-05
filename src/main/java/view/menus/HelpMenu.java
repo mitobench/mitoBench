@@ -2,8 +2,6 @@ package view.menus;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import view.dialogues.information.AboutDialogue;
 
 
@@ -31,9 +29,6 @@ public class HelpMenu {
 
          */
 
-        final WebView browser = new WebView();
-        final WebEngine webEngine = browser.getEngine();
-
         MenuItem helpItem = new MenuItem("Show help");
         helpItem.setOnAction(t -> {
 
@@ -43,7 +38,7 @@ public class HelpMenu {
 
 
          /*
-                        About starter.MitoBenchStarter
+                        About mitoBench
 
          */
 
@@ -52,13 +47,9 @@ public class HelpMenu {
         aboutItem.setOnAction(t -> {
             AboutDialogue aboutDialogue = new AboutDialogue(
                     "About MitoBench",
-                    "If you need some help, read the documentation first:",
-                    "mitoBench and mitoDB",
-                    "aboutDialogue");
+                    "If you need some help, read the documentation first:");
         });
 
-
-        //menuHelp.getItems().addAll(helpItem, aboutItem);
         menuHelp.getItems().addAll(aboutItem);
 
     }

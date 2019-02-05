@@ -4,7 +4,7 @@ import controller.TableControllerUserBench;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import view.table.MTStorage;
+import model.MTStorage;
 
 import java.io.*;
 

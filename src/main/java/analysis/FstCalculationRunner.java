@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.visualizations.HeatMap;
-import view.table.MTStorage;
+import model.MTStorage;
 import controller.TableControllerFstValues;
 import controller.TableControllerUserBench;
 

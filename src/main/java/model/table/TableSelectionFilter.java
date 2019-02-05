@@ -1,4 +1,4 @@
-package view.table;
+package model.table;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import controller.ATableController;
 
 import java.util.Arrays;
-import java.util.function.Predicate;
 
 /**
  * Created by neukamm on 09.11.16.

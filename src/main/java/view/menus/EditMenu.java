@@ -39,19 +39,11 @@ public class EditMenu {
         filterTreeBased.setId("filterWithTree");
         filterTreeBased.setOnAction(t -> {
 
-            try {
-                DataFilteringTreebasedDialogue dataFilteringWithListDialogue =
-                        new DataFilteringTreebasedDialogue("Tree based data filtering",
-                        logClass, mito);
-                mito.getTabpane_statistics().getTabs().add(dataFilteringWithListDialogue.getTab());
-                mito.getTabpane_statistics().getSelectionModel().select(dataFilteringWithListDialogue.getTab());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            }
+            DataFilteringTreebasedDialogue dataFilteringWithListDialogue =
+                    new DataFilteringTreebasedDialogue("Tree based data filtering",
+                    logClass, mito);
+            mito.getTabpane_statistics().getTabs().add(dataFilteringWithListDialogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(dataFilteringWithListDialogue.getTab());
 
           });
 
