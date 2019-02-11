@@ -29,7 +29,7 @@ public class ExcelWriter implements IOutputData {
     }
 
     @Override
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, TableControllerUserBench tableController) throws Exception {
         Writer writer = null;
         Workbook wb = new XSSFWorkbook();
 
@@ -43,42 +43,47 @@ public class ExcelWriter implements IOutputData {
         int index_id = tableController.getColIndex("ID");
         int index_mt = tableController.getColIndex("MTSequence");
 
+            Sheet sheet1 = wb.createSheet(safe_sheetname);
+            Row row = sheet1.createRow(0);
 
-        Sheet sheet1 = wb.createSheet(safe_sheetname);
-        Row row = sheet1.createRow(0);
-
-        // write header
-        List<String> columns = this.tableController.getCurrentColumnNames();
-        for (int i = 0; i < columns.size(); i++) {
-            Cell c = row.createCell(i);
-            String text = columns.get(i);
-            if(text.endsWith("(Grouping)")){
-                text = text.split(" ")[0];
+            // write header
+            List<String> columns = this.tableController.getCurrentColumnNames();
+            for (int i = 0; i < columns.size(); i++) {
+                Cell c = row.createCell(i);
+                String text = columns.get(i);
+                if(text.endsWith("(Grouping)")){
+                    text = text.split(" ")[0];
+                }
+                c.setCellValue(text);
             }
-            c.setCellValue(text);
-        }
 
-        // write table content
-        int rowcounter = 1; //Else, we loose our header here!
-        for (Object list_entry : data) {
-            ObservableList e = (ObservableList) list_entry;
-            Row row_to_add = sheet1.createRow(rowcounter);
-            rowcounter++;
-            for (int i = 0; i < e.size(); i++) {
-                if(i==index_mt) {
-                    String mt_seq = tableController.getDataTable().getMtStorage().getData().get(e.get(index_id));
-                    Cell c = row_to_add.createCell(i);
-                    c.setCellValue(mt_seq);
-                }else{
-                    Cell c = row_to_add.createCell(i);
-                    c.setCellValue((String) e.get(i));
+            // write table content
+            int rowcounter = 1; //Else, we loose our header here!
+            for (Object list_entry : data) {
+                ObservableList e = (ObservableList) list_entry;
+                Row row_to_add = sheet1.createRow(rowcounter);
+                rowcounter++;
+                for (int i = 0; i < e.size(); i++) {
+                    if(i==index_mt) {
+                        String mt_seq = tableController.getDataTable().getMtStorage().getData().get(e.get(index_id));
+                        Cell c = row_to_add.createCell(i);
+                        c.setCellValue(mt_seq);
+                    }else{
+                        Cell c = row_to_add.createCell(i);
+                        if(e.get(i).equals("Undefined"))
+                            c.setCellValue("");
+                        else
+                            c.setCellValue((String) e.get(i));
+                    }
                 }
             }
-        }
 
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
-        wb.write(fileOutputStream);
-        fileOutputStream.close();
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            wb.write(fileOutputStream);
+            fileOutputStream.close();
+
+
+
 
     }
 
