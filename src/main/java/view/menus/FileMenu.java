@@ -213,9 +213,8 @@ public class FileMenu {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
             SaveAsDialogue sad = new SaveAsDialogue(fex);
             sad.start(new Stage());
-            StatisticsWriter statisticsWriter = new StatisticsWriter(
-                    mitoBenchWindow.getTabpane_statistics().getSelectionModel().getSelectedItem()
-            );
+            StatisticsWriter statisticsWriter = new StatisticsWriter();
+            statisticsWriter.setTab( mitoBenchWindow.getTabpane_statistics().getSelectionModel().getSelectedItem());
             try {
                 statisticsWriter.writeData(sad.getOutFile(), tableControllerUserBench);
             } catch (IOException e) {

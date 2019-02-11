@@ -735,23 +735,21 @@ public abstract class ATableController {
      */
 
     public int getColIndex(String k){
-        if(column_to_index.keySet().contains(k)){
 
-            if(k.equals("Haplogroup")) {
-                for (String s : column_to_index.keySet()) {
-                    if (s.equals("Haplogroup")) {
-                        return column_to_index.get(s);
-                    }
+        if(k.equals("Haplogroup")) {
+            for (String s : column_to_index.keySet()) {
+                if (s.equals("Haplogroup")) {
+                    return column_to_index.get(s);
                 }
-            } else if(k.equals("Grouping")){
-                for(String s : column_to_index.keySet()){
-                    if(s.contains("Grouping")){
-                        return column_to_index.get(s);
-                    }
-                }
-            } else {
-                return column_to_index.get(k);
             }
+        } else if(k.equals("Grouping")){
+            for(String s : column_to_index.keySet()){
+                if(s.contains("Grouping")){
+                    return column_to_index.get(s);
+                }
+            }
+        } else if(column_to_index.keySet().contains(k)) {
+            return column_to_index.get(k);
         }
 
         // column not contained

@@ -1,24 +1,38 @@
 package view.visualizations;
 
 import Logging.LogClass;
-import javafx.collections.ObservableList;
+import controller.TableControllerUserBench;
+import io.dialogues.Export.SaveAsDialogue;
+import io.writer.StatisticsWriter;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import statistics.HaploStatistics;
 
+import java.io.IOException;
 import java.net.URL;
 
-public class ScatterPlot extends AChart{
+
+public class PCAPlot extends AChart{
 
     private final TabPane tabPaneStats;
+    private final HaploStatistics stats;
+    private final TableControllerUserBench TCBench;
     private ScatterChart<Number, Number> sc;
 
-    public ScatterPlot(Stage stage, LogClass logClass, TabPane tabpane_statistics){
+    public PCAPlot(Stage stage, LogClass logClass, TabPane tabpane_statistics, HaploStatistics stats, TableControllerUserBench
+                   tableControllerUserBench){
         super("", "",logClass);
         tabPaneStats = tabpane_statistics;
+        this.stats = stats;
+        this.TCBench = tableControllerUserBench;
 
         URL url = this.getClass().getResource("/css/ColorsPCA.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
@@ -58,6 +72,34 @@ public class ScatterPlot extends AChart{
 //        }
 
 
+    }
+
+    public HBox getBottomBox (){
+        HBox bottom = new HBox();
+
+        Button btn_getdata = new Button("Export Haplogroup frequencies");
+        btn_getdata.setOnAction(event -> {
+
+
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
+            SaveAsDialogue sad = new SaveAsDialogue(fex);
+            sad.start(new Stage());
+            StatisticsWriter statisticsWriter = new StatisticsWriter();
+            statisticsWriter.parseFreqs(tabPaneStats.getSelectionModel().getSelectedItem());
+            try {
+                statisticsWriter.writeData(sad.getOutFile(), TCBench);
+            } catch (IOException e) {
+
+
+            }
+
+
+        });
+
+        bottom.setAlignment(Pos.CENTER_RIGHT);
+        bottom.setPadding(new Insets(0.5,0.5,0.5,0.5));
+        bottom.getChildren().add(btn_getdata);
+        return bottom;
     }
 
 

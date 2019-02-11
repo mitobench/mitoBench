@@ -1,7 +1,6 @@
 package io.writer;
 
-import
-        io.IOutputData;
+import io.IOutputData;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -21,7 +20,11 @@ public class StatisticsWriter implements IOutputData{
     private Object tab_content;
 
 
-    public StatisticsWriter(Tab tab) {
+    public StatisticsWriter() {
+    }
+
+
+    public void setTab(Tab tab) {
         tab_content = tab.getContent();
         if(tab_content instanceof TableView){
             table = (TableView) tab.getContent();
@@ -30,7 +33,6 @@ public class StatisticsWriter implements IOutputData{
             content = ((Label) tab_content).getText();
 
         }
-
     }
 
     private String parseTableContent(TableView table){
@@ -66,13 +68,66 @@ public class StatisticsWriter implements IOutputData{
 
     }
 
+    public void parseFreqs(Tab tab){
+
+        tab_content = tab.getContent();
+        if(tab_content instanceof TableView){
+            table = (TableView) tab.getContent();
+            content = parseTableContentPCA(table);
+        } else if(tab_content instanceof Label){
+            content = ((Label) tab_content).getText();
+
+        }
+
+    }
+
+
+    private String parseTableContentPCA(TableView table){
+        String content="";
+        int counter = 0;
+        // write column names as first line
+        for(Object col : table.getColumns()){
+            TableColumn column = (TableColumn) col;
+            if(counter == table.getColumns().size()-1){
+                content += column.getText();
+            } else if(counter != 1){
+                content += column.getText()+",";
+            }
+            counter++;
+        }
+        content += "\n";
+        counter = 0;
+        for(Object r : table.getItems()){
+            ObservableList row = (ObservableList) r;
+            int total_number=0;
+            for(Object cell : row){
+                if(counter == row.size()-1) {
+                    content += Double.parseDouble(cell.toString())/ (double) total_number;
+                }else if(counter ==1 ){
+                    total_number = Integer.parseInt(cell.toString());
+                } else if(counter == 0) {
+                    content += cell + ",";
+                } else {
+                    content +=  Double.parseDouble(cell.toString())/ (double) total_number + ",";
+                }
+
+
+                counter++;
+            }
+            content += "\n";
+            counter=0;
+        }
+
+        return content;
+
+    }
 
     /**
      * This method writes the statistics to csv file.
      * @throws IOException
      */
     @Override
-    public void writeData(String path, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String path, TableControllerUserBench tableControllerUserBench) throws IOException {
         if(!path.endsWith(".csv")){
             path += ".csv";
         }
