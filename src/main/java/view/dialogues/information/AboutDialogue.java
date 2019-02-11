@@ -56,7 +56,7 @@ public class AboutDialogue {
         link.setText("Documentation");
 
         String text = "MitoBench is a tool aimed at helping researchers to organize, \n" +
-                "visualize and maintain their mitochondrial datasets. Some functionality \n" +
+                "visualize and maintain their mitochondrial data sets. Some functionality \n" +
                 "is aimed towards generating population genetics statistics with \n" +
                 "additional visualization";
 

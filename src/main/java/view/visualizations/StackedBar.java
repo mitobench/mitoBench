@@ -182,13 +182,12 @@ public class StackedBar extends AChart{
 
         }
 
-
         HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_user_selection);
         List<String> sub_hgs = hgs_summed.get(hg);
 
         if(sub_hgs != null){
 
-            visualizationController.initHaploBarchart("(sub-haplogroups of HG "+ hg +")");
+            visualizationController.initHaploBarchart(hg + " ("+ group +")");
             List<String> columnData = new ArrayList<>();
 
             for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {

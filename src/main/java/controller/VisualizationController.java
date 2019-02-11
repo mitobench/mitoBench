@@ -68,7 +68,7 @@ public class VisualizationController {
     public void initHaploBarchart(String titlePart) {
         LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
         Text t = new Text();
-        t.setText("Haplogroup occurrences " + titlePart);
+        t.setText("Haplogroup occurrences of "  + titlePart);
         t.setFont(Font.font(25));
 
         barPlotHaplo = new BarPlotHaplo(

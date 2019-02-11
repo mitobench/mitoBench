@@ -47,8 +47,7 @@ public class FileMenu {
 
 
     public FileMenu( StatisticsMenu toolsMenu,
-                     MitoBenchWindow mitoBenchWindow)
-            throws IOException {
+                     MitoBenchWindow mitoBenchWindow) {
 
         MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
 

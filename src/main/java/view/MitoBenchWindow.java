@@ -36,8 +36,6 @@ public class MitoBenchWindow extends Application{
     private VBox pane_table_userBench;
     private Label info_selected_items;
     private GroupController groupController;
-    private SplitPane splitPane_table;
-    private VBox pane_table_DB;
     private Button enableDBBtn;
     private LogClass logClass;
     private TreeView treeView;
@@ -104,7 +102,6 @@ public class MitoBenchWindow extends Application{
         tableControllerUserBench.addRowListener(info_selected_items);
         tableControllerUserBench.getTable().setId("mainEntryTable");
         tableControllerUserBench.createContextMenu();
-        tableControllerUserBench.addButtonFunctionality(enableDBBtn, this);
 
         tableControllerDB = new TableControllerDB(logClass);
         tableControllerDB.init();
@@ -234,7 +231,9 @@ public class MitoBenchWindow extends Application{
     private BorderPane configureTablePane()
     {
         final Label label = new Label("User table");
-        String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " rows are selected";
+        String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " / " +
+                tableControllerUserBench.getTable().getItems().size() +  " rows are selected";
+
         info_selected_items.setText(info_text);
 
         HBox hbox = new HBox();
@@ -306,17 +305,6 @@ public class MitoBenchWindow extends Application{
         return scene;
     }
 
-
-    public void disableBDTable() {
-        splitPane_table.getItems().remove(pane_table_DB);
-    }
-
-
-    public void enableBDTable() {
-        splitPane_table.getItems().add(pane_table_DB);
-    }
-
-
     public Button getEnableDBBtn() {
         return enableDBBtn;
     }
@@ -371,14 +359,6 @@ public class MitoBenchWindow extends Application{
 
     public GroupController getGroupController() {
         return groupController;
-    }
-
-    public SplitPane getSplitPane_table() {
-        return splitPane_table;
-    }
-
-    public VBox getPane_table_DB() {
-        return pane_table_DB;
     }
 
     public boolean isAnotherProjectLoaded() {
