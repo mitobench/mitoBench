@@ -73,6 +73,29 @@ public abstract class ATableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
+        List<Entry> to_remove = new ArrayList<>();
+        List<Entry> to_add = new ArrayList<>();
+        for(String key : input.keySet()){
+            List<Entry> e_list = input.get(key);
+            for (Entry e : e_list){
+                String data = e.getData().getTableInformation();
+                IInputType type = e.getType();
+                String id = e.getIdentifier();
+
+                if(!id.equals("ID") && !id.contains("Haplogroup") && !type.getTypeInformation().equals("Location") &&
+                !type.getTypeInformation().equals("C14")){
+                    Entry e_updated = new Entry(id, type, new GenericInputData(data.toLowerCase()));
+                    to_add.add(e_updated);
+                    to_remove.add(e);
+                }
+            }
+            e_list.removeAll(to_remove);
+            e_list.addAll(to_add);
+            input.put(key, e_list);
+
+        }
+
+
         String groupname=null;
         if(groupController.groupingExists()){
             groupname=groupController.getColname_group().replace(" (Grouping)", "");

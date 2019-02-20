@@ -177,7 +177,7 @@ public class VisualizationMenu {
         plotHGfreqGroup.setId("plotHGfreqGroup_item");
         plotHGfreqGroup.setOnAction(t -> {
             if(//tableController.getTableColumnByName("Grouping") != null &&
-                tableController.getTable().getItems().size()!=0) {
+                    tableController.getTable().getItems().size()!=0) {
 
                 String[] selection_groups;
                 String[] selection_haplogroups;
@@ -275,8 +275,8 @@ public class VisualizationMenu {
             try {
                 // makes only sense if grouping exists.
                 if(//tableController.getTableColumnByName("Grouping") != null &&
-                      tableController.getTableColumnByName("Haplogroup") != null
-                        && tableController.getTable().getItems().size() != 0 ){
+                        tableController.getTableColumnByName("Haplogroup") != null
+                                && tableController.getTable().getItems().size() != 0 ){
 
 
                     HGlistProfilePlot hGlistProfilePlot = new HGlistProfilePlot("Profile plot configuration", logClass, mito);
