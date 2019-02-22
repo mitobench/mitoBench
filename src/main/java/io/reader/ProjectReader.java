@@ -77,7 +77,6 @@ public class ProjectReader {
                                     entry = new Entry(mapper.mapString(headergroup[i]), new LocationInputType(headertype[i].trim()), new LocationData(entries[i].trim(), LocationData.PARSE_LOCATION_INFORMATION));
                                 } else {
                                     entry = new Entry(mapper.mapString(headergroup[i].trim()), new CategoricInputType(headertype[i].trim()), new GenericInputData(entries[i].trim()));
-
                                 }
                                 all_entries.add(entry);
                             }

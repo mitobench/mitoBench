@@ -84,20 +84,11 @@ public class GenericInputParser implements IInputData {
                         );
                     }
                     else {
-                        if(headergroup[i].contains("Haplogroup")){
-                            e = new Entry(
-                                    mapper.mapString(headergroup[i]),
-                                    new CategoricInputType(headerType),
-                                    new GenericInputData(splitLine[i])
-                            );
-                        } else {
-                            e = new Entry(
-                                    mapper.mapString(headergroup[i]),
-                                    new CategoricInputType(headerType),
-                                    new GenericInputData(splitLine[i].toLowerCase())
-                            );
-                        }
-
+                        e = new Entry(
+                                mapper.mapString(headergroup[i]),
+                                new CategoricInputType(headerType),
+                                new GenericInputData(splitLine[i])
+                        );
                     }
 
                     entries.add(e);

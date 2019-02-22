@@ -115,7 +115,7 @@ public class MultiFastAInput implements IInputData {
             Entry entry = new Entry("MTSequence", new CategoricInputType("String"), new GenericInputData(fa.getSequence()));
             List<Entry> sequence = new ArrayList<>();
             sequence.add(entry);
-            output.put(fa.getHeader().toLowerCase(), sequence);
+            output.put(fa.getHeader(), sequence);
         }
 
         return output;

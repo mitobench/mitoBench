@@ -34,16 +34,13 @@ public abstract class AChart extends Chart {
         xAxis.setLabel(lable_xaxis);
         xAxis.setTickMarkVisible(false);
         xAxis.setTickLabelRotation(45);
-        xAxis.setAnimated(false);
 
         yAxis.setTickUnit(5);
         yAxis.setLabel(label_yaxis);
         yAxis.setMinorTickVisible(false);
         yAxis.tickLabelFontProperty().set(Font.font(15));
-        yAxis.setAnimated(false);
 
         lc = logClass;
-        this.setAnimated(false);
 
 
     }

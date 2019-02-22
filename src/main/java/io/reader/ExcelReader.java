@@ -99,7 +99,7 @@ public class ExcelReader implements IInputData{
                         if(colname.equals("ID"))
                             id = cell.getStringCellValue();
                         data = cell.getStringCellValue();
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data.toLowerCase()));
+                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
@@ -107,7 +107,7 @@ public class ExcelReader implements IInputData{
                         if(colname.equals("ID"))
                             id = cell.getStringCellValue();
                         data = String.valueOf(cell.getNumericCellValue());
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data.toLowerCase()));
+                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
                     case Cell.CELL_TYPE_BOOLEAN:
@@ -115,7 +115,7 @@ public class ExcelReader implements IInputData{
                         if(colname.equals("ID"))
                             id = cell.getStringCellValue();
                         data = String.valueOf(cell.getBooleanCellValue());
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data.toLowerCase()));
+                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
                     case Cell.CELL_TYPE_BLANK:
@@ -123,14 +123,14 @@ public class ExcelReader implements IInputData{
                         if(colname.equals("ID"))
                             id = cell.getStringCellValue();
                         data = "Undefined";
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data.toLowerCase()));
+                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
 
                 }
                 entries.add(e);
             }
-            map.put(id.toLowerCase(), entries);
+            map.put(id, entries);
             i++;
         }
 

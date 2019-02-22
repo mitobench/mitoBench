@@ -177,13 +177,13 @@ public class VisualizationMenu {
         plotHGfreqGroup.setId("plotHGfreqGroup_item");
         plotHGfreqGroup.setOnAction(t -> {
             if(//tableController.getTableColumnByName("Grouping") != null &&
-                    tableController.getTable().getItems().size()!=0) {
+                tableController.getTable().getItems().size()!=0) {
 
                 String[] selection_groups;
                 String[] selection_haplogroups;
 
                 if(!tableController.getGroupController().groupingExists()) {
-                    String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
+                    String[][] cols = chartController.prepareColumnsAsList(new String[]{"Haplogroup"}, tableController.getSelectedRows());
                     selection_haplogroups = cols[0];
                     selection_groups = new String[]{"All data"};
                 } else {
@@ -245,6 +245,7 @@ public class VisualizationMenu {
                         stackedBar.addListener();
                     } else {
                         colorScheme.setNewColorsLess20(stackedBar);
+                        stackedBar.addListener();
                     }
 
                     //advancedStackedBarchartDialogue.close();
@@ -275,8 +276,8 @@ public class VisualizationMenu {
             try {
                 // makes only sense if grouping exists.
                 if(//tableController.getTableColumnByName("Grouping") != null &&
-                        tableController.getTableColumnByName("Haplogroup") != null
-                                && tableController.getTable().getItems().size() != 0 ){
+                      tableController.getTableColumnByName("Haplogroup") != null
+                        && tableController.getTable().getItems().size() != 0 ){
 
 
                     HGlistProfilePlot hGlistProfilePlot = new HGlistProfilePlot("Profile plot configuration", logClass, mito);

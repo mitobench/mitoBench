@@ -199,21 +199,19 @@ public class VisualizationController {
         LOG.info("Visualize data: Visualize all samples on map");
 
         GeographicalMapViz geographicalMapViz = new GeographicalMapViz();
-        if(tableController.getColIndex("Location") != -1){
 
-            GeographicalMapController mapViewController = new GeographicalMapController(
-                    mito,
-                    groupController,
-                    geographicalMapViz
-            );
+        GeographicalMapController mapViewController = new GeographicalMapController(
+                mito,
+                groupController,
+                geographicalMapViz
+        );
 
-            Tab tab = new Tab();
-            tab.setId("tab_map");
-            tab.setText("Map");
-            tab.setContent(geographicalMapViz.getMapBasicPane());
-            tabPane.getTabs().add(tab);
-            tabPane.getSelectionModel().select(tab);
-        }
+        Tab tab = new Tab();
+        tab.setId("tab_map");
+        tab.setText("Map");
+        tab.setContent(geographicalMapViz.getMapBasicPane());
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
 
     }
 

@@ -13,9 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import view.MitoBenchWindow;
 
-import java.util.Enumeration;
-import java.util.Properties;
-
 public class Toolbarpane extends ToolBar {
 
     private final FileReaderController fileReaderController;

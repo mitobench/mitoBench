@@ -43,7 +43,7 @@ public class BarPlotHaplo2 extends AChart {
 
         tableController = tc;
 
-        URL url = this.getClass().getResource("/css/ColorsBarchart.css");
+        URL url = this.getClass().getResource("/css/ColorsStackedBarChart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
 
         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");

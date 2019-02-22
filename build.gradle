@@ -1,5 +1,5 @@
 group 'com.uni-tuebingen.de.it.mitobench'
-version '1.0-beta'
+version '1.1-beta'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -32,6 +32,8 @@ sourceSets {
         }
     }
 }
+
+
 
 dependencies {
     compile 'org.slf4j:slf4j-simple:+'
@@ -90,10 +92,8 @@ jar {
 }
 
 
-
 jacocoTestReport {
     reports {
         xml.enabled true
     }
 }
-
