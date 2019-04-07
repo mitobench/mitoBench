@@ -25,9 +25,8 @@ public class DatabaseQueryHandler {
     public HashMap<String, List<Entry>> getAllData() {
         try {
             HttpResponse<JsonNode> response_metadata = Unirest.get("http://mitodb.org/meta").asJson();
-            HttpResponse<JsonNode> response_sequences = Unirest.get("http://mitodb.org/sequences").asJson();
 
-            return  combineResults(response_metadata, response_sequences);
+            return jsonDataParser.getData(response_metadata);
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -53,9 +52,7 @@ public class DatabaseQueryHandler {
             query = query.substring(0, query.length()-1);
 
             HttpResponse<JsonNode> response_meta = Unirest.get("http://mitodb.org/meta?or=(" + query +");").asJson();
-            HttpResponse<JsonNode> response_sequences = Unirest.get("http://mitodb.org/sequences?or=(" + query +");").asJson();
-
-            return combineResults(response_meta, response_sequences);
+            return jsonDataParser.getData(response_meta);
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -81,26 +78,4 @@ public class DatabaseQueryHandler {
         return null;
     }
 
-    /**
-     * Combine (based on selection) meta data and sequences.
-     *
-     * @param response_meta
-     * @param response_sequences
-     * @return single dataset including both meta data and sequences
-     */
-    private  HashMap<String, List<Entry>> combineResults(HttpResponse<JsonNode> response_meta, HttpResponse<JsonNode> response_sequences){
-        HashMap<String, List<Entry>> data_map_sequences = jsonDataParser.getData(response_sequences);
-        HashMap<String, List<Entry>> data_map_metadata = jsonDataParser.getData(response_meta);
-
-        for(String k : data_map_sequences.keySet()){
-            List<Entry> entry_data_map_sequences = data_map_sequences.get(k);
-            List<Entry> entry_data_map_meta = data_map_metadata.get(k);
-            for(Entry e : entry_data_map_meta)
-                entry_data_map_sequences.add(e);
-
-            data_map_sequences.put(k, entry_data_map_sequences);
-        }
-
-        return data_map_sequences;
-    }
 }
