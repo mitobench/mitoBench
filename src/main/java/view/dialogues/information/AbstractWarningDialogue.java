@@ -2,8 +2,6 @@ package view.dialogues.information;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 /**
  * Created by neukamm on 18.05.17.

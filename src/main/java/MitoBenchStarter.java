@@ -13,6 +13,7 @@ public class MitoBenchStarter {
      */
     public static void main(String[] args)
     {
+        //SvgImageLoaderFactory.install();
         new Thread(() -> Application.launch(MitoBenchWindow.class)).start();
 
     }

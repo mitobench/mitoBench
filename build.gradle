@@ -1,5 +1,5 @@
 group 'com.uni-tuebingen.de.it.mitobench'
-version '1.0-beta'
+version '1.1-beta'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -33,6 +33,8 @@ sourceSets {
     }
 }
 
+
+
 dependencies {
     compile 'org.slf4j:slf4j-simple:+'
     //compile 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:0.+'
@@ -57,9 +59,9 @@ dependencies {
     compile group: 'org.javafxdata', name: 'datafx-flow', version: '8.0b5'
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     compile group: 'com.github.haifengl', name: 'smile-plot', version: '1.3.1'
+    compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.+'
     compile files('src/main/resources/jars/FstCalculator-0.1.20.jar')
     compile files('src/main/resources/jars/PhylotreeParser-0.4.3.jar')
-    //compile files('jar/spark-core-2.7.2.jar')
 
 }
 
@@ -90,12 +92,8 @@ jar {
 }
 
 
-
 jacocoTestReport {
     reports {
         xml.enabled true
     }
 }
-
-
-

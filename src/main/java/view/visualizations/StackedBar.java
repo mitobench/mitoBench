@@ -1,6 +1,7 @@
 package view.visualizations;
 
 import controller.ChartController;
+import controller.GroupController;
 import controller.TableControllerUserBench;
 import controller.VisualizationController;
 import javafx.collections.FXCollections;
@@ -27,6 +28,7 @@ public class StackedBar extends AChart{
 
     private final TableControllerUserBench tableController
             ;
+    private final GroupController groupcontroller;
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;
     private TabPane tabPane;
@@ -37,9 +39,10 @@ public class StackedBar extends AChart{
     private VisualizationController visualizationController;
 
     public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu, ChartController cc, TableControllerUserBench tc,
-                      VisualizationController visualizationController) {
+                      VisualizationController visualizationController, GroupController groupController) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
+        this.groupcontroller = groupController;
         tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
 
@@ -56,7 +59,7 @@ public class StackedBar extends AChart{
         sbc.prefWidthProperty().bind(tabPane.widthProperty());
         sbc.setAnimated(false);
         sbc.setCategoryGap(20);
-        sbc.setLegendSide(Side.RIGHT);
+        sbc.setLegendSide(Side.TOP);
 
         this.visualizationController = visualizationController;
 
@@ -179,16 +182,12 @@ public class StackedBar extends AChart{
 
         }
 
-        // todo: what do they want??
-        //HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, chartController.getCoreHGs());
-
-        // or:
         HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_user_selection);
         List<String> sub_hgs = hgs_summed.get(hg);
 
         if(sub_hgs != null){
 
-            visualizationController.initHaploBarchart("(sub-haplogroups of HG "+ hg +")");
+            visualizationController.initHaploBarchart(hg + " ("+ group +")");
             List<String> columnData = new ArrayList<>();
 
             for (Object tmp : graphicsMenu.getTableController().getTable().getItems()) {
@@ -226,9 +225,7 @@ public class StackedBar extends AChart{
 
         ObservableList categories = FXCollections.observableArrayList();
         for(String s : groups)
-            categories.add(s);
-        //categories.add(getMinString(s, 15));
-
+            categories.add(s);//categories.add(s + " (" + groupcontroller.getGroupSize(s) +")");
         xAxis.setCategories(categories);
     }
     public List<XYChart.Series<String, Number>> getSeriesList() {
@@ -236,10 +233,6 @@ public class StackedBar extends AChart{
     }
     public StackedBarChart<String, Number> getSbc() {
         return sbc;
-    }
-
-    public String[] getHg_user_selection() {
-        return hg_user_selection;
     }
 
     public void setHg_user_selection(String[] hg_user_selection) {

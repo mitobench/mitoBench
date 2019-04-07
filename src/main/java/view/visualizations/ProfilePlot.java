@@ -126,7 +126,7 @@ public class ProfilePlot extends AChart {
 
         setMaxBoundary();
 
-        HaploStatistics haploStatistics = new HaploStatistics(tableController, treeController, chartController,logClass);
+        HaploStatistics haploStatistics = new HaploStatistics(tableController, chartController,logClass);
 
         haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
         TableView table = haploStatistics.writeToTable();

@@ -43,7 +43,7 @@ public class BarPlotHaplo extends AChart {
 
         tableController = tc;
 
-        URL url = this.getClass().getResource("/css/ColorsBarchart.css");
+        URL url = this.getClass().getResource("/css/ColorsStackedBarChart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
 
         TableColumn haplo_col = tableController.getTableColumnByName("Haplogroup");
@@ -56,7 +56,7 @@ public class BarPlotHaplo extends AChart {
 
     }
 
-    public void addData(HashMap<String, Integer> data) throws MalformedURLException {
+    public void addData(HashMap<String, Integer> data) {
 
         series = new XYChart.Series();
         series.setName("");

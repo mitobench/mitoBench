@@ -20,7 +20,6 @@ public class VisualizationController {
     private final Logger LOG;
     private MitoBenchWindow mito;
     private Stage stage;
-    private Scene scene;
 
     private TableControllerUserBench tableController;
     private ChartController chartController;
@@ -31,15 +30,12 @@ public class VisualizationController {
     private BarPlotHaplo2 barPlotHaplo2;
     private BarChartGrouping barChartGrouping;
     private StackedBar stackedBar;
-   // private SunburstChartCreator sunburstChart;
     private TreeView treeView;
     private ProfilePlot profilePlot;
     private PieChartViz pieChartViz;
-    private ColorSchemeStackedBarChart colorScheme;
 
     private TabPane tabPane;
     private TabPane statsTabpane;
-    private Menu menuGraphics;
 
     private HashMap<String, List<String>> treeMap_path_to_root;
     private int profilePlotID=1;
@@ -72,7 +68,7 @@ public class VisualizationController {
     public void initHaploBarchart(String titlePart) {
         LOG.info("Visualize data: Haplogroup frequency " + titlePart + " (Barchart)");
         Text t = new Text();
-        t.setText("Haplogroup occurrences " + titlePart);
+        t.setText("Haplogroup occurrences of "  + titlePart);
         t.setFont(Font.font(25));
 
         barPlotHaplo = new BarPlotHaplo(
@@ -145,7 +141,7 @@ public class VisualizationController {
         t.setText("Haplogroup frequency per group");
         t.setFont(Font.font(25));
 
-        this.stackedBar = new StackedBar(t.getText(), tabPane, visualizationMenu, chartController, tableController, this);
+        this.stackedBar = new StackedBar(t.getText(), tabPane, visualizationMenu, chartController, tableController, this, groupController);
         stackedBar.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");
@@ -155,21 +151,6 @@ public class VisualizationController {
         tabPane.getSelectionModel().select(tab);
 
     }
-
-//    private void initSunburst(){
-//        LOG.info("Visualize data: Sunburst Chart");
-//
-//        sunburstChart = new SunburstChartCreator(stage, tabPane, logClass);
-//        Tab tab = new Tab();
-//        tab.setId("tab_sunburst");
-//        tab.setText("Sunburst Chart");
-//        sunburstChart.getBorderPane().prefHeightProperty().bind(stage.heightProperty());
-//        sunburstChart.getBorderPane().prefWidthProperty().bind(stage.widthProperty());
-//        tab.setContent(sunburstChart.getBorderPane());
-//        tabPane.getTabs().add(tab);
-//        tabPane.getSelectionModel().select(tab);
-//
-//    }
 
 
     public void initPieChart(String title) throws MalformedURLException {
@@ -254,10 +235,6 @@ public class VisualizationController {
         return stage;
     }
 
-    public Scene getScene() {
-        return scene;
-    }
-
     public TableControllerUserBench getTableController() {
         return tableController;
     }
@@ -302,10 +279,6 @@ public class VisualizationController {
         return pieChartViz;
     }
 
-    public ColorSchemeStackedBarChart getColorScheme() {
-        return colorScheme;
-    }
-
     public TabPane getTabPane() {
         return tabPane;
     }
@@ -313,11 +286,7 @@ public class VisualizationController {
     public TabPane getStatsTabpane() {
         return statsTabpane;
     }
-
-    public Menu getMenuGraphics() {
-        return menuGraphics;
-    }
-
+    
     public HashMap<String, List<String>> getTreeMap_path_to_root() {
         return treeMap_path_to_root;
     }

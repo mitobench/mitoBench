@@ -8,8 +8,6 @@ import view.MitoBenchWindow;
 import view.dialogues.settings.FstSettingsDialogue;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Set;
 
 public class
 FstCalculationController {

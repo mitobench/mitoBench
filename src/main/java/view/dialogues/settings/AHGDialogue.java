@@ -30,7 +30,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
 
     public void init(MitoBenchWindow mito){
         this.mito = mito;
-        haploStatistics = new HaploStatistics(mito.getTableControllerUserBench(), mito.getTreeController(), mito.getChartController(), logClass);
+        haploStatistics = new HaploStatistics(mito.getTableControllerUserBench(), mito.getChartController(), logClass);
         addComponents(haploStatistics, mito);
         this.LOG = this.logClass.getLogger(this.getClass());
         addEvents();

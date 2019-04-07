@@ -18,11 +18,9 @@ public class TableMenu {
 
     private Menu menuTable;
     private TableControllerUserBench tableController;
-    private GroupController groupController;
     private Logger LOG;
 
     public TableMenu(MitoBenchWindow mitoBenchWindow){
-        this.groupController = mitoBenchWindow.getGroupController();
         menuTable = new Menu("Table");
         menuTable.setId("tableMenu");
         this.tableController = mitoBenchWindow.getTableControllerUserBench();
@@ -41,23 +39,21 @@ public class TableMenu {
          */
 
         MenuItem getSelectedRows = new MenuItem("Get selected rows");
-        getSelectedRows.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
+        getSelectedRows.setOnAction(t -> {
+            try{
 
-                    ObservableList<ObservableList> selection = tableController.getTable().getSelectionModel().getSelectedItems();
-                    int index_ID = tableController.getColIndex("ID");
-                    String log = "Get only selected rows: ";
+                ObservableList<ObservableList> selection = tableController.getTable().getSelectionModel().getSelectedItems();
+                int index_ID = tableController.getColIndex("ID");
+                String log = "Get only selected rows: ";
 
-                    for(int i = 0; i < selection.size(); i++){
-                        log += selection.get(i).get(index_ID) + " ";
-                    }
-                    LOG.info(log);
-                    tableController.updateView(selection);
-
-                } catch (Exception e){
-                    e.printStackTrace();
+                for(int i = 0; i < selection.size(); i++){
+                    log += selection.get(i).get(index_ID) + " ";
                 }
+                LOG.info(log);
+                tableController.updateView(selection);
+
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
 
@@ -69,14 +65,12 @@ public class TableMenu {
          */
 
         MenuItem selectAllRows = new MenuItem("Select all rows");
-        selectAllRows.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
-                    LOG.info("Select all rows in user data table.");
-                    tableController.getTable().getSelectionModel().selectAll();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        selectAllRows.setOnAction(t -> {
+            try{
+                LOG.info("Select all rows in user data table.");
+                tableController.getTable().getSelectionModel().selectAll();
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
 
@@ -89,14 +83,12 @@ public class TableMenu {
          */
 
         MenuItem cleanTable = new MenuItem("Clear table");
-        cleanTable.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                try{
-                    LOG.info("Remove all data from data table.");
-                    tableController.cleartable();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        cleanTable.setOnAction(t -> {
+            try{
+                LOG.info("Remove all data from data table.");
+                tableController.cleartable();
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
 

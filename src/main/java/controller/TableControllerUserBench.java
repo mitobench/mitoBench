@@ -2,8 +2,10 @@ package controller;
 
 
 import Logging.LogClass;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -13,6 +15,8 @@ import view.dialogues.settings.AddDataToColumnDialog;
 import view.dialogues.settings.AddNewColumnDialogue;
 import view.dialogues.settings.CopyColumnDialogue;
 import view.dialogues.settings.DeleteColumnDialogue;
+
+import java.awt.print.Book;
 
 
 /**
@@ -29,9 +33,17 @@ public class TableControllerUserBench extends ATableController {
     public void addRowListener(Label infolabel){
         table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             // update text
-            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " rows are selected");
+            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+                    table.getItems().size() +  " rows are selected");
         });
 
+        table.getItems().addListener((ListChangeListener<ObservableList>) pChange -> {
+            while(pChange.next()) {
+                // update text
+                infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+                        table.getItems().size() +  " rows are selected");
+            }
+        });
     }
 
 
@@ -68,13 +80,6 @@ public class TableControllerUserBench extends ATableController {
         menu.getItems().addAll(addNewGropuItem, addAllSelectedItem, copyColumn,  deleteColumn);
         table.setContextMenu(menu);
 
-    }
-
-    public void addButtonFunctionality(Button btn, MitoBenchWindow mitoBenchWindow){
-        btn.setOnAction(e -> {
-            mitoBenchWindow.enableBDTable();
-            btn.setVisible(false);
-        });
     }
 
 

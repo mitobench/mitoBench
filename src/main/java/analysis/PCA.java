@@ -2,16 +2,17 @@ package analysis;
 
 import Logging.LogClass;
 import controller.ChartController;
+import controller.TableControllerUserBench;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TabPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.commons.math3.linear.EigenDecomposition;
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.stat.correlation.Covariance;
-import view.visualizations.ScatterPlot;
+import statistics.HaploStatistics;
+import view.visualizations.PCAPlot;
 
 
 import java.util.*;
@@ -19,13 +20,15 @@ import java.util.*;
 
 public class PCA {
 
-    private final ChartController chartController;
-    private ScatterPlot pca_plot;
+    private final HaploStatistics stats;
+    private final TableControllerUserBench TC_bench;
+    private PCAPlot pca_plot;
     private int numberOfDimensions = 2;
     private String[] groups;
 
-    public PCA(ChartController cc){
-        chartController = cc;
+    public PCA(HaploStatistics haploStatistics, TableControllerUserBench tableControllerUserBench){
+        this.stats = haploStatistics;
+        this.TC_bench = tableControllerUserBench;
 
     }
 
@@ -81,24 +84,21 @@ public class PCA {
 
     /**
      * Plot adjusted values.
-     *
-     *  @param result_pca
+     *   @param result_pca
      * @param stage
      * @param logClass
      * @param tabpane_statistics
      * @param group_members
+     * @param chartController
      */
     public void plot(double[][] result_pca, Stage stage, LogClass logClass,
-                     TabPane tabpane_statistics, HashMap<String, ObservableList<String>> group_members) {
+                     TabPane tabpane_statistics, HashMap<String, ObservableList<String>> group_members, ChartController chartController) {
 
-        pca_plot = new ScatterPlot(stage, logClass, tabpane_statistics);
+        pca_plot = new PCAPlot(stage, logClass, tabpane_statistics, stats, TC_bench);
         groups = group_members.keySet().toArray(new String[group_members.keySet().size()]);
         double[] pc1 = result_pca[0];
         double[] pc2 = result_pca[1];
-        //String[] groupOrder = chartController.getGroupOrder();
-        String[] groupOrder = new String[]{"PPP", "PP", "RP", "TRO", "EGYPA", "EGY", "MRT", "TUN", "ESH", "MAR", "SDN", "ETH", "BFA",
-                "CMR", "GIN", "SYR", "IRN", "IRQ", "TUR", "GEO", "YEM", "KWT","ARE","LBN","ISR","OMN","ARM","SAU","PAK","QAT","JOR","SVN",
-                "HUN","ITA","FRA","SRB","ENG","FRO","FIN","NOR","SWE","ESP","ISL"};
+        String[] groupOrder = chartController.getGroupOrder();
 
 
         OptionalDouble lowerbound_x = Arrays.stream(pc1).min();
@@ -210,7 +210,7 @@ public class PCA {
 
     }
 
-    public ScatterPlot getPca_plot() {
+    public PCAPlot getPca_plot() {
         return pca_plot;
     }
 

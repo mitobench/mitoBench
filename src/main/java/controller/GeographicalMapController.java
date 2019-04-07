@@ -93,7 +93,7 @@ public class GeographicalMapController {
     }
 
     public void setOptionsTab(){
-        GeoMapDisplay geoMapDisplay = new GeoMapDisplay("Map Options", logClass);
+        GeoMapDisplay geoMapDisplay = new GeoMapDisplay("Map Options", map.getListView().getItems().size(),logClass);
 
         // add functionality to buttons
         geoMapDisplay.getRb_location_sampling().selectedProperty().addListener((obs, wasPreviouslySelected, isNowSelected) -> {
@@ -102,6 +102,7 @@ public class GeographicalMapController {
                         tableControllerUserBench.getTableColumnByName("Latitude (Sampling)"),
                         tableControllerUserBench.getTableColumnByName("Longitude (Sampling)")
                 );
+                geoMapDisplay.getTextField_sample_info().setText("# of samples: " + map.getListView().getItems().size());
             }
         });
 
@@ -111,6 +112,8 @@ public class GeographicalMapController {
                         tableControllerUserBench.getTableColumnByName("Latitude (Sample)"),
                         tableControllerUserBench.getTableColumnByName("Longitude (Sample)")
                 );
+                geoMapDisplay.getTextField_sample_info().setText("# of samples: " +  map.getListView().getItems().size());
+
             }
         });
 
@@ -120,6 +123,8 @@ public class GeographicalMapController {
                         tableControllerUserBench.getTableColumnByName("Latitude (TMA inferred)"),
                         tableControllerUserBench.getTableColumnByName("Longitude (TMA inferred)")
                 );
+                geoMapDisplay.getTextField_sample_info().setText("# of samples: " +  map.getListView().getItems().size());
+
             }
         });
 

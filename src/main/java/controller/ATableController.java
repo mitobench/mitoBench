@@ -15,7 +15,7 @@ import javafx.util.Callback;
 import io.IData;
 import org.apache.log4j.Logger;
 import view.menus.GroupMenu;
-import view.table.DataTable;
+import model.table.DataTable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -93,10 +93,6 @@ public abstract class ATableController {
 
         table.getColumns().removeAll(table.getColumns());
 
-        // define column order
-        if(customColumnOrder == null){
-
-        }
 
         Set<String> cols = dataTable.getDataTable().keySet();
         for(String s : cols) {
@@ -121,8 +117,7 @@ public abstract class ATableController {
         updateVersion();
 
         // clear Items in table
-        table.getItems().removeAll(table.getItems());
-
+        table.setItems(FXCollections.observableArrayList());
         //FINALLY ADDED TO TableView
         table.getItems().addAll(data);
 
@@ -154,7 +149,7 @@ public abstract class ATableController {
                 List<Entry> elist = input_new.get(key_new);
                 for (Entry e : elist){
                     if (e.getIdentifier().equals("accession_id"))
-                        key_new = e.getData().getTableInformation();
+                        key_new = e.getData().getTableInformation().replace("\"","");
                 }
             }
             if(table_content.containsKey(key_new)){
@@ -240,9 +235,16 @@ public abstract class ATableController {
                 curr_colnames.remove("Longitude (Sample origin)");
             }
 
+            boolean containsSeq = false;
+            if(curr_colnames.contains("MTSequence")){
+                curr_colnames.remove("MTSequence");
+                containsSeq = true;
+            }
 
             Collections.sort(curr_colnames);
             col_names_sorted.addAll(curr_colnames);
+            if(containsSeq)
+                col_names_sorted.add("MTSequence");
 
         } else {
             // set user defined order
@@ -253,6 +255,7 @@ public abstract class ATableController {
                     curr_colnames_copy.remove(colname);
                 }
             }
+
             col_names_sorted.addAll(curr_colnames_copy);
         }
 
@@ -382,7 +385,8 @@ public abstract class ATableController {
         ColumnNameMapper mapper = new ColumnNameMapper();
         for(int i = 0; i < items.size(); i++) {
             ObservableList item = items.get(i);
-            String rowName = items.get(i).get(getColIndex("ID")).toString();
+            int index_id = getColIndex("ID");
+            String rowName = items.get(i).get(index_id).toString();
             List<Entry> eList = new ArrayList<>();
             List<String> colnames = getCurrentColumnNames();
             for(int k = 0; k < item.size(); k++){
@@ -411,7 +415,8 @@ public abstract class ATableController {
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
             col_names.add(colname);
-            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
+            col.prefWidthProperty().bind(table.widthProperty().multiply(0.07));
+            //col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             table.getColumns().addAll(col);
         }
     }
@@ -574,7 +579,7 @@ public abstract class ATableController {
         // clean view.data model
         data.removeAll(data);
         // clean table view
-        table.getItems().removeAll(table.getItems());
+        table.setItems(null);//getItems().clear();//removeAll(table.getItems());
         dataTable.getMtStorage().getData().clear();
         dataTable.getDataTable().clear();
         table.getColumns().removeAll(table.getColumns());
@@ -731,29 +736,23 @@ public abstract class ATableController {
 
     public int getColIndex(String k){
 
-        String key = "";
-        for(String s : column_to_index.keySet()) {
-            if (s.contains(k)) {
-                key = s;
+        if(k.equals("Haplogroup")) {
+            for (String s : column_to_index.keySet()) {
+                if (s.equals("Haplogroup")) {
+                    return column_to_index.get(s);
+                }
             }
-        }
-        if(key.equals("Grouping")){
+        } else if(k.equals("Grouping")){
             for(String s : column_to_index.keySet()){
                 if(s.contains("Grouping")){
                     return column_to_index.get(s);
                 }
             }
-        } else if(key.equals("Haplogroup")){
-            for(String s : column_to_index.keySet()){
-                if(s.contains("Haplogroup")){
-                    return column_to_index.get(s);
-                }
-            }
-
-        } else {
-            return column_to_index.get(key);
+        } else if(column_to_index.keySet().contains(k)) {
+            return column_to_index.get(k);
         }
-        // this return will never reached
+
+        // column not contained
         return -1;
     }
 

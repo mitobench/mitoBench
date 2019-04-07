@@ -9,8 +9,6 @@ public interface IImportDialogue {
 
     void start();
 
-    boolean isFileSelected();
-
     File getSelectedFile();
 
 

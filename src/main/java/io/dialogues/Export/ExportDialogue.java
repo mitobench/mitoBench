@@ -25,7 +25,7 @@ public class ExportDialogue extends Application {
     private final LogClass logClass;
     private final boolean exportAllData;
     private final ChartController cc;
-    private List<String> columnsInTable = FXCollections.observableArrayList("option1", "option2", "option3");
+    private List<String> columnsInTable;
     private TableControllerUserBench tableController;
     private String MITOBENCH_VERSION;
     private ObservableList<ObservableList> dataToExport;

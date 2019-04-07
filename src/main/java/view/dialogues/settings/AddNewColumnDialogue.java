@@ -43,31 +43,21 @@ public class AddNewColumnDialogue extends APopupDialogue{
 
     private void addButtonListener(Button okButton){
 
-        okButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                // create new Group
-                String colName = columnNameField.getText();
-                LOG.info("Add new column: " + colName);
-                controller.updateTable(controller.createNewEntryList(dataField.getText(), colName, true));
-                close();
-            }
+        okButton.setOnAction(e -> {
+            // create new Group
+            String colName = columnNameField.getText();
+            LOG.info("Add new column: " + colName);
+            controller.updateTable(controller.createNewEntryList(dataField.getText(), colName, true));
+            close();
         });
 
         DropShadow shadow = new DropShadow();
         //Adding the shadow when the mouse cursor is on
         okButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                new EventHandler<MouseEvent>() {
-                    @Override public void handle(MouseEvent e) {
-                        okButton.setEffect(shadow);
-                    }
-                });
+                e -> okButton.setEffect(shadow));
         //Removing the shadow when the mouse cursor is off
         okButton.addEventHandler(MouseEvent.MOUSE_EXITED,
-                new EventHandler<MouseEvent>() {
-                    @Override public void handle(MouseEvent e) {
-                        okButton.setEffect(null);
-                    }
-                });
+                e -> okButton.setEffect(null));
 
     }
 

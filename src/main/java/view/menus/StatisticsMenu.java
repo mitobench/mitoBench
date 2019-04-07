@@ -1,9 +1,6 @@
 package view.menus;
 
 import Logging.LogClass;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
@@ -17,8 +14,6 @@ import controller.GroupController;
 import controller.TableControllerUserBench;
 import statistics.HaploStatistics;
 import controller.HaplotreeController;
-
-import java.io.IOException;
 
 /**
  * Created by neukamm on 16.11.16.
@@ -36,7 +31,7 @@ public class StatisticsMenu {
     private Logger LOG;
     private LogClass LOGClass;
 
-    public StatisticsMenu(MitoBenchWindow mitoBenchWindow) throws IOException {
+    public StatisticsMenu(MitoBenchWindow mitoBenchWindow) {
         LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
         LOGClass =mitoBenchWindow.getLogClass();
         mito = mitoBenchWindow;
@@ -47,21 +42,19 @@ public class StatisticsMenu {
         treeHaploController = mitoBenchWindow.getTreeController();
         groupController = mitoBenchWindow.getGroupController();
         stage = mitoBenchWindow.getPrimaryStage();
-        addSubMenus(mitoBenchWindow.getTabpane_statistics(), mitoBenchWindow.getScene());
+        addSubMenus(mitoBenchWindow.getTabpane_statistics());
     }
 
-    private void addSubMenus(TabPane statsTabpane, Scene scene) throws IOException {
+    private void addSubMenus(TabPane statsTabpane){
         MenuItem haploStats = new MenuItem("Count Haplogroups");
         haploStats.setId("toolsMenu_stats_hg");
-        haploStats.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                haploStatistics = new HaploStatistics(tableController, treeHaploController, mito.getChartController(), LOGClass);
-                HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
-                hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane);
-                Tab tab = hgStatisticsPopupDialogug.getTab();
-                mito.getTabpane_statistics().getTabs().add(tab);
-                mito.getTabpane_statistics().getSelectionModel().select(tab);
-            }
+        haploStats.setOnAction(t -> {
+            haploStatistics = new HaploStatistics(tableController, mito.getChartController(), LOGClass);
+            HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
+            hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane);
+            Tab tab = hgStatisticsPopupDialogug.getTab();
+            mito.getTabpane_statistics().getTabs().add(tab);
+            mito.getTabpane_statistics().getSelectionModel().select(tab);
         });
 
         MenuItem mutations = new MenuItem("Calculate haplotype frequency");
@@ -88,7 +81,4 @@ public class StatisticsMenu {
         return menuTools;
     }
 
-    public HaploStatistics getHaploStatistics() {
-        return haploStatistics;
-    }
 }

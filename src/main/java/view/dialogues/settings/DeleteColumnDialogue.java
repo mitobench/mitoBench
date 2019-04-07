@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 
 public class DeleteColumnDialogue extends APopupDialogue{
 
-    private final TextField entry_field;
     private ComboBox comboBox;
     private ATableController tableController;
 
@@ -32,7 +31,6 @@ public class DeleteColumnDialogue extends APopupDialogue{
         comboBox = new ComboBox();
         comboBox.getItems().addAll(comboEntries);
         comboBox.getSelectionModel().selectFirst();
-        entry_field = new TextField();
 
         Button okButton = new Button("OK");
         addButtonListener(okButton);
@@ -48,33 +46,20 @@ public class DeleteColumnDialogue extends APopupDialogue{
     private void addButtonListener(Button okButton){
 
 
-        okButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                // add elements to group
-                tableController.removeColumn(comboBox.getValue().toString());
-                close();
-
-
-
-            }
+        okButton.setOnAction(e -> {
+            // add elements to group
+            tableController.removeColumn(comboBox.getValue().toString());
+            close();
         });
 
 
         DropShadow shadow = new DropShadow();
         //Adding the shadow when the mouse cursor is on
         okButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                new EventHandler<MouseEvent>() {
-                    @Override public void handle(MouseEvent e) {
-                        okButton.setEffect(shadow);
-                    }
-                });
+                e -> okButton.setEffect(shadow));
         //Removing the shadow when the mouse cursor is off
         okButton.addEventHandler(MouseEvent.MOUSE_EXITED,
-                new EventHandler<MouseEvent>() {
-                    @Override public void handle(MouseEvent e) {
-                        okButton.setEffect(null);
-                    }
-                });
+                e -> okButton.setEffect(null));
 
     }
 

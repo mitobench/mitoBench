@@ -13,17 +13,15 @@ import io.dialogues.Import.ImportDialogueFactoryImpl;
 import io.fileConversionPGDSpider.SpiderCoversion;
 import io.writer.ImageWriter;
 import io.writer.StatisticsWriter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import view.dialogues.settings.DBSearchDialogue;
-import view.dialogues.settings.DatabaseConnectionDialogue;
 import io.dialogues.Export.ExportDialogue;
+import view.dialogues.settings.NewProjectWarning;
+import view.dialogues.settings.SqlQueryBuilderWindow;
 
 import java.io.IOException;
 import java.util.*;
@@ -44,15 +42,12 @@ public class FileMenu {
     private StatisticsMenu toolsMenu;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
-    private DrapAndDropManagerDB drapAndDropEventMaganer;
     private Logger LOG;
     private LogClass logClass;
-    private DatabaseConnectionController databaseConnectionController;
 
 
     public FileMenu( StatisticsMenu toolsMenu,
-                     MitoBenchWindow mitoBenchWindow)
-            throws IOException {
+                     MitoBenchWindow mitoBenchWindow) {
 
         MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
 
@@ -78,20 +73,18 @@ public class FileMenu {
     }
 
 
-    private void addSubMenus() throws IOException {
+    private void addSubMenus() {
 
         // new project
 
         MenuItem newProject = new MenuItem("New Project");
         newProject.setId("menu_item_new_project");
         newProject.setOnAction(t -> {
-            // clear all
-            tableControllerDB.cleartable();
-            tableControllerUserBench.cleartable();
-            viz_pane.getTabs().removeAll(viz_pane.getTabs());
-            mitoBenchWindow.getTabpane_statistics().getTabs().removeAll(mitoBenchWindow.getTabpane_statistics().getTabs());
-            mitoBenchWindow.setAnotherProjectLoaded(false);
-            LOG.info("New project was created.");
+            // ask if project should be saved
+            NewProjectWarning newProjectWarning = new NewProjectWarning("Warning!", mitoBenchWindow.getLogClass(),
+                    mitoBenchWindow);
+
+
         });
 
 
@@ -128,33 +121,7 @@ public class FileMenu {
         importFromDB.setId("importFromDB");
         // todo: make db query
         importFromDB.setOnAction(t -> {
-            if(databaseConnectionController == null || !databaseConnectionController.isLoggedIn()){
-                databaseConnectionController = new DatabaseConnectionController();
-
-                DatabaseConnectionDialogue databaseConnectionDialogue = new DatabaseConnectionDialogue(
-                        "Database Login",
-                        tableControllerDB,
-                        logClass,
-                        mitoBenchWindow,
-                        databaseConnectionController
-                );
-
-                mitoBenchWindow.getTabpane_statistics().getTabs().add(databaseConnectionDialogue.getTab());
-                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(databaseConnectionDialogue.getTab());
-
-            } else {
-                // open search mask to specify which data should be loaded
-                DBSearchDialogue dbSearchDialogue = new DBSearchDialogue("SQL statement configurator", mitoBenchWindow, databaseConnectionController);
-                dbSearchDialogue.fillDialogue();
-                dbSearchDialogue.addFunctionality(databaseConnectionController.getTable());
-                mitoBenchWindow.getTabpane_statistics().getTabs().add(dbSearchDialogue.getTab());
-                mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(dbSearchDialogue.getTab());
-            }
-
-//            if(drapAndDropEventMaganer == null){
-//                drapAndDropEventMaganer = new DrapAndDropManagerDB(tableControllerDB, tableControllerUserBench);
-//                drapAndDropEventMaganer.createEvent();
-//            }
+            SqlQueryBuilderWindow sqlQueryBuilderWindow = new SqlQueryBuilderWindow(mitoBenchWindow);
 
 
         });
@@ -246,9 +213,8 @@ public class FileMenu {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Text format (*.txt)", "*.txt");
             SaveAsDialogue sad = new SaveAsDialogue(fex);
             sad.start(new Stage());
-            StatisticsWriter statisticsWriter = new StatisticsWriter(
-                    mitoBenchWindow.getTabpane_statistics().getSelectionModel().getSelectedItem()
-            );
+            StatisticsWriter statisticsWriter = new StatisticsWriter();
+            statisticsWriter.setTab( mitoBenchWindow.getTabpane_statistics().getSelectionModel().getSelectedItem());
             try {
                 statisticsWriter.writeData(sad.getOutFile(), tableControllerUserBench);
             } catch (IOException e) {
@@ -270,9 +236,6 @@ public class FileMenu {
             LoggerSettingsDialogue loggerSettingsDialogue =
                     new LoggerSettingsDialogue("Log file configuration", logClass, stage);
         });
-
-//        menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
-//                exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
 
         menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
                 exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);

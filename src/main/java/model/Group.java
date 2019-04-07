@@ -37,6 +37,9 @@ public class Group {
         return entries;
     }
 
+    public int getSize(){
+        return entries.size();
+    }
     public String getName() {
         return name;
     }

@@ -35,8 +35,8 @@ public class HSDInput implements IInputData {
 
         String currline;
         boolean init = true;
-
-        String[] header = bfr.readLine().split("\t");
+        String line = bfr.readLine();
+        String[] header = line.replace("\"", "").split("\t");
 
 
         int polys_not_found_index = -1;
@@ -50,7 +50,7 @@ public class HSDInput implements IInputData {
         int quality_index = -1;
 
         for (int i = 0; i < header.length; i++){
-            switch (header[i]) {
+            switch (header[i].replace("\"", "")) {
                 case "SampleID":  id_index = i;
                     break;
                 case "Haplogroup":  group_index = i;
@@ -59,7 +59,7 @@ public class HSDInput implements IInputData {
                 //    break;
                 case "Found_Polys":  polys_found_index = i;
                     break;
-                case "Overall_Rank":  quality_index = i;
+                case "Quality":  quality_index = i;
                     break;
                 case "Not_Found_Polys":  polys_not_found_index = i;
                     break;
@@ -69,18 +69,19 @@ public class HSDInput implements IInputData {
                     break;
                 case "Input_Sample":  input_sample_index = i;
                     break;
+
             }
         }
 
 
         while ((currline = bfr.readLine()) != null) {
-            if(!header[0].equals("SampleID") && init){
+            if(!header[0].replace("\"","").equals("SampleID") && init){
                 if(init){
                     throw new HSDException("This is probably not a HSD input format file, as the header is missing.");
                 }
             } else {
 
-                String[] splitGroup = currline.split("\t");
+                String[] splitGroup = currline.replace("\"", "").split("\t");
 
                 String polys_not_found = "Undefined";
                 String polys_found = "Undefined";
@@ -98,7 +99,8 @@ public class HSDInput implements IInputData {
                     group = splitGroup[group_index].trim();
                 }
                 if(quality_index!=-1){
-                    quality = round(Double.parseDouble(splitGroup[quality_index])*100,2);
+                    double num = Double.parseDouble(splitGroup[quality_index]);
+                    quality = round(num*100,2);
                 }
                 if(polys_not_found_index!=-1) {
                     polys_not_found = splitGroup[polys_not_found_index].trim();

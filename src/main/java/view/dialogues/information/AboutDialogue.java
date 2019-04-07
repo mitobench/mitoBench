@@ -1,7 +1,5 @@
 package view.dialogues.information;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
@@ -26,7 +24,7 @@ public class AboutDialogue {
     private final ImageView imageView;
     private Hyperlink link;
 
-    public AboutDialogue(String title, String message, String headertext, String id) {
+    public AboutDialogue(String title, String message) {
 
         dialog = new Stage();
         dialog.setTitle(title);
@@ -58,7 +56,7 @@ public class AboutDialogue {
         link.setText("Documentation");
 
         String text = "MitoBench is a tool aimed at helping researchers to organize, \n" +
-                "visualize and maintain their mitochondrial datasets. Some functionality \n" +
+                "visualize and maintain their mitochondrial data sets. Some functionality \n" +
                 "is aimed towards generating population genetics statistics with \n" +
                 "additional visualization";
 
