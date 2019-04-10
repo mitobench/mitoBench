@@ -369,7 +369,7 @@ public class VisualizationMenu {
                                     chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
                             for(String group : groupController.getGroupnames()) {
-                                if(!group.equals("Undefined")){
+                                if(!group.equals("")){
                                     try {
                                         visualizationController.initPieChart(group);
                                     } catch (MalformedURLException e1) {

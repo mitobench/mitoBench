@@ -99,7 +99,7 @@ public class MapView extends StackPane {
                 String latitude  = latitude_col.getCellObservableValue(item).getValue().toString();
                 String longitude  = longitude_col.getCellObservableValue(item).getValue().toString();
 
-                if(!latitude.equals("Undefined") && !longitude.equals("Undefined") ){
+                if(!latitude.equals("") && !longitude.equals("") ){
                     marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude)));
                 }
             }
@@ -111,22 +111,26 @@ public class MapView extends StackPane {
 
     private void addMarker(){
 
-        MarkerIcons markerIcons = new MarkerIcons(groupController, tableController);
-        markerIcons.setItems(listView.getItems());
+        if(listView.getItems().size() > 0){
+            MarkerIcons markerIcons = new MarkerIcons(groupController, tableController);
+            markerIcons.setItems(listView.getItems());
 
-        if(grouping_col != null){
-            // get groups
-            List<String> columnData = new ArrayList<>();
-            for( Object item : items) {
-                columnData.add(grouping_col.getCellObservableValue(item).getValue().toString());
+            if(grouping_col != null){
+                // get groups
+                List<String> columnData = new ArrayList<>();
+                for( Object item : items) {
+                    columnData.add(grouping_col.getCellObservableValue(item).getValue().toString());
+                }
+                markerIcons.setGroups(columnData);
             }
-            markerIcons.setGroups(columnData);
+
+            markerIcons.addIconsToMap(map);
+
+            Legend legend = markerIcons.getLegend();
+            mapBasicPane.setBottom(legend);
+        } else {
+            System.out.println("No items to show on geogr. map");
         }
-
-        markerIcons.addIconsToMap(map);
-
-        Legend legend = markerIcons.getLegend();
-        mapBasicPane.setBottom(legend);
 
     }
 

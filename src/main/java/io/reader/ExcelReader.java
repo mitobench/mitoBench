@@ -122,7 +122,7 @@ public class ExcelReader implements IInputData{
                         colname = mapper.mapString(header.get(i));
                         if(colname.equals("ID"))
                             id = cell.getStringCellValue();
-                        data = "Undefined";
+                        data = "";
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;

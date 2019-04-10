@@ -57,7 +57,7 @@ public class BarChartGrouping extends AChart {
         series.setName("");
 
         for(String group : data.keySet()){
-            if(!group.equals("Undefined")){
+            if(!group.equals("")){
                 XYChart.Data data_node = new XYChart.Data<>(group, data.get(group));
                 series.getData().add(data_node);
             }

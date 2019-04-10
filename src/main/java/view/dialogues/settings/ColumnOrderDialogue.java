@@ -56,7 +56,7 @@ public class ColumnOrderDialogue extends ATabpaneDialogue{
 
         ObservableList<ObservableList<String>> items = FXCollections.observableArrayList();
         for(String s : groups){
-            if(!s.equals("Undefined")){
+            if(!s.equals("")){
                 ObservableList data = FXCollections.observableArrayList(s);
                 items.add(data);
             }

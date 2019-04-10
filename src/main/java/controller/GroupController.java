@@ -165,11 +165,11 @@ public class GroupController {
         return allGroups;
     }
 
-    public HashMap<String, Group> getGroupsWithoutUndefined() {
+    public HashMap<String, Group> getGroupsWithout() {
         HashMap<String, Group> allGroups_new = new HashMap<>();
 
         for(String key : allGroups.keySet()){
-            if(!key.equals("Undefined")){
+            if(!key.equals("")){
                 allGroups_new.put(key, allGroups.get(key));
             }
         }

@@ -70,7 +70,7 @@ public class ProfilePlot extends AChart {
         } else {
             String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
             String[] selection_haplogroups = cols[0];
-            selection_groups = removeUndefined(cols[1]);
+            selection_groups = remove(cols[1]);
 
             HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_list);
             data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
@@ -143,11 +143,11 @@ public class ProfilePlot extends AChart {
         //addTabPaneListener(tabpaneViz, statsTabpane);
     }
 
-    private String[] removeUndefined(String[] col) {
+    private String[] remove(String[] col) {
 
         List<String> list = new ArrayList<>();
         for(String g : col){
-            if(!g.equals("Undefined"))
+            if(!g.equals(""))
                 list.add(g);
         }
 

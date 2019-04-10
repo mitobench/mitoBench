@@ -60,7 +60,7 @@ public class GenericInputParser implements IInputData {
                 for(int i = 0; i < splitLine.length; i++){
                     splitLine[i].trim();
                     if(splitLine[i].equals("")){
-                        splitLine[i] = "Undefined";
+                        splitLine[i] = "";
                     }
                 }
 

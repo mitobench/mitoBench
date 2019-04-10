@@ -223,7 +223,7 @@ public class ChartController {
                             String group = selection_groups[i];
 
 
-                            if(!group.equals("Undefined")){
+                            if(!group.equals("")){
                                 double count = 0.0;
                                 for (String hg : subHGs) {
 
@@ -241,7 +241,7 @@ public class ChartController {
                     List<XYChart.Data<String, Number>> data_list = new ArrayList<>();
                     for (int i = 0; i < selection_groups.length; i++) {
                         String group = selection_groups[i];
-                        if(!group.equals("Undefined")){
+                        if(!group.equals("")){
                             XYChart.Data<String, Number> data = new XYChart.Data<>(group, 0.0);
                             data_list.add(data);
                         }
@@ -314,7 +314,7 @@ public class ChartController {
                 String group = selection_groups[i];
                 double count_others = 0.0;
 
-                if(!group.equals("Undefined")){
+                if(!group.equals("")){
                     for (String hg : unused_hgs) {
                         count_others += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"),
                                 tableController.getColIndex("Grouping")).size();

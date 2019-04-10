@@ -276,7 +276,7 @@ public abstract class ATableController {
                     if(e != null && !e.equals("null")){
                         data_tmp[j][m] = col_entry[j];
                     } else {
-                        data_tmp[j][m] = "Undefined";
+                        data_tmp[j][m] = "";
                     }
                 }
                 m++;
@@ -340,8 +340,6 @@ public abstract class ATableController {
      * @return
      */
     public HashMap<String, List<Entry>> createNewEntryList(String textfield, String colName, boolean getAllRows){
-        if(textfield.equals(""))
-            textfield="Undefined";
 
         HashMap<String, List<Entry>> entries = new HashMap<>();
         ObservableList<ObservableList> selection;

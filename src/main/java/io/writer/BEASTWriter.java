@@ -108,7 +108,7 @@ public class BEASTWriter implements IOutputData {
     private String getC14String(String c14data, int year) {
         String tmp = "";
         if(!c14data.equals("")){
-            if (!c14data.equals("Undefined")) {
+            if (!c14data.equals("")) {
                 //tmp = "_" + Math.abs(Double.parseDouble(c14data) - 2000);
                 tmp = "_" + Math.abs(year - Double.parseDouble(c14data)); // years before present
             }
