@@ -47,7 +47,7 @@ public class ColumnNameMapper {
             case "geographic_info_tma_inferred_longitude":
                 return "Longitude (TMA inferred)";
             case "geographic_info_tma_inferred_region":
-                return "Geographic Area (TMA inferred)";
+                return "Continent (TMA inferred)";
             case "geographic_info_tma_inferred_subregion":
                 return "Subregion (TMA inferred)";
             case "geographic_info_tma_inferred_intermediate_region":
@@ -129,7 +129,7 @@ public class ColumnNameMapper {
             case "sampling_longitude":
                 return "Longitude (Sampling)";
             case "sampling_region":
-                return "Geographic Area (sampling)";
+                return "Continent (sampling)";
             case "sampling_subregion":
                 return "Subregion (sampling)";
             case "sampling_intermediate_region":
@@ -143,7 +143,7 @@ public class ColumnNameMapper {
             case "sample_origin_longitude":
                 return "Longitude (Sample)";
             case "sample_origin_region":
-                return "Geographic Area (Sample)";
+                return "Continent (Sample)";
             case "sample_origin_subregion":
                 return "Subregion (Sample)";
             case "sample_origin_intermediate_region":

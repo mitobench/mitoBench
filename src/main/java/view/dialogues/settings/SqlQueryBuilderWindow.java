@@ -1,7 +1,11 @@
 package view.dialogues.settings;
 
+import analysis.ProgressBarHandler;
 import database.DatabaseQueryHandler;
 import io.datastructure.Entry;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,12 +28,15 @@ public class SqlQueryBuilderWindow {
     private final DatabaseQueryHandler databaseQueryHandler;
     private Button btn_getData;
     private CheckBox checkBox_SelectAllData;
+    private ProgressBarHandler progressBarhandler;
+    private HashMap<String, List<Entry>> data_map;
 
 
     public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
 
         databaseQueryHandler = new DatabaseQueryHandler();
         mito = mitoBenchWindow;
+        progressBarhandler = mitoBenchWindow.getProgressBarhandler();
 
         root = new BorderPane();
         stage = new Stage();
@@ -57,14 +64,28 @@ public class SqlQueryBuilderWindow {
         Label database_filtering_explanation = new Label("To filter data, right-click on the column name.\nSearch field is case sensitive.");
         database_filtering_explanation.setPadding(new Insets(10,10,10,10));
 
-        HashMap<String, List<Entry>> data_map = databaseQueryHandler.getMetaData();
-        mito.getLogClass().getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
-        mito.getTableControllerDB().updateTable(data_map);
-        TableView table = mito.getTableControllerDB().getTable();
-        TableFilter filter = new TableFilter(table);
+        Task task = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                 data_map = databaseQueryHandler.getMetaData();
+                return true;
+            }
+        };
+
+        mito.getProgressBarhandler().activate(task.progressProperty());
+
+        task.setOnSucceeded((EventHandler<Event>) event -> {
+            mito.getLogClass().getLogger(this.getClass()).info("Import data from mitoDB.\nQuery: ");
+            mito.getTableControllerDB().updateTable(data_map);
+            TableView table = mito.getTableControllerDB().getTable();
+            TableFilter filter = new TableFilter(table);
+            root.setCenter(mito.getTableControllerDB().getTable());
+            mito.getProgressBarhandler().stop();
+        });
+
 
         root.setTop(database_filtering_explanation);
-        root.setCenter(mito.getTableControllerDB().getTable());
+        root.setCenter(new Label("Getting data from database..."));
         root.setBottom(bottom);
 
     }
