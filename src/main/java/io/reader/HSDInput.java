@@ -83,14 +83,14 @@ public class HSDInput implements IInputData {
 
                 String[] splitGroup = currline.replace("\"", "").split("\t");
 
-                String polys_not_found = "Undefined";
-                String polys_found = "Undefined";
-                String polys_remaining = "Undefined";
-                String acc_in_remainings = "Undefined";
-                String input_sample = "Undefined";
-                String id = "Undefined";
-                String group = "Undefined";
-                String quality = "Undefined";
+                String polys_not_found = "";
+                String polys_found = "";
+                String polys_remaining = "";
+                String acc_in_remainings = "";
+                String input_sample = "";
+                String id = "";
+                String group = "";
+                String quality = "";
 
                 if(id_index!=-1){
                     id = splitGroup[id_index].trim();
@@ -121,11 +121,11 @@ public class HSDInput implements IInputData {
 
                 List<Entry> entries = new ArrayList<>();
                 Entry entry = new Entry(mapper.mapString("Haplogroup"), new CategoricInputType("String"), new GenericInputData(group));
-                if(!polys_found.equals("Undefined")){
+                if(!polys_found.equals("")){
                     Entry entry2 = new Entry(mapper.mapString("Haplotype"), new CategoricInputType("String"), new GenericInputData(polys_found));
                     entries.add(entry2);
                 }
-                if(!quality.equals("Undefined")){
+                if(!quality.equals("")){
                     Entry entry_HGqual = new Entry("Haplogrep Quality", new CategoricInputType("String"), new GenericInputData(quality));
                     entries.add(entry_HGqual);
                 }

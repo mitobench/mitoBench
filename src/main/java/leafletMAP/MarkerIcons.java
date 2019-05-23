@@ -104,7 +104,7 @@ public class MarkerIcons {
 
         int groupCount = 0;
 
-        HashMap<String, Group> all_groups = groupController.getGroupsWithoutUndefined();
+        HashMap<String, Group> all_groups = groupController.getGroupsWithout();
         // iterate over groups and generates marker/icon for each element in the group.
         for(String gName : all_groups.keySet()){
             Group g = all_groups.get(gName);
@@ -115,7 +115,7 @@ public class MarkerIcons {
 
                 String location = (String) entry.get(tableController.getColIndex("Location"));
                 String id = (String) entry.get(tableController.getColIndex("ID"));
-                if(!location.equals("Undefined") && columnData.contains(id)){
+                if(!location.equals("") && columnData.contains(id)){
                     String[] loc = location.split(";");
                     LatLng pos = new LatLng(Double.parseDouble(loc[0]), Double.parseDouble(loc[1]));
 
@@ -159,7 +159,7 @@ public class MarkerIcons {
 
         int colorCount = 0;
         for (String groupName : groupController.getGroupnames()) {
-            if(!groupName.equals("Undefined")){
+            if(!groupName.equals("")){
                 Rectangle rect = new Rectangle(10,10,5, 5);
                 rect.setFill(colorsString[colorCount]);
                 rect.setStroke(colorsString[colorCount]);

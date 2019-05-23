@@ -2,8 +2,6 @@ package controller;
 
 
 import Logging.LogClass;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
@@ -15,8 +13,6 @@ import view.dialogues.settings.AddDataToColumnDialog;
 import view.dialogues.settings.AddNewColumnDialogue;
 import view.dialogues.settings.CopyColumnDialogue;
 import view.dialogues.settings.DeleteColumnDialogue;
-
-import java.awt.print.Book;
 
 
 /**

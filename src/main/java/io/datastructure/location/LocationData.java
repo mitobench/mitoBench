@@ -19,7 +19,7 @@ public class LocationData implements IData {
     }
 
     private void setParseLocationInformation(String toParseThis){
-        if(!toParseThis.equals("Undefined")){
+        if(!toParseThis.equals("")){
             String[] location = toParseThis.split(";");
             latitude = Double.parseDouble(location[0]);
             longitude = Double.parseDouble(location[1]);
@@ -30,7 +30,7 @@ public class LocationData implements IData {
     @Override
     public String getTableInformation() {
         if (latitude == 0.0 && longitude==0.0)
-            return "Undefined";
+            return "";
         else
             return (latitude + ";" + longitude);
     }

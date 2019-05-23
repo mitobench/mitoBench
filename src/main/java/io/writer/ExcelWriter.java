@@ -70,7 +70,7 @@ public class ExcelWriter implements IOutputData {
                         c.setCellValue(mt_seq);
                     }else{
                         Cell c = row_to_add.createCell(i);
-                        if(e.get(i).equals("Undefined"))
+                        if(e.get(i).equals(""))
                             c.setCellValue("");
                         else
                             c.setCellValue((String) e.get(i));

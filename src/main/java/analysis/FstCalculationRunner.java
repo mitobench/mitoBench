@@ -78,7 +78,7 @@ public class FstCalculationRunner {
             String group = (String)row.get(colIndexGrouping);
             String id = (String)row.get(colIndexSequence);
             String sequence = mtStorage.getData().get(id);
-            if(!group.equals("Undefined")){
+            if(!group.equals("")){
                 if(!data.containsKey(group)){
                     List<String> sequences = new ArrayList<>();
                     sequences.add(sequence);

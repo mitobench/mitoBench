@@ -73,7 +73,7 @@ public class PieChartViz extends AChart {
             List<XYChart.Data<String, Number>> data_entry = data_all.get(hg);
             for(XYChart.Data<String, Number> data : data_entry){
                 String g = data.getXValue();
-                if(g.equals(group) && !g.equals("Undefined")){
+                if(g.equals(group) && !g.equals("")){
                     int count = data.getYValue().intValue();
                     if(count!=0){
                         if(hg_count.containsKey(hg)){

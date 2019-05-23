@@ -41,6 +41,9 @@ public class JsonDataParser {
 
         List<Entry> entries = new ArrayList<>();
         for (String key : json_data_map.keySet()){
+            if(key.contains(" "))
+                System.out.println(key);
+
             String d = json_data_map.get(key).toString();
             Entry e;
             // don't publish user password and alias

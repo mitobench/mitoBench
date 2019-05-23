@@ -63,7 +63,7 @@ public class HaploStatistics {
             number_of_groups = selection_groups.length;
 
             for(String s : selection_groups){
-                if(s.equals("Undefined"))
+                if(s.equals(""))
                     number_of_groups = selection_groups.length-1;
             }
             
