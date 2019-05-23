@@ -51,15 +51,17 @@ public class HaplotypeCaller {
         //HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
         HSDInput hsdInput = null;
         try {
-            hsdInput = new HSDInput("haplogroups.hsd", LOG);
+            if(new File("haplogroups.hsd").exists()){
+                hsdInput = new HSDInput("haplogroups.hsd", LOG);
+                tableController.updateTable(hsdInput.getCorrespondingData());
+            }    else {
+                System.out.println("Haplogrep did not run properly");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (HSDException e) {
             e.printStackTrace();
         }
-        tableController.updateTable(hsdInput.getCorrespondingData());
-
-
 
     }
 

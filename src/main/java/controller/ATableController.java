@@ -6,6 +6,7 @@ import io.IInputType;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 import io.IData;
 import org.apache.log4j.Logger;
+import org.controlsfx.control.table.TableFilter;
 import view.menus.GroupMenu;
 import model.table.DataTable;
 
@@ -125,6 +127,8 @@ public abstract class ATableController {
 
         if(groupname!=null)
             groupController.createGroupByColumn(groupname,"");
+
+        TableFilter filter = new TableFilter(table);
 
     }
 
@@ -377,27 +381,6 @@ public abstract class ATableController {
     }
 
 
-    public HashMap<String, List<Entry>>  createNewEntryListDragAndDrop(ObservableList<ObservableList> items){
-
-        HashMap<String, List<Entry>> entries = new HashMap<>();
-        ColumnNameMapper mapper = new ColumnNameMapper();
-        for(int i = 0; i < items.size(); i++) {
-            ObservableList item = items.get(i);
-            int index_id = getColIndex("ID");
-            String rowName = items.get(i).get(index_id).toString();
-            List<Entry> eList = new ArrayList<>();
-            List<String> colnames = getCurrentColumnNames();
-            for(int k = 0; k < item.size(); k++){
-
-                Entry e = new Entry(mapper.mapString(colnames.get(k)), new CategoricInputType("String"), new GenericInputData(item.get(k).toString()));
-                eList.add(e);
-            }
-            entries.put(rowName, eList);
-
-        }
-        return entries;
-    }
-
 
     /**
      * Add new column to table
@@ -413,7 +396,7 @@ public abstract class ATableController {
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
             col_names.add(colname);
-            col.prefWidthProperty().bind(table.widthProperty().multiply(0.07));
+            //col.prefWidthProperty().bindBidirectional((Property<Number>) table.widthProperty().multiply(0.07));
             //col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             table.getColumns().addAll(col);
         }

@@ -34,18 +34,23 @@ public class DataTable {
     public void update(HashMap<String, List<Entry>> input){
 
         for(String key : input.keySet()){
-            int rowPosition = getRowPosition(key);
-
-            if(rowPosition >= 0){
-                // row already exists
-                // update row
-                updateRow(rowPosition, input.get(key), key);
+            if(key.contains(" ")){
+                System.out.println(key);
             } else {
-                // create new Row with dummy entries
-                addRow(key);
-                int rpos = getRowPosition(key);
-                updateRow(rpos, input.get(key), key);
+                int rowPosition = getRowPosition(key);
+
+                if(rowPosition >= 0){
+                    // row already exists
+                    // update row
+                    updateRow(rowPosition, input.get(key), key);
+                } else {
+                    // create new Row with dummy entries
+                    addRow(key);
+                    int rpos = getRowPosition(key);
+                    updateRow(rpos, input.get(key), key);
+                }
             }
+
         }
     }
 
