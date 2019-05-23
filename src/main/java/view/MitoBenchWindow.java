@@ -22,7 +22,7 @@ import view.tree.TreeView;
  */
 public class MitoBenchWindow extends Application{
 
-    private final String MITOBENCH_VERSION = "1.0-beta";
+    private final String MITOBENCH_VERSION = "1.2-beta";
 
     private BorderPane pane_root;
     private TableControllerUserBench tableControllerUserBench;
