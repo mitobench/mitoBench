@@ -28,7 +28,6 @@ public class DatabaseQueryHandler {
             long startTime = System.currentTimeMillis();
             String query = "http://mitodb.org/meta";
 
-            System.out.println(query);
             HttpResponse<JsonNode> response_metadata = Unirest.get(query).asJson();
 
             long currtime_post_execution = System.currentTimeMillis();
@@ -65,10 +64,7 @@ public class DatabaseQueryHandler {
 
             String query_complete = "http://mitodb.org/meta?" + query;
             System.out.println(query_complete);
-
             HttpResponse<JsonNode> response_meta = Unirest.get(query_complete).asJson();
-
-
 
             long currtime_post_execution = System.currentTimeMillis();
             long diff = currtime_post_execution - startTime;

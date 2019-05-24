@@ -26,21 +26,21 @@ public class TableControllerUserBench extends ATableController {
 
     }
 
-    public void addRowListener(Label infolabel){
-        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            // update text
-            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
-                    table.getItems().size() +  " rows are selected");
-        });
-
-        table.getItems().addListener((ListChangeListener<ObservableList>) pChange -> {
-            while(pChange.next()) {
-                // update text
-                infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
-                        table.getItems().size() +  " rows are selected");
-            }
-        });
-    }
+//    public void addRowListener(Label infolabel){
+//        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+//            // update text
+//            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+//                    table.getItems().size() +  " rows are selected");
+//        });
+//
+//        table.getItems().addListener((ListChangeListener<ObservableList>) pChange -> {
+//            while(pChange.next()) {
+//                // update text
+//                infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+//                        table.getItems().size() +  " rows are selected");
+//            }
+//        });
+//    }
 
 
     public void createContextMenu(){

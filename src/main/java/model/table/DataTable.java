@@ -35,7 +35,7 @@ public class DataTable {
 
         for(String key : input.keySet()){
             if(key.contains(" ")){
-                System.out.println(key);
+
             } else {
                 int rowPosition = getRowPosition(key);
 

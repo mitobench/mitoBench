@@ -2,6 +2,8 @@ package view.dialogues.settings;
 
 import database.DatabaseQueryHandler;
 import io.datastructure.Entry;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -10,11 +12,16 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.CheckComboBox;
 import view.MitoBenchWindow;
 
+import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class SqlQueryBuilderWindow {
@@ -39,6 +46,7 @@ public class SqlQueryBuilderWindow {
 
     private Label label_no_data;
     private GridPane center;
+    private Label imageLabel;
 
 
     public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
@@ -68,7 +76,7 @@ public class SqlQueryBuilderWindow {
 
         btn_getData = new Button("Get data");
         btn_getData.setDisable(false);
-        btn_importToMitoBench = new Button("Import to mitoBench");
+        btn_importToMitoBench = new Button("Import into mitoBench");
         btn_importToMitoBench.setDisable(true);
 
         checkbox_connector_and =new CheckBox("and");
@@ -83,6 +91,17 @@ public class SqlQueryBuilderWindow {
 
         label_no_data = new Label("");
 
+        InputStream input = getClass().getResourceAsStream("/icons/icons8-info-30.png");
+
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+
+        imageLabel = new Label();
+        imageLabel.setGraphic(imageView);
+        final Tooltip tooltip = new Tooltip();
+        hackTooltipStartTiming(tooltip);
+        tooltip.setText("Select how you want to connect the database queries.\n'and' returns data that matches all search criteria.\n'or' returns data that matches one of the search criteria.\nThe selection here is also applied to the continent search.  ");
+        imageLabel.setTooltip(tooltip);
 
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
@@ -102,14 +121,18 @@ public class SqlQueryBuilderWindow {
 
         center.add(new Separator(),0,3,2,1);
 
-        center.add(checkbox_connector_and, 0,4,1,1);
-        center.add(checkbox_connector_or, 1,4,1,1);
-
         continentFilter();
+
+        center.add(new Separator(),0,7,2,1);
+
+        center.add(checkbox_connector_and, 0,8,1,1);
+        center.add(checkbox_connector_or, 1,8,1,1);
+        center.add(imageLabel, 2,8,1,1);
+
 
         // filling bottom
         bottom.setPadding(new Insets(10,10,10,10));
-        bottom.getChildren().addAll(region1, label_no_data, btn_getData, btn_importToMitoBench);
+        bottom.getChildren().addAll(mito.getInfo_selected_items(), region1, label_no_data, btn_getData, btn_importToMitoBench);
 
 
         root.setTop(top);
@@ -130,19 +153,19 @@ public class SqlQueryBuilderWindow {
         continents_tma_inferred_combobox = new CheckComboBox<>(continent_list);
 
         Label l_sample_origin = new Label("Continent (sample origin):");
-        l_sample_origin.setPadding(new Insets(5,5,5,5));
-        center.add(l_sample_origin, 0,5,1,1);
-        center.add(continents_sample_origin_combobox, 1,5,1,1);
+        l_sample_origin.setPadding(new Insets(10,10,10,10));
+        center.add(l_sample_origin, 0,4,1,1);
+        center.add(continents_sample_origin_combobox, 1,4,1,1);
 
         Label l_sampling = new Label("Continent (sampling):");
-        l_sampling.setPadding(new Insets(5,5,5,5));
-        center.add(l_sampling, 0,6,1,1);
-        center.add(continents_sampling_combobox, 1,6,1,1);
+        l_sampling.setPadding(new Insets(10,10,10,10));
+        center.add(l_sampling, 0,5,1,1);
+        center.add(continents_sampling_combobox, 1,5,1,1);
 
         Label l_tma_inferred = new Label("Continent (TMA inferred):");
-        l_tma_inferred.setPadding(new Insets(5,5,5,5));
-        center.add(l_tma_inferred, 0,7,1,1);
-        center.add(continents_tma_inferred_combobox, 1,7,1,1);
+        l_tma_inferred.setPadding(new Insets(10,10,10,10));
+        center.add(l_tma_inferred, 0,6,1,1);
+        center.add(continents_tma_inferred_combobox, 1,6,1,1);
 
 
     }
@@ -155,7 +178,6 @@ public class SqlQueryBuilderWindow {
             if(data_map.size()>0){
 
                 long startTime = System.currentTimeMillis();
-                System.out.println("Import data from database.");
                 mito.getLogClass().getLogger(this.getClass()).info("Import data from database.\nQuery: ");
 
                 mito.getTableControllerDB().updateTable(data_map);
@@ -174,9 +196,9 @@ public class SqlQueryBuilderWindow {
                 if(runtime_s > 60) {
                     long minutes = runtime_s / 60;
                     long seconds = runtime_s % 60;
-                    System.out.println("Runtime of data import to mitoBench: " + minutes + " minutes, and " + seconds + " seconds.");
+                    System.out.println("Runtime of data import to configuration window: " + minutes + " minutes, and " + seconds + " seconds.");
                 } else {
-                    System.out.println("Runtime of data import to mitoBench: " + runtime_s + " seconds.");
+                    System.out.println("Runtime of data import to configuration window: " + runtime_s + " seconds.");
                 }
             } else {
                 mito.getProgressBarhandler().stop();
@@ -199,11 +221,15 @@ public class SqlQueryBuilderWindow {
                 continents_sample_origin_combobox.setDisable(true);
                 continents_sampling_combobox.setDisable(true);
                 continents_tma_inferred_combobox.setDisable(true);
+                checkbox_connector_and.setDisable(true);
+                checkbox_connector_or.setDisable(true);
             } else if(!newValue){
                 checkBox_Select100GP.setDisable(false);
                 continents_sample_origin_combobox.setDisable(false);
                 continents_sampling_combobox.setDisable(false);
                 continents_tma_inferred_combobox.setDisable(false);
+                checkbox_connector_and.setDisable(false);
+                checkbox_connector_or.setDisable(false);
             }
 
         });
@@ -241,7 +267,7 @@ public class SqlQueryBuilderWindow {
 
 
             } else {
-                String query = "";
+                String query;
                 // building query
                 if(checkbox_connector_or.isSelected()){
                     query = "or=(" ;
@@ -291,6 +317,7 @@ public class SqlQueryBuilderWindow {
                     }
 
                     query_tmp = query_tmp.substring(0, query_tmp.length()-1) + ")";
+                    query += query_tmp + ",";
                 }
 
 
@@ -319,13 +346,34 @@ public class SqlQueryBuilderWindow {
         });
 
         btn_importToMitoBench.setOnAction(e -> {
-
+            label_no_data.setText("Import data into workbench\t");
             HashMap<String, List<Entry>> data = mito.getTableControllerDB().parseDataToEntrylist();
             mito.getTableControllerUserBench().updateTable(data);
             stage.close();
             mito.getTableControllerDB().cleartable();
         });
 
+
+
+
+    }
+
+
+    public static void hackTooltipStartTiming(Tooltip tooltip) {
+        try {
+            Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
+            fieldBehavior.setAccessible(true);
+            Object objBehavior = fieldBehavior.get(tooltip);
+
+            Field fieldTimer = objBehavior.getClass().getDeclaredField("activationTimer");
+            fieldTimer.setAccessible(true);
+            Timeline objTimer = (Timeline) fieldTimer.get(objBehavior);
+
+            objTimer.getKeyFrames().clear();
+            objTimer.getKeyFrames().add(new KeyFrame(new Duration(250)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

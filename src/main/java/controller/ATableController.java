@@ -10,6 +10,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Callback;
@@ -883,6 +884,24 @@ public abstract class ATableController {
     public void setCustomColumnOrder(String[] customColumnOrder) {
         this.customColumnOrder = customColumnOrder;
         //updateTable(null);
+    }
+
+
+
+    public void addRowListener(Label infolabel){
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            // update text
+            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+                    table.getItems().size() +  " rows are selected");
+        });
+
+        table.getItems().addListener((ListChangeListener<ObservableList>) pChange -> {
+            while(pChange.next()) {
+                // update text
+                infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+                        table.getItems().size() +  " rows are selected");
+            }
+        });
     }
 }
 
