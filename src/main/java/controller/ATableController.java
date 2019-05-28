@@ -557,7 +557,7 @@ public abstract class ATableController {
         // clean view.data model
         data.removeAll(data);
         // clean table view
-        table.setItems(null);//getItems().clear();//removeAll(table.getItems());
+        table.setItems(FXCollections.emptyObservableList());
         dataTable.getMtStorage().getData().clear();
         dataTable.getDataTable().clear();
         table.getColumns().removeAll(table.getColumns());
@@ -885,6 +885,7 @@ public abstract class ATableController {
 
 
     public void addRowListener(Label infolabel){
+
         table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             // update text
             infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
@@ -898,6 +899,8 @@ public abstract class ATableController {
                         table.getItems().size() +  " rows are selected");
             }
         });
+
+
     }
 }
 

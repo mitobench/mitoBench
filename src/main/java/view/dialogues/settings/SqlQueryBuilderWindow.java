@@ -47,6 +47,7 @@ public class SqlQueryBuilderWindow {
     private Label label_no_data;
     private GridPane center;
     private Label imageLabel;
+    private Label label_info_selected_items;
 
 
     public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
@@ -93,6 +94,10 @@ public class SqlQueryBuilderWindow {
 
         InputStream input = getClass().getResourceAsStream("/icons/icons8-info-30.png");
 
+        String info_text = "";
+
+        label_info_selected_items = new Label(info_text);
+
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
 
@@ -132,7 +137,7 @@ public class SqlQueryBuilderWindow {
 
         // filling bottom
         bottom.setPadding(new Insets(10,10,10,10));
-        bottom.getChildren().addAll(mito.getInfo_selected_items(), region1, label_no_data, btn_getData, btn_importToMitoBench);
+        bottom.getChildren().addAll(label_info_selected_items, region1, label_no_data, btn_getData, btn_importToMitoBench);
 
 
         root.setTop(top);
@@ -181,6 +186,8 @@ public class SqlQueryBuilderWindow {
                 mito.getLogClass().getLogger(this.getClass()).info("Import data from database.\nQuery: ");
 
                 mito.getTableControllerDB().updateTable(data_map);
+                this.label_info_selected_items.setText(mito.getTableControllerDB().getTable().getSelectionModel().getSelectedItems().size() + " / " +
+                        mito.getTableControllerDB().getTable().getItems().size() +  " rows are selected");
 
                 root.setCenter(mito.getTableControllerDB().getTable());
 
@@ -213,6 +220,9 @@ public class SqlQueryBuilderWindow {
      * Add functionality to the buttons.
      */
     public void addAction(){
+
+        mito.getTableControllerDB().addRowListener(label_info_selected_items);
+
 
 
         checkBox_SelectAllData.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -349,6 +359,8 @@ public class SqlQueryBuilderWindow {
             label_no_data.setText("Import data into workbench\t");
             HashMap<String, List<Entry>> data = mito.getTableControllerDB().parseDataToEntrylist();
             mito.getTableControllerUserBench().updateTable(data);
+            mito.setInfo_selected_items_text(mito.getTableControllerUserBench().getTable().getSelectionModel().getSelectedItems().size() + " / " +
+                    mito.getTableControllerUserBench().getTable().getItems().size() +  " rows are selected");
             stage.close();
             mito.getTableControllerDB().cleartable();
         });
@@ -376,4 +388,11 @@ public class SqlQueryBuilderWindow {
         }
     }
 
+    public Label getLabel_info_selected_items() {
+        return label_info_selected_items;
+    }
+
+    public void setLabel_info_selected_items(Label label_info_selected_items) {
+        this.label_info_selected_items = label_info_selected_items;
+    }
 }
