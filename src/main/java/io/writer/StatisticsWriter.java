@@ -9,11 +9,13 @@ import javafx.scene.control.TableView;
 import controller.TableControllerUserBench;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  * Created by neukamm on 17.01.17.
  */
-public class StatisticsWriter implements IOutputData{
+public class StatisticsWriter implements IOutputData {
 
     private TableView table;
     private String content="";
@@ -128,14 +130,16 @@ public class StatisticsWriter implements IOutputData{
      */
     @Override
     public void writeData(String path, TableControllerUserBench tableControllerUserBench) throws IOException {
+
         if(!path.endsWith(".csv")){
             path += ".csv";
         }
-        OutputStream outputStream = new FileOutputStream(new File(path).getAbsoluteFile());
-        OutputStreamWriter writerOutputStream = new OutputStreamWriter(outputStream, "UTF-8");
-        writerOutputStream.write(content);
-        writerOutputStream.close();
 
+        FileOutputStream fos = new FileOutputStream(path);
+        FileChannel fileChannel = fos.getChannel();
+        fileChannel.write(ByteBuffer.wrap(content.getBytes()));
+        fileChannel.close();
+        fos.close();
     }
 
 

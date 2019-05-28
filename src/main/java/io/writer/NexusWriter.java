@@ -7,6 +7,8 @@ import model.MTStorage;
 import controller.TableControllerUserBench;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  *
@@ -46,17 +48,17 @@ public class NexusWriter implements IOutputData {
 
     @Override
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
-        Writer writer = null;
+
+        if(!file.endsWith(".nex"))
+            file = file + ".nex";
+
+        FileOutputStream fos = new FileOutputStream(file);
+        FileChannel fileChannel = fos.getChannel();
         try {
 
             MTStorage mtStorage = tableController.getDataTable().getMtStorage();
             if(sequencesHaveSameLength(mtStorage,
                     tableController.getTableColumnByName("ID"))){
-
-                if(!file.endsWith(".nex"))
-                    file = file + ".nex";
-
-                writer = new BufferedWriter(new FileWriter(new File(file)));
 
                 int ntax = data.size();
                 int nchar = length;
@@ -65,7 +67,7 @@ public class NexusWriter implements IOutputData {
                 String header = "#NEXUS\nBegin data;\nDimensions ntax=" + ntax + " nchar=" + nchar + ";\n" +
                         "Format datatype=dna Interleave=yes missing=" + missing_data_symbol + " gap=-;\nMatrix\n";
 
-                writer.write(header);
+                fileChannel.write(ByteBuffer.wrap(header.getBytes()));
 
                 // get IDs
                 String[] ids = tableController.getSampleNames(data);
@@ -80,6 +82,7 @@ public class NexusWriter implements IOutputData {
                 // write IDs and sequences (50 characters of sequence per line)
                 int sequencePositionCounter = 0;
                 int maxCharactersPerLine = 70;
+                String text;
 
                 while (sequencePositionCounter < length){
                     for(String id : ids){
@@ -87,19 +90,20 @@ public class NexusWriter implements IOutputData {
                         //writer.write(id_extended + "" + mtStorage.getData().get(id) + "\n");
 //
                         if(sequencePositionCounter+maxCharactersPerLine > length){
-                            writer.write(id_extended + "" + mtStorage.getData().get(id).substring(sequencePositionCounter,
-                                    length) + "\n");
+                            text = id_extended + "" + mtStorage.getData().get(id).substring(sequencePositionCounter,
+                                    length) + "\n";
+                            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         } else {
-                            writer.write(id_extended + "" + mtStorage.getData().get(id).substring(sequencePositionCounter,
-                                    sequencePositionCounter+maxCharactersPerLine)+ "\n");
+                            text = id_extended + "" + mtStorage.getData().get(id).substring(sequencePositionCounter,
+                                    sequencePositionCounter+maxCharactersPerLine)+ "\n";
+                            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         }
                     }
                     sequencePositionCounter += maxCharactersPerLine;
-                    writer.write("\n");
+                    fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
                 }
 
-                writer.write(";\nEnd;");
-
+                fileChannel.write(ByteBuffer.wrap(";\nEnd;".getBytes()));
 
             } else {
                 throw new Exception("Sequences do not have the same length!");
@@ -109,8 +113,8 @@ public class NexusWriter implements IOutputData {
             ex.printStackTrace();
         }
         finally {
-            writer.flush();
-            writer.close();
+            fileChannel.close();
+            fos.close();
         }
     }
 

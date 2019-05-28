@@ -7,10 +7,9 @@ import javafx.scene.control.TableColumn;
 import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +26,6 @@ public class BEASTWriter implements IOutputData {
     private final int year;
     private TableControllerUserBench tableController;
     private Logger LOG;
-    private FileWriter fileWriter;
-    private BufferedWriter bfWriter;
 
     public BEASTWriter(TableControllerUserBench tblcontroller, Logger LOG, ObservableList<ObservableList> dataToExport, int year) {
         this.tableController = tblcontroller;
@@ -39,13 +36,15 @@ public class BEASTWriter implements IOutputData {
 
     @Override
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
-        fileWriter = null;
-        try {
-            if(!(file.endsWith(".fasta") || !file.endsWith(".fa") || file.endsWith(".fas")))
-                file = file + ".beast.fasta";
 
-            fileWriter = new FileWriter(new File(file));
-            bfWriter = new BufferedWriter(fileWriter);
+        if(!(file.endsWith(".fasta") || !file.endsWith(".fa") || file.endsWith(".fas")))
+            file = file + ".beast.fasta";
+
+        FileOutputStream fos = new FileOutputStream(file);
+        FileChannel fileChannel = fos.getChannel();
+
+        try {
+
             HashMap<FastaEntry, String> tmp = getSequenceData();
 
             List<String> ids = new ArrayList<>();
@@ -56,7 +55,8 @@ public class BEASTWriter implements IOutputData {
             for (FastaEntry key : tmp.keySet()) {
                 if(ids.contains(key.getHeader())){
                     String c14date = tmp.get(key);
-                    bfWriter.write(">" + key.getHeader() + getC14String(c14date, year) + "\n" + key.getSequence() + "\n");
+                    String text = ">" + key.getHeader() + getC14String(c14date, year) + "\n" + key.getSequence() + "\n";
+                    fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                 }
             }
 
@@ -65,9 +65,8 @@ public class BEASTWriter implements IOutputData {
         }
         finally {
 
-            fileWriter.flush();
-            bfWriter.close();
-            fileWriter.close();
+            fileChannel.close();
+            fos.close();
         }
 
     }

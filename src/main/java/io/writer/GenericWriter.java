@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,21 +39,23 @@ public class GenericWriter implements IOutputData {
      * @throws Exception
      */
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
-        Writer writer = null;
-        try {
-            if(delimiter.equals(",")){
-                if(!file.endsWith(".csv"))
-                    file = file + ".csv";
-            } else {
-                if(!file.endsWith(".tsv"))
-                    file = file + ".tsv";
-            }
 
+        if(delimiter.equals(",")){
+            if(!file.endsWith(".csv"))
+                file = file + ".csv";
+        } else {
+            if(!file.endsWith(".tsv"))
+                file = file + ".tsv";
+        }
+
+        FileOutputStream fos = new FileOutputStream(file);
+        FileChannel fileChannel = fos.getChannel();
+
+        try {
 
             int index_id = tableController.getColIndex("ID");
             int index_mt = tableController.getColIndex("MTSequence");
 
-            writer = new BufferedWriter(new FileWriter(new File(file)));
 
             // write header
             String header = "";
@@ -67,7 +71,10 @@ public class GenericWriter implements IOutputData {
                     header += colname + delimiter;
                 }
             }
-            writer.write("##" + header);
+
+            String text = "##" + header;
+            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
+
 
             // write header type:
             String headertypes = "";
@@ -76,39 +83,41 @@ public class GenericWriter implements IOutputData {
                 headertypes += colname_to_type.get(colname) + delimiter;
             }
 
-            writer.write("#" + headertypes.substring(0, headertypes.length()-1) + "\n");
+            text = "#" + headertypes.substring(0, headertypes.length()-1) + "\n";
+            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
 
             // write view.data
             for (ObservableList entry :  this.data) {
-                String text = "";
+                text = "";
                 for(int i = 0; i < entry.size(); i++){
                     if(i==index_mt){
                         String mt_seq = tableController.getDataTable().getMtStorage().getData().get(entry.get(index_id));
                         if(i == entry.size()-1){
-                            text += mt_seq + "\n";
+                            text = mt_seq + "\n";
+                            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         } else {
-                            text += mt_seq + delimiter;
+                            text = mt_seq + delimiter;
+                            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         }
 
                     } else {
                         if(i == entry.size()-1){
-                            text += entry.get(i) + "\n";
+                            text = entry.get(i) + "\n";
+                            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         } else {
-                            text += entry.get(i) + delimiter;
+                            text = entry.get(i) + delimiter;
+                            fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         }
                     }
-
-
                 }
-                writer.write(text);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         finally {
 
-            writer.flush();
-            writer.close();
+            fileChannel.close();
+            fos.close();
         }
     }
 

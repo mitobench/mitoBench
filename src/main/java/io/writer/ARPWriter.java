@@ -9,10 +9,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import controller.TableControllerUserBench;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,8 +22,6 @@ import java.util.Set;
  */
 public class ARPWriter implements IOutputData {
     private final ObservableList<ObservableList> data;
-    private FileWriter fileWriter;
-    private BufferedWriter bfWriter;
     private String groups = "";
     private int groupSize = 0;
     private HashMap<String, String> regions;
@@ -43,20 +40,23 @@ public class ARPWriter implements IOutputData {
             file = file + ".arp";
         }
 
-        fileWriter = new FileWriter(new File(file));
-        bfWriter = new BufferedWriter(fileWriter);
+        FileOutputStream fos = new FileOutputStream(file);
+        FileChannel fileChannel = fos.getChannel();
 
         getRegions();
         //Write profile first
 
         ArpProfile arpprofile = new ArpProfile(file, String.valueOf(groupSize), "DNA", "N");
-        bfWriter.write(arpprofile.getProfile());
+        fileChannel.write(ByteBuffer.wrap(arpprofile.getProfile().getBytes()));
+
         ArpSample arpsample = new ArpSample(getSequenceData(), regions, groupSize);
-        bfWriter.write(arpsample.getARPSample());
+        fileChannel.write(ByteBuffer.wrap(arpsample.getARPSample().getBytes()));
+
         ArpStructure arpstructure = new ArpStructure(groupSize, getGroupCounts(regions));
-        bfWriter.write(arpstructure.getArpStructure());
-        bfWriter.flush();
-        bfWriter.close();
+        fileChannel.write(ByteBuffer.wrap(arpstructure.getArpStructure().getBytes()));
+
+        fileChannel.close();
+        fos.close();
 
 
     }
