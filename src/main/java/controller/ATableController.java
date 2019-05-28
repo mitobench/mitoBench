@@ -1,12 +1,10 @@
 package controller;
 
 import Logging.LogClass;
-import database.ColumnNameMapper;
 import io.IInputType;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -397,8 +395,6 @@ public abstract class ATableController {
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
             col_names.add(colname);
-            //col.prefWidthProperty().bindBidirectional((Property<Number>) table.widthProperty().multiply(0.07));
-            //col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             table.getColumns().addAll(col);
         }
     }

@@ -2,10 +2,8 @@ package controller;
 
 
 import Logging.LogClass;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 
 import view.MitoBenchWindow;
@@ -25,23 +23,6 @@ public class TableControllerUserBench extends ATableController {
         super(logClass);
 
     }
-
-//    public void addRowListener(Label infolabel){
-//        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            // update text
-//            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
-//                    table.getItems().size() +  " rows are selected");
-//        });
-//
-//        table.getItems().addListener((ListChangeListener<ObservableList>) pChange -> {
-//            while(pChange.next()) {
-//                // update text
-//                infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
-//                        table.getItems().size() +  " rows are selected");
-//            }
-//        });
-//    }
-
 
     public void createContextMenu(){
 

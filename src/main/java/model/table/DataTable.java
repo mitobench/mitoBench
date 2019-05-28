@@ -34,24 +34,22 @@ public class DataTable {
     public void update(HashMap<String, List<Entry>> input){
 
         for(String key : input.keySet()){
-            if(key.contains(" ")){
 
+            int rowPosition = getRowPosition(key);
+
+            if(rowPosition >= 0){
+                // row already exists
+                // update row
+                updateRow(rowPosition, input.get(key), key);
             } else {
-                int rowPosition = getRowPosition(key);
-
-                if(rowPosition >= 0){
-                    // row already exists
-                    // update row
-                    updateRow(rowPosition, input.get(key), key);
-                } else {
-                    // create new Row with dummy entries
-                    addRow(key);
-                    int rpos = getRowPosition(key);
-                    updateRow(rpos, input.get(key), key);
-                }
+                // create new Row with dummy entries
+                addRow(key);
+                int rpos = getRowPosition(key);
+                updateRow(rpos, input.get(key), key);
             }
-
         }
+
+
     }
 
     /**
@@ -110,10 +108,8 @@ public class DataTable {
 
         // store original mt seq
         columnEntries[getRowPosition(key)] = mtSeq;
-        //mtStorage.setMTStorage(this);
         mtStorage.addEntry(key, mtSeq);
-        //columnEntries[getRowPosition(key)] = mtseq_short;
-        //columnEntries[getRowPosition(key)] = mtSeq;
+        columnEntries[getRowPosition(key)] = mtseq_short;
     }
 
     /**

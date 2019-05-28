@@ -41,7 +41,7 @@ public class MultiFastAInput implements IInputData {
     public MultiFastAInput(String fileToParse, Logger LOG) throws IOException, FastAException {
         LOG.info("Read FastA file: " + fileToParse);
 
-        fastaEntrys = new ArrayList<FastaEntry>();
+        fastaEntrys = new ArrayList<>();
         File f = new File(fileToParse);
         fr = new FileReader(f);
         bfr = new BufferedReader(fr);
@@ -77,7 +77,7 @@ public class MultiFastAInput implements IInputData {
             }
 
             if (currentLine.startsWith(">") && (init == 0)) { //then we have a header (first header)
-                currHeader = currentLine.replace(">", "");
+                currHeader = currentLine.replace(">", "").split(" ")[0];
                 init = -1;
                 line_index++;
                 continue;
