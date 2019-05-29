@@ -34,8 +34,8 @@ public class AddNewColumnDialogue extends APopupDialogue{
 
         dialogGrid.add(new Label("Name of column:"), 0,0);
         dialogGrid.add(columnNameField, 1,0);
-        dialogGrid.add(new Label("Entry:"), 0, 1);
-        dialogGrid.add(dataField, 1, 1);
+        //dialogGrid.add(new Label("Entry:"), 0, 1);
+        //dialogGrid.add(dataField, 1, 1);
         dialogGrid.add(okButton, 1,2);
         show();
 

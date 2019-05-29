@@ -361,6 +361,7 @@ public abstract class ATableController {
 
         } else {
             selection = getSelectedRows();
+            boolean never_reached = true;
 
             for(int i = 0; i < selection.size(); i++){
                 String rowName = selection.get(i).get(getColIndex("ID")).toString();
@@ -372,7 +373,15 @@ public abstract class ATableController {
                         e_list.remove(e);
                         e_list.add(e_new);
                         table_content.put(rowName, e_list);
+                        never_reached = false;
                     }
+                }
+
+                if(never_reached){
+                    // add column entry
+                    Entry e_new = new Entry(colName,new CategoricInputType("String"), new GenericInputData(textfield));
+                    e_list.add(e_new);
+                    table_content.put(rowName, e_list);
                 }
             }
             return table_content;
