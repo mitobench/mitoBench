@@ -71,7 +71,7 @@ public class MultiFastAInput implements IInputData {
                 fastaEntrys.add(faentry);
                 //And reset everything
                 currSeq = "";
-                currHeader = currentLine.replace(">","");
+                currHeader = currentLine.replace(">","").split(" ")[0];
                 line_index++;
                 continue;
             }

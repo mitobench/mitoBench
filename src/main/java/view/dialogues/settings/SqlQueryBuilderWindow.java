@@ -48,6 +48,8 @@ public class SqlQueryBuilderWindow {
     private GridPane center;
     private Label imageLabel;
     private Label label_info_selected_items;
+    private CheckComboBox<String> checkComboBoxAuthors;
+    private CheckBox checkBox_authors;
 
 
     public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
@@ -89,6 +91,14 @@ public class SqlQueryBuilderWindow {
         checkBox_SelectAllData.setPadding(new Insets(5,5,5,5));
         checkBox_Select100GP = new CheckBox("Get all data from 1000 Genome Project (phase3)");
         checkBox_Select100GP.setPadding(new Insets(5,5,5,5));
+
+        Set<String> authors_entry = databaseQueryHandler.getAuthorList();
+        List<String> targetList = new ArrayList<>(authors_entry);
+
+        checkBox_authors = new CheckBox("Author,year");
+        checkBox_authors.setPadding(new Insets(10,10,10,10));
+        checkComboBoxAuthors = new CheckComboBox<>(FXCollections.observableList(targetList));
+
 
         label_no_data = new Label("");
 
@@ -134,6 +144,9 @@ public class SqlQueryBuilderWindow {
         center.add(checkbox_connector_or, 1,8,1,1);
         center.add(imageLabel, 2,8,1,1);
 
+        center.add(new Separator(),0,9,2,1);
+        center.add(checkBox_authors, 0,10,1,1);
+        center.add(checkComboBoxAuthors, 1,10,1,1);
 
         // filling bottom
         bottom.setPadding(new Insets(10,10,10,10));
@@ -276,6 +289,35 @@ public class SqlQueryBuilderWindow {
                 getData(task);
 
 
+            } if(checkBox_authors.isSelected()){
+
+                Task task = new Task() {
+                    @Override
+                    protected Object call() {
+                        String query = "or=(";
+                        ObservableList<String> selected_authors = checkComboBoxAuthors.getCheckModel().getCheckedItems();
+                        for(String author_year : selected_authors){
+                            query += "and(author.eq." + author_year.split(",")[0] + "," +
+                                    "publication_date.eq." + author_year.split(",")[1] + "),";
+                        }
+
+
+                        if(query.endsWith(",")){
+                            query = query.substring(0, query.length() - 1) + ")";
+                        } else {
+                            query += query + ")";
+                        }
+
+                        query = query.replace(" ", "%20");
+
+                        data_map = databaseQueryHandler.getDataSelection(query);
+                        return true;
+                    }
+                };
+                label_no_data.setText("Getting data from database...\t");
+                getData(task);
+
+
             } else {
                 String query;
                 // building query
@@ -364,6 +406,8 @@ public class SqlQueryBuilderWindow {
             stage.close();
             mito.getTableControllerDB().cleartable();
         });
+
+
 
 
 
