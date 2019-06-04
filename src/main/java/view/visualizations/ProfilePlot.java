@@ -167,11 +167,12 @@ public class ProfilePlot extends AChart {
         series.setName(name);
 
         for(int i = 0; i < hgs.size(); i++){
-            double val = data.get(i).getYValue().doubleValue();
-            series.getData().add(new XYChart.Data(hgs.get(i), val));
-            if(data.get(i).getYValue().doubleValue() > maxVal)
-                maxVal = (int)data.get(i).getYValue().doubleValue();
-
+            if(data.size() > i){
+                double val = data.get(i).getYValue().doubleValue();
+                series.getData().add(new XYChart.Data(hgs.get(i), val));
+                if(data.get(i).getYValue().doubleValue() > maxVal)
+                    maxVal = (int)data.get(i).getYValue().doubleValue();
+            }
         }
 
         this.seriesList.add(series);

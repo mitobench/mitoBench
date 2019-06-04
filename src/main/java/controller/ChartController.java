@@ -22,8 +22,6 @@ public class ChartController {
     private List<String> used_hgs;
     private HashMap<String, List<String>> treeMap;
     private List<String> hg_core_list;
-    private String[] coreHGs = new String[]{"L4", "M1", "T1", "W", "I", "X",  "L1", "L0", "L2", "T2",
-            "K",  "T",  "J",  "H", "U", "HV", "R0",  "R",  "N",  "L3"};
     private String[] customHGList;
     private String[] groupOrder;
 
@@ -116,7 +114,7 @@ public class ChartController {
      * @param hgs
      */
 
-    public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, String[] selection_groups, String hgs) {
+    public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, String[] selection_groups, String[] hgs) {
 
         // get number of elements per group
         int[] numberOfElementsPerCaregory;
@@ -126,17 +124,9 @@ public class ChartController {
             numberOfElementsPerCaregory = getNumberOfElementsPerCategory(selection_groups);
         }
 
-        // hgs to display
-        String[] hg_list;
-        if(hgs.equals("")){
-            hg_list = coreHGs;
-        } else {
-            hg_list = hgs.split(",");
-        }
-
         stackedBar.clearData();
         stackedBar.setCategories(selection_groups);
-        HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, hg_list);
+        HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, hgs);
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
         if(numberOfElementsPerCaregory.length==1){
@@ -382,8 +372,10 @@ public class ChartController {
         used_hgs = new ArrayList<>();
 
         for(String hg_core : hg_core_list){
+            hg_core = hg_core.trim();
             List<String> core_subs = treeMap.get(hg_core);
             for(String hg : hgs){
+                hg = hg.trim();
                 if(core_subs.contains(hg)) {
                     if(!used_hgs.contains(hg)){
                         used_hgs.add(hg);
@@ -428,12 +420,12 @@ public class ChartController {
         List<Integer> sizes = new ArrayList<>();
         HashMap<Integer, List<String>> count_to_hg = new HashMap<>();
         for(String key : coreHGs){
-            if(treeMap.containsKey(key.trim())){
-                int count = treeMap.get(key.trim()).size();
+            if(treeMap.containsKey(key)){
+                int count = treeMap.get(key).size();
                 sizes.add(count);
                 if(count_to_hg.containsKey(count)){
-                    List tmp = count_to_hg.get(count);
-                    tmp.add(key.trim());
+                    List<String> tmp = new ArrayList<>(count_to_hg.get(count));
+                    tmp.add(key);
                     count_to_hg.put(count, tmp);
                 } else {
                     count_to_hg.put(count,  Arrays.asList(key));
@@ -540,15 +532,6 @@ public class ChartController {
 
         return false;
 
-    }
-
-
-    public String[] getCoreHGs() {
-        return coreHGs;
-    }
-
-    public List<String> getHg_core_list() {
-        return hg_core_list;
     }
 
 

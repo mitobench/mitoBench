@@ -51,7 +51,7 @@ public class StatisticsMenu {
         haploStats.setOnAction(t -> {
             haploStatistics = new HaploStatistics(tableController, mito.getChartController(), LOGClass);
             HGStatisticsPopupDialogue hgStatisticsPopupDialogug = new HGStatisticsPopupDialogue("Statistics", LOGClass);
-            hgStatisticsPopupDialogug.init(haploStatistics, statsTabpane);
+            hgStatisticsPopupDialogug.init(mito);
             Tab tab = hgStatisticsPopupDialogug.getTab();
             mito.getTabpane_statistics().getTabs().add(tab);
             mito.getTabpane_statistics().getSelectionModel().select(tab);

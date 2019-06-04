@@ -80,6 +80,7 @@ public class DatabaseQueryHandler {
     }
 
 
+
     public HashMap<String, List<Entry>> getDataSelection(String query) {
 
         try {

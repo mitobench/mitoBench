@@ -1,7 +1,9 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
-import javafx.geometry.Point2D;
+import controller.ChartController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
@@ -9,18 +11,25 @@ import view.MitoBenchWindow;
 
 import java.util.Arrays;
 
-public abstract class AHGDialogue extends ATabpaneDialogue{
+public abstract class AHGDialogue extends ATabpaneDialogue {
 
 
-    protected TextField textField_hglist;
+    protected ComboBox combobox_hglist;
     protected Button okBtn;
-    protected CheckBox default_list_checkbox;
     protected HaploStatistics haploStatistics;
     protected Scene scene;
     protected TabPane statsTabPane;
     protected MitoBenchWindow mito;
     protected Label label;
-    protected Label default_list;
+
+    protected ObservableList<String> options =
+            FXCollections.observableArrayList(
+                    "Sub-Saharan Africa (L0a,L0d,L0k,L1b,L1c,L2a,L2b,L2c,L3b,L3d,L3e,L3f,L4,L5)",
+                    "Americas and the Caribbean (A2,B2,C1b,C1c,C1d,C4c,D1,D2a,D3,D4h3a,X2a,X2g)",
+                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B)",
+                    "Europe (H)");
+    protected ChartController chartcontroller;
+    protected int row;
 
 
     public AHGDialogue(String title, LogClass logClass) {
@@ -30,58 +39,60 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
 
     public void init(MitoBenchWindow mito){
         this.mito = mito;
+        this.chartcontroller = mito.getChartController();
         haploStatistics = new HaploStatistics(mito.getTableControllerUserBench(), mito.getChartController(), logClass);
-        addComponents(haploStatistics, mito);
+        addHGListCombobox(haploStatistics, mito);
         this.LOG = this.logClass.getLogger(this.getClass());
         addEvents();
     }
 
-    /**
-     * This method adds all components to dialogue.
-     * @param haploStatistics
-     */
-    public void addComponents(HaploStatistics haploStatistics, MitoBenchWindow mito){
 
+    public void addHGListCombobox(HaploStatistics haploStatistics, MitoBenchWindow mito){
         this.statsTabPane = mito.getTabpane_statistics();
         this.scene = mito.getScene();
         this.haploStatistics = haploStatistics;
+
         label = new Label("Please enter comma separated list of haplogroups " +
                 "\naccording to which the haplogroups should be grouped:");
-        default_list = new Label("or use the default list:");
+        combobox_hglist = new ComboBox(options);
+        combobox_hglist.setEditable(true);
 
-        textField_hglist = new TextField();
+
+        if(mito.getChartController().getCustomHGList()!=null) {
+            if (mito.getChartController().getCustomHGList().length != 0) {
+                String hgs = "";
+                for(String s : mito.getChartController().getCustomHGList())
+                    hgs += s + ",";
+
+                if(!combobox_hglist.getItems().contains(hgs.substring(0, hgs.length()-1))){
+                    combobox_hglist.getItems().addAll(hgs.substring(0, hgs.length()-1));
+                }
+
+                combobox_hglist.getSelectionModel().select(hgs.substring(0, hgs.length()-1));
+
+            }
+        }
+
 
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
 
-        int row=0;
-
-        default_list_checkbox = new CheckBox("Use default list");
-        default_list_checkbox.setId("checkbox_hg_default_selection");
-        default_list_checkbox.setSelected(false);
+        row=0;
 
         dialogGrid.add(label, 0,row,3,1);
-        dialogGrid.add(textField_hglist, 0,++row,3,1);
-        dialogGrid.add(default_list,0,++row,1,1);
-        dialogGrid.add(default_list_checkbox,1,row,1,1);
-
+        dialogGrid.add(combobox_hglist, 0,++row,3,1);
         dialogGrid.add(okBtn,2,++row,1,1);
     }
 
 
     public void addEvents(){
         okBtn.setOnAction(e -> {
-            if((textField_hglist.getText().equals("") || textField_hglist.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
-                textField_hglist.setText("Please enter list here.");
+            if((combobox_hglist.getSelectionModel().getSelectedItem().toString().equals("") || combobox_hglist.getSelectionModel().getSelectedItem().toString().startsWith("Please"))){
+                combobox_hglist.getItems().add("Please enter list here.");
+                combobox_hglist.getSelectionModel().select("Please enter list here.");
 
             } else {
-                String[] hg_list;
-                if(default_list_checkbox.isSelected()){
-                    hg_list = haploStatistics.getChartController().getCoreHGs();
-                } else {
-                    hg_list = textField_hglist.getText().split(",");
-                }
-                String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+                String[] hg_list_trimmed = getTrimmedHGList();
                 haploStatistics.count(hg_list_trimmed);
 
                 TableView table = haploStatistics.writeToTable();
@@ -102,17 +113,25 @@ public abstract class AHGDialogue extends ATabpaneDialogue{
 
         });
 
-        Tooltip tp = new Tooltip("Default list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
-        default_list_checkbox.setOnMouseEntered(event -> {
-            Point2D p = default_list_checkbox.localToScreen(
-                    default_list_checkbox.getLayoutBounds().getMaxX(),
-                    default_list_checkbox.getLayoutBounds().getMaxY());
-
-            tp.show(default_list_checkbox, p.getX(), p.getY());
-        });
-        default_list_checkbox.setOnMouseExited(event -> tp.hide());
     }
 
 
+    public String[] getTrimmedHGList(){
+        String[] hg_list;
 
+        String p1 = combobox_hglist.getSelectionModel().getSelectedItem().toString();
+        if(p1.contains("(") && p1.contains(")") ){
+            String p2 = p1.split("\\(")[1];
+            String p3 = p2.split("\\)")[0];
+            hg_list = p3.split(",");
+        } else  {
+            hg_list = p1.split(",");
+        }
+
+        return Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+    }
+
+    public Button getOkBtn() {
+        return okBtn;
+    }
 }

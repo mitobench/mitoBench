@@ -4,7 +4,10 @@ import database.DatabaseQueryHandler;
 import io.datastructure.Entry;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -50,6 +53,15 @@ public class SqlQueryBuilderWindow {
     private Label label_info_selected_items;
     private CheckComboBox<String> checkComboBoxAuthors;
     private CheckBox checkBox_authors;
+    private CheckComboBox<String> country_sample_origin_combobox;
+    private List<String> countries_africa;
+    private List<String> countries_americas;
+    private List<String> countries_asia;
+    private List<String> countries_europe;
+    private List<String> countries_oceania;
+    private List<String> countries;
+    private List<String> countries_antarctica;
+    private HashMap<String, List<String>> continent_country_map;
 
 
     public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
@@ -94,6 +106,7 @@ public class SqlQueryBuilderWindow {
 
         Set<String> authors_entry = databaseQueryHandler.getAuthorList();
         List<String> targetList = new ArrayList<>(authors_entry);
+        java.util.Collections.sort(targetList);
 
         checkBox_authors = new CheckBox("Author,year");
         checkBox_authors.setPadding(new Insets(10,10,10,10));
@@ -130,15 +143,15 @@ public class SqlQueryBuilderWindow {
         center.setPadding(new Insets(10,10,10,10));
         center.add(checkBox_SelectAllData,0,0,2,1);
 
-        center.add(new Separator(),0,1,2,1);
+        center.add(new Separator(),0,1,6,1);
 
         center.add(checkBox_Select100GP,0,2,2,1);
 
-        center.add(new Separator(),0,3,2,1);
+        center.add(new Separator(),0,3,6,1);
 
         continentFilter();
 
-        center.add(new Separator(),0,7,2,1);
+        center.add(new Separator(),0,7,6,1);
 
         center.add(checkbox_connector_and, 0,8,1,1);
         center.add(checkbox_connector_or, 1,8,1,1);
@@ -146,7 +159,7 @@ public class SqlQueryBuilderWindow {
 
         center.add(new Separator(),0,9,2,1);
         center.add(checkBox_authors, 0,10,1,1);
-        center.add(checkComboBoxAuthors, 1,10,1,1);
+        center.add(checkComboBoxAuthors, 1,10,5,1);
 
         // filling bottom
         bottom.setPadding(new Insets(10,10,10,10));
@@ -166,24 +179,141 @@ public class SqlQueryBuilderWindow {
         ObservableList<String> continent_list = FXCollections.observableList(new ArrayList<String>(){{add("Africa");
             add("Americas"); add("Antarctica"); add("Asia"); add("Europe"); add("Oceania");}});
 
+        countries_africa = Arrays.asList("Algeria", "Egypt","Libya","Morocco","Sudan","Tunisia",
+                "Western Sahara","British Indian Ocean Territory","Burundi","Comoros","Djibouti","Eritrea","Ethiopia",
+                "French Southern Territories","Kenya","Madagascar","Malawi","Mauritius","Mayotte","Mozambique","Reunion",
+                "Rwanda","Seychelles","Somalia","South Sudan","Uganda","United Republic of Tanzania","Zambia","Zimbabwe",
+                "Angola","Cameroon","Central African Republic","Chad","Congo","Democratic Republic of the Congo",
+                "Equatorial Guinea","Gabon","Sao Tome and Principe","Botswana","Eswatini","Lesotho","Namibia",
+                "South Africa","Benin","Burkina Faso","Cape Verde","Ivory Coast","Gambia","Ghana","Guinea","Guinea-Bissau",
+                "Liberia","Mali","Mauritania","Niger","Nigeria","Saint Helena","Senegal","Sierra Leone","Togo");
+
+
+        countries_americas = Arrays.asList("Anguilla","Antigua and Barbuda","Aruba","Bahamas","Barbados",
+                "Bonaire/Sint Eustatius/Saba","British Virgin Islands","Cayman Islands","Cuba","Curacao","Dominica",
+                "Dominican Republic","Grenada","Guadeloupe","Haiti","Jamaica","Martinique","Montserrat","Puerto Rico",
+                "Saint Barthelemy","Saint Kitts and Nevis","Saint Lucia","Saint Martin (French Part)","Saint Vincent and the Grenadines",
+                "Sint Maarten (Dutch part)","Trinidad and Tobago","Turks and Caicos Islands","United States Virgin Islands",
+                "Belize","Costa Rica","El Salvador","Guatemala","Honduras","Mexico","Nicaragua","Panama","Argentina",
+                "Bolivia (Plurinational State of)","Bouvet Island","Brazil","Chile","Colombia","Ecuador","Falkland Islands (Malvinas)",
+                "French Guiana","Guyana","Paraguay","Peru","South Georgia and the South Sandwich Islands","Suriname","Uruguay",
+                "Venezuela (Bolivarian Republic of)","Bermuda","Canada","Greenland","Saint Pierre and Miquelon","United States of America","Antarctica");
+
+        countries_asia = Arrays.asList("Kazakhstan","Kyrgyzstan","Tajikistan","Turkmenistan","Uzbekistan",
+                "China","China/Hong Kong Special Administrative Region","China/Macao Special Administrative Region","Taiwan",
+                "Democratic People s Republic of Korea","Japan","Mongolia","Republic of Korea","Brunei Darussalam",
+                "Cambodia","Indonesia","Lao People s Democratic Republic","Malaysia","Myanmar","Philippines","Singapore",
+                "Thailand","Timor-Leste","Viet Nam","Afghanistan","Bangladesh","Bhutan","India","Iran (Islamic Republic of)",
+                "Maldives","Nepal","Pakistan","Sri Lanka","Armenia","Azerbaijan","Bahrain","Cyprus","Georgia","Iraq","Israel",
+                "Jordan","Kuwait","Lebanon","Oman","Qatar","Saudi Arabia","State of Palestine","Syrian Arab Republic","Turkey",
+                "United Arab Emirates","Yemen");
+
+
+        countries_europe = Arrays.asList("Belarus","Bulgaria","Czechia","Hungary","Poland","Republic of Moldova",
+                "Romania","Russian Federation","Slovakia","Ukraine","Aland Islands","Guernsey","Jersey","Denmark","Estonia",
+                "Faroe Islands","Finland","Iceland","Ireland","Isle of Man","Latvia","Lithuania","Norway",
+                "Svalbard and Jan Mayen Islands","Sweden","United Kingdom of Great Britain and Northern Ireland","Albania",
+                "Andorra","Bosnia and Herzegovina","Croatia","Gibraltar","Greece","Holy See","Italy","Malta","Montenegro",
+                "Portugal","San Marino","Kosovo","Serbia","Slovenia","Spain","The former Yugoslav Republic of Macedonia",
+                "Austria","Belgium","France","Germany","Liechtenstein","Luxembourg","Monaco","Netherlands","Switzerland");
+
+
+        countries_oceania = Arrays.asList("Australia","Christmas Island","Cocos (Keeling) Islands",
+                "Heard Island and McDonald Islands","New Zealand","Norfolk Island","Fiji","New Caledonia",
+                "Papua New Guinea","Solomon Islands","Vanuatu","Guam","Kiribati","Marshall Islands",
+                "Micronesia (Federated States of)","Nauru","Northern Mariana Islands","Palau","United States Minor Outlying Islands",
+                "American Samoa","Cook Islands","French Polynesia","Niue","Pitcairn","Samoa","Tokelau","Tonga","Tuvalu","Wallis and Futuna Islands");
+
+        countries = Arrays.asList("Algeria","Egypt", "Libya", "Morocco", "Sudan", "Tunisia", "Western Sahara",
+                "British Indian Ocean Territory", "Burundi", "Comoros", "Djibouti", "Eritrea", "Ethiopia", "French Southern Territories",
+                "Kenya", "Madagascar", "Malawi", "Mauritius", "Mayotte", "Mozambique", "Reunion", "Rwanda", "Seychelles", "Somalia",
+                "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Angola", "Cameroon", "Central African Republic",
+                "Chad", "Congo", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Sao Tome and Principe", "Botswana",
+                "Eswatini", "Lesotho", "Namibia", "South Africa", "Benin", "Burkina Faso", "Cape Verde", "Ivory Coast", "Gambia",
+                "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Mauritania", "Niger", "Nigeria", "Saint Helena", "Senegal",
+                "Sierra Leone", "Togo", "Anguilla", "Antigua and Barbuda", "Aruba", "Bahamas", "Barbados", "Bonaire/Sint Eustatius/Saba",
+                "British Virgin Islands", "Cayman Islands", "Cuba", "Curacao", "Dominica", "Dominican Republic", "Grenada", "Guadeloupe",
+                "Haiti", "Jamaica", "Martinique", "Montserrat", "Puerto Rico", "Saint Barthelemy", "Saint Kitts and Nevis", "Saint Lucia",
+                "Saint Martin (French Part)", "Saint Vincent and the Grenadines", "Sint Maarten (Dutch part)", "Trinidad and Tobago",
+                "Turks and Caicos Islands", "United States Virgin Islands", "Belize", "Costa Rica", "El Salvador", "Guatemala",
+                "Honduras", "Mexico", "Nicaragua", "Panama", "Argentina", "Bolivia (Plurinational State of)", "Bouvet Island",
+                "Brazil", "Chile", "Colombia", "Ecuador", "Falkland Islands (Malvinas)", "French Guiana", "Guyana", "Paraguay",
+                "Peru", "South Georgia and the South Sandwich Islands", "Suriname", "Uruguay", "Venezuela (Bolivarian Republic of)",
+                "Bermuda", "Canada", "Greenland", "Saint Pierre and Miquelon", "United States of America", "Antarctica", "Kazakhstan",
+                "Kyrgyzstan", "Tajikistan", "Turkmenistan", "Uzbekistan", "China", "China/Hong Kong Special Administrative Region",
+                "China/Macao Special Administrative Region", "Taiwan", "Democratic Peoples Republic of Korea", "Japan", "Mongolia",
+                "Republic of Korea", "Brunei Darussalam", "Cambodia", "Indonesia", "Lao People s Democratic Republic", "Malaysia",
+                "Myanmar", "Philippines", "Singapore", "Thailand", "Timor-Leste", "Viet Nam", "Afghanistan", "Bangladesh", "Bhutan",
+                "India", "Iran (Islamic Republic of)", "Maldives", "Nepal", "Pakistan", "Sri Lanka", "Armenia", "Azerbaijan", "Bahrain",
+                "Cyprus", "Georgia", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Oman", "Qatar", "Saudi Arabia", "State of Palestine",
+                "Syrian Arab Republic", "Turkey", "United Arab Emirates", "Yemen", "Belarus", "Bulgaria", "Czechia", "Hungary",
+                "Poland", "Republic of Moldova", "Romania", "Russian Federation", "Slovakia", "Ukraine", "Aland Islands", "Guernsey",
+                "Jersey", "Denmark", "Estonia", "Faroe Islands", "Finland", "Iceland", "Ireland", "Isle of Man", "Latvia", "Lithuania",
+                "Norway", "Svalbard and Jan Mayen Islands", "Sweden", "United Kingdom of Great Britain and Northern Ireland", "Albania",
+                "Andorra", "Bosnia and Herzegovina", "Croatia", "Gibraltar", "Greece", "Holy See", "Italy", "Malta", "Montenegro",
+                "Portugal", "San Marino", "Kosovo", "Serbia", "Slovenia", "Spain", "The former Yugoslav Republic of Macedonia", "Austria",
+                "Belgium", "France", "Germany", "Liechtenstein", "Luxembourg", "Monaco", "Netherlands", "Switzerland", "Australia",
+                "Christmas Island", "Cocos (Keeling) Islands", "Heard Island and McDonald Islands", "New Zealand", "Norfolk Island",
+                "Fiji", "New Caledonia", "Papua New Guinea", "Solomon Islands", "Vanuatu", "Guam", "Kiribati", "Marshall Islands",
+                "Micronesia (Federated States of)", "Nauru", "Northern Mariana Islands", "Palau", "United States Minor Outlying Islands",
+                "American Samoa", "Cook Islands", "French Polynesia", "Niue", "Pitcairn", "Samoa", "Tokelau", "Tonga", "Tuvalu", "Wallis and Futuna Islands");
+
+        countries_antarctica = Arrays.asList("Antarctica");
+
+        java.util.Collections.sort(countries);
+        java.util.Collections.sort(countries_africa);
+        java.util.Collections.sort(countries_americas);
+        java.util.Collections.sort(countries_asia);
+        java.util.Collections.sort(countries_europe);
+        java.util.Collections.sort(countries_oceania);
+        java.util.Collections.sort(countries_antarctica);
+
+        continent_country_map = new HashMap<>();
+        continent_country_map.put("All", countries);
+        continent_country_map.put("Africa", countries_africa);
+        continent_country_map.put("Americas", countries_americas);
+        continent_country_map.put("Asia", countries_asia);
+        continent_country_map.put("Europe", countries_europe);
+        continent_country_map.put("Oceania", countries_oceania);
+        continent_country_map.put("Antarctica", countries_oceania);
+
+
+        ObservableList<String> country_list = FXCollections.observableArrayList(countries);
+
+
         continents_sample_origin_combobox = new CheckComboBox<>(continent_list);
+        country_sample_origin_combobox = new CheckComboBox<>(country_list);
         continents_sampling_combobox = new CheckComboBox<>(continent_list);
         continents_tma_inferred_combobox = new CheckComboBox<>(continent_list);
 
-        Label l_sample_origin = new Label("Continent (sample origin):");
-        l_sample_origin.setPadding(new Insets(10,10,10,10));
-        center.add(l_sample_origin, 0,4,1,1);
+        Label l_sample_origin_continent = new Label("Continent (sample origin):");
+        l_sample_origin_continent.setPadding(new Insets(10,10,10,10));
+        center.add(l_sample_origin_continent, 0,4,1,1);
         center.add(continents_sample_origin_combobox, 1,4,1,1);
+
+
+        Label l_sample_origin_country = new Label("Country (sample origin):");
+        l_sample_origin_country.setPadding(new Insets(10,10,10,10));
+        center.add(l_sample_origin_country, 0,5,1,1);
+        center.add(country_sample_origin_combobox, 1,5,1,1);
+
+
+        // --------------------------------------
 
         Label l_sampling = new Label("Continent (sampling):");
         l_sampling.setPadding(new Insets(10,10,10,10));
-        center.add(l_sampling, 0,5,1,1);
-        center.add(continents_sampling_combobox, 1,5,1,1);
+        center.add(l_sampling, 2,4,1,1);
+        center.add(continents_sampling_combobox, 3,4,1,1);
+
+        // --------------------------------------
 
         Label l_tma_inferred = new Label("Continent (TMA inferred):");
         l_tma_inferred.setPadding(new Insets(10,10,10,10));
-        center.add(l_tma_inferred, 0,6,1,1);
-        center.add(continents_tma_inferred_combobox, 1,6,1,1);
+        center.add(l_tma_inferred, 4,4,1,1);
+        center.add(continents_tma_inferred_combobox, 5,4,1,1);
+
+
+
 
 
     }
@@ -234,9 +364,27 @@ public class SqlQueryBuilderWindow {
      */
     public void addAction(){
 
+        continents_sample_origin_combobox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
+
+            ObservableList<String> curr_items = country_sample_origin_combobox.getItems();
+            country_sample_origin_combobox.getItems().removeAll(curr_items);
+
+            if(continents_sample_origin_combobox.getCheckModel().getCheckedItems().size() == 0){
+                country_sample_origin_combobox.getItems().addAll(continent_country_map.get("All"));
+
+            } else {
+                ObservableList<String> country_list = FXCollections.observableArrayList();
+
+                for(String country_selected : continents_sample_origin_combobox.getCheckModel().getCheckedItems()){
+                    country_list.addAll(continent_country_map.get(country_selected));
+                }
+                java.util.Collections.sort(country_list);
+                country_sample_origin_combobox.getItems().addAll(country_list);
+            }
+
+        });
+
         mito.getTableControllerDB().addRowListener(label_info_selected_items);
-
-
 
         checkBox_SelectAllData.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue){
@@ -257,6 +405,19 @@ public class SqlQueryBuilderWindow {
 
         });
 
+
+        continents_sample_origin_combobox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
+
+            while (c.next()) {
+                if (c.wasAdded()) {
+                    if (c.toString().contains("All")) {
+                        System.out.println(c.toString());
+
+
+                    }
+                }
+            }
+        });
 
         checkbox_connector_and.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue){
@@ -289,7 +450,7 @@ public class SqlQueryBuilderWindow {
                 getData(task);
 
 
-            } if(checkBox_authors.isSelected()){
+            } if(checkComboBoxAuthors.getCheckModel().getCheckedItems().size() > 0){
 
                 Task task = new Task() {
                     @Override
@@ -406,10 +567,6 @@ public class SqlQueryBuilderWindow {
             stage.close();
             mito.getTableControllerDB().cleartable();
         });
-
-
-
-
 
 
     }

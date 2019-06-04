@@ -77,7 +77,13 @@ public class MultiFastAInput implements IInputData {
             }
 
             if (currentLine.startsWith(">") && (init == 0)) { //then we have a header (first header)
-                currHeader = currentLine.replace(">", "").split(" ")[0];
+
+                String header = currentLine.replace(">", "").split(" ")[0];
+
+                if(header.endsWith(".1") || header.endsWith(".2") || header.endsWith(".3") || header.endsWith(".4")){
+                    header = header.split("\\.")[0];
+                }
+                currHeader = header;
                 init = -1;
                 line_index++;
                 continue;

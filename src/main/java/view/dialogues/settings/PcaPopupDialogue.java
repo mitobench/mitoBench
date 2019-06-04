@@ -6,20 +6,15 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import org.controlsfx.control.CheckComboBox;
-import statistics.HaploStatistics;
-import view.MitoBenchWindow;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -47,60 +42,24 @@ public class PcaPopupDialogue extends AHGDialogue {
         group_members = new HashMap<>();
         comboBoxes = new ArrayList<>();
         id = pcaID;
+        addAdditionalComponents();
     }
 
-    @Override
-    public void addComponents(HaploStatistics haploStatistics, MitoBenchWindow mito){
 
-        this.statsTabPane = mito.getTabpane_statistics();
-        this.scene = mito.getScene();
-        this.haploStatistics = haploStatistics;
+    public void addAdditionalComponents(){
 
 
-        label = new Label("Please enter comma separated list of haplogroups " +
-                "\naccording to which the haplogroups should be grouped:");
-        default_list = new Label("or use the example list:");
-
-        textField_hglist = new TextField();
-
-        if(haploStatistics.getChartController().getCustomHGList()!=null) {
-            if (haploStatistics.getChartController().getCustomHGList().length != 0) {
-                String hgs = "";
-                for(String s : haploStatistics.getChartController().getCustomHGList())
-                    hgs += s + ",";
-                textField_hglist.setText(hgs.substring(0, hgs.length()-1));
-            }
-        }
-
-        okBtn = new Button("OK");
         checkbox_use_grouping_for_colors = new CheckBox("Assign one colour to more than one group");
         addCheckboxColoringListener(checkbox_use_grouping_for_colors);
-
-        default_list_checkbox = new CheckBox("Use example list");
-        default_list_checkbox.setId("checkbox_hg_default_selection");
-        default_list_checkbox.setSelected(false);
 
         grid_colors_group = new GridPane();
         grid_colors_group.setHgap(4);
         grid_colors_group.setVgap(4);
         groupnames = new HashSet<>();
-        Set<String> mySet = new HashSet<String>(Arrays.asList(new String[]{"PPP", "PP", "RP", "TRO", "EGYPA", "EGY", "MRT", "TUN", "ESH", "MAR", "SDN", "ETH", "BFA",
-                "CMR", "GIN", "SYR", "IRN", "IRQ", "TUR", "GEO", "YEM", "KWT","ARE","LBN","ISR","OMN","ARM","SAU","PAK","QAT","JOR","SVN",
-                "HUN","ITA","FRA","SRB","ENG","FRO","FIN","NOR","SWE","ESP","ISL"}));
-        groupnames.addAll(mySet);
-        row2=0;
 
-        int row=0;
-
-        dialogGrid.add(label, 0,row,3,1);
-        dialogGrid.add(textField_hglist, 0,++row,3,1);
-        dialogGrid.add(default_list,0,++row,1,1);
-        dialogGrid.add(default_list_checkbox,1,row,1,1);
-        dialogGrid.add(new Separator(), 0, ++row, 3, 1);
         dialogGrid.add(checkbox_use_grouping_for_colors, 0,++row, 1,1);
         dialogGrid.add(grid_colors_group, 0, ++row, 2,1);
-        dialogGrid.add(new Separator(), 0, ++row, 3, 1);
-        dialogGrid.add(okBtn,2,++row,1,1);
+
 
     }
 
@@ -109,23 +68,16 @@ public class PcaPopupDialogue extends AHGDialogue {
     public void addEvents(){
 
         okBtn.setOnAction(e -> {
-            if((textField_hglist.getText().equals("") || textField_hglist.getText().startsWith("Please")) &&  !default_list_checkbox.isSelected()){
-                textField_hglist.setText("Please enter list here.");
+            if((combobox_hglist.getSelectionModel().getSelectedItem().toString().equals("") || combobox_hglist.getSelectionModel().getSelectedItem().toString().startsWith("Please"))){
+                combobox_hglist.getItems().add("Please enter list here.");
+                combobox_hglist.getSelectionModel().select("Please enter list here.");
 
             } else {
-
-
                 Task task1 = new Task() {
                     @Override
                     protected Object call() {
                         // calculate hg count statistics
-                        String[] hg_list;
-                        if(default_list_checkbox.isSelected()){
-                            hg_list = haploStatistics.getChartController().getCoreHGs();
-                        } else {
-                            hg_list = textField_hglist.getText().split(",");
-                        }
-                        hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+                        hg_list_trimmed = getTrimmedHGList();
                         haploStatistics.count(hg_list_trimmed);
 
                         // calculate PCA
@@ -152,6 +104,7 @@ public class PcaPopupDialogue extends AHGDialogue {
                     LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
 
                     double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
+
                     //group_members.clear();
                     pca_analysis.plot(
                             result_pca,
@@ -183,12 +136,6 @@ public class PcaPopupDialogue extends AHGDialogue {
             }
         });
 
-        Tooltip tp = new Tooltip("Example list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
-        default_list_checkbox.setOnMouseEntered(event -> {
-            Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
-            tp.show(default_list_checkbox, p.getX(), p.getY());
-        });
-        default_list_checkbox.setOnMouseExited(event -> tp.hide());
     }
 
 

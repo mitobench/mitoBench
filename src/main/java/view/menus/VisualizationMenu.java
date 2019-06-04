@@ -195,15 +195,15 @@ public class VisualizationMenu {
 
                 SettingsDialogueStackedBarchart advancedStackedBarchartDialogue =
                         new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups,
-                                logClass, mito);
+                                logClass);
+                advancedStackedBarchartDialogue.init(mito);
 
                 // add dialog to statsTabPane
                 Tab tab = advancedStackedBarchartDialogue.getTab();
                 mito.getTabpane_visualization().getTabs().add(tab);
                 mito.getTabpane_visualization().getSelectionModel().select(tab);
 
-                advancedStackedBarchartDialogue.getApplyBtn().setOnAction(e -> {
-                    advancedStackedBarchartDialogue.getApplyBtn();
+                advancedStackedBarchartDialogue.getOkBtn().setOnAction(e -> {
                     try {
                         visualizationController.initStackedBarchart(this);
                     } catch (MalformedURLException e1) {
@@ -215,15 +215,10 @@ public class VisualizationMenu {
                             stackedBar,
                             selection_haplogroups,
                             advancedStackedBarchartDialogue.getStackOrder(),
-                            advancedStackedBarchartDialogue.getTextField_hgList().getText()
+                            advancedStackedBarchartDialogue.getTrimmedHGList()
                     );
 
-                    String[] hg_list;
-                    if(advancedStackedBarchartDialogue.getDefault_list_checkbox().isSelected()){
-                        hg_list = mito.getChartController().getCoreHGs();
-                    } else {
-                        hg_list = advancedStackedBarchartDialogue.getTextField_hgList().getText().split(",");
-                    }
+                    String[] hg_list = advancedStackedBarchartDialogue.getTrimmedHGList();
 
 
                     stackedBar.setHg_user_selection(hg_list);
@@ -280,8 +275,8 @@ public class VisualizationMenu {
                         && tableController.getTable().getItems().size() != 0 ){
 
 
-                    HGlistProfilePlot hGlistProfilePlot = new HGlistProfilePlot("Profile plot configuration", logClass, mito);
-                    hGlistProfilePlot.init();
+                    HGlistProfilePlot hGlistProfilePlot = new HGlistProfilePlot("Profile plot configuration", logClass);
+                    hGlistProfilePlot.init(mito);
                     // add dialog to statsTabPane
                     Tab tab = hGlistProfilePlot.getTab();
                     mito.getTabpane_visualization().getTabs().add(tab);
@@ -291,7 +286,7 @@ public class VisualizationMenu {
                         try {
                             visualizationController.initProfilePlot();
                             profilePlot = visualizationController.getProfilePlot();
-                            profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHGsForProfilelotVis());
+                            profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getTrimmedHGList());
                             // remove tab from tabpane
                             mito.getTabpane_visualization().getTabs().remove(tab);
                         } catch (MalformedURLException e1) {
@@ -336,7 +331,8 @@ public class VisualizationMenu {
                 if(tableController.getTable().getItems().size() != 0 ){
 
                     PieChartSettingsDialogue pieChartSettingsDialogue =
-                            new PieChartSettingsDialogue("Advanced Piechart Settings", logClass, mito);
+                            new PieChartSettingsDialogue("Advanced Piechart Settings", logClass);
+                    pieChartSettingsDialogue.init(mito);
 
                     // add dialog to statsTabPane
                     Tab tab = pieChartSettingsDialogue.getTab();
@@ -344,16 +340,9 @@ public class VisualizationMenu {
                     mito.getTabpane_visualization().getSelectionModel().select(tab);
 
 
-                    pieChartSettingsDialogue.getApplyBtn().setOnAction(e -> {
+                    pieChartSettingsDialogue.getOkBtn().setOnAction(e -> {
 
-                        String[] hg_list;
-                        if(pieChartSettingsDialogue.getDefault_list_checkbox().isSelected()){
-                            hg_list = chartController.getCoreHGs();
-                        } else {
-                            hg_list = pieChartSettingsDialogue.getTextField_hgList().getText().split(",");
-                        }
-                        String[] hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
-
+                        String[] hg_list_trimmed = pieChartSettingsDialogue.getTrimmedHGList();
 
                         if(tableController.getTableColumnByName("Grouping") != null){
                             // get selected rows
