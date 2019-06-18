@@ -72,6 +72,9 @@ public class MultiFastAInput implements IInputData {
                 //And reset everything
                 currSeq = "";
                 currHeader = currentLine.replace(">","").split(" ")[0];
+                if(currHeader.matches(".*[^\\d]\\d{1}$")){
+                    currHeader = currHeader.split("\\.")[0];
+                }
                 line_index++;
                 continue;
             }
@@ -80,7 +83,7 @@ public class MultiFastAInput implements IInputData {
 
                 String header = currentLine.replace(">", "").split(" ")[0];
 
-                if(header.endsWith(".1") || header.endsWith(".2") || header.endsWith(".3") || header.endsWith(".4")){
+                if(header.matches(".*[^\\d]\\d{1}$")){// || header.endsWith(".1") || header.endsWith(".2") || header.endsWith(".3") || header.endsWith(".4") || header.endsWith(".5")){
                     header = header.split("\\.")[0];
                 }
                 currHeader = header;

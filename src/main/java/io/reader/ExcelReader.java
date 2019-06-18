@@ -96,32 +96,49 @@ public class ExcelReader implements IInputData{
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
                         colname = mapper.mapString(header.get(i));
-                        if(colname.equals("ID"))
+                        if(colname.equals("accession_id")){
                             id = cell.getStringCellValue();
+                            if(id.matches(".*[^\\d]\\d{1}$")){
+                                id = id.split("\\.")[0];
+                            }
+                        }
+
                         data = cell.getStringCellValue();
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
                         colname = mapper.mapString(header.get(i));
-                        if(colname.equals("ID"))
+                        if(colname.equals("accession_id")){
                             id = cell.getStringCellValue();
+                            if(id.matches(".*[^\\d]\\d{1}$")){
+                                id = id.split("\\.")[0];
+                            }
+                        }
                         data = String.valueOf(cell.getNumericCellValue());
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
                     case Cell.CELL_TYPE_BOOLEAN:
                         colname = mapper.mapString(header.get(i));
-                        if(colname.equals("ID"))
+                        if(colname.equals("accession_id")){
                             id = cell.getStringCellValue();
+                            if(id.matches(".*[^\\d]\\d{1}$")){
+                                id = id.split("\\.")[0];
+                            }
+                        }
                         data = String.valueOf(cell.getBooleanCellValue());
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
                     case Cell.CELL_TYPE_BLANK:
                         colname = mapper.mapString(header.get(i));
-                        if(colname.equals("ID"))
+                        if(colname.equals("accession_id")){
                             id = cell.getStringCellValue();
+                            if(id.matches(".*[^\\d]\\d{1}$")){
+                                id = id.split("\\.")[0];
+                            }
+                        }
                         data = "";
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
