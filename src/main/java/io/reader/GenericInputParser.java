@@ -94,7 +94,11 @@ public class GenericInputParser implements IInputData {
                     entries.add(e);
                 }
                 //Now add with ID to hashmap
-                map.put(splitLine[0].trim(), entries);
+                String id = splitLine[0].trim();
+                if(id.matches(".*[^\\d]\\d{1}$")){
+                    id = id.split("\\.")[0];
+                }
+                map.put(id, entries);
             }
         }
     }

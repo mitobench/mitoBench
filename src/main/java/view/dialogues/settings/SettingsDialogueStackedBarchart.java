@@ -12,24 +12,28 @@ import javafx.scene.input.*;
 import javafx.util.Callback;
 import view.MitoBenchWindow;
 
+import java.util.Arrays;
+
 
 /**
  * Created by neukamm on 15.02.17.
  */
-public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
+public class SettingsDialogueStackedBarchart extends AHGDialogue {
 
-    private final MitoBenchWindow mito;
     private TableView<ObservableList> table;
-    private Button applyBtn;
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
-    private TextField textField_hgList;
-    private CheckBox default_list_checkbox;
 
 
-    public SettingsDialogueStackedBarchart(String title, String[] groups, LogClass logClass, MitoBenchWindow mito) {
+    private ObservableList<String> options =
+            FXCollections.observableArrayList(
+                    "Sub-Saharan Africa (L0a,L0d,L0k,L1b,L1c,L2a,L2b,L2c,L3b,L3d,L3e,L3f,L4,L5)",
+                    "Americas and the Caribbean (A2,B2,C1b,C1c,C1d,C4c,D1,D2a,D3,D4h3a,X2a,X2g)",
+                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B)",
+                    "Europe (H)");
+
+    public SettingsDialogueStackedBarchart(String title, String[] groups, LogClass logClass) {
         super(title, logClass);
         dialogGrid.setId("stackedBarChartDialogue");
-        this.mito = mito;
 
         addComponents(groups);
         allowDragAndDrop();
@@ -37,51 +41,16 @@ public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
     }
 
     private void addComponents(String[] groups) {
-        applyBtn = new Button("Apply");
-        applyBtn.setId("stackedBarApplyBtn");
 
         Label label_stackOrder = new Label("Please choose stack order.");
         label_stackOrder.setId("id_label_stackOrder");
-        Label label_HgList = new Label("Please enter comma separated list of haplogroups \n " +
-                "\n according to which the haplogroups should be grouped:") ;
-        label_HgList.setId("id_label_HgList");
-
-        Label default_list = new Label("or use the example list:");
-
-        textField_hgList = new TextField();
-        textField_hgList.setId("id_textField_hgList");
-
-        if(mito.getChartController().getCustomHGList()!=null) {
-            if (mito.getChartController().getCustomHGList().length != 0) {
-                String hgs = "";
-                for(String s : mito.getChartController().getCustomHGList())
-                    hgs += s + ",";
-                textField_hgList.setText(hgs.substring(0, hgs.length()-1));
-            }
-        }
 
 
-        default_list_checkbox = new CheckBox("Use example list");
-        default_list_checkbox.setId("checkbox_hg_default_selection");
-        default_list_checkbox.setSelected(false);
-
-        int row_index = 0;
-        dialogGrid.add(label_HgList, 0,row_index);
-        dialogGrid.add(textField_hgList, 0,++row_index);
-        dialogGrid.add(default_list, 0,++row_index);
-        dialogGrid.add(default_list_checkbox, 1,row_index);
-        dialogGrid.add(new Separator(), 0,++row_index);
-        dialogGrid.add(label_stackOrder, 0,++row_index);
-        dialogGrid.add( setTable(groups), 0,++row_index);
-        dialogGrid.add(applyBtn, 0,++row_index);
+        dialogGrid.add(new Separator(), 0,++row);
+        dialogGrid.add(label_stackOrder, 0,++row);
+        dialogGrid.add( setTable(groups), 0,++row);
 
 
-        Tooltip tp = new Tooltip("Default list : H,HV,I,J,K,L0,L1,L2,L3,L4,M1,N,N1a,N1b,R,R0,T,T1,T2,U,W,X");
-        default_list_checkbox.setOnMouseEntered(event -> {
-            Point2D p = default_list_checkbox.localToScreen(default_list_checkbox.getLayoutBounds().getMaxX(), default_list_checkbox.getLayoutBounds().getMaxY()); //I position the tooltip at bottom right of the node (see below for explanation)
-            tp.show(default_list_checkbox, p.getX(), p.getY());
-        });
-        default_list_checkbox.setOnMouseExited(event -> tp.hide());
 
     }
 
@@ -172,29 +141,5 @@ public class SettingsDialogueStackedBarchart extends ATabpaneDialogue {
         }
         return entries;
 
-    }
-
-    public TextField getTextField_hgList() {
-        return textField_hgList;
-    }
-    public Button getApplyBtn() {
-        return applyBtn;
-    }
-
-
-    public void setApplyBtn(Button applyBtn) {
-        this.applyBtn = applyBtn;
-    }
-
-    public void setTextField_hgList(TextField textField_hgList) {
-        this.textField_hgList = textField_hgList;
-    }
-
-    public CheckBox getDefault_list_checkbox() {
-        return default_list_checkbox;
-    }
-
-    public void setDefault_list_checkbox(CheckBox default_list_checkbox) {
-        this.default_list_checkbox = default_list_checkbox;
     }
 }

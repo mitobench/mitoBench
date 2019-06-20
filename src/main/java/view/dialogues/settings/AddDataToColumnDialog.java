@@ -1,6 +1,7 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
+import io.datastructure.Entry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import controller.ATableController;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -60,10 +64,9 @@ public class AddDataToColumnDialog extends APopupDialogue{
             // add elements to group
 
             //groupController.addElements(groupItems, comboBox.getValue().toString());
-            tableController.updateTable(tableController.createNewEntryList(entry_field.getText(), comboBox.getValue().toString(), false));
+            HashMap<String, List<Entry>> new_data = tableController.createNewEntryList(entry_field.getText(), comboBox.getValue().toString(), false);
+            tableController.updateTable(new_data);
             close();
-
-
 
         });
 

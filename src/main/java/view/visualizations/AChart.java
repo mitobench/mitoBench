@@ -33,7 +33,7 @@ public abstract class AChart extends Chart {
         xAxis.tickLabelFontProperty().set(Font.font(15));
         xAxis.setLabel(lable_xaxis);
         xAxis.setTickMarkVisible(false);
-        xAxis.setTickLabelRotation(45);
+        xAxis.setTickLabelRotation(90);
 
         yAxis.setTickUnit(5);
         yAxis.setLabel(label_yaxis);

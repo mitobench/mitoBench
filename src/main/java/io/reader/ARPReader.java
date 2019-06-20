@@ -66,6 +66,9 @@ public class ARPReader implements IInputData {
                     while(dataSplit[array_index].length() == 0)
                         array_index++;
                     String id = dataSplit[array_index];
+                    if(id.matches(".*[^\\d]\\d{1}$")){
+                        id = id.split("\\.")[0];
+                    }
                     String mtseq = dataSplit[array_index+2];
                     List<Entry> entries = new ArrayList<>();
                     Entry e = new Entry(mapper.mapString("MTSequence"), new CategoricInputType("String"), new GenericInputData(mtseq));

@@ -357,6 +357,10 @@ public class MitoBenchWindow extends Application{
         return info_selected_items;
     }
 
+    public void setInfo_selected_items_text(String info_selected_items_text) {
+        this.info_selected_items.setText(info_selected_items_text);
+    }
+
     public GroupController getGroupController() {
         return groupController;
     }
@@ -393,5 +397,7 @@ public class MitoBenchWindow extends Application{
     public FileReaderController getFileReaderController() {
         return fileReaderController;
     }
+
+
 
 }

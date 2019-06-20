@@ -46,8 +46,8 @@ public class GeographicalMapController {
 
         grouping_col = tableControllerUserBench.getTableColumnByName("Grouping");
         id_col = tableControllerUserBench.getTableColumnByName("ID");
-        sampling_latitude_col = tableControllerUserBench.getTableColumnByName("Latitude (Sample)");
-        sampling_longitude_col = tableControllerUserBench.getTableColumnByName("Longitude (Sample)");
+        sampling_latitude_col = tableControllerUserBench.getTableColumnByName("Sample Latitude");
+        sampling_longitude_col = tableControllerUserBench.getTableColumnByName("Sample Longitude");
         items = tableControllerUserBench.getSelectedRows();
         this.groupController = groupController;
         this.geographicalMapViz = geographicalMapViz;
@@ -99,8 +99,8 @@ public class GeographicalMapController {
         geoMapDisplay.getRb_location_sampling().selectedProperty().addListener((obs, wasPreviouslySelected, isNowSelected) -> {
             if (isNowSelected) {
                 createMapView(
-                        tableControllerUserBench.getTableColumnByName("Latitude (Sampling)"),
-                        tableControllerUserBench.getTableColumnByName("Longitude (Sampling)")
+                        tableControllerUserBench.getTableColumnByName("Sampling Latitude"),
+                        tableControllerUserBench.getTableColumnByName("Sampling Longitude")
                 );
                 geoMapDisplay.getTextField_sample_info().setText("# of samples: " + map.getListView().getItems().size());
             }
@@ -109,8 +109,8 @@ public class GeographicalMapController {
         geoMapDisplay.getRb_location_sample().selectedProperty().addListener((obs, wasPreviouslySelected, isNowSelected) -> {
             if (isNowSelected) {
                 createMapView(
-                        tableControllerUserBench.getTableColumnByName("Latitude (Sample)"),
-                        tableControllerUserBench.getTableColumnByName("Longitude (Sample)")
+                        tableControllerUserBench.getTableColumnByName("Sample Latitude"),
+                        tableControllerUserBench.getTableColumnByName("Sample Longitude")
                 );
                 geoMapDisplay.getTextField_sample_info().setText("# of samples: " +  map.getListView().getItems().size());
 
@@ -120,8 +120,8 @@ public class GeographicalMapController {
         geoMapDisplay.getRb_location_TMA().selectedProperty().addListener((obs, wasPreviouslySelected, isNowSelected) -> {
             if (isNowSelected) {
                 createMapView(
-                        tableControllerUserBench.getTableColumnByName("Latitude (TMA inferred)"),
-                        tableControllerUserBench.getTableColumnByName("Longitude (TMA inferred)")
+                        tableControllerUserBench.getTableColumnByName("TMA inferred Latitude"),
+                        tableControllerUserBench.getTableColumnByName("TMA inferred Longitude")
                 );
                 geoMapDisplay.getTextField_sample_info().setText("# of samples: " +  map.getListView().getItems().size());
 

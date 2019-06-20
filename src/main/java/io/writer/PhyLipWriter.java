@@ -7,6 +7,8 @@ import javafx.scene.control.TableColumn;
 import model.MTStorage;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 
 /**
@@ -93,24 +95,25 @@ public class PhyLipWriter implements IOutputData {
 
     @Override
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
-        Writer writer = null;
+        if(!file.endsWith(".phylip"))
+            file = file + ".phylip";
+
+        FileOutputStream fos = new FileOutputStream(file);
+        FileChannel fileChannel = fos.getChannel();
+        String text;
+
         try {
 
             MTStorage mtStorage = tableController.getDataTable().getMtStorage();
             if(sequencesHaveSameLength(mtStorage,
                     tableController.getTableColumnByName("ID"))){
 
-                if(!file.endsWith(".phylip"))
-                    file = file + ".phylip";
-
-                writer = new BufferedWriter(new FileWriter(new File(file)));
-
                 int ntax = data.size();
                 int nchar = length;
 
                 // write header
                 String header = ntax + " " + nchar;
-                writer.write(header + "\n");
+                fileChannel.write(ByteBuffer.wrap((header + "\n").getBytes()));
 
                 // get IDs
                 String[] ids = tableController.getSampleNames(data);
@@ -135,18 +138,21 @@ public class PhyLipWriter implements IOutputData {
                         String id_extended = String.format("%-" + 10 + "." + 10 + "s", ids[i]);
 
                         if(sequencePositionCounter+maxCharactersPerLine > length){
-                            writer.write(id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                            fileChannel.write(ByteBuffer.wrap((id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
 
                         } else {
-                            writer.write(id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n");
+
+                            fileChannel.write(ByteBuffer.wrap((id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n").getBytes()));
                             sequencePositionCounter += maxCharactersPerLine;
                         }
 
                         while(sequencePositionCounter+maxCharactersPerLine <= length){
                             if(sequencePositionCounter+maxCharactersPerLine > length){
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
+
                             } else {
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n").getBytes()));
+
                             }
                             sequencePositionCounter += maxCharactersPerLine;
                         }
@@ -165,29 +171,28 @@ public class PhyLipWriter implements IOutputData {
                         String id_extended = String.format("%-" + 10 + "." + 10 + "s", ids[i]);
 
                         if (sequencePositionCounter + maxCharactersPerLine > length) {
-                            writer.write(id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                            fileChannel.write(ByteBuffer.wrap((id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
 
                         } else {
-                            writer.write(id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter + maxCharactersPerLine) + "\n");
+                            fileChannel.write(ByteBuffer.wrap((id_extended + "" + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter + maxCharactersPerLine) + "\n").getBytes()));
+
                             sequencePositionCounter += maxCharactersPerLine;
                         }
                     }
-                    writer.write("\n");
+                    fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
 
                     while(sequencePositionCounter <= length){
                         for(int i = 0; i < ids.length; i++) {
                             if(sequencePositionCounter+maxCharactersPerLine > length){
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
+
                             } else {
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n").getBytes()));
                             }
                         }
                         sequencePositionCounter += maxCharactersPerLine;
-                        writer.write("\n");
+                        fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
                     }
-
-
-
                 }
 
 
@@ -203,25 +208,31 @@ public class PhyLipWriter implements IOutputData {
                         //String id_extended = String.format("%-" + length_longest + "." + length_longest + "s", ids[i]);
 
                         if (sequencePositionCounter + maxCharactersPerLine > length) {
-                            writer.write(ids[i] + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                            fileChannel.write(ByteBuffer.wrap((ids[i] + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
+
 
                         } else {
-                            writer.write(ids[i] + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter + maxCharactersPerLine) + "\n");
+                            fileChannel.write(ByteBuffer.wrap((ids[i] + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter + maxCharactersPerLine) + "\n").getBytes()));
+
                             sequencePositionCounter += maxCharactersPerLine;
                         }
                     }
-                    writer.write("\n");
+                    fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
+
 
                     while(sequencePositionCounter <= length){
                         for(int i = 0; i < ids.length; i++) {
                             if(sequencePositionCounter+maxCharactersPerLine > length){
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
+
                             } else {
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n").getBytes()));
+
                             }
                         }
                         sequencePositionCounter += maxCharactersPerLine;
-                        writer.write("\n");
+                        fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
+
                     }
 
                 }
@@ -239,25 +250,26 @@ public class PhyLipWriter implements IOutputData {
                         String id_extended = String.format("%-" + length_longest + "." + length_longest + "s", ids[i]);
 
                         if(sequencePositionCounter+maxCharactersPerLine > length){
-                            writer.write(id_extended + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                            fileChannel.write(ByteBuffer.wrap((id_extended + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
+
 
                         } else {
-                            writer.write(id_extended + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n");
+                            fileChannel.write(ByteBuffer.wrap((id_extended + " " + mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n").getBytes()));
                             sequencePositionCounter += maxCharactersPerLine;
                         }
 
                         while(sequencePositionCounter+maxCharactersPerLine <= length){
                             if(sequencePositionCounter+maxCharactersPerLine > length){
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, length) + "\n").getBytes()));
+
                             } else {
-                                writer.write(mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n");
+                                fileChannel.write(ByteBuffer.wrap((mtStorage.getData().get(ids[i]).substring(sequencePositionCounter, sequencePositionCounter+maxCharactersPerLine)+ "\n").getBytes()));
+
                             }
                             sequencePositionCounter += maxCharactersPerLine;
                         }
                     }
                 }
-
-                writer.close();
 
             } else {
                 throw new Exception("Sequences do not have the same length!");
@@ -267,8 +279,9 @@ public class PhyLipWriter implements IOutputData {
             ex.printStackTrace();
         }
         finally {
-            writer.flush();
-            writer.close();
+
+            fileChannel.close();
+            fos.close();
         }
     }
 

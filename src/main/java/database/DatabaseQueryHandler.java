@@ -6,10 +6,12 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import io.datastructure.Entry;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 public class DatabaseQueryHandler {
@@ -28,7 +30,6 @@ public class DatabaseQueryHandler {
             long startTime = System.currentTimeMillis();
             String query = "http://mitodb.org/meta";
 
-            System.out.println(query);
             HttpResponse<JsonNode> response_metadata = Unirest.get(query).asJson();
 
             long currtime_post_execution = System.currentTimeMillis();
@@ -56,6 +57,29 @@ public class DatabaseQueryHandler {
     }
 
 
+    public Set<String> getAuthorList(){
+        Set<String> result = new HashSet<>();
+
+        try {
+            String query_complete = "http://mitodb.org/meta?select=author,publication_date";
+            HttpResponse<JsonNode> response_authors = Unirest.get(query_complete).asJson();
+
+
+            for (int i = 0; i < response_authors.getBody().getArray().length(); i++){
+                JSONObject map = (JSONObject) response_authors.getBody().getArray().get(i);
+                String author = (String) map.get("author");
+                String year = map.get("publication_date") + "";
+                result.add(author.trim() + "," + year.trim());
+            }
+
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
 
     public HashMap<String, List<Entry>> getDataSelection(String query) {
 
@@ -65,10 +89,7 @@ public class DatabaseQueryHandler {
 
             String query_complete = "http://mitodb.org/meta?" + query;
             System.out.println(query_complete);
-
             HttpResponse<JsonNode> response_meta = Unirest.get(query_complete).asJson();
-
-
 
             long currtime_post_execution = System.currentTimeMillis();
             long diff = currtime_post_execution - startTime;

@@ -43,19 +43,19 @@ public class ColumnNameMapper {
             case "generations_to_tma":
                 return "Generations to TMA";
             case "geographic_info_tma_inferred_latitude":
-                return "Latitude (TMA inferred)";
+                return "TMA inferred Latitude";
             case "geographic_info_tma_inferred_longitude":
-                return "Longitude (TMA inferred)";
+                return "TMA inferred Longitude";
             case "geographic_info_tma_inferred_region":
-                return "Continent (TMA inferred)";
+                return "TMA inferred Continent";
             case "geographic_info_tma_inferred_subregion":
-                return "Subregion (TMA inferred)";
+                return "TMA inferred Subregion";
             case "geographic_info_tma_inferred_intermediate_region":
-                return "Intermediate region (TMA inferred)";
+                return "TMA inferred Intermediate region";
             case "geographic_info_tma_inferred_city":
-                return "City (TMA inferred)";
+                return "TMA inferred City";
             case "geographic_info_tma_inferred_country":
-                return "Country (TMA inferred)";
+                return "TMA inferred Country";
             case "marriage_rules":
                 return "Marriage Rules";
             case "marriage_system":
@@ -125,33 +125,33 @@ public class ColumnNameMapper {
             case "ending_np":
                 return "Ending position";
             case "sampling_latitude":
-                return "Latitude (Sampling)";
+                return "Sampling Latitude";
             case "sampling_longitude":
-                return "Longitude (Sampling)";
+                return "Sampling Longitude";
             case "sampling_region":
-                return "Continent (sampling)";
+                return "Sampling Continent";
             case "sampling_subregion":
-                return "Subregion (sampling)";
+                return "Sampling Subregion";
             case "sampling_intermediate_region":
-                return "Intermediate region (sampling)";
+                return "Sampling Intermediate region";
             case "sampling_country":
-                return "Country (sampling)";
+                return "Sampling Country";
             case "sampling_city":
-                return "City (sampling)";
+                return "Sampling City";
             case "sample_origin_latitude":
-                return "Latitude (Sample)";
+                return "Sample Latitude";
             case "sample_origin_longitude":
-                return "Longitude (Sample)";
+                return "Sample Longitude";
             case "sample_origin_region":
-                return "Continent (Sample)";
+                return "Sample Continent";
             case "sample_origin_subregion":
-                return "Subregion (Sample)";
+                return "Sample Subregion";
             case "sample_origin_intermediate_region":
-                return "Intermediate region (Sample)";
+                return "Sample Intermediate region";
             case "sample_origin_country":
-                return "Country (Sample)";
+                return "Sample Country";
             case "sample_origin_city":
-                return "City (Sample)";
+                return "Sample City";
             case "haplotype_current_versions":
                 return "Haplotype";
             case "quality_haplotype_current_version":

@@ -94,6 +94,9 @@ public class HSDInput implements IInputData {
 
                 if(id_index!=-1){
                     id = splitGroup[id_index].trim();
+                    if(id.matches(".*[^\\d]\\d{1}$")){
+                        id = id.split("\\.")[0];
+                    }
                 }
                 if(group_index!=-1){
                     group = splitGroup[group_index].trim();

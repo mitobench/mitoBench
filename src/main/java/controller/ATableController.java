@@ -1,15 +1,14 @@
 package controller;
 
 import Logging.LogClass;
-import database.ColumnNameMapper;
 import io.IInputType;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Callback;
@@ -362,6 +361,7 @@ public abstract class ATableController {
 
         } else {
             selection = getSelectedRows();
+            boolean never_reached = true;
 
             for(int i = 0; i < selection.size(); i++){
                 String rowName = selection.get(i).get(getColIndex("ID")).toString();
@@ -373,7 +373,15 @@ public abstract class ATableController {
                         e_list.remove(e);
                         e_list.add(e_new);
                         table_content.put(rowName, e_list);
+                        never_reached = false;
                     }
+                }
+
+                if(never_reached){
+                    // add column entry
+                    Entry e_new = new Entry(colName,new CategoricInputType("String"), new GenericInputData(textfield));
+                    e_list.add(e_new);
+                    table_content.put(rowName, e_list);
                 }
             }
             return table_content;
@@ -396,8 +404,6 @@ public abstract class ATableController {
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
             col_names.add(colname);
-            //col.prefWidthProperty().bindBidirectional((Property<Number>) table.widthProperty().multiply(0.07));
-            //col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             table.getColumns().addAll(col);
         }
     }
@@ -560,7 +566,7 @@ public abstract class ATableController {
         // clean view.data model
         data.removeAll(data);
         // clean table view
-        table.setItems(null);//getItems().clear();//removeAll(table.getItems());
+        table.setItems(FXCollections.emptyObservableList());
         dataTable.getMtStorage().getData().clear();
         dataTable.getDataTable().clear();
         table.getColumns().removeAll(table.getColumns());
@@ -883,6 +889,27 @@ public abstract class ATableController {
     public void setCustomColumnOrder(String[] customColumnOrder) {
         this.customColumnOrder = customColumnOrder;
         //updateTable(null);
+    }
+
+
+
+    public void addRowListener(Label infolabel){
+
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            // update text
+            infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+                    table.getItems().size() +  " rows are selected");
+        });
+
+        table.getItems().addListener((ListChangeListener<ObservableList>) pChange -> {
+            while(pChange.next()) {
+                // update text
+                infolabel.setText(table.getSelectionModel().getSelectedItems().size() + " / " +
+                        table.getItems().size() +  " rows are selected");
+            }
+        });
+
+
     }
 }
 

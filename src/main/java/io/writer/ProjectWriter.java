@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,70 +30,70 @@ public class ProjectWriter {
     }
 
 
-    public void write(String outfile, TableControllerUserBench tableController, String[] user_defined_hg_list) throws IOException, ProjectException {
+    public void write(String outfile, TableControllerUserBench tableController, String[] user_defined_hg_list) throws IOException {
 
         //Initialize properly
         if (!outfile.endsWith(".mitoproj")) {
             outfile = outfile + ".mitoproj";
         }
 
+        FileOutputStream fos = new FileOutputStream(outfile);
+        FileChannel fileChannel = fos.getChannel();
+
         Date date = new Date();
-        Writer writer = null;
+
         try {
-            writer = new BufferedWriter(new FileWriter(outfile));
+
 
             // write header
             // This has been generated with starter.MitoBenchStarter version XYZ, do not edit manually unless you know what you are doing.
             String header = "# This file has been generated with starter.MitoBenchStarter version " + MITOBENCH_VERSION +
                     " and contains all information of a starter.MitoBenchStarter project\n# Created on  "+ date.toString()
                     + "\n# Please do NOT edit manually unless you know what you are doing.\n\n";
-            writer.write(header);
+            fileChannel.write(ByteBuffer.wrap(header.getBytes()));
 
             // write all data table information as Entry List
             HashMap<String, List<Entry>> tableData = tableController.getTable_content(data);
 
-            writer.write("<datatable\n");
+            fileChannel.write(ByteBuffer.wrap("<datatable\n".getBytes()));
             for(String sample_id : tableData.keySet()){
-                writer.write("\tkey\t " + sample_id + "\n");
+                fileChannel.write(ByteBuffer.wrap(("\tkey\t " + sample_id + "\n").getBytes()));
 
                 // write column names
-                writer.write("\t\t##ID\t" );
+                fileChannel.write(ByteBuffer.wrap("\t\t##ID\t".getBytes()));
                 for(Entry e : tableData.get(sample_id)){
                     if(!e.getIdentifier().equals("ID"))
-                        writer.write(e.getIdentifier() + "\t" );
+                        fileChannel.write(ByteBuffer.wrap((e.getIdentifier() + "\t").getBytes()));
                 }
-                writer.write("\n");
+                fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
 
                 // write column types
-                writer.write("\t\t#String\t" );
+                fileChannel.write(ByteBuffer.wrap("\t\t#String\t".getBytes()));
                 for(Entry e : tableData.get(sample_id)) {
                     if(!e.getIdentifier().equals("ID"))
-                        writer.write(e.getType().getTypeInformation() + "\t" );
+                        fileChannel.write(ByteBuffer.wrap((e.getType().getTypeInformation() + "\t").getBytes()));
 
                 }
-                writer.write("\n");
+                fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
 
                 // write data
-                writer.write("\t\t");
-                writer.write(sample_id + "\t");
+                fileChannel.write(ByteBuffer.wrap(("\t\t" + sample_id + "\t").getBytes()));
                 for(Entry e : tableData.get(sample_id)){
                     if(!e.getIdentifier().equals("ID"))
-                        writer.write(e.getData().getTableInformation().replace("\"","") + "\t" );
+                        fileChannel.write(ByteBuffer.wrap((e.getData().getTableInformation().replace("\"","") + "\t").getBytes()));
                 }
-                writer.write("\n");
+                fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
             }
 
-            writer.write(">\n");
+            fileChannel.write(ByteBuffer.wrap(">\n".getBytes()));
 
             if(user_defined_hg_list!=null){
-                writer.write("<haplogroupList\n");
-                writer.write("\t");
+                fileChannel.write(ByteBuffer.wrap("<haplogroupList\n\t".getBytes()));
                 for(String hg : user_defined_hg_list){
-                    writer.write(hg + ",");
+                    fileChannel.write(ByteBuffer.wrap((hg + ",").getBytes()));
                 }
 
-                writer.write("\n>\n");
-
+                fileChannel.write(ByteBuffer.wrap("\n>\n".getBytes()));
             }
 
 
@@ -100,8 +102,8 @@ public class ProjectWriter {
         }
         finally {
 
-            writer.flush();
-            writer.close();
+            fileChannel.close();
+            fos.close();
         }
 
     }

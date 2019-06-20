@@ -1,11 +1,12 @@
 package io.writer;
-
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import model.MTStorage;
 import controller.TableControllerUserBench;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,40 +25,30 @@ public class MultiFastaWriter implements IOutputData  {
     @Override
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
 
-        Writer writer = null;
-        try {
-            if(!(file.endsWith(".fa") ||file.endsWith(".fasta") || file.endsWith(".fna")))
-                file = file + ".fasta";
+        if(!(file.endsWith(".fa") ||file.endsWith(".fasta") || file.endsWith(".fna")))
+            file = file + ".fasta";
 
-            writer = new BufferedWriter(new FileWriter(new File(file)));
+        FileOutputStream fos = new FileOutputStream(file);
+        FileChannel fileChannel = fos.getChannel();
 
-            // write view.data
-            tableController.getTableColumnByName("ID");
-            String text = "";
+        // write view.data
+        tableController.getTableColumnByName("ID");
+        String text = "";
 
-            List<String> ids = new ArrayList<>();
-            for(int i = 0; i < data.size(); i++){
-                ids.add((String)data.get(i).get(0));
-            }
-
-            for(String id : mtStorage.getData().keySet()){
-                if(ids.contains(id)){
-                    text += ">" + id + "\n";
-                    text += mtStorage.getData().get(id) + "\n";
-                }
-            }
-
-            writer.write(text);
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        finally {
-
-            writer.flush();
-            writer.close();
+        List<String> ids = new ArrayList<>();
+        for(int i = 0; i < data.size(); i++){
+            ids.add((String)data.get(i).get(0));
         }
 
+        for(String id : mtStorage.getData().keySet()){
+            if(ids.contains(id)){
+                text = ">" + id + "\n" + mtStorage.getData().get(id) + "\n";
+                fileChannel.write(ByteBuffer.wrap(text.getBytes()));
+            }
+        }
+
+        fileChannel.close();
+        fos.close();
     }
 
     @Override
