@@ -101,7 +101,7 @@ public class SqlQueryBuilderWindow {
 
         checkBox_SelectAllData = new CheckBox("Get all data from DB (takes about 1-2 min)");
         checkBox_SelectAllData.setPadding(new Insets(5,5,5,5));
-        checkBox_Select100GP = new CheckBox("Get all data from 1000 Genome Project (phase3)");
+        checkBox_Select100GP = new CheckBox("Get all data from 1000 Genome Project (phase3) // Is this useful?");
         checkBox_Select100GP.setPadding(new Insets(5,5,5,5));
 
         Set<String> authors_entry = databaseQueryHandler.getAuthorList();
@@ -151,11 +151,11 @@ public class SqlQueryBuilderWindow {
 
         continentFilter();
 
-        center.add(new Separator(),0,7,6,1);
+        //center.add(new Separator(),0,7,6,1);
 
-        center.add(checkbox_connector_and, 0,8,1,1);
-        center.add(checkbox_connector_or, 1,8,1,1);
-        center.add(imageLabel, 2,8,1,1);
+        //center.add(checkbox_connector_and, 0,8,1,1);
+        //center.add(checkbox_connector_or, 1,8,1,1);
+        //center.add(imageLabel, 2,8,1,1);
 
         center.add(new Separator(),0,9,2,1);
         center.add(checkBox_authors, 0,10,1,1);
@@ -390,17 +390,24 @@ public class SqlQueryBuilderWindow {
             if (newValue){
                 checkBox_Select100GP.setDisable(true);
                 continents_sample_origin_combobox.setDisable(true);
+                country_sample_origin_combobox.setDisable(true);
                 continents_sampling_combobox.setDisable(true);
                 continents_tma_inferred_combobox.setDisable(true);
                 checkbox_connector_and.setDisable(true);
                 checkbox_connector_or.setDisable(true);
+                checkComboBoxAuthors.setDisable(true);
+                checkBox_authors.setDisable(true);
             } else if(!newValue){
                 checkBox_Select100GP.setDisable(false);
                 continents_sample_origin_combobox.setDisable(false);
+                country_sample_origin_combobox.setDisable(false);
                 continents_sampling_combobox.setDisable(false);
                 continents_tma_inferred_combobox.setDisable(false);
                 checkbox_connector_and.setDisable(false);
                 checkbox_connector_or.setDisable(false);
+                checkComboBoxAuthors.setDisable(false);
+                checkBox_authors.setDisable(false);
+
             }
 
         });
@@ -480,15 +487,15 @@ public class SqlQueryBuilderWindow {
 
 
             } else {
-                String query;
+                String query= "or=(" ;
                 // building query
-                if(checkbox_connector_or.isSelected()){
-                    query = "or=(" ;
-                } else if(checkbox_connector_and.isSelected()){
-                    query = "and=(" ;
-                } else {
-                    query = "and=(" ;
-                }
+//                if(checkbox_connector_or.isSelected()){
+//                    query = "or=(" ;
+//                } else if(checkbox_connector_and.isSelected()){
+//                    query = "and=(" ;
+//                } else {
+//                    query = "and=(" ;
+//                }
 
                 String query_tmp = "";
 
