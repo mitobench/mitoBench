@@ -2,7 +2,7 @@ General Usage
 =============
 
 
-The mitoBench can be used to upload and convert files and to manipulate, analyze and
+mitoBench can be used to upload and convert files and to manipulate, analyze and
 visualize mitochondrial data.
 
 The main window is split into three parts. The upper part contains a visualization
@@ -21,7 +21,8 @@ as the map view and the DB import) require a working internet connection. The fa
 Table
 ------
 
-It is possible to add and delete columns to the table as well as adding and replacing data by right-clicking on the table. Adding a new column requires a default value. This value can be replaced easily later.
+It is possible to add and delete columns to the table as well as adding and replacing data by right-clicking on the table.
+Adding a new column requires a default value. This value can be replaced easily later.
 
 Log file
 --------
