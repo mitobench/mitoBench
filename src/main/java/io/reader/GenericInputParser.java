@@ -84,17 +84,20 @@ public class GenericInputParser implements IInputData {
                         );
                     }
                     else {
-                        e = new Entry(
-                                mapper.mapString(headergroup[i]),
-                                new CategoricInputType(headerType),
-                                new GenericInputData(splitLine[i])
-                        );
+                        if (!mapper.mapString(headergroup[i]).equals("ID")){
+                            e = new Entry(
+                                    mapper.mapString(headergroup[i]),
+                                    new CategoricInputType(headerType),
+                                    new GenericInputData(splitLine[i])
+                            );
+                        }
                     }
 
-                    entries.add(e);
+                    if(e != null)
+                        entries.add(e);
                 }
                 //Now add with ID to hashmap
-                String id = splitLine[0].trim();
+                String id = splitLine[0].split(" ")[0].trim();
                 if(id.matches(".*[^\\d]\\d{1}$")){
                     id = id.split("\\.")[0];
                 }

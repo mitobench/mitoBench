@@ -1,14 +1,19 @@
-Citations
+How to cite
 ---------
 
 .. _citations:
 If you use mitoBench, please cite
 
+Alexander Peltzer, & Judith Neukamm. (2019, March 9). mitobench/MitoBench: mitoBench version 1.1-beta (Version v1.1-beta). Zenodo. http://doi.org/10.5281/zenodo.2588120
+
+
+Older releases:
+
 Judith Neukamm, & Alexander Peltzer. (2017, November 18). apeltzer/MitoBench: MitoBench Version 0.12.11 (Version v0.12.11). Zenodo. http://doi.org/10.5281/zenodo.1058980
 
 The project URL is:
 
-https://github.com/Integrative-Transcriptomics/MitoBench
+https://github.com/mitobench/MitoBench
 
 Tools & Methods
 ~~~~~~~~~~~~~~~

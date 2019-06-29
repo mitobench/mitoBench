@@ -7,10 +7,10 @@ Welcome to mitoBench's documentation!
 =====================================
 
 
-.. image:: contents/images/mitoBenchLogo.jpg
+.. image::   contents/images/mitoBenchLogo.jpg
    :align: center
    
-This is the main mitoBench documentation, where you can find information about the prerequisites, the installation and the usage of this workbench.
+This is the main mitoBench documentation, where you can find information about the prerequisites, the installation, and the usage of this workbench.
 
 .. toctree::
    :maxdepth: 2
@@ -20,36 +20,30 @@ This is the main mitoBench documentation, where you can find information about t
    contents/installation
 
    contents/generalUsage
-   
-   contents/import
-    
-   contents/export
 
-   contents/fileconversion
-   
-   contents/grouping
-      
-   contents/filtering
+   contents/workbench/workbench
 
-   contents/tableOption
-
-   contents/analysis   
-   
-   contents/statistics
-
-   contents/visualization  
+   contents/database/database
 
    contents/citations
-   
-   contents/mitoDB
-   
+
+
+.. mitoBench contents/import
+   contents/export
+   contents/fileconversion
+   contents/grouping
+   contents/filtering
+   contents/tableOption
+   contents/analysis
+   contents/statistics
+   contents/visualization
+
+
+.. contents/mitoDB
    contents/TemplateGenerator
-
-   contents/mitoDB
-
-   contents/TemplateGenerator
-
    contents/glossary
+
+
 
 
 
