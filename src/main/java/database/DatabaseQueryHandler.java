@@ -6,6 +6,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import io.datastructure.Entry;
+import javafx.collections.ObservableList;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -70,6 +71,35 @@ public class DatabaseQueryHandler {
                 String author = (String) map.get("author");
                 String year = map.get("publication_date") + "";
                 result.add(author.trim() + "," + year.trim());
+            }
+
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    public Set<String> getPopulationList(){
+        Set<String> result = new HashSet<>();
+
+        try {
+            String query_complete = "http://mitodb.org/meta?select=population";
+            HttpResponse<JsonNode> response_population = Unirest.get(query_complete).asJson();
+
+
+            for (int i = 0; i < response_population.getBody().getArray().length(); i++){
+                JSONObject map = (JSONObject) response_population.getBody().getArray().get(i);
+
+                try {
+                    String population = (String) map.get("population");
+                    result.add(population.trim());
+                } catch (Exception e){
+                    continue;
+                }
+
+
             }
 
         } catch (UnirestException e) {
