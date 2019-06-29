@@ -7,7 +7,7 @@ Welcome to mitoBench's documentation!
 =====================================
 
 
-.. image:: contents/images/mitoBenchLogo.jpg
+.. image::   contents/images/mitoBenchLogo.jpg
    :align: center
    
 This is the main mitoBench documentation, where you can find information about the prerequisites, the installation, and the usage of this workbench.

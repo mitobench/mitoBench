@@ -62,7 +62,7 @@ Example:
 The imported information is represented in table format. If e.g. samples have been imported from different files, they are merged into one row based on the sample name.
 
 .. note::
-To merge information from different files, make sure that the samples have
+   To merge information from different files, make sure that the samples have
    identical names/identifiers!
 
 
@@ -80,7 +80,7 @@ To merge information from different files, make sure that the samples have
  Example: 29.2505576,18.0843603
 
   .. note::
-The decimal point has to be a point (*.*), no comma!
+   The decimal point has to be a point (*.*), no comma!
 
 
 * C14
@@ -97,7 +97,7 @@ The decimal point has to be a point (*.*), no comma!
 
 
   .. note::
-The C14 dating is represented as an average value in the data table, as well as the lower and upper value, if available.
+   The C14 dating is represented as an average value in the data table, as well as the lower and upper value, if available.
 
 
 
@@ -115,16 +115,15 @@ Import from mitoDB
 
     File -> Import Data from DB
 
-To import data from mitoDB, select *File -> Import Data from DB*. This opens a
-tab in the main view where you have to enter your mitoDB login data.
+To import data from mitoDB, select *File -> Import Data from DB*. This opens the database search configurator, where
+you can do a initial filtering of the data.
 
-.. image:: images/mitoDB_login.png
+.. image::   images/mitobench_search.png
   :align: center
 
-After a successful login, the user can set up a database query. Currently, it is only possible to get all data from the database, which are several thousand mt Genomes including metadata from the 1000 genomes project (phase 3). This configuration panel will be more sophisticated in future and allow user-defined queries / more complex queries.
+After a successfully getting the data (clicking on 'Get Data'), they will displayed in this window. Now, a more detailed filtering is possible by right-clicking on the
+corresponding column. This will open a list with all entries contained in the data selection and allows to select and deselect
+certain values.
 
 
-.. image:: images/mitoDB_query.png
-  :align: center
-
-The specified data will be imported to the mitoBench in a separate table. By right-clicking on a column, a filter pops up to configure the search.
+After clicking the 'Import into mitoBench' button, the data can further be explored in the workbench.

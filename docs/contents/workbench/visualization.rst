@@ -11,7 +11,7 @@ Bar plot
 
 A general visualization of the Haplogroup occurrences in the whole dataset visualized using a simple barplot.
 
-.. image:: images/barplothg.png
+.. image::   images/barplothg.png
     :align: center
 
 
@@ -25,13 +25,13 @@ The stacked bar plot visualizes the Haplogroup frequency per group.
 The order of the stacks can be defined by drag-and-dropping the groups in the desired
 order, e.g. chronological order.
 
-.. image:: images/stackorder.png
+.. image::   images/stackorder.png
     :align: center
 
 The stacks, which represent the groups, are placed next to each other. This offers
 a direct comparison of the Haplogroup frequency between the different groups.
 
-.. image:: images/barplotstacked.png
+.. image::   images/barplotstacked.png
     :align: center
 
 
@@ -51,7 +51,7 @@ Hovering over the rows highlights the corresponding line in the profile plot.
 
 Tabs relying on each other are marked with the same automatically increasing number.
 
-.. image:: images/profileplot.png
+.. image::   images/profileplot.png
     :align: center
 
 
@@ -66,7 +66,7 @@ done on groups and ungrouped data. In case of multiple groups, one pie chart
 per group is created.
 
 
-.. image:: images/piechart.png
+.. image::   images/piechart.png
     :align: center
 
 
@@ -78,7 +78,7 @@ Grouping bar plot
 
 The grouping bar plot visualizes the sizes of the different groups.
 
-.. image:: images/barplotgrouping.png
+.. image::   images/barplotgrouping.png
     :align: center
 
 
@@ -92,5 +92,5 @@ To add all samples to the map, click on the *Add data* button.
 In case of grouped data, the grouping is represented with different colors, but only
 up to 8 different colors are supported by now.
 
-.. image:: images/mapview.png
+.. image::   images/mapview.png
     :align: center

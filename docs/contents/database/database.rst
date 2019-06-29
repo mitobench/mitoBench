@@ -10,7 +10,7 @@ Project and other published sources with the aim of continuous expansion
 Glossary
 ---------
 In addition to the accession id and the actual sequence, the database contains 72 attributes describing the data such as
-site-specific , sequencing, and sequence quality information. A complete list describing each attribute in detail including
+geographic location, sequencing technologies, and sequence quality information. A complete list describing each attribute in detail including
 examples can be found `here <https://bit.ly/2WZtYWs>`_.
 
 DataValidator
@@ -36,9 +36,3 @@ The user will be able to upload own data to the database via mitoBench. We will 
 filled in (:download:`Download template <template.csv>`) and imported into mitoBench.
 
 
-
-.. toctree::
-   :maxdepth: 1
-
-   datavalidator
-   datacompleter

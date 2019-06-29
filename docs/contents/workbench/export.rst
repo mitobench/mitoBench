@@ -15,7 +15,7 @@ Moreover, only a selection can be stored via
 
 Both options open an export dialogue where you can choose between different file formats:
 
-.. image:: images/export_data.png
+.. image::   images/export_data.png
     :align: center
 
 The supported file formats are:

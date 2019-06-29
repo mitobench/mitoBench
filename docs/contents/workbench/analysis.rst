@@ -2,7 +2,7 @@ Analyses
 =========
 
 Project-based Haplogroup list
-----------------------
+------------------------------
 
   > Analysis -> Define Haplogroup List
 
@@ -11,20 +11,20 @@ for, i.e. some visualization methods, Haplogroup counting and PCA analysis. This
 file and automatically loaded when opening the project file again.
 
 
-Pairwise Fst values (not yet publicly available, still in testing)
+Pairwise Fst values
 -------------------
 
   > Analysis -> Calculate pairwise Fst
 
 
 .. note::
-This implementation is just a prototype. The results might be incorrect.
+   This implementation is just a prototype. The results might be incorrect.
 
 
 This calculates the pairwise Fst values based on the approach of Hudson et al.
 Advanced settings are provided by the configuration dialogue.
 
-.. image:: images/Fst_settings.png
+.. image::   images/Fst_settings.png
     :align: center
 
 
@@ -55,8 +55,8 @@ Advanced settings are provided by the configuration dialogue.
     * Significance level for p-value
 
 * Save result
-    * The result is displayed in the mitoBench and can be downloaded as text file as well.
-    The file location can be specified here.
+    * The result is displayed in the mitoBench and can be downloaded as text file as well. The file location can be specified here.
+
 
 
 Finally, the result is displayed a text format and the Fst values are
@@ -64,8 +64,8 @@ visualized as a heatmap.
 
 
 
-Haplogroups (not yet publicly available, still in developing)
------------
+Haplogroups
+------------
 
   > Analysis -> Calculate haplogroups
 
@@ -79,7 +79,7 @@ downloaded as hsd file as well.
 
 
 PCA (still in testing)
-----
+-----------------------
 
   > Analysis -> PCA analysis
 
@@ -93,18 +93,18 @@ The principal component analysis requires a grouping of the data and the haplogr
 previously. The Haplogroups can be set in the configuration pane.
 The coloring can either be set like the groups (each group gets one color)
 
-.. image:: images/pcaConfig.png
+.. image::   images/pcaConfig.png
     :align: center
 
 
 or several groups can be assigned to one color. In the text field, the user can specify a name. The color is chosen by the tool.
 
-.. image:: images/pcaConfig2.png
+.. image::   images/pcaConfig2.png
     :align: center
 
 
 The result will be shown as a 2-dimensional plot in the visualization pane, and the counts used for the calculation in the
 statistics pane. Hovering over the data point opens gives information about the represented group.
 
-.. image:: images/pca_plot.png
+.. image::   images/pca_plot.png
     :align: center

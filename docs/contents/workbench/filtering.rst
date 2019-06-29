@@ -16,7 +16,7 @@ via a tree representation of the current version of PhyloTree.
 2. Instead of selecting Haplogroups in the tree, you can also enter a comma-separated
 list of Haplogroups in the text field below the tree representation.
 
-.. image:: images/phylotreefiltering.png
+.. image::   images/phylotreefiltering.png
     :align: center
 
 .. note::
@@ -37,5 +37,5 @@ do not have this haplotype.
 You can also specify a distance value d. This will include all Haplotypes
 with the distance d to the specified ones.
 
-.. image:: images/haplotypeFiltering.png
+.. image::   images/haplotypeFiltering.png
     :align: center

@@ -2,6 +2,12 @@ Table options
 =============
 
 
+Table
+------
+
+It is possible to add and delete columns to the table as well as adding and replacing data by right-clicking on the table.
+Adding a new column requires a default value. This value can be replaced easily later.
+
 Use selected rows
 -----------------
 
