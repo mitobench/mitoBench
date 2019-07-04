@@ -6,7 +6,7 @@ Workbench
    :maxdepth: 1
 
    import
-   tableOption
+   datatable
    analysis
    statistics
    visualization

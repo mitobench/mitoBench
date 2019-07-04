@@ -110,8 +110,10 @@ Import from mitoDB
 To import data from mitoDB, select *File --> Import Data from DB*. This opens the database search configurator, where
 you can do a initial filtering of the data.
 
+
 .. image::   images/mitobench_search.png
   :align: center
+
 
 Currently, three different filter modes are supported. This is an either-or filtering, so the different options cannot
 be combined, (which is planned in the future).

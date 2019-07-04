@@ -18,7 +18,7 @@ Moreover, only a selection can be stored via
 Both options open an export dialogue where you can choose between different file formats:
 
 .. image::   images/export_window.png
-    :align: center
+  :align: center
 
 The supported file formats are:
 
@@ -72,7 +72,7 @@ save the figure as a vector graphic so far. The export to pdf also does not resu
 
 
 .. note::
-The chart will be saved with the same aspect ratio displayed in the mitoBench.
+   The chart will be saved with the same aspect ratio displayed in the mitoBench.
 
 
 

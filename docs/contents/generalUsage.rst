@@ -9,7 +9,6 @@ The main window is divided into three parts. The upper part contains a toolbar (
 and a statistic/analysis area (3) on the right side. The following part shows the samples in a table format (4).
 
 
-
 .. image::   images/mitobenchMainWindow.png
     :align: center
 
