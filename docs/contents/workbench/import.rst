@@ -2,68 +2,79 @@
 Data Import
 ##################
 
-mitoBench offers different ways to import data.
+mitoBench offers different ways to import data. The imported information is represented in table format. If e.g. samples
+have been imported from different files, they are merged into one row based on the column *accession id*.
+
+.. note::
+   To merge information from different files, make sure that the samples have identical accession ids!
+
 
 ***********************
 Import via data upload
 ***********************
-::
-
-    File -> Import
 
 mitoBench supports different file formats:
 
-* Multi-FastA (.fasta, .fa, .fas)
+* Multi-FastA (.fasta, .fa, .fas, .fna)
 
-  To upload fastA files, please align them before with an aligner of your choice.
+  mitoBench supports the upload of fasta and multifasta files. The header of each entry will be set as accession ID without
+  a version information, which is the case e.g. for GenBank entries.
+
+   Example:
+
+   *KJ154949.1 Homo sapiens isolate Y5728 mitochondrion, complete genome* will be shortened to *KJ154949* and set as accession id.
 
 * Arlequin (.arp)
+
+   Files that were used for analyses in Arlequin can be imported to mitoBench as well. The grouping will be set as a new column.
+
 * Haplogrep (.hsd)
 
-  The HDS file has to be tab separated. Comma or space - separated files cannot be read. HaploGrep2 automatically creates tab-separated files.
-* Excel (.xls)
+   The hsd file must be tab-separated. Files separated by comma or space cannot be read. HaploGrep2 automatically creates tab-delimited files.
 
-  * First row will be used as header
+* Excel (.xls, .xlsx)
 
-* Generic file (.tsv)
+  * The file needs to have the same format for the first two rows as the generic file. First row will be used as header
+    and has to start with ##, the second row must contain the data types (starting with #).
+
+* Generic file (.tsv, .csv)
 
   To upload a generic file, the file must have a specific format:
 
-  * The first line starts with *##* and contains the column names separated with tabs.
+  * The first line starts with *##* and contains the column names separated with tabs/commas.
 
     ##<colname1>\\\t<colname2>\\\t....
+
+    ##<colname1>,<colname2>,....
 
   * The second line starts with *#* and specifies the data type of the column.
     You can find a list of all possible data types in the section below.
 
     #<data type1>\\\t<data type1>\\\t...
 
+    #<data type1>,<data type1>,...
+
   * Third line to end:
 
-    Contains the actual data. One line per sample, tab separated.
+    Contains the actual data. One line per sample, tab-/comma-separated.
 
-Example:
+    Example:
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    ##ID    C14-Date    Sample Location
-    #String    C14 String
-    JK2916    cal BC 1111-998 Eygpt
-    JK2895    cal AD 25-111   Eygpt
-    JK2907    cal AD 26-84    Eygpt
-    JK2907    cal AD 26-84    Eygpt
+        ##ID    C14-Date    Sample Country
+        #String    C14 String
+        JK2916    cal BC 1111-998 Eygpt
+        JK2895    cal AD 25-111   Eygpt
+        JK2907    cal AD 26-84    Eygpt
+        JK2907    cal AD 26-84    Eygpt
 
 
 * MitoProject (.mitoproj)
-    This file contains all information about a previous project, like grouping, filtering and haplogroup list.
+
+    This file contains all information about a previous project, like grouping, filtering, and project-specific haplogroup list.
     Only one project can be imported per session.
 
-
-The imported information is represented in table format. If e.g. samples have been imported from different files, they are merged into one row based on the sample name.
-
-.. note::
-   To merge information from different files, make sure that the samples have
-   identical names/identifiers!
 
 
 **Data types**
@@ -75,55 +86,61 @@ The imported information is represented in table format. If e.g. samples have be
 
 * Location
 
-  The location is expected as latitude and longitude, separated with a comma.
+  The location is expected as latitude and longitude. Each value has a separate column.
 
- Example: 29.2505576,18.0843603
-
-  .. note::
+  .. warning::
    The decimal point has to be a point (*.*), no comma!
 
 
 * C14
 
-  The C14 dating information requires one of the following formats:
-
-  * *cal* or *CAL* can be contained, but are not required
-
-  * *AD* / *ad* or *BC* / *bc* are followed by an integer (number)
-
-  * Both *AD* / *ad* and *BC* / *bc* can be contained in the C14 data type
-
-  Example: cal AD 81-132 , AD 81-132, cal BC 37-cal AD 48
+  *We are working on this at the moment.*
 
 
-  .. note::
-   The C14 dating is represented as an average value in the data table, as well as the lower and upper value, if available.
+.. note::
+   All files can also be imported into mitoBench via drag & drop.
 
 
-
-*************************
-Import via Drag and Drop
-*************************
-
-All files mentioned in the section above can also be added by drag and drop files into the table view of the mitoBench.
+.. _databaseaccess-label:
 
 ******************
 Import from mitoDB
 ******************
 
-::
-
-    File -> Import Data from DB
-
-To import data from mitoDB, select *File -> Import Data from DB*. This opens the database search configurator, where
+To import data from mitoDB, select *File --> Import Data from DB*. This opens the database search configurator, where
 you can do a initial filtering of the data.
 
 .. image::   images/mitobench_search.png
   :align: center
 
-After a successfully getting the data (clicking on 'Get Data'), they will displayed in this window. Now, a more detailed filtering is possible by right-clicking on the
-corresponding column. This will open a list with all entries contained in the data selection and allows to select and deselect
-certain values.
+Currently, three different filter modes are supported. This is an either-or filtering, so the different options cannot
+be combined, (which is planned in the future).
+
+* Getting all data
+
+  Returns all data that are contained in the database. Depending on the internet connection, this can take some minutes.
+
+* Getting only data from 1000 Genome Project (phase 3)
+
+  Returns 2,504 sequences from the 1000 GP Phase 3.
+
+* Filtering data by sample location, publication, or population.
+
+
+
+
+After a successfully getting the data (clicking on 'Get Data'), they will displayed in this window. Now, a more detailed
+filtering is possible by right-clicking on the corresponding column. This will open a list with all entries contained in
+the data selection and allows to select and deselect certain values.
+
+
+.. image::   images/database_filtering.png
+  :align: center
+
+It is also possible to select rows and add only the selection to the workbench.
+
+.. image::   images/database_row_selection.png
+  :align: center
 
 
 After clicking the 'Import into mitoBench' button, the data can further be explored in the workbench.
