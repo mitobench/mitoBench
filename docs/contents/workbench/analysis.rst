@@ -4,11 +4,11 @@ Analyses
 Project-based Haplogroup list
 ------------------------------
 
-  > Analysis -> Define Haplogroup List
+  > Edit -> Define Haplogroup List
 
 This allows the user to specify a list of Haplogroups for a project. The list will be applied whenever the user is asked
-for, i.e. some visualization methods, Haplogroup counting and PCA analysis. This list is also stored in the mito-project
-file and automatically loaded when opening the project file again.
+for, i.e. some visualization methods, Haplogroup counting and PCA analysis. This list is also stored in the mito project
+file (.mitoproj) and automatically loaded when opening the project file again.
 
 
 Pairwise Fst values
@@ -17,11 +17,10 @@ Pairwise Fst values
   > Analysis -> Calculate pairwise Fst
 
 
-.. note::
-   This implementation is just a prototype. The results might be incorrect.
+This calculates the pairwise Fst values based on the approach of Hudson et al. and implemented according Brid et al.
+*(Bird, CHRISTOPHER E., et al. "Detecting and measuring genetic differentiation." Phylogeography and population genetics in Crustacea 19.3 (2011): l-55.)*
+to achieve results comparable to the calculations done in Arlequin *(Excoffier, L. and H.E. L. Lischer (2010) Arlequin suite ver 3.5: A new series of programs to perform population genetics analyses under Linux and Windows. Molecular Ecology Resources. 10: 564-567.)*.
 
-
-This calculates the pairwise Fst values based on the approach of Hudson et al.
 Advanced settings are provided by the configuration dialogue.
 
 .. image::   images/Fst_settings.png
@@ -69,13 +68,8 @@ Haplogroups
 
   > Analysis -> Calculate haplogroups
 
-The Haplogroups are determined by HaploGrep2 based on the FastA sequence. This
-functionality is just provided in the beta version of Haplogrep2.
-
-The calculated haplogroups are added as new column in the table view and can be
-downloaded as hsd file as well.
-
-
+The Haplogroups are determined by the current version of HaploGrep2 (version 2.1.18) based on the FastA sequence. The calculated
+haplogroups are added as new column in the table view and can be downloaded as hsd file as well.
 
 
 PCA (still in testing)
@@ -86,7 +80,6 @@ PCA (still in testing)
 
 .. warning::
     This functionality has to be tested in detail. Please let us know, if you get unexpected or obviously incorrect results.
-
 
 
 The principal component analysis requires a grouping of the data and the haplogroups. A basic grouping of the data has to be done

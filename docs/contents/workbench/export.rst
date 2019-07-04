@@ -1,3 +1,5 @@
+.. _export-label:
+
 Export
 ======
 
@@ -15,13 +17,14 @@ Moreover, only a selection can be stored via
 
 Both options open an export dialogue where you can choose between different file formats:
 
-.. image::   images/export_data.png
+.. image::   images/export_window.png
     :align: center
 
 The supported file formats are:
 
 * MultiFastA (.fasta)
-  Writes all mt sequences into a multiFastA file
+
+  Writes all complete MT sequences into a multiFastA file.
 
 * Arlequin format (.arp)
 
@@ -30,9 +33,8 @@ The supported file formats are:
 
 * BEAST format (.beast)
 
-  This output file can be used as input file for your analyses with BEAST. The C14
-  dating will be added to the header line. If your data does not have a C14 dating,
-  the header of the FastA entry will only contain the sample name.
+  This output file can be used as input fasta file for BEAUti / BEAST (*Drummond, Alexei J., et al. "Bayesian phylogenetics with BEAUti and the BEAST 1.7." Molecular biology and evolution 29.8 (2012): 1969-1973.*). The C14 dating will be added to the header line.
+  If your data does not have a C14 dating, the header of the FastA entry will only contain the sample name.
 
 * Generic format (.csv)
 
@@ -54,7 +56,7 @@ The supported file formats are:
 
 * File conversions via PGDSpider
 
-  For more advanced file conversions, PGDSpider can be run directly from mitoBench
+  For more advanced file conversions, :ref:`PGDSpider <fileconversion-label>` can be run directly from mitoBench
   via *File -> Convert files with PGDSpider*. However, mitoBench currently does not support any file preparing to ease the usage of PGDSpider.
 
 

@@ -7,6 +7,11 @@ This database contains currently 22,880 complete modern and ancient published mi
 Project and other published sources with the aim of continuous expansion
 (see all publications `here <https://docs.google.com/spreadsheets/d/1AM9izcYYnGUoZrBaVGNWBQzldTgossOYX23fgJK474o/edit?usp=sharing>`_).
 
+Access
+-------
+
+The database can be :ref:`accessed <databaseaccess-label>` via mitoBench.
+
 Glossary
 ---------
 In addition to the accession id and the actual sequence, the database contains 72 attributes describing the data such as

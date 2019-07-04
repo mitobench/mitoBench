@@ -1,6 +1,9 @@
+.. _fileconversion-label:
+
 File conversion
 ===============
 
-Files can be converted from one file format to another. The easiest way is importing all necessary files and export to the
-required file format with the *Export data* functionality of mitoBench. Another way is using PGDSpider (citation!).
-This tool is not directly embedded, but can be executed via miroBench and used as usual.
+mitoBech provides different file conversions via the data :ref:`export function <export-label>`.
+
+For file formats not supported by mitoBench, PDGSpider (for more information see `here <https://heidi.chnebu.ch/doku.php?id=pgdspider>`_)
+is accessible to converted from one file format to another. This tools is only called via mitobench but works completely independent.
