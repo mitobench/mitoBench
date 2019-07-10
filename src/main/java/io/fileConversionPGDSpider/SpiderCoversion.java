@@ -1,27 +1,23 @@
 package io.fileConversionPGDSpider;
+import ch.unibe.iee.cmpg.pgdspider.gui.PGDSpiderGUI;
 
-
-import java.io.IOException;
 
 /**
  * Created by neukamm on 14.03.17.
  */
 public class SpiderCoversion {
 
-    public SpiderCoversion() throws IOException, InterruptedException {
+    public SpiderCoversion() {
 
       start();
 
     }
 
-    public void start() throws IOException, InterruptedException {
+    public void start() {
 
-        String dirpath = System.getProperty("user.dir") +  "/jar/PGDSpider2.jar";
-        //String dirpath = this.getClass().getResource("/jar/PGDSpider2.jar").toExternalForm();
-        //ProcessBuilder processBuilder = new ProcessBuilder(new String[] { "java", "-jar", dirpath.split(":")[1]});
-        ProcessBuilder processBuilder = new ProcessBuilder(new String[] { "java", "-jar", dirpath});
-        Process process = processBuilder.start();
-        process.waitFor();
+        PGDSpiderGUI pgdSpiderGUI = new PGDSpiderGUI();
+        pgdSpiderGUI.setVisible(true);
+
     }
 
 }

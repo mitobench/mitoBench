@@ -1,5 +1,6 @@
-package analysis;
+package controller;
 
+import analysis.FstCalculationRunner;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;

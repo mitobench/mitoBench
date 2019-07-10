@@ -2,6 +2,7 @@ package analysis;
 
 
 import Logging.LogClass;
+import genepi.haplogrep.main.Haplogrep;
 import io.Exceptions.HSDException;
 import io.reader.HSDInput;
 import io.writer.MultiFastaWriter;
@@ -85,23 +86,17 @@ public class HaplotypeCaller {
     }
 
 
-    private void start(String f, String linegae) throws IOException, InterruptedException {
+    private void start(String f, String linegae) throws IOException {
 
-        URL url = this.getClass().getResource("/jars/haplogrep-2.1.18.jar");
-        String dirpath = url.getPath();
-        String[] command = new String[] { "java", "-jar", dirpath,
+        String[] command = new String[] {
                 "--format", "fasta",
                 "--in",f,
                 "--out", "haplogroups.hsd",
+                "--extend-report",
                 linegae};
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        System.out.println("Start haploGrep ....");
-        Process process = processBuilder.start();
-        process.waitFor();
-//
-        while (process.isAlive()){
-            // wait until haplogroups are calculated
-        }
+
+        Haplogrep haplogrep = new Haplogrep(command);
+        haplogrep.start();
         System.out.println("Haplogroups are determined");
 
         //delete temporary fasta file

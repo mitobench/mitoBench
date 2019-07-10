@@ -567,7 +567,7 @@ public class SqlQueryBuilderWindow {
                 getData(task);
 
             } else {
-                String query= "and=(" ;
+                String query= "or=(" ;
 
                 ObservableList<String> continents_origin_checked = continents_sample_origin_combobox.getCheckModel().getCheckedItems();
 
@@ -576,8 +576,6 @@ public class SqlQueryBuilderWindow {
                         query += "sample_origin_region.eq." + continent + ",";
                     }
 
-                    query = query.substring(0, query.length()-1) + ")";
-                    query+=query + ",";
                 }
 
                 if(query.endsWith(",")){
@@ -625,27 +623,27 @@ public class SqlQueryBuilderWindow {
 
         // filling center
         center.setPadding(new Insets(10,10,10,10));
-        center.add(checkBox_SelectAllData,0,row,2,1);
+        center.add(checkBox_SelectAllData,0,row,3,1);
 
-        center.add(new Separator(),0,++row,6,1);
+        center.add(new Separator(),0,++row,3,1);
 
-        center.add(checkBox_Select100GP,0,++row,2,1);
+        center.add(checkBox_Select100GP,0,++row,3,1);
 
-        center.add(new Separator(),0,++row,6,1);
+        center.add(new Separator(),0,++row,3,1);
 
         center.add(l_sample_origin_continent, 0,++row,1,1);
-        center.add(continents_sample_origin_combobox, 1,row,1,1);
+        center.add(continents_sample_origin_combobox, 1,row,2,1);
 
         //center.add(l_sample_origin_country, 0,5,1,1);
         //center.add(country_sample_origin_combobox, 1,5,1,1);
 
         center.add(new Separator(),0,++row,2,1);
         center.add(label_authors, 0,++row,1,1);
-        center.add(checkComboBoxAuthors, 1,row,5,1);
+        center.add(checkComboBoxAuthors, 1,row,2,1);
 
-        center.add(new Separator(), 0,++row,6,1);
+        center.add(new Separator(), 0,++row,3,1);
         center.add(label_population,0, ++row, 1, 1);
-        center.add(population_combobox,1, row, 1, 1);
+        center.add(population_combobox,1, row, 2, 1);
 
 
     }

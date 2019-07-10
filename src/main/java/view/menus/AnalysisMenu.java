@@ -1,19 +1,16 @@
 package view.menus;
 
 import Logging.LogClass;
-import analysis.FstCalculationController;
+import controller.FstCalculationController;
 import analysis.HaplotypeCaller;
-import controller.HGListController;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
-import view.dialogues.settings.ColumnOrderDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
-import view.dialogues.settings.HGListDialogue;
 import view.dialogues.settings.PcaPopupDialogue;
 
 
@@ -28,7 +25,6 @@ public class AnalysisMenu {
     private final StatisticsMenu statisticsMenu;
     private Menu menuAnalysis;
     private int pcaID=1;
-    private Menu menuSettings;
 
     public AnalysisMenu(MitoBenchWindow mitoBenchWindow, StatisticsMenu statisticsMenu){
         menuAnalysis = new Menu("Analysis");
@@ -104,41 +100,8 @@ public class AnalysisMenu {
 
         });
 
-        CustomMenuItem defineHGList = new CustomMenuItem(new Label("Define Haplogroup list"));
-        defineHGList.setId("menuitem_hg_list");
-        defineHGList.setOnAction(t -> {
 
-            HGListDialogue hgListDialogue = new HGListDialogue("Custom Haplogroup list", logClass);
-            HGListController hgListController = new HGListController(hgListDialogue, mito.getChartController(), mito);
-            mito.getTabpane_statistics().getTabs().add(hgListDialogue.getTab());
-            mito.getTabpane_statistics().getSelectionModel().select(hgListDialogue.getTab());
-
-
-        });
-
-        Tooltip tooltip_hglist = new Tooltip("This list will be used al default list for all analyses and " +
-                "visualizations within this project.");
-        Tooltip.install(defineHGList.getContent(), tooltip_hglist);
-
-
-        CustomMenuItem defineColumnOrder = new CustomMenuItem(new Label("Define Column Order"));
-        defineColumnOrder.setId("menuitem_column_order");
-        defineColumnOrder.setOnAction(t -> {
-            ColumnOrderDialogue columnOrderDialogue = new ColumnOrderDialogue("Custom Column Order",
-                    logClass, mito);
-
-            mito.getTabpane_statistics().getTabs().add(columnOrderDialogue.getTab());
-            mito.getTabpane_statistics().getSelectionModel().select(columnOrderDialogue.getTab());
-
-        });
-
-
-        menuSettings = new Menu("General Settings");
-        menuSettings.setId("menu_settings");
-
-        menuSettings.getItems().addAll(defineHGList, defineColumnOrder);
-
-        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs, pcaAnalysis, menuSettings);
+        menuAnalysis.getItems().addAll(pairwiseFst, assignHGs, pcaAnalysis);
     }
 
     public Menu getMenuAnalysis() {

@@ -103,7 +103,6 @@ public class FstCalculationRunner {
      */
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
 
-        //fstCalculator = new FstHudson1992(usableLoci);
         fstCalculator = new FstCalculator(
                 data,
                 "N",

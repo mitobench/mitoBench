@@ -171,7 +171,7 @@ public class ColumnNameMapper {
             case "comments":
                 return "General comments";
             case "meta_info_id":
-                return "Accession ID (MitoBench)";
+                return "mitoBenchID";
 
         }
 
