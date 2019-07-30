@@ -126,8 +126,8 @@ public class MapView extends StackPane {
 
             markerIcons.addIconsToMap(map);
 
-            Legend legend = markerIcons.getLegend();
-            mapBasicPane.setBottom(legend);
+           // Legend legend = markerIcons.getLegend();
+            //mapBasicPane.setBottom(legend);
         } else {
             System.out.println("No items to show on geogr. map");
         }

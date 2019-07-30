@@ -54,14 +54,14 @@ public class MarkerIcons {
      */
     public void addIconsToMap(Map map) {
 
-        if(groups==null){
+        //if(groups==null){
             addMarkerOneColor(
                     items,
                     map
             );
-        } else {
-            addMarkerMultiColor(map);
-        }
+//        } else {
+//            addMarkerMultiColor(map);
+//        }
 
     }
 

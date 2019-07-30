@@ -5,7 +5,6 @@ import graphvizapi.GraphViz;
 import javafx.scene.image.Image;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 public class SampleTree  extends AChart {
 
@@ -13,8 +12,6 @@ public class SampleTree  extends AChart {
 
     public SampleTree(String lable_xaxis, String label_yaxis, LogClass logClass) {
         super(lable_xaxis, label_yaxis, logClass);
-
-        //setContextMenu();
     }
 
 
@@ -23,11 +20,13 @@ public class SampleTree  extends AChart {
 
     }
 
-    public void start() throws IOException {
+    public void start(){
 
         String input = "haplogroups.hsd.dot";
 
         GraphViz gv = new GraphViz();
+
+       // GraphViz gv = new GraphViz();
         gv.readSource(input);
         System.out.println(gv.getDotSource());
 

@@ -31,9 +31,10 @@ public class HaplotypeCaller {
         this.tableController = tableControllerUserBench;
         LOG = logClass.getLogger(this.getClass());
 
+
     }
 
-    public void call(String lineage) throws IOException, InterruptedException {
+    public void call(String lineage) throws IOException {
         String file = "multifasta.fasta";
         System.out.println("Writing fasta sequences to " + file);
         //System.out.println(file);

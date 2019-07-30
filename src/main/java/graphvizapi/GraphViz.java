@@ -97,29 +97,13 @@ public class GraphViz
      * tempDir = /tmp
      */
     public GraphViz() {
-//        if (GraphViz.osName.contains("Windows")) {
-//            this.tempDir = "c:/temp";
-//            this.executable = "c:/Program Files (x86)/Graphviz 2.28/bin/dot.exe";
-//        } else if (GraphViz.osName.equals("MacOSX")) {
-//            this.tempDir = "/tmp";
-//            this.executable = "/usr/local/bin/dot";
-//        } else if (GraphViz.osName.equals("Linux")) {
-            this.tempDir = "/tmp";
-            URL url = this.getClass().getResource("/dot");
-            this.executable = url.getPath();
-//        }
+        URL url = this.getClass().getResource("/dot");
+        URL url_tmp = this.getClass().getResource("/tmp");
+        this.executable = url.getPath();
+        this.tempDir = url_tmp.getPath();
+
     }
 
-    /**
-     * Configurable Constructor with path to executable dot and a temp dir
-     *
-     * @param executable absolute path to dot executable
-     * @param tempDir absolute path to temp directory
-     */
-    public GraphViz(String executable, String tempDir) {
-        this.executable = executable;
-        this.tempDir = tempDir;
-    }
 
     /**
      * Returns the graph's source description in dot language.
@@ -167,26 +151,24 @@ public class GraphViz
      * 	<li>twopi</li>
      * 	<li>circo</li>
      * </ul>
-     * @see http://www.graphviz.org under the Roadmap title
+     * @see "http://www.graphviz.org under the Roadmap title"
      * @return A byte array containing the image of the graph.
      */
     public byte[] getGraph(String dot_source, String type, String representationType)
     {
         File dot;
-        byte[] img_stream = null;
+        byte[] img_stream;
 
-        try {
-            dot = writeDotSourceToFile(dot_source);
-            if (dot != null)
-            {
-                img_stream = get_img_stream(dot, type, representationType);
-                if (dot.delete() == false) {
-                    System.err.println("Warning: " + dot.getAbsolutePath() + " could not be deleted!");
-                }
-                return img_stream;
+        dot = writeDotSourceToFile(dot_source);
+        if (dot != null)
+        {
+            img_stream = get_img_stream(dot, type, representationType);
+            if (dot.delete() == false) {
+                System.err.println("Warning: " + dot.getAbsolutePath() + " could not be deleted!");
             }
-            return null;
-        } catch (java.io.IOException ioe) { return null; }
+            return img_stream;
+        }
+        return null;
     }
 
     /**
@@ -231,7 +213,7 @@ public class GraphViz
      * 	<li>twopi</li>
      * 	<li>circo</li>
      * </ul>
-     * @see http://www.graphviz.org under the Roadmap title
+     * @see "http://www.graphviz.org under the Roadmap title"
      * @return The image of the graph in .gif format.
      */
     private byte[] get_img_stream(File dot, String type, String representationType)
@@ -240,12 +222,14 @@ public class GraphViz
         byte[] img_stream = null;
 
         try {
-            img = File.createTempFile("graph_", "." + type, new File(this.tempDir));
+            //img = File.createTempFile("graph_", "." + type, new File(this.tempDir));
+            img = new File("graph_tmp." + type);
             Runtime rt = Runtime.getRuntime();
 
             // patch by Mike Chenault
             // representation type with -K argument by Olivier Duplouy
-            String[] args = { executable, "-T" + type, "-K" + representationType, "-Gdpi=" + dpiSizes[this.currentDpiPos], dot.getAbsolutePath(), "-o", img.getAbsolutePath() };
+            String[] args = { executable, "-T" + type, "-K" + representationType, "-Gdpi=" + dpiSizes[this.currentDpiPos],
+                    dot.getAbsolutePath(), "-o", img.getAbsolutePath() };
             Process p = rt.exec(args);
             p.waitFor();
 
@@ -262,8 +246,9 @@ public class GraphViz
             }
         }
         catch (java.io.IOException ioe) {
-            System.err.println("Error:    in I/O processing of tempfile in dir " + tempDir + "\n");
-            System.err.println("       or in calling external command");
+            System.err.println("Error:    in I/O processing of tempfile in dir \n");
+            System.err.println("       or in calling external command:");
+            System.err.println(ioe.getMessage());
             ioe.printStackTrace();
         }
         catch (java.lang.InterruptedException ie) {
@@ -280,11 +265,11 @@ public class GraphViz
      * @param str Source of the graph (in dot language).
      * @return The file (as a File object) that contains the source of the graph.
      */
-    private File writeDotSourceToFile(String str) throws java.io.IOException
+    private File writeDotSourceToFile(String str)
     {
         File temp;
         try {
-            temp = File.createTempFile("graph_", ".dot.tmp", new File(tempDir));
+            temp = new File("graph_tmp.dot.tmp");
             FileWriter fout = new FileWriter(temp);
             fout.write(str);
             fout.close();

@@ -93,7 +93,7 @@ public class SqlQueryBuilderWindow {
 
         checkBox_SelectAllData = new CheckBox("Get all data from DB (takes about 1-2 min)");
         checkBox_SelectAllData.setPadding(new Insets(5,5,5,5));
-        checkBox_Select100GP = new CheckBox("Get all data from 1000 Genome Project (phase3) // Is this useful?");
+        checkBox_Select100GP = new CheckBox("Get all data from 1000 Genome Project (phase3) // For testing purposes");
         checkBox_Select100GP.setPadding(new Insets(5,5,5,5));
 
         authors_entries = databaseQueryHandler.getAuthorList();

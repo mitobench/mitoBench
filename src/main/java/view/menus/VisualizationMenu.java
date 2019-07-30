@@ -7,10 +7,19 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
@@ -21,14 +30,17 @@ import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import controller.TableControllerUserBench;
 
+import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.controlsfx.tools.Utils.clamp;
 
 
 /**
@@ -60,6 +72,8 @@ public class VisualizationMenu {
     private Menu menuGraphics;
 
     private LogClass logClass;
+
+    private static final int MIN_PIXELS = 10;
 
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
@@ -426,30 +440,79 @@ public class VisualizationMenu {
                         mito.getProgressBarhandler().stop();
 
                         // read graphviz file
+                        BorderPane tab_content = new BorderPane();
+                        HBox bottom_content = new HBox();
+                        URL url_tmp_dir = this.getClass().getResource("/tmp");
+
+                        Button save_as_svg = new Button("Save as SVG");
+                        save_as_svg.setOnAction(e -> {
+                            URL url = this.getClass().getResource("/dot");
+
+                            String executable = url.getPath();
+                            Runtime rt = Runtime.getRuntime();
+
+                            String[] args = { executable, "-Tsvg", "-Kdot", "-Gdpi=96", "haplogroups.hsd.dot",
+                                    "-o", "sample_tree.svg" };
+
+                            Process p;
+                            try {
+                                p = rt.exec(args);
+                                p.waitFor();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+
+                        });
+
+                        // todo: make method nicer, user setting output path
+                        Button save_as_png = new Button("Save as PNG");
+                        save_as_png.setOnAction(e -> {
+                            URL url = this.getClass().getResource("/dot");
+                            String executable = url.getPath();
+                            Runtime rt = Runtime.getRuntime();
+
+                            String[] args = { executable, "-Tpng", "-Kdot", "-Gdpi=96", "haplogroups.hsd.dot",
+                                    "-o", "sample_tree.png" };
+
+                            Process p;
+                            try {
+                                p = rt.exec(args);
+                                p.waitFor();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+
+                        });
+
 
                         SampleTree sampleTree = new SampleTree("","", mito.getLogClass());
-                        try {
-                            sampleTree.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        sampleTree.start();
 
-                        Tab sampleTree_tab = new Tab();
+                        Tab sampleTree_tab = new Tab("Sample tree");
                         ScrollPane scrollPane_samples_tree = new ScrollPane();
 
                         ImageView imageView = new ImageView(sampleTree.getImg());
 
                         scrollPane_samples_tree.setContent(imageView);
-                        sampleTree_tab.setContent(scrollPane_samples_tree);
 
+                        bottom_content.getChildren().addAll(save_as_svg,save_as_png);
+
+                        // set contents
+                        tab_content.setCenter(scrollPane_samples_tree);
+                        tab_content.setBottom(bottom_content);
+                        sampleTree_tab.setContent(tab_content);
                         mito.getTabpane_visualization().getTabs().add(sampleTree_tab);
 
-                        // delete tmp file
-                        try {
-                            Files.delete(new File("haplogroups.hsd.dot").toPath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+//                        // delete tmp file
+//                        try {
+//                            Files.delete(new File("haplogroups.hsd.dot").toPath());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
 
 
 
@@ -542,7 +605,7 @@ public class VisualizationMenu {
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqHist, plotHGfreqGroup);
-        haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart, samples_haplo_tree);
+        haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart,samples_haplo_tree);
         maps.getItems().add(mapsItem);
         options.getItems().addAll(showTickLabels, clearPlotBox);
 
