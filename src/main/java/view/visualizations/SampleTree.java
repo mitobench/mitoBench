@@ -1,14 +1,21 @@
 package view.visualizations;
 
 import Logging.LogClass;
-import graphvizapi.GraphViz;
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.parse.Parser;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
-import java.io.ByteArrayInputStream;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class SampleTree  extends AChart {
 
-    private Image img;
+    private BufferedImage image;
+    private Graphviz viz;
 
     public SampleTree(String lable_xaxis, String label_yaxis, LogClass logClass) {
         super(lable_xaxis, label_yaxis, logClass);
@@ -20,44 +27,22 @@ public class SampleTree  extends AChart {
 
     }
 
-    public void start(){
+    public void start() throws IOException {
 
         String input = "haplogroups.hsd.dot";
+        MutableGraph g = Parser.read(new File(input));
+        viz = Graphviz.fromGraph(g);
 
-        GraphViz gv = new GraphViz();
-
-       // GraphViz gv = new GraphViz();
-        gv.readSource(input);
-        System.out.println(gv.getDotSource());
-
-        //String type = "gif";
-        //    String type = "dot";
-        //    String type = "fig";    // open with xfig
-        //    String type = "pdf";
-        //    String type = "ps";
-        //    String type = "svg";    // open with inkscape
-        String type = "png";
-        //      String type = "plain";
-
-
-        String repesentationType= "dot";
-        //		String repesentationType= "neato";
-        //		String repesentationType= "fdp";
-        //		String repesentationType= "sfdp";
-        // 		String repesentationType= "twopi";
-        //		String repesentationType= "circo";
-
-        //File out = new File("samples_tree." + type);   // Linux
-        //gv.writeGraphToFile( gv.getGraph(gv.getDotSource(), type, repesentationType), out );
-        byte[] tree_img = gv.getGraph(gv.getDotSource(), type, repesentationType);
-        img = new Image(new ByteArrayInputStream(tree_img));
-
-
-
+        image = viz.render(Format.PNG).toImage();
 
     }
 
     public Image getImg() {
-        return img;
+        //return img;
+        return SwingFXUtils.toFXImage(this.image, null);
+    }
+
+    public Graphviz getViz() {
+        return viz;
     }
 }

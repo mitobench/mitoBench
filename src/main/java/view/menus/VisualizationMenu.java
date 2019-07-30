@@ -3,6 +3,9 @@ package view.menus;
 import Logging.LogClass;
 import analysis.HaplotypeCaller;
 import controller.*;
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import io.dialogues.Export.SaveAsDialogue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -20,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
@@ -74,6 +78,7 @@ public class VisualizationMenu {
     private LogClass logClass;
 
     private static final int MIN_PIXELS = 10;
+    private SampleTree sampleTree;
 
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
@@ -442,55 +447,53 @@ public class VisualizationMenu {
                         // read graphviz file
                         BorderPane tab_content = new BorderPane();
                         HBox bottom_content = new HBox();
-                        URL url_tmp_dir = this.getClass().getResource("/tmp");
 
                         Button save_as_svg = new Button("Save as SVG");
                         save_as_svg.setOnAction(e -> {
-                            URL url = this.getClass().getResource("/dot");
+                            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("SVG format (*.svg)", "*.svg");
+                            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+                            saveAsDialogue.start(mito.getPrimaryStage());
 
-                            String executable = url.getPath();
-                            Runtime rt = Runtime.getRuntime();
+                            String svgfile = saveAsDialogue.getOutFile();
+                            if(!svgfile.endsWith(".svg") && !svgfile.endsWith(".SVG"))
+                                svgfile += ".svg";
 
-                            String[] args = { executable, "-Tsvg", "-Kdot", "-Gdpi=96", "haplogroups.hsd.dot",
-                                    "-o", "sample_tree.svg" };
 
-                            Process p;
                             try {
-                                p = rt.exec(args);
-                                p.waitFor();
+                                sampleTree.getViz().render(Format.SVG).toFile(new File(svgfile));
                             } catch (IOException ex) {
-                                ex.printStackTrace();
-                            } catch (InterruptedException ex) {
                                 ex.printStackTrace();
                             }
 
                         });
 
-                        // todo: make method nicer, user setting output path
+
                         Button save_as_png = new Button("Save as PNG");
                         save_as_png.setOnAction(e -> {
-                            URL url = this.getClass().getResource("/dot");
-                            String executable = url.getPath();
-                            Runtime rt = Runtime.getRuntime();
+                            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("PNG format (*.png)", "*.png");
+                            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+                            saveAsDialogue.start(mito.getPrimaryStage());
 
-                            String[] args = { executable, "-Tpng", "-Kdot", "-Gdpi=96", "haplogroups.hsd.dot",
-                                    "-o", "sample_tree.png" };
+                            String pngfile = saveAsDialogue.getOutFile();
+                            if(!pngfile.endsWith(".png") && !pngfile.endsWith(".PNG"))
+                                pngfile += ".png";
 
-                            Process p;
+
                             try {
-                                p = rt.exec(args);
-                                p.waitFor();
+                                sampleTree.getViz().render(Format.PNG).toFile(new File(pngfile));
                             } catch (IOException ex) {
-                                ex.printStackTrace();
-                            } catch (InterruptedException ex) {
                                 ex.printStackTrace();
                             }
 
                         });
 
 
-                        SampleTree sampleTree = new SampleTree("","", mito.getLogClass());
-                        sampleTree.start();
+                        sampleTree = new SampleTree("","", mito.getLogClass());
+                        try {
+                            sampleTree.start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         Tab sampleTree_tab = new Tab("Sample tree");
                         ScrollPane scrollPane_samples_tree = new ScrollPane();
@@ -506,15 +509,6 @@ public class VisualizationMenu {
                         tab_content.setBottom(bottom_content);
                         sampleTree_tab.setContent(tab_content);
                         mito.getTabpane_visualization().getTabs().add(sampleTree_tab);
-
-//                        // delete tmp file
-//                        try {
-//                            Files.delete(new File("haplogroups.hsd.dot").toPath());
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-
-
 
 
                     });
@@ -580,6 +574,7 @@ public class VisualizationMenu {
         ((CheckMenuItem) showTickLabels).setSelected(true);
 
         showTickLabels.setOnAction(t -> {
+            // todo
 //            if(((CheckMenuItem) showTickLabels).isSelected()){
 //                String id = this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getId();
 //                Chart c = (Chart)this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getContent();
@@ -607,12 +602,13 @@ public class VisualizationMenu {
         barchart.getItems().addAll(plotHGfreq, plotHGfreqHist, plotHGfreqGroup);
         haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart,samples_haplo_tree);
         maps.getItems().add(mapsItem);
-        options.getItems().addAll(showTickLabels, clearPlotBox);
+        //options.getItems().addAll(showTickLabels, clearPlotBox);
+        options.getItems().addAll(clearPlotBox);
 
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, maps, new SeparatorMenuItem(), options);
     }
 
-    public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
+    public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) {
         barPlotHaplo = visualizationController.getBarPlotHaplo();
         chartController.addDataBarChart(barPlotHaplo, haplo_col, columnData);
     }
