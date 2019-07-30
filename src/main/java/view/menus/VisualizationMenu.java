@@ -302,16 +302,15 @@ public class VisualizationMenu {
                     mito.getTabpane_visualization().getSelectionModel().select(tab);
 
                     hGlistProfilePlot.getOkBtn().setOnAction(e -> {
-                        try {
-                            visualizationController.initProfilePlot();
-                            profilePlot = visualizationController.getProfilePlot();
-                            profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getTrimmedHGList());
-                            // remove tab from tabpane
-                            mito.getTabpane_visualization().getTabs().remove(tab);
-                        } catch (MalformedURLException e1) {
-                            e1.printStackTrace();
+                        visualizationController.initProfilePlot();
+                        profilePlot = visualizationController.getProfilePlot();
 
-                        }
+                        profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getTrimmedHGList());
+
+                        // remove tab from tabpane
+                        mito.getTabpane_visualization().getTabs().remove(tab);
+
+
                     });
 
 
@@ -509,6 +508,7 @@ public class VisualizationMenu {
                         tab_content.setBottom(bottom_content);
                         sampleTree_tab.setContent(tab_content);
                         mito.getTabpane_visualization().getTabs().add(sampleTree_tab);
+
 
 
                     });

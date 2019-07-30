@@ -4,6 +4,9 @@ import Logging.LogClass;
 import controller.ChartController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
@@ -30,6 +33,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
                     "Europe (H)");
     protected ChartController chartcontroller;
     protected int row;
+    private String[] hg_list_trimmed;
 
 
     public AHGDialogue(String title, LogClass logClass) {
@@ -92,21 +96,26 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
                 combobox_hglist.getSelectionModel().select("Please enter list here.");
 
             } else {
-                String[] hg_list_trimmed = getTrimmedHGList();
-                haploStatistics.count(hg_list_trimmed);
+                Task task = createTask();
+                mito.getProgressBarhandler().activate(task.progressProperty());
 
-                TableView table = haploStatistics.writeToTable();
+                task.setOnSucceeded((EventHandler<Event>) event -> {
+                    TableView table = haploStatistics.writeToTable();
+    
+                    statsTabPane.getTabs().remove(getTab());
+    
+                    Tab tab = new Tab();
+                    tab.setId("tab_statistics");
+                    tab.setText("Count statistics");
+                    tab.setContent(table);
+                    statsTabPane.getTabs().add(tab);
+                    statsTabPane.getSelectionModel().select(tab);
+    
+                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
+                    mito.getProgressBarhandler().stop();
 
-                statsTabPane.getTabs().remove(getTab());
-
-                Tab tab = new Tab();
-                tab.setId("tab_statistics");
-                tab.setText("Count statistics");
-                tab.setContent(table);
-                statsTabPane.getTabs().add(tab);
-                statsTabPane.getSelectionModel().select(tab);
-
-                LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
+                });
+                new Thread(task).start();
 
             }
 
@@ -133,5 +142,18 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
 
     public Button getOkBtn() {
         return okBtn;
+    }
+
+    public Task createTask(){
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                hg_list_trimmed = getTrimmedHGList();
+                haploStatistics.count(hg_list_trimmed);
+
+                return true;
+            }
+        };
+
     }
 }

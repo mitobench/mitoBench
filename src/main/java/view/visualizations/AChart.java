@@ -85,7 +85,7 @@ public abstract class AChart extends Chart {
 
 
     }
-    public void setStyleSheet(Stage stage) throws MalformedURLException {
+    public void setStyleSheet(Stage stage) {
         URL url = this.getClass().getResource("/css/chart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
     }

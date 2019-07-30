@@ -173,7 +173,7 @@ public class VisualizationController {
     }
 
 
-    public void initProfilePlot() throws MalformedURLException {
+    public void initProfilePlot() {
         LOG.info("Visualize data: Haplotypes per Group (Profile Plot)");
 
         Text t = new Text();
@@ -181,7 +181,7 @@ public class VisualizationController {
         t.setFont(Font.font(100));
 
         profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Frequency in %", tabPane,
-                logClass, profilePlotID);
+                logClass, profilePlotID, mito);
         profilePlot.setStyleSheet(stage);
 
         Tab tab = new Tab();

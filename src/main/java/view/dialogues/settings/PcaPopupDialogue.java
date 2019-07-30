@@ -127,7 +127,6 @@ public class PcaPopupDialogue extends AHGDialogue {
 
                     LOG.info("Calculate PCA");
 
-
                     mito.getProgressBarhandler().stop();
                 });
 
