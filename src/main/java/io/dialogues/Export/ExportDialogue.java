@@ -108,7 +108,7 @@ public class ExportDialogue extends Application {
             if(saveAsDialogue.getOutFile() != null) {
                 String outfileFASTA = saveAsDialogue.getOutFile();
                 LOG.info("Export data into multi FASTA format. File: " + outfileFASTA);
-                MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(), dataToExport);
+                MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(), dataToExport, false);
                 multiFastaWriter.writeData(outfileFASTA, tableController);
 
             }

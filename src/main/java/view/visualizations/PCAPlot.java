@@ -4,6 +4,7 @@ import Logging.LogClass;
 import controller.TableControllerUserBench;
 import io.dialogues.Export.SaveAsDialogue;
 import io.writer.StatisticsWriter;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.NumberAxis;
@@ -11,6 +12,7 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -63,13 +65,13 @@ public class PCAPlot extends AChart{
         }
 
         sc.getData().add(series);
-//        int i = 0;
-//        ObservableList<XYChart.Data<Number, Number>> data_list = series.getData();
-//        for (XYChart.Data<Number, Number> d : data_list) {
-//            Tooltip tip = new Tooltip(names[i]);
-//            Tooltip.install(d.getNode(), tip);
-//            i++;
-//        }
+        int i = 0;
+        ObservableList<XYChart.Data<Number, Number>> data_list = series.getData();
+        for (XYChart.Data<Number, Number> d : data_list) {
+            Tooltip tip = new Tooltip(names[i]);
+            Tooltip.install(d.getNode(), tip);
+            i++;
+        }
 
 
     }

@@ -40,7 +40,7 @@ public class HaplotypeCaller {
         //System.out.println(file);
 
         // generate fasta file with all sequences for which haplogroups have to be determined
-        MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getSelectedRows());
+        MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getSelectedRows(), true);
         multiFastaWriter.writeData(file, tableController);
 
         start(file, lineage);

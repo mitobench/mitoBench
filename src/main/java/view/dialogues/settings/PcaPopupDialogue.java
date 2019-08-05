@@ -1,7 +1,7 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
-import analysis.PCA;
+import analysis.PCA_Analysis;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -32,8 +32,9 @@ public class PcaPopupDialogue extends AHGDialogue {
     private List<CheckComboBox> checkComboBox_with_groupmembers = new ArrayList<>();
     private int id;
     private Button btn_del;
-    private PCA pca_analysis;
     private String[] hg_list_trimmed;
+    private PCA_Analysis pca_alternative;
+    private double[][] result_pca;
 
     public PcaPopupDialogue(String title, LogClass logClass, int pcaID) {
 
@@ -81,9 +82,17 @@ public class PcaPopupDialogue extends AHGDialogue {
                         haploStatistics.count(hg_list_trimmed);
 
                         // calculate PCA
-                        pca_analysis = new PCA(haploStatistics, mito.getTableControllerUserBench());
-                        pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
-                        parseGroups();
+                        pca_alternative = new PCA_Analysis();
+                        pca_alternative.setData(haploStatistics.getFrequencies());
+                        pca_alternative.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
+                        pca_alternative.calculate();
+
+                        //pca_analysis = new PCA(haploStatistics, mito.getTableControllerUserBench());
+                        //pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
+                        //parseGroups();
+
+                        //result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
+                        result_pca = pca_alternative.getResult();
 
                         return true;
                     }
@@ -103,23 +112,35 @@ public class PcaPopupDialogue extends AHGDialogue {
 
                     LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
 
-                    double[][] result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
-
                     //group_members.clear();
-                    pca_analysis.plot(
+                    pca_alternative.plot(
                             result_pca,
                             mito.getPrimaryStage(),
                             logClass,
                             mito.getTabpane_statistics(),
                             group_members,
-                            mito.getChartController());
+                            mito.getChartController(),
+                            pca_alternative.getVariancePC1(),
+                            pca_alternative.getVariancePC2(),
+                            haploStatistics,
+                            mito.getTableControllerUserBench()
+                    );
+//                    pca_analysis.plot(
+//                            result_pca,
+//                            mito.getPrimaryStage(),
+//                            logClass,
+//                            mito.getTabpane_statistics(),
+//                            group_members,
+//                            mito.getChartController(),
+//                            pca_alternative.getVariancePC1(),
+//                            pca_alternative.getVariancePC2());
 
                     Tab tab_pca = new Tab("PCA (pca " + id + ")");
                     tab_pca.setId("tab_pca_plot_" + id);
 
                     BorderPane basis = new BorderPane();
-                    basis.setCenter(pca_analysis.getPca_plot().getSc());
-                    basis.setBottom(pca_analysis.getPca_plot().getBottomBox());
+                    basis.setCenter(pca_alternative.getPca_plot().getSc());
+                    basis.setBottom(pca_alternative.getPca_plot().getBottomBox());
 
                     tab_pca.setContent(basis);
                     mito.getTabpane_visualization().getTabs().add(tab_pca);
