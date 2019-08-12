@@ -16,6 +16,10 @@ import javafx.stage.Stage;
 import view.menus.*;
 import view.tree.TreeView;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 
 /**
  * Created by neukamm on 03.11.16.
@@ -294,6 +298,15 @@ public class MitoBenchWindow extends Application{
 
         primaryStage.setOnCloseRequest(we -> {
             we.consume();
+            // delete haplogrep files
+            if (Files.exists(new File("haplogroups.hsd.dot").toPath())) {
+                try {
+                    Files.delete(new File("haplogroups.hsd.dot").toPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             LoggerSettingsDialogue loggerSettingsDialogue =
                     new LoggerSettingsDialogue("Log file configuration", logClass, primaryStage);
         });

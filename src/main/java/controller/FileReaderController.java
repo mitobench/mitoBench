@@ -44,7 +44,7 @@ public class FileReaderController {
             String absolutePath = f.getAbsolutePath();
 
             //Input is FastA
-            if (absolutePath.endsWith(".fasta") || absolutePath.endsWith(".fas") || absolutePath.endsWith(".fa")) {
+            if (absolutePath.endsWith(".fasta") || absolutePath.endsWith(".fas") || absolutePath.endsWith(".fa") || absolutePath.endsWith(".fna") ) {
 
                 MultiFastAInput multiFastAInput = null;
                 try {

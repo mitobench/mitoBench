@@ -1,5 +1,5 @@
 group 'com.uni-tuebingen.de.it.mitobench'
-version '1.4-beta'
+version '1.5-beta'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -17,10 +17,14 @@ repositories {
     }
 }
 
+
 sourceSets {
     main {
         java {
             srcDir 'src'
+        }
+        resources {
+            srcDirs "src/main/resources"
         }
     }
     test {
@@ -34,34 +38,23 @@ sourceSets {
 }
 
 
-
 dependencies {
     compile 'org.slf4j:slf4j-simple:+'
-    //compile 'com.uni-tuebingen.de.it.mitobench:PhyloTreeParser:0.+'
-    //compile 'com.uni-tuebingen.de.it.mitobench:SunburstChart:0.3.+'
-    //compile 'com.uni-tuebingen.de.it.mitobench:FstCalculator:0.1.+'
-    compile 'org.apache.poi:poi:3.15'
     compile 'org.apache.poi:poi-ooxml:3.15'
-    compile 'org.mockito:mockito-core:2.4.0'
-    compile "org.testfx:testfx-junit:4.0.+"
-    compile 'org.restlet.jee:org.restlet.ext.html:2.2.2'
     compile 'org.netbeans.html:net.java.html.boot.fx:1.4'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile "org.testfx:testfx-core:4.0.+"
-    compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1201-jdbc41'
     compile group: 'org.controlsfx', name: 'controlsfx', version: '8.+'
-    compile group: 'log4j', name: 'log4j', version: '1.2.16'
-    compile group: 'org.json', name: 'json', version: '20090211'
-    compile group: 'com.github.jsqlparser', name: 'jsqlparser', version: '1.0'
+    compile group: 'log4j', name: 'log4j', version: '1.2.+'
     compile group: 'com.dukescript.api', name: 'leaflet4j', version: '0.+'
-    compile group: 'org.testfx', name: 'openjfx-monocle', version: '8u76-b04'
-    compile group: 'org.ejml', name: 'ejml-all', version: '0.31'
-    compile group: 'org.javafxdata', name: 'datafx-flow', version: '8.0b5'
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     compile group: 'com.github.haifengl', name: 'smile-plot', version: '1.3.1'
     compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-    compile files('src/main/resources/jars/FstCalculator-0.1.20.jar')
-    compile files('src/main/resources/jars/PhylotreeParser-0.4.3.jar')
+    compile group: 'org.javafxdata', name: 'datafx-flow', version: '8.0b5'
+    compile group: 'guru.nidi', name: 'graphviz-java', version: '0.8.10'
+    compile group: 'org.ojalgo', name: 'ojalgo', version: '47.2.0'
+    //compile files('src/main/resources/jars/FstCalculator-0.1.20.jar')
+    compile files('src/main/resources/jars/PhylotreeParser-0.4.4.jar')
+    compile files('src/main/resources/jars/PGDSpider2.jar')
+    compile files('src/main/resources/jars/haplogrep-2.1.23.jar')
 
 }
 
@@ -82,6 +75,7 @@ test {
 }
 
 jar {
+
     manifest {
         attributes("Implementation-Title": "MitoBench",
                 "Implementation-Version": version, "main-Class": "MitoBenchStarter")

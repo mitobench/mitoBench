@@ -1,6 +1,6 @@
 package analysis;
 
-import Main.FstCalculator;
+import analysis.fstcalculation.FstCalculator;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -43,9 +43,12 @@ public class FstCalculationRunner {
     private FstCalculator fstCalculator;
 
 
-    public FstCalculationRunner(MitoBenchWindow mito, String type, double gamma, char mdc, int numberOfPermutations,
-                                double significance) {
+    public FstCalculationRunner() {
 
+    }
+
+    public void init(MitoBenchWindow mito, String type, double gamma, char mdc, int numberOfPermutations,
+                     double significance){
         mitobenchWindow = mito;
         distance_type = type;
         gamma_a = gamma;
@@ -58,6 +61,7 @@ public class FstCalculationRunner {
                 mito.getTableControllerUserBench(),
                 mito.getTableControllerUserBench().getDataTable().getMtStorage()
         );
+
     }
 
 
@@ -103,7 +107,6 @@ public class FstCalculationRunner {
      */
     public void run(boolean runSlatkin, boolean runReynolds, String field_level_missing_data) throws IOException {
 
-        //fstCalculator = new FstHudson1992(usableLoci);
         fstCalculator = new FstCalculator(
                 data,
                 "N",
@@ -111,12 +114,12 @@ public class FstCalculationRunner {
                 "Pairwise Difference",
                 numberOfPermutations,
                 gamma_a,
-                significance
+                significance,
+                LOG
                 );
 
         fsts = fstCalculator.runCaclulations();
         groupnames = fstCalculator.getGroupnames();
-
 
         // init table controller
         tableControllerFstValues = new TableControllerFstValues(mitobenchWindow.getLogClass());
@@ -183,7 +186,7 @@ public class FstCalculationRunner {
 
         Tab tab = new Tab("Fst values");
         tab.setId("tab_heatmap");
-        tab.setContent(heatMap.getHeatMap());
+        tab.setContent(new ScrollPane(heatMap.getHeatMap()));
 
         mitobenchWindow.getTabpane_visualization().getTabs().add(tab);
         mitobenchWindow.getTabpane_visualization().getSelectionModel().select(tab);

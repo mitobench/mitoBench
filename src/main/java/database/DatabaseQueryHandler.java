@@ -6,7 +6,6 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import io.datastructure.Entry;
-import javafx.collections.ObservableList;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -118,7 +117,7 @@ public class DatabaseQueryHandler {
             long startTime = System.currentTimeMillis();
 
             String query_complete = "http://mitodb.org/meta?" + query;
-            System.out.println(query_complete);
+            //System.out.println(query_complete);
             HttpResponse<JsonNode> response_meta = Unirest.get(query_complete).asJson();
 
             long currtime_post_execution = System.currentTimeMillis();

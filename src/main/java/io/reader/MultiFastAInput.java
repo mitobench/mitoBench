@@ -46,7 +46,7 @@ public class MultiFastAInput implements IInputData {
         fr = new FileReader(f);
         bfr = new BufferedReader(fr);
 
-        String currentLine = "";
+        String currentLine;
         String currHeader = "";
         String currSeq = "";
 
@@ -84,7 +84,7 @@ public class MultiFastAInput implements IInputData {
                 String header = currentLine.replace(">", "").split(" ")[0];
 
                 if(header.matches(".*[^\\d]\\d{1}$")){// || header.endsWith(".1") || header.endsWith(".2") || header.endsWith(".3") || header.endsWith(".4") || header.endsWith(".5")){
-                    header = header.split("\\.")[0];
+                    header = header.split("\\.")[0].trim();
                 }
                 currHeader = header;
                 init = -1;

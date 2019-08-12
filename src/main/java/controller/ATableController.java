@@ -814,14 +814,14 @@ public abstract class ATableController {
      */
     public ObservableList<ObservableList> getSelectedRows(){
 
-        ObservableList<ObservableList> selectedTableItems;
-        if(table.getSelectionModel().getSelectedItems().size() != 0){
-            selectedTableItems = table.getSelectionModel().getSelectedItems();
-        } else {
-            selectedTableItems = table.getItems();
-        }
+//        ObservableList<ObservableList> selectedTableItems;
+//        if(table.getSelectionModel().getSelectedItems().size() != 0){
+//            selectedTableItems = table.getSelectionModel().getSelectedItems();
+//        } else {
+//            selectedTableItems = table.getItems();
+//        }
 
-        return selectedTableItems;
+        return table.getItems();
 
     }
 

@@ -34,7 +34,7 @@ public class ImageWriter {
      * write image to png
      * @param node
 //     */
-    public void saveImage(Node node) throws ImageException {
+    public void saveImage(Node node) {
 
         int scale = 6; //6x resolution should be enough, users should downscale if required
         final SnapshotParameters spa = new SnapshotParameters();
@@ -55,10 +55,13 @@ public class ImageWriter {
                 for(String s : formatnames)
                     System.out.println(s);
                 LOG.info("Save image: " + outfile);
-            } catch (IOException e) {
-                throw new ImageException("Image cannot be saved.");
+            } catch (Exception e) {
+                System.err.println("Image cannot be saved.");
             }
 
         }
+
+
+
     }
 }

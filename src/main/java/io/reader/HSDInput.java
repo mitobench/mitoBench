@@ -53,7 +53,7 @@ public class HSDInput implements IInputData {
             switch (header[i].replace("\"", "")) {
                 case "SampleID":  id_index = i;
                     break;
-                case "Haplogroup":  group_index = i;
+                case "Haplogroup": group_index = i;
                     break;
                 //case "Polymorphisms":  polys_found_index = i;
                 //    break;

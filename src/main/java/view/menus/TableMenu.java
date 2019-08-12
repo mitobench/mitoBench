@@ -3,12 +3,15 @@ package view.menus;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import controller.GroupController;
 import controller.TableControllerUserBench;
+import view.dialogues.settings.ColumnOrderDialogue;
 
 
 /**
@@ -16,6 +19,7 @@ import controller.TableControllerUserBench;
  */
 public class TableMenu {
 
+    private final MitoBenchWindow mito;
     private Menu menuTable;
     private TableControllerUserBench tableController;
     private Logger LOG;
@@ -23,6 +27,7 @@ public class TableMenu {
     public TableMenu(MitoBenchWindow mitoBenchWindow){
         menuTable = new Menu("Table");
         menuTable.setId("tableMenu");
+        this.mito = mitoBenchWindow;
         this.tableController = mitoBenchWindow.getTableControllerUserBench();
         LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
         addSubMenus();
@@ -30,6 +35,19 @@ public class TableMenu {
 
 
     private void addSubMenus(){
+
+
+
+        CustomMenuItem defineColumnOrder = new CustomMenuItem(new Label("Define Column Order"));
+        defineColumnOrder.setId("menuitem_column_order");
+        defineColumnOrder.setOnAction(t -> {
+            ColumnOrderDialogue columnOrderDialogue = new ColumnOrderDialogue("Custom Column Order",
+                    mito.getLogClass(), mito);
+
+            mito.getTabpane_statistics().getTabs().add(columnOrderDialogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(columnOrderDialogue.getTab());
+
+        });
 
 
 
@@ -92,7 +110,8 @@ public class TableMenu {
             }
         });
 
-        menuTable.getItems().addAll(getSelectedRows, selectAllRows, cleanTable);
+        //menuTable.getItems().addAll(defineColumnOrder, getSelectedRows, selectAllRows, cleanTable);
+        menuTable.getItems().addAll(defineColumnOrder);
     }
 
 

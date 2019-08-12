@@ -2,12 +2,16 @@ package view.visualizations;
 
 import Logging.LogClass;
 import controller.ChartController;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
 import controller.TableControllerUserBench;
 import controller.HaplotreeController;
+import view.MitoBenchWindow;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,13 +26,18 @@ public class ProfilePlot extends AChart {
 
     private final int id;
     private final TabPane tabpaneViz;
+    private final MitoBenchWindow mito;
     LineChart<String,Number> profilePlot = new LineChart<String,Number>(xAxis,yAxis);
     List<XYChart.Series> seriesList = new ArrayList<>();
     int maxVal = 0;
+    private HaploStatistics haploStatistics;
 
 
-    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass, int uniqueID){
+    public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass,
+                       int uniqueID, MitoBenchWindow mitoBenchWindow){
         super(lable_xaxis, label_yaxis, logClass);
+
+        this.mito = mitoBenchWindow;
 
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
@@ -78,10 +87,6 @@ public class ProfilePlot extends AChart {
             number_of_elements = chartController.getNumberOfElementsPerCategory(selection_groups);
         }
 
-
-
-
-
         // sort list alphabetically
         List<String> hg_core_curr = Arrays.asList(hg_list);
         java.util.Collections.sort(hg_core_curr);
@@ -126,17 +131,36 @@ public class ProfilePlot extends AChart {
 
         setMaxBoundary();
 
-        HaploStatistics haploStatistics = new HaploStatistics(tableController, chartController,logClass);
 
-        haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
-        TableView table = haploStatistics.writeToTable();
-        haploStatistics.addListener(table, this);
-        Tab tab = new Tab();
-        tab.setId("tab_table_stats_" + id);
-        tab.setText("Count statistics (pp " + id + ")");
-        tab.setContent(table);
-        statsTabpane.getTabs().add(tab);
-        statsTabpane.getSelectionModel().select(tab);
+        Task task = new Task() {
+            @Override
+            protected Object call()  {
+
+                haploStatistics = new HaploStatistics(tableController, chartController,logClass);
+
+                haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
+
+
+                return true;
+            }
+        };
+
+        mito.getProgressBarhandler().activate(task.progressProperty());
+        task.setOnSucceeded((EventHandler<Event>) event -> {
+            TableView table = haploStatistics.writeToTable();
+            haploStatistics.addListener(table, this);
+            Tab tab = new Tab();
+            tab.setId("tab_table_stats_" + id);
+            tab.setText("Count statistics (pp " + id + ")");
+            tab.setContent(table);
+            statsTabpane.getTabs().add(tab);
+            statsTabpane.getSelectionModel().select(tab);
+            mito.getProgressBarhandler().stop();
+
+        });
+        new Thread(task).start();
+
+
 
 
         //addTabPaneListener(statsTabpane, tabpaneViz);

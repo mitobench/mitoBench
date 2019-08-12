@@ -303,7 +303,6 @@ public class ChartController {
             for (int i = 0; i < selection_groups.length; i++) {
                 String group = selection_groups[i];
                 double count_others = 0.0;
-
                 if(!group.equals("")){
                     for (String hg : unused_hgs) {
                         count_others += tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"),
@@ -374,8 +373,8 @@ public class ChartController {
         for(String hg_core : hg_core_list){
             hg_core = hg_core.trim();
             List<String> core_subs = treeMap.get(hg_core);
+
             for(String hg : hgs){
-                hg = hg.trim();
                 if(core_subs.contains(hg)) {
                     if(!used_hgs.contains(hg)){
                         used_hgs.add(hg);

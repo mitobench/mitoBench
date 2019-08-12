@@ -4,7 +4,6 @@ package leafletMAP;
  * Created by neukamm on 01.07.17.
  */
 
-import com.sun.javafx.charts.Legend;
 import controller.GroupController;
 import controller.TableControllerUserBench;
 import javafx.collections.ObservableList;
@@ -53,6 +52,7 @@ public class MapView extends StackPane {
         this.mapBasicPane = mapBasicPane;
         // we define a regular JavaFX WebView that DukeScript can use for rendering
         webView = new WebView();
+        webView.setContextMenuEnabled(false);
         getChildren().add(webView);
 
 
@@ -126,8 +126,8 @@ public class MapView extends StackPane {
 
             markerIcons.addIconsToMap(map);
 
-            Legend legend = markerIcons.getLegend();
-            mapBasicPane.setBottom(legend);
+           // Legend legend = markerIcons.getLegend();
+            //mapBasicPane.setBottom(legend);
         } else {
             System.out.println("No items to show on geogr. map");
         }

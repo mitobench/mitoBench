@@ -3,16 +3,23 @@ package view.menus;
 import Logging.LogClass;
 import analysis.HaplotypeCaller;
 import controller.*;
+import guru.nidi.graphviz.engine.Format;
+import io.dialogues.Export.SaveAsDialogue;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGlistProfilePlot;
 import view.dialogues.settings.PieChartSettingsDialogue;
@@ -23,12 +30,9 @@ import controller.TableControllerUserBench;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 
 
 /**
@@ -60,6 +64,9 @@ public class VisualizationMenu {
     private Menu menuGraphics;
 
     private LogClass logClass;
+
+    private static final int MIN_PIXELS = 10;
+    private SampleTree sampleTree;
 
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
@@ -204,22 +211,21 @@ public class VisualizationMenu {
                 mito.getTabpane_visualization().getSelectionModel().select(tab);
 
                 advancedStackedBarchartDialogue.getOkBtn().setOnAction(e -> {
-                    try {
-                        visualizationController.initStackedBarchart(this);
-                    } catch (MalformedURLException e1) {
-                        e1.printStackTrace();
-                    }
+
+                    visualizationController.initStackedBarchart(this);
+
 
                     stackedBar = visualizationController.getStackedBar();
+                    advancedStackedBarchartDialogue.calculateTrimmedHGList();
                     chartController.addDataStackedBarChart(
                             stackedBar,
                             selection_haplogroups,
                             advancedStackedBarchartDialogue.getStackOrder(),
-                            advancedStackedBarchartDialogue.getTrimmedHGList()
+                            advancedStackedBarchartDialogue.getHg_list_trimmed()
                     );
 
-                    String[] hg_list = advancedStackedBarchartDialogue.getTrimmedHGList();
-
+                    advancedStackedBarchartDialogue.calculateTrimmedHGList();
+                    String[] hg_list = advancedStackedBarchartDialogue.getHg_list_trimmed();
 
                     stackedBar.setHg_user_selection(hg_list);
 
@@ -283,16 +289,15 @@ public class VisualizationMenu {
                     mito.getTabpane_visualization().getSelectionModel().select(tab);
 
                     hGlistProfilePlot.getOkBtn().setOnAction(e -> {
-                        try {
-                            visualizationController.initProfilePlot();
-                            profilePlot = visualizationController.getProfilePlot();
-                            profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getTrimmedHGList());
-                            // remove tab from tabpane
-                            mito.getTabpane_visualization().getTabs().remove(tab);
-                        } catch (MalformedURLException e1) {
-                            e1.printStackTrace();
+                        visualizationController.initProfilePlot();
+                        profilePlot = visualizationController.getProfilePlot();
+                        hGlistProfilePlot.calculateTrimmedHGList();
+                        profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHg_list_trimmed());
 
-                        }
+                        // remove tab from tabpane
+                        mito.getTabpane_visualization().getTabs().remove(tab);
+
+
                     });
 
 
@@ -342,7 +347,9 @@ public class VisualizationMenu {
 
                     pieChartSettingsDialogue.getOkBtn().setOnAction(e -> {
 
-                        String[] hg_list_trimmed = pieChartSettingsDialogue.getTrimmedHGList();
+                        visualizationController.getGrid_piecharts().getChildren().clear();
+                        pieChartSettingsDialogue.calculateTrimmedHGList();
+                        String[] hg_list_trimmed = pieChartSettingsDialogue.getHg_list_trimmed();
 
                         if(tableController.getTableColumnByName("Grouping") != null){
                             // get selected rows
@@ -357,19 +364,29 @@ public class VisualizationMenu {
                             HashMap<String, List<XYChart.Data<String, Number>>> data_all =
                                     chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
+                            int max_number_cols = (int) Math.round(Math.sqrt(groupController.getGroupnames().size()));
+
+                            int curr_col = 0;
+                            int curr_row = 0;
+
                             for(String group : groupController.getGroupnames()) {
                                 if(!group.equals("")){
-                                    try {
-                                        visualizationController.initPieChart(group);
-                                    } catch (MalformedURLException e1) {
-                                        e1.printStackTrace();
-                                    }
+
+                                    visualizationController.initPieChart(group, curr_row, curr_col);
 
                                     pieChartViz = visualizationController.getPieChartViz();
                                     pieChartViz.createPlot(group, data_all);
                                     pieChartViz.setColor(stage);
+
+                                    if(curr_col < max_number_cols){
+                                        curr_col++;
+                                    } else {
+                                        curr_col=0;
+                                        curr_row++;
+                                    }
                                 }
                             }
+                            visualizationController.visualizePiechart();
                         } else {
 
                             if(tableController.getTableColumnByName("Haplogroup") != null){
@@ -380,14 +397,13 @@ public class VisualizationMenu {
                                 HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
                                         hg_list_trimmed);
 
-                                try {
-                                    visualizationController.initPieChart("Haplogroup frequency");
-                                } catch (MalformedURLException e1) {
-                                    e1.printStackTrace();
-                                }
+
+                                visualizationController.initPieChart("Haplogroup frequency (all data)", 0, 0);
+
                                 pieChartViz = visualizationController.getPieChartViz();
                                 pieChartViz.createPlotSingle(hgs_summed);
                                 pieChartViz.setColor(stage);
+                                visualizationController.visualizePiechart();
                             }
                         }
 
@@ -395,14 +411,15 @@ public class VisualizationMenu {
                         mito.getTabpane_visualization().getTabs().remove(tab);
                     });
 
-
-
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+
+
+
 
         // Tree visualization of samples (according haplogrep2)
         MenuItem samples_haplo_tree = new MenuItem("Create Sample Tree");
@@ -415,6 +432,7 @@ public class VisualizationMenu {
                     Task task = new Task() {
                         @Override
                         protected Object call() throws Exception {
+
                             haplotypeCaller.call("--lineage");
                             return true;
                         }
@@ -422,36 +440,50 @@ public class VisualizationMenu {
 
                     mito.getProgressBarhandler().activate(task.progressProperty());
                     task.setOnSucceeded((EventHandler<Event>) event -> {
-                        haplotypeCaller.deleteTmpFiles();
-                        mito.getProgressBarhandler().stop();
+                        Tab sampleTree_tab = new Tab("Sample tree");
+
+                        sampleTree = new SampleTree("","", mito.getLogClass());
 
                         // read graphviz file
+                        BorderPane tab_content = new BorderPane();
+                        HBox bottom_content = new HBox();
+                        bottom_content.setPadding(new Insets(10,10,10,10));
 
-                        SampleTree sampleTree = new SampleTree("","", mito.getLogClass());
-                        try {
-                            sampleTree.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Button save_as_svg = new Button("Save as SVG");
+                        save_as_svg.setOnAction(e -> {
+                            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("SVG format (*.svg)", "*.svg");
+                            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+                            saveAsDialogue.start(mito.getPrimaryStage());
 
-                        Tab sampleTree_tab = new Tab();
+                            String svgfile = saveAsDialogue.getOutFile();
+                            if(!svgfile.endsWith(".svg") && !svgfile.endsWith(".SVG"))
+                                svgfile += ".svg";
+
+
+                            try {
+                                sampleTree.start(svgfile);
+                                sampleTree.getViz().render(Format.SVG).toFile(new File(svgfile));
+                                mito.getTabpane_visualization().getTabs().remove(sampleTree_tab);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+
+                        });
+
                         ScrollPane scrollPane_samples_tree = new ScrollPane();
 
-                        ImageView imageView = new ImageView(sampleTree.getImg());
+                        bottom_content.getChildren().addAll(save_as_svg);
+                        scrollPane_samples_tree.setContent(bottom_content);
 
-                        scrollPane_samples_tree.setContent(imageView);
-                        sampleTree_tab.setContent(scrollPane_samples_tree);
-
+                        // set contents
+                        tab_content.setCenter(scrollPane_samples_tree);
+                        tab_content.setBottom(bottom_content);
+                        sampleTree_tab.setContent(tab_content);
                         mito.getTabpane_visualization().getTabs().add(sampleTree_tab);
+                        mito.getTabpane_visualization().getSelectionModel().select(sampleTree_tab);
 
-                        // delete tmp file
-                        try {
-                            Files.delete(new File("haplogroups.hsd.dot").toPath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-
+                        haplotypeCaller.deleteTmpFiles();
+                        mito.getProgressBarhandler().stop();
 
 
                     });
@@ -517,6 +549,7 @@ public class VisualizationMenu {
         ((CheckMenuItem) showTickLabels).setSelected(true);
 
         showTickLabels.setOnAction(t -> {
+            // todo
 //            if(((CheckMenuItem) showTickLabels).isSelected()){
 //                String id = this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getId();
 //                Chart c = (Chart)this.mito.getTabpane_visualization().getSelectionModel().getSelectedItem().getContent();
@@ -542,14 +575,15 @@ public class VisualizationMenu {
         // add menu items
         grouping_graphics.getItems().add(grouping_barchart);
         barchart.getItems().addAll(plotHGfreq, plotHGfreqHist, plotHGfreqGroup);
-        haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart, samples_haplo_tree);
+        haplo_graphics.getItems().addAll(barchart, profilePlotItem, pieChart,samples_haplo_tree);
         maps.getItems().add(mapsItem);
-        options.getItems().addAll(showTickLabels, clearPlotBox);
+        //options.getItems().addAll(showTickLabels, clearPlotBox);
+        options.getItems().addAll(clearPlotBox);
 
         menuGraphics.getItems().addAll(haplo_graphics, grouping_graphics, maps, new SeparatorMenuItem(), options);
     }
 
-    public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) throws MalformedURLException {
+    public void createHaploBarchart(TableColumn haplo_col, List<String> columnData ) {
         barPlotHaplo = visualizationController.getBarPlotHaplo();
         chartController.addDataBarChart(barPlotHaplo, haplo_col, columnData);
     }
@@ -566,5 +600,7 @@ public class VisualizationMenu {
     public TableControllerUserBench getTableController() { return tableController; }
     public HaplotreeController getTreeController() { return treeController; }
     public LogClass getLogClass() { return logClass; }
+
+
 
 }

@@ -53,6 +53,7 @@ public class HaploStatistics {
             HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
             data_all = chartController.assignHGsNoGrouping(hgs_summarized, selection_haplogroups);
 
+
         } else {
 
 
@@ -69,6 +70,8 @@ public class HaploStatistics {
             
             HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
             data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
+
+
 
         }
 

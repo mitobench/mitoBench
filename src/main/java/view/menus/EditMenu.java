@@ -1,12 +1,13 @@
 package view.menus;
 
 import Logging.LogClass;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import controller.HGListController;
+import javafx.scene.control.*;
 import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
 import view.dialogues.settings.DataFilteringHaplotypeBasedDialogue;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
+import view.dialogues.settings.HGListDialogue;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -65,9 +66,26 @@ public class EditMenu {
 
         });
 
+        CustomMenuItem defineHGList = new CustomMenuItem(new Label("Define Haplogroup list"));
+        defineHGList.setId("menuitem_hg_list");
+        defineHGList.setOnAction(t -> {
+
+            HGListDialogue hgListDialogue = new HGListDialogue("Custom Haplogroup list", logClass);
+            HGListController hgListController = new HGListController(hgListDialogue, mito.getChartController(), mito);
+            mito.getTabpane_statistics().getTabs().add(hgListDialogue.getTab());
+            mito.getTabpane_statistics().getSelectionModel().select(hgListDialogue.getTab());
+
+
+        });
+
+        Tooltip tooltip_hglist = new Tooltip("This list will be used as default list for all analyses and " +
+                "visualizations within this project.");
+        Tooltip.install(defineHGList.getContent(), tooltip_hglist);
+
+
 
         filterData.getItems().addAll(filterTreeBased, filterWithMutation);
-        menuEdit.getItems().addAll(filterData, unfilterData);
+        menuEdit.getItems().addAll(filterData, defineHGList);
 
     }
 

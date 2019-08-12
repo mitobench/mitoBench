@@ -1,7 +1,9 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 import org.apache.log4j.Logger;
@@ -26,7 +28,11 @@ public abstract class ATabpaneDialogue {
         dialogGrid.setHgap(10);
         dialogGrid.setVgap(10);
 
-        tab.setContent(dialogGrid);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setPadding(new Insets(10,10,10,10));
+        scrollPane.setContent(dialogGrid);
+
+        tab.setContent(scrollPane);
         tab.setText(title);
 
         this.logClass = logClass;

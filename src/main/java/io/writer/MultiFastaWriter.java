@@ -16,10 +16,12 @@ import java.util.List;
 public class MultiFastaWriter implements IOutputData  {
     private final MTStorage mtStorage;
     private final ObservableList<ObservableList> data;
+    private final boolean writeUnaligned;
 
-    public MultiFastaWriter(MTStorage mtStorage, ObservableList<ObservableList> dataToExport){
+    public MultiFastaWriter(MTStorage mtStorage, ObservableList<ObservableList> dataToExport, boolean writeUnaligned){
         this.mtStorage = mtStorage;
         this.data = dataToExport;
+        this.writeUnaligned = writeUnaligned;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class MultiFastaWriter implements IOutputData  {
 
         // write view.data
         tableController.getTableColumnByName("ID");
-        String text = "";
+        String text;
 
         List<String> ids = new ArrayList<>();
         for(int i = 0; i < data.size(); i++){
@@ -42,7 +44,12 @@ public class MultiFastaWriter implements IOutputData  {
 
         for(String id : mtStorage.getData().keySet()){
             if(ids.contains(id)){
-                text = ">" + id + "\n" + mtStorage.getData().get(id) + "\n";
+                if(this.writeUnaligned){
+                    text = ">" + id + "\n" + mtStorage.getData().get(id).replace("-","") + "\n";
+                } else {
+                    text = ">" + id + "\n" + mtStorage.getData().get(id) + "\n";
+                }
+
                 fileChannel.write(ByteBuffer.wrap(text.getBytes()));
             }
         }
