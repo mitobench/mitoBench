@@ -49,7 +49,7 @@ public class BarChartGrouping extends AChart {
             }
         });
 
-        setContextMenu(bc, scene);
+        setContextMenu(this, scene);
     }
 
     public void addData(HashMap<String, Integer> data) {

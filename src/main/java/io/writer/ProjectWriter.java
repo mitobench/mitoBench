@@ -80,7 +80,7 @@ public class ProjectWriter {
                 fileChannel.write(ByteBuffer.wrap(("\t\t" + sample_id + "\t").getBytes()));
                 for(Entry e : tableData.get(sample_id)){
                     if(!e.getIdentifier().equals("ID"))
-                        fileChannel.write(ByteBuffer.wrap((e.getData().getTableInformation().replace("\"","") + "\t").getBytes()));
+                        fileChannel.write(ByteBuffer.wrap((e.getData().getTableInformation() + "\t").getBytes()));
                 }
                 fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
             }

@@ -22,7 +22,7 @@ public class PieChartViz extends AChart {
         super(null, null, logClass);
         chart = new PieChart();
         chart.setTitle(title);
-        setContextMenu(chart, tabPane);
+        //setContextMenu(chart, tabPane);
     }
 
     public void setColor(Stage stage) {

@@ -46,7 +46,7 @@ public class MultiFastAInput implements IInputData {
         fr = new FileReader(f);
         bfr = new BufferedReader(fr);
 
-        String currentLine = "";
+        String currentLine;
         String currHeader = "";
         String currSeq = "";
 

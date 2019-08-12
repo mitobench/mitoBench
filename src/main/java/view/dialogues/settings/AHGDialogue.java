@@ -2,6 +2,7 @@ package view.dialogues.settings;
 
 import Logging.LogClass;
 import controller.ChartController;
+import io.Exceptions.HaplogroupException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -13,6 +14,8 @@ import statistics.HaploStatistics;
 import view.MitoBenchWindow;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AHGDialogue extends ATabpaneDialogue {
 
@@ -125,19 +128,33 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     }
 
 
-    public String[] getTrimmedHGList(){
+    public void calculateTrimmedHGList(){
+
+
         String[] hg_list;
 
         String p1 = combobox_hglist.getSelectionModel().getSelectedItem().toString();
-        if(p1.contains("(") && p1.contains(")") ){
-            String p2 = p1.split("\\(")[1];
-            String p3 = p2.split("\\)")[0];
-            hg_list = p3.split(",");
-        } else  {
-            hg_list = p1.split(",");
+        Pattern p = Pattern.compile("[A-Za-z0123456789*,]*\n*");
+        Matcher m = p.matcher(p1);
+        if (m.matches()) {
+            p1 = p1.replace("*", "");
+            if (p1.contains("(") && p1.contains(")")) {
+                String p2 = p1.split("\\(")[1];
+                String p3 = p2.split("\\)")[0];
+                hg_list = p3.split(",");
+            } else {
+                hg_list = p1.split(",");
+            }
+            hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+
+        } else {
+            try {
+                throw new HaplogroupException("Haplogroups are not in correct format.");
+            } catch (HaplogroupException e) {
+                e.printStackTrace();
+            }
         }
 
-        return Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
     }
 
     public Button getOkBtn() {
@@ -148,12 +165,16 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         return new Task() {
             @Override
             protected Object call() throws Exception {
-                hg_list_trimmed = getTrimmedHGList();
+                calculateTrimmedHGList();
                 haploStatistics.count(hg_list_trimmed);
 
                 return true;
             }
         };
 
+    }
+
+    public String[] getHg_list_trimmed() {
+        return hg_list_trimmed;
     }
 }

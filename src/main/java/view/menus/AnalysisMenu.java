@@ -44,12 +44,18 @@ public class AnalysisMenu {
         pairwiseFst.setOnAction(t -> {
 
             if(tableController.getGroupController().groupingExists()) {
-                FstSettingsDialogue fstSettingsDialogue =
+                if(mito.getTableControllerUserBench().sequencesHaveSameLength(mito.getTableControllerUserBench().getTableColumnByName("ID"))){
+                    FstSettingsDialogue fstSettingsDialogue =
                             new FstSettingsDialogue("Fst Calculation Settings", logClass, mito);
-                FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue, mito);
-                mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
-                mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
-
+                    FstCalculationController fstCalculationController = new FstCalculationController(fstSettingsDialogue, mito);
+                    mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
+                    mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
+                }  else {
+                    InformationDialogue informationDialogue_unaligned = new InformationDialogue("Warning: Unaligned sequences",
+                            "Please align you sequences first to proceed. mitoBench is not able to align you sequences, " +
+                                    "but you can export you data as multiFasta and align them with an alignment tool of your choice.",
+                            "Please align your sequences", "warning_unaligned");
+                }
             }
             else {
                 InformationDialogue groupingWarningDialogue = new InformationDialogue(
@@ -59,8 +65,6 @@ public class AnalysisMenu {
                         "groupWarning");
             }
         });
-
-
 
 
         MenuItem assignHGs = new MenuItem("Calculate haplogroups");

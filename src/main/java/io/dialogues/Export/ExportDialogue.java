@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
+import view.dialogues.information.InformationDialogue;
 
 import java.util.List;
 import java.util.Optional;
@@ -88,41 +89,58 @@ public class ExportDialogue extends Application {
 
         //ARP output
         if (result.get() == arp_button) {
-            DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(options);
-            String selection = dataChoiceDialogue.getSelected();
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
-            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
-            saveAsDialogue.start(new Stage());
-            if(saveAsDialogue.getOutFile() != null) {
-                String outfileDB = saveAsDialogue.getOutFile();
-                LOG.info("Export data into ARP format with grouping on column '" + selection + "'. File: " + outfileDB);
-                ARPWriter arpwriter = new ARPWriter(tableController, dataToExport);
-                arpwriter.setGroups(selection);
-                arpwriter.writeData(outfileDB, tableController);
-            }
-            //fasta output
-        } else  if (result.get() == fasta_button) {
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
-            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
-            saveAsDialogue.start(new Stage());
-            if(saveAsDialogue.getOutFile() != null) {
-                String outfileFASTA = saveAsDialogue.getOutFile();
-                LOG.info("Export data into multi FASTA format. File: " + outfileFASTA);
-                MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(), dataToExport, false);
-                multiFastaWriter.writeData(outfileFASTA, tableController);
+            if(tableController.sequencesHaveSameLength(tableController.getTableColumnByName("ID"))){
 
+                DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(options);
+                String selection = dataChoiceDialogue.getSelected();
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
+                SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+                saveAsDialogue.start(new Stage());
+                if(saveAsDialogue.getOutFile() != null) {
+                    String outfileDB = saveAsDialogue.getOutFile();
+                    LOG.info("Export data into ARP format with grouping on column '" + selection + "'. File: " + outfileDB);
+                    ARPWriter arpwriter = new ARPWriter(tableController, dataToExport);
+                    arpwriter.setGroups(selection);
+                    arpwriter.writeData(outfileDB, tableController);
+                }
+            } else {
+                InformationDialogue informationDialogue_unaligned = new InformationDialogue("Warning: Unaligned sequences",
+                        "Please align you sequences first to proceed. mitoBench is not able to align you sequences, " +
+                                "but you can export you data as multiFasta and align them with an alignment tool of your choice.",
+                        "Please align your sequences", "warning_unaligned");
             }
+                //fasta output
+            } else  if (result.get() == fasta_button) {
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Fasta Format (*.fasta)", "*.fasta");
+                SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+                saveAsDialogue.start(new Stage());
+                if(saveAsDialogue.getOutFile() != null) {
+                    String outfileFASTA = saveAsDialogue.getOutFile();
+                    LOG.info("Export data into multi FASTA format. File: " + outfileFASTA);
+                    MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(), dataToExport, false);
+                    multiFastaWriter.writeData(outfileFASTA, tableController);
+
+                }
+
             //Beast output
         } else if (result.get() == beast_button) {
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("BEAST FastA format (*.fasta)", "*.fasta");
-            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
-            saveAsDialogue.start(new Stage());
-            if (saveAsDialogue.getOutFile() != null) {
-                String outfileDB = saveAsDialogue.getOutFile();
-                LOG.info("Export data into BEAST format. File: " + outfileDB);
-                BEASTWriter beastwriter = new BEASTWriter(tableController, LOG, dataToExport, year);
-                beastwriter.writeData(outfileDB, tableController);
+            if(tableController.sequencesHaveSameLength(tableController.getTableColumnByName("ID"))){
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("BEAST FastA format (*.fasta)", "*.fasta");
+                SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
+                saveAsDialogue.start(new Stage());
+                if (saveAsDialogue.getOutFile() != null) {
+                    String outfileDB = saveAsDialogue.getOutFile();
+                    LOG.info("Export data into BEAST format. File: " + outfileDB);
+                    BEASTWriter beastwriter = new BEASTWriter(tableController, LOG, dataToExport, year);
+                    beastwriter.writeData(outfileDB, tableController);
+                }
+            } else {
+                InformationDialogue informationDialogue_unaligned = new InformationDialogue("Warning: Unaligned sequences",
+                        "Please align you sequences first to proceed. mitoBench is not able to align you sequences, " +
+                                "but you can export you data as multiFasta and align them with an alignment tool of your choice.",
+                        "Please align your sequences", "warning_unaligned");
             }
+
             //CSV Output
         } else if (result.get() == csv_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv");

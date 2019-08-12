@@ -110,7 +110,8 @@ public class TableMenu {
             }
         });
 
-        menuTable.getItems().addAll(defineColumnOrder, getSelectedRows, selectAllRows, cleanTable);
+        //menuTable.getItems().addAll(defineColumnOrder, getSelectedRows, selectAllRows, cleanTable);
+        menuTable.getItems().addAll(defineColumnOrder);
     }
 
 

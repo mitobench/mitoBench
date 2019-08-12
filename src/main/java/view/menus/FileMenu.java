@@ -142,11 +142,9 @@ public class FileMenu {
                 final SnapshotParameters spa = new SnapshotParameters();
                 spa.setTransform(javafx.scene.transform.Transform.scale(scale, scale));
                 ImageWriter imageWriter = new ImageWriter(logClass);
-                try {
-                    imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
-                } catch (ImageException e) {
-                    e.printStackTrace();
-                }
+
+                imageWriter.saveImage(viz_pane.getSelectionModel().getSelectedItem().getContent());
+
 
             } catch (Exception e) {
                 e.printStackTrace();

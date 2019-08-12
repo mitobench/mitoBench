@@ -78,7 +78,7 @@ public class PcaPopupDialogue extends AHGDialogue {
                     @Override
                     protected Object call() {
                         // calculate hg count statistics
-                        hg_list_trimmed = getTrimmedHGList();
+                        calculateTrimmedHGList();
                         haploStatistics.count(hg_list_trimmed);
 
                         // calculate PCA

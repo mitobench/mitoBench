@@ -25,7 +25,7 @@ public class MTStorage implements IDataStorage {
 
 
     public void addEntry(String key, String mtSeq) {
-        if(!mtSequences.containsKey(key))
-            mtSequences.put(key,mtSeq);//mtSequences.put(key,mtSeq.replace("-", ""));
+        mtSequences.put(key,mtSeq);
     }
+
 }

@@ -98,7 +98,7 @@ public class DataTable {
     }
 
     private void setSequenceMap(Entry entry, String key, String[] columnEntries){
-        String mtSeq = entry.getData().getTableInformation().replace("\"","");;
+        String mtSeq = entry.getData().getTableInformation().replace("\"","");
         String mtseq_short;
         if(mtSeq.length() > 5 ){
             mtseq_short = mtSeq.substring(0,5)+"...";

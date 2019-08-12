@@ -6,6 +6,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.stage.DirectoryChooser;
 import view.MitoBenchWindow;
+import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 
 import java.io.File;
@@ -29,22 +30,36 @@ FstCalculationController {
     public void addListener(){
 
         dialog.getOkBtn().setOnAction(e -> {
-            Task task = createTask();
-            mito.getProgressBarhandler().activate(task.progressProperty());
 
-            task.setOnSucceeded((EventHandler<Event>) event -> {
-                fstCalculationRunner.writeResultToMitoBench();
-                fstCalculationRunner.visualizeResult();
+            fstCalculationRunner = new FstCalculationRunner();
 
-                if(dialog.getCheckbox_saveLogFileBtn().isSelected()){
+            fstCalculationRunner.init(
+                    dialog.getMitobenchWindow(),
+                    dialog.getComboBox_distance().getSelectionModel().getSelectedItem().toString(),
+                    Double.parseDouble(dialog.getField_gamma_a().getText()),
+                    dialog.getField_missing_data().getText().charAt(0),
+                    Integer.parseInt(dialog.getField_numberOfPermutations().getText()),
+                    Double.parseDouble(dialog.getField_significance().getText()));
+
+
+                Task task = createTask();
+                mito.getProgressBarhandler().activate(task.progressProperty());
+
+                task.setOnSucceeded((EventHandler<Event>) event -> {
                     fstCalculationRunner.writeResultToMitoBench();
-                }
+                    fstCalculationRunner.visualizeResult();
 
-                dialog.getLOG().info("Fst calculations finished.");
-                dialog.getMitobenchWindow().getTabpane_statistics().getTabs().remove(dialog.getTab());
-                mito.getProgressBarhandler().stop();
-            });
+                    if(dialog.getCheckbox_saveLogFileBtn().isSelected()){
+                        fstCalculationRunner.writeResultToMitoBench();
+                    }
+
+                    dialog.getLOG().info("Fst calculations finished.");
+                    dialog.getMitobenchWindow().getTabpane_statistics().getTabs().remove(dialog.getTab());
+                    mito.getProgressBarhandler().stop();
+                });
+
             new Thread(task).start();
+
         });
 
         // add checkbox listener
@@ -73,21 +88,11 @@ FstCalculationController {
         return new Task() {
             @Override
             protected Object call() throws Exception {
-                fstCalculationRunner = new FstCalculationRunner(dialog.getMitobenchWindow(),
-                        dialog.getComboBox_distance().getSelectionModel().getSelectedItem().toString(),
-                        Double.parseDouble(dialog.getField_gamma_a().getText()),
-                        dialog.getField_missing_data().getText().charAt(0),
-                        Integer.parseInt(dialog.getField_numberOfPermutations().getText()),
-                        Double.parseDouble(dialog.getField_significance().getText()));
-
-
 
                 fstCalculationRunner.run(
                         dialog.getCheckbox_linearized_slatkin().isSelected(),
                         dialog.getCheckbox_linearized_slatkin().isSelected(),
                         dialog.getField_level_missing_data().getText());
-
-
 
                 return true;
             }

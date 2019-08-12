@@ -83,7 +83,8 @@ public class StatisticsMenu {
 
         });
 
-        menuTools.getItems().addAll(haploStats, mutations);
+       // menuTools.getItems().addAll(haploStats, mutations);
+        menuTools.getItems().addAll(haploStats);
     }
 
 

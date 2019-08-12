@@ -99,7 +99,7 @@ public class FstSettingsDialogue extends ATabpaneDialogue {
         field_level_missing_data = new TextField("0.05");
         field_filePathResult = new TextField(System.getProperty("user.dir"));
         field_filePathResult.setDisable(true);
-        field_numberOfPermutations = new TextField("10");
+        field_numberOfPermutations = new TextField("0");
         field_significance = new TextField("0.05");
 
          /*

@@ -16,6 +16,7 @@ public class AbstractWarningDialogue {
         alert.getDialogPane().lookupButton(ButtonType.OK).setId(id + "button");
         alert.getDialogPane().setId(id);
         alert.setContentText(message);
+        alert.setResizable(true);
     }
 
     protected void showAndWait(){

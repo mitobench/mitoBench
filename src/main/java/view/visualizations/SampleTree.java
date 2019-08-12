@@ -3,6 +3,7 @@ package view.visualizations;
 import Logging.LogClass;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.engine.GraphvizV8Engine;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
 import javafx.embed.swing.SwingFXUtils;
@@ -27,19 +28,18 @@ public class SampleTree  extends AChart {
 
     }
 
-    public void start() throws IOException {
+    public void start(String imgFile) throws IOException {
 
         String input = "haplogroups.hsd.dot";
+        System.out.println("Start reading/parsing dot file");
         MutableGraph g = Parser.read(new File(input));
+        System.out.println("Start creating graph");
         viz = Graphviz.fromGraph(g);
+        System.out.println("Start rendering graph ");
+        //image = viz.render(Format.PNG).toImage();
+        viz.render(Format.SVG).toFile(new File(imgFile));
+        System.out.println("Finished rendering graph");
 
-        image = viz.render(Format.PNG).toImage();
-
-    }
-
-    public Image getImg() {
-        //return img;
-        return SwingFXUtils.toFXImage(this.image, null);
     }
 
     public Graphviz getViz() {

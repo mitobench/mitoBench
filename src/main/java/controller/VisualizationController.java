@@ -1,8 +1,11 @@
 package controller;
 
 import Logging.LogClass;
-import javafx.scene.Scene;
+import io.writer.ImageWriter;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -18,6 +21,7 @@ import java.util.List;
 public class VisualizationController {
 
     private final Logger LOG;
+    private final GridPane grid_piecharts;
     private MitoBenchWindow mito;
     private Stage stage;
 
@@ -41,6 +45,7 @@ public class VisualizationController {
     private int profilePlotID=1;
     private TreeItem<String> tree_root;
 
+
     private LogClass logClass;
 
 
@@ -63,6 +68,9 @@ public class VisualizationController {
         this.logClass = mitoBenchWindow.getLogClass();
 
         this.stage = mitoBenchWindow.getPrimaryStage();
+
+        grid_piecharts = new GridPane();
+
     }
 
     public void initHaploBarchart(String titlePart) {
@@ -79,7 +87,6 @@ public class VisualizationController {
                 tabPane,
                 logClass
         );
-        //barPlotHaplo.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Haplogroup occurrences");
@@ -105,7 +112,6 @@ public class VisualizationController {
                 logClass
         );
 
-        //barPlotHaplo2.setStyleSheet(stage);
         Tab tab = new Tab();
         tab.setId("tab_haplo_barchart");
         tab.setText("Haplogroup occurrences");
@@ -115,7 +121,7 @@ public class VisualizationController {
 
     }
 
-    public void initGroupBarChart() throws MalformedURLException {
+    public void initGroupBarChart() {
         LOG.info("Visualize data: Group frequency (Barchart)");
 
         Text t = new Text();
@@ -134,7 +140,7 @@ public class VisualizationController {
     }
 
 
-    public void initStackedBarchart(VisualizationMenu visualizationMenu) throws MalformedURLException {
+    public void initStackedBarchart(VisualizationMenu visualizationMenu) {
         LOG.info("Visualize data: Haplogroup frequency per group (Stacked Barchart)");
 
         Text t = new Text();
@@ -153,7 +159,7 @@ public class VisualizationController {
     }
 
 
-    public void initPieChart(String title) throws MalformedURLException {
+    public void initPieChart(String title, int curr_row, int curr_col) {
         LOG.info("Visualize data: Haplotypes in Group " + title + " (PieChart)");
 
         Text t = new Text(title);
@@ -161,14 +167,45 @@ public class VisualizationController {
 
         pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
         pieChartViz.setStyleSheet(stage);
+        grid_piecharts.setGridLinesVisible(true);
+        grid_piecharts.add(pieChartViz.getChart(),curr_col,curr_row,1,1);
+
+
+    }
+
+    public void visualizePiechart(){
         Tab tab = new Tab();
         tab.setId("tab_piechart");
         tab.setText("Pie Chart");
-        pieChartViz.getChart().prefHeightProperty().bind(stage.heightProperty());
-        pieChartViz.getChart().prefWidthProperty().bind(stage.widthProperty());
-        tab.setContent(pieChartViz.getChart());
+        ScrollPane scrollpane = new ScrollPane(grid_piecharts);
+        tab.setContent(scrollpane);
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
+        setContextMenuPie(grid_piecharts);
+
+    }
+
+    /**
+     * This method initializes the context menu to save chart as image
+     */
+    protected void setContextMenuPie(Node node){
+
+        //adding a context menu item to the chart
+        final MenuItem saveAsPng = new MenuItem("Save as png");
+        saveAsPng.setOnAction(event -> {
+            ImageWriter imageWriter = new ImageWriter(mito.getLogClass());
+
+            imageWriter.saveImage(node);
+
+        });
+
+        final ContextMenu menu = new ContextMenu(saveAsPng);
+
+        node.setOnMouseClicked(event -> {
+            if (MouseButton.SECONDARY.equals(event.getButton())) {
+                menu.show(node, event.getScreenX(), event.getScreenY());
+            }
+        });
 
     }
 
@@ -219,6 +256,7 @@ public class VisualizationController {
     public void clearCharts(){
         stackedBar = null;
         barPlotHaplo = null;
+        grid_piecharts.getChildren().clear();
         tabPane.getTabs().clear();
     }
 
@@ -301,5 +339,9 @@ public class VisualizationController {
 
     public LogClass getLogClass() {
         return logClass;
+    }
+
+    public GridPane getGrid_piecharts() {
+        return grid_piecharts;
     }
 }

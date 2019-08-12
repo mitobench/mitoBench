@@ -637,7 +637,7 @@ public class SqlQueryBuilderWindow {
         //center.add(l_sample_origin_country, 0,5,1,1);
         //center.add(country_sample_origin_combobox, 1,5,1,1);
 
-        center.add(new Separator(),0,++row,2,1);
+        center.add(new Separator(),0,++row,3,1);
         center.add(label_authors, 0,++row,1,1);
         center.add(checkComboBoxAuthors, 1,row,2,1);
 
