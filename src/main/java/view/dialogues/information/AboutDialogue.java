@@ -92,6 +92,8 @@ public class AboutDialogue {
             VBox.setVgrow(browser, Priority.ALWAYS);
             stage.setScene(scene);
             stage.show();
+
+            dialog.close();
         });
 
     }

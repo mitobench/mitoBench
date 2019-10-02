@@ -31,19 +31,19 @@ public class DatabaseQueryHandler {
             String query = "http://mitodb.org/meta";
 
             HttpResponse<JsonNode> response_metadata = Unirest.get(query).asJson();
-
-            long currtime_post_execution = System.currentTimeMillis();
-            long diff = currtime_post_execution - startTime;
-
-            long runtime_s = diff / 1000;
-            if(runtime_s > 60) {
-                long minutes = runtime_s / 60;
-                long seconds = runtime_s % 60;
-                System.out.println("Runtime of getting data from database: " + minutes + " minutes, and " + seconds + " seconds.");
-            } else {
-                System.out.println("Runtime of getting data from database: " + runtime_s + " seconds.");
-            }
-
+//
+//            long currtime_post_execution = System.currentTimeMillis();
+//            long diff = currtime_post_execution - startTime;
+//
+//            long runtime_s = diff / 1000;
+//            if(runtime_s > 60) {
+//                long minutes = runtime_s / 60;
+//                long seconds = runtime_s % 60;
+//                System.out.println("Runtime of getting data from database: " + minutes + " minutes, and " + seconds + " seconds.");
+//            } else {
+//                System.out.println("Runtime of getting data from database: " + runtime_s + " seconds.");
+//            }
+//
 
             HashMap<String, List<Entry>> data = jsonDataParser.getData(response_metadata);
 
@@ -120,17 +120,17 @@ public class DatabaseQueryHandler {
             //System.out.println(query_complete);
             HttpResponse<JsonNode> response_meta = Unirest.get(query_complete).asJson();
 
-            long currtime_post_execution = System.currentTimeMillis();
-            long diff = currtime_post_execution - startTime;
-
-            long runtime_s = diff / 1000;
-            if(runtime_s > 60) {
-                long minutes = runtime_s / 60;
-                long seconds = runtime_s % 60;
-                System.out.println("Runtime of getting data from database: " + minutes + " minutes, and " + seconds + " seconds.");
-            } else {
-                System.out.println("Runtime of getting data from database: " + runtime_s + " seconds.");
-            }
+//            long currtime_post_execution = System.currentTimeMillis();
+//            long diff = currtime_post_execution - startTime;
+//
+//            long runtime_s = diff / 1000;
+//            if(runtime_s > 60) {
+//                long minutes = runtime_s / 60;
+//                long seconds = runtime_s % 60;
+//                System.out.println("Runtime of getting data from database: " + minutes + " minutes, and " + seconds + " seconds.");
+//            } else {
+//                System.out.println("Runtime of getting data from database: " + runtime_s + " seconds.");
+//            }
             return jsonDataParser.getData(response_meta);
 
         } catch (UnirestException e) {

@@ -42,21 +42,27 @@ FstCalculationController {
                     Double.parseDouble(dialog.getField_significance().getText()));
 
 
-                Task task = createTask();
-                mito.getProgressBarhandler().activate(task.progressProperty());
+            Task task = createTask();
+            mito.getProgressBarhandler().activate(task);
 
-                task.setOnSucceeded((EventHandler<Event>) event -> {
+            task.setOnCancelled((EventHandler<Event>) event -> {
+                dialog.getMitobenchWindow().getTabpane_statistics().getTabs().remove(dialog.getTab());
+                System.out.println("FST cancelled");
+                mito.getProgressBarhandler().stop();
+            });
+
+            task.setOnSucceeded((EventHandler<Event>) event -> {
+                fstCalculationRunner.writeResultToMitoBench();
+                fstCalculationRunner.visualizeResult();
+
+                if(dialog.getCheckbox_saveLogFileBtn().isSelected()){
                     fstCalculationRunner.writeResultToMitoBench();
-                    fstCalculationRunner.visualizeResult();
+                }
 
-                    if(dialog.getCheckbox_saveLogFileBtn().isSelected()){
-                        fstCalculationRunner.writeResultToMitoBench();
-                    }
-
-                    dialog.getLOG().info("Fst calculations finished.");
-                    dialog.getMitobenchWindow().getTabpane_statistics().getTabs().remove(dialog.getTab());
-                    mito.getProgressBarhandler().stop();
-                });
+                dialog.getLOG().info("Fst calculations finished.");
+                dialog.getMitobenchWindow().getTabpane_statistics().getTabs().remove(dialog.getTab());
+                mito.getProgressBarhandler().stop();
+            });
 
             new Thread(task).start();
 

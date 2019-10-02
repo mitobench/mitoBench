@@ -145,7 +145,13 @@ public class ProfilePlot extends AChart {
             }
         };
 
-        mito.getProgressBarhandler().activate(task.progressProperty());
+        mito.getProgressBarhandler().activate(task);
+
+        task.setOnCancelled((EventHandler<Event>) event -> {
+            mito.getProgressBarhandler().stop();
+        });
+
+
         task.setOnSucceeded((EventHandler<Event>) event -> {
             TableView table = haploStatistics.writeToTable();
             haploStatistics.addListener(table, this);

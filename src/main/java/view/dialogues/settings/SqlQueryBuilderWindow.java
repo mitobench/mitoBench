@@ -259,7 +259,12 @@ public class SqlQueryBuilderWindow {
     }
 
     private void getData(Task task){
-        mito.getProgressBarhandler().activate(task.progressProperty());
+        mito.getProgressBarhandler().activate(task);
+
+        task.setOnCancelled((EventHandler<Event>) event -> {
+            stage.close();
+            mito.getProgressBarhandler().stop();
+        });
 
         task.setOnSucceeded((EventHandler<Event>) event -> {
 
@@ -455,28 +460,6 @@ public class SqlQueryBuilderWindow {
                 label_population.setDisable(true);
                 population_combobox.setDisable(true);
             }
-//
-//            // set list of countries according the selected continent(s)
-//            ObservableList<String> curr_checked_items_country = country_sample_origin_combobox.getItems();
-//            country_sample_origin_combobox.getItems().removeAll(curr_checked_items_country);
-//
-//            if(continents_sample_origin_combobox.getCheckModel().getCheckedItems().size() == 0){
-//                // no continent selected --> reset everything
-//                country_sample_origin_combobox.getItems().addAll(continent_country_map.get("All"));
-//
-//            } else {
-//                //continents selected --> set other boxes according this selection
-//                ObservableList<String> curr_checked_items_continent = continents_sample_origin_combobox.getCheckModel().getCheckedItems();
-//
-//
-//                // set counties
-//                ObservableList<String> country_list = FXCollections.observableArrayList();
-//                for(String continent_selected : curr_checked_items_continent){
-//                    country_list.addAll(continent_country_map.get(continent_selected));
-//                }
-//                java.util.Collections.sort(country_list);
-//                country_sample_origin_combobox.getItems().addAll(country_list);
-//            }
 
         });
 

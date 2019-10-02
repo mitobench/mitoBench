@@ -13,8 +13,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import org.apache.commons.collections4.bag.SynchronizedSortedBag;
 import org.controlsfx.control.CheckComboBox;
 
+import javax.sound.midi.Soundbank;
 import java.util.*;
 import java.util.List;
 
@@ -32,7 +34,6 @@ public class PcaPopupDialogue extends AHGDialogue {
     private List<CheckComboBox> checkComboBox_with_groupmembers = new ArrayList<>();
     private int id;
     private Button btn_del;
-    private String[] hg_list_trimmed;
     private PCA_Analysis pca_alternative;
     private double[][] result_pca;
 
@@ -49,7 +50,6 @@ public class PcaPopupDialogue extends AHGDialogue {
 
     public void addAdditionalComponents(){
 
-
         checkbox_use_grouping_for_colors = new CheckBox("Assign one colour to more than one group");
         addCheckboxColoringListener(checkbox_use_grouping_for_colors);
 
@@ -60,7 +60,6 @@ public class PcaPopupDialogue extends AHGDialogue {
 
         dialogGrid.add(checkbox_use_grouping_for_colors, 0,++row, 1,1);
         dialogGrid.add(grid_colors_group, 0, ++row, 2,1);
-
 
     }
 
@@ -74,12 +73,12 @@ public class PcaPopupDialogue extends AHGDialogue {
                 combobox_hglist.getSelectionModel().select("Please enter list here.");
 
             } else {
-                Task task1 = new Task() {
+                Task task = new Task() {
                     @Override
                     protected Object call() {
                         // calculate hg count statistics
                         calculateTrimmedHGList();
-                        haploStatistics.count(hg_list_trimmed);
+                        haploStatistics.count(getHg_list_trimmed());
 
                         // calculate PCA
                         pca_alternative = new PCA_Analysis();
@@ -87,18 +86,19 @@ public class PcaPopupDialogue extends AHGDialogue {
                         pca_alternative.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
                         pca_alternative.calculate();
 
-                        //pca_analysis = new PCA(haploStatistics, mito.getTableControllerUserBench());
-                        //pca_analysis.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
-                        //parseGroups();
-
-                        //result_pca = pca_analysis.calculate(haploStatistics.getFrequencies(), 2);
                         result_pca = pca_alternative.getResult();
 
                         return true;
                     }
                 };
-                mito.getProgressBarhandler().activate(task1.progressProperty());
-                task1.setOnSucceeded((EventHandler<Event>) event -> {
+                mito.getProgressBarhandler().activate(task);
+
+                task.setOnCancelled((EventHandler<Event>) event -> {
+                    statsTabPane.getTabs().remove(getTab());
+                    mito.getProgressBarhandler().stop();
+                });
+
+                task.setOnSucceeded((EventHandler<Event>) event -> {
                     TableView table = haploStatistics.writeToTable();
 
                     statsTabPane.getTabs().remove(getTab());
@@ -110,7 +110,7 @@ public class PcaPopupDialogue extends AHGDialogue {
                     statsTabPane.getTabs().add(tab);
                     statsTabPane.getSelectionModel().select(tab);
 
-                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
+                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(getHg_list_trimmed()));
 
                     //group_members.clear();
                     pca_alternative.plot(
@@ -125,15 +125,6 @@ public class PcaPopupDialogue extends AHGDialogue {
                             haploStatistics,
                             mito.getTableControllerUserBench()
                     );
-//                    pca_analysis.plot(
-//                            result_pca,
-//                            mito.getPrimaryStage(),
-//                            logClass,
-//                            mito.getTabpane_statistics(),
-//                            group_members,
-//                            mito.getChartController(),
-//                            pca_alternative.getVariancePC1(),
-//                            pca_alternative.getVariancePC2());
 
                     Tab tab_pca = new Tab("PCA (pca " + id + ")");
                     tab_pca.setId("tab_pca_plot_" + id);
@@ -147,11 +138,10 @@ public class PcaPopupDialogue extends AHGDialogue {
                     mito.getTabpane_visualization().getSelectionModel().select(tab_pca);
 
                     LOG.info("Calculate PCA");
-
                     mito.getProgressBarhandler().stop();
                 });
 
-                new Thread(task1).start();
+                new Thread(task).start();
 
             }
         });

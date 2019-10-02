@@ -100,7 +100,13 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
 
             } else {
                 Task task = createTask();
-                mito.getProgressBarhandler().activate(task.progressProperty());
+                mito.getProgressBarhandler().activate(task);
+
+                task.setOnCancelled((EventHandler<Event>) event -> {
+                    statsTabPane.getTabs().remove(getTab());
+                    LOG.info("Calculate Haplotype frequencies.\nSpecified Haplotypes: " + Arrays.toString(hg_list_trimmed));
+                    mito.getProgressBarhandler().stop();
+                });
 
                 task.setOnSucceeded((EventHandler<Event>) event -> {
                     TableView table = haploStatistics.writeToTable();
@@ -128,23 +134,22 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     }
 
 
-    public void calculateTrimmedHGList(){
-
+    public void calculateTrimmedHGList() {
 
         String[] hg_list;
 
         String p1 = combobox_hglist.getSelectionModel().getSelectedItem().toString();
-        Pattern p = Pattern.compile("[A-Za-z0123456789*,]*\n*");
+
+        if (p1.contains("(") && p1.contains(")")) {
+            String p2 = p1.split("\\(")[1];
+            p1 = p2.split("\\)")[0];
+        }
+
+        Pattern p = Pattern.compile("[A-Za-z0123456789*@+,' ()]*\n*");
         Matcher m = p.matcher(p1);
         if (m.matches()) {
             p1 = p1.replace("*", "");
-            if (p1.contains("(") && p1.contains(")")) {
-                String p2 = p1.split("\\(")[1];
-                String p3 = p2.split("\\)")[0];
-                hg_list = p3.split(",");
-            } else {
-                hg_list = p1.split(",");
-            }
+            hg_list = p1.split(",");
             hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
 
         } else {
@@ -156,6 +161,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         }
 
     }
+
 
     public Button getOkBtn() {
         return okBtn;

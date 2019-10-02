@@ -11,8 +11,10 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import model.CancelButton;
 import view.menus.*;
 import view.tree.TreeView;
 
@@ -40,7 +42,7 @@ public class MitoBenchWindow extends Application{
     private VBox pane_table_userBench;
     private Label info_selected_items;
     private GroupController groupController;
-    private Button enableDBBtn;
+    private CancelButton btn_cancel;
     private LogClass logClass;
     private TreeView treeView;
     private boolean anotherProjectLoaded;
@@ -96,9 +98,7 @@ public class MitoBenchWindow extends Application{
         pane_root.prefHeightProperty().bind(scene.heightProperty());
         pane_root.prefWidthProperty().bind(scene.widthProperty());
 
-        enableDBBtn = new Button("Show DB");
-        enableDBBtn.setVisible(false);
-
+        btn_cancel = new CancelButton();
 
         // initialize table
         tableControllerUserBench = new TableControllerUserBench(logClass);
@@ -243,10 +243,10 @@ public class MitoBenchWindow extends Application{
         HBox hbox = new HBox();
         Region filler = new Region(); HBox.setHgrow(filler, Priority.ALWAYS);
 
-        progressBarhandler = new ProgressBarHandler();
+        progressBarhandler = new ProgressBarHandler(btn_cancel);
         progressBarhandler.create();
 
-        hbox.getChildren().addAll(label, filler, progressBarhandler.getProgressBar(), enableDBBtn);
+        hbox.getChildren().addAll(label, filler, progressBarhandler.getProgressBar(), btn_cancel);
 
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTablePane");
@@ -318,8 +318,8 @@ public class MitoBenchWindow extends Application{
         return scene;
     }
 
-    public Button getEnableDBBtn() {
-        return enableDBBtn;
+    public Button getBtn_cancel() {
+        return btn_cancel;
     }
 
     public LogClass getLogClass() {

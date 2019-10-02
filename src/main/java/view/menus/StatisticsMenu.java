@@ -73,8 +73,11 @@ public class StatisticsMenu {
             LOG.info("Calculate haplotype frequency");
             mutationStatistics = new HaplotypeStatistics(LOGClass, mito.getPrimaryStage());
             Task task = createTaskHaploFreqs();
-            mito.getProgressBarhandler().activate(task.progressProperty());
+            mito.getProgressBarhandler().activate(task);
 
+            task.setOnCancelled((EventHandler<Event>) event -> {
+                mito.getProgressBarhandler().stop();
+            });
             task.setOnSucceeded((EventHandler<Event>) event -> {
                 mutationStatistics.writeToTable(statsTabpane);
                 mito.getProgressBarhandler().stop();

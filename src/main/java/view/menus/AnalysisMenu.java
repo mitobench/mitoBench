@@ -13,6 +13,8 @@ import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
 import view.dialogues.settings.PcaPopupDialogue;
 
+import java.util.Arrays;
+
 
 /**
  * Created by neukamm on 20.04.17.
@@ -79,7 +81,12 @@ public class AnalysisMenu {
                     return true;
                 }
             };
-            mito.getProgressBarhandler().activate(task.progressProperty());
+            mito.getProgressBarhandler().activate(task);
+
+            task.setOnCancelled((EventHandler<Event>) event -> {
+                haplotypeCaller.deleteTmpFiles();
+                mito.getProgressBarhandler().stop();
+            });
             task.setOnSucceeded((EventHandler<Event>) event -> {
                 haplotypeCaller.update();
                 haplotypeCaller.deleteTmpFiles();

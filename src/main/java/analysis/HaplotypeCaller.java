@@ -3,6 +3,7 @@ package analysis;
 
 import Logging.LogClass;
 import genepi.haplogrep.main.Haplogrep;
+import htsjdk.samtools.SAMException;
 import io.Exceptions.HSDException;
 import io.reader.HSDInput;
 import io.writer.MultiFastaWriter;
@@ -36,7 +37,7 @@ public class HaplotypeCaller {
 
     public void call(String lineage) throws IOException {
         String file = "multifasta.fasta";
-        System.out.println("Writing fasta sequences to " + file);
+        //System.out.println("Writing fasta sequences to " + file);
         //System.out.println(file);
 
         // generate fasta file with all sequences for which haplogroups have to be determined
@@ -57,7 +58,7 @@ public class HaplotypeCaller {
                 hsdInput = new HSDInput("haplogroups.hsd", LOG);
                 tableController.updateTable(hsdInput.getCorrespondingData());
             }    else {
-                System.out.println("Haplogrep did not run properly");
+                LOG.info("Haplogrep did not run properly");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,23 +88,37 @@ public class HaplotypeCaller {
     }
 
 
-    private void start(String f, String linegae) throws IOException {
+    private void start(String f, String lineage) {
+        // todo: error handling when task cancelled
 
         String[] command = new String[] {
                 "--format", "fasta",
                 "--in",f,
                 "--out", "haplogroups.hsd",
                 "--extend-report",
-                linegae};
+                lineage};
 
-        Haplogrep haplogrep = new Haplogrep(command);
-        haplogrep.start();
-        System.out.println("Haplogroups are determined");
 
-        //delete temporary fasta file
-        Files.delete(new File(f).toPath());
+            Haplogrep haplogrep = new Haplogrep(command);
+        try {
+            haplogrep.start();
 
-        LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.1.18");
+            LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.1.18");
+        } catch (SAMException e){
+                System.err.println("Task cancelled");
+
+        }
+
+        // delete all temporary files
+
+        if(new File(f).exists()) {
+            try {
+                Files.delete(new File(f).toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
+
 }

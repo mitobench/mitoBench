@@ -438,7 +438,13 @@ public class VisualizationMenu {
                         }
                     };
 
-                    mito.getProgressBarhandler().activate(task.progressProperty());
+                    mito.getProgressBarhandler().activate(task);
+
+                    task.setOnCancelled((EventHandler<Event>) event -> {
+                        haplotypeCaller.deleteTmpFiles();
+                        mito.getProgressBarhandler().stop();
+                    });
+
                     task.setOnSucceeded((EventHandler<Event>) event -> {
                         Tab sampleTree_tab = new Tab("Sample tree");
 
@@ -485,11 +491,9 @@ public class VisualizationMenu {
                         haplotypeCaller.deleteTmpFiles();
                         mito.getProgressBarhandler().stop();
 
-
                     });
 
                     new Thread(task).start();
-
 
                 }
 
