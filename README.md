@@ -1,6 +1,5 @@
 # MitoBench
 
-[![Build Status](https://travis-ci.org/Integrative-Transcriptomics/MitoBench.svg?branch=master)](https://travis-ci.org/Integrative-Transcriptomics/MitoBench)
 [![dependencies Status](https://david-dm.org/thomasjo/atom-latex/status.svg)](https://david-dm.org/thomasjo/atom-latex)
 [![DOI](https://zenodo.org/badge/72427990.svg)](https://zenodo.org/badge/latestdoi/72427990)
 [![Documentation Status](https://readthedocs.org/projects/mitobench/badge/?version=latest)](https://readthedocs.org/projects/mitobench/badge/?version=latest)
