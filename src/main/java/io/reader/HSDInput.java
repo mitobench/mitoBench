@@ -81,7 +81,7 @@ public class HSDInput implements IInputData {
                 }
             } else {
 
-                String[] splitGroup = currline.replace("\"", "").split("\t");
+                String[] splitGroup = currline.replace("\"", "").split("\t", Integer.MAX_VALUE);
 
                 String polys_not_found = "";
                 String polys_found = "";
