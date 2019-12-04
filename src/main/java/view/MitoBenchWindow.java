@@ -26,9 +26,9 @@ import java.nio.file.Files;
 /**
  * Created by neukamm on 03.11.16.
  */
-public class MitoBenchWindow extends Application{
+public class MitoBenchWindow extends Application {
 
-    private final String MITOBENCH_VERSION = "1.2-beta";
+    private final String MITOBENCH_VERSION = "1.6-beta";
 
     private BorderPane pane_root;
     private TableControllerUserBench tableControllerUserBench;

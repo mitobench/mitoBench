@@ -3,7 +3,6 @@ version '1.6-beta'
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'jacoco'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
@@ -27,14 +26,6 @@ sourceSets {
             srcDirs "src/main/resources"
         }
     }
-    test {
-        java {
-            srcDir 'test'
-        }
-        resources {
-            srcDir 'resources'
-        }
-    }
 }
 
 
@@ -55,39 +46,16 @@ dependencies {
     compile files('src/main/resources/jars/PhylotreeParser-0.4.4.jar')
     compile files('src/main/resources/jars/PGDSpider2.jar')
     compile files('src/main/resources/jars/haplogrep-2.1.25.jar')
-
 }
 
-
-task copyTestResources(type: Copy) {
-    from "${projectDir}/src/test/resources"
-    into "${buildDir}/classes/test"
-}
-processTestResources.dependsOn copyTestResources
-
-//Required for headless testing here!!
-test {
-    if (!project.hasProperty("noHeadless")) {
-        jvmArgs = ["-Dheadless=true"]
-    } else {
-        jvmArgs = ["-Dheadless=false"]
-    }
-}
 
 jar {
 
     manifest {
         attributes("Implementation-Title": "MitoBench",
-                "Implementation-Version": version, "main-Class": "MitoBenchStarter")
+                   "main-Class": "Launcher")
     }
     doFirst {
         from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
-    }
-}
-
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
     }
 }
