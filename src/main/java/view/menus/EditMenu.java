@@ -20,6 +20,7 @@ public class EditMenu {
     private final LogClass logClass;
     private final MitoBenchWindow mito;
     private Menu menuEdit;
+    private MenuController menuController;
 
 
     public EditMenu(MitoBenchWindow mitoBenchWindow){
@@ -27,6 +28,7 @@ public class EditMenu {
         menuEdit.setId("menuEdit");
         mito = mitoBenchWindow;
         logClass = mitoBenchWindow.getLogClass();
+        menuController = mitoBenchWindow.getMenuController();
         addSubMenus();
 
     }
@@ -83,9 +85,17 @@ public class EditMenu {
         Tooltip.install(defineHGList.getContent(), tooltip_hglist);
 
 
+        CustomMenuItem validateData = new CustomMenuItem(new Label("Validate data"));
+        validateData.setId("menuitem_validate_data");
+        menuController.setEditMenuValidateData(validateData);
+
+        Tooltip tooltip_validateData = new Tooltip("This will validate your data, which is necessary before " +
+                "uploading data to database.");
+        Tooltip.install(validateData.getContent(), tooltip_validateData);
+
 
         filterData.getItems().addAll(filterTreeBased, filterWithMutation);
-        menuEdit.getItems().addAll(filterData, defineHGList);
+        menuEdit.getItems().addAll(filterData, defineHGList, validateData);
 
     }
 

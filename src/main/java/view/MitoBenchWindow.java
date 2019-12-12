@@ -50,6 +50,7 @@ public class MitoBenchWindow extends Application {
     private ChartController chartController;
     private ProgressBarHandler progressBarhandler;
     private FileReaderController fileReaderController;
+    private MenuController menuController;
 
 
     @Override
@@ -92,6 +93,7 @@ public class MitoBenchWindow extends Application {
         primaryStage.setMaximized(true);
         primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
 
+        menuController = new MenuController();
 
 
         // bind width and height to scene to enable resizing
@@ -147,7 +149,7 @@ public class MitoBenchWindow extends Application {
 
         // add drag and drop files to data table view
         tableControllerUserBench.addDragAndDropFiles(this);
-
+        menuController.setTableController(tableControllerUserBench);
         primaryStage.show();
 
     }
@@ -411,6 +413,7 @@ public class MitoBenchWindow extends Application {
         return fileReaderController;
     }
 
-
-
+    public MenuController getMenuController() {
+        return menuController;
+    }
 }
