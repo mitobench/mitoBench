@@ -2,15 +2,12 @@ package view.menus;
 
 import Logging.LogClass;
 import controller.HGListController;
+import controller.MenuController;
 import javafx.scene.control.*;
-import org.xml.sax.SAXException;
 import view.MitoBenchWindow;
 import view.dialogues.settings.DataFilteringHaplotypeBasedDialogue;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.dialogues.settings.HGListDialogue;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 
 /**
  * Created by neukamm on 16.11.16.

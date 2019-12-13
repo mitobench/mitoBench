@@ -1,5 +1,6 @@
 package io.writer;
 
+import database.ColumnNameMapper;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
@@ -27,6 +28,7 @@ public class GenericWriter implements IOutputData {
         this.tableController = tableController;
         this.delimiter = delimiter;
         this.addFasta = addfasta;
+
     }
 
 
@@ -39,6 +41,7 @@ public class GenericWriter implements IOutputData {
      * @throws Exception
      */
     public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+        ColumnNameMapper mapper = new ColumnNameMapper();
 
         if(delimiter.equals(",")){
             if(!file.endsWith(".csv"))
@@ -69,12 +72,12 @@ public class GenericWriter implements IOutputData {
                         header = header.substring(0, header.length() - 1);
                         colname = "";
                     }
-                    header += colname + "\n";
+                    header += mapper.mapString(colname) + "\n";
                 } else {
                     if(!addFasta && colname.equals("MTSequence")){
                         header = header.substring(0, header.length() - 1);
                     } else {
-                        header += colname + delimiter;
+                        header += mapper.mapString(colname) + delimiter;
                     }
 
                 }

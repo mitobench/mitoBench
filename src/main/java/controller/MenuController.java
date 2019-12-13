@@ -1,11 +1,10 @@
-package view.menus;
+package controller;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import controller.TableControllerUserBench;
 import io.writer.GenericWriter;
 import io.writer.MultiFastaWriter;
 import javafx.scene.control.CustomMenuItem;
 import validator.calculations.Validator;
+import view.dialogues.information.DataValidationDialogue;
 import view.dialogues.information.InformationDialogue;
 
 import java.io.IOException;
@@ -52,21 +51,24 @@ public class MenuController {
 
             // run validation
             Validator validator = new Validator();
-            validator.validate(file_meta, fasta_headers, log, file_fasta);
+            System.out.println("running validation");
+            try{
+                validator.validate(file_meta, fasta_headers, log, file_fasta);
+            } catch (ArrayIndexOutOfBoundsException e){
+               log += "Problems with column names. Please use the csv template.";
+            }
+
+            System.out.println("finished validation");
             boolean uploadPossible = validator.isUploadPossible();
             if(uploadPossible){
-                result = "Data upload is possible. Please use the option 'Upload data'\n" +
-                        "to import your data to the daatbase.";
+                result = "Data upload is possible.";
             } else {
                 result = "Data upload not possible. Please check the report below.";
             }
 
             // todo: delete tmp files
             // write to popup window
-            InformationDialogue datavalidation_info_Dialogue = new InformationDialogue("Result data validation", log,
-                    result, "dataValidationInfo");
-
-
+            DataValidationDialogue dataValidationDialogue = new DataValidationDialogue("Result data validation", result, log, uploadPossible);
 
         });
     }
