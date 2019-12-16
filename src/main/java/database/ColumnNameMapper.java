@@ -29,7 +29,7 @@ public class ColumnNameMapper {
             case "data_type":
                 return "Data Type";
             case "labsample_id":
-                return "Labsample Ident";
+                return "Labsample Id";
             case "sex":
                 return "Sex";
             case "age":

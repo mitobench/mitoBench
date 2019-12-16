@@ -7,7 +7,9 @@ import validator.calculations.Validator;
 import view.dialogues.information.DataValidationDialogue;
 import view.dialogues.information.InformationDialogue;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class MenuController {
             try{
                 validator.validate(file_meta, fasta_headers, log, file_fasta);
             } catch (ArrayIndexOutOfBoundsException e){
-               log += "Problems with column names. Please use the csv template.";
+               log += "Problems with column names. Please use the csv template.\n\n";
             }
 
             System.out.println("finished validation");
@@ -64,13 +66,37 @@ public class MenuController {
                 result = "Data upload is possible.";
             } else {
                 result = "Data upload not possible. Please check the report below.";
+                log += validator.getLogfileTxt();
             }
 
-            // todo: delete tmp files
+            //delete tmp files
+            deleteTmpFiles();
+
             // write to popup window
             DataValidationDialogue dataValidationDialogue = new DataValidationDialogue("Result data validation", result, log, uploadPossible);
 
+            dataValidationDialogue.getUpload_later_btn().setOnAction(event -> {
+                dataValidationDialogue.getDialog().close();
+            });
+
         });
+    }
+
+    /**
+     * Delete all temporary files that were created while data validation
+     */
+    private void deleteTmpFiles() {
+
+        try {
+            if (Files.exists(new File("tmp_meta_data_toValidate.csv").toPath()))
+                Files.delete(new File("tmp_meta_data_toValidate.csv").toPath());
+
+            if (Files.exists(new File("tmp_fasta_toValidate.fasta").toPath()))
+                Files.delete(new File("tmp_fasta_toValidate.fasta").toPath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setTableController(TableControllerUserBench tableControllerUserBench) {
