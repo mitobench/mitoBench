@@ -1,11 +1,10 @@
 package controller;
 
+import calculations.Validator;
 import io.writer.GenericWriter;
 import io.writer.MultiFastaWriter;
 import javafx.scene.control.CustomMenuItem;
-import validator.calculations.Validator;
 import view.dialogues.information.DataValidationDialogue;
-import view.dialogues.information.InformationDialogue;
 
 import java.io.File;
 import java.io.IOException;
