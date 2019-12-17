@@ -22,6 +22,8 @@ public class DataValidationDialogue {
     private final boolean uploadPossible;
     private Button upload_later_btn;
     private Button upload_now_btn;
+    private Label textArea_message;
+    private ScrollPane scrollPane_log;
 
 
     public DataValidationDialogue(String title, String result, String log, boolean uploadPossible){
@@ -46,9 +48,8 @@ public class DataValidationDialogue {
     private void addComponents(String result, String log) {
 
         int row=0;
-        ScrollPane scrollPane_log = new ScrollPane();
-        scrollPane_log.setDisable(true);
-        Label textArea_message = new Label(result);
+        scrollPane_log = new ScrollPane();
+        textArea_message = new Label(result);
         upload_now_btn = new Button("Upload data now");
         upload_later_btn = new Button("Upload data later");
         if (!uploadPossible){
@@ -99,8 +100,8 @@ public class DataValidationDialogue {
     public Button getUpload_later_btn() {
         return upload_later_btn;
     }
-
     public Button getUpload_now_btn() {
         return upload_now_btn;
     }
+
 }

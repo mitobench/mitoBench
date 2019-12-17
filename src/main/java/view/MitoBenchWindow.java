@@ -92,7 +92,7 @@ public class MitoBenchWindow extends Application {
         primaryStage.setMaximized(true);
         primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
 
-        menuController = new MenuController();
+        menuController = new MenuController(logClass.getLogger(this.getClass()));
 
 
         // bind width and height to scene to enable resizing
