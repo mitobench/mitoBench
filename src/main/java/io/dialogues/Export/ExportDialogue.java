@@ -149,7 +149,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    GenericWriter csvWriter = new GenericWriter(tableController, LOG, dataToExport, ",", true);
+                    GenericWriter csvWriter = new GenericWriter(dataToExport, ",", true);
                     csvWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception e) {
@@ -164,7 +164,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    GenericWriter csvWriter = new GenericWriter(tableController, LOG, dataToExport, "\t", true);
+                    GenericWriter csvWriter = new GenericWriter(dataToExport, "\t", true);
                     csvWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into TSV format. File: " + outFileDB);
                 } catch (Exception e) {

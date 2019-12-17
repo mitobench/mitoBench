@@ -115,9 +115,9 @@ public class ColumnNameMapper {
             case "c14_age_bp":
                 return "C14 Radiocarbon Date";
             case "indirect_contextual_date_to":
-                return "Indirect contextual Date To";
+                return "Indirect contextual Date upper limit";
             case "indirect_contextual_date_from":
-                return "Indirect Contextual Date From";
+                return "Indirect Contextual Date lower limit";
             case "radiocarbon_lab_code":
                 return "Lab code of radiocarbon dating";
             case "dating_comments":
@@ -164,7 +164,7 @@ public class ColumnNameMapper {
                 return "Haplogroup";
             case "macro_haplogroup":
                 return "Macro Haplogroup";
-            case "percentage_n":
+            case "percentage_N":
                 return "Percentage of N";
             case "sequence_versions":
                 return "Sequence versions";
@@ -277,9 +277,9 @@ public class ColumnNameMapper {
                 return "calibrated_date_range_to";
             case "C14 Radiocarbon Date":
                 return "c14_age_bp";
-            case "Indirect contextual Date From":
+            case "Indirect contextual Date lower limit":
                 return "indirect_contextual_date_from";
-            case "Indirect contextual Date To":
+            case "Indirect contextual Date upper limit":
                 return "indirect_contextual_date_to";
             case "Lab code of radiocarbon dating":
                 return "radiocarbon_lab_code";
@@ -328,7 +328,7 @@ public class ColumnNameMapper {
             case "Macro Haplogroup":
                 return "macro_haplogroup";
             case "Percentage of N":
-                return "percentage_n";
+                return "percentage_N";
             case "Sequence versions":
                 return "sequence_versions";
             case "Sequence version comments":

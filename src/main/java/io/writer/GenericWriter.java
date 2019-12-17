@@ -19,13 +19,11 @@ public class GenericWriter implements IOutputData {
 
     private final boolean addFasta;
     private ObservableList<ObservableList> data;
-    private TableControllerUserBench tableController;
     private String delimiter;
 
-    public GenericWriter(TableControllerUserBench tableController, Logger LOG, ObservableList<ObservableList> dataToExport,
-                         String delimiter, boolean addfasta){
+    public GenericWriter(ObservableList<ObservableList> dataToExport, String delimiter, boolean addfasta){
         this.data = dataToExport;
-        this.tableController = tableController;
+
         this.delimiter = delimiter;
         this.addFasta = addfasta;
 
@@ -62,7 +60,7 @@ public class GenericWriter implements IOutputData {
 
             // write header
             String header = "";
-            List<String> columns = this.tableController.getCurrentColumnNames();
+            List<String> columns = tableController.getCurrentColumnNames();
             for (int i = 0; i < columns.size(); i++){
                 String colname = columns.get(i);
                 if(i == columns.size()-1){

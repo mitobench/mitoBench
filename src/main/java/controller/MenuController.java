@@ -2,6 +2,7 @@ package controller;
 
 import calculations.Validator;
 import com.company.DataCompleter;
+import database.DataUploader;
 import database.DuplicatesChecker;
 import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
@@ -46,8 +47,7 @@ public class MenuController {
                     e.printStackTrace();
                 }
 
-                GenericWriter metaWriter = new GenericWriter(tablecontroller, null, tablecontroller.getSelectedRows(),
-                        ",", false);
+                GenericWriter metaWriter = new GenericWriter(tablecontroller.getSelectedRows(),",", false);
                 try {
                     metaWriter.writeData("tmp_meta_data_toValidate.csv", tablecontroller);
                 } catch (IOException e) {
@@ -121,6 +121,8 @@ public class MenuController {
                     }
                     // - upload data
                     System.out.println("Uploading data to database ....");
+                    DataUploader dataUploader = new DataUploader(tablecontroller);
+                    dataUploader.upload();
 
                     dataValidationDialogue.getDialog().close();
 
