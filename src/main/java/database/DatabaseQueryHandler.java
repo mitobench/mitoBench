@@ -18,7 +18,6 @@ public class DatabaseQueryHandler {
 
     private JsonDataParser jsonDataParser = new JsonDataParser();
 
-
     /**
      * add all data from database to mitoBench.
      *
@@ -57,13 +56,16 @@ public class DatabaseQueryHandler {
     }
 
 
+    /**
+     *
+     * @return
+     */
     public Set<String> getAuthorList(){
         Set<String> result = new HashSet<>();
 
         try {
             String query_complete = "http://mitodb.org/meta?select=author,publication_date";
             HttpResponse<JsonNode> response_authors = Unirest.get(query_complete).asJson();
-
 
             for (int i = 0; i < response_authors.getBody().getArray().length(); i++){
                 JSONObject map = (JSONObject) response_authors.getBody().getArray().get(i);
@@ -80,13 +82,16 @@ public class DatabaseQueryHandler {
     }
 
 
+    /**
+     *
+     * @return
+     */
     public Set<String> getPopulationList(){
         Set<String> result = new HashSet<>();
 
         try {
             String query_complete = "http://mitodb.org/meta?select=population";
             HttpResponse<JsonNode> response_population = Unirest.get(query_complete).asJson();
-
 
             for (int i = 0; i < response_population.getBody().getArray().length(); i++){
                 JSONObject map = (JSONObject) response_population.getBody().getArray().get(i);
@@ -97,8 +102,35 @@ public class DatabaseQueryHandler {
                 } catch (Exception e){
                     continue;
                 }
+            }
 
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
 
+        return result;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Set<String> getAccessionIDs(){
+        Set<String> result = new HashSet<>();
+
+        try {
+            String query_complete = "http://mitodb.org/meta?select=accession_id";
+            HttpResponse<JsonNode> response_accession_ids = Unirest.get(query_complete).asJson();
+
+            for (int i = 0; i < response_accession_ids.getBody().getArray().length(); i++){
+                JSONObject map = (JSONObject) response_accession_ids.getBody().getArray().get(i);
+
+                try {
+                    String accession_id = (String) map.get("accession_id");
+                    result.add(accession_id.trim());
+                } catch (Exception e){
+                    continue;
+                }
             }
 
         } catch (UnirestException e) {
@@ -109,7 +141,11 @@ public class DatabaseQueryHandler {
     }
 
 
-
+    /**
+     *
+     * @param query
+     * @return
+     */
     public HashMap<String, List<Entry>> getDataSelection(String query) {
 
         try {

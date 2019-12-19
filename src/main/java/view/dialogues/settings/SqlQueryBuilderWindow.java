@@ -59,7 +59,7 @@ public class SqlQueryBuilderWindow {
 
     public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
 
-        databaseQueryHandler = new DatabaseQueryHandler();
+        databaseQueryHandler = mitoBenchWindow.getDatabaseQueryHandler();
         mito = mitoBenchWindow;
 
         root = new BorderPane();

@@ -51,7 +51,7 @@ public abstract class ATableController {
     public void init(){
 
         table = new TableView();
-        table.setEditable(false);
+        table.setEditable(true);
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 

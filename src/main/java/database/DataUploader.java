@@ -1,15 +1,26 @@
 package database;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import controller.TableControllerUserBench;
+import io.datastructure.Entry;
+import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DataUploader {
+    private Logger logger;
     private TableControllerUserBench tablecontroller;
 
-    public DataUploader(TableControllerUserBench tablecontroller) {
-
+    public DataUploader(TableControllerUserBench tablecontroller, Logger logger) {
+        this.logger = logger;
         this.tablecontroller = tablecontroller;
         // write data
         GenericWriter genericWriter = new GenericWriter(tablecontroller.getSelectedRows(), ",", true);
@@ -21,9 +32,80 @@ public class DataUploader {
         }
     }
 
-    public void upload() {
+
+    /**
+     *
+     * @param outfile
+     */
+    public void parseMeta(String outfile) {
+
+        try {
+            GenericInputParser genericInputReader = new GenericInputParser(outfile, logger, ",");
+
+            HashMap<String, List<Entry>> meta = genericInputReader.getCorrespondingData();
+            String[] header = genericInputReader.getHeader();
+
+            for (String acc : meta.keySet()){
+                List<Entry> row = meta.get(acc);
+                upload(header, row, acc);
+            }
 
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
+    public void upload(String[] header, List<Entry> row, String acc) {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("accept", "application/json");
+
+        Map<String, Object> fields =  buildBody(header, row, acc);
+
+        try {
+            HttpResponse<JsonNode> response_authors = Unirest
+                    .post("http://mitodb.org/meta")
+                    .headers(headers)
+                    .fields(fields)
+                    .asJson();
+
+            int status = response_authors.getStatus();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     *
+     * @return
+     * @param header
+     * @param row
+     * @param acc
+     */
+    private Map<String, Object>  buildBody(String[] header, List<Entry> row, String acc){
+
+        Map<String, Object>  body = new HashMap<>();
+        body.put(header[0], acc);
+
+        if(header.length == row.size()+1){
+
+            for(int i = 1; i < header.length; i++){
+                body.put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
+                System.out.println(header[i] +"_"+ row.get(i-1).getData().getTableInformation());
+
+                //body += "\"" + header[i] + "\":\"" + row.get(i-1).getData().getTableInformation() +"\",";
+            }
+            //body = "{" + body.substring(0, body.length()-1) + "}";
+            return body;
+        } else {
+            System.err.println("Header and row are of different length. Upload not possible.");
+            return null;
+        }
+
+    }
+
+
 }

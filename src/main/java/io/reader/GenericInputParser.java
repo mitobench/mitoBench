@@ -22,6 +22,9 @@ import java.util.List;
  * Created by peltzer on 17/11/2016.
  */
 public class GenericInputParser implements IInputData {
+
+    private String[] headertype;
+    private String[] headergroup;
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
 
@@ -30,8 +33,8 @@ public class GenericInputParser implements IInputData {
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
         ColumnNameMapper mapper = new ColumnNameMapper();
-        String[] headergroup = null;
-        String[] headertype = null;
+        headergroup = null;
+        headertype = null;
 
         String currline;
 
@@ -110,5 +113,13 @@ public class GenericInputParser implements IInputData {
     @Override
     public HashMap<String, List<Entry>> getCorrespondingData() {
         return map;
+    }
+
+    public String[] getTypes() {
+        return headertype;
+    }
+
+    public String[] getHeader() {
+        return headergroup;
     }
 }

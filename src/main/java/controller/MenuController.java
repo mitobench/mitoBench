@@ -3,6 +3,7 @@ package controller;
 import calculations.Validator;
 import com.company.DataCompleter;
 import database.DataUploader;
+import database.DatabaseQueryHandler;
 import database.DuplicatesChecker;
 import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
@@ -12,7 +13,6 @@ import org.apache.log4j.Logger;
 import view.dialogues.information.DataValidationDialogue;
 import view.dialogues.information.InformationDialogue;
 
-import javax.sound.sampled.DataLine;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,11 +21,13 @@ import java.util.List;
 
 
 public class MenuController {
-    private final Logger log;
+    private Logger log;
+    private DatabaseQueryHandler databaseQueryHandler;
     private TableControllerUserBench tablecontroller;
 
-    public MenuController(Logger logger) {
+    public MenuController(Logger logger, DatabaseQueryHandler databaseQueryHandler) {
         this.log = logger;
+        this.databaseQueryHandler = databaseQueryHandler;
     }
 
     public void setEditMenuValidateData(CustomMenuItem validateData) {
@@ -68,6 +70,7 @@ public class MenuController {
                 System.out.println("running validation");
                 try{
                     validator.validate(file_meta, fasta_headers, log, file_fasta);
+                    System.out.println();
                 } catch (ArrayIndexOutOfBoundsException e){
                     log += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();
                 }
@@ -97,9 +100,9 @@ public class MenuController {
                 dataValidationDialogue.getUpload_now_btn().setOnAction(event -> {
 
                     // todo: check for duplicates
-                    DuplicatesChecker duplicatesChecker = new DuplicatesChecker();
+                    DuplicatesChecker duplicatesChecker = new DuplicatesChecker(databaseQueryHandler);
                     System.out.println("Checking for duplicates ....");
-                    duplicatesChecker.check();
+                    duplicatesChecker.check(fasta_headers);
 
                     // - data completion
                     DataCompleter dataCompleter = new DataCompleter();
@@ -121,8 +124,8 @@ public class MenuController {
                     }
                     // - upload data
                     System.out.println("Uploading data to database ....");
-                    DataUploader dataUploader = new DataUploader(tablecontroller);
-                    dataUploader.upload();
+                    DataUploader dataUploader = new DataUploader(tablecontroller, this.log);
+                    dataUploader.parseMeta(dataCompleter.getOutfile());
 
                     dataValidationDialogue.getDialog().close();
 
@@ -151,4 +154,6 @@ public class MenuController {
     public void setTableController(TableControllerUserBench tableControllerUserBench) {
         this.tablecontroller = tableControllerUserBench;
     }
+
+
 }

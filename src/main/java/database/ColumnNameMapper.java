@@ -42,21 +42,21 @@ public class ColumnNameMapper {
                 return "Access";
             case "language":
                 return "Language";
-            case "generations_to_TMA":
+            case "generations_to_tma":
                 return "Generations to TMA";
-            case "geographic_info_TMA_inferred_latitude":
+            case "geographic_info_tma_inferred_latitude":
                 return "TMA inferred Latitude";
-            case "geographic_info_TMA_inferred_longitude":
+            case "geographic_info_tma_inferred_longitude":
                 return "TMA inferred Longitude";
-            case "geographic_info_TMA_inferred_region":
+            case "geographic_info_tma_inferred_region":
                 return "TMA inferred Continent";
-            case "geographic_info_TMA_inferred_subregion":
+            case "geographic_info_tma_inferred_subregion":
                 return "TMA inferred Subregion";
-            case "geographic_info_TMA_inferred_intermediate_region":
+            case "geographic_info_tma_inferred_intermediate_region":
                 return "TMA inferred Intermediate region";
-            case "geographic_info_TMA_inferred_city":
+            case "geographic_info_tma_inferred_city":
                 return "TMA inferred City";
-            case "geographic_info_TMA_inferred_country":
+            case "geographic_info_tma_inferred_country":
                 return "TMA inferred Country";
             case "marriage_rules":
                 return "Marriage Rules";
@@ -114,6 +114,8 @@ public class ColumnNameMapper {
                 return "Calibrated Date upper limit";
             case "c14_age_bp":
                 return "C14 Radiocarbon Date";
+            case "indirect_contextual_date":
+                return "Indirect contextual Date";
             case "indirect_contextual_date_to":
                 return "Indirect contextual Date upper limit";
             case "indirect_contextual_date_from":
@@ -164,7 +166,7 @@ public class ColumnNameMapper {
                 return "Haplogroup";
             case "macro_haplogroup":
                 return "Macro Haplogroup";
-            case "percentage_N":
+            case "percentage_n":
                 return "Percentage of N";
             case "sequence_versions":
                 return "Sequence versions";
@@ -205,22 +207,22 @@ public class ColumnNameMapper {
                 return "access";
             case "Language":
                 return "language";
-            case "Generations to TMA":
-                return "generations_to_TMA";
+            case "Generations to tma":
+                return "generations_to_tma";
             case "TMA inferred Latitude":
-                return "geographic_info_TMA_inferred_latitude";
+                return "geographic_info_tma_inferred_latitude";
             case "TMA inferred Longitude":
-                return "geographic_info_TMA_inferred_longitude";
+                return "geographic_info_tma_inferred_longitude";
             case "TMA inferred Continent":
-                return "geographic_info_TMA_inferred_region";
+                return "geographic_info_tma_inferred_region";
             case "TMA inferred Subregion":
-                return "geographic_info_TMA_inferred_subregion";
+                return "geographic_info_tma_inferred_subregion";
             case "TMA inferred Intermediate region":
-                return "geographic_info_TMA_inferred_intermediate_region";
+                return "geographic_info_tma_inferred_intermediate_region";
             case "TMA inferred City":
-                return "geographic_info_TMA_inferred_city";
+                return "geographic_info_tma_inferred_city";
             case "TMA inferred Country":
-                return "geographic_info_TMA_inferred_country";
+                return "geographic_info_tma_inferred_country";
             case "Marriage Rules":
                 return "marriage_rules";
             case "Marriage System":
@@ -277,6 +279,8 @@ public class ColumnNameMapper {
                 return "calibrated_date_range_to";
             case "C14 Radiocarbon Date":
                 return "c14_age_bp";
+            case "Indirect contextual Date":
+                return "indirect_contextual_date";
             case "Indirect contextual Date lower limit":
                 return "indirect_contextual_date_from";
             case "Indirect contextual Date upper limit":
@@ -328,7 +332,7 @@ public class ColumnNameMapper {
             case "Macro Haplogroup":
                 return "macro_haplogroup";
             case "Percentage of N":
-                return "percentage_N";
+                return "percentage_n";
             case "Sequence versions":
                 return "sequence_versions";
             case "Sequence version comments":

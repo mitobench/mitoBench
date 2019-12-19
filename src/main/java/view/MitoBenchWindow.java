@@ -4,6 +4,7 @@ import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import analysis.ProgressBarHandler;
 import controller.*;
+import database.DatabaseQueryHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -50,6 +51,7 @@ public class MitoBenchWindow extends Application {
     private ProgressBarHandler progressBarhandler;
     private FileReaderController fileReaderController;
     private MenuController menuController;
+    private DatabaseQueryHandler databaseQueryHandler;
 
 
     @Override
@@ -92,7 +94,9 @@ public class MitoBenchWindow extends Application {
         primaryStage.setMaximized(true);
         primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
 
-        menuController = new MenuController(logClass.getLogger(this.getClass()));
+        // init database and menu controller
+        databaseQueryHandler = new DatabaseQueryHandler();
+        menuController = new MenuController(logClass.getLogger(this.getClass()), databaseQueryHandler);
 
 
         // bind width and height to scene to enable resizing
@@ -148,6 +152,7 @@ public class MitoBenchWindow extends Application {
 
         // add drag and drop files to data table view
         tableControllerUserBench.addDragAndDropFiles(this);
+
         menuController.setTableController(tableControllerUserBench);
         primaryStage.show();
 
@@ -414,5 +419,9 @@ public class MitoBenchWindow extends Application {
 
     public MenuController getMenuController() {
         return menuController;
+    }
+
+    public DatabaseQueryHandler getDatabaseQueryHandler() {
+        return databaseQueryHandler;
     }
 }
