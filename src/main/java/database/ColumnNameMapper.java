@@ -31,7 +31,7 @@ public class ColumnNameMapper {
             case "data_type":
                 return "Data Type";
             case "labsample_id":
-                return "Labsample Id";
+                return "Labsample ID";
             case "sex":
                 return "Sex";
             case "age":
@@ -43,7 +43,7 @@ public class ColumnNameMapper {
             case "language":
                 return "Language";
             case "generations_to_tma":
-                return "Generations to TMA";
+                return "Generations to tma";
             case "geographic_info_tma_inferred_latitude":
                 return "TMA inferred Latitude";
             case "geographic_info_tma_inferred_longitude":
@@ -115,9 +115,9 @@ public class ColumnNameMapper {
             case "c14_age_bp":
                 return "C14 Radiocarbon Date";
             case "indirect_contextual_date":
-                return "Indirect contextual Date";
+                return "Indirect Contextual Date";
             case "indirect_contextual_date_to":
-                return "Indirect contextual Date upper limit";
+                return "Indirect Contextual Date upper limit";
             case "indirect_contextual_date_from":
                 return "Indirect Contextual Date lower limit";
             case "radiocarbon_lab_code":
@@ -279,11 +279,11 @@ public class ColumnNameMapper {
                 return "calibrated_date_range_to";
             case "C14 Radiocarbon Date":
                 return "c14_age_bp";
-            case "Indirect contextual Date":
+            case "Indirect Contextual Date":
                 return "indirect_contextual_date";
-            case "Indirect contextual Date lower limit":
+            case "Indirect Contextual Date lower limit":
                 return "indirect_contextual_date_from";
-            case "Indirect contextual Date upper limit":
+            case "Indirect Contextual Date upper limit":
                 return "indirect_contextual_date_to";
             case "Lab code of radiocarbon dating":
                 return "radiocarbon_lab_code";

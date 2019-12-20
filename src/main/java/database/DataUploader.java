@@ -100,7 +100,6 @@ public class DataUploader {
 
             for(int i = 1; i < header.length; i++){
                 body.put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
-                System.out.println(header[i] +"_"+ row.get(i-1).getData().getTableInformation());
 
                 //body += "\"" + header[i] + "\":\"" + row.get(i-1).getData().getTableInformation() +"\",";
             }
