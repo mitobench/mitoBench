@@ -43,12 +43,13 @@ dependencies {
     compile group: 'guru.nidi', name: 'graphviz-java', version: '0.8.10'
     compile group: 'org.ojalgo', name: 'ojalgo', version: '47.2.0'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
-    //compile files('src/main/resources/jars/FstCalculator-0.1.20.jar')
+    compile files('src/main/resources/jars/FstCalculator-0.1.21.jar')
     compile files('src/main/resources/jars/PhylotreeParser-0.4.4.jar')
     compile files('src/main/resources/jars/PGDSpider2.jar')
     compile files('src/main/resources/jars/haplogrep-2.1.25.jar')
-    compile files('src/main/resources/jars/dataValidator.jar')
-    compile files('src/main/resources/jars/dataCompleter.jar')
+    compile files('src/main/resources/jars/reverse-country-code.jar')
+    //compile files('src/main/resources/jars/dataValidator.jar')
+    //compile files('src/main/resources/jars/dataCompleter.jar')
 
 }
 

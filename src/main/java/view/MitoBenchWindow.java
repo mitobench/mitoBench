@@ -96,7 +96,7 @@ public class MitoBenchWindow extends Application {
 
         // init database and menu controller
         databaseQueryHandler = new DatabaseQueryHandler();
-        menuController = new MenuController(logClass.getLogger(this.getClass()), databaseQueryHandler);
+        menuController = new MenuController(databaseQueryHandler, this);
 
 
         // bind width and height to scene to enable resizing
@@ -172,8 +172,8 @@ public class MitoBenchWindow extends Application {
         return toolBar;
     }
 
-    private MenuBar getMenuPane() throws Exception
-    {
+    private MenuBar getMenuPane() {
+
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menuBar");
 
@@ -182,19 +182,22 @@ public class MitoBenchWindow extends Application {
 
         EditMenu editMenu = new EditMenu(this);
         GroupMenu groupMenu = new GroupMenu(this);
+
         StatisticsMenu statisticsMenu = new StatisticsMenu(this);
-        fileMenu = new FileMenu( statisticsMenu, this);
+        fileMenu = new FileMenu( this);
         AnalysisMenu analysisMenu = new AnalysisMenu(this, statisticsMenu);
+        ToolsMenu toolsMenu = new ToolsMenu(this, groupMenu, analysisMenu, statisticsMenu);
         TableMenu tableMenu = new TableMenu(this);
         VisualizationMenu visualizationMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
                                   editMenu.getMenuEdit() ,
-                                  groupMenu.getMenuGroup(),
-                                  analysisMenu.getMenuAnalysis(),
-                                  statisticsMenu.getMenuTools(),
-                                  tableMenu.getMenuTable(),
+                                  toolsMenu.getMenuTools(),
+                                  //groupMenu.getMenuGroup(),
+                                  //analysisMenu.getMenuAnalysis(),
+                                  //statisticsMenu.getMenuTools(),
+                                  //tableMenu.getMenuTable(),
                                   visualizationMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 

@@ -4,7 +4,6 @@ package view.menus;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import controller.*;
-import io.Exceptions.*;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
@@ -39,15 +38,13 @@ public class FileMenu {
     private MitoBenchWindow mitoBenchWindow;
     private String MITOBENCH_VERSION;
     private Stage stage;
-    private StatisticsMenu toolsMenu;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
     private Logger LOG;
     private LogClass logClass;
 
 
-    public FileMenu( StatisticsMenu toolsMenu,
-                     MitoBenchWindow mitoBenchWindow) {
+    public FileMenu( MitoBenchWindow mitoBenchWindow) {
 
         MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
 
@@ -55,7 +52,6 @@ public class FileMenu {
         this.tableControllerDB = mitoBenchWindow.getTableControllerDB();
         this.tableControllerUserBench = mitoBenchWindow.getTableControllerUserBench();
         this.stage = mitoBenchWindow.getPrimaryStage();
-        this.toolsMenu = toolsMenu;
 
         this.menuFile = new Menu("File");
         menuFile.setId("fileMenu");

@@ -59,7 +59,7 @@ public class GenericInputParser implements IInputData {
 
                 continue;
             } else {
-                String[] splitLine = currline.split(delimiter);
+                String[] splitLine = currline.split(delimiter, -1);
                 for(int i = 0; i < splitLine.length; i++){
                     splitLine[i].trim();
                     if(splitLine[i].equals("")){

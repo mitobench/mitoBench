@@ -14,7 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.CancelButton;
 
 public class DataValidationDialogue {
     private final Stage dialog;
@@ -41,7 +40,7 @@ public class DataValidationDialogue {
         this.uploadPossible = uploadPossible;
         addComponents(result, log);
 
-        show(600,400);
+        //show(600,400);
     }
 
 
@@ -83,7 +82,7 @@ public class DataValidationDialogue {
     /**
      * This method displays dialogue.
      */
-    protected void show(int width, int height){
+    public void show(int width, int height){
         Scene dialogScene = new Scene(dialogGrid, width, height);
         dialog.setScene(dialogScene);
         dialog.show();
@@ -104,4 +103,11 @@ public class DataValidationDialogue {
         return upload_now_btn;
     }
 
+    public void setUpload_later_btn_disabled(boolean b) {
+        this.getUpload_later_btn().setDisable(b);
+    }
+
+    public void setUpload_now_btn_disabled(boolean b) {
+        this.getUpload_now_btn().setDisable(b);
+    }
 }

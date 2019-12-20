@@ -10,7 +10,9 @@ import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ public class DataUploader {
     private TableControllerUserBench tablecontroller;
 
     public DataUploader(TableControllerUserBench tablecontroller, Logger logger) {
-        this.logger = logger;
+        this.logger = logger.getLogger(this.getClass());
         this.tablecontroller = tablecontroller;
         // write data
         GenericWriter genericWriter = new GenericWriter(tablecontroller.getSelectedRows(), ",", true);
@@ -49,6 +51,10 @@ public class DataUploader {
                 List<Entry> row = meta.get(acc);
                 upload(header, row, acc);
             }
+
+
+            if (Files.exists(new File("data_to_upload.csv").toPath()))
+                Files.delete(new File("data_to_upload.csv").toPath());
 
 
         } catch (IOException e) {
