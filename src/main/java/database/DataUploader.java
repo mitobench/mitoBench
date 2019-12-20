@@ -108,7 +108,7 @@ public class DataUploader {
                 } else if(types[i].equals("float") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
                     body.put(header[i].trim().toLowerCase(), Double.parseDouble(row.get(i - 1).getData().getTableInformation().trim()));
 
-                } else if (types[i].equals("int") && row.get(i-1).getData().getTableInformation().trim().equals("")){
+                } else if (types[i].equals("int") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
                     body.put(header[i].trim().toLowerCase(), Integer.parseInt(row.get(i-1).getData().getTableInformation().trim()));
                 }
             }
