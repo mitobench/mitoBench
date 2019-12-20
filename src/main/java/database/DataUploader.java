@@ -46,10 +46,11 @@ public class DataUploader {
 
             HashMap<String, List<Entry>> meta = genericInputReader.getCorrespondingData();
             String[] header = genericInputReader.getHeader();
+            String[] types = genericInputReader.getTypes();
 
             for (String acc : meta.keySet()){
                 List<Entry> row = meta.get(acc);
-                upload(header, row, acc);
+                upload(header, types, row, acc);
             }
 
 
@@ -63,19 +64,14 @@ public class DataUploader {
 
     }
 
-    public void upload(String[] header, List<Entry> row, String acc) {
+    public void upload(String[] header, String[] types, List<Entry> row, String acc) {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("accept", "application/json");
 
-        Map<String, Object> fields =  buildBody(header, row, acc);
+        Map<String, Object> fields =  buildBody(header, types, row, acc);
 
         try {
-
-//            Unirest.get("http://mitodb.org")
-//                    .basicAuth("mitodbreader_nonpublic", "1b$UW!$20MitoWrite17?")
-//                    .asString();
-
             HttpResponse<JsonNode> response_authors = Unirest
                     .post("http://mitodb.org/meta")
                     .basicAuth("mitodbreader_nonpublic", "$20MitoWrite17")
@@ -94,10 +90,11 @@ public class DataUploader {
      *
      * @return
      * @param header
+     * @param types
      * @param row
      * @param acc
      */
-    private Map<String, Object>  buildBody(String[] header, List<Entry> row, String acc){
+    private Map<String, Object>  buildBody(String[] header, String[] types, List<Entry> row, String acc){
 
         Map<String, Object>  body = new HashMap<>();
         body.put(header[0], acc);
@@ -105,12 +102,17 @@ public class DataUploader {
         if(header.length == row.size()+1){
 
             for(int i = 1; i < header.length; i++){
-                body.put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
+                if (types[i].equals("String") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
+                    body. put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
 
+                } else if(types[i].equals("float") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
+                    body.put(header[i].trim().toLowerCase(), Double.parseDouble(row.get(i - 1).getData().getTableInformation().trim()));
 
-                //body += "\"" + header[i] + "\":\"" + row.get(i-1).getData().getTableInformation() +"\",";
+                } else if (types[i].equals("int") && row.get(i-1).getData().getTableInformation().trim().equals("")){
+                    body.put(header[i].trim().toLowerCase(), Integer.parseInt(row.get(i-1).getData().getTableInformation().trim()));
+                }
             }
-            //body = "{" + body.substring(0, body.length()-1) + "}";
+
             return body;
         } else {
             System.err.println("Header and row are of different length. Upload not possible.");

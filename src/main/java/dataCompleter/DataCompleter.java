@@ -129,7 +129,7 @@ public class DataCompleter {
             // write new header
             if (!isheaderWritter) {
                 metaInfoReader.addToHeader(",percentage_n,user_alias,haplogroup_current_versions,macro_haplogroup,haplotype_current_versions,quality_haplotype_current_version, mt_sequence");
-                metaInfoReader.addTotypes(",real,String,String,String,String,int,String");
+                metaInfoReader.addTotypes(",real,String,String,String,String,real,String");
                 data_meta_file_updated.write(metaInfoReader.getHeader());
                 data_meta_file_updated.newLine();
                 data_meta_file_updated.write(metaInfoReader.getTypes());
