@@ -71,13 +71,19 @@ public class DataUploader {
         Map<String, Object> fields =  buildBody(header, row, acc);
 
         try {
+
+//            Unirest.get("http://mitodb.org")
+//                    .basicAuth("mitodbreader_nonpublic", "1b$UW!$20MitoWrite17?")
+//                    .asString();
+
             HttpResponse<JsonNode> response_authors = Unirest
                     .post("http://mitodb.org/meta")
+                    .basicAuth("mitodbreader_nonpublic", "$20MitoWrite17")
                     .headers(headers)
                     .fields(fields)
                     .asJson();
 
-            int status = response_authors.getStatus();
+            System.out.println(response_authors.getBody().toString());
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -100,6 +106,7 @@ public class DataUploader {
 
             for(int i = 1; i < header.length; i++){
                 body.put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
+
 
                 //body += "\"" + header[i] + "\":\"" + row.get(i-1).getData().getTableInformation() +"\",";
             }
