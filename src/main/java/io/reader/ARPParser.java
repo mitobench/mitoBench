@@ -18,11 +18,11 @@ import java.util.List;
 /**
  * Created by peltzer on 24/11/2016.
  */
-public class ARPReader implements IInputData {
+public class ARPParser implements IInputData {
     private HashMap<String, List<Entry>> map = new HashMap<>();
     private Logger LOG;
 
-    public ARPReader(String file, Logger logger) throws IOException, ARPException {
+    public ARPParser(String file, Logger logger) throws IOException, ARPException {
         LOG = logger;
         LOG.info("Read ARP file: " + file);
         FileReader fr = new FileReader(file);

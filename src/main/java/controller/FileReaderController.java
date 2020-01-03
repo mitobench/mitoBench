@@ -46,10 +46,10 @@ public class FileReaderController {
             //Input is FastA
             if (absolutePath.endsWith(".fasta") || absolutePath.endsWith(".fas") || absolutePath.endsWith(".fa") || absolutePath.endsWith(".fna") ) {
 
-                MultiFastAInput multiFastAInput = null;
+                MultiFastaParser multiFastAInput = null;
                 try {
                     try {
-                        multiFastAInput = new MultiFastAInput(f.getPath(), LOG);
+                        multiFastAInput = new MultiFastaParser(f.getPath(), LOG);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -63,9 +63,9 @@ public class FileReaderController {
             //Input is HSD Format
             if (absolutePath.endsWith(".hsd")) {
                 try {
-                    HSDInput hsdInputParser = null;
+                    HSDParser hsdInputParser = null;
                     try {
-                        hsdInputParser = new HSDInput(f.getPath(), LOG);
+                        hsdInputParser = new HSDParser(f.getPath(), LOG);
                     } catch (HSDException e) {
                         HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
                     }
@@ -101,9 +101,9 @@ public class FileReaderController {
             //Input is Excel Format
 
             if (absolutePath.endsWith(".xlsx") || absolutePath.endsWith(".xls")) {
-                ExcelReader excelReader = null;
+                ExcelParser excelReader = null;
                 try {
-                    excelReader = new ExcelReader(f.getPath(), LOG);
+                    excelReader = new ExcelParser(f.getPath(), LOG);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -116,9 +116,9 @@ public class FileReaderController {
             //Input is in ARP Format
 
             if(absolutePath.endsWith(".arp")){
-                ARPReader arpreader = null;
+                ARPParser arpreader = null;
                 try {
-                    arpreader = new ARPReader(f.getPath(), LOG);
+                    arpreader = new ARPParser(f.getPath(), LOG);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ARPException e) {
@@ -140,7 +140,7 @@ public class FileReaderController {
                             "projectLoadedDialogue"
                     );
                 } else {
-                    ProjectReader projectReader = new ProjectReader();
+                    ProjectParser projectReader = new ProjectParser();
                     try {
 
                         projectReader.read(f, LOG);

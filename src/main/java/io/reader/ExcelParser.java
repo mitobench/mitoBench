@@ -21,11 +21,11 @@ import java.util.List;
 /**
  * Created by neukamm on 22.03.17.
  */
-public class ExcelReader implements IInputData{
+public class ExcelParser implements IInputData{
 
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
-    public ExcelReader(String file, Logger logger) throws IOException {
+    public ExcelParser(String file, Logger logger) throws IOException {
 
         Logger LOG = logger;
         LOG.info("Read Excel file: " + file);

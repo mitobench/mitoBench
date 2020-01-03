@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 /**
  * Created by peltzer on 17/11/2016.
  */
-public class MultiFastAInput implements IInputData {
+public class MultiFastaParser implements IInputData {
     private ArrayList<FastaEntry> fastaEntrys;
     private BufferedReader bfr;
     private FileReader fr;
@@ -38,7 +38,7 @@ public class MultiFastAInput implements IInputData {
      * @param LOG
      * @throws IOException
      */
-    public MultiFastAInput(String fileToParse, Logger LOG) throws IOException, FastAException {
+    public MultiFastaParser(String fileToParse, Logger LOG) throws IOException, FastAException {
         LOG.info("Read FastA file: " + fileToParse);
 
         fastaEntrys = new ArrayList<>();

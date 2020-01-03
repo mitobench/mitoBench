@@ -23,10 +23,10 @@ import java.util.List;
  *
  * Created by peltzer on 17/11/2016.
  */
-public class HSDInput implements IInputData {
+public class HSDParser implements IInputData {
     private HashMap<String, List<Entry>> map;
 
-    public HSDInput(String filetoParse, Logger LOG) throws IOException, HSDException {
+    public HSDParser(String filetoParse, Logger LOG) throws IOException, HSDException {
         LOG.info("Read HSD file: " + filetoParse);
         FileReader fr = new FileReader(new File(filetoParse));
         BufferedReader bfr = new BufferedReader(fr);

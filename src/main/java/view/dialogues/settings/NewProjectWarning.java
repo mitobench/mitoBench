@@ -49,8 +49,7 @@ public class NewProjectWarning extends APopupDialogue {
 
         saveLogFileBtn.setOnAction(e -> {
             if(mito.getTableControllerUserBench().getTable().getItems().size() != 0){
-                ExportDialogue exportDialogue = new ExportDialogue(mito.getTableControllerUserBench(), mito.getMITOBENCH_VERSION(), logClass,
-                        mito.getChartController(), true);
+                ExportDialogue exportDialogue = new ExportDialogue(mito, true);
 
                 try {
                     exportDialogue.start(new Stage());

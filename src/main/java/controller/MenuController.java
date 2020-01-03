@@ -1,6 +1,7 @@
 package controller;
 
 import Logging.LogClass;
+import analysis.SequenceAligner;
 import dataCompleter.DataCompleter;
 import dataValidator.Validator;
 import database.DataUploader;
@@ -87,8 +88,29 @@ public class MenuController {
     }
 
 
-    public void setToolsMenu(MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem, MenuItem dataUploaderMenuItem) {
+    public void setToolsMenu(MenuItem dataAlignerMenuItem, MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem, MenuItem dataUploaderMenuItem) {
 
+        dataAlignerMenuItem.setOnAction(t -> {
+            SequenceAligner sequenceAligner = new SequenceAligner(mito.getLogClass().getLogger(this.getClass()), mito.getTableControllerUserBench());
+
+            // get sequences to align
+            MultiFastaWriter multiFastaWriter = new MultiFastaWriter(mito.getTableControllerUserBench().getDataTable().getMtStorage(),
+                    mito.getTableControllerUserBench().getSelectedRows(),
+                    true);
+            try {
+                try {
+                    multiFastaWriter.writeData("sequences_to_align.fasta", mito.getTableControllerUserBench());
+                    sequenceAligner.align("sequences_to_align.fasta");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+
+        });
 
         dataValidatorMenuItem.setOnAction(t -> {
             // start validation and completion on non-empty data table only

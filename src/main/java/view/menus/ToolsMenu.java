@@ -13,6 +13,7 @@ public class ToolsMenu {
     private CustomMenuItem dataUploaderMenuItem;
     private CustomMenuItem dataValidatorMenuItem;
     private CustomMenuItem dataCompleterMenuItem;
+    private CustomMenuItem dataAlignerMenuItem;
 
     public ToolsMenu(MitoBenchWindow mitoBenchWindow, GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
         menuTools = new Menu("Tools");
@@ -23,6 +24,12 @@ public class ToolsMenu {
     }
 
     private void addSubMenus(GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
+
+
+        // ------------------------------ Menu Item Validate data --------------------------------------------
+
+        dataAlignerMenuItem = new CustomMenuItem(new Label("Align Sequences"));
+        dataAlignerMenuItem.setId("dataAligner");
 
 
         // ------------------------------ Menu Item Validate data --------------------------------------------
@@ -49,19 +56,19 @@ public class ToolsMenu {
 
         Tooltip tooltip_completeData = new Tooltip("This will complete and calculate some meta information. " +
                 "It also runs dataValidation.");
-        Tooltip.install(dataCompleterMenuItem.getContent(), tooltip_validateData);
+        Tooltip.install(dataCompleterMenuItem.getContent(), tooltip_completeData);
 
 
         Tooltip tooltip_uploadData = new Tooltip("This will upload your data to database and runs dataValidation and dataCompletion " +
                 "before. You will be asked again before uploading.");
-        Tooltip.install(dataUploaderMenuItem.getContent(), tooltip_validateData);
+        Tooltip.install(dataUploaderMenuItem.getContent(), tooltip_uploadData);
 
         // ------------------------------ Add All Items---------- --------------------------------------------
 
-        menuController.setToolsMenu(dataValidatorMenuItem, dataCompleterMenuItem, dataUploaderMenuItem);
+        menuController.setToolsMenu(dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem, dataUploaderMenuItem);
 
         menuTools.getItems().addAll(groupMenu.getMenuGroup(), analysisMenu.getMenuAnalysis(), statisticsMenu.getMenuTools(),
-                dataValidatorMenuItem, dataCompleterMenuItem, dataUploaderMenuItem);
+                dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem, dataUploaderMenuItem);
 
 
 

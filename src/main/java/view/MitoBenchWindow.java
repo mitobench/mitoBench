@@ -31,9 +31,7 @@ public class MitoBenchWindow extends Application {
     private final String MITOBENCH_VERSION = "1.6-beta";
 
     private BorderPane pane_root;
-    private TableControllerUserBench tableControllerUserBench;
-    private TableControllerDB tableControllerDB;
-    private HaplotreeController treeController;
+
     private Scene scene;
     private TabPane tabpane_visualization;
     private Stage primaryStage;
@@ -41,17 +39,22 @@ public class MitoBenchWindow extends Application {
     private BorderPane pane_table;
     private VBox pane_table_userBench;
     private Label info_selected_items;
-    private GroupController groupController;
     private CancelButton btn_cancel;
     private LogClass logClass;
     private TreeView treeView;
     private boolean anotherProjectLoaded;
     private FileMenu fileMenu;
-    private ChartController chartController;
     private ProgressBarHandler progressBarhandler;
-    private FileReaderController fileReaderController;
-    private MenuController menuController;
     private DatabaseQueryHandler databaseQueryHandler;
+
+    private ChartController chartController;
+    private MenuController menuController;
+    private GroupController groupController;
+    private TableControllerUserBench tableControllerUserBench;
+    private TableControllerDB tableControllerDB;
+    private HaplotreeController treeController;
+    private FileReaderController fileReaderController;
+    private DialogueController dialogueController;
 
 
     @Override
@@ -97,6 +100,7 @@ public class MitoBenchWindow extends Application {
         // init database and menu controller
         databaseQueryHandler = new DatabaseQueryHandler();
         menuController = new MenuController(databaseQueryHandler, this);
+        dialogueController = new DialogueController(this);
 
 
         // bind width and height to scene to enable resizing
@@ -426,5 +430,13 @@ public class MitoBenchWindow extends Application {
 
     public DatabaseQueryHandler getDatabaseQueryHandler() {
         return databaseQueryHandler;
+    }
+
+    public DialogueController getDialogueController() {
+        return dialogueController;
+    }
+
+    public void setDialogueController(DialogueController dialogueController) {
+        this.dialogueController = dialogueController;
     }
 }

@@ -4,8 +4,7 @@ package analysis;
 import Logging.LogClass;
 import genepi.haplogrep.main.Haplogrep;
 import htsjdk.samtools.SAMException;
-import io.Exceptions.HSDException;
-import io.reader.HSDInput;
+import io.reader.HSDParser;
 import io.writer.MultiFastaWriter;
 import org.apache.log4j.Logger;
 import model.MTStorage;
@@ -74,11 +73,11 @@ public class HaplotypeCaller {
      */
     public void update() {
 
-        HSDInput hsdInput;
+        HSDParser hsdInput;
 
         try {
             if(new File("haplogroups.hsd").exists()){
-                hsdInput = new HSDInput("haplogroups.hsd", LOG);
+                hsdInput = new HSDParser("haplogroups.hsd", LOG);
                 tableController.updateTable(hsdInput.getCorrespondingData());
             }    else {
                 LOG.info("HaploGrep2 did not run properly, 'haplogroups.hsd' does not exists.");

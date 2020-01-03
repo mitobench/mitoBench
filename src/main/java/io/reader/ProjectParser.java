@@ -21,13 +21,13 @@ import java.util.List;
 /**
  * Created by neukamm on 09.12.2016.
  */
-public class ProjectReader {
+public class ProjectParser {
 
 
     private HashMap<String, List<Entry>> datatable;
     private String[] hgs_user_defined;
 
-    public ProjectReader(){}
+    public ProjectParser(){}
 
     public void read(File infile, Logger LOG) throws IOException, ProjectException {
         LOG.info("Read project file: " + infile);

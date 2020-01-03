@@ -94,8 +94,7 @@ public class Toolbarpane extends ToolBar {
         saveprojectBtn.setOnAction(t -> {
 
             if(mito.getTableControllerUserBench().getTable().getItems().size() != 0){
-                ExportDialogue exportDialogue = new ExportDialogue(mito.getTableControllerUserBench(), mito.getMITOBENCH_VERSION(), mito.getLogClass(),
-                        mito.getChartController(), true);
+                ExportDialogue exportDialogue = new ExportDialogue(mito, true);
                 try {
                     exportDialogue.start(new Stage());
                 } catch (Exception e) {
