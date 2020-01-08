@@ -293,7 +293,7 @@ public class MenuController {
         Validator validator = new Validator();
         System.out.println("running validation");
         try{
-            validator.validate(file_meta, fasta_headers, log_validation, file_fasta);
+            validator.validate(file_meta, fasta_headers, log_validation, file_fasta, mito.getTableControllerUserBench().getTable().getItems().size());
             System.out.println();
         } catch (ArrayIndexOutOfBoundsException e){
             log_validation += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();

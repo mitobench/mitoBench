@@ -35,7 +35,7 @@ public class Validator {
             "Jersey", "Denmark", "Estonia", "Faroe Islands", "Finland", "Iceland", "Ireland", "Isle of Man", "Latvia", "Lithuania",
             "Norway", "Svalbard and Jan Mayen Islands", "Sweden", "United Kingdom of Great Britain and Northern Ireland", "Albania",
             "Andorra", "Bosnia and Herzegovina", "Croatia", "Gibraltar", "Greece", "Holy See", "Italy", "Malta", "Montenegro",
-            "Portugal", "San Marino", "Kosovo", "Serbia", "Slovenia", "Spain", "The former Yugoslav Republic of Macedonia", "Austria",
+            "Portugal", "San Marino", "Kosovo", "Serbia", "Slovenia", "Spain", "The former Yugoslav Republic of Macedonia", "North Macedonia", "Austria",
             "Belgium", "France", "Germany", "Liechtenstein", "Luxembourg", "Monaco", "Netherlands", "Switzerland", "Australia",
             "Christmas Island", "Cocos (Keeling) Islands", "Heard Island and McDonald Islands", "New Zealand", "Norfolk Island",
             "Fiji", "New Caledonia", "Papua New Guinea", "Solomon Islands", "Vanuatu", "Guam", "Kiribati", "Marshall Islands",
@@ -54,7 +54,7 @@ public class Validator {
             "GGY","JEY","DNK","EST","FRO","FIN","ISL","IRL","IMN","LVA","LTU","NOR","SJM","SWE","GBR","ALB","AND","BIH",
             "HRV","GIB","GRC","VAT","ITA","MLT","MNE","PRT","SMR","XKX","SRB","SVN","ESP","MKD","AUT","BEL","FRA","DEU",
             "LIE","LUX","MCO","NLD","CHE","AUS","CXR","CCK","HMD","NZL","NFK","FJI","NCL","PNG","SLB","VUT","GUM","KIR",
-            "MHL","FSM","NRU","MNP","PLW","UMI","ASM","COK","PYF","NIU","PCN","WSM","TKL","TON","TUV","WLF");
+            "MHL","FSM","NRU","MNP","PLW","UMI","ASM","COK","PYF","NIU","PCN","WSM","TKL","TON","TUV","WLF", "MKD");
 
     private List<String> region = Arrays.asList("africa", "americas", "antarctica", "asia", "europe", "oceania");
     private List<String> subregion = Arrays.asList("northern africa", "sub-saharan africa", "latin america and the caribbean",
@@ -86,7 +86,7 @@ public class Validator {
     private boolean uploadPossible;
 
 
-    public boolean validate(String data_template, List<String> fastaheaders, String log_sequence_corretness, String mt_sequences_filepath) {
+    public boolean validate(String data_template, List<String> fastaheaders, String log_sequence_corretness, String mt_sequences_filepath, int size) {
         BufferedReader br = null;
         String line;
         String delimiter = ",";
@@ -407,8 +407,8 @@ public class Validator {
 
             while ((line = br.readLine()) != null) {
                 if(!line.startsWith("#") && !line.startsWith("##")){
+                    System.out.println(count_meta + "/" + size + " Sequences validated");
                     count_meta++;
-
 
                     String[] line_splitted = line.split(",", headerLine_array.length);
                     // does sequence exists?
