@@ -1,5 +1,5 @@
 group 'com.uni-tuebingen.de.it.mitobench'
-version '1.6-beta'
+version '1.7-beta'
 
 apply plugin: 'java'
 apply plugin: 'idea'

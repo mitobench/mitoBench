@@ -76,6 +76,8 @@ public class MultiFastaParser implements IInputData {
                     currHeader = currHeader.split("\\.")[0];
                 }
                 line_index++;
+                if(line_index==5005)
+                    System.out.println();
                 continue;
             }
 
@@ -99,7 +101,7 @@ public class MultiFastaParser implements IInputData {
                 if(m.matches()){
                     currSeq += currentLine;
                 } else {
-                    throw new FastAException("Your FastA entry in line " + line_index + " is incorrect. Please check your input file for correctness.");
+                    throw new FastAException("Your FastA entry in line " + line_index + " is incorrect. Please check your input file for correctness.\n" + currentLine);
                 }
             }
         }

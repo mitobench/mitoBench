@@ -604,7 +604,7 @@ public class Validator {
 
 
                     if(index_geographic_info_tma_inferred_country != -1){
-                        String geographic_info_tma_inferred_country = line_splitted[index_geographic_info_tma_inferred_country];
+                        String geographic_info_tma_inferred_country = line_splitted[index_geographic_info_tma_inferred_country].trim();
                         geographic_info_tma_inferred_country = geographic_info_tma_inferred_country.trim();
                         if (geographic_info_tma_inferred_country.equals("")) {
                             log_missing_value += "\tGeographic info tma inferred country is missing.\n";
@@ -614,7 +614,7 @@ public class Validator {
                     }
 
                     if(index_geographic_info_tma_inferred_latitude != -1){
-                        String number = line_splitted[index_geographic_info_tma_inferred_latitude];
+                        String number = line_splitted[index_geographic_info_tma_inferred_latitude].trim();
                         if(number.equals("")){
                             log_missing_value += "\tGeographic info tma inferred latitude is missing.\n";
                         } else {
@@ -627,7 +627,7 @@ public class Validator {
                     }
 
                     if(index_geographic_info_tma_inferred_longitude != -1){
-                        String number = line_splitted[index_geographic_info_tma_inferred_longitude];
+                        String number = line_splitted[index_geographic_info_tma_inferred_longitude].trim();
                         if(number.equals("")){
                             log_missing_value += "\tGeographic info tma inferred longitude is missing.\n";
                         } else {
@@ -673,7 +673,7 @@ public class Validator {
                     }
 
                     if(index_sample_origin_country != -1){
-                        String sample_origin_country = line_splitted[index_sample_origin_country];
+                        String sample_origin_country = line_splitted[index_sample_origin_country].trim();
                         if (sample_origin_country.equals("")) {
                             log_missing_value += "\tSample origin country is missing.\n";
                         } else if(!country.contains(sample_origin_country) && !isStringInt(sample_origin_country)){
@@ -683,7 +683,7 @@ public class Validator {
 
 
                     if(index_sample_origin_latitude != -1){
-                        String number = line_splitted[index_sample_origin_latitude];
+                        String number = line_splitted[index_sample_origin_latitude].trim();
                         if(number.equals("")){
                             log_missing_value += "\tSample origin latitude is missing.\n";
                         } else {
@@ -696,7 +696,7 @@ public class Validator {
                     }
 
                     if(index_sample_origin_longitude != -1){
-                        String number = line_splitted[index_sample_origin_longitude];
+                        String number = line_splitted[index_sample_origin_longitude].trim();
                         if(number.equals("")){
                             log_missing_value += "\tSample origin longitude is missing.\n";
                         } else {
@@ -741,7 +741,7 @@ public class Validator {
                     }
 
                     if(index_sampling_country != -1){
-                        String sampling_contry = line_splitted[index_sampling_country];
+                        String sampling_contry = line_splitted[index_sampling_country].trim();
                         if (sampling_contry.equals("")) {
                             log_missing_value += "\tSampling country is missing.\n";
                         } else if(!country.contains(sampling_contry) && !isStringInt(sampling_contry)){
@@ -750,7 +750,7 @@ public class Validator {
                     }
 
                     if(index_sampling_latitude != -1){
-                        String number = line_splitted[index_sampling_latitude];
+                        String number = line_splitted[index_sampling_latitude].trim();
                         if(number.equals("")){
                             log_missing_value += "\tSampling latitude is missing.\n";
                         } else {
@@ -763,7 +763,7 @@ public class Validator {
                     }
 
                     if(index_sampling_longitude != -1){
-                        String number = line_splitted[index_sampling_longitude];
+                        String number = line_splitted[index_sampling_longitude].trim();
                         if(number.equals("")){
                             log_missing_value += "\tSampling longitude is missing.\n";
                         } else {
@@ -778,7 +778,7 @@ public class Validator {
 
                     // --------------------------------------------------------------------------------------------------------------------
                     if(index_generations_to_tma != -1){
-                        String number = line_splitted[index_generations_to_tma];
+                        String number = line_splitted[index_generations_to_tma].trim();
                         if(number.equals("")){
                             log_missing_value += "\tGenerations to tma is missing\n";
                         } else if(!isStringInt(number)){
