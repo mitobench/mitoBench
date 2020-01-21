@@ -59,7 +59,7 @@ public class HSDParser {
             String currline;
             boolean init = true;
 
-            String[] header = bfr.readLine().replace("\"", "").split("\t");
+            String[] header = bfr.readLine().replace("\"", "").split("\t",-1);
 
             for (int i = 0; i < header.length; i++){
                 switch (header[i]) {
@@ -93,7 +93,7 @@ public class HSDParser {
                     }
                 } else {
 
-                    String[] splitGroup = currline.split("\t");
+                    String[] splitGroup = currline.split("\t",-1);
                     ArrayList<String> entry = new ArrayList<>();
 
                     if(id_index!=-1){
@@ -130,11 +130,11 @@ public class HSDParser {
                     entry.add(input_sample);
 
                     entryList.put(id.replace("\"","").split("\\.")[0], entry);
+                    System.out.println("Adding " + id.replace("\"","").split("\\.")[0]);
 
                 }
             }
         }
-
     }
 
     /**

@@ -78,8 +78,6 @@ public class DataUploader {
                     .headers(headers)
                     .fields(fields)
                     .asJson();
-
-            System.out.println(response_authors.getBody().toString());
         } catch (UnirestException e) {
             e.printStackTrace();
         }

@@ -3,6 +3,7 @@ package dataCompleter;
 
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,11 +39,14 @@ public class DataCompleter {
         HSDParser hsdParser = new HSDParser();
         HashMap<String, ArrayList<String>> entryList = null;
 
+        String f = new File("haplogroups.hsd").toString();
+
         try {
             hsdParser.parseFile("haplogroups.hsd");
             entryList = hsdParser.getEntryList();
         } catch (Exception e) {
             System.out.println("'haplogroups.hsd' could not be read.");
+            System.out.println(e.toString());
             System.exit(0);
         }
 

@@ -218,15 +218,12 @@ public class MenuController {
                     System.out.println("Uploading data to database ....");
                     DataUploader dataUploader = new DataUploader(tablecontroller, this.log.getLogger(this.getClass()));
                     dataUploader.parseMeta(dataCompleter.getOutfile());
-
                     dataValidationDialogue.getDialog().close();
                     deleteTmpFiles();
+                    System.out.println("Data successfully uploaded.");
 
                 });
-
-
             }
-
         });
     }
 
@@ -289,23 +286,25 @@ public class MenuController {
         log_validation="";
         result_validation = "";
 
+        //todo wieder einkommentieren
+
         // run validation
-        Validator validator = new Validator();
-        System.out.println("running validation");
-        try{
-            validator.validate(file_meta, fasta_headers, log_validation, file_fasta, mito.getTableControllerUserBench().getTable().getItems().size());
-            System.out.println();
-        } catch (ArrayIndexOutOfBoundsException e){
-            log_validation += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();
-        }
+//        Validator validator = new Validator();
+//        System.out.println("running validation");
+//        try{
+//            validator.validate(file_meta, fasta_headers, log_validation, file_fasta, mito.getTableControllerUserBench().getTable().getItems().size());
+//            System.out.println();
+//        } catch (ArrayIndexOutOfBoundsException e){
+//            log_validation += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();
+//        }
 
         System.out.println("finished validation");
-        uploadPossible = validator.isUploadPossible();
+        uploadPossible = true;//validator.isUploadPossible();
         if(uploadPossible){
             result_validation = "All values are in correct format.";
         } else {
             result_validation = "Data upload not possible. Please check the report below.";
-            log_validation += validator.getLogfileTxt();
+            //log_validation += validator.getLogfileTxt();
         }
 
     }

@@ -2,6 +2,7 @@ package io.dialogues.Export;
 
 import Logging.LogClass;
 import controller.ChartController;
+import database.ColumnNameMapper;
 import io.writer.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;

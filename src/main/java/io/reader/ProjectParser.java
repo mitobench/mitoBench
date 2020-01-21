@@ -23,6 +23,7 @@ import java.util.List;
  */
 public class ProjectParser {
 
+    // todo: compare versions of mitoBench. mitoproject files from different versions are not compatible
 
     private HashMap<String, List<Entry>> datatable;
     private String[] hgs_user_defined;
@@ -61,11 +62,12 @@ public class ProjectParser {
                             // parse one entry
                             key = currline.replace("\tkey\t", "").trim();
                         } else if (currline.startsWith("\t\t##")) {
-                            headergroup = currline.replace("\t\t##", "").split("\t");
+                            headergroup = currline.replace("\t\t##", "").split("\t",-1);
                         } else if (currline.startsWith("\t\t#")) {
-                            headertype = currline.replace("\t\t#", "").split("\t");
+                            headertype = currline.replace("\t\t#", "").split("\t",-1);
                         } else if (currline.startsWith("\t\t")) {
-                            entries = currline.replace("\t\t", "").split("\t");
+                            //entries = currline.replace("\t\t", "").split("\t");
+                            entries = currline.substring(2).split("\t", -1);
 
                             List<Entry> all_entries = new ArrayList<>();
                             for (int i = 0; i < headergroup.length; i++) {
