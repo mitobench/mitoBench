@@ -39,8 +39,6 @@ public class DataCompleter {
         HSDParser hsdParser = new HSDParser();
         HashMap<String, ArrayList<String>> entryList = null;
 
-        String f = new File("haplogroups.hsd").toString();
-
         try {
             hsdParser.parseFile("haplogroups.hsd");
             entryList = hsdParser.getEntryList();
@@ -71,8 +69,11 @@ public class DataCompleter {
             double percentageOfN = calculator.calculatePercentageOfN(sequence);
 
             // determine user alias
-            String user_alias = meta_info[metaInfoReader.getIndexOfArrtibute("user_firstname")].trim() + "" + meta_info[metaInfoReader.getIndexOfArrtibute("user_surname")].trim();
-//                String user_alias = meta_info[metaInfoReader.getUserFirstNameIndex()].trim() + "" + meta_info[metaInfoReader.getUserSurnameIndex()].trim();
+            String user_alias = "";
+            int index_firstname = metaInfoReader.getIndexOfArrtibute("user_firstname");
+            if(index_firstname != -1){
+                user_alias  = meta_info[metaInfoReader.getIndexOfArrtibute("user_firstname")].trim() + "" + meta_info[metaInfoReader.getIndexOfArrtibute("user_surname")].trim();
+            }
 
             // fill HaploGrep2 results
             String haplogroup="NULL";
@@ -138,8 +139,6 @@ public class DataCompleter {
                 data_meta_file_updated.newLine();
                 data_meta_file_updated.write(metaInfoReader.getTypes());
                 data_meta_file_updated.newLine();
-                //System.out.println(metaInfoReader.getHeader());
-                //System.out.println(metaInfoReader.getTypes());
                 isheaderWritter = true;
             }
 

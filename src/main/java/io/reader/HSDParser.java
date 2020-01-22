@@ -123,13 +123,13 @@ public class HSDParser implements IInputData {
 
 
                 List<Entry> entries = new ArrayList<>();
-                Entry entry = new Entry(mapper.mapString("Haplogroup"), new CategoricInputType("String"), new GenericInputData(group));
+                Entry entry = new Entry(mapper.mapString("haplogroup_current_versions"), new CategoricInputType("String"), new GenericInputData(group));
                 if(!polys_found.equals("")){
-                    Entry entry2 = new Entry(mapper.mapString("Haplotype"), new CategoricInputType("String"), new GenericInputData(polys_found));
+                    Entry entry2 = new Entry(mapper.mapString("haplotype_current_versions"), new CategoricInputType("String"), new GenericInputData(polys_found));
                     entries.add(entry2);
                 }
                 if(!quality.equals("")){
-                    Entry entry_HGqual = new Entry("Haplogrep Quality", new CategoricInputType("String"), new GenericInputData(quality));
+                    Entry entry_HGqual = new Entry(mapper.mapString("quality_haplotype_current_version"), new CategoricInputType("String"), new GenericInputData(quality));
                     entries.add(entry_HGqual);
                 }
 

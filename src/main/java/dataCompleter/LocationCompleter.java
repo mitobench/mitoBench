@@ -342,35 +342,40 @@ public class LocationCompleter {
 
     public String[] getCompletedInformation() {
 
-        // complete sample origin geo
-        String sample_lat = entry[this.index_sample_origin_latitude];
-        String sample_long = entry[this.index_sample_origin_longitude];
-        String sample_region = entry[this.index_sample_origin_region];
-        String sample_subregion = entry[this.index_sample_origin_subregion];
-        String sample_inter_region = entry[this.index_sample_origin_intermediate_region];
-        String sample_country = entry[this.index_sample_origin_country];
+        try {
+            // complete sample origin geo
+            String sample_lat = entry[this.index_sample_origin_latitude];
+            String sample_long = entry[this.index_sample_origin_longitude];
+            String sample_region = entry[this.index_sample_origin_region];
+            String sample_subregion = entry[this.index_sample_origin_subregion];
+            String sample_inter_region = entry[this.index_sample_origin_intermediate_region];
+            String sample_country = entry[this.index_sample_origin_country];
 
-        fillMissingGeoSample(sample_lat, sample_long,sample_subregion, sample_inter_region, sample_country);
+            fillMissingGeoSample(sample_lat, sample_long,sample_subregion, sample_inter_region, sample_country);
 
-        // complete sampling geo
-        String sampling_lat = entry[this.index_sampling_latitude];
-        String sampling_long = entry[this.index_sampling_longitude];
-        String sampling_region = entry[this.index_sampling_region];
-        String sampling_subregion = entry[this.index_sampling_subregion];
-        String sampling_inter_region = entry[this.index_sampling_intermediate_region];
-        String sampling_country = entry[this.index_sampling_country];
+            // complete sampling geo
+            String sampling_lat = entry[this.index_sampling_latitude];
+            String sampling_long = entry[this.index_sampling_longitude];
+            String sampling_region = entry[this.index_sampling_region];
+            String sampling_subregion = entry[this.index_sampling_subregion];
+            String sampling_inter_region = entry[this.index_sampling_intermediate_region];
+            String sampling_country = entry[this.index_sampling_country];
 
-        fillMissingGeoSampling(sampling_lat, sampling_long,sampling_subregion, sampling_inter_region, sampling_country);
+            fillMissingGeoSampling(sampling_lat, sampling_long,sampling_subregion, sampling_inter_region, sampling_country);
 
-        // complete TMA inferred geo
-        String sample_tma_lat = entry[this.index_TMA_inferrred_latitude];
-        String sample_tma_long = entry[this.index_TMA_inferrred_longitude];
-        String sample_tma_region = entry[this.index_TMA_inferrred_region];
-        String sample_tma_subregion = entry[this.index_TMA_inferrred_subregion];
-        String sample_tma_inter_region = entry[this.index_TMA_inferrred_intermediate_region];
-        String sample_tma_country = entry[this.index_TMA_inferrred_country];
+            // complete TMA inferred geo
+            String sample_tma_lat = entry[this.index_TMA_inferrred_latitude];
+            String sample_tma_long = entry[this.index_TMA_inferrred_longitude];
+            String sample_tma_region = entry[this.index_TMA_inferrred_region];
+            String sample_tma_subregion = entry[this.index_TMA_inferrred_subregion];
+            String sample_tma_inter_region = entry[this.index_TMA_inferrred_intermediate_region];
+            String sample_tma_country = entry[this.index_TMA_inferrred_country];
 
-        fillMissingGeoTma(sample_tma_lat, sample_tma_long,sample_tma_subregion, sample_tma_inter_region, sample_tma_country);
+            fillMissingGeoTma(sample_tma_lat, sample_tma_long,sample_tma_subregion, sample_tma_inter_region, sample_tma_country);
+        } catch (Exception e) {
+            return entry;
+        }
+
 
         return entry;
     }

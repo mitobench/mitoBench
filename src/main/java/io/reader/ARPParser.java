@@ -71,7 +71,7 @@ public class ARPParser implements IInputData {
                     }
                     String mtseq = dataSplit[array_index+2];
                     List<Entry> entries = new ArrayList<>();
-                    Entry e = new Entry(mapper.mapString("MTSequence"), new CategoricInputType("String"), new GenericInputData(mtseq));
+                    Entry e = new Entry(mapper.mapString("mt_sequence"), new CategoricInputType("String"), new GenericInputData(mtseq));
                     Entry e_group = new Entry(mapper.mapString("ARP-Groups"), new CategoricInputType("String"), new GenericInputData(currGroup));
                     entries.add(e);
                     entries.add(e_group);
