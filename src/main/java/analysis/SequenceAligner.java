@@ -63,7 +63,6 @@ public class SequenceAligner {
                 entries.add(entry);
                 output.put(acc, entries);
             }
-
             tablecontroller.updateTable(output);
 
 

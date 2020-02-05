@@ -108,7 +108,6 @@ public class FileReaderController {
                     e.printStackTrace();
                 }
                 HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
-
                 tableControllerUserBench.updateTable(data_map);
                 //tableControllerUserBench.loadGroups();
             }
@@ -125,7 +124,6 @@ public class FileReaderController {
                     ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
                 }
                 HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
-
                 tableControllerUserBench.updateTable(data_map);
                 //tableControllerUserBench.loadGroups();
             }

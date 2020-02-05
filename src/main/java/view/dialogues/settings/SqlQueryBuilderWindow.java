@@ -272,7 +272,6 @@ public class SqlQueryBuilderWindow {
 
                 long startTime = System.currentTimeMillis();
                 mito.getLogClass().getLogger(this.getClass()).info("Import data from database.\nQuery: ");
-
                 mito.getTableControllerDB().updateTable(data_map);
                 this.label_info_selected_items.setText(mito.getTableControllerDB().getTable().getSelectionModel().getSelectedItems().size() + " / " +
                         mito.getTableControllerDB().getTable().getItems().size() +  " rows are selected");

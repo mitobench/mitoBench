@@ -74,6 +74,13 @@ public abstract class ATableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
+        // unbind columns
+        ObservableList<TableColumn<ObservableList, ?>> columns1 = table.getColumns();
+        for (TableColumn col : columns1) {
+            col.prefWidthProperty().unbind();
+        }
+
+
         String groupname=null;
         if(groupController.groupingExists()){
             groupname=groupController.getColname_group().replace(" (Grouping)", "");
@@ -127,7 +134,13 @@ public abstract class ATableController {
         if(groupname!=null)
             groupController.createGroupByColumn(groupname,"");
 
-        TableFilter filter = new TableFilter(table);
+        // bind columns
+        ObservableList<TableColumn<ObservableList, ?>> columns_all = table.getColumns();
+        for (TableColumn col : columns_all) {
+            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
+        }
+
+        TableFilter.forTableView(table).lazy(true).apply();
 
     }
 
@@ -400,7 +413,6 @@ public abstract class ATableController {
 
         if(!getCurrentColumnNames().contains(colname)){
             TableColumn col = new TableColumn(colname);
-            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
@@ -881,7 +893,6 @@ public abstract class ATableController {
             }
             e_list.add(e_copy);
         }
-
         updateTable(table_content);
 
     }
@@ -909,8 +920,7 @@ public abstract class ATableController {
                         table.getItems().size() +  " rows are selected");
             }
         });
-
-
     }
+
 }
 
