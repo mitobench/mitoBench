@@ -243,7 +243,7 @@ public class LocationCompleter {
                         "NOR," +
                         "SJM," +
                         "SWE," +
-                        "GBR","Northern Europe", "", "Europe"},
+                        "GB","Northern Europe", "", "Europe"},
                 new String[]{"GGY,JEY,SAR","Northern Europe", "Channel Islands", "Europe"},
                 new String[]{"ALB," +
                         "AND," +
@@ -546,9 +546,7 @@ public class LocationCompleter {
                 return m49_list[i][1];
             }
         }
-
         return null;
-
     }
 
 
@@ -563,10 +561,7 @@ public class LocationCompleter {
                 return m49_list[i][3];
             }
         }
-
-
         return null;
-
     }
 
     private String parseContinent(String continent) {
@@ -586,8 +581,6 @@ public class LocationCompleter {
                 return "Oceania";
             }
         }
-
-
         return continent;
     }
 
@@ -604,10 +597,7 @@ public class LocationCompleter {
             if(name.equals(countryName)){
                 return iso;
             }
-
         }
-
-
         return null;
     }
 

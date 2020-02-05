@@ -108,18 +108,12 @@ public class ColumnNameMapper {
                 return "Coverage (mean)";
             case "std_dev_coverage":
                 return "Coverage (SD)";
-            case "calibrated_date_range_from":
-                return "Calibrated Date lower limit";
-            case "calibrated_date_range_to":
-                return "Calibrated Date upper limit";
-            case "c14_age_bp":
-                return "C14 Radiocarbon Date";
-            case "indirect_contextual_date":
-                return "Indirect Contextual Date";
-            case "indirect_contextual_date_to":
-                return "Indirect Contextual Date upper limit";
-            case "indirect_contextual_date_from":
-                return "Indirect Contextual Date lower limit";
+            case "indirect_date":
+                return "Indirect dating";
+            case "ci_calibrated_radiocarbon_age":
+                return "CI Calibrated Radiocarbon Age";
+            case "conventional_radiocarbon_age":
+                return "Conventional Radiocarbon Age";
             case "radiocarbon_lab_code":
                 return "Lab code of radiocarbon dating";
             case "dating_comments":
@@ -273,18 +267,12 @@ public class ColumnNameMapper {
                 return "mean_coverage";
             case "Coverage (SD)":
                 return "std_dev_coverage";
-            case "Calibrated Date lower limit":
-                return "calibrated_date_range_from";
-            case "Calibrated Date upper limit":
-                return "calibrated_date_range_to";
-            case "C14 Radiocarbon Date":
-                return "c14_age_bp";
-            case "Indirect Contextual Date":
-                return "indirect_contextual_date";
-            case "Indirect Contextual Date lower limit":
-                return "indirect_contextual_date_from";
-            case "Indirect Contextual Date upper limit":
-                return "indirect_contextual_date_to";
+            case "Indirect dating":
+                return "indirect_date";
+            case "CI Calibrated Radiocarbon Age":
+                return "ci_calibrated_radiocarbon_age";
+            case "Conventional Radiocarbon Age":
+                return "conventional_radiocarbon_age";
             case "Lab code of radiocarbon dating":
                 return "radiocarbon_lab_code";
             case "Dating comments":
