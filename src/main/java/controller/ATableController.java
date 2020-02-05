@@ -400,6 +400,7 @@ public abstract class ATableController {
 
         if(!getCurrentColumnNames().contains(colname)){
             TableColumn col = new TableColumn(colname);
+            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 

@@ -25,7 +25,7 @@ public class DataUploader {
         this.logger = logger.getLogger(this.getClass());
         this.tablecontroller = tablecontroller;
         // write data
-        GenericWriter genericWriter = new GenericWriter(tablecontroller.getSelectedRows(), ",", true);
+        GenericWriter genericWriter = new GenericWriter(tablecontroller.getTable().getItems(), ",", true);
         try {
             genericWriter.writeData("data_to_upload.csv", tablecontroller);
 
