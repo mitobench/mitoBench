@@ -32,11 +32,12 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
             FXCollections.observableArrayList(
                     "Sub-Saharan Africa (L0a,L0d,L0k,L1b,L1c,L2a,L2b,L2c,L3b,L3d,L3e,L3f,L4,L5)",
                     "Americas and the Caribbean (A2,B2,C1b,C1c,C1d,C4c,D1,D2a,D3,D4h3a,X2a,X2g)",
-                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B)",
+                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B4,B5,B6)",
                     "Europe (H)");
     protected ChartController chartcontroller;
     protected int row;
     private String[] hg_list_trimmed;
+    private Label warning_label;
 
 
     public AHGDialogue(String title, LogClass logClass) {
@@ -84,10 +85,14 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
 
+        warning_label = new Label("Warning!\nIf you want to include the haplogroup 'B' to you list, please specify " +
+                "it as 'B4,B5,B6'.\nThe current version of phylotree (v17) does not support only 'B'.");
+
         row=0;
 
         dialogGrid.add(label, 0,row,3,1);
         dialogGrid.add(combobox_hglist, 0,++row,3,1);
+        dialogGrid.add(warning_label,0,++row,3,1);
         dialogGrid.add(okBtn,2,++row,1,1);
     }
 

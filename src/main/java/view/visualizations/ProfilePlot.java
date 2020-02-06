@@ -92,32 +92,32 @@ public class ProfilePlot extends AChart {
         java.util.Collections.sort(hg_core_curr);
 
         HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();
-
         for(String key : hg_core_curr){
-            if(data_all.containsKey(key)) {
-                for(int i = 0; i < selection_groups.length; i++){
-                    String group = data_all.get(key).get(i).getXValue();
+            if(key.equals("B")){
 
-                    if(!group_hg.containsKey(group)){
-                        List<XYChart.Data<String, Number>> hg = new ArrayList<>();
-                        hg.add(data_all.get(key).get(i));
-                        group_hg.put(group, hg);
-                    } else {
-                        List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
-                        hg_tmp.addAll(group_hg.get(group));
-                        hg_tmp.add(data_all.get(key).get(i));
-                        group_hg.put(group, hg_tmp);
-                    }
-
-                    double val = data_all.get(key).get(i).getYValue().doubleValue();
-                    double val_norm = (val/number_of_elements[i])*100;
-                    data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
-
-
-                }
             } else {
+                if(data_all.containsKey(key)) {
+                    for(int i = 0; i < selection_groups.length; i++){
+                        String group = data_all.get(key).get(i).getXValue();
 
+                        if(!group_hg.containsKey(group)){
+                            List<XYChart.Data<String, Number>> hg = new ArrayList<>();
+                            hg.add(data_all.get(key).get(i));
+                            group_hg.put(group, hg);
+                        } else {
+                            List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
+                            hg_tmp.addAll(group_hg.get(group));
+                            hg_tmp.add(data_all.get(key).get(i));
+                            group_hg.put(group, hg_tmp);
+                        }
+
+                        double val = data_all.get(key).get(i).getYValue().doubleValue();
+                        double val_norm = (val/number_of_elements[i])*100;
+                        data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
+                    }
+                }
             }
+
         }
 
         for(String group : group_hg.keySet()){
@@ -128,25 +128,21 @@ public class ProfilePlot extends AChart {
             profilePlot.getData().add(series);
 
         addListener();
-
-        setMaxBoundary();
-
+        //setMaxBoundary();
+        yAxis.setUpperBound(100);
+        xAxis.setTickLabelRotation(0);
 
         Task task = new Task() {
             @Override
             protected Object call()  {
 
                 haploStatistics = new HaploStatistics(tableController, chartController,logClass);
-
                 haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
-
-
                 return true;
             }
         };
 
         mito.getProgressBarhandler().activate(task);
-
         task.setOnCancelled((EventHandler<Event>) event -> {
             mito.getProgressBarhandler().stop();
         });
@@ -165,12 +161,10 @@ public class ProfilePlot extends AChart {
 
         });
         new Thread(task).start();
+    }
 
+    private void getYvalue() {
 
-
-
-        //addTabPaneListener(statsTabpane, tabpaneViz);
-        //addTabPaneListener(tabpaneViz, statsTabpane);
     }
 
     private String[] remove(String[] col) {
@@ -258,7 +252,10 @@ public class ProfilePlot extends AChart {
     public void setMaxBoundary(){
         for(int i = 1; i < 6; i++){
             if((maxVal+i)%5 == 0){
-                yAxis.setUpperBound(maxVal+i);
+                if((maxVal+i) > 100)
+                    yAxis.setUpperBound(100);
+                else
+                    yAxis.setUpperBound(maxVal+i);
                 break;
             }
         }
