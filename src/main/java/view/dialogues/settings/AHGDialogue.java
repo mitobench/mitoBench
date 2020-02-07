@@ -156,7 +156,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
             p1 = p1.replace("*", "");
             hg_list = p1.split(",");
             hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
-
         } else {
             try {
                 throw new HaplogroupException("Haplogroups are not in correct format.");

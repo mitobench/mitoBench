@@ -243,7 +243,7 @@ public class LocationCompleter {
                         "NOR," +
                         "SJM," +
                         "SWE," +
-                        "GB","GBR","Northern Europe", "", "Europe"},
+                        "GBR","Northern Europe", "", "Europe"},
                 new String[]{"GGY,JEY,SAR","Northern Europe", "Channel Islands", "Europe"},
                 new String[]{"ALB," +
                         "AND," +
@@ -384,22 +384,16 @@ public class LocationCompleter {
     private void fillMissingGeoSample(String lat, String lon, String subregion, String inter_region, String country){
 
         if(!lat.equals("") && !lon.equals("")){
-            //System.out.println("Lat Long given, calculate everything else.");
             fillBasedOnLatLong(Double.parseDouble(lat), Double.parseDouble(lon), index_sample_origin_country, index_sample_origin_region,
                     index_sample_origin_subregion, index_sample_origin_intermediate_region);
 
         } else if(!country.equals("")){
-            //System.out.println("Country given.");
-            if (country.equals("United Kingdom"))
-                System.out.println("");
             fillBasedOnCountry(country, index_sample_origin_region, index_sample_origin_subregion, index_sample_origin_intermediate_region, index_sample_origin_country);
 
         } else if(!inter_region.equals("")){
-            //System.out.println("Intermediate region given.");
             fillBasedOnIntermediate(inter_region, index_sample_origin_subregion, index_sample_origin_region);
 
         } else if(!subregion.equals("")){
-            //System.out.println("Subregion region given.");
             fillBasedOnSubregion(subregion, index_sample_origin_region);
         }
     }
@@ -408,22 +402,16 @@ public class LocationCompleter {
     private void fillMissingGeoSampling(String lat, String lon, String subregion, String inter_region, String country){
 
         if(!lat.equals("") && !lon.equals("")){
-            //System.out.println("Lat Long given, calculate everything else.");
             fillBasedOnLatLong(Double.parseDouble(lat), Double.parseDouble(lon), index_sampling_country, index_sampling_region,
                     index_sampling_subregion, index_sampling_intermediate_region);
 
         } else if(!country.equals("")){
-            if (country.equals("United Kingdom"))
-                System.out.println("");
-            //System.out.println("Country given.");
             fillBasedOnCountry(country, index_sampling_region, index_sampling_subregion, index_sampling_intermediate_region, index_sampling_country);
 
         } else if(!inter_region.equals("")){
-            //System.out.println("Intermediate region given.");
             fillBasedOnIntermediate(inter_region, index_sampling_subregion, index_sampling_region);
 
         } else if(!subregion.equals("")){
-            //System.out.println("Subregion region given.");
             fillBasedOnSubregion(subregion, index_sampling_region);
         }
 

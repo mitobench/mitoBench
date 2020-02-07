@@ -890,7 +890,7 @@ public abstract class ATableController {
             Entry e_copy=null;
             for(Entry e : e_list){
                 if(e.getIdentifier().equals(s)){
-                     e_copy = new Entry(newColname, e.getType(), e.getData());
+                    e_copy = new Entry(newColname, e.getType(), e.getData());
                 }
             }
             e_list.add(e_copy);

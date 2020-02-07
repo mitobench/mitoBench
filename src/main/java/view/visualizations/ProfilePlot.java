@@ -10,7 +10,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import statistics.HaploStatistics;
 import controller.TableControllerUserBench;
-import controller.HaplotreeController;
 import view.MitoBenchWindow;
 
 import java.net.URL;
@@ -31,6 +30,7 @@ public class ProfilePlot extends AChart {
     List<XYChart.Series> seriesList = new ArrayList<>();
     int maxVal = 0;
     private HaploStatistics haploStatistics;
+    //private boolean bContained=false;
 
 
     public ProfilePlot(String title, String lable_xaxis, String label_yaxis, TabPane tabpane, LogClass logClass,
@@ -54,12 +54,11 @@ public class ProfilePlot extends AChart {
      * Create profile plot.
      *
      * @param tableController
-     * @param treeController
      * @param chartController
      * @param logClass
      * @param statsTabpane
      */
-    public void create(TableControllerUserBench tableController, HaplotreeController treeController,
+    public void create(TableControllerUserBench tableController,
                        ChartController chartController, LogClass logClass, TabPane statsTabpane, String[] hg_list){
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
@@ -92,33 +91,62 @@ public class ProfilePlot extends AChart {
         java.util.Collections.sort(hg_core_curr);
 
         HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();
-        for(String key : hg_core_curr){
-            if(key.equals("B")){
+        for(String key : hg_core_curr) {
 
-            } else {
-                if(data_all.containsKey(key)) {
-                    for(int i = 0; i < selection_groups.length; i++){
-                        String group = data_all.get(key).get(i).getXValue();
+            //if (hg_core_curr.contains("B"))
+                //bContained = true;
 
-                        if(!group_hg.containsKey(group)){
-                            List<XYChart.Data<String, Number>> hg = new ArrayList<>();
-                            hg.add(data_all.get(key).get(i));
-                            group_hg.put(group, hg);
-                        } else {
-                            List<XYChart.Data<String, Number>>hg_tmp = new ArrayList<>();
-                            hg_tmp.addAll(group_hg.get(group));
-                            hg_tmp.add(data_all.get(key).get(i));
-                            group_hg.put(group, hg_tmp);
-                        }
+            if (data_all.containsKey(key)) {
+                for (int i = 0; i < selection_groups.length; i++) {
+                    String group = data_all.get(key).get(i).getXValue();
 
-                        double val = data_all.get(key).get(i).getYValue().doubleValue();
-                        double val_norm = (val/number_of_elements[i])*100;
-                        data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
+                    if (!group_hg.containsKey(group)) {
+                        List<XYChart.Data<String, Number>> hg = new ArrayList<>();
+                        hg.add(data_all.get(key).get(i));
+                        group_hg.put(group, hg);
+                    } else {
+                        List<XYChart.Data<String, Number>> hg_tmp = new ArrayList<>();
+                        hg_tmp.addAll(group_hg.get(group));
+                        hg_tmp.add(data_all.get(key).get(i));
+                        group_hg.put(group, hg_tmp);
                     }
+
+                    double val = data_all.get(key).get(i).getYValue().doubleValue();
+                    double val_norm = (val / number_of_elements[i]) * 100;
+                    data_all.get(key).get(i).setYValue(chartController.roundValue(val_norm));
                 }
             }
-
         }
+
+//        // if hg list contained 'B', group them together
+//        if(bContained){
+//            for(String group : group_hg.keySet()){
+//                List<XYChart.Data<String, Number>> datalist = group_hg.get(group);
+//                XYChart.Data<String, Number> dataB4 = datalist.get(hg_core_curr.indexOf("B4"));
+//                XYChart.Data<String, Number> dataB5 = datalist.get(hg_core_curr.indexOf("B5"));
+//                XYChart.Data<String, Number> dataB6 = datalist.get(hg_core_curr.indexOf("B6"));
+//
+//                Number valB4 = dataB4.getYValue();
+//                Number valB5 = dataB5.getYValue();
+//                Number valB6 = dataB6.getYValue();
+//
+//                int valB = valB4.intValue() + valB5.intValue() + valB6.intValue();
+//                datalist.get(hg_core_curr.indexOf("B4")).setYValue((Number) valB);
+//                datalist.remove(dataB5);
+//                datalist.remove(dataB6);
+//            }
+//        }
+//
+//        // new hg_curr_list
+//        List<String> hg_core_curr_new = new ArrayList<>();
+//        for (int i = 0; i < hg_core_curr.size(); i++){
+//            if(i == hg_core_curr.indexOf("B4")){
+//                hg_core_curr_new.add("B");
+//            } else if(!hg_core_curr.get(i).equals("B5") && !hg_core_curr.get(i).equals("B6")){
+//                hg_core_curr_new.add(hg_core_curr.get(i));
+//            }
+//        }
+//        hg_core_curr = hg_core_curr_new;
 
         for(String group : group_hg.keySet()){
             addSeries(hg_core_curr, group_hg.get(group), group);
@@ -132,12 +160,13 @@ public class ProfilePlot extends AChart {
         yAxis.setUpperBound(100);
         xAxis.setTickLabelRotation(0);
 
+        List<String> finalHg_core_curr = hg_core_curr;
         Task task = new Task() {
             @Override
             protected Object call()  {
 
                 haploStatistics = new HaploStatistics(tableController, chartController,logClass);
-                haploStatistics.count(hg_core_curr.toArray(new String[hg_core_curr.size()]));
+                haploStatistics.count(finalHg_core_curr.toArray(new String[finalHg_core_curr.size()]));
                 return true;
             }
         };
@@ -264,6 +293,6 @@ public class ProfilePlot extends AChart {
 
     @Override
     protected void layoutChartChildren(double v, double v1, double v2, double v3) {
-        
+
     }
 }

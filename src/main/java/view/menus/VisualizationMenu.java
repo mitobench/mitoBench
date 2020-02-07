@@ -292,7 +292,7 @@ public class VisualizationMenu {
                         visualizationController.initProfilePlot();
                         profilePlot = visualizationController.getProfilePlot();
                         hGlistProfilePlot.calculateTrimmedHGList();
-                        profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHg_list_trimmed());
+                        profilePlot.create(tableController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHg_list_trimmed());
 
                         // remove tab from tabpane
                         mito.getTabpane_visualization().getTabs().remove(tab);

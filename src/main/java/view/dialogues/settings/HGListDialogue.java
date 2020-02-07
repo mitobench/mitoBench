@@ -30,6 +30,9 @@ public class HGListDialogue extends AHGDialogue {
         addComponents();
     }
 
+    /**
+     * Add graphical components to main pane
+     */
     private void addComponents() {
 
         label_info = new Label("You can define your own list of haplogroups here.\nExample: H,HV,R0\n\nThis list will " +

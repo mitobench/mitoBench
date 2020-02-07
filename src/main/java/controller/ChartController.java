@@ -430,7 +430,6 @@ public class ChartController {
                     count_to_hg.put(count,  Arrays.asList(key));
                 }
             }
-
         }
         Collections.sort(sizes);
 
