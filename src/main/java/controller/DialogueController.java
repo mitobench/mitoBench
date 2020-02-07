@@ -7,8 +7,6 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 
-import java.io.IOException;
-
 
 public class DialogueController {
 

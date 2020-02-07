@@ -130,8 +130,6 @@ public class HSDParser {
                     entry.add(input_sample);
 
                     entryList.put(id.replace("\"","").split("\\.")[0], entry);
-                    //System.out.println("Adding " + id.replace("\"","").split("\\.")[0]);
-
                 }
             }
         }

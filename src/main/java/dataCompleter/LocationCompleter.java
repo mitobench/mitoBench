@@ -243,7 +243,7 @@ public class LocationCompleter {
                         "NOR," +
                         "SJM," +
                         "SWE," +
-                        "GB","Northern Europe", "", "Europe"},
+                        "GB","GBR","Northern Europe", "", "Europe"},
                 new String[]{"GGY,JEY,SAR","Northern Europe", "Channel Islands", "Europe"},
                 new String[]{"ALB," +
                         "AND," +
@@ -390,6 +390,8 @@ public class LocationCompleter {
 
         } else if(!country.equals("")){
             //System.out.println("Country given.");
+            if (country.equals("United Kingdom"))
+                System.out.println("");
             fillBasedOnCountry(country, index_sample_origin_region, index_sample_origin_subregion, index_sample_origin_intermediate_region, index_sample_origin_country);
 
         } else if(!inter_region.equals("")){
@@ -411,6 +413,8 @@ public class LocationCompleter {
                     index_sampling_subregion, index_sampling_intermediate_region);
 
         } else if(!country.equals("")){
+            if (country.equals("United Kingdom"))
+                System.out.println("");
             //System.out.println("Country given.");
             fillBasedOnCountry(country, index_sampling_region, index_sampling_subregion, index_sampling_intermediate_region, index_sampling_country);
 

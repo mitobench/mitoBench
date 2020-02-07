@@ -468,7 +468,7 @@ public class VisualizationMenu {
 
                             try {
                                 sampleTree.start(svgfile);
-                                sampleTree.getViz().render(Format.SVG).toFile(new File(svgfile));
+                                //sampleTree.getViz().render(Format.SVG).toFile(new File(svgfile));
                                 mito.getTabpane_visualization().getTabs().remove(sampleTree_tab);
                             } catch (IOException ex) {
                                 ex.printStackTrace();

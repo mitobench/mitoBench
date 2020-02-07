@@ -35,7 +35,7 @@ public abstract class ATableController {
     protected HashMap<String, List<Entry>> table_content;
     protected ATableController controller;
     protected GroupController groupController;
-    protected List<String> col_names;
+    protected Set<String> col_names;
     protected List<String> col_names_sorted;
     protected GroupMenu groupMenu;
     protected LogClass logClass;
@@ -57,7 +57,7 @@ public abstract class ATableController {
 
         data = FXCollections.observableArrayList();
         data_initial = FXCollections.observableArrayList();
-        col_names = new ArrayList<>();
+        col_names = new HashSet<>();
 
         dataTable = new DataTable();
         column_to_index = new HashMap<>();
@@ -122,7 +122,7 @@ public abstract class ATableController {
             addColumn(col_names_sorted.get(i), i);
         }
 
-        updateVersion();
+        //updateVersion();
 
         // clear Items in table
         table.setItems(FXCollections.observableArrayList());
@@ -320,7 +320,7 @@ public abstract class ATableController {
     public void updateView(ObservableList<ObservableList> newItems){
 
         // update version
-        updateVersion();
+        //updateVersion();
 
         ObservableList<ObservableList> new_items_copy;
         new_items_copy = copyData(newItems);
@@ -373,7 +373,7 @@ public abstract class ATableController {
             return entries;
 
         } else {
-            selection = getSelectedRows();
+            selection = table.getSelectionModel().getSelectedItems();
             boolean never_reached = true;
 
             for(int i = 0; i < selection.size(); i++){
@@ -413,6 +413,7 @@ public abstract class ATableController {
 
         if(!getCurrentColumnNames().contains(colname)){
             TableColumn col = new TableColumn(colname);
+
             col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
@@ -461,7 +462,7 @@ public abstract class ATableController {
      */
     public void removeColumn(String colName) {
 
-        updateVersion();
+        //updateVersion();
 
         // remove grouping
         if(colName.contains("(Grouping)")){
@@ -833,7 +834,8 @@ public abstract class ATableController {
 //        } else {
 //            selectedTableItems = table.getItems();
 //        }
-
+//
+//        return selectedTableItems;
         return table.getItems();
 
     }
