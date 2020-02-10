@@ -11,6 +11,7 @@ import model.Group;
 import net.java.html.leaflet.*;
 import controller.TableControllerUserBench;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,16 +73,28 @@ public class MarkerIcons {
      * @param map
      */
     private void addMarkerOneColor(ObservableList items, Map map) {
+
         for(Object location : items){
             Location loc = (Location) location;
             LatLng pos = new LatLng(loc.getLat(), loc.getLng());
 
             PathOptions pathOpt = new PathOptions().setColor("BLUE");
-            CircleMarker m = new CircleMarker(pos,  pathOpt);
+            MarkerOptions markerOptions = new MarkerOptions().setTitle("Ancient");
+            CircleMarker m_circle = new CircleMarker(pos,  pathOpt);
+            Marker marker = new Marker(pos, markerOptions);
+            URL pathToIcon = this.getClass().getResource("/icons/skull_filled.png");
+            IconOptions iconOptions = new IconOptions(pathToIcon.toExternalForm());
+            iconOptions.setIconSize(new Point(30,30));
+            Icon icon = new Icon(iconOptions);
+            marker.setIcon(icon);
+
             Popup popup = new Popup();
             popup.setContent(location.toString());
-            m.bindPopup(popup);
-            m.addTo(map);
+            //m_circle.bindPopup(popup);
+            //m_circle.addTo(map);
+
+            marker.bindPopup(popup);
+            marker.addTo(map);
         }
     }
 
