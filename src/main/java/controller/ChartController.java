@@ -4,7 +4,7 @@ import io.Exceptions.HaplogroupException;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
-import view.dialogues.error.HaplogroupErrorDialogure;
+import view.dialogues.error.HaplogroupErrorDialogue;
 import view.visualizations.BarChartGrouping;
 import view.visualizations.BarPlotHaplo;
 import view.visualizations.BarPlotHaplo2;
@@ -464,7 +464,7 @@ public class ChartController {
         if(tmp.contains("Haplogroup") && !conraintHGCol(tableController.getCurrentColumnNames())){
 
             HaplogroupException haplogroupException = new HaplogroupException("No haplogroups defined!");
-            HaplogroupErrorDialogure haplogroupErrorDialogue = new HaplogroupErrorDialogure(haplogroupException);
+            HaplogroupErrorDialogue haplogroupErrorDialogue = new HaplogroupErrorDialogue(haplogroupException);
 
         } else {
             String[][] res = new String[names.length][];
@@ -499,7 +499,7 @@ public class ChartController {
         if(tmp.contains("Haplogroup") && !conraintHGCol(tableController.getCurrentColumnNames())){
 
             HaplogroupException haplogroupException = new HaplogroupException("No haplogroups defined!");
-            HaplogroupErrorDialogure haplogroupErrorDialogue = new HaplogroupErrorDialogure(haplogroupException);
+            HaplogroupErrorDialogue haplogroupErrorDialogue = new HaplogroupErrorDialogue(haplogroupException);
 
         } else {
             String[][] res = new String[names.length][];

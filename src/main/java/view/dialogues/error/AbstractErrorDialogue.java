@@ -1,6 +1,5 @@
 package view.dialogues.error;
 
-import io.Exceptions.IMitoException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -10,15 +9,11 @@ import javafx.scene.layout.Priority;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-/**
- * Created by peltzer on 23/11/2016.
- */
-public abstract class AbstractExceptionDialogue {
+public class AbstractErrorDialogue {
 
+    public AbstractErrorDialogue(Exception ex, String message) {
 
-    public AbstractExceptionDialogue(IMitoException ex) {
-
-        Alert alert = createContextAlert(ex.getType());
+        Alert alert = createContextAlert(message);
         // Create expandable Exception.
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -48,11 +43,10 @@ public abstract class AbstractExceptionDialogue {
         alert.showAndWait();
     }
 
-    private Alert createContextAlert(String inputType){
+    private Alert createContextAlert(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception Dialog");
-        alert.setContentText("Something is wrong with your "+ inputType +
-                " file, either bad format or there are wrong characters inside.");
+        alert.setContentText(message);
         return alert;
     }
 }

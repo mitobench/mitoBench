@@ -5,16 +5,14 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
+import view.dialogues.error.SampleTreeError;
 
-
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class SampleTree  extends AChart {
 ;
     private Graphviz viz;
-    private BufferedImage image;
 
     public SampleTree(String lable_xaxis, String label_yaxis, LogClass logClass) {
         super(lable_xaxis, label_yaxis, logClass);
@@ -40,14 +38,14 @@ public class SampleTree  extends AChart {
             System.out.println("Finished rendering graph");
         } catch (Exception e){
 
-            System.err.println("The svg cannot be created. Please use the dot file (" + System.getProperty("user.dir") +"/haplogroups.hsd.dot) to visualuze the tree\n");
-            System.err.println(e);
+            new SampleTreeError(
+                    e,
+                    "The svg cannot be created. Please use the dot file (" + System.getProperty("user.dir")
+                    +"/haplogroups.hsd.dot) to visualize the tree with a tool of your choice");
+
         }
 
 
     }
 
-    public Graphviz getViz() {
-        return viz;
-    }
 }
