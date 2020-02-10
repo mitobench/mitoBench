@@ -141,26 +141,22 @@ public class DataCompleter {
                 isheaderWritter = true;
             }
 
+            String macro =  setMacrogroup(haplogroup);
 
-            if(percentageOfN > 0.02){
-                System.out.println("Sequence: " + accessionID + " was removed because it has " + percentageOfN*100 + "% missing data");
-            } else {
-                String macro =  setMacrogroup(haplogroup);
+            // write new meta data entry
+            String values = meta_info_parsed + "," + percentageOfN + ",'" + user_alias + "','" + haplogroup + "','" +
+                    macro + "," + haplotype + "'," + quality + ",'" + fastaReader.getSequenceMap().get(accessionID) + "'";
 
-                // write new meta data entry
-                String values = meta_info_parsed + "," + percentageOfN + ",'" + user_alias + "','" + haplogroup + "','" +
-                        macro + "," + haplotype + "'," + quality + ",'" + fastaReader.getSequenceMap().get(accessionID) + "'";
+            values = values.replace("'NULL'", "NULL");
+            values = values.replace("NULL", "");
+            values = values.replace("'\"", "'");
+            values = values.replace("\"'", "'");
+            values = values.replace("\"", "");
+            values = values.replace("'", "");
 
-                values = values.replace("'NULL'", "NULL");
-                values = values.replace("NULL", "");
-                values = values.replace("'\"", "'");
-                values = values.replace("\"'", "'");
-                values = values.replace("\"", "");
-                values = values.replace("'", "");
+            data_meta_file_updated.write(values);
+            data_meta_file_updated.newLine();
 
-                data_meta_file_updated.write(values);
-                data_meta_file_updated.newLine();
-            }
 
         }
 

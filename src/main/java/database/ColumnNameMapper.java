@@ -43,7 +43,7 @@ public class ColumnNameMapper {
             case "language":
                 return "Language";
             case "generations_to_tma":
-                return "Generations to tma";
+                return "Generations to TMA";
             case "geographic_info_tma_inferred_latitude":
                 return "TMA inferred Latitude";
             case "geographic_info_tma_inferred_longitude":
@@ -93,7 +93,7 @@ public class ColumnNameMapper {
             case "tissue_sampled":
                 return "Tissue Sampled";
             case "sampling_date":
-                return "Sampling Date";
+                return "Date of Sampling";
             case "sequencing_platform":
                 return "Sequencing Platform";
             case "enrichment_method":
@@ -133,7 +133,7 @@ public class ColumnNameMapper {
             case "sampling_subregion":
                 return "Sampling Subregion";
             case "sampling_intermediate_region":
-                return "Sampling Intermediate region";
+                return "Sampling Intermediate Region";
             case "sampling_country":
                 return "Sampling Country";
             case "sampling_city":
@@ -147,7 +147,7 @@ public class ColumnNameMapper {
             case "sample_origin_subregion":
                 return "Sample Subregion";
             case "sample_origin_intermediate_region":
-                return "Sample Intermediate region";
+                return "Sample Intermediate Region";
             case "sample_origin_country":
                 return "Sample Country";
             case "sample_origin_city":
@@ -171,6 +171,7 @@ public class ColumnNameMapper {
             case "meta_info_id":
                 return "mitoBenchID";
 
+            // and the other way around
             case "ID":
                 return "accession_id";
             case "MTSequence":
@@ -201,7 +202,7 @@ public class ColumnNameMapper {
                 return "access";
             case "Language":
                 return "language";
-            case "Generations to tma":
+            case "Generations to TMA":
                 return "generations_to_tma";
             case "TMA inferred Latitude":
                 return "geographic_info_tma_inferred_latitude";
@@ -211,7 +212,7 @@ public class ColumnNameMapper {
                 return "geographic_info_tma_inferred_region";
             case "TMA inferred Subregion":
                 return "geographic_info_tma_inferred_subregion";
-            case "TMA inferred Intermediate region":
+            case "TMA inferred Intermediate Region":
                 return "geographic_info_tma_inferred_intermediate_region";
             case "TMA inferred City":
                 return "geographic_info_tma_inferred_city";
@@ -251,7 +252,7 @@ public class ColumnNameMapper {
                 return "publication_comments";
             case "Tissue Sampled":
                 return "tissue_sampled";
-            case "Sampling Date":
+            case "Date of Sampling":
                 return "sampling_date";
             case "Sequencing Platform":
                 return "sequencing_platform";
@@ -291,7 +292,7 @@ public class ColumnNameMapper {
                 return "sampling_region";
             case "Sampling Subregion":
                 return "sampling_subregion";
-            case "Sampling Intermediate region":
+            case "Sampling Intermediate Region":
                 return "sampling_intermediate_region";
             case "Sampling Country":
                 return "sampling_country";
@@ -305,7 +306,7 @@ public class ColumnNameMapper {
                 return "sample_origin_region";
             case "Sample Subregion":
                 return "sample_origin_subregion";
-            case "Sample Intermediate region":
+            case "Sample Intermediate Region":
                 return "sample_origin_intermediate_region";
             case "Sample Country":
                 return "sample_origin_country";

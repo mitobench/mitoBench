@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ public class DataUploader {
 
 
     /**
+     * Parse meta file and check if data can be uploaded (all criteria are fulfilled)
      *
      * @param outfile
      */
@@ -50,7 +52,13 @@ public class DataUploader {
 
             for (String acc : meta.keySet()){
                 List<Entry> row = meta.get(acc);
-                upload(header, types, row, acc);
+
+                // check row
+                if(checkPassed(row, acc)){
+                    // upload
+                   // upload(header, types, row, acc);
+                }
+
             }
 
 
@@ -62,6 +70,154 @@ public class DataUploader {
             e.printStackTrace();
         }
 
+    }
+
+    private boolean checkPassed(List<Entry> row, String acc) {
+        boolean passed = true;
+
+        int index_completeness = -1;
+        int index_user_email = -1;
+        int index_publication_status = -1;
+        int index_author = -1;
+        int index_data_type = -1;
+        int index_sequence = -1;
+        int index_sample_origin_latitude = -1;
+        int index_sample_origin_longitude = -1;
+        int index_sample_origin_intermediate_region = -1;
+        int index_sample_origin_country = -1;
+        int index_sample_origin_region = -1;
+        int index_sample_origin_city = -1;
+        int index_sample_origin_subregion = -1;
+        int index_sampling_latitude = -1;
+        int index_sampling_longitude = -1;
+        int index_sampling_intermediate_region = -1;
+        int index_sampling_country = -1;
+        int index_sampling_region = -1;
+        int index_sampling_city = -1;
+        int index_sampling_subregion = -1;
+
+
+
+        for (int i = 0; i < row.size(); i++){
+            Entry e = row.get(i);
+
+            if (e.getIdentifier().equals("Percentage of N")){
+                index_completeness = i;
+            } else if(e.getIdentifier().equals("Submitter Email")){
+                index_user_email = i;
+            } else if(e.getIdentifier().equals("Publication Status")){
+                index_publication_status = i;
+            } else if(e.getIdentifier().equals("Author")){
+                index_author = i;
+            } else if(e.getIdentifier().equals("Data Type")){
+                index_data_type = i;
+            } else if(e.getIdentifier().equals("MTSequence")){
+                index_sequence = i;
+            } else if(e.getIdentifier().startsWith("Sample Latitude")){
+                index_sample_origin_latitude = i;
+            } else if(e.getIdentifier().startsWith("Sample Longitude")){
+                index_sample_origin_longitude = i;
+            } else if(e.getIdentifier().startsWith("Sample Intermediate Region")){
+                index_sample_origin_intermediate_region = i;
+            } else if(e.getIdentifier().startsWith("Sample Country")){
+                index_sample_origin_country = i;
+            } else if(e.getIdentifier().startsWith("Sample Continent")){
+                index_sample_origin_region = i;
+            } else if(e.getIdentifier().startsWith("Sample City")){
+                index_sample_origin_city = i;
+            } else if(e.getIdentifier().startsWith("Sample Subregion")){
+                index_sample_origin_subregion = i;
+            } else if(e.getIdentifier().startsWith("Sampling Latitude")){
+                index_sampling_latitude = i;
+            } else if(e.getIdentifier().startsWith("Sampling Longitude")){
+                index_sampling_longitude = i;
+            } else if(e.getIdentifier().startsWith("Sampling Intermediate Region")){
+                index_sampling_intermediate_region = i;
+            } else if(e.getIdentifier().startsWith("Sampling Country")){
+                index_sampling_country = i;
+            } else if(e.getIdentifier().startsWith("Sampling Continent")){
+                index_sampling_region = i;
+            } else if(e.getIdentifier().startsWith("Sampling City")){
+                index_sampling_city = i;
+            } else if(e.getIdentifier().startsWith("Sampling Subregion")){
+                index_sampling_subregion = i;
+            }
+        }
+
+        // test mandatory attributes
+
+        if(index_completeness != -1 && !row.get(index_completeness).getData().getTableInformation().equals("")){
+            double completeness = Double.parseDouble(row.get(index_completeness).getData().getTableInformation());
+            if(completeness > 0.02){
+                System.out.println("Sequence: " + acc + ": " + completeness*100 + "% of missing data");
+                passed = false;
+            }
+        }
+
+        if(index_author == -1 || row.get(index_completeness).getData().getTableInformation().equals("")){
+            System.out.println("Sequence: " + acc + ": Author is missing.");
+            passed = false;
+        }
+
+        if(index_user_email == -1 || row.get(index_user_email).getData().getTableInformation().equals("")){
+            System.out.println("Sequence: " + acc + ": Email address of submitter is missing.");
+            passed = false;
+        }
+
+        if(index_data_type == -1 || row.get(index_data_type).getData().getTableInformation().equals("")){
+            System.out.println("Sequence: " + acc + ": data type is missing.");
+            passed = false;
+        }
+
+        if(index_publication_status == -1 || row.get(index_publication_status).getData().getTableInformation().equals("")){
+            System.out.println("Sequence: " + acc + ": publication status is missing.");
+            passed = false;
+        }
+
+        if(index_sequence == -1 || row.get(index_sequence).getData().getTableInformation().equals("")){
+            System.out.println("Sequence: " + acc + ": MT sequence is missing.");
+            passed = false;
+        }
+
+        // check geo information
+        boolean geo_set = false;
+
+        if(index_sample_origin_latitude != -1 && index_sample_origin_longitude != -1 &&
+                !row.get(index_sample_origin_latitude).getData().getTableInformation().equals("") && !row.get(index_sample_origin_longitude).getData().getTableInformation().equals("")){
+            geo_set = true;
+        } else if (index_sample_origin_region != -1 && !row.get(index_sample_origin_region).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sample_origin_city != -1 && !row.get(index_sample_origin_city).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sample_origin_country != -1 && !row.get(index_sample_origin_country).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sample_origin_subregion != -1 && !row.get(index_sample_origin_subregion).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sample_origin_intermediate_region != -1 && !row.get(index_sample_origin_intermediate_region).getData().getTableInformation().equals("")) {
+            geo_set = true;
+
+
+        } else if(index_sampling_latitude != -1 && index_sampling_longitude != -1 &&
+                !row.get(index_sampling_latitude).getData().getTableInformation().equals("") && !row.get(index_sampling_longitude).getData().getTableInformation().equals("")){
+            geo_set = true;
+        } else if (index_sampling_region != -1 && !row.get(index_sampling_region).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sampling_city != -1 && !row.get(index_sampling_city).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sampling_country != -1 && !row.get(index_sampling_country).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sampling_subregion != -1 && !row.get(index_sampling_subregion).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else if (index_sampling_intermediate_region != -1 && !row.get(index_sampling_intermediate_region).getData().getTableInformation().equals("")) {
+            geo_set = true;
+        } else {
+            geo_set = false;
+            passed = geo_set;
+            System.out.println("Sequence: " + acc + ": geographical information is missing.");
+        }
+
+
+        return passed;
     }
 
     public void upload(String[] header, String[] types, List<Entry> row, String acc) {
@@ -101,7 +257,7 @@ public class DataUploader {
 
             for(int i = 1; i < header.length; i++){
                 if (types[i].equals("String") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
-                    body. put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
+                    body.put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
 
                 } else if(types[i].equals("float") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
                     body.put(header[i].trim().toLowerCase(), Double.parseDouble(row.get(i - 1).getData().getTableInformation().trim()));
