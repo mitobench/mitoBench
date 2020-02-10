@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.CancelButton;
+import view.dialogues.information.AboutDialogue;
 import view.menus.*;
 import view.tree.TreeView;
 
@@ -162,17 +163,21 @@ public class MitoBenchWindow extends Application {
 
     }
 
-    private VBox getTopPane() throws Exception {
+    private VBox getTopPane() {
         VBox topPane = new VBox();
-
         topPane.getChildren().addAll(getMenuPane(), getToolbarpane());
 
         return topPane;
 
     }
 
-    private ToolBar getToolbarpane() {
-        Toolbarpane toolBar = new Toolbarpane(fileReaderController, this);
+    private Toolbarpane getToolbarpane() {
+
+        progressBarhandler = new ProgressBarHandler(btn_cancel);
+        progressBarhandler.create();
+
+        Toolbarpane toolBar = new Toolbarpane(fileReaderController, this, progressBarhandler.getProgressBar(), btn_cancel);
+
         return toolBar;
     }
 
@@ -247,26 +252,17 @@ public class MitoBenchWindow extends Application {
      */
     private BorderPane configureTablePane()
     {
-        final Label label = new Label("User table");
         String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " / " +
                 tableControllerUserBench.getTable().getItems().size() +  " rows are selected";
 
         info_selected_items.setText(info_text);
 
-        HBox hbox = new HBox();
-        Region filler = new Region(); HBox.setHgrow(filler, Priority.ALWAYS);
-
-        progressBarhandler = new ProgressBarHandler(btn_cancel);
-        progressBarhandler.create();
-
-        hbox.getChildren().addAll(label, filler, progressBarhandler.getProgressBar(), btn_cancel);
-
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTablePane");
         pane_table_userBench = new VBox();
         pane_table_userBench.setSpacing(10);
-        pane_table_userBench.setPadding(new Insets(20, 10, 10, 10));
-        pane_table_userBench.getChildren().addAll(hbox, tableControllerUserBench.getTable(), info_selected_items);
+        pane_table_userBench.setPadding(new Insets(5, 5, 5, 5));
+        pane_table_userBench.getChildren().addAll(tableControllerUserBench.getTable(), info_selected_items);
         pane_table.setCenter(pane_table_userBench);
 
         return pane_table;
@@ -300,6 +296,9 @@ public class MitoBenchWindow extends Application {
         borderpane_statistics.setId("mainWindowLeftpart");
 
         tabpane_statistics = new TabPane();
+        tabpane_statistics.getTabs().add(new Tab("Welcome to mitoBench", new AboutDialogue("Welcome",
+                "If you need some help, read the documentation first:").getDialogGrid()));
+
         borderpane_statistics.setCenter(tabpane_statistics);
 
         return borderpane_statistics;

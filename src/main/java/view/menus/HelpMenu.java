@@ -48,7 +48,9 @@ public class HelpMenu {
             AboutDialogue aboutDialogue = new AboutDialogue(
                     "About MitoBench",
                     "If you need some help, read the documentation first:");
+            aboutDialogue.show(600,400);
         });
+
 
         menuHelp.getItems().addAll(aboutItem);
 

@@ -6,23 +6,25 @@ import io.dialogues.Export.ExportDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import model.CancelButton;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGListDialogue;
 import view.dialogues.settings.SqlQueryBuilderWindow;
+
 
 public class Toolbarpane extends ToolBar {
 
     private final FileReaderController fileReaderController;
     private final Stage stage;
     private final MitoBenchWindow mito;
-    private Button goBackBtn;
     private Button openFileBtn;
     private Button saveprojectBtn;
     private IImportDialogueFactory importDialogueFactory;
@@ -30,8 +32,10 @@ public class Toolbarpane extends ToolBar {
     private Button settings;
 
 
-    public Toolbarpane(FileReaderController fileReaderController, MitoBenchWindow mitoBenchWindow){
-        create();
+    public Toolbarpane(FileReaderController fileReaderController, MitoBenchWindow mitoBenchWindow,
+                       ProgressBar progressBar, CancelButton btn_cancel){
+
+        create(progressBar, btn_cancel);
         addFunctionality();
 
         this.fileReaderController = fileReaderController;
@@ -39,10 +43,11 @@ public class Toolbarpane extends ToolBar {
         this.mito = mitoBenchWindow;
         importDialogueFactory = new ImportDialogueFactoryImpl();
 
+
     }
 
 
-    private void create(){
+    private void create(ProgressBar progressBar, CancelButton btn_cancel){
         openFileBtn = new Button();
         saveprojectBtn = new Button();
         //goBackBtn = new Button();
@@ -77,8 +82,18 @@ public class Toolbarpane extends ToolBar {
         //goBackBtn.setTooltip(new Tooltip("Go one filtering step back"));
         loadFromDatabase.setTooltip(new Tooltip("Download data from database"));
         settings.setTooltip(new Tooltip("Set Haplogroup list"));
-        this.getItems().addAll(openFileBtn, saveprojectBtn, loadFromDatabase, settings);
+
+        final Pane rightSpacer = new Pane();
+        HBox.setHgrow(
+                rightSpacer,
+                Priority.SOMETIMES
+        );
+
+        this.getItems().addAll(openFileBtn, saveprojectBtn, loadFromDatabase, settings, rightSpacer, progressBar, btn_cancel);
+
     }
+
+
 
 
     private void addFunctionality() {

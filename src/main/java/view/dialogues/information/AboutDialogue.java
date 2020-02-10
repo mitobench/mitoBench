@@ -44,7 +44,7 @@ public class AboutDialogue {
         addComponents(message);
         addListener();
 
-        show(600,400);
+        //show(600,400);
     }
 
     private void addComponents(String message) {
@@ -58,7 +58,7 @@ public class AboutDialogue {
         String text = "MitoBench is a tool aimed at helping researchers to organize, \n" +
                 "visualize and maintain their mitochondrial data sets. Some functionality \n" +
                 "is aimed towards generating population genetics statistics with \n" +
-                "additional visualization";
+                "additional visualization.";
 
         dialogGrid.add(imageView,0,row,3,1);
         dialogGrid.add(new Separator(), 0, ++row, 3,1);
@@ -110,7 +110,7 @@ public class AboutDialogue {
     /**
      * This method displays dialogue.
      */
-    protected void show(int width, int height){
+    public void show(int width, int height){
         Scene dialogScene = new Scene(dialogGrid, width, height);
         dialog.setScene(dialogScene);
         dialog.show();

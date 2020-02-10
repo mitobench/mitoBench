@@ -130,14 +130,14 @@ public class FileReaderController {
 
             if(absolutePath.endsWith(".mitoproj")){
 
-                if(mito.isAnotherProjectLoaded()){
-                    InformationDialogue informationDialogue = new InformationDialogue(
-                            "Project already loaded",
-                            "Please clean up your analysis before \na new project can be loaded.",
-                            "Project already loaded",
-                            "projectLoadedDialogue"
-                    );
-                } else {
+//                if(mito.isAnotherProjectLoaded()){
+//                    InformationDialogue informationDialogue = new InformationDialogue(
+//                            "Project already loaded",
+//                            "Please clean up your analysis before \na new project can be loaded.",
+//                            "Project already loaded",
+//                            "projectLoadedDialogue"
+//                    );
+//                } else {
                     ProjectParser projectReader = new ProjectParser();
                     try {
 
@@ -151,7 +151,7 @@ public class FileReaderController {
                         e.printStackTrace();
                     }
 
-                }
+                //}
             }
         } else {
             try {
