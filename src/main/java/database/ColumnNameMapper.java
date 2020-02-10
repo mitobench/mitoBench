@@ -170,6 +170,8 @@ public class ColumnNameMapper {
                 return "General comments";
             case "meta_info_id":
                 return "mitoBenchID";
+            case "ancient_modern":
+                return "Modern/Ancient Data";
 
             // and the other way around
             case "ID":
@@ -330,6 +332,9 @@ public class ColumnNameMapper {
                 return "comments";
             case "mitoBenchID":
                 return "meta_info_id";
+            case "Modern/Ancient Data":
+                return "ancient_modern";
+
 
         }
 

@@ -95,6 +95,7 @@ public class DataUploader {
         int index_sampling_region = -1;
         int index_sampling_city = -1;
         int index_sampling_subregion = -1;
+        int index_modern_ancient = -1;
 
 
 
@@ -113,43 +114,56 @@ public class DataUploader {
                 index_data_type = i;
             } else if(e.getIdentifier().equals("MTSequence")){
                 index_sequence = i;
-            } else if(e.getIdentifier().startsWith("Sample Latitude")){
+            } else if(e.getIdentifier().equals("Sample Latitude")){
                 index_sample_origin_latitude = i;
-            } else if(e.getIdentifier().startsWith("Sample Longitude")){
+            } else if(e.getIdentifier().equals("Sample Longitude")){
                 index_sample_origin_longitude = i;
-            } else if(e.getIdentifier().startsWith("Sample Intermediate Region")){
+            } else if(e.getIdentifier().equals("Sample Intermediate Region")){
                 index_sample_origin_intermediate_region = i;
-            } else if(e.getIdentifier().startsWith("Sample Country")){
+            } else if(e.getIdentifier().equals("Sample Country")){
                 index_sample_origin_country = i;
-            } else if(e.getIdentifier().startsWith("Sample Continent")){
+            } else if(e.getIdentifier().equals("Sample Continent")){
                 index_sample_origin_region = i;
-            } else if(e.getIdentifier().startsWith("Sample City")){
+            } else if(e.getIdentifier().equals("Sample City")){
                 index_sample_origin_city = i;
-            } else if(e.getIdentifier().startsWith("Sample Subregion")){
+            } else if(e.getIdentifier().equals("Sample Subregion")){
                 index_sample_origin_subregion = i;
-            } else if(e.getIdentifier().startsWith("Sampling Latitude")){
+            } else if(e.getIdentifier().equals("Sampling Latitude")){
                 index_sampling_latitude = i;
-            } else if(e.getIdentifier().startsWith("Sampling Longitude")){
+            } else if(e.getIdentifier().equals("Sampling Longitude")){
                 index_sampling_longitude = i;
-            } else if(e.getIdentifier().startsWith("Sampling Intermediate Region")){
+            } else if(e.getIdentifier().equals("Sampling Intermediate Region")){
                 index_sampling_intermediate_region = i;
-            } else if(e.getIdentifier().startsWith("Sampling Country")){
+            } else if(e.getIdentifier().equals("Sampling Country")){
                 index_sampling_country = i;
-            } else if(e.getIdentifier().startsWith("Sampling Continent")){
+            } else if(e.getIdentifier().equals("Sampling Continent")){
                 index_sampling_region = i;
-            } else if(e.getIdentifier().startsWith("Sampling City")){
+            } else if(e.getIdentifier().equals("Sampling City")){
                 index_sampling_city = i;
-            } else if(e.getIdentifier().startsWith("Sampling Subregion")){
+            } else if(e.getIdentifier().equals("Sampling Subregion")){
                 index_sampling_subregion = i;
-            }
+            } else if(e.getIdentifier().equals("Modern/Ancient Data")){
+                index_modern_ancient = i;
+          }
         }
 
         // test mandatory attributes
 
         if(index_completeness != -1 && !row.get(index_completeness).getData().getTableInformation().equals("")){
-            double completeness = Double.parseDouble(row.get(index_completeness).getData().getTableInformation());
-            if(completeness > 0.02){
-                System.out.println("Sequence: " + acc + ": " + completeness*100 + "% of missing data");
+            double percentage_of_N = Double.parseDouble(row.get(index_completeness).getData().getTableInformation());
+            double threshold = 0.1;
+
+            if(index_modern_ancient != -1 && !row.get(index_modern_ancient).getData().getTableInformation().equals("")){
+
+                if (row.get(index_modern_ancient).getData().getTableInformation().equals("modern")){
+                    threshold = 0.01;
+                } else if (row.get(index_modern_ancient).getData().getTableInformation().equals("ancient")){
+                    threshold = 0.02;
+                }
+            }
+
+            if(percentage_of_N > threshold){
+                System.out.println("Sequence: " + acc + ": " + percentage_of_N*100 + "% of missing data");
                 passed = false;
             }
         }
