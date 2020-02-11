@@ -16,7 +16,7 @@ public class DuplicatesChecker {
 
     public void check(List<String> fasta_headers) {
         // get all accession IDs from database
-        Set<String> accessionIDs = databaseQueryHandler.getAccessionIDs();
+        Set<String> accessionIDs = databaseQueryHandler.getColumnSet("accession_id");
         List<String> duplicates = new ArrayList<>();
 
         for (String acc_to_upload : fasta_headers){

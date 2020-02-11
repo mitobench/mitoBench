@@ -107,7 +107,7 @@ public class SqlQueryBuilderWindow {
 
         label_population = new Label("Population");
         label_population.setPadding(new Insets(10,10,10,10));
-        population_entries = databaseQueryHandler.getPopulationList();
+        population_entries = databaseQueryHandler.getColumnSet("population");
         List<String> targetList_pop = new ArrayList<>(population_entries);
         java.util.Collections.sort(targetList_pop);
         population_combobox = new CheckComboBox<>(FXCollections.observableList(targetList_pop));

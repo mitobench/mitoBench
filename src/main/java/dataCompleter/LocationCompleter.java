@@ -1,5 +1,6 @@
 package dataCompleter;
 
+import uk.recurse.geocoding.reverse.Country;
 import uk.recurse.geocoding.reverse.ReverseGeocoder;
 
 import java.util.*;
@@ -446,6 +447,11 @@ public class LocationCompleter {
     private void fillBasedOnLatLong(double lat, double lon, int index_country, int index_region,
                                     int index_subregion, int index_intermediate_region){
 
+
+        Optional<Country> res = geocoder.getCountry(lat, lon);
+        if(res==null){
+            System.out.println("Geo info not found:" + lat +"," + lon);
+        }
         geocoder.getCountry(lat, lon).ifPresent(country -> {
 
             if( country.iso3()==null){
@@ -476,6 +482,9 @@ public class LocationCompleter {
             }
 
         });
+
+
+
     }
 
 

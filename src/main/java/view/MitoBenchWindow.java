@@ -301,7 +301,7 @@ public class MitoBenchWindow extends Application {
         Tab welcomeTab = new Tab("Welcome to mitoBench", new AboutDialogue("Welcome",
                 "If you need some help, read the documentation first:").getDialogGrid());
 
-        Tab dbStatsTab = new Tab("Database statistics", new DBstatisticsDialogue(databaseQueryHandler).getDialogGrid());
+        Tab dbStatsTab = new Tab("Database statistics", new DBstatisticsDialogue(databaseQueryHandler, getMITOBENCH_VERSION()).getDialogGrid());
 
         tabpane_statistics.getTabs().addAll(welcomeTab, dbStatsTab);
         borderpane_statistics.setCenter(tabpane_statistics);

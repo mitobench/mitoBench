@@ -8,10 +8,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import io.datastructure.Entry;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class DatabaseQueryHandler {
@@ -20,6 +17,9 @@ public class DatabaseQueryHandler {
     private int number_of_samples;
     private int number_of_publications;
     private int number_of_countries_covered;
+    private int number_of_continents_covered;
+    private int number_of_ancient_samples;
+    private int number_of_modern_samples;
 
     /**
      * add all data from database to mitoBench.
@@ -84,54 +84,29 @@ public class DatabaseQueryHandler {
     }
 
 
+
     /**
      * @return
      */
-    public Set<String> getPopulationList() {
+    public Set<String> getColumnSet(String column) {
         Set<String> result = new HashSet<>();
 
         try {
-            String query_complete = "http://mitodb.org/meta?select=population";
-            HttpResponse<JsonNode> response_population = Unirest.get(query_complete).asJson();
+            String query_complete = "http://mitodb.org/meta?select="+column;
 
-            for (int i = 0; i < response_population.getBody().getArray().length(); i++) {
-                JSONObject map = (JSONObject) response_population.getBody().getArray().get(i);
+            HttpResponse<JsonNode> response_column = Unirest.get(query_complete).asJson();
+
+            for (int i = 0; i < response_column.getBody().getArray().length(); i++) {
+                JSONObject map = (JSONObject) response_column.getBody().getArray().get(i);
 
                 try {
-                    String population = (String) map.get("population");
-                    result.add(population.trim());
+                    String countries = (String) map.get(column);
+                    result.add(countries.trim());
                 } catch (Exception e) {
                     continue;
                 }
             }
 
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    /**
-     * @return
-     */
-    public Set<String> getAccessionIDs() {
-        Set<String> result = new HashSet<>();
-
-        try {
-            String query_complete = "http://mitodb.org/meta?select=accession_id";
-            HttpResponse<JsonNode> response_accession_ids = Unirest.get(query_complete).asJson();
-
-            for (int i = 0; i < response_accession_ids.getBody().getArray().length(); i++) {
-                JSONObject map = (JSONObject) response_accession_ids.getBody().getArray().get(i);
-
-                try {
-                    String accession_id = (String) map.get("accession_id");
-                    result.add(accession_id.trim());
-                } catch (Exception e) {
-                    continue;
-                }
-            }
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -141,36 +116,24 @@ public class DatabaseQueryHandler {
     }
 
 
+
     /**
      * @return
      */
-    public Set<String> getCountries() {
-        Set<String> result = new HashSet<>();
+    public List<String> getModernAndAncient() {
+        List<String> result = new ArrayList<>();
 
         try {
-            String query_complete_sample = "http://mitodb.org/meta?select=sample_origin_country";
-            String query_complete_sampling = "http://mitodb.org/meta?select=sampling_country";
+            String query_complete = "http://mitodb.org/meta?select=modern_ancient";
 
-            HttpResponse<JsonNode> response_countries_sample = Unirest.get(query_complete_sample).asJson();
-            HttpResponse<JsonNode> response_countries_sampling = Unirest.get(query_complete_sampling).asJson();
+            HttpResponse<JsonNode> response_column = Unirest.get(query_complete).asJson();
 
-            for (int i = 0; i < response_countries_sample.getBody().getArray().length(); i++) {
-                JSONObject map = (JSONObject) response_countries_sample.getBody().getArray().get(i);
+            for (int i = 0; i < response_column.getBody().getArray().length(); i++) {
+                JSONObject map = (JSONObject) response_column.getBody().getArray().get(i);
 
                 try {
-                    String countries = (String) map.get("sample_origin_country");
-                    result.add(countries.trim());
-                } catch (Exception e) {
-                    continue;
-                }
-            }
-
-            for (int i = 0; i < response_countries_sampling.getBody().getArray().length(); i++) {
-                JSONObject map = (JSONObject) response_countries_sampling.getBody().getArray().get(i);
-
-                try {
-                    String countries = (String) map.get("sampling_country");
-                    result.add(countries.trim());
+                    String modern_entry = (String) map.get("modern_ancient");
+                    result.add(modern_entry.trim());
                 } catch (Exception e) {
                     continue;
                 }
@@ -220,10 +183,24 @@ public class DatabaseQueryHandler {
 
     public void calculateDBstats() {
 
-        // get number of samples
-        number_of_samples = getAccessionIDs().size();
-        number_of_countries_covered = getCountries().size();
+        number_of_samples = getColumnSet("accession_id").size();
+
+        Set<String> set_tmp = new HashSet<>();
+        set_tmp.addAll(getColumnSet("sample_origin_country"));
+        set_tmp.addAll(getColumnSet("sampling_country"));
+        number_of_countries_covered = set_tmp.size();
+
+        set_tmp.clear();
+        set_tmp.addAll(getColumnSet("sample_origin_region"));
+        set_tmp.addAll(getColumnSet("sampling_region"));
+
+        number_of_continents_covered = set_tmp.size();
         number_of_publications = getAuthorList().size();
+
+        List<String> list_modern_ancient = getModernAndAncient();
+        //todo
+        number_of_modern_samples = 5;
+        number_of_ancient_samples = 5;
 
     }
 
@@ -238,4 +215,18 @@ public class DatabaseQueryHandler {
     public int getNumber_of_countries_covered() {
         return number_of_countries_covered;
     }
+
+    public int getNumber_of_continents() {
+        return number_of_continents_covered;
+    }
+
+    public int getNumber_of_modern_samples() {
+        return number_of_modern_samples;
+    }
+
+    public int getNumber_of_ancient_samples() {
+        return number_of_ancient_samples;
+    }
+
+
 }

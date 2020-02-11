@@ -56,7 +56,7 @@ public class DataUploader {
                 // check row
                 if(checkPassed(row, acc)){
                     // upload
-                   // upload(header, types, row, acc);
+                   upload(header, types, row, acc);
                 }
 
             }
@@ -242,12 +242,14 @@ public class DataUploader {
         Map<String, Object> fields =  buildBody(header, types, row, acc);
 
         try {
-            HttpResponse<JsonNode> response_authors = Unirest
+            Unirest
                     .post("http://mitodb.org/meta")
                     .basicAuth("mitodbreader_nonpublic", "$20MitoWrite17")
                     .headers(headers)
                     .fields(fields)
                     .asJson();
+
+            //System.out.println(response_authors.getBody().toString());
         } catch (UnirestException e) {
             e.printStackTrace();
         }
