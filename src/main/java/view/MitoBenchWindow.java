@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.CancelButton;
 import view.dialogues.information.AboutDialogue;
+import view.dialogues.information.DBstatisticsDialogue;
 import view.menus.*;
 import view.tree.TreeView;
 
@@ -159,6 +160,7 @@ public class MitoBenchWindow extends Application {
         tableControllerUserBench.addDragAndDropFiles(this);
 
         menuController.setTableController(tableControllerUserBench);
+
         primaryStage.show();
 
     }
@@ -296,9 +298,12 @@ public class MitoBenchWindow extends Application {
         borderpane_statistics.setId("mainWindowLeftpart");
 
         tabpane_statistics = new TabPane();
-        tabpane_statistics.getTabs().add(new Tab("Welcome to mitoBench", new AboutDialogue("Welcome",
-                "If you need some help, read the documentation first:").getDialogGrid()));
+        Tab welcomeTab = new Tab("Welcome to mitoBench", new AboutDialogue("Welcome",
+                "If you need some help, read the documentation first:").getDialogGrid());
 
+        Tab dbStatsTab = new Tab("Database statistics", new DBstatisticsDialogue(databaseQueryHandler).getDialogGrid());
+
+        tabpane_statistics.getTabs().addAll(welcomeTab, dbStatsTab);
         borderpane_statistics.setCenter(tabpane_statistics);
 
         return borderpane_statistics;
