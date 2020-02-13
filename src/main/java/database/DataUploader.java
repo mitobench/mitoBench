@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,8 +208,6 @@ public class DataUploader {
             geo_set = true;
         } else if (index_sample_origin_intermediate_region != -1 && !row.get(index_sample_origin_intermediate_region).getData().getTableInformation().equals("")) {
             geo_set = true;
-
-
         } else if(index_sampling_latitude != -1 && index_sampling_longitude != -1 &&
                 !row.get(index_sampling_latitude).getData().getTableInformation().equals("") && !row.get(index_sampling_longitude).getData().getTableInformation().equals("")){
             geo_set = true;
@@ -242,14 +239,16 @@ public class DataUploader {
         Map<String, Object> fields =  buildBody(header, types, row, acc);
 
         try {
-            Unirest
+            HttpResponse<JsonNode> response_authors = Unirest
                     .post("http://mitodb.org/meta")
                     .basicAuth("mitodbreader_nonpublic", "$20MitoWrite17")
                     .headers(headers)
                     .fields(fields)
                     .asJson();
 
-            //System.out.println(response_authors.getBody().toString());
+            if(!response_authors.getBody().toString().equals("{}")){
+                System.out.println(response_authors.getBody().toString());
+            }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -275,7 +274,7 @@ public class DataUploader {
                 if (types[i].equals("String") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
                     body.put(header[i].trim().toLowerCase(), row.get(i-1).getData().getTableInformation().trim());
 
-                } else if(types[i].equals("float") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
+                } else if(types[i].equals("real") && !row.get(i-1).getData().getTableInformation().trim().equals("")){
                     body.put(header[i].trim().toLowerCase(), Double.parseDouble(row.get(i - 1).getData().getTableInformation().trim()));
 
                 } else if (types[i].equals("int") && !row.get(i-1).getData().getTableInformation().trim().equals("")){

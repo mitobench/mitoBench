@@ -124,7 +124,7 @@ public class DatabaseQueryHandler {
         List<String> result = new ArrayList<>();
 
         try {
-            String query_complete = "http://mitodb.org/meta?select=modern_ancient";
+            String query_complete = "http://mitodb.org/meta?select=ancient_modern";
 
             HttpResponse<JsonNode> response_column = Unirest.get(query_complete).asJson();
 
@@ -132,7 +132,7 @@ public class DatabaseQueryHandler {
                 JSONObject map = (JSONObject) response_column.getBody().getArray().get(i);
 
                 try {
-                    String modern_entry = (String) map.get("modern_ancient");
+                    String modern_entry = (String) map.get("ancient_modern");
                     result.add(modern_entry.trim());
                 } catch (Exception e) {
                     continue;
@@ -185,22 +185,30 @@ public class DatabaseQueryHandler {
 
         number_of_samples = getColumnSet("accession_id").size();
 
-        Set<String> set_tmp = new HashSet<>();
-        set_tmp.addAll(getColumnSet("sample_origin_country"));
-        set_tmp.addAll(getColumnSet("sampling_country"));
-        number_of_countries_covered = set_tmp.size();
+        if(number_of_samples == 0){
+            number_of_countries_covered=0;
+            number_of_continents_covered=0;
+            number_of_publications=0;
+            number_of_modern_samples=0;
+            number_of_ancient_samples=0;
+        } else {
+            Set<String> set_tmp = new HashSet<>();
+            set_tmp.addAll(getColumnSet("sample_origin_country"));
+            set_tmp.addAll(getColumnSet("sampling_country"));
+            number_of_countries_covered = set_tmp.size();
 
-        set_tmp.clear();
-        set_tmp.addAll(getColumnSet("sample_origin_region"));
-        set_tmp.addAll(getColumnSet("sampling_region"));
+            set_tmp.clear();
+            set_tmp.addAll(getColumnSet("sample_origin_region"));
+            set_tmp.addAll(getColumnSet("sampling_region"));
 
-        number_of_continents_covered = set_tmp.size();
-        number_of_publications = getAuthorList().size();
+            number_of_continents_covered = set_tmp.size();
+            number_of_publications = getAuthorList().size();
 
-        List<String> list_modern_ancient = getModernAndAncient();
-        //todo
-        number_of_modern_samples = 5;
-        number_of_ancient_samples = 5;
+            List<String> list_modern_ancient = getModernAndAncient();
+            number_of_modern_samples = Collections.frequency(list_modern_ancient, "modern");
+            number_of_ancient_samples = Collections.frequency(list_modern_ancient, "ancient");
+        }
+
 
     }
 

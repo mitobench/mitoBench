@@ -12,11 +12,13 @@ public class Location {
     private final String name;
     private final double lat;
     private final double lng;
+    private final String property;
 
-    public Location(String name, double lat, double lng) {
+    public Location(String name, double lat, double lng, String property) {
         this.name = name;
         this.lat = lat;
         this.lng = lng;
+        this.property = property;
     }
 
     public double getLat() {
@@ -25,6 +27,10 @@ public class Location {
 
     public double getLng() {
         return lng;
+    }
+
+    public String getProperty() {
+        return property;
     }
 
     @Override

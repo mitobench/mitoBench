@@ -172,6 +172,10 @@ public class ColumnNameMapper {
                 return "mitoBenchID";
             case "ancient_modern":
                 return "Modern/Ancient Data";
+            case "epoch":
+                return "Epoch";
+            case "archaeological_culture":
+                return "Archaeological Culture";
 
             // and the other way around
             case "ID":
@@ -334,6 +338,10 @@ public class ColumnNameMapper {
                 return "meta_info_id";
             case "Modern/Ancient Data":
                 return "ancient_modern";
+            case "Epoch":
+                return "epoch";
+            case "Archaeological Culture":
+                return "archaeological_culture";
 
 
         }

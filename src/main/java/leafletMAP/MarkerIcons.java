@@ -78,23 +78,34 @@ public class MarkerIcons {
             Location loc = (Location) location;
             LatLng pos = new LatLng(loc.getLat(), loc.getLng());
 
-            PathOptions pathOpt = new PathOptions().setColor("BLUE");
-            MarkerOptions markerOptions = new MarkerOptions().setTitle("Ancient");
-            CircleMarker m_circle = new CircleMarker(pos,  pathOpt);
-            Marker marker = new Marker(pos, markerOptions);
-            URL pathToIcon = this.getClass().getResource("/icons/skull_filled.png");
-            IconOptions iconOptions = new IconOptions(pathToIcon.toExternalForm());
-            iconOptions.setIconSize(new Point(30,30));
-            Icon icon = new Icon(iconOptions);
-            marker.setIcon(icon);
+            // ancient marker
+            MarkerOptions markerOptions_ancient = new MarkerOptions().setTitle("Ancient");
+            URL pathToIcon_ancient = this.getClass().getResource("/icons/skull_filled.png");
+            IconOptions iconOptions_ancient = new IconOptions(pathToIcon_ancient.toExternalForm());
+            iconOptions_ancient.setIconSize(new Point(30,30));
+            Icon icon_ancient = new Icon(iconOptions_ancient);
 
-            Popup popup = new Popup();
-            popup.setContent(location.toString());
-            //m_circle.bindPopup(popup);
-            //m_circle.addTo(map);
 
-            marker.bindPopup(popup);
-            marker.addTo(map);
+            // modern marker
+            PathOptions pathOpt_modern = new PathOptions().setColor("BLUE");
+            CircleMarker m_circle_modern = new CircleMarker(pos,  pathOpt_modern);
+
+            if (((Location) location).getProperty().equals("ancient")){
+                Popup popup = new Popup();
+                popup.setContent(location.toString());
+
+                Marker marker_ancient = new Marker(pos, markerOptions_ancient);
+                marker_ancient.setIcon(icon_ancient);
+                marker_ancient.bindPopup(popup);
+                marker_ancient.addTo(map);
+
+            } else{
+                Popup popup = new Popup();
+                popup.setContent(location.toString());
+                m_circle_modern.bindPopup(popup);
+                m_circle_modern.addTo(map);
+
+            }
         }
     }
 

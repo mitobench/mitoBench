@@ -98,9 +98,10 @@ public class MapView extends StackPane {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
                 String latitude  = latitude_col.getCellObservableValue(item).getValue().toString();
                 String longitude  = longitude_col.getCellObservableValue(item).getValue().toString();
+                String ancient_modern = tableController.getTableColumnByName("Modern/Ancient Data").getCellObservableValue(item).getValue().toString();
 
                 if(!latitude.equals("") && !longitude.equals("") ){
-                    marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude)));
+                    marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern));
                 }
             }
         }
