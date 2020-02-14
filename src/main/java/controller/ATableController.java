@@ -135,10 +135,10 @@ public abstract class ATableController {
             groupController.createGroupByColumn(groupname,"");
 
         // bind columns
-        ObservableList<TableColumn<ObservableList, ?>> columns_all = table.getColumns();
-        for (TableColumn col : columns_all) {
-            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
-        }
+//        ObservableList<TableColumn<ObservableList, ?>> columns_all = table.getColumns();
+//        for (TableColumn col : columns_all) {
+//            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
+//        }
 
         TableFilter.forTableView(table).lazy(true).apply();
 
@@ -678,8 +678,6 @@ public abstract class ATableController {
         return  haplo_occurrences;
     }
 
-
-
     /**
      * This method returns a table column of specific column name
      *
@@ -778,7 +776,13 @@ public abstract class ATableController {
         if(colIndexGroup == -1){
             for(int i = 0; i < selection.size(); i++){
                 ObservableList list = selection.get(i);
-                if(list.get(colIndexHG).equals(hg)){
+                String HG = (String) list.get(colIndexHG);
+                if(HG.contains("+")){
+                    String hg_tmp = HG.split("\\+")[0];
+                    HG = hg_tmp;
+                }
+
+                if(HG.equals(hg)){
                     hgs.add(hg);
                 }
             }
@@ -855,7 +859,7 @@ public abstract class ATableController {
         }
     }
 
-    private List<String> getColumnData(TableColumn column){
+    public List<String> getColumnData(TableColumn column){
 
         List<String> columnData = new ArrayList<>();
         for (ObservableList item : table.getItems()) {

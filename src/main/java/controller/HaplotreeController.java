@@ -202,10 +202,12 @@ public class HaplotreeController {
         TreeIterator<String> iterator = new TreeIterator<>(item);
         TreeItem it = item;
         while (iterator.hasNext()) {
-            treeMap.put(it.getValue().toString(), getSubtree(it));
-            treeMap_leaf_to_root.put(it.getValue().toString(), getPathToRoot(it));
-            node_to_children.put(it.getValue().toString(), it.getChildren());
+            String node_hg = it.getValue().toString().replace("'","");
+            treeMap.put(node_hg, getSubtree(it));
+            treeMap_leaf_to_root.put(node_hg, getPathToRoot(it));
+            node_to_children.put(node_hg, it.getChildren());
             it = iterator.next();
+
         }
     }
 
@@ -263,7 +265,7 @@ public class HaplotreeController {
         TreeItem it;// = iterator.next();
         while (iterator.hasNext()) {
             it = iterator.next();
-            path.add(it.getValue().toString());
+            path.add(it.getValue().toString().replace("'", ""));
         }
         return path;
     }

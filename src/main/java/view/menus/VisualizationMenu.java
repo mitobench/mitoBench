@@ -31,6 +31,7 @@ import controller.TableControllerUserBench;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -370,7 +371,7 @@ public class VisualizationMenu {
                             String[] selection_groups = cols[1];
 
 
-                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
+                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups),
                                     hg_list_trimmed);
                             HashMap<String, List<XYChart.Data<String, Number>>> data_all =
                                     chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
@@ -405,7 +406,7 @@ public class VisualizationMenu {
                                         tableController.getSelectedRows());
                                 String[] selection_haplogroups = cols[0];
 
-                                HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
+                                HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups),
                                         hg_list_trimmed);
 
 

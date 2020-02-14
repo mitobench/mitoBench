@@ -1,6 +1,9 @@
 group 'com.uni-tuebingen.de.it.mitobench'
 version '1.7-beta'
 
+
+
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven'
@@ -8,6 +11,8 @@ apply plugin: 'maven-publish'
 
 
 sourceCompatibility = 1.8
+
+
 
 repositories {
     jcenter()
@@ -29,6 +34,7 @@ sourceSets {
 }
 
 
+
 dependencies {
     compile 'org.slf4j:slf4j-simple:+'
     compile 'org.apache.poi:poi-ooxml:3.15'
@@ -48,8 +54,6 @@ dependencies {
     compile files('src/main/resources/jars/PGDSpider2.jar')
     compile files('src/main/resources/jars/haplogrep-2.1.25.jar')
     compile files('src/main/resources/jars/reverse-country-code.jar')
-    //compile files('src/main/resources/jars/dataValidator.jar')
-    //compile files('src/main/resources/jars/dataCompleter.jar')
 
 }
 

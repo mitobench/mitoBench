@@ -70,9 +70,9 @@ public class ProfilePlot extends AChart {
             String[] selection_haplogroups = cols[0];
             selection_groups = new String[]{"All data"};
 
-            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_list);
+            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups), hg_list);
 
-            data_all = chartController.assignHGsNoGrouping(hgs_summed, selection_haplogroups);
+            data_all = chartController.assignHGsNoGrouping(hgs_summed, Arrays.asList(selection_haplogroups));
             number_of_elements = new int[]{selection_haplogroups.length};
 
         } else {
@@ -80,7 +80,7 @@ public class ProfilePlot extends AChart {
             String[] selection_haplogroups = cols[0];
             selection_groups = remove(cols[1]);
 
-            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_list);
+            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups), hg_list);
             data_all = chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
 
             number_of_elements = chartController.getNumberOfElementsPerCategory(selection_groups);
