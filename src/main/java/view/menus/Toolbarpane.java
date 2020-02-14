@@ -129,7 +129,7 @@ public class Toolbarpane extends ToolBar {
         });
 
         settings.setOnAction(t -> {
-            HGListDialogue hgListDialogue = new HGListDialogue("Custom Haplogroup list", mito.getLogClass());
+            HGListDialogue hgListDialogue = new HGListDialogue("Custom Haplogroup list", mito.getLogClass(), mito);
             HGListController hgListController = new HGListController(hgListDialogue, mito.getChartController(), mito);
             mito.getTabpane_statistics().getTabs().add(hgListDialogue.getTab());
             mito.getTabpane_statistics().getSelectionModel().select(hgListDialogue.getTab());

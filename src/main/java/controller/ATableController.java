@@ -692,7 +692,13 @@ public abstract class ATableController {
                 }
             }
 
-        } else if(name.contains("Haplogroup")){
+        } else if(name.equals("Macro Haplogroup")){
+            for (TableColumn col : table.getColumns()) {
+                if (col.getText().contains("Macro Haplogroup")) {
+                    return col;
+                }
+            }
+        }else if(name.contains("Haplogroup")){
             for (TableColumn col : table.getColumns()) {
                 if (col.getText().contains("Haplogroup")) {
                     return col;

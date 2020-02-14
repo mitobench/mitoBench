@@ -6,6 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import view.MitoBenchWindow;
+
+import java.util.List;
 
 
 public class HGListDialogue extends AHGDialogue {
@@ -15,20 +18,20 @@ public class HGListDialogue extends AHGDialogue {
     private Label label_info;
     private Button button_apply_list;
 
-    private ObservableList<String> options =
-            FXCollections.observableArrayList(
-                    "Sub-Saharan Africa (L0a,L0d,L0k,L1b,L1c,L2a,L2b,L2c,L3b,L3d,L3e,L3f,L4,L5)",
-                    "Americas and the Caribbean (A2,B2,C1b,C1c,C1d,C4c,D1,D2a,D3,D4h3a,X2a,X2g)",
-                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B)",
-                    "Europe (H)");
 
-    public HGListDialogue(String title, LogClass logClass) {
+    public HGListDialogue(String title, LogClass logClass, MitoBenchWindow mito) {
         super(title, logClass);
 
         LOG = this.logClass.getLogger(this.getClass());
         dialogGrid.setId("custom_hg_list_dialogue");
+        this.mito = mito;
+        String add_list = getMacrogroupsAsString(mito);
+        if(!add_list.equals(""))
+            options.add("Macrogroups (" + add_list + ")");
         addComponents();
     }
+
+
 
     /**
      * Add graphical components to main pane

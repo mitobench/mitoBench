@@ -77,7 +77,7 @@ public class MenuController {
 
         defineHGList.setOnAction(t -> {
 
-            HGListDialogue hgListDialogue = new HGListDialogue("Custom Haplogroup list", log);
+            HGListDialogue hgListDialogue = new HGListDialogue("Custom Haplogroup list", log, mito);
             HGListController hgListController = new HGListController(hgListDialogue, mito.getChartController(), mito);
             mito.getTabpane_statistics().getTabs().add(hgListDialogue.getTab());
             mito.getTabpane_statistics().getSelectionModel().select(hgListDialogue.getTab());

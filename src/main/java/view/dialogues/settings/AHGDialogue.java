@@ -14,6 +14,9 @@ import statistics.HaploStatistics;
 import view.MitoBenchWindow;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,10 +51,28 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     public void init(MitoBenchWindow mito){
         this.mito = mito;
         this.chartcontroller = mito.getChartController();
+
+        String add_list = getMacrogroupsAsString(mito);
+        if(!add_list.equals(""))
+            options.add("Macrogroups (" + add_list + ")");
+
         haploStatistics = new HaploStatistics(mito.getTableControllerUserBench(), mito.getChartController(), logClass);
         addHGListCombobox(haploStatistics, mito);
+
         this.LOG = this.logClass.getLogger(this.getClass());
         addEvents();
+    }
+
+    protected String getMacrogroupsAsString(MitoBenchWindow mito) {
+        String res = "";
+        if(mito.getTableControllerUserBench().getTableColumnByName("Macro Haplogroup")!=null) {
+            Set<String> macrogroups = new HashSet<>(mito.getTableControllerUserBench().getColumnData(mito.getTableControllerUserBench().getTableColumnByName("Macro Haplogroup")));
+            for(String mhg : macrogroups){
+                res += mhg+",";
+            }
+            res = res.substring(0,res.length()-1);
+        }
+        return res;
     }
 
 
