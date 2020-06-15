@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MenuController {
@@ -140,7 +141,6 @@ public class MenuController {
                         InformationDialogue informationDialogue = new InformationDialogue("Data completion", "No data for data completion", "", "");
                         System.err.println("No data for data validation");
                     } else {
-
                         validate();
                         if(uploadPossible){
                             // - data completion
@@ -254,10 +254,15 @@ public class MenuController {
 
 
     private void validate(){
+        System.out.println("Start data validation");
 
         log_validation="";
         result_validation="";
         uploadPossible = false;
+
+
+        //DuplicatesChecker duplicatesChecker = new DuplicatesChecker(mito.getDatabaseQueryHandler());
+        //duplicatesChecker.check((List<String>) tablecontroller.getDataTable().getMtStorage().getData().keySet());
 
         // write data to fasta and csv file
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(

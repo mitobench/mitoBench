@@ -1,7 +1,5 @@
 package dataCompleter;
 
-
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DataCompleter {
-
 
     private String outfile;
 

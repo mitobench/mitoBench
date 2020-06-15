@@ -71,10 +71,13 @@ public class MapView extends StackPane {
             // from here we just use the Leaflet API to show some stuff on the map
             map.setView(new LatLng(47.628304, -5.198158), 3);
             map.addLayer(new TileLayer(
-                    "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", //"http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
+                    "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}.png", //"http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
                     new TileLayerOptions().setMaxZoom(18)
             ));
 
+            // https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}
+            // https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}
+            // https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}
             addMarker();
 
 

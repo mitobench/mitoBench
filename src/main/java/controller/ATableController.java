@@ -1,6 +1,7 @@
 package controller;
 
 import Logging.LogClass;
+import database.DuplicatesChecker;
 import io.IInputType;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -141,7 +142,6 @@ public abstract class ATableController {
 //        }
 
         TableFilter.forTableView(table).lazy(true).apply();
-
     }
 
 
@@ -149,11 +149,8 @@ public abstract class ATableController {
 
         if(data_versions.size()>=4){
             data_versions.removeFirst();
-            data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
-
-        } else {
-            data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
         }
+        data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
     }
 
 

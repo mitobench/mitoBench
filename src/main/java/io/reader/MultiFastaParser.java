@@ -76,8 +76,6 @@ public class MultiFastaParser implements IInputData {
                     currHeader = currHeader.split("\\.")[0];
                 }
                 line_index++;
-                if(line_index==5005)
-                    System.out.println();
                 continue;
             }
 
