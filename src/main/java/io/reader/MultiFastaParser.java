@@ -1,5 +1,6 @@
 package io.reader;
 
+import io.Exceptions.DuplicatesException;
 import io.Exceptions.FastAException;
 import io.IInputData;
 import io.datastructure.Entry;
@@ -7,6 +8,7 @@ import io.datastructure.fastA.FastaEntry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import org.apache.log4j.Logger;
+import view.dialogues.error.DuplicatesErrorDialogue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -125,7 +127,18 @@ public class MultiFastaParser implements IInputData {
             Entry entry = new Entry("MTSequence", new CategoricInputType("String"), new GenericInputData(fa.getSequence()));
             List<Entry> sequence = new ArrayList<>();
             sequence.add(entry);
-            output.put(fa.getHeader(), sequence);
+
+
+            // Duplicates within input file are not allowed!
+            if(output.keySet().contains(fa.getHeader())){
+                DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + fa.getHeader() +
+                        "\nOnly first hit will be added");
+                DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+            } else {
+                output.put(fa.getHeader(), sequence);
+            }
+
+
         }
 
         return output;

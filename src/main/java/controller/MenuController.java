@@ -150,7 +150,10 @@ public class MenuController {
                             try {
 
                                 dataCompleter.run(file_meta, file_fasta, "");
-                                GenericInputParser genericInputParser = new GenericInputParser(dataCompleter.getOutfile(), this.log.getLogger(this.getClass()), ",");
+                                GenericInputParser genericInputParser = new GenericInputParser(
+                                        dataCompleter.getOutfile(),
+                                        this.log.getLogger(this.getClass()),
+                                        ",");
                                 tablecontroller.updateTable(genericInputParser.getCorrespondingData());
                                 InformationDialogue informationDialogue = new InformationDialogue("Data completion", "Data validation finished.\nData completion finished.", "", "");
 
