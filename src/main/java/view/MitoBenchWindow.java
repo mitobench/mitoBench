@@ -30,7 +30,7 @@ import java.nio.file.Files;
  */
 public class MitoBenchWindow extends Application {
 
-    private final String MITOBENCH_VERSION = "1.6-beta";
+    private final String MITOBENCH_VERSION = "1.8-beta";
 
     private BorderPane pane_root;
 

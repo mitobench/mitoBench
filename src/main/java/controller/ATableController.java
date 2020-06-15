@@ -11,9 +11,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.util.Callback;
 import io.IData;
+import model.table.TableKeyEventHandler;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
 import view.menus.GroupMenu;
@@ -55,17 +59,27 @@ public abstract class ATableController {
         table.setEditable(true);
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        table.getSelectionModel().setCellSelectionEnabled(true);
+
+        // add copy to clipboard
+        copyToClipboard();
 
         data = FXCollections.observableArrayList();
         data_initial = FXCollections.observableArrayList();
         col_names = new HashSet<>();
 
         dataTable = new DataTable();
+
         column_to_index = new HashMap<>();
         this.controller = this;
         table_content = new HashMap<>();
         data_versions = new LinkedList<>();
     }
+
+    private void copyToClipboard() {
+        table.setOnKeyPressed(new TableKeyEventHandler());
+    }
+
 
     /**
      * This method gets a hash map of new input entries, updates the view.data table and prepares the table view for updating.
