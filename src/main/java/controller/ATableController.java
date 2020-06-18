@@ -231,6 +231,11 @@ public abstract class ATableController {
                 curr_colnames.remove("ID");
             }
 
+            if(curr_colnames.contains("Labsample ID")){
+                col_names_sorted.add("Labsample ID");
+                curr_colnames.remove("Labsample ID");
+            }
+
             if(curr_colnames.contains("Haplogroup")){
                 col_names_sorted.add("Haplogroup");
                 curr_colnames.remove("Haplogroup");
