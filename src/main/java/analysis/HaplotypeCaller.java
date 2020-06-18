@@ -23,6 +23,7 @@ public class HaplotypeCaller {
     private MTStorage mtStorage;
     private Logger LOG;
     private String phylotreeVersion = "17";
+    private String haplogrepversion = "2.2.5";
 
 
     public HaplotypeCaller(TableControllerUserBench tableControllerUserBench, LogClass logClass){
@@ -61,7 +62,7 @@ public class HaplotypeCaller {
             Haplogrep haplogrep = new Haplogrep(command);
             haplogrep.start();
 
-            LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.1.18");
+            LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-" + haplogrepversion);
         } catch (SAMException e){
             System.err.println("Task cancelled");
         }
