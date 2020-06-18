@@ -18,6 +18,7 @@ public class HaplogrepCaller {
     public void call(String f) {
 
         String[] command = new String[] {
+                "classify",
                 "--format", "fasta",
                 "--in",f,
                 "--out", "haplogroups.hsd",

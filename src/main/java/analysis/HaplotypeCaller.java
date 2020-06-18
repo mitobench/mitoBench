@@ -52,6 +52,7 @@ public class HaplotypeCaller {
         // todo: error handling when task cancelled
 
         String[] command = new String[] {
+                "classify",
                 "--format", "fasta",
                 "--in",file,
                 "--out", "haplogroups.hsd",
@@ -63,6 +64,7 @@ public class HaplotypeCaller {
             haplogrep.start();
 
             LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-" + haplogrepversion);
+            System.out.println("Haplogrep finished");
         } catch (SAMException e){
             System.err.println("Task cancelled");
         }
