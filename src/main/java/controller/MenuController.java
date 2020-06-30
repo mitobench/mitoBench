@@ -136,34 +136,35 @@ public class MenuController {
 
 
         dataCompleterMenuItem.setOnAction(t -> {
-                    // start validation and completion on non-empty data table only
-                    if(tablecontroller.getTable().getItems().size() == 0){
-                        InformationDialogue informationDialogue = new InformationDialogue("Data completion", "No data for data completion", "", "");
-                        System.err.println("No data for data validation");
-                    } else {
-                        validate();
-                        if(uploadPossible){
-                            // - data completion
-                            DataCompleter dataCompleter = new DataCompleter();
-                            System.out.println("Completing meta information ....");
+            // start validation and completion on non-empty data table only
+            if(tablecontroller.getTable().getItems().size() == 0){
+                InformationDialogue informationDialogue = new InformationDialogue("Data completion", "No data for data completion", "", "");
+                System.err.println("No data for data validation");
+            } else {
+                validate();
+                if(uploadPossible){
+                    // - data completion
+                    DataCompleter dataCompleter = new DataCompleter();
+                    System.out.println("Completing meta information ....");
 
-                            try {
+                    try {
 
-                                dataCompleter.run(file_meta, file_fasta, "");
-                                GenericInputParser genericInputParser = new GenericInputParser(
-                                        dataCompleter.getOutfile(),
-                                        this.log.getLogger(this.getClass()),
-                                        ",");
-                                tablecontroller.updateTable(genericInputParser.getCorrespondingData());
-                                InformationDialogue informationDialogue = new InformationDialogue("Data completion", "Data validation finished.\nData completion finished.", "", "");
+                        dataCompleter.run(file_meta, file_fasta, "");
+                        GenericInputParser genericInputParser = new GenericInputParser(
+                                dataCompleter.getOutfile(),
+                                this.log.getLogger(this.getClass()),
+                                ",",
+                                null);
+                        tablecontroller.updateTable(genericInputParser.getCorrespondingData());
+                        InformationDialogue informationDialogue = new InformationDialogue("Data completion", "Data validation finished.\nData completion finished.", "", "");
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+
+                }
+
+            }
 
             deleteTmpFiles();
 
@@ -211,7 +212,7 @@ public class MenuController {
                     //  --  update data view in mitoBench data window
                     System.out.println("Update data in mitoBench ....");
                     try {
-                        GenericInputParser genericInputParser = new GenericInputParser(dataCompleter.getOutfile(), this.log.getLogger(this.getClass()), ",");
+                        GenericInputParser genericInputParser = new GenericInputParser(dataCompleter.getOutfile(), this.log.getLogger(this.getClass()), ",", null);
                         tablecontroller.updateTable(genericInputParser.getCorrespondingData());
 
                     } catch (IOException e) {

@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import view.dialogues.settings.ATabpaneDialogue;
 
 import java.awt.*;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 
-public class DBstatisticsDialogue {
+public class DBstatisticsDialogue{
 
     private final GridPane dialogGrid;
     private final DatabaseQueryHandler databaseQueryHandler;

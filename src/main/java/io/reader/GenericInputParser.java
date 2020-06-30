@@ -1,7 +1,6 @@
 package io.reader;
 
 import database.ColumnNameMapper;
-import io.Exceptions.DuplicatesException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -11,7 +10,6 @@ import io.inputtypes.CategoricInputType;
 import io.inputtypes.LocationInputType;
 import io.inputtypes.RadioCarbonInputType;
 import org.apache.log4j.Logger;
-import view.dialogues.error.DuplicatesErrorDialogue;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -28,14 +26,16 @@ public class GenericInputParser implements IInputData {
     private String[] headertype;
     private String[] headergroup;
     private HashMap<String, List<Entry>> map = new HashMap<>();
+    private HashMap<String, List<Entry>> list_duplicates;
 
-    public GenericInputParser(String file, Logger LOG, String delimiter) throws IOException {
+    public GenericInputParser(String file, Logger LOG, String delimiter, Set<String> message_duplicates) throws IOException {
         LOG.info("Read generic file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
         ColumnNameMapper mapper = new ColumnNameMapper();
         headergroup = null;
         headertype = null;
+        list_duplicates = new HashMap<>();
 
         String currline;
 
@@ -107,9 +107,13 @@ public class GenericInputParser implements IInputData {
 
                 // Duplicates within input file are not allowed!
                 if(map.keySet().contains(id)){
-                    DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
-                            "\nOnly first hit will be added");
-                    DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+                    String id_plus = id + "_" + Math.random();
+                    this.list_duplicates.put(id_plus, entries);
+                    this.list_duplicates.put(id, map.get(id));
+                    map.remove(id);
+                    //DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
+                    //        "\nOnly first hit will be added");
+                    //DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
                 } else {
                     map.put(id , entries);
                 }
@@ -117,40 +121,6 @@ public class GenericInputParser implements IInputData {
             }
         }
     }
-
-//    private boolean isUpdateNeeded(HashMap<String, List<Entry>> map, List<Entry> e_new, String id) {
-//        Set<String> keyset = map.keySet();
-//        List<List<Entry>> list_identical_ids = new ArrayList<List<Entry>>();
-//        for(String key : keyset){
-//            String key_stripped = key.split("_")[0];
-//            if(key_stripped.equals(id)){
-//                // collect all entries with this accession id
-//                list_identical_ids.add(map.get(key));
-//            }
-//        }
-//
-//        // iterate over list and check if update new entry already exists
-//        for(List<Entry> e : list_identical_ids){
-//            if(entryIsIdentical(e, e_new)){
-//                return false;
-//            }
-//        }
-//            return true;
-//    }
-//
-//    private boolean entryIsIdentical(List<Entry> es_new, List<Entry> es_old) {
-//
-//        for (int i = 0; i < es_old.size(); i++){
-//            Entry e_old = es_old.get(i);
-//            Entry e_new = es_new.get(i);
-//            if(!e_old.getIdentifier().equals(e_new.getIdentifier()) ||
-//                    !e_old.getType().equals(e_new.getType()) ||
-//                    !e_old.getData().getTableInformation().toLowerCase().equals(e_new.getData().getTableInformation().toLowerCase())){
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 
 
     @Override
@@ -165,4 +135,7 @@ public class GenericInputParser implements IInputData {
     public String[] getHeader() {
         return headergroup;
     }
+
+
+    public HashMap<String, List<Entry>> getList_duplicates() { return list_duplicates; }
 }

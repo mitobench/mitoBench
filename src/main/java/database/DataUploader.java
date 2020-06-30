@@ -43,7 +43,7 @@ public class DataUploader {
     public void parseMeta(String outfile) {
 
         try {
-            GenericInputParser genericInputReader = new GenericInputParser(outfile, logger, ",");
+            GenericInputParser genericInputReader = new GenericInputParser(outfile, logger, ",", null);
 
             HashMap<String, List<Entry>> meta = genericInputReader.getCorrespondingData();
             String[] header = genericInputReader.getHeader();

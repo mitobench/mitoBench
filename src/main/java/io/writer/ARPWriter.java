@@ -1,5 +1,6 @@
 package io.writer;
 
+import controller.ATableController;
 import io.IOutputData;
 import io.datastructure.arp.ArpProfile;
 import io.datastructure.arp.ArpSample;
@@ -34,7 +35,7 @@ public class ARPWriter implements IOutputData {
     }
 
     @Override
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, ATableController tableController) throws IOException {
         //Initialize properly
         if (!file.endsWith(".arp")) {
             file = file + ".arp";

@@ -118,6 +118,10 @@ public class FileMenu {
         // todo: make db query
         importFromDB.setOnAction(t -> {
             SqlQueryBuilderWindow sqlQueryBuilderWindow = new SqlQueryBuilderWindow(mitoBenchWindow);
+            Tab sqlConfigTab = new Tab("DB search config");
+            sqlConfigTab.setContent(sqlQueryBuilderWindow.getPane());
+            mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlConfigTab);
+            mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlConfigTab);
         });
 
 

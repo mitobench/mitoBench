@@ -2,13 +2,11 @@ package io.reader;
 
 import database.ColumnNameMapper;
 import io.Exceptions.ARPException;
-import io.Exceptions.DuplicatesException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import org.apache.log4j.Logger;
-import view.dialogues.error.DuplicatesErrorDialogue;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by peltzer on 24/11/2016.
@@ -23,14 +22,15 @@ import java.util.List;
 public class ARPParser implements IInputData {
     private HashMap<String, List<Entry>> map = new HashMap<>();
     private Logger LOG;
+    private Set<String> message_duplicates;
 
-    public ARPParser(String file, Logger logger) throws IOException, ARPException {
+    public ARPParser(String file, Logger logger, Set<String> message_duplications) throws IOException, ARPException {
         LOG = logger;
         LOG.info("Read ARP file: " + file);
         FileReader fr = new FileReader(file);
         BufferedReader bfr = new BufferedReader(fr);
         ColumnNameMapper mapper = new ColumnNameMapper();
-
+        this.message_duplicates = message_duplications;
 
         String currline;
         boolean init = true;
@@ -81,9 +81,10 @@ public class ARPParser implements IInputData {
 
                     // Duplicates within input file are not allowed!
                     if(map.keySet().contains(id)){
-                        DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
-                                "\nOnly first hit will be added");
-                        DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+                        message_duplicates.add(id);
+//                        DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
+//                                "\nOnly first hit will be added");
+//                        DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
                     } else {
                         map.put(id , entries);
                     }

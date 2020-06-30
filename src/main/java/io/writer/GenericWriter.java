@@ -1,5 +1,6 @@
 package io.writer;
 
+import controller.ATableController;
 import database.ColumnNameMapper;
 import io.IOutputData;
 import javafx.collections.ObservableList;
@@ -38,7 +39,7 @@ public class GenericWriter implements IOutputData {
      * @param tableController
      * @throws Exception
      */
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, ATableController tableController) throws IOException {
         ColumnNameMapper mapper = new ColumnNameMapper();
 
         if(delimiter.equals(",")){

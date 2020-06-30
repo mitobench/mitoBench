@@ -1,4 +1,5 @@
 package io.writer;
+import controller.ATableController;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import model.MTStorage;
@@ -25,7 +26,7 @@ public class MultiFastaWriter implements IOutputData  {
     }
 
     @Override
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, ATableController tableController) throws IOException {
 
         if(!(file.endsWith(".fa") ||file.endsWith(".fasta") || file.endsWith(".fna")))
             file = file + ".fasta";

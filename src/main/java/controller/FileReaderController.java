@@ -1,7 +1,6 @@
 package controller;
 
 import Logging.LogClass;
-import dataValidator.Validator;
 import io.Exceptions.ARPException;
 import io.Exceptions.FastAException;
 import io.Exceptions.HSDException;
@@ -11,25 +10,29 @@ import io.reader.*;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import view.dialogues.error.ARPErrorDialogue;
+import view.dialogues.error.DuplicatesDialogue;
 import view.dialogues.error.FastAErrorDialogue;
 import view.dialogues.error.HSDErrorDialogue;
-import view.dialogues.information.InformationDialogue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class FileReaderController {
 
+    private LogClass logClass;
+    private Set<String> message_duplications;
     private ATableController tableControllerUserBench;
     private Logger LOG;
     private MitoBenchWindow mito;
+    private HashMap<String, List<Entry>> table_list_duplications;
 
     public FileReaderController(TableControllerUserBench tableControllerUserBench, LogClass logClass, MitoBenchWindow mitoBenchWindow){
         this.tableControllerUserBench = tableControllerUserBench;
+        this.logClass = logClass;
         this.LOG = logClass.getLogger(this.getClass());
         this.mito = mitoBenchWindow;
+        this.message_duplications = new HashSet<>();
 
     }
 
@@ -50,7 +53,7 @@ public class FileReaderController {
                 MultiFastaParser multiFastAInput = null;
                 try {
                     try {
-                        multiFastAInput = new MultiFastaParser(f.getPath(), LOG);
+                        multiFastAInput = new MultiFastaParser(f.getPath(), LOG, message_duplications);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -66,7 +69,7 @@ public class FileReaderController {
                 try {
                     HSDParser hsdInputParser = null;
                     try {
-                        hsdInputParser = new HSDParser(f.getPath(), LOG);
+                        hsdInputParser = new HSDParser(f.getPath(), LOG, message_duplications);
                     } catch (HSDException e) {
                         HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
                     }
@@ -81,9 +84,11 @@ public class FileReaderController {
 
             if (absolutePath.endsWith(".tsv")) {
                 try {
-                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, "\t");
+                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, "\t", message_duplications);
+
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -91,8 +96,10 @@ public class FileReaderController {
 
             if (absolutePath.endsWith(".csv")) {
                 try {
-                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, ",");
+                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, ",", message_duplications);
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
+                    //message_duplications = genericInputParser.getList_duplicates();
+                    table_list_duplications = genericInputParser.getList_duplicates();
                     tableControllerUserBench.updateTable(data_map);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -104,7 +111,7 @@ public class FileReaderController {
             if (absolutePath.endsWith(".xlsx") || absolutePath.endsWith(".xls")) {
                 ExcelParser excelReader = null;
                 try {
-                    excelReader = new ExcelParser(f.getPath(), LOG);
+                    excelReader = new ExcelParser(f.getPath(), LOG, message_duplications);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -118,7 +125,7 @@ public class FileReaderController {
             if(absolutePath.endsWith(".arp")){
                 ARPParser arpreader = null;
                 try {
-                    arpreader = new ARPParser(f.getPath(), LOG);
+                    arpreader = new ARPParser(f.getPath(), LOG, message_duplications);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ARPException e) {
@@ -130,30 +137,24 @@ public class FileReaderController {
             }
 
             if(absolutePath.endsWith(".mitoproj")){
+                ProjectParser projectReader = new ProjectParser();
+                try {
 
-//                if(mito.isAnotherProjectLoaded()){
-//                    InformationDialogue informationDialogue = new InformationDialogue(
-//                            "Project already loaded",
-//                            "Please clean up your analysis before \na new project can be loaded.",
-//                            "Project already loaded",
-//                            "projectLoadedDialogue"
-//                    );
-//                } else {
-                    ProjectParser projectReader = new ProjectParser();
-                    try {
+                    projectReader.read(f, LOG);
+                    projectReader.loadData(tableControllerUserBench, mito.getChartController());
+                    //tableControllerUserBench.loadGroups();
+                    mito.setAnotherProjectLoaded(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ProjectException e) {
+                    e.printStackTrace();
+                }
 
-                        projectReader.read(f, LOG);
-                        projectReader.loadData(tableControllerUserBench, mito.getChartController());
-                        //tableControllerUserBench.loadGroups();
-                        mito.setAnotherProjectLoaded(true);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ProjectException e) {
-                        e.printStackTrace();
-                    }
-
-                //}
             }
+
+            DuplicatesDialogue duplicatesErrorDialogue = new DuplicatesDialogue(table_list_duplications,  logClass, mito.getTableControllerDB());
+
+
         } else {
             try {
                 // do nothing
@@ -161,7 +162,5 @@ public class FileReaderController {
                 System.out.println(e.getMessage());
             }
         }
-
     }
-
 }

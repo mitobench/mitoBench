@@ -1,25 +1,22 @@
 package io.reader;
 
 import database.ColumnNameMapper;
-import io.Exceptions.DuplicatesException;
 import io.Exceptions.HSDException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import org.apache.log4j.Logger;
-import view.dialogues.error.DuplicatesErrorDialogue;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This method is intended to parse HSD format files, e.g. output from HaploGrep v1/v2 correctly.
@@ -30,7 +27,7 @@ import java.util.List;
 public class HSDParser implements IInputData {
     private HashMap<String, List<Entry>> map;
 
-    public HSDParser(String filetoParse, Logger LOG) throws IOException, HSDException {
+    public HSDParser(String filetoParse, Logger LOG, Set<String> message_duplicates) throws IOException, HSDException {
         LOG.info("Read HSD file: " + filetoParse);
         FileReader fr = new FileReader(new File(filetoParse));
         BufferedReader bfr = new BufferedReader(fr);
@@ -141,9 +138,10 @@ public class HSDParser implements IInputData {
 
                 // Duplicates within input file are not allowed!
                 if(map.keySet().contains(id)){
-                    DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
-                            "\nOnly first hit will be added");
-                    DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+                    message_duplicates.add(id);
+//                    DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
+//                            "\nOnly first hit will be added");
+//                    DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
                 } else {
                     map.put(id , entries);
                 }

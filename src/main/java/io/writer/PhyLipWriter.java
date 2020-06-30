@@ -1,5 +1,6 @@
 package io.writer;
 
+import controller.ATableController;
 import controller.TableControllerUserBench;
 import io.IOutputData;
 import javafx.collections.ObservableList;
@@ -94,7 +95,7 @@ public class PhyLipWriter implements IOutputData {
     }
 
     @Override
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, ATableController tableController) throws IOException {
         if(!file.endsWith(".phylip"))
             file = file + ".phylip";
 

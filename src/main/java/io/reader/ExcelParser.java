@@ -1,7 +1,6 @@
 package io.reader;
 
 import database.ColumnNameMapper;
-import io.Exceptions.DuplicatesException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -12,7 +11,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import view.dialogues.error.DuplicatesErrorDialogue;
 
 import java.io.*;
 import java.util.*;
@@ -24,7 +22,7 @@ public class ExcelParser implements IInputData{
 
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
-    public ExcelParser(String file, Logger logger) throws IOException {
+    public ExcelParser(String file, Logger logger, Set<String> message_duplications) throws IOException {
 
         Logger LOG = logger;
         LOG.info("Read Excel file: " + file);
@@ -135,9 +133,10 @@ public class ExcelParser implements IInputData{
 
             // Duplicates within input file are not allowed!
             if(map.keySet().contains(id)){
-                DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
-                        "\nOnly first hit will be added");
-                DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+                message_duplications.add(id);
+//                DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
+//                        "\nOnly first hit will be added");
+//                DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
             } else {
                 map.put(id , entries);
             }

@@ -1,6 +1,5 @@
 package io.reader;
 
-import io.Exceptions.DuplicatesException;
 import io.Exceptions.FastAException;
 import io.IInputData;
 import io.datastructure.Entry;
@@ -8,7 +7,6 @@ import io.datastructure.fastA.FastaEntry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import org.apache.log4j.Logger;
-import view.dialogues.error.DuplicatesErrorDialogue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +26,7 @@ public class MultiFastaParser implements IInputData {
     private ArrayList<FastaEntry> fastaEntrys;
     private BufferedReader bfr;
     private FileReader fr;
+    private Set<String> message_duplicates;
 
     @Override
     public HashMap<String, List<Entry>> getCorrespondingData() {
@@ -38,9 +38,10 @@ public class MultiFastaParser implements IInputData {
      * This method reads the actual file and generates an ArrayList of FastA entries properly.
      * @param fileToParse
      * @param LOG
+     * @param message_duplications
      * @throws IOException
      */
-    public MultiFastaParser(String fileToParse, Logger LOG) throws IOException, FastAException {
+    public MultiFastaParser(String fileToParse, Logger LOG, Set<String> message_duplications) throws IOException, FastAException {
         LOG.info("Read FastA file: " + fileToParse);
 
         fastaEntrys = new ArrayList<>();
@@ -51,7 +52,7 @@ public class MultiFastaParser implements IInputData {
         String currentLine;
         String currHeader = "";
         String currSeq = "";
-
+        message_duplicates = message_duplications;
         int init = 0;
         boolean seq_length_should_be_equal = true;
         int line_index = 0;
@@ -131,9 +132,10 @@ public class MultiFastaParser implements IInputData {
 
             // Duplicates within input file are not allowed!
             if(output.keySet().contains(fa.getHeader())){
-                DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + fa.getHeader() +
-                        "\nOnly first hit will be added");
-                DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+                message_duplicates.add(fa.getHeader());
+//                DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + fa.getHeader() +
+//                        "\nOnly first hit will be added");
+//                DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
             } else {
                 output.put(fa.getHeader(), sequence);
             }

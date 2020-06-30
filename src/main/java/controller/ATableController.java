@@ -932,6 +932,28 @@ public abstract class ATableController {
     }
 
 
+    /**
+     * This method returns all samples names.
+     *
+     * @return
+     * @param data
+     */
+    public String[] getSampleNames(ObservableList<ObservableList> data) {
+
+        String[] ids = new String[getSelectedRows().size()];
+
+        ObservableList<ObservableList> selection = data;
+        int index_id = getColIndex("ID");
+
+        int i = 0;
+        for(ObservableList row : selection){
+            ids[i] = (String) row.get(index_id);
+            i++;
+        }
+
+        return ids;
+    }
+
 
     public void addRowListener(Label infolabel){
 

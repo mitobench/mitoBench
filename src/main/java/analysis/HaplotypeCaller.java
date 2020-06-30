@@ -80,7 +80,7 @@ public class HaplotypeCaller {
 
         try {
             if(new File("haplogroups.hsd").exists()){
-                hsdInput = new HSDParser("haplogroups.hsd", LOG);
+                hsdInput = new HSDParser("haplogroups.hsd", LOG, null);
                 tableController.updateTable(hsdInput.getCorrespondingData());
             }    else {
                 LOG.info("HaploGrep2 did not run properly, 'haplogroups.hsd' does not exists.");

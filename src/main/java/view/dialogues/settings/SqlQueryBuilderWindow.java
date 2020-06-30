@@ -64,7 +64,7 @@ public class SqlQueryBuilderWindow {
 
         root = new BorderPane();
         stage = new Stage();
-        stage.setTitle("Database search configurator");
+        //stage.setTitle("Database search configurator");
         stage.setScene(new Scene(root));
 
         initContinentFilter();
@@ -74,7 +74,7 @@ public class SqlQueryBuilderWindow {
 
 
         fillCenterGrid();
-        stage.show();
+        //stage.show();
 
     }
 
@@ -630,4 +630,7 @@ public class SqlQueryBuilderWindow {
 
     }
 
+    public BorderPane getPane() {
+        return root;
+    }
 }

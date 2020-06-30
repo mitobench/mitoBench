@@ -125,6 +125,10 @@ public class Toolbarpane extends ToolBar {
 
         loadFromDatabase.setOnAction(t -> {
             SqlQueryBuilderWindow sqlQueryBuilderWindow = new SqlQueryBuilderWindow(mito);
+            Tab sqlConfigTab = new Tab("DB search config");
+            sqlConfigTab.setContent(sqlQueryBuilderWindow.getPane());
+            mito.getTabpane_statistics().getTabs().add(sqlConfigTab);
+            mito.getTabpane_statistics().getSelectionModel().select(sqlConfigTab);
 
         });
 
