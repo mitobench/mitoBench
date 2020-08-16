@@ -1,37 +1,37 @@
-//group 'com.uni-tuebingen.de.it.mitobench'
-//version '1.8-beta'
-//
-//
-//apply plugin: 'java'
-//apply plugin: 'idea'
-//apply plugin: 'maven'
-//apply plugin: 'maven-publish'
-//
-//
-//sourceCompatibility = 1.8
-//
-//
-//
-//repositories {
-//    jcenter()
-//    maven {
-//        url  "http://dl.bintray.com/apeltzer/Mitobench"
-//    }
-//}
-plugins {
-    id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.8'
-    id 'org.beryx.jlink' version '2.12.0'
-}
+group 'com.uni-tuebingen.de.it.mitobench'
+version '1.7-beta'
+
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+
+sourceCompatibility = 1.8
+
 
 
 repositories {
-    mavenCentral()
     jcenter()
-    maven {url 'https://oss.sonatype.org/content/repositories/snapshots'}
+    maven {
+        url  "http://dl.bintray.com/apeltzer/Mitobench"
+    }
 }
-
-version '1.9-beta'
+//plugins {
+//    id 'application'
+//    id 'org.openjfx.javafxplugin' version '0.0.8'
+//    id 'org.beryx.jlink' version '2.12.0'
+//}
+//
+//
+//repositories {
+//    mavenCentral()
+//    jcenter()
+//    maven {url 'https://oss.sonatype.org/content/repositories/snapshots'}
+//}
+//
+//version '1.9-beta'
 
 sourceSets {
     main {
@@ -48,6 +48,7 @@ sourceSets {
 
 dependencies {
     //runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
+    //implementation 'org.controlsfx:controlsfx:9.0.1-SNAPSHOT'
     compile 'org.slf4j:slf4j-simple:+'
     compile 'org.apache.poi:poi-ooxml:3.15'
     compile 'org.netbeans.html:net.java.html.boot.fx:1.4'
@@ -61,7 +62,6 @@ dependencies {
     compile group: 'guru.nidi', name: 'graphviz-java', version: '0.8.10'
     compile group: 'org.ojalgo', name: 'ojalgo', version: '47.2.0'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
-    implementation 'org.controlsfx:controlsfx:9.0.1-SNAPSHOT'
     compile files('src/main/resources/jars/FstCalculator-0.1.21.jar')
     compile files('src/main/resources/jars/PhylotreeParser-0.4.4.jar')
     compile files('src/main/resources/jars/PGDSpider2.jar')
@@ -70,12 +70,12 @@ dependencies {
 
 }
 
-javafx {
-    version = "14"
-    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.base', 'javafx.media', 'javafx.swing','javafx.web']
-}
+//javafx {
+//    version = "14"
+//    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.base', 'javafx.media', 'javafx.swing','javafx.web']
+//}
 
-mainClassName = "Launcher"
+//mainClassName = "Launcher"
 
 jar {
     manifest {

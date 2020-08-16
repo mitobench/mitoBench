@@ -4,9 +4,7 @@ import Logging.LogClass;
 import analysis.SequenceAligner;
 import dataCompleter.DataCompleter;
 import dataValidator.Validator;
-import database.DataUploader;
 import database.DatabaseQueryHandler;
-import database.DuplicatesChecker;
 import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
 import io.writer.MultiFastaWriter;
@@ -22,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MenuController {
@@ -89,7 +86,7 @@ public class MenuController {
     }
 
 
-    public void setToolsMenu(MenuItem dataAlignerMenuItem, MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem, MenuItem dataUploaderMenuItem) {
+    public void setToolsMenu(MenuItem dataAlignerMenuItem, MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem) {
 
         dataAlignerMenuItem.setOnAction(t -> {
             SequenceAligner sequenceAligner = new SequenceAligner(mito.getLogClass().getLogger(this.getClass()), mito.getTableControllerUserBench());
@@ -161,73 +158,11 @@ public class MenuController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
-
             }
 
             deleteTmpFiles();
 
-        });
-
-
-        dataUploaderMenuItem.setOnAction(t -> {
-            // start validation on non-empty data table only
-            if(tablecontroller.getTable().getItems().size() == 0){
-                InformationDialogue informationDialogue = new InformationDialogue("Data upload", "No data for data upload", "", "");
-                System.err.println("No data for data validation");
-            } else {
-
-                validate();
-
-                // write to popup window
-                DataValidationDialogue dataValidationDialogue = new DataValidationDialogue("Result data validation", result_validation, log_validation, uploadPossible);
-                dataValidationDialogue.show(600,400);
-                // Button 'upload later': do nothing
-                dataValidationDialogue.getUpload_later_btn().setOnAction(event -> {
-                    dataValidationDialogue.getDialog().close();
-                    deleteTmpFiles();
-                });
-
-                // Button 'upload now':
-                //  - check for duplicates
-                //  - complete meta information
-                //  - upload data
-                dataValidationDialogue.getUpload_now_btn().setOnAction(event -> {
-
-                    // todo: check for duplicates
-                    DuplicatesChecker duplicatesChecker = new DuplicatesChecker(databaseQueryHandler);
-                    System.out.println("Checking for duplicates ....");
-                    duplicatesChecker.check(fasta_headers);
-
-                    // - data completion
-                    dataCompleter = new DataCompleter();
-                    System.out.println("Completing meta information ....");
-                    try {
-                        dataCompleter.run(file_meta, file_fasta, "");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    //  --  update data view in mitoBench data window
-                    System.out.println("Update data in mitoBench ....");
-                    try {
-                        GenericInputParser genericInputParser = new GenericInputParser(dataCompleter.getOutfile(), this.log.getLogger(this.getClass()), ",", null);
-                        tablecontroller.updateTable(genericInputParser.getCorrespondingData());
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    // - upload data
-                    System.out.println("Uploading data to database ....");
-                    DataUploader dataUploader = new DataUploader(tablecontroller, this.log.getLogger(this.getClass()));
-                    dataUploader.parseMeta(dataCompleter.getOutfile());
-                    dataValidationDialogue.getDialog().close();
-                    deleteTmpFiles();
-                    System.out.println("Data successfully uploaded.");
-
-                });
-            }
         });
     }
 
@@ -264,10 +199,6 @@ public class MenuController {
         result_validation="";
         uploadPossible = false;
 
-
-        //DuplicatesChecker duplicatesChecker = new DuplicatesChecker(mito.getDatabaseQueryHandler());
-        //duplicatesChecker.check((List<String>) tablecontroller.getDataTable().getMtStorage().getData().keySet());
-
         // write data to fasta and csv file
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(
                 tablecontroller.getDataTable().getMtStorage(),
@@ -295,17 +226,16 @@ public class MenuController {
         log_validation="";
         result_validation = "";
 
-        //todo wieder einkommentieren
 
         // run validation
-//        Validator validator = new Validator();
-//        System.out.println("running validation");
-//        try{
-//            validator.validate(file_meta, fasta_headers, log_validation, file_fasta, mito.getTableControllerUserBench().getTable().getItems().size());
-//            System.out.println();
-//        } catch (ArrayIndexOutOfBoundsException e){
-//            log_validation += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();
-//        }
+        Validator validator = new Validator();
+        System.out.println("running validation");
+        try{
+            validator.validate(file_meta, fasta_headers, log_validation, file_fasta, mito.getTableControllerUserBench().getTable().getItems().size());
+            System.out.println();
+        } catch (ArrayIndexOutOfBoundsException e){
+            log_validation += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();
+        }
 
         System.out.println("finished validation");
         uploadPossible = true;//validator.isUploadPossible();

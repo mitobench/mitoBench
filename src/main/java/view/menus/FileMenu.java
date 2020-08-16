@@ -4,6 +4,7 @@ package view.menus;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import controller.*;
+import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
@@ -122,6 +123,7 @@ public class FileMenu {
             sqlConfigTab.setContent(sqlQueryBuilderWindow.getPane());
             mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlConfigTab);
             mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlConfigTab);
+
         });
 
 

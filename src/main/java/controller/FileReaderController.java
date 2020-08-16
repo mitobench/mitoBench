@@ -152,8 +152,9 @@ public class FileReaderController {
 
             }
 
-            DuplicatesDialogue duplicatesErrorDialogue = new DuplicatesDialogue(table_list_duplications,  logClass, mito.getTableControllerDB());
-
+            if(table_list_duplications.size()>0){
+                DuplicatesDialogue duplicatesErrorDialogue = new DuplicatesDialogue(table_list_duplications,  logClass, mito.getTableControllerDB());
+            }
 
         } else {
             try {
