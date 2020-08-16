@@ -44,19 +44,24 @@ public class GroupMenu {
     private void addSubMenus(){
 
         groupByColumnItem.getItems().removeAll(groupByColumnItem.getItems());
-        for(String col : tableController.getCurrentColumnNames() ){
-            MenuItem colItem = new MenuItem(col);
+        if (tableController.getCurrentColumnNames().size() == 0){
+            MenuItem colItem = new MenuItem("Empty table");
+            colItem.setDisable(true);
             groupByColumnItem.getItems().add(colItem);
-            colItem.setOnAction(t -> {
-                if(!colItem.getText().contains("(Grouping)")){
-                    groupController.clearGrouping();
-                    groupController.createGroupByColumn(colItem.getText(), "");
-                    LOG.info("Group data on column: " + colItem.getText());
-                }
+        } else {
+            for(String col : tableController.getCurrentColumnNames() ){
+                MenuItem colItem = new MenuItem(col);
+                groupByColumnItem.getItems().add(colItem);
+                colItem.setOnAction(t -> {
+                    if(!colItem.getText().contains("(Grouping)")){
+                        groupController.clearGrouping();
+                        groupController.createGroupByColumn(colItem.getText(), "");
+                        LOG.info("Group data on column: " + colItem.getText());
+                    }
 
-            });
+                });
+            }
         }
-
 
         MenuItem delGrouping = new MenuItem("Delete grouping");
         delGrouping.setId("delGrouping");
@@ -88,6 +93,5 @@ public class GroupMenu {
             });
         }
     }
-
 
 }

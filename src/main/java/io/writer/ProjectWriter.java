@@ -1,6 +1,6 @@
 package io.writer;
 
-import io.Exceptions.ProjectException;
+import database.ColumnNameMapper;
 import io.datastructure.Entry;
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
@@ -32,6 +32,8 @@ public class ProjectWriter {
 
     public void write(String outfile, TableControllerUserBench tableController, String[] user_defined_hg_list) throws IOException {
 
+        ColumnNameMapper mapper = new ColumnNameMapper();
+
         //Initialize properly
         if (!outfile.endsWith(".mitoproj")) {
             outfile = outfile + ".mitoproj";
@@ -60,10 +62,10 @@ public class ProjectWriter {
                 fileChannel.write(ByteBuffer.wrap(("\tkey\t " + sample_id + "\n").getBytes()));
 
                 // write column names
-                fileChannel.write(ByteBuffer.wrap("\t\t##ID\t".getBytes()));
+                fileChannel.write(ByteBuffer.wrap("\t\t##accession_id\t".getBytes()));
                 for(Entry e : tableData.get(sample_id)){
                     if(!e.getIdentifier().equals("ID"))
-                        fileChannel.write(ByteBuffer.wrap((e.getIdentifier() + "\t").getBytes()));
+                        fileChannel.write(ByteBuffer.wrap((mapper.mapString(e.getIdentifier()) + "\t").getBytes()));
                 }
                 fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
 

@@ -4,8 +4,7 @@ package analysis;
 import Logging.LogClass;
 import genepi.haplogrep.main.Haplogrep;
 import htsjdk.samtools.SAMException;
-import io.Exceptions.HSDException;
-import io.reader.HSDInput;
+import io.reader.HSDParser;
 import io.writer.MultiFastaWriter;
 import org.apache.log4j.Logger;
 import model.MTStorage;
@@ -13,7 +12,6 @@ import controller.TableControllerUserBench;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 
 
@@ -25,16 +23,23 @@ public class HaplotypeCaller {
     private MTStorage mtStorage;
     private Logger LOG;
     private String phylotreeVersion = "17";
+    private String haplogrepversion = "2.2.5";
 
 
     public HaplotypeCaller(TableControllerUserBench tableControllerUserBench, LogClass logClass){
+
         this.mtStorage = tableControllerUserBench.getDataTable().getMtStorage();
         this.tableController = tableControllerUserBench;
         LOG = logClass.getLogger(this.getClass());
 
-
     }
 
+
+    /**
+     * Run HaploGrep2.
+     *
+     * @param lineage   Lineage parameter. Can be true or false (default = false). Creates dot file ('tree').
+     */
     public void call(String lineage) throws IOException {
         String file = "multifasta.fasta";
         //System.out.println("Writing fasta sequences to " + file);
@@ -44,30 +49,52 @@ public class HaplotypeCaller {
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getSelectedRows(), true);
         multiFastaWriter.writeData(file, tableController);
 
-        start(file, lineage);
+        // todo: error handling when task cancelled
 
+        String[] command = new String[] {
+                "classify",
+                "--format", "fasta",
+                "--in",file,
+                "--out", "haplogroups.hsd",
+                "--extend-report",
+                lineage};
+
+        try {
+            Haplogrep haplogrep = new Haplogrep(command);
+            haplogrep.start();
+
+            LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-" + haplogrepversion);
+            System.out.println("Haplogrep finished");
+        } catch (SAMException e){
+            System.err.println("Task cancelled");
+        }
     }
 
 
+    /**
+     * Parse HaploGrep2 output file and update data.
+     */
     public void update() {
 
-        //HSDReaderIntern hsd_reader = new HSDReaderIntern("haplogroups.hsd", LOG, "Haplogroup Phylotree17", "Haplotype Phlyotree17");
-        HSDInput hsdInput = null;
+        HSDParser hsdInput;
+
         try {
             if(new File("haplogroups.hsd").exists()){
-                hsdInput = new HSDInput("haplogroups.hsd", LOG);
+                hsdInput = new HSDParser("haplogroups.hsd", LOG, null);
                 tableController.updateTable(hsdInput.getCorrespondingData());
             }    else {
-                LOG.info("Haplogrep did not run properly");
+                LOG.info("HaploGrep2 did not run properly, 'haplogroups.hsd' does not exists.");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (HSDException e) {
+        } catch (Exception e) {
+            System.out.println("HaploGrep2 did not run properly, 'haplogroups.hsd' does not exists.");
             e.printStackTrace();
         }
 
     }
 
+    /**
+     * Delete all temporary files that were created while running HaploGrep2
+     */
     public void deleteTmpFiles() {
 
         try {
@@ -83,40 +110,6 @@ public class HaplotypeCaller {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-    }
-
-
-    private void start(String f, String lineage) {
-        // todo: error handling when task cancelled
-
-        String[] command = new String[] {
-                "--format", "fasta",
-                "--in",f,
-                "--out", "haplogroups.hsd",
-                "--extend-report",
-                lineage};
-
-
-            Haplogrep haplogrep = new Haplogrep(command);
-        try {
-            haplogrep.start();
-
-            LOG.info("Calculate Haplogroups with Phylotree version " + phylotreeVersion + " and haplogrep-2.1.18");
-        } catch (SAMException e){
-                System.err.println("Task cancelled");
-
-        }
-
-        // delete all temporary files
-
-        if(new File(f).exists()) {
-            try {
-                Files.delete(new File(f).toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
     }

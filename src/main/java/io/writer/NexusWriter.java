@@ -1,5 +1,6 @@
 package io.writer;
 
+import controller.ATableController;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -47,7 +48,7 @@ public class NexusWriter implements IOutputData {
     }
 
     @Override
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, ATableController tableController) throws IOException {
 
         if(!file.endsWith(".nex"))
             file = file + ".nex";

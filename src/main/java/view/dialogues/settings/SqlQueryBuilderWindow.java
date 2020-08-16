@@ -9,10 +9,8 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 import view.MitoBenchWindow;
 
@@ -23,7 +21,6 @@ public class SqlQueryBuilderWindow {
 
     private final BorderPane root;
     private final MitoBenchWindow mito;
-    private final Stage stage;
     private final DatabaseQueryHandler databaseQueryHandler;
 
     private Button btn_getData;
@@ -59,22 +56,18 @@ public class SqlQueryBuilderWindow {
 
     public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
 
-        databaseQueryHandler = new DatabaseQueryHandler();
+        databaseQueryHandler = mitoBenchWindow.getDatabaseQueryHandler();
         mito = mitoBenchWindow;
 
         root = new BorderPane();
-        stage = new Stage();
-        stage.setTitle("Database search configurator");
-        stage.setScene(new Scene(root));
 
         initContinentFilter();
 
         fillWindow();
         addAction();
 
-
         fillCenterGrid();
-        stage.show();
+        //stage.show();
 
     }
 
@@ -107,7 +100,7 @@ public class SqlQueryBuilderWindow {
 
         label_population = new Label("Population");
         label_population.setPadding(new Insets(10,10,10,10));
-        population_entries = databaseQueryHandler.getPopulationList();
+        population_entries = databaseQueryHandler.getColumnSet("population");
         List<String> targetList_pop = new ArrayList<>(population_entries);
         java.util.Collections.sort(targetList_pop);
         population_combobox = new CheckComboBox<>(FXCollections.observableList(targetList_pop));
@@ -262,7 +255,6 @@ public class SqlQueryBuilderWindow {
         mito.getProgressBarhandler().activate(task);
 
         task.setOnCancelled((EventHandler<Event>) event -> {
-            stage.close();
             mito.getProgressBarhandler().stop();
         });
 
@@ -272,7 +264,6 @@ public class SqlQueryBuilderWindow {
 
                 long startTime = System.currentTimeMillis();
                 mito.getLogClass().getLogger(this.getClass()).info("Import data from database.\nQuery: ");
-
                 mito.getTableControllerDB().updateTable(data_map);
                 this.label_info_selected_items.setText(mito.getTableControllerDB().getTable().getSelectionModel().getSelectedItems().size() + " / " +
                         mito.getTableControllerDB().getTable().getItems().size() +  " rows are selected");
@@ -586,15 +577,16 @@ public class SqlQueryBuilderWindow {
             mito.getTableControllerDB().addRowListener(label_info_selected_items);
         });
 
+
         btn_importToMitoBench.setOnAction(e -> {
             label_no_data.setText("Import data into workbench\t");
             HashMap<String, List<Entry>> data = mito.getTableControllerDB().parseDataToEntrylist();
             mito.getTableControllerUserBench().updateTable(data);
             mito.setInfo_selected_items_text(mito.getTableControllerUserBench().getTable().getSelectionModel().getSelectedItems().size() + " / " +
                     mito.getTableControllerUserBench().getTable().getItems().size() +  " rows are selected");
-            stage.close();
             mito.getTableControllerDB().cleartable();
         });
+
 
 
     }
@@ -631,4 +623,15 @@ public class SqlQueryBuilderWindow {
 
     }
 
+    public BorderPane getPane() {
+        return root;
+    }
+
+    public Button getBtn_importToMitoBench() {
+        return btn_importToMitoBench;
+    }
+
+    public Label getLabel_no_data() {
+        return label_no_data;
+    }
 }

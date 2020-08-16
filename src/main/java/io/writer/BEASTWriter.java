@@ -1,5 +1,6 @@
 package io.writer;
 
+import controller.ATableController;
 import io.IOutputData;
 import io.datastructure.fastA.FastaEntry;
 import javafx.collections.ObservableList;
@@ -35,7 +36,7 @@ public class BEASTWriter implements IOutputData {
     }
 
     @Override
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, ATableController tableController) throws IOException {
 
         if(!(file.endsWith(".fasta") || !file.endsWith(".fa") || file.endsWith(".fas")))
             file = file + ".beast.fasta";

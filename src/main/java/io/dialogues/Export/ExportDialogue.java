@@ -2,6 +2,7 @@ package io.dialogues.Export;
 
 import Logging.LogClass;
 import controller.ChartController;
+import database.ColumnNameMapper;
 import io.writer.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -13,7 +14,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
+import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
+import view.dialogues.information.UnalignedSequencesDialogue;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +29,7 @@ public class ExportDialogue extends Application {
     private final LogClass logClass;
     private final boolean exportAllData;
     private final ChartController cc;
+    private final MitoBenchWindow mito;
     private List<String> columnsInTable;
     private TableControllerUserBench tableController;
     private String MITOBENCH_VERSION;
@@ -39,17 +43,17 @@ public class ExportDialogue extends Application {
         Application.launch(args);
     }
 
-    public ExportDialogue(TableControllerUserBench tableManager, String mitoVersion, LogClass logClass,
-                          ChartController chartController, boolean exportAllData) {
+    public ExportDialogue(MitoBenchWindow mitoBenchWindow, boolean exportAllData) {
 
-        LOG = logClass.getLogger(this.getClass());
-        this.logClass = logClass;
+        this.mito = mitoBenchWindow;
+        LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
+        this.logClass = mitoBenchWindow.getLogClass();
         this.exportAllData = exportAllData;
-        this.cc = chartController;
-        this.tableController = tableManager;
-        this.columnsInTable = tableManager.getCurrentColumnNames();
-        this.MITOBENCH_VERSION = mitoVersion;
-        this.userdefinedHGlist = chartController.getCustomHGList();
+        this.cc = mitoBenchWindow.getChartController();
+        this.tableController = mitoBenchWindow.getTableControllerUserBench();
+        this.columnsInTable = tableController.getCurrentColumnNames();
+        this.MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
+        this.userdefinedHGlist = cc.getCustomHGList();
         if(exportAllData){
             dataToExport = tableController.getTable().getItems();
         } else {
@@ -104,10 +108,11 @@ public class ExportDialogue extends Application {
                     arpwriter.writeData(outfileDB, tableController);
                 }
             } else {
-                InformationDialogue informationDialogue_unaligned = new InformationDialogue("Warning: Unaligned sequences",
-                        "Please align you sequences first to proceed. mitoBench is not able to align you sequences, " +
-                                "but you can export you data as multiFasta and align them with an alignment tool of your choice.",
-                        "Please align your sequences", "warning_unaligned");
+                UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
+                        "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
+                                "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",
+                        mito.getDialogueController()
+                        );
             }
                 //fasta output
             } else  if (result.get() == fasta_button) {
@@ -135,10 +140,9 @@ public class ExportDialogue extends Application {
                     beastwriter.writeData(outfileDB, tableController);
                 }
             } else {
-                InformationDialogue informationDialogue_unaligned = new InformationDialogue("Warning: Unaligned sequences",
-                        "Please align you sequences first to proceed. mitoBench is not able to align you sequences, " +
-                                "but you can export you data as multiFasta and align them with an alignment tool of your choice.",
-                        "Please align your sequences", "warning_unaligned");
+                UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
+                        "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
+                                "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",mito.getDialogueController());
             }
 
             //CSV Output
@@ -149,7 +153,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    GenericWriter csvWriter = new GenericWriter(tableController, LOG, dataToExport, ",");
+                    GenericWriter csvWriter = new GenericWriter(dataToExport, ",", true);
                     csvWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception e) {
@@ -164,7 +168,7 @@ public class ExportDialogue extends Application {
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    GenericWriter csvWriter = new GenericWriter(tableController, LOG, dataToExport, "\t");
+                    GenericWriter csvWriter = new GenericWriter(dataToExport, "\t", true);
                     csvWriter.writeData(outFileDB, tableController);
                     LOG.info("Export data into TSV format. File: " + outFileDB);
                 } catch (Exception e) {
@@ -223,8 +227,7 @@ public class ExportDialogue extends Application {
         else if (result.get() == phylip_button) {
 
             // open new config window
-            PhylipSettingsDialogue phylipSettingsDialogue  = new PhylipSettingsDialogue("Phylip format configuration", logClass,
-                    dataToExport, tableController, MITOBENCH_VERSION, cc, exportAllData);
+            PhylipSettingsDialogue phylipSettingsDialogue  = new PhylipSettingsDialogue("Phylip format configuration", mito, dataToExport, exportAllData);
 
 
 //            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Phylip (*.phylip)", "*.phylip");

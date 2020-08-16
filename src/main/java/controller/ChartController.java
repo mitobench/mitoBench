@@ -4,7 +4,7 @@ import io.Exceptions.HaplogroupException;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
-import view.dialogues.error.HaplogroupErrorDialogure;
+import view.dialogues.error.HaplogroupErrorDialogue;
 import view.visualizations.BarChartGrouping;
 import view.visualizations.BarPlotHaplo;
 import view.visualizations.BarPlotHaplo2;
@@ -126,11 +126,11 @@ public class ChartController {
 
         stackedBar.clearData();
         stackedBar.setCategories(selection_groups);
-        HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(selection_haplogroups, hgs);
+        HashMap<String, ArrayList> hgs_summed = summarizeHaplogroups(Arrays.asList(selection_haplogroups), hgs);
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all;
         if(numberOfElementsPerCaregory.length==1){
-            data_all = assignHGsNoGrouping(hgs_summed, selection_haplogroups);
+            data_all = assignHGsNoGrouping(hgs_summed, Arrays.asList(selection_haplogroups));
         } else {
             data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups);
         }
@@ -364,7 +364,8 @@ public class ChartController {
      * @return
      */
 
-    public HashMap<String, ArrayList> summarizeHaplogroups(String[] hgs, String[] coreHGs_variable){
+    //public HashMap<String, ArrayList> summarizeHaplogroups(String[] hgs, String[] coreHGs_variable){
+    public HashMap<String, ArrayList> summarizeHaplogroups(List<String> hgs, String[] coreHGs_variable){
 
         HashMap<String, ArrayList> hgs_summarized = new HashMap<>();
         hg_core_list = generateHG_core_list(coreHGs_variable);
@@ -375,6 +376,10 @@ public class ChartController {
             List<String> core_subs = treeMap.get(hg_core);
 
             for(String hg : hgs){
+                if(hg.contains("+")){
+                    hg = hg.split("\\+")[0];
+                }
+
                 if(core_subs.contains(hg)) {
                     if(!used_hgs.contains(hg)){
                         used_hgs.add(hg);
@@ -430,7 +435,6 @@ public class ChartController {
                     count_to_hg.put(count,  Arrays.asList(key));
                 }
             }
-
         }
         Collections.sort(sizes);
 
@@ -462,10 +466,10 @@ public class ChartController {
     public String[][] prepareColumns(String[] names, ObservableList<ObservableList> selectedTableItems) {
 
         List tmp = new ArrayList<>(Arrays.asList(names));
-        if(tmp.contains("Haplogroup") && !conraintHGCol(tableController.getCurrentColumnNames())){
+        if(tmp.contains("Haplogroup") && !containsHGCol(tableController.getCurrentColumnNames())){
 
             HaplogroupException haplogroupException = new HaplogroupException("No haplogroups defined!");
-            HaplogroupErrorDialogure haplogroupErrorDialogue = new HaplogroupErrorDialogure(haplogroupException);
+            HaplogroupErrorDialogue haplogroupErrorDialogue = new HaplogroupErrorDialogue(haplogroupException);
 
         } else {
             String[][] res = new String[names.length][];
@@ -497,10 +501,10 @@ public class ChartController {
     public String[][] prepareColumnsAsList(String[] names, ObservableList<ObservableList> selectedTableItems) {
 
         List tmp = new ArrayList<>(Arrays.asList(names));
-        if(tmp.contains("Haplogroup") && !conraintHGCol(tableController.getCurrentColumnNames())){
+        if(tmp.contains("Haplogroup") && !containsHGCol(tableController.getCurrentColumnNames())){
 
             HaplogroupException haplogroupException = new HaplogroupException("No haplogroups defined!");
-            HaplogroupErrorDialogure haplogroupErrorDialogue = new HaplogroupErrorDialogure(haplogroupException);
+            HaplogroupErrorDialogue haplogroupErrorDialogue = new HaplogroupErrorDialogue(haplogroupException);
 
         } else {
             String[][] res = new String[names.length][];
@@ -522,7 +526,7 @@ public class ChartController {
     }
 
 
-    private boolean conraintHGCol(List<String> currentColumnNames){
+    private boolean containsHGCol(List<String> currentColumnNames){
         for (String s : currentColumnNames){
             if(s.contains("Haplogroup")){
                 return true;
@@ -534,11 +538,12 @@ public class ChartController {
     }
 
 
-    public HashMap<String, List<XYChart.Data<String, Number>>> assignHGsNoGrouping(HashMap<String, ArrayList> hgs_summed, String[] selection_haplogroups) {
+    //public HashMap<String, List<XYChart.Data<String, Number>>> assignHGsNoGrouping(HashMap<String, ArrayList> hgs_summed, String[] selection_haplogroups) {
+    public HashMap<String, List<XYChart.Data<String, Number>>> assignHGsNoGrouping(HashMap<String, ArrayList> hgs_summed, List<String> selection_haplogroups) {
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<>();
 
-        if(hg_core_list.size()>0){
+        if(hg_core_list.size() > 0){
 
             for(String hg_core : hg_core_list){
 
@@ -551,7 +556,6 @@ public class ChartController {
 
                         double count = 0.0;
                         for (String hg : subHGs) {
-
                             List<String> hgs = tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), -1);
                             count += hgs.size();
                         }
@@ -573,32 +577,42 @@ public class ChartController {
 
             // iterate over used hgs and check if there are some unused hgs
             List<String> unused_hgs = new ArrayList<String>();
+            //for (String hg : tableController.getColumnData(tableController.getTableColumnByName("Haplogroup"))) {
             for (String hg : selection_haplogroups) {
+                if(hg.contains("+")){
+                    hg = hg.split("\\+")[0];
+                }
                 if (!used_hgs.contains(hg)) {
                     unused_hgs.add(hg);
                 }
             }
 
 
-            List<String> unused_hgs_now_used = new ArrayList<>();
-            for (String hg : unused_hgs) {
-                //check beginning of HG, assign according this
-                List<String> list_hg_keyset = new ArrayList<>(data_all.keySet());
-
-                Collections.sort(list_hg_keyset, Comparator.comparing(String::length));
-                for(int i = list_hg_keyset.size()-1; i >= 0; i--){
-                    String hg_key = list_hg_keyset.get(i);
-                    if (hg.startsWith(hg_key)){
-                        int number_of_hgs_in_hg_key = data_all.get(hg_key).get(0).getYValue().intValue();
-                        data_all.get(hg_key).get(0).setYValue(number_of_hgs_in_hg_key + 1);
-                        unused_hgs_now_used.add(hg);
-                    }
-                }
-
-            }
+//            List<String> unused_hgs_now_used = new ArrayList<>();
+//            for (String hg : unused_hgs) {
+//                //check beginning of HG, assign according this
+//                List<String> list_hg_keyset = new ArrayList<>(data_all.keySet());
+//
+//                Collections.sort(list_hg_keyset, Comparator.comparing(String::length));
+//
+//                for(int i = list_hg_keyset.size()-1; i >= 0; i--){
+//                    String hg_key = list_hg_keyset.get(i);
+//                    if (hg.startsWith(hg_key)){
+//                        int number_of_hgs_in_hg_key = data_all.get(hg_key).get(0).getYValue().intValue();
+//                        data_all.get(hg_key).get(0).setYValue(number_of_hgs_in_hg_key + 1);
+//                        unused_hgs_now_used.add(hg);
+//                    }
+//                }
+//
+//            }
+//            for(String usedhg : used_hgs)
+//                System.out.println(usedhg);
+//
+//            for(String usedhg : unused_hgs_now_used)
+//                System.out.println(usedhg);
 
             List<XYChart.Data<String, Number>> data_list = new ArrayList<>();
-            unused_hgs.removeAll(unused_hgs_now_used);
+           // unused_hgs.removeAll(unused_hgs_now_used);
 
             XYChart.Data<String, Number> data = new XYChart.Data<>("All data", unused_hgs.size());
             data_list.add(data);

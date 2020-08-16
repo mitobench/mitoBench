@@ -1,6 +1,6 @@
 package analysis;
 
-import analysis.fstcalculation.FstCalculator;
+import Main.FstCalculator;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -114,8 +114,7 @@ public class FstCalculationRunner {
                 "Pairwise Difference",
                 numberOfPermutations,
                 gamma_a,
-                significance,
-                LOG
+                significance
                 );
 
         fsts = fstCalculator.runCaclulations();

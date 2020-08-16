@@ -4,6 +4,7 @@ import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import analysis.ProgressBarHandler;
 import controller.*;
+import database.DatabaseQueryHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -11,10 +12,11 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.CancelButton;
+import view.dialogues.information.AboutDialogue;
+import view.dialogues.information.DBstatisticsDialogue;
 import view.menus.*;
 import view.tree.TreeView;
 
@@ -26,14 +28,12 @@ import java.nio.file.Files;
 /**
  * Created by neukamm on 03.11.16.
  */
-public class MitoBenchWindow extends Application{
+public class MitoBenchWindow extends Application {
 
-    private final String MITOBENCH_VERSION = "1.2-beta";
+    private final String MITOBENCH_VERSION = "1.8-beta";
 
     private BorderPane pane_root;
-    private TableControllerUserBench tableControllerUserBench;
-    private TableControllerDB tableControllerDB;
-    private HaplotreeController treeController;
+
     private Scene scene;
     private TabPane tabpane_visualization;
     private Stage primaryStage;
@@ -41,15 +41,22 @@ public class MitoBenchWindow extends Application{
     private BorderPane pane_table;
     private VBox pane_table_userBench;
     private Label info_selected_items;
-    private GroupController groupController;
     private CancelButton btn_cancel;
     private LogClass logClass;
     private TreeView treeView;
     private boolean anotherProjectLoaded;
     private FileMenu fileMenu;
-    private ChartController chartController;
     private ProgressBarHandler progressBarhandler;
+    private DatabaseQueryHandler databaseQueryHandler;
+
+    private ChartController chartController;
+    private MenuController menuController;
+    private GroupController groupController;
+    private TableControllerUserBench tableControllerUserBench;
+    private TableControllerDB tableControllerDB;
+    private HaplotreeController treeController;
     private FileReaderController fileReaderController;
+    private DialogueController dialogueController;
 
 
     @Override
@@ -92,6 +99,10 @@ public class MitoBenchWindow extends Application{
         primaryStage.setMaximized(true);
         primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
 
+        // init database and menu controller
+        databaseQueryHandler = new DatabaseQueryHandler();
+        menuController = new MenuController(databaseQueryHandler, this);
+        dialogueController = new DialogueController(this);
 
 
         // bind width and height to scene to enable resizing
@@ -148,26 +159,32 @@ public class MitoBenchWindow extends Application{
         // add drag and drop files to data table view
         tableControllerUserBench.addDragAndDropFiles(this);
 
+        menuController.setTableController(tableControllerUserBench);
+
         primaryStage.show();
 
     }
 
-    private VBox getTopPane() throws Exception {
+    private VBox getTopPane() {
         VBox topPane = new VBox();
-
         topPane.getChildren().addAll(getMenuPane(), getToolbarpane());
 
         return topPane;
 
     }
 
-    private ToolBar getToolbarpane() {
-        Toolbarpane toolBar = new Toolbarpane(fileReaderController, this);
+    private Toolbarpane getToolbarpane() {
+
+        progressBarhandler = new ProgressBarHandler(btn_cancel);
+        progressBarhandler.create();
+
+        Toolbarpane toolBar = new Toolbarpane(fileReaderController, this, progressBarhandler.getProgressBar(), btn_cancel);
+
         return toolBar;
     }
 
-    private MenuBar getMenuPane() throws Exception
-    {
+    private MenuBar getMenuPane() {
+
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menuBar");
 
@@ -176,19 +193,22 @@ public class MitoBenchWindow extends Application{
 
         EditMenu editMenu = new EditMenu(this);
         GroupMenu groupMenu = new GroupMenu(this);
+
         StatisticsMenu statisticsMenu = new StatisticsMenu(this);
-        fileMenu = new FileMenu( statisticsMenu, this);
+        fileMenu = new FileMenu( this);
         AnalysisMenu analysisMenu = new AnalysisMenu(this, statisticsMenu);
+        ToolsMenu toolsMenu = new ToolsMenu(this, groupMenu, analysisMenu, statisticsMenu);
         TableMenu tableMenu = new TableMenu(this);
         VisualizationMenu visualizationMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
                                   editMenu.getMenuEdit() ,
-                                  groupMenu.getMenuGroup(),
-                                  analysisMenu.getMenuAnalysis(),
-                                  statisticsMenu.getMenuTools(),
-                                  tableMenu.getMenuTable(),
+                                  toolsMenu.getMenuTools(),
+                                  //groupMenu.getMenuGroup(),
+                                  //analysisMenu.getMenuAnalysis(),
+                                  //statisticsMenu.getMenuTools(),
+                                  //tableMenu.getMenuTable(),
                                   visualizationMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 
@@ -234,26 +254,17 @@ public class MitoBenchWindow extends Application{
      */
     private BorderPane configureTablePane()
     {
-        final Label label = new Label("User table");
         String info_text = tableControllerUserBench.getTable().getSelectionModel().getSelectedItems().size() + " / " +
                 tableControllerUserBench.getTable().getItems().size() +  " rows are selected";
 
         info_selected_items.setText(info_text);
 
-        HBox hbox = new HBox();
-        Region filler = new Region(); HBox.setHgrow(filler, Priority.ALWAYS);
-
-        progressBarhandler = new ProgressBarHandler(btn_cancel);
-        progressBarhandler.create();
-
-        hbox.getChildren().addAll(label, filler, progressBarhandler.getProgressBar(), btn_cancel);
-
         pane_table = new BorderPane();
         pane_table.setId("mainEntryTablePane");
         pane_table_userBench = new VBox();
         pane_table_userBench.setSpacing(10);
-        pane_table_userBench.setPadding(new Insets(20, 10, 10, 10));
-        pane_table_userBench.getChildren().addAll(hbox, tableControllerUserBench.getTable(), info_selected_items);
+        pane_table_userBench.setPadding(new Insets(5, 5, 5, 5));
+        pane_table_userBench.getChildren().addAll(tableControllerUserBench.getTable(), info_selected_items);
         pane_table.setCenter(pane_table_userBench);
 
         return pane_table;
@@ -287,6 +298,12 @@ public class MitoBenchWindow extends Application{
         borderpane_statistics.setId("mainWindowLeftpart");
 
         tabpane_statistics = new TabPane();
+        Tab welcomeTab = new Tab("Welcome to mitoBench", new AboutDialogue("Welcome",
+                "If you need some help, read the documentation first:").getDialogGrid());
+
+        Tab dbStatsTab = new Tab("Database statistics", new DBstatisticsDialogue(databaseQueryHandler, getMITOBENCH_VERSION()).getDialogGrid());
+
+        tabpane_statistics.getTabs().addAll(welcomeTab, dbStatsTab);
         borderpane_statistics.setCenter(tabpane_statistics);
 
         return borderpane_statistics;
@@ -411,6 +428,19 @@ public class MitoBenchWindow extends Application{
         return fileReaderController;
     }
 
+    public MenuController getMenuController() {
+        return menuController;
+    }
 
+    public DatabaseQueryHandler getDatabaseQueryHandler() {
+        return databaseQueryHandler;
+    }
 
+    public DialogueController getDialogueController() {
+        return dialogueController;
+    }
+
+    public void setDialogueController(DialogueController dialogueController) {
+        this.dialogueController = dialogueController;
+    }
 }

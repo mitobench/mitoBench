@@ -1,5 +1,6 @@
 package io.writer;
 
+import controller.ATableController;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,7 +30,7 @@ public class ExcelWriter implements IOutputData {
     }
 
     @Override
-    public void writeData(String file, TableControllerUserBench tableController) throws Exception {
+    public void writeData(String file, ATableController tableController) throws Exception {
         Writer writer = null;
         Workbook wb = new XSSFWorkbook();
 

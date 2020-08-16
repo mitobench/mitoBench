@@ -1,5 +1,6 @@
 package io.writer;
 
+import controller.ATableController;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -129,7 +130,7 @@ public class StatisticsWriter implements IOutputData {
      * @throws IOException
      */
     @Override
-    public void writeData(String path, TableControllerUserBench tableControllerUserBench) throws IOException {
+    public void writeData(String path, ATableController tableControllerUserBench) throws IOException {
 
         if(!path.endsWith(".csv")){
             path += ".csv";

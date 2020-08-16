@@ -4,7 +4,7 @@ package view.menus;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import controller.*;
-import io.Exceptions.*;
+import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
@@ -39,15 +39,13 @@ public class FileMenu {
     private MitoBenchWindow mitoBenchWindow;
     private String MITOBENCH_VERSION;
     private Stage stage;
-    private StatisticsMenu toolsMenu;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
     private Logger LOG;
     private LogClass logClass;
 
 
-    public FileMenu( StatisticsMenu toolsMenu,
-                     MitoBenchWindow mitoBenchWindow) {
+    public FileMenu( MitoBenchWindow mitoBenchWindow) {
 
         MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
 
@@ -55,7 +53,6 @@ public class FileMenu {
         this.tableControllerDB = mitoBenchWindow.getTableControllerDB();
         this.tableControllerUserBench = mitoBenchWindow.getTableControllerUserBench();
         this.stage = mitoBenchWindow.getPrimaryStage();
-        this.toolsMenu = toolsMenu;
 
         this.menuFile = new Menu("File");
         menuFile.setId("fileMenu");
@@ -122,7 +119,10 @@ public class FileMenu {
         // todo: make db query
         importFromDB.setOnAction(t -> {
             SqlQueryBuilderWindow sqlQueryBuilderWindow = new SqlQueryBuilderWindow(mitoBenchWindow);
-
+            Tab sqlConfigTab = new Tab("DB search config");
+            sqlConfigTab.setContent(sqlQueryBuilderWindow.getPane());
+            mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlConfigTab);
+            mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlConfigTab);
 
         });
 
@@ -160,8 +160,7 @@ public class FileMenu {
         MenuItem exportFile = new MenuItem("Export all Data");
         exportFile.setOnAction(t -> {
             if(tableControllerUserBench.getTable().getItems().size() != 0){
-                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
-                        mitoBenchWindow.getChartController(), true);
+                ExportDialogue exportDialogue = new ExportDialogue(mitoBenchWindow, true);
                 try {
                     exportDialogue.start(new Stage());
                 } catch (Exception e) {
@@ -175,8 +174,7 @@ public class FileMenu {
         MenuItem exportSelectedData = new MenuItem("Export selected Data");
         exportSelectedData.setOnAction(t -> {
             if(tableControllerUserBench.getTable().getItems().size() != 0){
-                ExportDialogue exportDialogue = new ExportDialogue(tableControllerUserBench, MITOBENCH_VERSION, logClass,
-                        mitoBenchWindow.getChartController(), false);
+                ExportDialogue exportDialogue = new ExportDialogue(mitoBenchWindow, false);
                 try {
                     exportDialogue.start(new Stage());
                 } catch (Exception e) {

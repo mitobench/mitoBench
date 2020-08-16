@@ -1,5 +1,7 @@
 package io.writer;
 
+import controller.ATableController;
+import database.ColumnNameMapper;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
@@ -16,16 +18,15 @@ import java.util.List;
  */
 public class GenericWriter implements IOutputData {
 
+    private final boolean addFasta;
     private ObservableList<ObservableList> data;
-    private TableControllerUserBench tableController;
     private String delimiter;
 
-    public GenericWriter(TableControllerUserBench tableController, Logger LOG, ObservableList<ObservableList> dataToExport,
-                         String delimiter){
+    public GenericWriter(ObservableList<ObservableList> dataToExport, String delimiter, boolean addfasta){
         this.data = dataToExport;
-        this.tableController = tableController;
-        this.delimiter = delimiter;
 
+        this.delimiter = delimiter;
+        this.addFasta = addfasta;
 
     }
 
@@ -38,7 +39,8 @@ public class GenericWriter implements IOutputData {
      * @param tableController
      * @throws Exception
      */
-    public void writeData(String file, TableControllerUserBench tableController) throws IOException {
+    public void writeData(String file, ATableController tableController) throws IOException {
+        ColumnNameMapper mapper = new ColumnNameMapper();
 
         if(delimiter.equals(",")){
             if(!file.endsWith(".csv"))
@@ -59,16 +61,24 @@ public class GenericWriter implements IOutputData {
 
             // write header
             String header = "";
-            List<String> columns = this.tableController.getCurrentColumnNames();
+            List<String> columns = tableController.getCurrentColumnNames();
             for (int i = 0; i < columns.size(); i++){
                 String colname = columns.get(i);
                 if(i == columns.size()-1){
                     if(colname.contains("(Grouping)")){
                         colname = colname.replace("(Grouping)","").trim();
+                    } else if(!addFasta && colname.equals("MTSequence")){
+                        header = header.substring(0, header.length() - 1);
+                        colname = "";
                     }
-                    header += colname + "\n";
+                    header += mapper.mapString(colname) + "\n";
                 } else {
-                    header += colname + delimiter;
+                    if(!addFasta && colname.equals("MTSequence")){
+                        header = header.substring(0, header.length() - 1);
+                    } else {
+                        header += mapper.mapString(colname) + delimiter;
+                    }
+
                 }
             }
 
@@ -80,19 +90,34 @@ public class GenericWriter implements IOutputData {
             String headertypes = "";
             HashMap<String, String> colname_to_type = tableController.getHeadertypes();
             for(String colname : columns){
-                headertypes += colname_to_type.get(colname) + delimiter;
+                if(!addFasta && colname.equals("MTSequence")){
+                    headertypes = headertypes.substring(0, headertypes.length() - 1);
+                } else {
+                    headertypes += colname_to_type.get(colname) + delimiter;
+                }
             }
 
-            text = "#" + headertypes.substring(0, headertypes.length()-1) + "\n";
+            if(headertypes.endsWith(","))
+                headertypes = headertypes.substring(0, headertypes.length() - 1);
+            text = "#" + headertypes + "\n";
             fileChannel.write(ByteBuffer.wrap(text.getBytes()));
+
+            int limit = data.get(0).size();
+            if(!addFasta){
+                if(index_mt == data.get(0).size()-1){
+                    limit = data.get(0).size()-1;
+                } else {
+                    limit = data.get(0).size();
+                }
+            }
 
             // write view.data
             for (ObservableList entry :  this.data) {
                 text = "";
-                for(int i = 0; i < entry.size(); i++){
+                for(int i = 0; i < limit; i++){
                     if(i==index_mt){
                         String mt_seq = tableController.getDataTable().getMtStorage().getData().get(entry.get(index_id));
-                        if(i == entry.size()-1){
+                        if(i == limit-1){
                             text = mt_seq + "\n";
                             fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         } else {
@@ -101,7 +126,7 @@ public class GenericWriter implements IOutputData {
                         }
 
                     } else {
-                        if(i == entry.size()-1){
+                        if(i == limit-1){
                             text = entry.get(i) + "\n";
                             fileChannel.write(ByteBuffer.wrap(text.getBytes()));
                         } else {
@@ -123,7 +148,7 @@ public class GenericWriter implements IOutputData {
 
     @Override
     public void setGroups(String groupID) {
-        //Do nothing here, we dont care for CSV files atalll
+        //Do nothing here
     }
 
 

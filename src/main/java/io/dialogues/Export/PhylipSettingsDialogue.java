@@ -1,6 +1,5 @@
 package io.dialogues.Export;
 
-import Logging.LogClass;
 import controller.ChartController;
 import controller.TableControllerUserBench;
 import io.writer.PhyLipWriter;
@@ -11,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import view.MitoBenchWindow;
 import view.dialogues.settings.APopupDialogue;
 
 
@@ -20,29 +20,25 @@ public class PhylipSettingsDialogue extends APopupDialogue {
     private final ChartController cc;
     private final boolean exportAllData;
     private final String version;
+    private final MitoBenchWindow mito;
     private Button ok;
     private ComboBox comboBox1;
     private ComboBox comboBox2;
     private Button back;
 
 
-    public PhylipSettingsDialogue(String title, LogClass logClass,
-                                  ObservableList<ObservableList> dataToExport,
-                                  TableControllerUserBench tableController,
-                                  String MITOBENCH_VERSION,
-                                  ChartController cc,
-                                  boolean exportAllData) {
-        super(title, logClass);
+    public PhylipSettingsDialogue(String phylip_format_configuration, MitoBenchWindow mito, ObservableList<ObservableList> dataToExport, boolean exportAllData) {
+        super(phylip_format_configuration, mito.getLogClass());
+        this.mito = mito;
         this.data = dataToExport;
-        this.tableController = tableController;
-        this.cc = cc;
+        this.tableController = mito.getTableControllerUserBench();
+        this.cc = mito.getChartController();
         this.exportAllData = exportAllData;
-        this.version = MITOBENCH_VERSION;
+        this.version = mito.getMITOBENCH_VERSION();
         addComponents();
         addListener();
         show();
     }
-
 
 
     private void addComponents() {
@@ -90,8 +86,7 @@ public class PhylipSettingsDialogue extends APopupDialogue {
 
         back.setOnAction(t -> {
             close();
-            ExportDialogue exportDialogue = new ExportDialogue(tableController, version, logClass,
-                    cc, exportAllData);
+            ExportDialogue exportDialogue = new ExportDialogue(mito, exportAllData);
             try {
                 exportDialogue.start(new Stage());
             } catch (Exception e) {

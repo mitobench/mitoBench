@@ -14,6 +14,9 @@ import statistics.HaploStatistics;
 import view.MitoBenchWindow;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,11 +35,12 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
             FXCollections.observableArrayList(
                     "Sub-Saharan Africa (L0a,L0d,L0k,L1b,L1c,L2a,L2b,L2c,L3b,L3d,L3e,L3f,L4,L5)",
                     "Americas and the Caribbean (A2,B2,C1b,C1c,C1d,C4c,D1,D2a,D3,D4h3a,X2a,X2g)",
-                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B)",
+                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B4,B5,B6)",
                     "Europe (H)");
     protected ChartController chartcontroller;
     protected int row;
     private String[] hg_list_trimmed;
+    private Label warning_label;
 
 
     public AHGDialogue(String title, LogClass logClass) {
@@ -47,10 +51,28 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     public void init(MitoBenchWindow mito){
         this.mito = mito;
         this.chartcontroller = mito.getChartController();
+
+        String add_list = getMacrogroupsAsString(mito);
+        if(!add_list.equals(""))
+            options.add("Macrogroups (" + add_list + ")");
+
         haploStatistics = new HaploStatistics(mito.getTableControllerUserBench(), mito.getChartController(), logClass);
         addHGListCombobox(haploStatistics, mito);
+
         this.LOG = this.logClass.getLogger(this.getClass());
         addEvents();
+    }
+
+    protected String getMacrogroupsAsString(MitoBenchWindow mito) {
+        String res = "";
+        if(mito.getTableControllerUserBench().getTableColumnByName("Macro Haplogroup")!=null) {
+            Set<String> macrogroups = new HashSet<>(mito.getTableControllerUserBench().getColumnData(mito.getTableControllerUserBench().getTableColumnByName("Macro Haplogroup")));
+            for(String mhg : macrogroups){
+                res += mhg+",";
+            }
+            res = res.substring(0,res.length()-1);
+        }
+        return res;
     }
 
 
@@ -84,10 +106,14 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
 
+        warning_label = new Label("Warning!\nIf you want to include the haplogroup 'B' to you list, please specify " +
+                "it as 'B4,B5,B6'.\nThe current version of phylotree (v17) does not support only 'B'.");
+
         row=0;
 
         dialogGrid.add(label, 0,row,3,1);
         dialogGrid.add(combobox_hglist, 0,++row,3,1);
+        dialogGrid.add(warning_label,0,++row,3,1);
         dialogGrid.add(okBtn,2,++row,1,1);
     }
 
@@ -151,7 +177,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
             p1 = p1.replace("*", "");
             hg_list = p1.split(",");
             hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
-
         } else {
             try {
                 throw new HaplogroupException("Haplogroups are not in correct format.");

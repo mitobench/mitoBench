@@ -146,10 +146,15 @@ public class HeatMapLegend {
      * @return double rounded
      */
     public double round(double value, int numberOfDigitsAfterDecimalPoint) {
-        BigDecimal bigDecimal = new BigDecimal(value);
-        bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
-                BigDecimal.ROUND_HALF_EVEN);
-        return bigDecimal.doubleValue();
+        if (!Double.isNaN(value)){
+            BigDecimal bigDecimal = new BigDecimal(value);
+            bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
+                    BigDecimal.ROUND_HALF_EVEN);
+            return bigDecimal.doubleValue();
+        } else {
+            return -1;
+        }
+
     }
 
     /*

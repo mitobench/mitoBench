@@ -1,6 +1,7 @@
 package controller;
 
 import Logging.LogClass;
+import database.DuplicatesChecker;
 import io.IInputType;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -10,9 +11,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.util.Callback;
 import io.IData;
+import model.table.TableKeyEventHandler;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
 import view.menus.GroupMenu;
@@ -35,7 +40,7 @@ public abstract class ATableController {
     protected HashMap<String, List<Entry>> table_content;
     protected ATableController controller;
     protected GroupController groupController;
-    protected List<String> col_names;
+    protected Set<String> col_names;
     protected List<String> col_names_sorted;
     protected GroupMenu groupMenu;
     protected LogClass logClass;
@@ -51,20 +56,30 @@ public abstract class ATableController {
     public void init(){
 
         table = new TableView();
-        table.setEditable(false);
+        table.setEditable(true);
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        table.getSelectionModel().setCellSelectionEnabled(true);
+
+        // add copy to clipboard
+        copyToClipboard();
 
         data = FXCollections.observableArrayList();
         data_initial = FXCollections.observableArrayList();
-        col_names = new ArrayList<>();
+        col_names = new HashSet<>();
 
         dataTable = new DataTable();
+
         column_to_index = new HashMap<>();
         this.controller = this;
         table_content = new HashMap<>();
         data_versions = new LinkedList<>();
     }
+
+    private void copyToClipboard() {
+        table.setOnKeyPressed(new TableKeyEventHandler());
+    }
+
 
     /**
      * This method gets a hash map of new input entries, updates the view.data table and prepares the table view for updating.
@@ -73,6 +88,13 @@ public abstract class ATableController {
      * @param input
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
+
+        // unbind columns
+        ObservableList<TableColumn<ObservableList, ?>> columns1 = table.getColumns();
+        for (TableColumn col : columns1) {
+            col.prefWidthProperty().unbind();
+        }
+
 
         String groupname=null;
         if(groupController.groupingExists()){
@@ -115,7 +137,7 @@ public abstract class ATableController {
             addColumn(col_names_sorted.get(i), i);
         }
 
-        updateVersion();
+        //updateVersion();
 
         // clear Items in table
         table.setItems(FXCollections.observableArrayList());
@@ -127,8 +149,13 @@ public abstract class ATableController {
         if(groupname!=null)
             groupController.createGroupByColumn(groupname,"");
 
-        TableFilter filter = new TableFilter(table);
+        // bind columns
+//        ObservableList<TableColumn<ObservableList, ?>> columns_all = table.getColumns();
+//        for (TableColumn col : columns_all) {
+//            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
+//        }
 
+        TableFilter.forTableView(table).lazy(true).apply();
     }
 
 
@@ -136,11 +163,8 @@ public abstract class ATableController {
 
         if(data_versions.size()>=4){
             data_versions.removeFirst();
-            data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
-
-        } else {
-            data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
         }
+        data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
     }
 
 
@@ -205,6 +229,11 @@ public abstract class ATableController {
             if(curr_colnames.contains("ID")){
                 col_names_sorted.add("ID");
                 curr_colnames.remove("ID");
+            }
+
+            if(curr_colnames.contains("Labsample ID")){
+                col_names_sorted.add("Labsample ID");
+                curr_colnames.remove("Labsample ID");
             }
 
             if(curr_colnames.contains("Haplogroup")){
@@ -307,7 +336,7 @@ public abstract class ATableController {
     public void updateView(ObservableList<ObservableList> newItems){
 
         // update version
-        updateVersion();
+        //updateVersion();
 
         ObservableList<ObservableList> new_items_copy;
         new_items_copy = copyData(newItems);
@@ -360,7 +389,7 @@ public abstract class ATableController {
             return entries;
 
         } else {
-            selection = getSelectedRows();
+            selection = table.getSelectionModel().getSelectedItems();
             boolean never_reached = true;
 
             for(int i = 0; i < selection.size(); i++){
@@ -400,6 +429,7 @@ public abstract class ATableController {
 
         if(!getCurrentColumnNames().contains(colname)){
             TableColumn col = new TableColumn(colname);
+
             col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
@@ -448,7 +478,7 @@ public abstract class ATableController {
      */
     public void removeColumn(String colName) {
 
-        updateVersion();
+        //updateVersion();
 
         // remove grouping
         if(colName.contains("(Grouping)")){
@@ -664,8 +694,6 @@ public abstract class ATableController {
         return  haplo_occurrences;
     }
 
-
-
     /**
      * This method returns a table column of specific column name
      *
@@ -680,7 +708,13 @@ public abstract class ATableController {
                 }
             }
 
-        } else if(name.contains("Haplogroup")){
+        } else if(name.equals("Macro Haplogroup")){
+            for (TableColumn col : table.getColumns()) {
+                if (col.getText().contains("Macro Haplogroup")) {
+                    return col;
+                }
+            }
+        }else if(name.contains("Haplogroup")){
             for (TableColumn col : table.getColumns()) {
                 if (col.getText().contains("Haplogroup")) {
                     return col;
@@ -764,7 +798,13 @@ public abstract class ATableController {
         if(colIndexGroup == -1){
             for(int i = 0; i < selection.size(); i++){
                 ObservableList list = selection.get(i);
-                if(list.get(colIndexHG).equals(hg)){
+                String HG = (String) list.get(colIndexHG);
+                if(HG.contains("+")){
+                    String hg_tmp = HG.split("\\+")[0];
+                    HG = hg_tmp;
+                }
+
+                if(HG.equals(hg)){
                     hgs.add(hg);
                 }
             }
@@ -820,7 +860,8 @@ public abstract class ATableController {
 //        } else {
 //            selectedTableItems = table.getItems();
 //        }
-
+//
+//        return selectedTableItems;
         return table.getItems();
 
     }
@@ -840,7 +881,7 @@ public abstract class ATableController {
         }
     }
 
-    private List<String> getColumnData(TableColumn column){
+    public List<String> getColumnData(TableColumn column){
 
         List<String> columnData = new ArrayList<>();
         for (ObservableList item : table.getItems()) {
@@ -875,12 +916,11 @@ public abstract class ATableController {
             Entry e_copy=null;
             for(Entry e : e_list){
                 if(e.getIdentifier().equals(s)){
-                     e_copy = new Entry(newColname, e.getType(), e.getData());
+                    e_copy = new Entry(newColname, e.getType(), e.getData());
                 }
             }
             e_list.add(e_copy);
         }
-
         updateTable(table_content);
 
     }
@@ -891,6 +931,28 @@ public abstract class ATableController {
         //updateTable(null);
     }
 
+
+    /**
+     * This method returns all samples names.
+     *
+     * @return
+     * @param data
+     */
+    public String[] getSampleNames(ObservableList<ObservableList> data) {
+
+        String[] ids = new String[getSelectedRows().size()];
+
+        ObservableList<ObservableList> selection = data;
+        int index_id = getColIndex("ID");
+
+        int i = 0;
+        for(ObservableList row : selection){
+            ids[i] = (String) row.get(index_id);
+            i++;
+        }
+
+        return ids;
+    }
 
 
     public void addRowListener(Label infolabel){
@@ -908,8 +970,7 @@ public abstract class ATableController {
                         table.getItems().size() +  " rows are selected");
             }
         });
-
-
     }
+
 }
 

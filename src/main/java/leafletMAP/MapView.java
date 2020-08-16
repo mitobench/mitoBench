@@ -71,10 +71,13 @@ public class MapView extends StackPane {
             // from here we just use the Leaflet API to show some stuff on the map
             map.setView(new LatLng(47.628304, -5.198158), 3);
             map.addLayer(new TileLayer(
-                    "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", //"http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
+                    "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}.png", //"http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png
                     new TileLayerOptions().setMaxZoom(18)
             ));
 
+            // https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}
+            // https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}
+            // https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}
             addMarker();
 
 
@@ -98,9 +101,10 @@ public class MapView extends StackPane {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
                 String latitude  = latitude_col.getCellObservableValue(item).getValue().toString();
                 String longitude  = longitude_col.getCellObservableValue(item).getValue().toString();
+                String ancient_modern = tableController.getTableColumnByName("Modern/Ancient Data").getCellObservableValue(item).getValue().toString();
 
                 if(!latitude.equals("") && !longitude.equals("") ){
-                    marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude)));
+                    marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern));
                 }
             }
         }

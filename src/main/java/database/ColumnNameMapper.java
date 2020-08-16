@@ -11,7 +11,7 @@ public class ColumnNameMapper {
 
     public String mapString(String colNameDB){
 
-        switch(colNameDB){
+        switch(colNameDB.trim()){
             case "accession_id":
                 return "ID";
             case "mt_sequence":
@@ -24,12 +24,14 @@ public class ColumnNameMapper {
                 return "Submitter surname";
             case "user_affiliation":
                 return "Submitter affiliation";
+            case "user_alias":
+                return "Submitter Alias";
             case "haplogroup_originally_published":
                 return "Haplogroup (original)";
             case "data_type":
                 return "Data Type";
             case "labsample_id":
-                return "Labsample Ident";
+                return "Labsample ID";
             case "sex":
                 return "Sex";
             case "age":
@@ -91,7 +93,7 @@ public class ColumnNameMapper {
             case "tissue_sampled":
                 return "Tissue Sampled";
             case "sampling_date":
-                return "Sampling Date";
+                return "Date of Sampling";
             case "sequencing_platform":
                 return "Sequencing Platform";
             case "enrichment_method":
@@ -106,14 +108,12 @@ public class ColumnNameMapper {
                 return "Coverage (mean)";
             case "std_dev_coverage":
                 return "Coverage (SD)";
-            case "calibrated_date_range_from":
-                return "Calibrated Date lower limit";
-            case "calibrated_date_range_to":
-                return "Calibrated Date upper limit";
-            case "c14_age_bp":
-                return "C14 Radiocarbon Date";
-            case "indirect_contextual_date":
-                return "Indirect contextual Date";
+            case "indirect_date":
+                return "Indirect dating";
+            case "ci_calibrated_radiocarbon_age":
+                return "CI Calibrated Radiocarbon Age";
+            case "conventional_radiocarbon_age":
+                return "Conventional Radiocarbon Age";
             case "radiocarbon_lab_code":
                 return "Lab code of radiocarbon dating";
             case "dating_comments":
@@ -133,7 +133,7 @@ public class ColumnNameMapper {
             case "sampling_subregion":
                 return "Sampling Subregion";
             case "sampling_intermediate_region":
-                return "Sampling Intermediate region";
+                return "Sampling Intermediate Region";
             case "sampling_country":
                 return "Sampling Country";
             case "sampling_city":
@@ -147,7 +147,7 @@ public class ColumnNameMapper {
             case "sample_origin_subregion":
                 return "Sample Subregion";
             case "sample_origin_intermediate_region":
-                return "Sample Intermediate region";
+                return "Sample Intermediate Region";
             case "sample_origin_country":
                 return "Sample Country";
             case "sample_origin_city":
@@ -162,8 +162,6 @@ public class ColumnNameMapper {
                 return "Macro Haplogroup";
             case "percentage_n":
                 return "Percentage of N";
-            case "completeness":
-                return "Completeness";
             case "sequence_versions":
                 return "Sequence versions";
             case "comments_sequence_version":
@@ -172,6 +170,199 @@ public class ColumnNameMapper {
                 return "General comments";
             case "meta_info_id":
                 return "mitoBenchID";
+            case "ancient_modern":
+                return "Modern/Ancient Data";
+            case "epoch":
+                return "Epoch";
+            case "archaeological_culture":
+                return "Archaeological Culture";
+            case "mixEMT":
+                return "mixEMT";
+            case "proportion_of_contamination_DNA":
+                return "Proportion of contamination DNA (contamMix)";
+            case "mode_of_read_length":
+                return "Mode of read length";
+            case "number_of_reads":
+                return "Number of reads";
+            case "sites_more_than_5-fold_coverage":
+                return "Sites >= 5-fold coverage";
+
+
+
+            // and the other way around -------------------------------------
+            case "ID":
+                return "accession_id";
+            case "MTSequence":
+                return "mt_sequence";
+            case "Submitter Email":
+                return "user_email";
+            case "Submitter firstname":
+                return "user_firstname";
+            case "Submitter surname":
+                return "user_surname";
+            case "Submitter affiliation":
+                return "user_affiliation";
+            case "Submitter Alias":
+                return "user_alias";
+            case "Haplogroup (original)":
+                return "haplogroup_originally_published";
+            case "Data Type":
+                return "data_type";
+            case "Labsample ID":
+                return "labsample_id";
+            case "Sex":
+                return "sex";
+            case "Age":
+                return "age";
+            case "Population Purpose":
+                return "population_purpose";
+            case "Access":
+                return "access";
+            case "Language":
+                return "language";
+            case "Generations to TMA":
+                return "generations_to_tma";
+            case "TMA inferred Latitude":
+                return "geographic_info_tma_inferred_latitude";
+            case "TMA inferred Longitude":
+                return "geographic_info_tma_inferred_longitude";
+            case "TMA inferred Continent":
+                return "geographic_info_tma_inferred_region";
+            case "TMA inferred Subregion":
+                return "geographic_info_tma_inferred_subregion";
+            case "TMA inferred Intermediate Region":
+                return "geographic_info_tma_inferred_intermediate_region";
+            case "TMA inferred City":
+                return "geographic_info_tma_inferred_city";
+            case "TMA inferred Country":
+                return "geographic_info_tma_inferred_country";
+            case "Marriage Rules":
+                return "marriage_rules";
+            case "Marriage System":
+                return "marriage_system";
+            case "Descent System":
+                return "descent_system";
+            case "Residence System":
+                return "residence_system";
+            case "Subsistence":
+                return "subsistence";
+            case "Clan":
+                return "clan";
+            case "Ethnicity":
+                return "ethnicity";
+            case "Population":
+                return "population";
+            case "DOI":
+                return "doi";
+            case "Author":
+                return "author";
+            case "Publication Date":
+                return "publication_date";
+            case "Journal":
+                return "journal";
+            case "Publication Title":
+                return "title";
+            case "Publication Type":
+                return "publication_type";
+            case "Publication Status":
+                return "publication_status";
+            case "Publication Comments":
+                return "publication_comments";
+            case "Tissue Sampled":
+                return "tissue_sampled";
+            case "Date of Sampling":
+                return "sampling_date";
+            case "Sequencing Platform":
+                return "sequencing_platform";
+            case "Enrichment Method":
+                return "enrichment_method";
+            case "Extraction Protocol":
+                return "extraction_protocol";
+            case "Coverage (Min. depth)":
+                return "minimum_coverage";
+            case "Coverage (Max. depth)":
+                return "maximum_coverage";
+            case "Coverage (mean)":
+                return "mean_coverage";
+            case "Coverage (SD)":
+                return "std_dev_coverage";
+            case "Indirect dating":
+                return "indirect_date";
+            case "CI Calibrated Radiocarbon Age":
+                return "ci_calibrated_radiocarbon_age";
+            case "Conventional Radiocarbon Age":
+                return "conventional_radiocarbon_age";
+            case "Lab code of radiocarbon dating":
+                return "radiocarbon_lab_code";
+            case "Dating comments":
+                return "dating_comments";
+            case "Reference Genome":
+                return "reference_genome";
+            case "Starting position":
+                return "starting_np";
+            case "Ending position":
+                return "ending_np";
+            case "Sampling Latitude":
+                return "sampling_latitude";
+            case "Sampling Longitude":
+                return "sampling_longitude";
+            case "Sampling Continent":
+                return "sampling_region";
+            case "Sampling Subregion":
+                return "sampling_subregion";
+            case "Sampling Intermediate Region":
+                return "sampling_intermediate_region";
+            case "Sampling Country":
+                return "sampling_country";
+            case "Sampling City":
+                return "sampling_city";
+            case "Sample Latitude":
+                return "sample_origin_latitude";
+            case "Sample Longitude":
+                return "sample_origin_longitude";
+            case "Sample Continent":
+                return "sample_origin_region";
+            case "Sample Subregion":
+                return "sample_origin_subregion";
+            case "Sample Intermediate Region":
+                return "sample_origin_intermediate_region";
+            case "Sample Country":
+                return "sample_origin_country";
+            case "Sample City":
+                return "sample_origin_city";
+            case "Haplotype":
+                return "haplotype_current_versions";
+            case "Haplotype Quality":
+                return "quality_haplotype_current_version";
+            case "Haplogroup":
+                return "haplogroup_current_versions";
+            case "Macro Haplogroup":
+                return "macro_haplogroup";
+            case "Percentage of N":
+                return "percentage_n";
+            case "Sequence versions":
+                return "sequence_versions";
+            case "Sequence version comments":
+                return "comments_sequence_version";
+            case "General comments":
+                return "comments";
+            case "mitoBenchID":
+                return "meta_info_id";
+            case "Modern/Ancient Data":
+                return "ancient_modern";
+            case "Epoch":
+                return "epoch";
+            case "Archaeological Culture":
+                return "archaeological_culture";
+            case "Proportion of contamination DNA (contamMix)":
+                return "proportion_of_contamination_DNA";
+            case "Mode of read length":
+                return "mode_of_read_length";
+            case "Number of reads":
+                return "number_of_reads";
+            case "Sites >= 5-fold coverage":
+                return "sites_more_than_5-fold_coverage";
+
 
         }
 

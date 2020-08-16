@@ -11,6 +11,7 @@ import model.Group;
 import net.java.html.leaflet.*;
 import controller.TableControllerUserBench;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,16 +73,39 @@ public class MarkerIcons {
      * @param map
      */
     private void addMarkerOneColor(ObservableList items, Map map) {
+
         for(Object location : items){
             Location loc = (Location) location;
             LatLng pos = new LatLng(loc.getLat(), loc.getLng());
 
-            PathOptions pathOpt = new PathOptions().setColor("BLUE");
-            CircleMarker m = new CircleMarker(pos,  pathOpt);
-            Popup popup = new Popup();
-            popup.setContent(location.toString());
-            m.bindPopup(popup);
-            m.addTo(map);
+            // ancient marker
+            MarkerOptions markerOptions_ancient = new MarkerOptions().setTitle("Ancient");
+            URL pathToIcon_ancient = this.getClass().getResource("/icons/skull_filled.png");
+            IconOptions iconOptions_ancient = new IconOptions(pathToIcon_ancient.toExternalForm());
+            iconOptions_ancient.setIconSize(new Point(30,30));
+            Icon icon_ancient = new Icon(iconOptions_ancient);
+
+
+            // modern marker
+            PathOptions pathOpt_modern = new PathOptions().setColor("BLUE");
+            CircleMarker m_circle_modern = new CircleMarker(pos,  pathOpt_modern);
+
+            if (((Location) location).getProperty().equals("ancient")){
+                Popup popup = new Popup();
+                popup.setContent(location.toString());
+
+                Marker marker_ancient = new Marker(pos, markerOptions_ancient);
+                marker_ancient.setIcon(icon_ancient);
+                marker_ancient.bindPopup(popup);
+                marker_ancient.addTo(map);
+
+            } else{
+                Popup popup = new Popup();
+                popup.setContent(location.toString());
+                m_circle_modern.bindPopup(popup);
+                m_circle_modern.addTo(map);
+
+            }
         }
     }
 

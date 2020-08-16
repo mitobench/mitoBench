@@ -31,6 +31,7 @@ import controller.TableControllerUserBench;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -189,6 +190,8 @@ public class VisualizationMenu {
                 String[] selection_groups;
                 String[] selection_haplogroups;
 
+
+
                 if(!tableController.getGroupController().groupingExists()) {
                     String[][] cols = chartController.prepareColumnsAsList(new String[]{"Haplogroup"}, tableController.getSelectedRows());
                     selection_haplogroups = cols[0];
@@ -198,67 +201,76 @@ public class VisualizationMenu {
                     selection_haplogroups = cols[0];
                     selection_groups = cols[1];
                 }
+                if(selection_haplogroups.length != 0){
 
+                    SettingsDialogueStackedBarchart advancedStackedBarchartDialogue =
+                            new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups,
+                                    logClass);
+                    advancedStackedBarchartDialogue.init(mito);
 
-                SettingsDialogueStackedBarchart advancedStackedBarchartDialogue =
-                        new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups,
-                                logClass);
-                advancedStackedBarchartDialogue.init(mito);
+                    // add dialog to statsTabPane
+                    Tab tab = advancedStackedBarchartDialogue.getTab();
+                    mito.getTabpane_visualization().getTabs().add(tab);
+                    mito.getTabpane_visualization().getSelectionModel().select(tab);
 
-                // add dialog to statsTabPane
-                Tab tab = advancedStackedBarchartDialogue.getTab();
-                mito.getTabpane_visualization().getTabs().add(tab);
-                mito.getTabpane_visualization().getSelectionModel().select(tab);
+                    advancedStackedBarchartDialogue.getOkBtn().setOnAction(e -> {
 
-                advancedStackedBarchartDialogue.getOkBtn().setOnAction(e -> {
+                        visualizationController.initStackedBarchart(this);
 
-                    visualizationController.initStackedBarchart(this);
+                        stackedBar = visualizationController.getStackedBar();
+                        advancedStackedBarchartDialogue.calculateTrimmedHGList();
+                        chartController.addDataStackedBarChart(
+                                stackedBar,
+                                selection_haplogroups,
+                                advancedStackedBarchartDialogue.getStackOrder(),
+                                advancedStackedBarchartDialogue.getHg_list_trimmed()
+                        );
 
+                        advancedStackedBarchartDialogue.calculateTrimmedHGList();
+                        String[] hg_list = advancedStackedBarchartDialogue.getHg_list_trimmed();
 
-                    stackedBar = visualizationController.getStackedBar();
-                    advancedStackedBarchartDialogue.calculateTrimmedHGList();
-                    chartController.addDataStackedBarChart(
-                            stackedBar,
-                            selection_haplogroups,
-                            advancedStackedBarchartDialogue.getStackOrder(),
-                            advancedStackedBarchartDialogue.getHg_list_trimmed()
-                    );
+                        stackedBar.setHg_user_selection(hg_list);
 
-                    advancedStackedBarchartDialogue.calculateTrimmedHGList();
-                    String[] hg_list = advancedStackedBarchartDialogue.getHg_list_trimmed();
+                        stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
-                    stackedBar.setHg_user_selection(hg_list);
+                        // add settings
 
-                    stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+                        stackedBar.addTooltip();
+                        colorScheme = null;
+                        try {
+                            colorScheme = new ColorSchemeStackedBarChart(stage);
+                        } catch (MalformedURLException e1) {
+                            e1.printStackTrace();
+                        }
 
-                    // add settings
+                        if(selection_haplogroups.length > 20){
+                            colorScheme.setNewColors(stackedBar);
+                            stackedBar.addListener();
+                        } else {
+                            colorScheme.setNewColorsLess20(stackedBar);
+                            stackedBar.addListener();
+                        }
 
-                    stackedBar.addTooltip();
-                    colorScheme = null;
-                    try {
-                        colorScheme = new ColorSchemeStackedBarChart(stage);
-                    } catch (MalformedURLException e1) {
-                        e1.printStackTrace();
+                        //advancedStackedBarchartDialogue.close();
+                        // remove tab from tabpane
+                        mito.getTabpane_visualization().getTabs().remove(tab);
+                    });
+
+                } else {
+                    InformationDialogue groupingWarningDialogue = new InformationDialogue(
+                            "No haplogroups",
+                            "Please determine haplogroups first.",
+                            null,
+                            "hgWarning");
                     }
 
-                    if(selection_haplogroups.length > 20){
-                        colorScheme.setNewColors(stackedBar);
-                        stackedBar.addListener();
-                    } else {
-                        colorScheme.setNewColorsLess20(stackedBar);
-                        stackedBar.addListener();
-                    }
 
-                    //advancedStackedBarchartDialogue.close();
-                    // remove tab from tabpane
-                    mito.getTabpane_visualization().getTabs().remove(tab);
-                });
             } else {
                 InformationDialogue groupingWarningDialogue = new InformationDialogue(
-                        "No groups defined",
-                        "Please define a grouping first.",
+                        "Empty Table",
+                        "Please add data first.",
                         null,
-                        "groupWarning");
+                        "dataWarning");
             }
         });
 
@@ -292,7 +304,7 @@ public class VisualizationMenu {
                         visualizationController.initProfilePlot();
                         profilePlot = visualizationController.getProfilePlot();
                         hGlistProfilePlot.calculateTrimmedHGList();
-                        profilePlot.create(tableController, treeController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHg_list_trimmed());
+                        profilePlot.create(tableController, chartController, logClass, statsTabpane, hGlistProfilePlot.getHg_list_trimmed());
 
                         // remove tab from tabpane
                         mito.getTabpane_visualization().getTabs().remove(tab);
@@ -359,7 +371,7 @@ public class VisualizationMenu {
                             String[] selection_groups = cols[1];
 
 
-                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
+                            HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups),
                                     hg_list_trimmed);
                             HashMap<String, List<XYChart.Data<String, Number>>> data_all =
                                     chartController.assignHGs(hgs_summed, selection_haplogroups, selection_groups);
@@ -394,7 +406,7 @@ public class VisualizationMenu {
                                         tableController.getSelectedRows());
                                 String[] selection_haplogroups = cols[0];
 
-                                HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups,
+                                HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups),
                                         hg_list_trimmed);
 
 
@@ -468,7 +480,7 @@ public class VisualizationMenu {
 
                             try {
                                 sampleTree.start(svgfile);
-                                sampleTree.getViz().render(Format.SVG).toFile(new File(svgfile));
+                                //sampleTree.getViz().render(Format.SVG).toFile(new File(svgfile));
                                 mito.getTabpane_visualization().getTabs().remove(sampleTree_tab);
                             } catch (IOException ex) {
                                 ex.printStackTrace();

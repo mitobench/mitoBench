@@ -8,16 +8,18 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import io.datastructure.Entry;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class DatabaseQueryHandler {
 
     private JsonDataParser jsonDataParser = new JsonDataParser();
-
+    private int number_of_samples;
+    private int number_of_publications;
+    private int number_of_countries_covered;
+    private int number_of_continents_covered;
+    private int number_of_ancient_samples;
+    private int number_of_modern_samples;
 
     /**
      * add all data from database to mitoBench.
@@ -57,15 +59,17 @@ public class DatabaseQueryHandler {
     }
 
 
-    public Set<String> getAuthorList(){
+    /**
+     * @return
+     */
+    public Set<String> getAuthorList() {
         Set<String> result = new HashSet<>();
 
         try {
             String query_complete = "http://mitodb.org/meta?select=author,publication_date";
             HttpResponse<JsonNode> response_authors = Unirest.get(query_complete).asJson();
 
-
-            for (int i = 0; i < response_authors.getBody().getArray().length(); i++){
+            for (int i = 0; i < response_authors.getBody().getArray().length(); i++) {
                 JSONObject map = (JSONObject) response_authors.getBody().getArray().get(i);
                 String author = (String) map.get("author");
                 String year = map.get("publication_date") + "";
@@ -80,26 +84,29 @@ public class DatabaseQueryHandler {
     }
 
 
-    public Set<String> getPopulationList(){
+
+    /**
+     * @return
+     */
+    public Set<String> getColumnSet(String column) {
         Set<String> result = new HashSet<>();
 
         try {
-            String query_complete = "http://mitodb.org/meta?select=population";
-            HttpResponse<JsonNode> response_population = Unirest.get(query_complete).asJson();
+            String query_complete = "http://mitodb.org/meta?select="+column;
 
+            HttpResponse<JsonNode> response_column = Unirest.get(query_complete).asJson();
 
-            for (int i = 0; i < response_population.getBody().getArray().length(); i++){
-                JSONObject map = (JSONObject) response_population.getBody().getArray().get(i);
+            for (int i = 0; i < response_column.getBody().getArray().length(); i++) {
+                JSONObject map = (JSONObject) response_column.getBody().getArray().get(i);
 
                 try {
-                    String population = (String) map.get("population");
-                    result.add(population.trim());
-                } catch (Exception e){
+                    String countries = (String) map.get(column);
+                    result.add(countries.trim());
+                } catch (Exception e) {
                     continue;
                 }
-
-
             }
+
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -110,6 +117,40 @@ public class DatabaseQueryHandler {
 
 
 
+    /**
+     * @return
+     */
+    public List<String> getModernAndAncient() {
+        List<String> result = new ArrayList<>();
+
+        try {
+            String query_complete = "http://mitodb.org/meta?select=ancient_modern";
+
+            HttpResponse<JsonNode> response_column = Unirest.get(query_complete).asJson();
+
+            for (int i = 0; i < response_column.getBody().getArray().length(); i++) {
+                JSONObject map = (JSONObject) response_column.getBody().getArray().get(i);
+
+                try {
+                    String modern_entry = (String) map.get("ancient_modern");
+                    result.add(modern_entry.trim());
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    /**
+     * @param query
+     * @return
+     */
     public HashMap<String, List<Entry>> getDataSelection(String query) {
 
         try {
@@ -139,4 +180,61 @@ public class DatabaseQueryHandler {
         return null;
 
     }
+
+    public void calculateDBstats() {
+
+        number_of_samples = getColumnSet("accession_id").size();
+
+        if(number_of_samples == 0){
+            number_of_countries_covered=0;
+            number_of_continents_covered=0;
+            number_of_publications=0;
+            number_of_modern_samples=0;
+            number_of_ancient_samples=0;
+        } else {
+            Set<String> set_tmp = new HashSet<>();
+            set_tmp.addAll(getColumnSet("sample_origin_country"));
+            set_tmp.addAll(getColumnSet("sampling_country"));
+            number_of_countries_covered = set_tmp.size();
+
+            set_tmp.clear();
+            set_tmp.addAll(getColumnSet("sample_origin_region"));
+            set_tmp.addAll(getColumnSet("sampling_region"));
+
+            number_of_continents_covered = set_tmp.size();
+            number_of_publications = getAuthorList().size();
+
+            List<String> list_modern_ancient = getModernAndAncient();
+            number_of_modern_samples = Collections.frequency(list_modern_ancient, "modern");
+            number_of_ancient_samples = Collections.frequency(list_modern_ancient, "ancient");
+        }
+
+
+    }
+
+    public int getNumber_of_samples() {
+        return number_of_samples;
+    }
+
+    public int getNumber_of_publications() {
+        return number_of_publications;
+    }
+
+    public int getNumber_of_countries_covered() {
+        return number_of_countries_covered;
+    }
+
+    public int getNumber_of_continents() {
+        return number_of_continents_covered;
+    }
+
+    public int getNumber_of_modern_samples() {
+        return number_of_modern_samples;
+    }
+
+    public int getNumber_of_ancient_samples() {
+        return number_of_ancient_samples;
+    }
+
+
 }

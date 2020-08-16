@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import view.MitoBenchWindow;
 import view.dialogues.information.InformationDialogue;
+import view.dialogues.information.UnalignedSequencesDialogue;
 import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
 import view.dialogues.settings.PcaPopupDialogue;
@@ -53,10 +54,11 @@ public class AnalysisMenu {
                     mito.getTabpane_statistics().getTabs().add(fstSettingsDialogue.getTab());
                     mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
                 }  else {
-                    InformationDialogue informationDialogue_unaligned = new InformationDialogue("Warning: Unaligned sequences",
-                            "Please align you sequences first to proceed. mitoBench is not able to align you sequences, " +
-                                    "but you can export you data as multiFasta and align them with an alignment tool of your choice.",
-                            "Please align your sequences", "warning_unaligned");
+                    UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
+                            "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
+                                    "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",
+                            mito.getDialogueController());
+
                 }
             }
             else {

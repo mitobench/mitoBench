@@ -9,9 +9,4 @@ public class HGlistProfilePlot extends AHGDialogue {
         dialogGrid.setId("statistics_popup");
 
     }
-
-
-
-
-
 }

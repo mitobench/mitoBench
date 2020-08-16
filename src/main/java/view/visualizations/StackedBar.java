@@ -18,6 +18,7 @@ import view.menus.VisualizationMenu;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -182,7 +183,7 @@ public class StackedBar extends AChart{
 
         }
 
-        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(selection_haplogroups, hg_user_selection);
+        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups), hg_user_selection);
         List<String> sub_hgs = hgs_summed.get(hg);
 
         if(sub_hgs != null){

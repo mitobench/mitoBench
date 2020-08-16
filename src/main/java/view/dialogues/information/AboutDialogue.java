@@ -7,12 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by peltzer on 02/12/2016.
@@ -44,7 +45,7 @@ public class AboutDialogue {
         addComponents(message);
         addListener();
 
-        show(600,400);
+        //show(600,400);
     }
 
     private void addComponents(String message) {
@@ -58,7 +59,7 @@ public class AboutDialogue {
         String text = "MitoBench is a tool aimed at helping researchers to organize, \n" +
                 "visualize and maintain their mitochondrial data sets. Some functionality \n" +
                 "is aimed towards generating population genetics statistics with \n" +
-                "additional visualization";
+                "additional visualization.";
 
         dialogGrid.add(imageView,0,row,3,1);
         dialogGrid.add(new Separator(), 0, ++row, 3,1);
@@ -73,28 +74,13 @@ public class AboutDialogue {
 
     private void addListener() {
 
-        final WebView browser = new WebView();
-        final WebEngine webEngine = browser.getEngine();
-
-
-        link.setOnAction(e -> {
-            VBox vbox = new VBox();
-            Scene scene = new Scene(vbox);
-            Stage stage = new Stage();
-            stage.setTitle("mitoBench documentation");
-            stage.setWidth(570);
-            stage.setHeight(550);
-
-
-            webEngine.load("http://mitobench.readthedocs.io/en/latest/");
-
-            vbox.getChildren().addAll(browser);
-            VBox.setVgrow(browser, Priority.ALWAYS);
-            stage.setScene(scene);
-            stage.show();
-
-            dialog.close();
-        });
+        link.setOnAction(event -> new Thread(() -> {
+            try {
+                Desktop.getDesktop().browse(new URI("http://mitobench.readthedocs.io/en/latest/"));
+            } catch (IOException | URISyntaxException e1) {
+                e1.printStackTrace();
+            }
+        }).start());
 
     }
 
@@ -110,7 +96,7 @@ public class AboutDialogue {
     /**
      * This method displays dialogue.
      */
-    protected void show(int width, int height){
+    public void show(int width, int height){
         Scene dialogScene = new Scene(dialogGrid, width, height);
         dialog.setScene(dialogScene);
         dialog.show();
