@@ -76,13 +76,14 @@ public class MarkerIcons {
 
         for(Object location : items){
             Location loc = (Location) location;
+
             LatLng pos = new LatLng(loc.getLat(), loc.getLng());
 
             // ancient marker
             MarkerOptions markerOptions_ancient = new MarkerOptions().setTitle("Ancient");
-            URL pathToIcon_ancient = this.getClass().getResource("/icons/skull_filled.png");
+            URL pathToIcon_ancient = this.getClass().getResource("/icons/raute.png");
             IconOptions iconOptions_ancient = new IconOptions(pathToIcon_ancient.toExternalForm());
-            iconOptions_ancient.setIconSize(new Point(30,30));
+            iconOptions_ancient.setIconSize(new Point(15,15));
             Icon icon_ancient = new Icon(iconOptions_ancient);
 
 
@@ -93,7 +94,6 @@ public class MarkerIcons {
             if (((Location) location).getProperty().equals("ancient")){
                 Popup popup = new Popup();
                 popup.setContent(location.toString());
-
                 Marker marker_ancient = new Marker(pos, markerOptions_ancient);
                 marker_ancient.setIcon(icon_ancient);
                 marker_ancient.bindPopup(popup);

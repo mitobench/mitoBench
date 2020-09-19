@@ -67,6 +67,7 @@ public class GeographicalMapController {
                 longitude_col,
                 items,
                 id_col,
+                tableControllerUserBench.getTableColumnByName("Labsample ID"),
                 grouping_col,
                 geographicalMapViz.getMapBasicPane()
         );

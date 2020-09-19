@@ -237,4 +237,14 @@ public class DatabaseQueryHandler {
     }
 
 
+    public boolean connecting() {
+        try{
+            Unirest.get("http://mitodb.org/meta");
+            System.out.println("Connected with database");
+            return true;
+        } catch (Exception e){
+            System.err.println("Connection with database not possible. Please check your internet connection");
+            return false;
+        }
+    }
 }

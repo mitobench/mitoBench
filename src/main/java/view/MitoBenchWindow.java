@@ -30,7 +30,7 @@ import java.nio.file.Files;
  */
 public class MitoBenchWindow extends Application {
 
-    private final String MITOBENCH_VERSION = "1.8-beta";
+    private final String MITOBENCH_VERSION = "1.0";
 
     private BorderPane pane_root;
 
@@ -93,11 +93,11 @@ public class MitoBenchWindow extends Application {
 
         // set stage properties
         primaryStage = stage;
-        primaryStage.setTitle("mitoBench");
+        primaryStage.setTitle("mitoBench v" + getMITOBENCH_VERSION());
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
-        primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/logo/mitoBenchLogo.jpg")));
 
         // init database and menu controller
         databaseQueryHandler = new DatabaseQueryHandler();

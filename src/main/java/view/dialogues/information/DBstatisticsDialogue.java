@@ -43,13 +43,16 @@ public class DBstatisticsDialogue{
         header.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
         header.setFill(Color.BLACK);
 
-        databaseQueryHandler.calculateDBstats();
+        if(connectionPossible())
+            databaseQueryHandler.calculateDBstats();
         addComponents(mitobench_version);
         addListener();
 
     }
 
-
+    private boolean connectionPossible() {
+        return databaseQueryHandler.connecting();
+    }
 
 
     private void addComponents(String mitobench_version) {

@@ -5,7 +5,12 @@ import analysis.HaplotypeCaller;
 import controller.*;
 import guru.nidi.graphviz.engine.Format;
 import io.dialogues.Export.SaveAsDialogue;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,8 +21,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.MitoBenchWindow;
@@ -461,10 +471,15 @@ public class VisualizationMenu {
                         Tab sampleTree_tab = new Tab("Sample tree");
 
                         sampleTree = new SampleTree("","", mito.getLogClass());
+                        try {
+                            sampleTree.showGraph();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         // read graphviz file
                         BorderPane tab_content = new BorderPane();
-                        HBox bottom_content = new HBox();
+                        VBox bottom_content = new VBox();
                         bottom_content.setPadding(new Insets(10,10,10,10));
 
                         Button save_as_svg = new Button("Save as SVG");
@@ -489,8 +504,34 @@ public class VisualizationMenu {
                         });
 
                         ScrollPane scrollPane_samples_tree = new ScrollPane();
+                        ImageView imageView = new ImageView();
+                        WritableImage image = SwingFXUtils.toFXImage(sampleTree.getTree(), null);
+                        imageView.setImage(image);
+                        imageView.setPreserveRatio(true);
+                        ScrollPane scrollPane_image = new ScrollPane();
+                        DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
+                        zoomProperty.addListener(new InvalidationListener() {
+                            @Override
+                            public void invalidated(Observable arg0) {
+                                imageView.setFitWidth(zoomProperty.get() * 4);
+                                imageView.setFitHeight(zoomProperty.get() * 3);
+                            }
+                        });
 
-                        bottom_content.getChildren().addAll(save_as_svg);
+                        scrollPane_image.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
+                            @Override
+                            public void handle(ScrollEvent event) {
+                                if (event.getDeltaY() > 0) {
+                                    zoomProperty.set(zoomProperty.get() * 1.1);
+                                } else if (event.getDeltaY() < 0) {
+                                    zoomProperty.set(zoomProperty.get() / 1.1);
+                                }
+                            }
+                        });
+                        scrollPane_image.setContent(imageView);
+
+
+                        bottom_content.getChildren().addAll(save_as_svg, scrollPane_image);
                         scrollPane_samples_tree.setContent(bottom_content);
 
                         // set contents

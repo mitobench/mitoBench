@@ -35,18 +35,20 @@ public class MapView extends StackPane {
     private final BorderPane mapBasicPane;
     private final TableColumn latitude_col;
     private final TableColumn longitude_col;
+    private final TableColumn labID_col;
     private Map map;
     private GroupController groupController;
 
     public MapView(GroupController groupController, TableControllerUserBench tc, TableColumn sampling_latitude_col,
                    TableColumn sampling_longitude_col, ObservableList items,
-                   TableColumn id_col, TableColumn grouping_col, BorderPane mapBasicPane) {
+                   TableColumn id_col, TableColumn labID_col, TableColumn grouping_col, BorderPane mapBasicPane) {
 
         this.tableController = tc;
         this.groupController = groupController;
         this.latitude_col = sampling_latitude_col;
         this.longitude_col = sampling_longitude_col;
         this.id_col = id_col;
+        this.labID_col = labID_col;
         this.items = items;
         this.grouping_col = grouping_col;
         this.mapBasicPane = mapBasicPane;
@@ -99,12 +101,17 @@ public class MapView extends StackPane {
 
             for (Object item : items) {
                 String id = id_col.getCellObservableValue(item).getValue().toString();
+                String labID = labID_col.getCellObservableValue(item).getValue().toString();
                 String latitude  = latitude_col.getCellObservableValue(item).getValue().toString();
                 String longitude  = longitude_col.getCellObservableValue(item).getValue().toString();
                 String ancient_modern = tableController.getTableColumnByName("Modern/Ancient Data").getCellObservableValue(item).getValue().toString();
 
                 if(!latitude.equals("") && !longitude.equals("") ){
-                    marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern));
+                    if(labID==null){
+                        marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern));
+                    } else {
+                        marker_all.add(new Location(id + "_" + labID, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern));
+                    }
                 }
             }
         }

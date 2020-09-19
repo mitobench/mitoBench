@@ -93,18 +93,18 @@ public class FileReaderController {
                     e.printStackTrace();
                 }
             }
-
-            if (absolutePath.endsWith(".csv")) {
-                try {
-                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, ",", message_duplications);
-                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-                    //message_duplications = genericInputParser.getList_duplicates();
-                    table_list_duplications = genericInputParser.getList_duplicates();
-                    tableControllerUserBench.updateTable(data_map);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+//
+//            if (absolutePath.endsWith(".csv")) {
+//                try {
+//                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, ",", message_duplications);
+//                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
+//                    //message_duplications = genericInputParser.getList_duplicates();
+//                    table_list_duplications = genericInputParser.getList_duplicates();
+//                    tableControllerUserBench.updateTable(data_map);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
             //Input is Excel Format
 
@@ -152,7 +152,7 @@ public class FileReaderController {
 
             }
 
-            if(table_list_duplications.size()>0){
+            if(table_list_duplications!= null && table_list_duplications.size()>0){
                 DuplicatesDialogue duplicatesErrorDialogue = new DuplicatesDialogue(table_list_duplications,  logClass, mito.getTableControllerDB());
             }
 

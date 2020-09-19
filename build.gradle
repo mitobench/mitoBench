@@ -59,7 +59,7 @@ dependencies {
     compile group: 'com.github.haifengl', name: 'smile-plot', version: '1.3.1'
     compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
     compile group: 'org.javafxdata', name: 'datafx-flow', version: '8.0b5'
-    compile group: 'guru.nidi', name: 'graphviz-java', version: '0.8.10'
+    compile group: 'guru.nidi', name: 'graphviz-java', version: '0.8.+'
     compile group: 'org.ojalgo', name: 'ojalgo', version: '47.2.0'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
     compile files('src/main/resources/jars/FstCalculator-0.1.21.jar')
