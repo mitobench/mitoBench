@@ -1,5 +1,6 @@
 package view.dialogues.information;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import database.DatabaseQueryHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;

@@ -89,7 +89,7 @@ public class Validator {
     public boolean validate(String data_template, List<String> fastaheaders, String log_sequence_corretness, String mt_sequences_filepath, int size) {
         BufferedReader br = null;
         String line;
-        String delimiter = ",";
+        String delimiter = "\t";
         HashMap<String, Integer> attribute_index_map = new HashMap<>();
         count_sequences=fastaheaders.size();
 

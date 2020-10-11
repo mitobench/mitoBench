@@ -28,10 +28,8 @@ public class MetaInfoReader {
 
     public void read(){
         BufferedReader br;
-        String delimiter = ",";
+        String delimiter = "\t";
         String line;
-
-
 
         try {
             br = new BufferedReader(new FileReader(filepath));
@@ -44,7 +42,7 @@ public class MetaInfoReader {
 
                 } else if (line.startsWith("#")){
                     types = line;
-                    types_list = line.split(",");
+                    types_list = line.split(delimiter);
 
                 } else {
                     entry_list.add(line);

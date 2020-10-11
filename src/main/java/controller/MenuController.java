@@ -150,7 +150,7 @@ public class MenuController {
                         GenericInputParser genericInputParser = new GenericInputParser(
                                 dataCompleter.getOutfile(),
                                 this.log.getLogger(this.getClass()),
-                                ",",
+                                "\t",
                                 null);
                         tablecontroller.updateTable(genericInputParser.getCorrespondingData());
                         InformationDialogue informationDialogue = new InformationDialogue("Data completion", "Data validation finished.\nData completion finished.", "", "");
@@ -172,8 +172,8 @@ public class MenuController {
     private void deleteTmpFiles() {
 
         try {
-            if (Files.exists(new File("tmp_meta_data_toValidate.csv").toPath()))
-                Files.delete(new File("tmp_meta_data_toValidate.csv").toPath());
+            if (Files.exists(new File("tmp_meta_data_toValidate.tsv").toPath()))
+                Files.delete(new File("tmp_meta_data_toValidate.tsv").toPath());
 
             if (Files.exists(new File("tmp_fasta_toValidate.fasta").toPath()))
                 Files.delete(new File("tmp_fasta_toValidate.fasta").toPath());
@@ -210,9 +210,9 @@ public class MenuController {
             e.printStackTrace();
         }
 
-        GenericWriter metaWriter = new GenericWriter(tablecontroller.getSelectedRows(),",", false);
+        GenericWriter metaWriter = new GenericWriter(tablecontroller.getSelectedRows(),"\t", false);
         try {
-            metaWriter.writeData("tmp_meta_data_toValidate.csv", tablecontroller);
+            metaWriter.writeData("tmp_meta_data_toValidate.tsv", tablecontroller);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -221,7 +221,7 @@ public class MenuController {
         // get fasta headers
         fasta_headers = new ArrayList<>();
         fasta_headers.addAll(tablecontroller.getDataTable().getMtStorage().getData().keySet());
-        file_meta="tmp_meta_data_toValidate.csv";
+        file_meta="tmp_meta_data_toValidate.tsv";
 
         log_validation="";
         result_validation = "";
@@ -232,7 +232,6 @@ public class MenuController {
         System.out.println("running validation");
         try{
             validator.validate(file_meta, fasta_headers, log_validation, file_fasta, mito.getTableControllerUserBench().getTable().getItems().size());
-            System.out.println();
         } catch (ArrayIndexOutOfBoundsException e){
             log_validation += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();
         }
@@ -245,7 +244,6 @@ public class MenuController {
             result_validation = "Data upload not possible. Please check the report below.";
             //log_validation += validator.getLogfileTxt();
         }
-
     }
 
 

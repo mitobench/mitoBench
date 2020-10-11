@@ -91,7 +91,7 @@ public class LocationCompleter {
                         "COG," +
                         "COD," +
                         "GNQ," +
-                        "GAB" +
+                        "GAB," +
                         "STP", "Sub-Saharan Africa", "Middle Africa", "Africa"},
                 new String[]{"BWA," +
                         "SWZ," +
@@ -586,16 +586,20 @@ public class LocationCompleter {
     }
 
     private String convertCountryNameToIsoCode(String countryName){
+        if(countryName.equals("United Republic of Tanzania"))
+            System.out.println();
 
         String[] countryCodes = Locale.getISOCountries();
         for (String countryCode : countryCodes){
 
             Locale locale = new Locale("", countryCode);
+            if(countryCode.equals("TZ"))
+                System.out.println();
             String iso = locale.getISO3Country();
             String code = locale.getCountry();
             String name = locale.getDisplayCountry();
 
-            if(name.equals(countryName)){
+            if(name.toLowerCase().equals(countryName.toLowerCase())){
                 return iso;
             }
         }

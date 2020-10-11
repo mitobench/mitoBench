@@ -42,7 +42,7 @@ public class GenericInputParser implements IInputData {
         while ((currline = bfr.readLine()) != null) {
             //Parse header, two line header !!
             if (currline.startsWith("##")) {
-                headergroup = currline.replace("##","").split(delimiter, -1);
+                headergroup = currline.replace("##","").split(delimiter);
                 for(int i = 0; i < headergroup.length; i++){
                     String s = headergroup[i].replace("\t","");
                     if(s.contains("(Grouping)"))
@@ -53,9 +53,9 @@ public class GenericInputParser implements IInputData {
 
                 continue;
             } else if (currline.startsWith("#")) {
-                headertype = currline.replace("#","").split(delimiter, -1);
+                headertype = currline.replace("#","").split(delimiter);
                 for(String s : headertype){
-                    s.trim().replace("\t","");
+                    s.trim().replace(delimiter,"");
                 }
 
                 continue;

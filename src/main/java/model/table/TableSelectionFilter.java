@@ -53,8 +53,6 @@ public class TableSelectionFilter {
             throw new IllegalArgumentException("Column 'Haplogroup' does not exist.");
         }
 
-
-
     }
 
 }

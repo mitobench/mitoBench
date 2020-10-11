@@ -1,4 +1,4 @@
-package view.dialogues.settings;
+package view.table;
 
 import Logging.LogClass;
 import controller.ATableController;
@@ -12,8 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
+import view.dialogues.settings.APopupDialogue;
 
-public class CopyColumnDialogue extends APopupDialogue{
+public class CopyColumnDialogue extends APopupDialogue {
 
     private final TextField newColumnName;
     private ComboBox comboBox;

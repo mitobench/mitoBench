@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGlistProfilePlot;
 import view.dialogues.settings.PieChartSettingsDialogue;
+import view.dialogues.settings.SampleTreeTabPaneDialogue;
 import view.visualizations.*;
 import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
@@ -77,7 +78,6 @@ public class VisualizationMenu {
     private LogClass logClass;
 
     private static final int MIN_PIXELS = 10;
-    private SampleTree sampleTree;
 
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
@@ -116,7 +116,7 @@ public class VisualizationMenu {
         Menu haplo_graphics = new Menu("Haplogroups");
         haplo_graphics.setId("haplo_graphics");
 
-        Menu barchart = new Menu("Create Barchart...");
+        Menu barchart = new Menu("Barchart...");
         barchart.setId("barchart");
 
         Menu grouping_graphics = new Menu("Grouping");
@@ -293,7 +293,7 @@ public class VisualizationMenu {
 
          */
 
-        MenuItem profilePlotItem = new MenuItem("Create Profile Plot");
+        MenuItem profilePlotItem = new MenuItem("Profile Plot");
         profilePlotItem.setId("profilePlot");
         profilePlotItem.setOnAction(t -> {
             try {
@@ -350,7 +350,7 @@ public class VisualizationMenu {
 
        */
 
-        MenuItem pieChart = new MenuItem("Create Pie Chart");
+        MenuItem pieChart = new MenuItem("Pie Chart");
         pieChart.setId("piechart");
         pieChart.setOnAction(t -> {
             try {
@@ -441,114 +441,23 @@ public class VisualizationMenu {
         });
 
 
-
-
-        // Tree visualization of samples (according haplogrep2)
-        MenuItem samples_haplo_tree = new MenuItem("Create Sample Tree");
+        // Tree visualization of samples (using haplogrep2)
+        MenuItem samples_haplo_tree = new MenuItem("Graphical Phylogenetic Tree");
         samples_haplo_tree.setId("menuitem_sampletree");
         samples_haplo_tree.setOnAction(t -> {
             try {
                 if(tableController.getTable().getItems().size() != 0 ) {
 
-                    HaplotypeCaller haplotypeCaller = new HaplotypeCaller(tableController, logClass);
-                    Task task = new Task() {
-                        @Override
-                        protected Object call() throws Exception {
+                    // info tabpane
+                    SampleTreeTabPaneDialogue sampleTreeTabPaneDialogue = new SampleTreeTabPaneDialogue("Graphical Phylogenetic Tree", logClass);
+                    sampleTreeTabPaneDialogue.setMito(mito);
+                    sampleTreeTabPaneDialogue.setTableController(tableController);
+                    mito.getTabpane_statistics().getTabs().add(sampleTreeTabPaneDialogue.getTab());
+                    mito.getTabpane_statistics().getSelectionModel().select(sampleTreeTabPaneDialogue.getTab());
 
-                            haplotypeCaller.call("--lineage");
-                            return true;
-                        }
-                    };
-
-                    mito.getProgressBarhandler().activate(task);
-
-                    task.setOnCancelled((EventHandler<Event>) event -> {
-                        haplotypeCaller.deleteTmpFiles();
-                        mito.getProgressBarhandler().stop();
-                    });
-
-                    task.setOnSucceeded((EventHandler<Event>) event -> {
-                        Tab sampleTree_tab = new Tab("Sample tree");
-
-                        sampleTree = new SampleTree("","", mito.getLogClass());
-                        try {
-                            sampleTree.showGraph();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        // read graphviz file
-                        BorderPane tab_content = new BorderPane();
-                        VBox bottom_content = new VBox();
-                        bottom_content.setPadding(new Insets(10,10,10,10));
-
-                        Button save_as_svg = new Button("Save as SVG");
-                        save_as_svg.setOnAction(e -> {
-                            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("SVG format (*.svg)", "*.svg");
-                            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
-                            saveAsDialogue.start(mito.getPrimaryStage());
-
-                            String svgfile = saveAsDialogue.getOutFile();
-                            if(!svgfile.endsWith(".svg") && !svgfile.endsWith(".SVG"))
-                                svgfile += ".svg";
-
-
-                            try {
-                                sampleTree.start(svgfile);
-                                //sampleTree.getViz().render(Format.SVG).toFile(new File(svgfile));
-                                mito.getTabpane_visualization().getTabs().remove(sampleTree_tab);
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-
-                        });
-
-                        ScrollPane scrollPane_samples_tree = new ScrollPane();
-                        ImageView imageView = new ImageView();
-                        WritableImage image = SwingFXUtils.toFXImage(sampleTree.getTree(), null);
-                        imageView.setImage(image);
-                        imageView.setPreserveRatio(true);
-                        ScrollPane scrollPane_image = new ScrollPane();
-                        DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
-                        zoomProperty.addListener(new InvalidationListener() {
-                            @Override
-                            public void invalidated(Observable arg0) {
-                                imageView.setFitWidth(zoomProperty.get() * 4);
-                                imageView.setFitHeight(zoomProperty.get() * 3);
-                            }
-                        });
-
-                        scrollPane_image.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
-                            @Override
-                            public void handle(ScrollEvent event) {
-                                if (event.getDeltaY() > 0) {
-                                    zoomProperty.set(zoomProperty.get() * 1.1);
-                                } else if (event.getDeltaY() < 0) {
-                                    zoomProperty.set(zoomProperty.get() / 1.1);
-                                }
-                            }
-                        });
-                        scrollPane_image.setContent(imageView);
-
-
-                        bottom_content.getChildren().addAll(save_as_svg, scrollPane_image);
-                        scrollPane_samples_tree.setContent(bottom_content);
-
-                        // set contents
-                        tab_content.setCenter(scrollPane_samples_tree);
-                        tab_content.setBottom(bottom_content);
-                        sampleTree_tab.setContent(tab_content);
-                        mito.getTabpane_visualization().getTabs().add(sampleTree_tab);
-                        mito.getTabpane_visualization().getSelectionModel().select(sampleTree_tab);
-
-                        haplotypeCaller.deleteTmpFiles();
-                        mito.getProgressBarhandler().stop();
-
-                    });
-
-                    new Thread(task).start();
 
                 }
+
 
             } catch (Exception e) {
                 e.printStackTrace();

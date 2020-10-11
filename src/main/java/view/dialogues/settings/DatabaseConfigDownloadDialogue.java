@@ -16,7 +16,7 @@ import view.MitoBenchWindow;
 
 import java.util.*;
 
-public class SqlQueryBuilderWindow {
+public class DatabaseConfigDownloadDialogue {
 
 
     private final BorderPane root;
@@ -52,9 +52,10 @@ public class SqlQueryBuilderWindow {
     private Set<String> authors_entries;
     private ObservableList<String> continent_list;
     private Label label_authors;
+    private Tab sqlConfigTab;
 
 
-    public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
+    public DatabaseConfigDownloadDialogue(MitoBenchWindow mitoBenchWindow){
 
         databaseQueryHandler = mitoBenchWindow.getDatabaseQueryHandler();
         mito = mitoBenchWindow;
@@ -129,6 +130,9 @@ public class SqlQueryBuilderWindow {
         root.setTop(top);
         root.setCenter(center);
         root.setBottom(bottom);
+
+        sqlConfigTab = new Tab("DB search config");
+        sqlConfigTab.setContent(root);
 
     }
 
@@ -585,6 +589,7 @@ public class SqlQueryBuilderWindow {
             mito.setInfo_selected_items_text(mito.getTableControllerUserBench().getTable().getSelectionModel().getSelectedItems().size() + " / " +
                     mito.getTableControllerUserBench().getTable().getItems().size() +  " rows are selected");
             mito.getTableControllerDB().cleartable();
+            mito.getTabpane_statistics().getTabs().remove(sqlConfigTab);
         });
 
 
@@ -623,15 +628,15 @@ public class SqlQueryBuilderWindow {
 
     }
 
-    public BorderPane getPane() {
-        return root;
-    }
-
     public Button getBtn_importToMitoBench() {
         return btn_importToMitoBench;
     }
 
     public Label getLabel_no_data() {
         return label_no_data;
+    }
+
+    public Tab getSqlConfigTab() {
+        return sqlConfigTab;
     }
 }

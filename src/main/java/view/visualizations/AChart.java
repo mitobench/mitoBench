@@ -22,7 +22,7 @@ import java.net.URL;
  */
 public abstract class AChart extends Chart {
 
-    private final LogClass lc;
+    protected final LogClass lc;
     protected Node node;
 
     protected CategoryAxis xAxis = new CategoryAxis();

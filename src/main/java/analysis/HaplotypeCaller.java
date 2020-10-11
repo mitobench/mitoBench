@@ -40,10 +40,8 @@ public class HaplotypeCaller {
      *
      * @param lineage   Lineage parameter. Can be true or false (default = false). Creates dot file ('tree').
      */
-    public void call(String lineage) throws IOException {
+    public void call(String lineage, String outpath) throws IOException {
         String file = "multifasta.fasta";
-        //System.out.println("Writing fasta sequences to " + file);
-        //System.out.println(file);
 
         // generate fasta file with all sequences for which haplogroups have to be determined
         MultiFastaWriter multiFastaWriter = new MultiFastaWriter(this.mtStorage, tableController.getSelectedRows(), true);
@@ -55,7 +53,7 @@ public class HaplotypeCaller {
                 "classify",
                 "--format", "fasta",
                 "--in",file,
-                "--out", "haplogroups.hsd",
+                "--out", outpath + "haplogroups.hsd",
                 "--extend-report",
                 lineage};
 

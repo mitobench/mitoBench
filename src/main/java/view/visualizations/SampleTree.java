@@ -5,22 +5,20 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
+import org.apache.log4j.Logger;
 import view.dialogues.error.SampleTreeError;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class SampleTree  extends AChart {
-;
+public class SampleTree extends AChart {
+    private final Logger log;
     private Graphviz viz;
-    private BufferedImage tree;
 
     public SampleTree(String lable_xaxis, String label_yaxis, LogClass logClass) {
         super(lable_xaxis, label_yaxis, logClass);
 
-
-
+        log = lc.getLogger(this.getClass());
     }
 
 
@@ -29,40 +27,31 @@ public class SampleTree  extends AChart {
 
     }
 
-    public void showGraph() throws IOException {
-        String input = "haplogroups.hsd.dot";
-        System.out.println("Start reading/parsing dot file");
+    /**
+     * Generate visualization of tree (in dot format) using the Graphviz library.
+     * The tree is saved as svg file, together with the dot file.
+     *
+     * @param imgFile
+     * @param outfolder
+     * @throws IOException
+     */
+    public void start(String imgFile, String outfolder) throws IOException {
+
+        String input = outfolder + File.separator + "haplogroups.hsd.dot";
+        log.info("Start reading/parsing dot file");
         MutableGraph g = Parser.read(new File(input));
-        System.out.println("Start creating graph");
+        log.info("Start creating graph");
         viz = Graphviz.fromGraph(g);
-        System.out.println("Start rendering graph ");
-
-        tree = Graphviz.fromGraph(g).totalMemory(24000000).render(Format.PNG).toImage();
-    }
-
-    public void start(String imgFile) throws IOException {
-
-        String input = "haplogroups.hsd.dot";
-        System.out.println("Start reading/parsing dot file");
-        MutableGraph g = Parser.read(new File(input));
-        System.out.println("Start creating graph");
-        viz = Graphviz.fromGraph(g);
-        System.out.println("Start rendering graph ");
+        log.info("Start rendering graph ");
 
         try{
-            //tree = Graphviz.fromGraph(g).totalMemory(24000000).render(Format.PNG).toImage();
             viz.totalMemory(24000000).render(Format.SVG).toFile(new File(imgFile));
-            System.out.println("Finished rendering graph");
+            log.info("Finished rendering graph");
         } catch (Exception e){
             new SampleTreeError(
                     e,
                     "The svg cannot be created. Please use the dot file (" + System.getProperty("user.dir")
                     +"/haplogroups.hsd.dot) to visualize the tree with a tool of your choice");
-
         }
-    }
-
-    public BufferedImage getTree() {
-        return tree;
     }
 }

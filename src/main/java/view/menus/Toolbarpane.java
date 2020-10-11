@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import model.CancelButton;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGListDialogue;
-import view.dialogues.settings.SqlQueryBuilderWindow;
+import view.dialogues.settings.DatabaseConfigDownloadDialogue;
 
 
 public class Toolbarpane extends ToolBar {
@@ -124,11 +124,9 @@ public class Toolbarpane extends ToolBar {
 //        });
 
         loadFromDatabase.setOnAction(t -> {
-            SqlQueryBuilderWindow sqlQueryBuilderWindow = new SqlQueryBuilderWindow(mito);
-            Tab sqlConfigTab = new Tab("DB search config");
-            sqlConfigTab.setContent(sqlQueryBuilderWindow.getPane());
-            mito.getTabpane_statistics().getTabs().add(sqlConfigTab);
-            mito.getTabpane_statistics().getSelectionModel().select(sqlConfigTab);
+            DatabaseConfigDownloadDialogue sqlQueryBuilderWindow = new DatabaseConfigDownloadDialogue(mito);
+            mito.getTabpane_statistics().getTabs().add(sqlQueryBuilderWindow.getSqlConfigTab());
+            mito.getTabpane_statistics().getSelectionModel().select(sqlQueryBuilderWindow.getSqlConfigTab());
 
         });
 

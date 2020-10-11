@@ -7,6 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 import org.apache.log4j.Logger;
+import view.MitoBenchWindow;
 
 /**
  * Created by neukamm on 09.02.17.
@@ -44,9 +45,9 @@ public abstract class ATabpaneDialogue {
         return dialogGrid;
     }
     public Tab getTab() { return tab; }
-
     public Logger getLOG() {
         return LOG;
     }
+
 }
 

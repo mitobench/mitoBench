@@ -3,6 +3,7 @@ package view;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import analysis.ProgressBarHandler;
+import com.mashape.unirest.http.Unirest;
 import controller.*;
 import database.DatabaseQueryHandler;
 import javafx.application.Application;
@@ -198,17 +199,12 @@ public class MitoBenchWindow extends Application {
         fileMenu = new FileMenu( this);
         AnalysisMenu analysisMenu = new AnalysisMenu(this, statisticsMenu);
         ToolsMenu toolsMenu = new ToolsMenu(this, groupMenu, analysisMenu, statisticsMenu);
-        TableMenu tableMenu = new TableMenu(this);
         VisualizationMenu visualizationMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
                                   editMenu.getMenuEdit() ,
                                   toolsMenu.getMenuTools(),
-                                  //groupMenu.getMenuGroup(),
-                                  //analysisMenu.getMenuAnalysis(),
-                                  //statisticsMenu.getMenuTools(),
-                                  //tableMenu.getMenuTable(),
                                   visualizationMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 
@@ -315,6 +311,13 @@ public class MitoBenchWindow extends Application {
 
         primaryStage.setOnCloseRequest(we -> {
             we.consume();
+
+            // close UniRest
+            try {
+                Unirest.shutdown();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             // delete haplogrep files
             if (Files.exists(new File("haplogroups.hsd.dot").toPath())) {
                 try {

@@ -184,7 +184,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
                 e.printStackTrace();
             }
         }
-
     }
 
 

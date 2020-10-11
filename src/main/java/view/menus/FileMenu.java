@@ -4,7 +4,6 @@ package view.menus;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import controller.*;
-import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
@@ -21,7 +20,7 @@ import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import io.dialogues.Export.ExportDialogue;
 import view.dialogues.settings.NewProjectWarning;
-import view.dialogues.settings.SqlQueryBuilderWindow;
+import view.dialogues.settings.DatabaseConfigDownloadDialogue;
 
 import java.io.IOException;
 import java.util.*;
@@ -118,11 +117,9 @@ public class FileMenu {
         importFromDB.setId("importFromDB");
         // todo: make db query
         importFromDB.setOnAction(t -> {
-            SqlQueryBuilderWindow sqlQueryBuilderWindow = new SqlQueryBuilderWindow(mitoBenchWindow);
-            Tab sqlConfigTab = new Tab("DB search config");
-            sqlConfigTab.setContent(sqlQueryBuilderWindow.getPane());
-            mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlConfigTab);
-            mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlConfigTab);
+            DatabaseConfigDownloadDialogue sqlQueryBuilderWindow = new DatabaseConfigDownloadDialogue(mitoBenchWindow);
+            mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlQueryBuilderWindow.getSqlConfigTab());
+            mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlQueryBuilderWindow.getSqlConfigTab());
 
         });
 

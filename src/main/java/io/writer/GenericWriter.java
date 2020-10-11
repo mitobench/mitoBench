@@ -97,7 +97,7 @@ public class GenericWriter implements IOutputData {
                 }
             }
 
-            if(headertypes.endsWith(","))
+            if(headertypes.endsWith(delimiter))
                 headertypes = headertypes.substring(0, headertypes.length() - 1);
             text = "#" + headertypes + "\n";
             fileChannel.write(ByteBuffer.wrap(text.getBytes()));

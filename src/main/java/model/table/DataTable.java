@@ -14,7 +14,7 @@ import java.util.List;
 public class DataTable {
 
     // key = column name
-    // Array = view.data od this col     --> has to be array to ensure the order of the entries
+    // Array = data of this column --> has to be array to ensure the order of the entries
     HashMap<String, String[]> data;
     MTStorage mtStorage;
 
@@ -48,8 +48,6 @@ public class DataTable {
                 updateRow(rpos, input.get(key), key);
             }
         }
-
-
     }
 
     /**
@@ -215,5 +213,4 @@ public class DataTable {
             }
         }
     }
-
 }

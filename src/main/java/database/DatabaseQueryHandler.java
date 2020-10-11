@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import io.datastructure.Entry;
 import org.json.JSONObject;
 
@@ -238,12 +239,14 @@ public class DatabaseQueryHandler {
 
 
     public boolean connecting() {
-        try{
-            Unirest.get("http://mitodb.org/meta");
-            System.out.println("Connected with database");
+        String query_complete = "http://mitodb.org/meta?select=author";
+        HttpResponse<JsonNode> response_authors = null;
+        try {
+            response_authors = Unirest.get(query_complete).asJson();
+            System.out.println("Database connected.");
             return true;
-        } catch (Exception e){
-            System.err.println("Connection with database not possible. Please check your internet connection");
+        } catch (UnirestException e) {
+            System.out.println("Databse connection not possible. Please check your internet connection.");
             return false;
         }
     }
