@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.http.options.Options;
 import io.datastructure.Entry;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -87,8 +88,8 @@ public class DatabaseQueryHandler {
     /**
      * @return
      */
-    public Set<String> getColumnSet(String column) {
-        Set<String> result = new HashSet<>();
+    public List getColumnSet(String column, String type) {
+        List result = new ArrayList();
 
         try {
             String query_complete = "http://mitodb.org/meta?select="+column;
@@ -97,15 +98,18 @@ public class DatabaseQueryHandler {
 
             for (int i = 0; i < response_column.getBody().getArray().length(); i++) {
                 JSONObject map = (JSONObject) response_column.getBody().getArray().get(i);
-
                 try {
-                    String countries = (String) map.get(column);
-                    result.add(countries.trim());
+                    if(type.equals("int")){
+                        int value = (int) map.get(column);
+                        result.add(value);
+                    } else if(type.equals("String")){
+                        String value = (String) map.get(column);
+                        result.add(value.trim());
+                    }
                 } catch (Exception e) {
                     continue;
                 }
             }
-
 
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -181,7 +185,7 @@ public class DatabaseQueryHandler {
 
     public void calculateDBstats() {
 
-        number_of_samples = getColumnSet("accession_id").size();
+        number_of_samples = getColumnSet("meta_info_id", "int").size();
 
         if(number_of_samples == 0){
             number_of_countries_covered=0;
@@ -191,13 +195,13 @@ public class DatabaseQueryHandler {
             number_of_ancient_samples=0;
         } else {
             Set<String> set_tmp = new HashSet<>();
-            set_tmp.addAll(getColumnSet("sample_origin_country"));
-            set_tmp.addAll(getColumnSet("sampling_country"));
+            set_tmp.addAll(getColumnSet("sample_origin_country", "String"));
+            set_tmp.addAll(getColumnSet("sampling_country", "String"));
             number_of_countries_covered = set_tmp.size();
 
             set_tmp.clear();
-            set_tmp.addAll(getColumnSet("sample_origin_region"));
-            set_tmp.addAll(getColumnSet("sampling_region"));
+            set_tmp.addAll(getColumnSet("sample_origin_region", "String"));
+            set_tmp.addAll(getColumnSet("sampling_region", "String"));
 
             number_of_continents_covered = set_tmp.size();
             number_of_publications = getAuthorList().size();

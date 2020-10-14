@@ -101,7 +101,7 @@ public class DatabaseConfigDownloadDialogue {
 
         label_population = new Label("Population");
         label_population.setPadding(new Insets(10,10,10,10));
-        population_entries = databaseQueryHandler.getColumnSet("population");
+        population_entries = new HashSet<>(databaseQueryHandler.getColumnSet("population", "String"));
         List<String> targetList_pop = new ArrayList<>(population_entries);
         java.util.Collections.sort(targetList_pop);
         population_combobox = new CheckComboBox<>(FXCollections.observableList(targetList_pop));

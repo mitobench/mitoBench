@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public class DuplicatesChecker {
 
     public void check(List<String> fasta_headers) {
         // get all accession IDs from database
-        Set<String> accessionIDs = databaseQueryHandler.getColumnSet("accession_id");
+        Set<String> accessionIDs = new HashSet<>(databaseQueryHandler.getColumnSet("accession_id", "String"));
         List<String> duplicates = new ArrayList<>();
 
         for (String acc_to_upload : fasta_headers){

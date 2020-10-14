@@ -119,6 +119,7 @@ public class DataUploader {
         int index_tma_subregion = -1;
 
         int index_labsample_id = -1;
+        int index_surname = -1;
 
         for (int i = 0; i < row.size(); i++){
             Entry e = row.get(i);
@@ -137,6 +138,8 @@ public class DataUploader {
                 index_sequence = i;
             } else if(e.getIdentifier().equals("Labsample ID")){
                 index_labsample_id = i;
+            } else if(e.getIdentifier().equals("Submitter surname")){
+                index_surname = i;
             }
 
             else if(e.getIdentifier().equals("Sample Latitude")){
@@ -260,6 +263,9 @@ public class DataUploader {
             System.out.print("\tAccessionID: " + acc + ";\t");
             if(index_labsample_id != -1){
                 System.out.print("LabID: " + row.get(index_labsample_id).getData().getTableInformation() + ";\t");
+            }
+            if(index_surname != -1){
+                System.out.print("Submitter: " + row.get(index_surname).getData().getTableInformation() + ";\t");
             }
             if(index_author != -1){
                 System.out.print("Author: " + row.get(index_author).getData().getTableInformation() + " et al.;\t");
