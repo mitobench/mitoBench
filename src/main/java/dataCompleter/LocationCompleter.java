@@ -33,22 +33,25 @@ public class LocationCompleter {
     private int index_TMA_inferrred_country;
 
     private String[][] m49_list;
-    // private String[][] m49_list2;
-
-
     private Map<String, Locale> localeMap;
 
 
 
-    public LocationCompleter(){
+    public LocationCompleter(String[] header){
 
         initCountryCodeMapping();
         this.geocoder = new ReverseGeocoder();
         fillListISO3();
-        // fillListName();
+        this.header = Arrays.asList(header);
+        setIndexes();
     }
 
 
+    /**
+     * Initialize the country mapping.
+     * - Set up complete list of available countries
+     * - Create HashMap that assigns complete 'locale' information to iso code
+     */
     private void initCountryCodeMapping() {
         String[] countries = Locale.getISOCountries();
         localeMap = new HashMap<>(countries.length);
@@ -58,9 +61,12 @@ public class LocationCompleter {
         }
     }
 
+    /**
+     * Set up country - continent lists. One list per subregion, containing the ISO code for
+     * each country that belongs to the subregion.
+     */
     private void fillListISO3() {
         // array: sub region, intermediate region, continent/region
-
         m49_list = new String[][] {new String[]{"DZA,EGY,LBY,MAR,SDN,TUN,ESH","Northern Africa","", "Africa"},
                 new String[]{"IOT," +
                         "BDI," +
@@ -301,21 +307,13 @@ public class LocationCompleter {
                         "TUV," +
                         "WLF","Polynesia", "", "Oceania"}
         };
-
     }
 
-    public void setHeader(String[] header) {
 
-        this.header = Arrays.asList(header);
-    }
-
-    public void setEntry(String[] entry) {
-
-        this.entry = entry;
-    }
-
-    public void setIndexes() {
-
+    /**
+     * Get column index of all attributes belonging to geo info.
+     */
+    private void setIndexes() {
 
         this.index_sample_origin_latitude = header.indexOf("sample_origin_latitude");
         this.index_sample_origin_longitude = header.indexOf("sample_origin_longitude");
@@ -338,16 +336,17 @@ public class LocationCompleter {
         this.index_TMA_inferrred_intermediate_region = header.indexOf("geographic_info_tma_inferred_intermediate_region");
         this.index_TMA_inferrred_country = header.indexOf("geographic_info_tma_inferred_country");
 
-
     }
 
-    public String[] getCompletedInformation() {
+
+
+    public String[] getCompletedInformation(String[] en) {
+        this.entry = en;
 
         try {
             // complete sample origin geo
             String sample_lat = entry[this.index_sample_origin_latitude];
             String sample_long = entry[this.index_sample_origin_longitude];
-            String sample_region = entry[this.index_sample_origin_region];
             String sample_subregion = entry[this.index_sample_origin_subregion];
             String sample_inter_region = entry[this.index_sample_origin_intermediate_region];
             String sample_country = entry[this.index_sample_origin_country];
@@ -357,7 +356,6 @@ public class LocationCompleter {
             // complete sampling geo
             String sampling_lat = entry[this.index_sampling_latitude];
             String sampling_long = entry[this.index_sampling_longitude];
-            String sampling_region = entry[this.index_sampling_region];
             String sampling_subregion = entry[this.index_sampling_subregion];
             String sampling_inter_region = entry[this.index_sampling_intermediate_region];
             String sampling_country = entry[this.index_sampling_country];
@@ -367,7 +365,6 @@ public class LocationCompleter {
             // complete TMA inferred geo
             String sample_tma_lat = entry[this.index_TMA_inferrred_latitude];
             String sample_tma_long = entry[this.index_TMA_inferrred_longitude];
-            String sample_tma_region = entry[this.index_TMA_inferrred_region];
             String sample_tma_subregion = entry[this.index_TMA_inferrred_subregion];
             String sample_tma_inter_region = entry[this.index_TMA_inferrred_intermediate_region];
             String sample_tma_country = entry[this.index_TMA_inferrred_country];
@@ -376,7 +373,6 @@ public class LocationCompleter {
         } catch (Exception e) {
             return entry;
         }
-
 
         return entry;
     }
@@ -423,27 +419,30 @@ public class LocationCompleter {
     private void fillMissingGeoTma(String lat, String lon, String subregion, String inter_region, String coun){
 
         if(!lat.equals("") && !lon.equals("")){
-            //System.out.println("Lat Long given, calculate everything else.");
             fillBasedOnLatLong(Double.parseDouble(lat), Double.parseDouble(lon), index_TMA_inferrred_country, index_TMA_inferrred_region,
                     index_TMA_inferrred_subregion, index_TMA_inferrred_intermediate_region);
-
         } else if(!coun.equals("")){
-            //System.out.println("Country given.");
             fillBasedOnCountry(coun, index_TMA_inferrred_region, index_TMA_inferrred_subregion, index_TMA_inferrred_intermediate_region, index_TMA_inferrred_country);
 
         } else if(!inter_region.equals("")){
-            //System.out.println("Intermediate region given.");
             fillBasedOnIntermediate(inter_region, index_TMA_inferrred_subregion, index_TMA_inferrred_region);
 
         } else if(!subregion.equals("")){
-            //System.out.println("Subregion region given.");
             fillBasedOnSubregion(subregion, index_TMA_inferrred_region);
         }
-
     }
 
 
-
+    /**
+     * Complete geographic information based on given latitude and longitude information.
+     *
+     * @param lat
+     * @param lon
+     * @param index_country
+     * @param index_region
+     * @param index_subregion
+     * @param index_intermediate_region
+     */
     private void fillBasedOnLatLong(double lat, double lon, int index_country, int index_region,
                                     int index_subregion, int index_intermediate_region){
 
@@ -482,12 +481,19 @@ public class LocationCompleter {
             }
 
         });
-
-
-
     }
 
 
+    /**
+     * Complete geographic information based on given country.
+     * Values that will be filled: continent, subregion, and intermediate region.
+     *
+     * @param country
+     * @param index_region
+     * @param index_subregion
+     * @param index_intermediate_region
+     * @param index_country
+     */
     private void fillBasedOnCountry(String country, int index_region, int index_subregion, int index_intermediate_region, int index_country){
         entry[index_region] = parseContinent(getContinent(country));
         entry[index_subregion] = getSubRegion(country);
@@ -506,6 +512,13 @@ public class LocationCompleter {
         }
     }
 
+    /**
+     * Complete geographic information based on given subregion.
+     * Values that will be filled: continent.
+     *
+     * @param subregion
+     * @param index_region
+     */
     private void fillBasedOnSubregion(String subregion, int index_region){
 
         for(int i = 0; i < m49_list.length; i++){
@@ -517,7 +530,12 @@ public class LocationCompleter {
     }
 
 
-
+    /**
+     * Get intermediate region based on country information.
+     *
+     * @param country
+     * @return
+     */
     private String getIntermediateRegion(String country) {
 
         if(country.length() != 3){
@@ -535,6 +553,12 @@ public class LocationCompleter {
     }
 
 
+    /**
+     * Get subregion based on country information.
+     *
+     * @param country
+     * @return
+     */
     private String getSubRegion(String country) {
 
         if(country.length() != 3){
@@ -551,6 +575,12 @@ public class LocationCompleter {
     }
 
 
+    /**
+     * Get continent based on country information.
+     *
+     * @param country
+     * @return
+     */
     private String getContinent(String country){
 
         if(country.length() != 3){
@@ -565,6 +595,12 @@ public class LocationCompleter {
         return null;
     }
 
+    /**
+     * Return full continent name if only abbreviation is provided.
+     *
+     * @param continent
+     * @return
+     */
     private String parseContinent(String continent) {
         if(continent!=null){
 
@@ -585,16 +621,17 @@ public class LocationCompleter {
         return continent;
     }
 
+    /**
+     * Return ISO code of country.
+     *
+     * @param countryName
+     * @return
+     */
     private String convertCountryNameToIsoCode(String countryName){
-        if(countryName.equals("United Republic of Tanzania"))
-            System.out.println();
-
         String[] countryCodes = Locale.getISOCountries();
         for (String countryCode : countryCodes){
 
             Locale locale = new Locale("", countryCode);
-            if(countryCode.equals("TZ"))
-                System.out.println();
             String iso = locale.getISO3Country();
             String code = locale.getCountry();
             String name = locale.getDisplayCountry();

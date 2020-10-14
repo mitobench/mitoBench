@@ -105,6 +105,12 @@ public class HSDParser implements IInputData {
                 if(quality_index!=-1){
                     double num = Double.parseDouble(splitGroup[quality_index]);
                     quality = round(num*100,2);
+
+                    if (quality.equals("Inf")){
+                        quality = "0.0";
+                    }
+
+
                 }
                 if(polys_not_found_index!=-1) {
                     polys_not_found = splitGroup[polys_not_found_index].trim();

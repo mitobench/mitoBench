@@ -69,7 +69,7 @@ public class GenericInputParser implements IInputData {
                 }
 
                 if(splitLine.length != headergroup.length || splitLine.length != headertype.length){
-                    System.err.println("Entry and headergroups / -types have unequal length.\n");
+                    System.err.println("Entry and headergroups/-types have unequal length.");
                 } else {
                     //Assume ID is always first! -> requirement
                     List<Entry> entries = new ArrayList<>();

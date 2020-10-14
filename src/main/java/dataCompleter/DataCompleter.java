@@ -1,10 +1,8 @@
 package dataCompleter;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,11 +12,7 @@ public class DataCompleter {
     private String delimiter = "\t";
 
     public void run(String data_template_filepath, String data_fasta_filepath, String outfolder) throws IOException {
-
-        String[] fileName = data_fasta_filepath.replaceFirst("[.][^.]+$", "").split("/");
-        String fileNameWithoutExt = fileName[fileName.length-1];
-
-        outfile = outfolder + java.time.LocalDateTime.now() + "_" + fileNameWithoutExt + "_" + "completed.tsv";
+        outfile = outfolder + "data_completed.tsv";
         BufferedWriter data_meta_file_updated = new BufferedWriter(new FileWriter(outfile));
 
         MetaInfoReader metaInfoReader = new MetaInfoReader(data_template_filepath);
@@ -50,9 +44,7 @@ public class DataCompleter {
         haplogrepCaller.deleteTmpFiles();
 
         // complete geographic locations based on already given information
-        LocationCompleter locationCompleter = new LocationCompleter();
-        locationCompleter.setHeader(header);
-        locationCompleter.setIndexes();
+        LocationCompleter locationCompleter = new LocationCompleter(header);
 
         Statistics calculator = new Statistics();
 
@@ -89,14 +81,12 @@ public class DataCompleter {
                     haplotype = entryList.get(accessionID).get(3);
                     quality = entryList.get(accessionID).get(1);
                 } catch (Exception e) {
-                    System.out.println("Sequence with accession id "+ accessionID + " not contained in Haplogrep2 result file");
+                    System.out.println("Sequence with accession id "+ accessionID + " not contained in HaploGrep2 result file");
                 }
             }
 
             // complete geographic information
-            locationCompleter.setEntry(entry.split(delimiter, -1));
-
-            String[] entry_completed = locationCompleter.getCompletedInformation();
+            String[] entry_completed = locationCompleter.getCompletedInformation(entry.split(delimiter, -1));
             meta_info = entry_completed;
             String meta_info_parsed = "";
 
@@ -160,13 +150,16 @@ public class DataCompleter {
 
             data_meta_file_updated.write(values);
             data_meta_file_updated.newLine();
-
-
         }
-
         data_meta_file_updated.close();
     }
 
+    /**
+     * Assign macro- (or super-) haplogroup based on haplogroup.
+     *
+     * @param haplogroup
+     * @return macrogroup
+     */
     private String setMacrogroup(String haplogroup){
 
         if(haplogroup.startsWith("L0")){
@@ -233,9 +226,11 @@ public class DataCompleter {
             return "R";
         } else if(haplogroup.startsWith("P")){
             return "P";
-        } else if(haplogroup.startsWith("J") || haplogroup.startsWith("T")){
-            return "JT";
-        } else if(haplogroup.startsWith("HV")){
+        } else if(haplogroup.startsWith("J")){
+            return "J";
+        } else if(haplogroup.startsWith("T")){
+            return "T";
+        }else if(haplogroup.startsWith("HV")){
             return "HV";
         } else if(haplogroup.startsWith("H")){
             return "H";
@@ -243,8 +238,12 @@ public class DataCompleter {
             return "V";
         } else if(haplogroup.startsWith("F")){
             return "F";
-        } else if(haplogroup.startsWith("B")){
-            return "B";
+        } else if(haplogroup.startsWith("B4")){
+            return "B4";
+        } else if(haplogroup.startsWith("B5")){
+            return "B5";
+        } else if(haplogroup.startsWith("B6")){
+            return "B6";
         } else if(haplogroup.startsWith("U")){
             return "U";
         } else if(haplogroup.startsWith("K")){
@@ -252,10 +251,13 @@ public class DataCompleter {
         }  else {
             return haplogroup;
         }
-
-
     }
 
+    /**
+     * Return the path to tsv file with completed information.
+     *
+     * @return file path
+     */
     public String getOutfile() {
         return outfile;
     }

@@ -102,7 +102,7 @@ public class MitoBenchWindow extends Application {
 
         // init database and menu controller
         databaseQueryHandler = new DatabaseQueryHandler();
-        menuController = new MenuController(databaseQueryHandler, this);
+        menuController = new MenuController(this);
         dialogueController = new DialogueController(this);
 
 
@@ -318,13 +318,23 @@ public class MitoBenchWindow extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // delete haplogrep files
-            if (Files.exists(new File("haplogroups.hsd.dot").toPath())) {
-                try {
+
+            // delete all temp files
+            try {
+                if (Files.exists(new File("haplogroups.hsd.dot").toPath()))
                     Files.delete(new File("haplogroups.hsd.dot").toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                if (Files.exists(new File("tmp_meta_data_toValidate.tsv").toPath()))
+                    Files.delete(new File("tmp_meta_data_toValidate.tsv").toPath());
+
+                if (Files.exists(new File("tmp_fasta_toValidate.fasta").toPath()))
+                    Files.delete(new File("tmp_fasta_toValidate.fasta").toPath());
+
+                if (Files.exists(new File("data_completed.tsv.fasta").toPath()))
+                    Files.delete(new File("data_completed.tsv.fasta").toPath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             LoggerSettingsDialogue loggerSettingsDialogue =
@@ -332,6 +342,26 @@ public class MitoBenchWindow extends Application {
         });
     }
 
+
+    /**
+     * Delete all temporary files that were created while data validation
+     */
+    private void deleteTmpFiles() {
+
+        try {
+            if (Files.exists(new File("tmp_meta_data_toValidate.tsv").toPath()))
+                Files.delete(new File("tmp_meta_data_toValidate.tsv").toPath());
+
+            if (Files.exists(new File("tmp_fasta_toValidate.fasta").toPath()))
+                Files.delete(new File("tmp_fasta_toValidate.fasta").toPath());
+
+            if (Files.exists(new File("data_completed.tsv.fasta").toPath()))
+                Files.delete(new File("data_completed.tsv.fasta").toPath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public Scene getScene() {

@@ -53,7 +53,7 @@ public class ColumnNameMapper {
             case "geographic_info_tma_inferred_subregion":
                 return "TMA inferred Subregion";
             case "geographic_info_tma_inferred_intermediate_region":
-                return "TMA inferred Intermediate region";
+                return "TMA inferred Intermediate Region";
             case "geographic_info_tma_inferred_city":
                 return "TMA inferred City";
             case "geographic_info_tma_inferred_country":

@@ -1,34 +1,12 @@
 package view.menus;
 
 import Logging.LogClass;
-import analysis.HaplotypeCaller;
 import controller.*;
-import guru.nidi.graphviz.engine.Format;
-import io.dialogues.Export.SaveAsDialogue;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.concurrent.Task;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.MitoBenchWindow;
 import view.dialogues.settings.HGlistProfilePlot;
@@ -39,7 +17,6 @@ import view.dialogues.information.InformationDialogue;
 import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import controller.TableControllerUserBench;
 
-import java.io.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,8 +53,6 @@ public class VisualizationMenu {
     private Menu menuGraphics;
 
     private LogClass logClass;
-
-    private static final int MIN_PIXELS = 10;
 
 
     public VisualizationMenu(MitoBenchWindow mitoBenchWindow){
@@ -194,13 +169,10 @@ public class VisualizationMenu {
         MenuItem plotHGfreqGroup = new MenuItem("Plot haplogroup frequency per group (Stacked Barchart)");
         plotHGfreqGroup.setId("plotHGfreqGroup_item");
         plotHGfreqGroup.setOnAction(t -> {
-            if(//tableController.getTableColumnByName("Grouping") != null &&
-                tableController.getTable().getItems().size()!=0) {
+            if(tableController.getTable().getItems().size()!=0) {
 
                 String[] selection_groups;
                 String[] selection_haplogroups;
-
-
 
                 if(!tableController.getGroupController().groupingExists()) {
                     String[][] cols = chartController.prepareColumnsAsList(new String[]{"Haplogroup"}, tableController.getSelectedRows());
@@ -214,9 +186,11 @@ public class VisualizationMenu {
                 if(selection_haplogroups.length != 0){
 
                     SettingsDialogueStackedBarchart advancedStackedBarchartDialogue =
-                            new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings", selection_groups,
+                            new SettingsDialogueStackedBarchart("Advanced Stacked Barchart Settings",
                                     logClass);
                     advancedStackedBarchartDialogue.init(mito);
+                    advancedStackedBarchartDialogue.addComponents(selection_groups);
+                    advancedStackedBarchartDialogue.allowDragAndDrop();
 
                     // add dialog to statsTabPane
                     Tab tab = advancedStackedBarchartDialogue.getTab();
@@ -261,7 +235,6 @@ public class VisualizationMenu {
                             stackedBar.addListener();
                         }
 
-                        //advancedStackedBarchartDialogue.close();
                         // remove tab from tabpane
                         mito.getTabpane_visualization().getTabs().remove(tab);
                     });
@@ -396,9 +369,9 @@ public class VisualizationMenu {
 
                                     visualizationController.initPieChart(group, curr_row, curr_col);
 
-                                    pieChartViz = visualizationController.getPieChartViz();
-                                    pieChartViz.createPlot(group, data_all);
-                                    pieChartViz.setColor(stage);
+                                    this.pieChartViz = visualizationController.getPieChartViz();
+                                    this.pieChartViz.createPlot(group, data_all);
+                                    this.pieChartViz.setColor(stage);
 
                                     if(curr_col < max_number_cols){
                                         curr_col++;
@@ -422,9 +395,9 @@ public class VisualizationMenu {
 
                                 visualizationController.initPieChart("Haplogroup frequency (all data)", 0, 0);
 
-                                pieChartViz = visualizationController.getPieChartViz();
-                                pieChartViz.createPlotSingle(hgs_summed);
-                                pieChartViz.setColor(stage);
+                                this.pieChartViz = visualizationController.getPieChartViz();
+                                this.pieChartViz.createPlotSingle(hgs_summed);
+                                this.pieChartViz.setColor(stage);
                                 visualizationController.visualizePiechart();
                             }
                         }

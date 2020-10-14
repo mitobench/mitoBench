@@ -50,7 +50,7 @@ public class StackedBar extends AChart{
         chartController = cc;
         tableController = tc;
 
-        // set autoranging to false to allow manual settings
+        // set auto-ranging to false to allow manual settings
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);

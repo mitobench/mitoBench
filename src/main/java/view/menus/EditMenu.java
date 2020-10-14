@@ -63,10 +63,6 @@ public class EditMenu {
 
 
 
-
-
-
-
         // --------------------- Add items ------------------------------------------------------
         menuController.setEditMenu(filterTreeBased, filterWithMutation, unfilterData, defineHGList);
 

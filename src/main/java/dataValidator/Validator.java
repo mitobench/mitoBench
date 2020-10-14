@@ -407,10 +407,8 @@ public class Validator {
 
             while ((line = br.readLine()) != null) {
                 if(!line.startsWith("#") && !line.startsWith("##")){
-                    System.out.println(count_meta + "/" + size + " Sequences validated");
-                    count_meta++;
 
-                    String[] line_splitted = line.split(",", headerLine_array.length);
+                    String[] line_splitted = line.split(delimiter, headerLine_array.length);
                     // does sequence exists?
                     String accession = line_splitted[index_accession_id];
 
@@ -886,6 +884,14 @@ public class Validator {
                             log_incorrect_format += "Accession: "+ accession + "\tC14 date BP is not in correct format: " + c14_age_bp + "\n";
                         }
                     }
+                    count_meta++;
+                    if(size>=10){
+                        if(count_meta%(size/10)==0){
+                            System.out.println(count_meta + "/" + size + " Sequences validated");
+                        }
+                    } else {
+                        System.out.println(count_meta + "/" + size + " Sequences validated");
+                    }
 
                 }
             }
@@ -1103,4 +1109,5 @@ public class Validator {
     public int getCount_meta() {
         return count_meta;
     }
+
 }

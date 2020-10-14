@@ -1,6 +1,5 @@
 package view.dialogues.information;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import database.DatabaseQueryHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;
@@ -11,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import view.dialogues.settings.ATabpaneDialogue;
 
 import java.awt.*;
 import java.io.IOException;

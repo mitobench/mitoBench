@@ -44,6 +44,8 @@ public abstract class ATableController {
     protected LogClass logClass;
     protected Deque<HashMap<String, List<Entry>>> data_versions = new LinkedList();
     protected String[] customColumnOrder=null;
+    private boolean isValidated;
+    private boolean isCompleted;
 
 
     public ATableController(LogClass logClass){
@@ -86,6 +88,10 @@ public abstract class ATableController {
      * @param input
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
+
+        this.isValidated = false;
+        this.isCompleted = false;
+
         String groupname=null;
         if(groupController.groupingExists()){
             groupname=groupController.getColname_group().replace(" (Grouping)", "");
@@ -935,6 +941,22 @@ public abstract class ATableController {
                         table.getItems().size() +  " rows are selected");
             }
         });
+    }
+
+    public boolean isValidated() {
+        return isValidated;
+    }
+
+    public void setValidated(boolean validated) {
+        isValidated = validated;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }
 

@@ -13,6 +13,7 @@ public class ToolsMenu {
     private CustomMenuItem dataValidatorMenuItem;
     private CustomMenuItem dataCompleterMenuItem;
     private CustomMenuItem dataAlignerMenuItem;
+    private CustomMenuItem dataUploaderMenuItem;
 
     public ToolsMenu(MitoBenchWindow mitoBenchWindow, GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
         menuTools = new Menu("Tools");
@@ -41,6 +42,11 @@ public class ToolsMenu {
         dataCompleterMenuItem = new CustomMenuItem(new Label("Complete data"));
         dataValidatorMenuItem.setId("dataCompleter");
 
+        // ------------------------------ Menu Item Upload data --------------------------------------------
+
+        dataUploaderMenuItem = new CustomMenuItem(new Label("Upload data"));
+        dataUploaderMenuItem.setId("dataUploader");
+
         // ------------------------------ Add tooltips --------------------------------------------------------
 
         Tooltip tooltip_validateData = new Tooltip("This will check if your data are in correct format.");
@@ -52,10 +58,10 @@ public class ToolsMenu {
 
         // ------------------------------ Add All Items---------- --------------------------------------------
 
-        menuController.setToolsMenu(dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem);
+        menuController.setToolsMenu(dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem,dataUploaderMenuItem);
 
         menuTools.getItems().addAll(groupMenu.getMenuGroup(), analysisMenu.getMenuAnalysis(), statisticsMenu.getMenuTools(),
-                dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem);
+                dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem,dataUploaderMenuItem);
 
     }
 

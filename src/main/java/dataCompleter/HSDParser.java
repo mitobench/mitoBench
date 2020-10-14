@@ -103,7 +103,12 @@ public class HSDParser {
                         group = splitGroup[group_index].trim();
                     }
                     if(quality_index!=-1){
-                        quality = round(Double.parseDouble(splitGroup[quality_index])*100,2);
+                        double num = Double.parseDouble(splitGroup[quality_index]);
+                        quality = round(num*100,2);
+
+                        if (quality.equals("Inf")){
+                            quality = "0.0";
+                        }
                     }
                     if(polys_not_found_index!=-1) {
                         polys_not_found = splitGroup[polys_not_found_index].trim();
