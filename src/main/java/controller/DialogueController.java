@@ -2,6 +2,9 @@ package controller;
 
 import analysis.SequenceAligner;
 import io.writer.MultiFastaWriter;
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -23,28 +26,21 @@ public class DialogueController {
     public void unalignedDialogue_setAlign_mafft_btn(Button align_mafft_btn, Stage dialog) {
         // todo: add different mafft algorithms
         align_mafft_btn.setOnAction(e -> {
-            SequenceAligner sequenceAligner = new SequenceAligner(log, mito.getTableControllerUserBench());
+            SequenceAligner sequenceAligner = new SequenceAligner(log, mito.getTableControllerUserBench(), mito);
 
             // get sequences to align
             MultiFastaWriter multiFastaWriter = new MultiFastaWriter(mito.getTableControllerUserBench().getDataTable().getMtStorage(),
                     mito.getTableControllerUserBench().getSelectedRows(),
                     true);
 
-            try {
-                try {
-                    multiFastaWriter.writeData("sequences_to_align.fasta", mito.getTableControllerUserBench());
+            sequenceAligner.runTask(multiFastaWriter);
 
-                    sequenceAligner.align("sequences_to_align.fasta");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
 
-            dialog.close();
+
+
         });
     }
+
 
     public void unalignedDialogue_setCancel_btn(Button cancel_btn, Stage dialog) {
         cancel_btn.setOnAction(e -> {

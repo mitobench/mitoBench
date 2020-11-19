@@ -15,6 +15,7 @@ import view.menus.VisualizationMenu;
 import view.visualizations.*;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
@@ -149,7 +150,10 @@ public class VisualizationController {
 
         this.stackedBar = new StackedBar(t.getText(), tabPane, visualizationMenu,
                 chartController, tableController, this, groupController);
-        stackedBar.setStyleSheet(stage);
+        //stackedBar.setStyleSheet(stage);
+        URL url = this.getClass().getResource("/css/ColorsStackedBarChart.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
+
         Tab tab = new Tab();
         tab.setId("tab_stacked_bar_chart");
         tab.setText("Haplogroup frequency per group");

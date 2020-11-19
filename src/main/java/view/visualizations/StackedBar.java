@@ -27,8 +27,7 @@ import java.util.List;
  */
 public class StackedBar extends AChart{
 
-    private final TableControllerUserBench tableController
-            ;
+    private final TableControllerUserBench tableController;
     private final GroupController groupcontroller;
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;

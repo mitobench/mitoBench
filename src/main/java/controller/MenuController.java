@@ -85,7 +85,7 @@ public class MenuController {
                              MenuItem dataUploaderMenuItem) {
 
         dataAlignerMenuItem.setOnAction(t -> {
-            SequenceAligner sequenceAligner = new SequenceAligner(mito.getLogClass().getLogger(this.getClass()), mito.getTableControllerUserBench());
+            SequenceAligner sequenceAligner = new SequenceAligner(mito.getLogClass().getLogger(this.getClass()), mito.getTableControllerUserBench(), mito);
 
             // get sequences to align
             MultiFastaWriter multiFastaWriter = new MultiFastaWriter(mito.getTableControllerUserBench().getDataTable().getMtStorage(),

@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.util.*;
 
+
 /**
  * Created by neukamm on 22.03.17.
  */
@@ -48,7 +49,7 @@ public class ExcelParser implements IInputData{
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
                 switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
+                    case STRING:
                         header.add(cell.getStringCellValue().replace("##","").trim());
                         break;
                 }
@@ -65,9 +66,10 @@ public class ExcelParser implements IInputData{
 
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
-                switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        types.add(cell.getStringCellValue().replace("#","").trim());
+
+                switch(cell.getCellType()) {
+                    case STRING:
+                        types.add(cell.getStringCellValue().replace("#", "").trim());
                         break;
                 }
             }
@@ -85,13 +87,13 @@ public class ExcelParser implements IInputData{
             Cell cell;
 
             for(int j = 0; j < nextRow.getLastCellNum(); j++) {
-                cell = nextRow.getCell(j, Row.CREATE_NULL_AS_BLANK);
+                cell = nextRow.getCell(j, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                 Entry e = null;
                 String colname;
                 String data;
 
                 switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
+                    case STRING:
                         colname = mapper.mapString(header.get(i));
                         data = cell.getStringCellValue();
 
@@ -106,19 +108,19 @@ public class ExcelParser implements IInputData{
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
-                    case Cell.CELL_TYPE_NUMERIC:
+                    case NUMERIC:
                         colname = mapper.mapString(header.get(i));
                         data = String.valueOf(cell.getNumericCellValue());
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
-                    case Cell.CELL_TYPE_BOOLEAN:
+                    case BOOLEAN:
                         colname = mapper.mapString(header.get(i));
                         data = String.valueOf(cell.getBooleanCellValue());
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
                         i++;
                         break;
-                    case Cell.CELL_TYPE_BLANK:
+                    case BLANK:
                         colname = mapper.mapString(header.get(i));
                         data = "";
                         e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));

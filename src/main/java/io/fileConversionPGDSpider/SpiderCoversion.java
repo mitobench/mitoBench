@@ -16,6 +16,7 @@ public class SpiderCoversion {
     public void start() {
 
         PGDSpiderGUI pgdSpiderGUI = new PGDSpiderGUI();
+        System.out.println("Starting PGDSpider");
         pgdSpiderGUI.setVisible(true);
 
     }
