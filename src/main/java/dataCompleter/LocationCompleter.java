@@ -184,6 +184,7 @@ public class LocationCompleter {
                         "TKM," +
                         "UZB","Central Asia", "", "Asia"},
                 new String[]{"CHN," +
+                        "TWN," +
                         "HKG," +
                         "MAC," +
                         "PRK," +
@@ -265,6 +266,7 @@ public class LocationCompleter {
                         "PRT," +
                         "SMR," +
                         "SRB," +
+                        "XKX," +
                         "SVN," +
                         "ESP," +
                         "MKD","Southern Europe", "", "Europe"},
@@ -628,18 +630,25 @@ public class LocationCompleter {
      * @return
      */
     private String convertCountryNameToIsoCode(String countryName){
+        countryName = countryName.trim();
+        if (countryName.equals("Kosovo")){
+            return "XKX";
+        }
+        if (countryName.equals("Taiwan")){
+            return "TWN";
+        }
+
         String[] countryCodes = Locale.getISOCountries();
         for (String countryCode : countryCodes){
-
             Locale locale = new Locale("", countryCode);
             String iso = locale.getISO3Country();
-            String code = locale.getCountry();
             String name = locale.getDisplayCountry();
 
             if(name.toLowerCase().equals(countryName.toLowerCase())){
                 return iso;
             }
         }
+        System.err.println("Country " + countryName + " could not be completed");
         return null;
     }
 

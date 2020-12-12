@@ -242,8 +242,7 @@ public class DatabaseQueryHandler {
     public boolean connecting() {
         try {
             Options.refresh();
-            Unirest.get("http://mitodb.org/meta?select=author")
-                    .asJson();
+            Unirest.get("http://mitodb.org/meta?select=author").asJson();
 
             System.out.println("Database connected.");
             return true;

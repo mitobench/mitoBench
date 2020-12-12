@@ -15,7 +15,13 @@ plugins {
 }
 
 group 'com.uni-tuebingen.de.it.mitobench'
-version '1.7-beta'
+version '1.0'
+
+
+tasks.withType(JavaExec) {
+    jvmArgs = ['-Xmx30g']
+}
+
 
 allprojects {
     repositories {

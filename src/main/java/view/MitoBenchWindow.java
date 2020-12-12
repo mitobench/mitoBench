@@ -312,12 +312,6 @@ public class MitoBenchWindow extends Application {
         primaryStage.setOnCloseRequest(we -> {
             we.consume();
 
-            // close UniRest
-            try {
-                Unirest.shutdown();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             // delete all temp files
             try {
