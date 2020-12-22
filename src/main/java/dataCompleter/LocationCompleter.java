@@ -458,10 +458,10 @@ public class LocationCompleter {
             if( country.iso3()==null){
                 entry[index_country] = "";
             } else {
-                if(country.iso3().equals("USA"))
-                    entry[index_country] = "USA";
-                else
-                    entry[index_country] = country.name();
+//                if(country.iso3().equals("USA"))
+//                    entry[index_country] = "USA";
+//                else
+                entry[index_country] = country.name();
             }
 
             if( parseContinent(country.continent())==null){

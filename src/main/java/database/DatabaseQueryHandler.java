@@ -64,7 +64,6 @@ public class DatabaseQueryHandler {
      */
     public Set<String> getAuthorList() {
         Set<String> result = new HashSet<>();
-
         try {
             String query_complete = "http://mitodb.org/meta?select=author,publication_date";
             HttpResponse<JsonNode> response_authors = Unirest.get(query_complete).asJson();
@@ -147,6 +146,22 @@ public class DatabaseQueryHandler {
         }
 
         return result;
+    }
+
+    public HashMap getDuplicatesFromDatabase(String query) {
+
+        try {
+            String query_complete = "http://mitodb.org/meta?" + query;
+            HttpResponse<JsonNode> response = Unirest.get(query_complete).asJson();
+
+            HashMap data_map = jsonDataParser.getDataList(response);
+
+            return data_map;
+
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

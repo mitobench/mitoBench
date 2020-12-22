@@ -7,6 +7,7 @@ import com.mashape.unirest.http.options.Options;
 import dataCompleter.DataCompleter;
 import dataValidator.Validator;
 import database.DataUploader;
+import database.DuplicatesHandler;
 import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
 import io.writer.MultiFastaWriter;
@@ -217,8 +218,9 @@ public class MenuController {
                     }
                     Options.refresh();
                     System.out.println("Start Database");
-                    DataUploader dataUploader = new DataUploader(mito.getTableControllerUserBench(), log.getLogger(this.getClass()));
-                    dataUploader.parseMeta("data_to_upload.tsv", "", "");
+                    DuplicatesHandler duplicatesHandler = new DuplicatesHandler(mito);
+                    duplicatesHandler.startUpload();
+
 
                 }
             }

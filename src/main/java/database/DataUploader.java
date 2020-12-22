@@ -1,6 +1,5 @@
 package database;
 
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -10,24 +9,32 @@ import io.datastructure.Entry;
 import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
 import org.apache.log4j.Logger;
-
+import view.MitoBenchWindow;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class DataUploader {
+    private final DuplicatesChecker duplicatesChecker;
+    private final DuplicatesHandler duplicatesHandler;
+    private final DatabaseQueryHandler databaseQueryHandler;
+    private final MitoBenchWindow mito;
     private Logger logger;
     private TableControllerUserBench tablecontroller;
     private int num_data_uploaded = 0;
 
-    public DataUploader(TableControllerUserBench tablecontroller, Logger logger) {
-        this.logger = logger.getLogger(this.getClass());
-        this.tablecontroller = tablecontroller;
+    public DataUploader(MitoBenchWindow mito, DuplicatesHandler duplicatesHandler) {
+        this.mito = mito;
+        this.logger = mito.getLogClass().getLogger(this.getClass());
+        this.tablecontroller = mito.getTableControllerUserBench();
+        this.databaseQueryHandler = new DatabaseQueryHandler();
+        this.duplicatesChecker = new DuplicatesChecker(databaseQueryHandler);
+        this.duplicatesHandler = duplicatesHandler;
         // write data
         GenericWriter genericWriter = new GenericWriter(tablecontroller.getTable().getItems(), "\t", true);
         try {
@@ -60,11 +67,23 @@ public class DataUploader {
 
                 // check row
                 if(checkPassed(row, acc)){
+
                     // upload
-                    upload(header, types, row, acc, username, password);
+                    if(duplicatesChecker.isDuplicate(acc)){//,tablecontroller.getColIndex("Author"),tablecontroller.getColIndex("ID"),tablecontroller.getColIndex("Labsample ID"))) {
+                        // do something
+                        duplicatesHandler.collectDuplicates(row, acc);
 
+
+                    } else {
+                        // upload
+                        upload(header, types, row, acc, username, password);
+                    }
                 }
+            }
 
+            if(duplicatesHandler.getNumOfDuplicates() > 0) {
+                duplicatesHandler.handle();
+                num_data_uploaded += duplicatesHandler.getNumberOfUploadedDuplicates();
             }
 
             System.out.println("Upload finished. " + num_data_uploaded + "/" +
@@ -178,15 +197,15 @@ public class DataUploader {
                 index_tma_latitude = i;
             } else if(e.getIdentifier().equals("TMA inferred Longitude")){
                 index_tma_longitude = i;
-            } else if(e.getIdentifier().equals("Sampling Intermediate Region")){
+            } else if(e.getIdentifier().equals("TMA inferred Intermediate Region")){
                 index_tma_intermediate_region = i;
-            } else if(e.getIdentifier().equals("Sampling Country")){
+            } else if(e.getIdentifier().equals("TMA inferred Country")){
                 index_tma_country = i;
-            } else if(e.getIdentifier().equals("Sampling Continent")){
+            } else if(e.getIdentifier().equals("TMA inferred Continent")){
                 index_tma_region = i;
-            } else if(e.getIdentifier().equals("Sampling City")){
+            } else if(e.getIdentifier().equals("TMA inferred City")){
                 index_tma_city = i;
-            } else if(e.getIdentifier().equals("Sampling Subregion")){
+            } else if(e.getIdentifier().equals("TMA inferred Subregion")){
                 index_tma_subregion = i;
             }
         }
@@ -279,7 +298,7 @@ public class DataUploader {
 
 
 
-    private void upload(String[] header, String[] types, List<Entry> row, String acc, String username, String password) {
+    public void upload(String[] header, String[] types, List<Entry> row, String acc, String username, String password) {
 
         Map<String, Object> fields =  buildBody(header, types, row, acc);
         Map<String, String> headers = new HashMap<>();
@@ -314,7 +333,7 @@ public class DataUploader {
      */
     private Map<String, Object>  buildBody(String[] header, String[] types, List<Entry> row, String acc){
 
-        Map<String, Object>  body = new HashMap<>();
+        Map<String, Object> body = new HashMap<>();
         body.put(header[0], acc);
 
         if(header.length == row.size()+1){

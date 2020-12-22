@@ -30,6 +30,19 @@ public class JsonDataParser {
     }
 
 
+    public HashMap<Integer, List<Entry>> getDataList(HttpResponse<JsonNode> response) {
+
+        HashMap<Integer, List<Entry>> data_map = new HashMap();
+        ColumnNameMapper mapper = new ColumnNameMapper();
+        for (int i = 0; i < response.getBody().getArray().length(); i++){
+            JSONObject map = (JSONObject) response.getBody().getArray().get(i);
+            String accession = (String) map.get("accession_id");
+            data_map.put(i, getEntries(map, mapper));
+        }
+
+        return data_map;
+    }
+
     /**
      * Parse json array entry. Each entry is one sample entry including all available information on the database.
      *
