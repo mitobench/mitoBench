@@ -99,7 +99,6 @@ public class ProjectParser {
 
     public void loadData(ATableController tableController, ChartController chartController){
 
-        tableController.cleanVersions();
         tableController.updateTable(datatable);
         tableController.loadGroups();
         chartController.setCustomHGList(hgs_user_defined);

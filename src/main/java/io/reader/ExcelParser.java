@@ -1,152 +1,95 @@
 package io.reader;
 
 import database.ColumnNameMapper;
+import io.Exceptions.EXCELException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
 import io.inputtypes.CategoricInputType;
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.dhatim.fastexcel.reader.ReadableWorkbook;
+import org.dhatim.fastexcel.reader.Row;
+import org.dhatim.fastexcel.reader.Sheet;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Stream;
+
 
 /**
  * Created by neukamm on 22.03.17.
  */
 public class ExcelParser implements IInputData{
 
+    private ArrayList<String> header;
+    private ArrayList<String> types;
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
-    public ExcelParser(String file, Logger logger, Set<String> message_duplications) throws IOException {
+    public ExcelParser(String filepath, Logger logger, Set<String> message_duplications) throws IOException, EXCELException {
 
         Logger LOG = logger;
-        LOG.info("Read Excel file: " + file);
-
+        LOG.info("Read Excel file: " + filepath);
         ColumnNameMapper mapper = new ColumnNameMapper();
-        String excelFilePath = file;
-        FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+        InputStream is = new FileInputStream(filepath);
+        ReadableWorkbook wb = new ReadableWorkbook(is);
+        Sheet sheet = wb.getFirstSheet();
 
-        Workbook workbook = new XSSFWorkbook(inputStream);
-        Sheet firstSheet = workbook.getSheetAt(0);
-        Iterator<Row> iterator = firstSheet.iterator();
+        List<Row> rows_tmp = sheet.read();
+        if (!rows_tmp.get(0).getCellAsString(0).orElse(null).startsWith("##") ||
+                !rows_tmp.get(1).getCellAsString(0).orElse(null).startsWith("#")){
+            throw new EXCELException("This is not in correct Format!\nThe header lines are missing or incorrect. Please also check " +
+                    "if the file contains empty rows.");
+        } else {
+            rows_tmp.clear();
 
-        Iterator<Cell> cellIterator;
-
-        // read header
-        List<String> header = new ArrayList<>();
-        Row headerRow = iterator.next();
-
-        if(headerRow.getCell(0).getStringCellValue().startsWith("##")){
-            cellIterator = headerRow.cellIterator();
-
-
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        header.add(cell.getStringCellValue().replace("##","").trim());
-                        break;
-                }
-            }
-        }
-
-
-        // read types
-        List<String> types = new ArrayList<>();
-        Row typeRow = iterator.next();
-
-        if(typeRow.getCell(0).getStringCellValue().startsWith("#")){
-            cellIterator = typeRow.cellIterator();
-
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        types.add(cell.getStringCellValue().replace("#","").trim());
-                        break;
-                }
-            }
-        }
-
-
-        List<Entry> entries;
-        while (iterator.hasNext()) {
-            Row nextRow = iterator.next();
-            cellIterator = nextRow.cellIterator();
-            String id = "";
-            int i = 0;
-            entries = new ArrayList<>();
-
-            Cell cell;
-
-            for(int j = 0; j < nextRow.getLastCellNum(); j++) {
-                cell = nextRow.getCell(j, Row.CREATE_NULL_AS_BLANK);
-                Entry e = null;
-                String colname;
-                String data;
-
-                switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        colname = mapper.mapString(header.get(i));
-                        data = cell.getStringCellValue();
-
-                        if(colname.equals("ID")){
-                            id = cell.getStringCellValue();
-                            id = id.split(" ")[0];
-                            if(id.matches(".*[^\\d]\\d{1}$")){
-                                id = id.split("\\.")[0];
-                                data = id;
-                            }
+            try (Stream<Row> rows = sheet.openStream()) {
+                rows.forEach(r -> {
+                    if(r.getCellAsString(0).orElse(null).startsWith("##")){
+                        // read header
+                        header = new ArrayList<>();
+                        for (int i = 0; i < r.getCellCount(); i++){
+                            header.add(r.getCellAsString(i).orElse(null).replace("##","").trim());
                         }
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
-                        i++;
-                        break;
-                    case Cell.CELL_TYPE_NUMERIC:
-                        colname = mapper.mapString(header.get(i));
-                        data = String.valueOf(cell.getNumericCellValue());
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
-                        i++;
-                        break;
-                    case Cell.CELL_TYPE_BOOLEAN:
-                        colname = mapper.mapString(header.get(i));
-                        data = String.valueOf(cell.getBooleanCellValue());
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
-                        i++;
-                        break;
-                    case Cell.CELL_TYPE_BLANK:
-                        colname = mapper.mapString(header.get(i));
-                        data = "";
-                        e = new Entry(colname, new CategoricInputType("String"), new GenericInputData(data));
-                        i++;
-                        break;
+                    } else if(r.getCellAsString(0).orElse(null).startsWith("#")){
+                        // read types
+                        types = new ArrayList<>();
 
-                }
-                entries.add(e);
+                        for (int i = 0; i < r.getCellCount(); i++){
+                            types.add(r.getCellAsString(i).orElse(null).replace("#","").trim());
+                        }
+                    } else {
+                        // read meta information
+                        List<Entry> entries;
+                        String id = "";
+                        entries = new ArrayList<>();
+
+                        for(int j = 0; j < r.getCellCount(); j++) {
+                            String colname;
+                            String data;
+
+                            colname = mapper.mapString(header.get(j));
+                            data = r.getCellAsString(j).orElse(null);
+
+                            if(colname.equals("ID")){
+                                id = r.getCellAsString(j).orElse(null);
+                                id = id.split(" ")[0];
+                                if(id.matches(".*[^\\d]\\d{1}$")){
+                                    id = id.split("\\.")[0];
+                                    data = id;
+                                }
+                            }
+                            entries.add(new Entry(colname, new CategoricInputType("String"), new GenericInputData(data)));
+                        }
+                        map.put(id , entries);
+                    }
+                });
+            } catch (Exception e){
+                throw new EXCELException();
             }
 
-
-
-            // Duplicates within input file are not allowed!
-            if(map.keySet().contains(id)){
-                message_duplications.add(id);
-//                DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
-//                        "\nOnly first hit will be added");
-//                DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
-            } else {
-                map.put(id , entries);
-            }
-
-            i++;
         }
-
-        workbook.close();
-        inputStream.close();
-
+        wb.close();
+        is.close();
     }
 
     @Override

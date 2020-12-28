@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Created by neukamm on 13.07.17.
@@ -149,7 +150,7 @@ public class HeatMapLegend {
         if (!Double.isNaN(value)){
             BigDecimal bigDecimal = new BigDecimal(value);
             bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
-                    BigDecimal.ROUND_HALF_EVEN);
+                    RoundingMode.HALF_EVEN);
             return bigDecimal.doubleValue();
         } else {
             return -1;

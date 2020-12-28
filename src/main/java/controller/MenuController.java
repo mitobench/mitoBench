@@ -2,9 +2,10 @@ package controller;
 
 import Logging.LogClass;
 import analysis.SequenceAligner;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.options.Options;
 import dataCompleter.DataCompleter;
 import dataValidator.Validator;
-import database.DatabaseQueryHandler;
 import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
 import io.writer.MultiFastaWriter;
@@ -16,16 +17,13 @@ import view.dialogues.settings.DataFilteringHaplotypeBasedDialogue;
 import view.dialogues.settings.DataFilteringTreebasedDialogue;
 import view.dialogues.settings.HGListDialogue;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 
 public class MenuController {
     private final MitoBenchWindow mito;
     private LogClass log;
-    private DatabaseQueryHandler databaseQueryHandler;
     private TableControllerUserBench tablecontroller;
     private String log_validation;
     private String result_validation;
@@ -33,11 +31,9 @@ public class MenuController {
     private String file_fasta;
     private String file_meta;
     private boolean uploadPossible;
-    private DataCompleter dataCompleter;
 
-    public MenuController(DatabaseQueryHandler databaseQueryHandler, MitoBenchWindow mito) {
+    public MenuController(MitoBenchWindow mito) {
         this.log = mito.getLogClass();
-        this.databaseQueryHandler = databaseQueryHandler;
         this.mito = mito;
     }
 
@@ -48,7 +44,7 @@ public class MenuController {
      * @param filterWithMutation
      * @param defineHGList
      */
-    public void setEditMenu(MenuItem filterTreeBased, MenuItem filterWithMutation, MenuItem unfilterData, MenuItem defineHGList) {
+    public void setEditMenu(MenuItem filterTreeBased, MenuItem filterWithMutation, MenuItem defineHGList) {
 
         filterTreeBased.setOnAction(t -> {
 
@@ -68,10 +64,6 @@ public class MenuController {
             mito.getTabpane_statistics().getSelectionModel().select(dataFilteringMutationBasedDialogue.getTab());
         });
 
-        unfilterData.setOnAction(t -> {
-            mito.getTableControllerUserBench().resetToUnfilteredData();
-
-        });
 
         defineHGList.setOnAction(t -> {
 
@@ -80,16 +72,14 @@ public class MenuController {
             mito.getTabpane_statistics().getTabs().add(hgListDialogue.getTab());
             mito.getTabpane_statistics().getSelectionModel().select(hgListDialogue.getTab());
 
-
         });
-
     }
 
 
-    public void setToolsMenu(MenuItem dataAlignerMenuItem, MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem) {
+    public void setToolsMenu(MenuItem dataAlignerMenuItem, MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem){
 
         dataAlignerMenuItem.setOnAction(t -> {
-            SequenceAligner sequenceAligner = new SequenceAligner(mito.getLogClass().getLogger(this.getClass()), mito.getTableControllerUserBench());
+            SequenceAligner sequenceAligner = new SequenceAligner(mito.getLogClass().getLogger(this.getClass()), mito.getTableControllerUserBench(), mito);
 
             // get sequences to align
             MultiFastaWriter multiFastaWriter = new MultiFastaWriter(mito.getTableControllerUserBench().getDataTable().getMtStorage(),
@@ -106,8 +96,6 @@ public class MenuController {
                 e.printStackTrace();
 
             }
-
-
         });
 
         dataValidatorMenuItem.setOnAction(t -> {
@@ -117,18 +105,20 @@ public class MenuController {
                 System.err.println("No data for data validation");
             } else {
 
-                validate();
-                //InformationDialogue informationDialogue = new InformationDialogue("Data validation", result_validation, "Data validation finished", "");
-                // write to popup window
-                DataValidationDialogue dataValidationDialogue = new DataValidationDialogue("Result data validation", result_validation, log_validation, uploadPossible);
-                dataValidationDialogue.setUpload_later_btn_disabled(true);
-                dataValidationDialogue.setUpload_now_btn_disabled(true);
-                dataValidationDialogue.show(600,400);
+                if(!tablecontroller.isValidated()){
+                    validate();
+                    //InformationDialogue informationDialogue = new InformationDialogue("Data validation", result_validation, "Data validation finished", "");
+                    // write to popup window
+                    DataValidationDialogue dataValidationDialogue = new DataValidationDialogue("Result data validation", result_validation, log_validation, uploadPossible);
+                    dataValidationDialogue.setUpload_later_btn_disabled(true);
+                    dataValidationDialogue.setUpload_now_btn_disabled(true);
+                    dataValidationDialogue.show(600,400);
 
-                deleteTmpFiles();
-
+                    tablecontroller.setValidated(true);
+                } else {
+                    System.out.println("Data is already validated. Continue");
+                }
             }
-
         });
 
 
@@ -138,60 +128,48 @@ public class MenuController {
                 InformationDialogue informationDialogue = new InformationDialogue("Data completion", "No data for data completion", "", "");
                 System.err.println("No data for data validation");
             } else {
-                validate();
+                if(!tablecontroller.isValidated()){
+                    validate();
+                    tablecontroller.setValidated(true);
+                } else {
+                    System.out.println("Data is already validated. Continue");
+                }
+
                 if(uploadPossible){
                     // - data completion
-                    DataCompleter dataCompleter = new DataCompleter();
-                    System.out.println("Completing meta information ....");
+                    if(!tablecontroller.isCompleted()){
+                        DataCompleter dataCompleter = new DataCompleter();
+                        System.out.println("Completing meta information ....");
+                        try {
 
-                    try {
+                            dataCompleter.run(file_meta, file_fasta, "");
+                            GenericInputParser genericInputParser = new GenericInputParser(
+                                    dataCompleter.getOutfile(),
+                                    this.log.getLogger(this.getClass()),
+                                    "\t",
+                                    null);
+                            tablecontroller.updateTable(genericInputParser.getCorrespondingData());
+                            tablecontroller.setValidated(true);
+                            tablecontroller.setCompleted(true);
+                            InformationDialogue informationDialogue = new InformationDialogue("Data completion", "Data validation finished.\nData completion finished.", "", "");
 
-                        dataCompleter.run(file_meta, file_fasta, "");
-                        GenericInputParser genericInputParser = new GenericInputParser(
-                                dataCompleter.getOutfile(),
-                                this.log.getLogger(this.getClass()),
-                                ",",
-                                null);
-                        tablecontroller.updateTable(genericInputParser.getCorrespondingData());
-                        InformationDialogue informationDialogue = new InformationDialogue("Data completion", "Data validation finished.\nData completion finished.", "", "");
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        System.out.println("Data is already completed. Continue");
                     }
                 }
             }
-
-            deleteTmpFiles();
-
         });
+
     }
+
+
 
     /**
-     * Delete all temporary files that were created while data validation
+     * Validate data
      */
-    private void deleteTmpFiles() {
-
-        try {
-            if (Files.exists(new File("tmp_meta_data_toValidate.csv").toPath()))
-                Files.delete(new File("tmp_meta_data_toValidate.csv").toPath());
-
-            if (Files.exists(new File("tmp_fasta_toValidate.fasta").toPath()))
-                Files.delete(new File("tmp_fasta_toValidate.fasta").toPath());
-
-            if(dataCompleter != null && Files.exists(new File(dataCompleter.getOutfile()).toPath())){
-                Files.delete(new File(dataCompleter.getOutfile()).toPath());
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setTableController(TableControllerUserBench tableControllerUserBench) {
-        this.tablecontroller = tableControllerUserBench;
-    }
-
-
     private void validate(){
         System.out.println("Start data validation");
 
@@ -210,9 +188,9 @@ public class MenuController {
             e.printStackTrace();
         }
 
-        GenericWriter metaWriter = new GenericWriter(tablecontroller.getSelectedRows(),",", false);
+        GenericWriter metaWriter = new GenericWriter(tablecontroller.getSelectedRows(),"\t", false);
         try {
-            metaWriter.writeData("tmp_meta_data_toValidate.csv", tablecontroller);
+            metaWriter.writeData("tmp_meta_data_toValidate.tsv", tablecontroller);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -221,7 +199,7 @@ public class MenuController {
         // get fasta headers
         fasta_headers = new ArrayList<>();
         fasta_headers.addAll(tablecontroller.getDataTable().getMtStorage().getData().keySet());
-        file_meta="tmp_meta_data_toValidate.csv";
+        file_meta="tmp_meta_data_toValidate.tsv";
 
         log_validation="";
         result_validation = "";
@@ -232,20 +210,25 @@ public class MenuController {
         System.out.println("running validation");
         try{
             validator.validate(file_meta, fasta_headers, log_validation, file_fasta, mito.getTableControllerUserBench().getTable().getItems().size());
-            System.out.println();
         } catch (ArrayIndexOutOfBoundsException e){
             log_validation += "Problems with column names. Please use the csv template.\n\n" + validator.getLogfileTxt() + "\nMissing columns:\n\n" + validator.getLog_missing_columns();
         }
 
         System.out.println("finished validation");
-        uploadPossible = true;//validator.isUploadPossible();
+        uploadPossible = true;
         if(uploadPossible){
             result_validation = "All values are in correct format.";
         } else {
             result_validation = "Data upload not possible. Please check the report below.";
-            //log_validation += validator.getLogfileTxt();
         }
+    }
 
+
+    /*
+         Setter and Getter
+     */
+    public void setTableController(TableControllerUserBench tableControllerUserBench) {
+        this.tablecontroller = tableControllerUserBench;
     }
 
 

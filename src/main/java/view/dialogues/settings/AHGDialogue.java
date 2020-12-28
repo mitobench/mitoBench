@@ -15,7 +15,6 @@ import view.MitoBenchWindow;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +35,13 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
                     "Sub-Saharan Africa (L0a,L0d,L0k,L1b,L1c,L2a,L2b,L2c,L3b,L3d,L3e,L3f,L4,L5)",
                     "Americas and the Caribbean (A2,B2,C1b,C1c,C1d,C4c,D1,D2a,D3,D4h3a,X2a,X2g)",
                     "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B4,B5,B6)",
-                    "Europe (H)");
+                    "West Eurasian (H,T,U,V,X,K,I,J,W)",
+                    "East Eurasian (A,B4,B5,B6,C,D,E,F,G,Y,Z)",
+                    "Native American (A,B4,B5,B6,C,D,X)",
+                    "South Pacific Region (Q)",
+                    "Australia (O,S)",
+                    "West Africa (D,W,X,U,K)",
+                    "Asia (A,F,I,N,Y)");
     protected ChartController chartcontroller;
     protected int row;
     private String[] hg_list_trimmed;
@@ -66,7 +71,8 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     protected String getMacrogroupsAsString(MitoBenchWindow mito) {
         String res = "";
         if(mito.getTableControllerUserBench().getTableColumnByName("Macro Haplogroup")!=null) {
-            Set<String> macrogroups = new HashSet<>(mito.getTableControllerUserBench().getColumnData(mito.getTableControllerUserBench().getTableColumnByName("Macro Haplogroup")));
+            Set<String> macrogroups = new HashSet<>(mito.getTableControllerUserBench().getColumnData(
+                    mito.getTableControllerUserBench().getTableColumnByName("Macro Haplogroup")));
             for(String mhg : macrogroups){
                 res += mhg+",";
             }
@@ -106,7 +112,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
 
-        warning_label = new Label("Warning!\nIf you want to include the haplogroup 'B' to you list, please specify " +
+        warning_label = new Label("Warning!\nIf you want to include the haplogroup 'B' in you list, please specify " +
                 "it as 'B4,B5,B6'.\nThe current version of phylotree (v17) does not support only 'B'.");
 
         row=0;
@@ -114,7 +120,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         dialogGrid.add(label, 0,row,3,1);
         dialogGrid.add(combobox_hglist, 0,++row,3,1);
         dialogGrid.add(warning_label,0,++row,3,1);
-        dialogGrid.add(okBtn,2,++row,1,1);
+        dialogGrid.add(okBtn,0,++row,1,1);
     }
 
 
@@ -151,12 +157,8 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
 
                 });
                 new Thread(task).start();
-
             }
-
-
         });
-
     }
 
 
@@ -184,7 +186,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
                 e.printStackTrace();
             }
         }
-
     }
 
 

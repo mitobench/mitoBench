@@ -1,4 +1,4 @@
-package view.dialogues.settings;
+package view.table;
 
 import Logging.LogClass;
 import javafx.event.ActionEvent;
@@ -9,12 +9,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import controller.ATableController;
+import view.dialogues.settings.APopupDialogue;
 
 
 /**
  * Created by neukamm on 26.11.2016.
  */
-public class AddNewColumnDialogue extends APopupDialogue{
+public class AddNewColumnDialogue extends APopupDialogue {
 
 
     private final TextField dataField;

@@ -35,8 +35,8 @@ public class ARPParser implements IInputData {
         String currline;
         boolean init = true;
         String currGroup = "";
-            while ((currline = bfr.readLine()) != null) {
-                currline = currline.trim();
+        while ((currline = bfr.readLine()) != null) {
+            currline = currline.trim();
             if(init){
                 init = false;
                 //check if format is indeed ARP format
@@ -57,10 +57,10 @@ public class ARPParser implements IInputData {
                     break; //Then we are done with actual view.data, grouping is parsed differently by us...
                 }
                 if(currline.isEmpty() | currline.startsWith("}") |  currline.startsWith("SampleSize") |
-                   currline.startsWith("SampleData") | currline.startsWith("Title") | currline.startsWith("NbSamples") |
+                        currline.startsWith("SampleData") | currline.startsWith("Title") | currline.startsWith("NbSamples") |
                         currline.startsWith("GameticPhase") |  currline.startsWith("RecessiveData") |
                         currline.startsWith("DataType") | currline.startsWith("LocusSeparator") | currline.startsWith("MissingData") |
-                   currline.startsWith("GenotypicData") | currline.startsWith("[Data]") | currline.startsWith("[[Samples]]")) {
+                        currline.startsWith("GenotypicData") | currline.startsWith("[Data]") | currline.startsWith("[[Samples]]")) {
                     continue;
                 } else {
                     String[] dataSplit = currline.split("\t");

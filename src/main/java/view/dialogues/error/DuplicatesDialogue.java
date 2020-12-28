@@ -32,14 +32,14 @@ public class DuplicatesDialogue extends APopupDialogue {
 
     private void addListener(TableControllerDB tableControllerDB) {
         save_dup.setOnAction(e -> {
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv");
+            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Tab Separated Values (*.tsv)", "*.tsv");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
             if (saveAsDialogue.getOutFile() != null) {
                 String outFileDB = saveAsDialogue.getOutFile();
                 try {
-                    GenericWriter csvWriter = new GenericWriter(tableControllerDB.getData(), ",", false);
-                    csvWriter.writeData(outFileDB, tableControllerDB);
+                    GenericWriter tsvWriter = new GenericWriter(tableControllerDB.getData(), "\t", false);
+                    tsvWriter.writeData(outFileDB, tableControllerDB);
                     LOG.info("Export data into CSV format. File: " + outFileDB);
                 } catch (Exception ex) {
                     System.err.println("Caught Exception: " + ex.getMessage());

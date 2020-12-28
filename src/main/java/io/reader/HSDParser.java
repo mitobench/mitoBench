@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.Set;
  * Created by peltzer on 17/11/2016.
  */
 public class HSDParser implements IInputData {
-    private HashMap<String, List<Entry>> map;
+    private final HashMap<String, List<Entry>> map;
 
     public HSDParser(String filetoParse, Logger LOG, Set<String> message_duplicates) throws IOException, HSDException {
         LOG.info("Read HSD file: " + filetoParse);
@@ -35,10 +36,8 @@ public class HSDParser implements IInputData {
         map = new HashMap<>();
 
         String currline;
-        boolean init = true;
         String line = bfr.readLine();
         String[] header = line.replace("\"", "").split("\t");
-
 
         int polys_not_found_index = -1;
         int polys_found_index = -1;
@@ -76,10 +75,8 @@ public class HSDParser implements IInputData {
 
 
         while ((currline = bfr.readLine()) != null) {
-            if(!header[0].replace("\"","").equals("SampleID") && init){
-                if(init){
-                    throw new HSDException("This is probably not a HSD input format file, as the header is missing.");
-                }
+            if(!header[0].replace("\"","").equals("SampleID")){
+                throw new HSDException("This is probably not a HSD input format file, as the header is missing.");
             } else {
 
                 String[] splitGroup = currline.replace("\"", "").split("\t", Integer.MAX_VALUE);
@@ -105,6 +102,12 @@ public class HSDParser implements IInputData {
                 if(quality_index!=-1){
                     double num = Double.parseDouble(splitGroup[quality_index]);
                     quality = round(num*100,2);
+
+                    if (quality.equals("Inf")){
+                        quality = "0.0";
+                    }
+
+
                 }
                 if(polys_not_found_index!=-1) {
                     polys_not_found = splitGroup[polys_not_found_index].trim();
@@ -137,12 +140,11 @@ public class HSDParser implements IInputData {
                 entries.add(entry);
 
                 // Duplicates within input file are not allowed!
-                if(map.keySet().contains(id)){
-                    message_duplicates.add(id);
-//                    DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
-//                            "\nOnly first hit will be added");
-//                    DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
-                } else {
+                //                    DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
+                //                            "\nOnly first hit will be added");
+                //                    DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+                if(map.containsKey(id)) message_duplicates.add(id);
+                else {
                     map.put(id , entries);
                 }
             }
@@ -164,7 +166,7 @@ public class HSDParser implements IInputData {
         else {
             BigDecimal bigDecimal = new BigDecimal(value);
             bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
-                    BigDecimal.ROUND_HALF_EVEN);
+                    RoundingMode.HALF_EVEN);
             return bigDecimal.doubleValue()+"%";
         }
 

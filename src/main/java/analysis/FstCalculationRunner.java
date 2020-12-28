@@ -1,10 +1,19 @@
 package analysis;
 
 import Main.FstCalculator;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.text.Text;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
@@ -183,12 +192,32 @@ public class FstCalculationRunner {
         heatMap.setContextMenu(mitobenchWindow.getTabpane_visualization());
         heatMap.createHeatMap(fsts, groupnames, 0.0, 1.0);
 
-        Tab tab = new Tab("Fst values");
-        tab.setId("tab_heatmap");
-        tab.setContent(new ScrollPane(heatMap.getHeatMap()));
+        Tab tab_heatmap = new Tab("Fst values");
+        tab_heatmap.setId("tab_heatmap");
 
-        mitobenchWindow.getTabpane_visualization().getTabs().add(tab);
-        mitobenchWindow.getTabpane_visualization().getSelectionModel().select(tab);
+        ScrollPane scrollPane_heatmap = new ScrollPane(heatMap.getHeatMap());
+
+        DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
+        zoomProperty.addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable arg0) {
+                heatMap.getHeatMap().setPrefWidth(zoomProperty.get() * 4);
+                heatMap.getHeatMap().setPrefHeight(zoomProperty.get() * 3);
+            }
+        });
+
+        scrollPane_heatmap.addEventFilter(ScrollEvent.ANY, event -> {
+            if (event.getDeltaY() > 0) {
+                zoomProperty.set(zoomProperty.get() * 1.1);
+            } else if (event.getDeltaY() < 0) {
+                zoomProperty.set(zoomProperty.get() / 1.1);
+            }
+        });
+
+        tab_heatmap.setContent(scrollPane_heatmap);
+
+        mitobenchWindow.getTabpane_visualization().getTabs().add(tab_heatmap);
+        mitobenchWindow.getTabpane_visualization().getSelectionModel().select(tab_heatmap);
 
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 import org.apache.log4j.Logger;
+import view.MitoBenchWindow;
 
 /**
  * Created by neukamm on 09.02.17.
@@ -15,6 +16,7 @@ public abstract class ATabpaneDialogue {
 
 
     private final Tab tab;
+    private final ScrollPane scrollPane;
     protected GridPane dialogGrid;
     protected LogClass logClass;
     protected Logger LOG;
@@ -28,7 +30,7 @@ public abstract class ATabpaneDialogue {
         dialogGrid.setHgap(10);
         dialogGrid.setVgap(10);
 
-        ScrollPane scrollPane = new ScrollPane();
+        scrollPane = new ScrollPane();
         scrollPane.setPadding(new Insets(10,10,10,10));
         scrollPane.setContent(dialogGrid);
 
@@ -44,9 +46,11 @@ public abstract class ATabpaneDialogue {
         return dialogGrid;
     }
     public Tab getTab() { return tab; }
-
     public Logger getLOG() {
         return LOG;
+    }
+    public ScrollPane getScrollPane() {
+        return scrollPane;
     }
 }
 

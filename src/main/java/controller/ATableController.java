@@ -1,7 +1,6 @@
 package controller;
 
 import Logging.LogClass;
-import database.DuplicatesChecker;
 import io.IInputType;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -11,15 +10,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
-import javafx.scene.input.*;
 import javafx.util.Callback;
 import io.IData;
 import model.table.TableKeyEventHandler;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.table.TableFilter;
+import view.MitoBenchWindow;
 import view.menus.GroupMenu;
 import model.table.DataTable;
 
@@ -32,6 +29,7 @@ import java.util.stream.Collectors;
 public abstract class ATableController {
 
     protected final Logger LOG;
+    protected  MitoBenchWindow mito;
     protected TableView<ObservableList> table;
     protected ObservableList<ObservableList> data;
     protected ObservableList<ObservableList> data_initial;
@@ -44,13 +42,14 @@ public abstract class ATableController {
     protected List<String> col_names_sorted;
     protected GroupMenu groupMenu;
     protected LogClass logClass;
-    protected Deque<HashMap<String, List<Entry>>> data_versions = new LinkedList();
     protected String[] customColumnOrder=null;
+    private boolean isValidated;
+    private boolean isCompleted;
 
 
     public ATableController(LogClass logClass){
         this.logClass = logClass;
-        LOG = logClass.getLogger(this.getClass());
+        this.LOG = logClass.getLogger(this.getClass());
     }
 
     public void init(){
@@ -59,7 +58,7 @@ public abstract class ATableController {
         table.setEditable(true);
         // allow multiple selection of rows in tableView
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        table.getSelectionModel().setCellSelectionEnabled(true);
+        //table.getSelectionModel().setCellSelectionEnabled(true);
 
         // add copy to clipboard
         copyToClipboard();
@@ -73,7 +72,6 @@ public abstract class ATableController {
         column_to_index = new HashMap<>();
         this.controller = this;
         table_content = new HashMap<>();
-        data_versions = new LinkedList<>();
     }
 
     private void copyToClipboard() {
@@ -89,12 +87,8 @@ public abstract class ATableController {
      */
     public void updateTable(HashMap<String, List<Entry>> input) {
 
-        // unbind columns
-        ObservableList<TableColumn<ObservableList, ?>> columns1 = table.getColumns();
-        for (TableColumn col : columns1) {
-            col.prefWidthProperty().unbind();
-        }
-
+        this.isValidated = false;
+        this.isCompleted = false;
 
         String groupname=null;
         if(groupController.groupingExists()){
@@ -116,7 +110,6 @@ public abstract class ATableController {
 
         table.getColumns().removeAll(table.getColumns());
 
-
         Set<String> cols = dataTable.getDataTable().keySet();
         for(String s : cols) {
             if(!curr_colnames.contains(s.trim()))
@@ -127,8 +120,8 @@ public abstract class ATableController {
         setColumns_to_index();
 
         // display updated table
-
         data = parseDataTableToObservableList(dataTable, curr_colnames, input.keySet(), customColumnOrder);
+
         // delete duplicated columns
         col_names_sorted = col_names_sorted.stream().distinct().collect(Collectors.toList());
 
@@ -149,22 +142,7 @@ public abstract class ATableController {
         if(groupname!=null)
             groupController.createGroupByColumn(groupname,"");
 
-        // bind columns
-//        ObservableList<TableColumn<ObservableList, ?>> columns_all = table.getColumns();
-//        for (TableColumn col : columns_all) {
-//            col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
-//        }
-
         TableFilter.forTableView(table).lazy(true).apply();
-    }
-
-
-    private void updateVersion() {
-
-        if(data_versions.size()>=4){
-            data_versions.removeFirst();
-        }
-        data_versions.add((HashMap<String, List<Entry>>) table_content.clone());
     }
 
 
@@ -206,7 +184,7 @@ public abstract class ATableController {
 
 
     /**
-     *  This method parses the view.data table to a representation that can be displayed by the table view
+     *  This method parses the data table to a representation that can be displayed by the table view
      * (ObservableList<ObservableList> )
      *
      * @param dataTable
@@ -287,12 +265,8 @@ public abstract class ATableController {
                     curr_colnames_copy.remove(colname);
                 }
             }
-
             col_names_sorted.addAll(curr_colnames_copy);
         }
-
-
-
 
         ObservableList<ObservableList> parsedData = FXCollections.observableArrayList();
 
@@ -334,10 +308,6 @@ public abstract class ATableController {
      * @param newItems
      */
     public void updateView(ObservableList<ObservableList> newItems){
-
-        // update version
-        //updateVersion();
-
         ObservableList<ObservableList> new_items_copy;
         new_items_copy = copyData(newItems);
         if(data_initial==null){
@@ -346,13 +316,14 @@ public abstract class ATableController {
         data.removeAll(data);
         data.addAll(new_items_copy);
         this.table.setItems(data);
-
     }
 
 
     /**
-     * copy view.data to always allow resetting of table
+     * copy data to always allow resetting of table
      * to old/initial state
+     * @param data_to_copy
+     * @return
      */
     public ObservableList<ObservableList> copyData(ObservableList<ObservableList> data_to_copy){
         ObservableList<ObservableList> copy = FXCollections.observableArrayList();
@@ -361,10 +332,8 @@ public abstract class ATableController {
                 copy.add(item);
             }
         }
-
         return copy;
     }
-
 
 
     /**
@@ -633,7 +602,7 @@ public abstract class ATableController {
 
 
     /**
-     * This method counts occurrences of haplotypes within selected view.data
+     * This method counts occurrences of haplotypes within selected data
      * return as hash map to plot it easily
      *
      * @return
@@ -656,7 +625,7 @@ public abstract class ATableController {
 
 
     /**
-     * This method counts occurrences of haplotypes within selected view.data
+     * This method counts occurrences of haplotypes within selected data
      * return as hash map to plot it easily
      *
      * @return
@@ -867,20 +836,6 @@ public abstract class ATableController {
     }
 
 
-    public void resetToUnfilteredData(){
-        if(data_versions.size()>1){
-            //data_versions.removeLast();
-            HashMap<String, List<Entry>> data_tmp = data_versions.getLast();
-            if (data_tmp.equals(table.getItems())){
-                data_versions.removeLast();
-                data_tmp = data_versions.getLast();
-            }
-            data_versions.removeLast();
-            updateTable(data_tmp);
-
-        }
-    }
-
     public List<String> getColumnData(TableColumn column){
 
         List<String> columnData = new ArrayList<>();
@@ -902,12 +857,6 @@ public abstract class ATableController {
 
         res.put("ID", "String");
         return res;
-    }
-
-
-    public void cleanVersions() {
-
-        data_versions = new LinkedList<>();
     }
 
     public void copyColumn(String s, String newColname) {
@@ -972,5 +921,20 @@ public abstract class ATableController {
         });
     }
 
+    public boolean isValidated() {
+        return isValidated;
+    }
+
+    public void setValidated(boolean validated) {
+        isValidated = validated;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
+    }
 }
 

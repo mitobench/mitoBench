@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import view.dialogues.settings.ATabpaneDialogue;
 
 import java.awt.*;
 import java.io.IOException;
@@ -43,13 +42,16 @@ public class DBstatisticsDialogue{
         header.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
         header.setFill(Color.BLACK);
 
-        databaseQueryHandler.calculateDBstats();
+        if(connectionPossible())
+            databaseQueryHandler.calculateDBstats();
         addComponents(mitobench_version);
         addListener();
 
     }
 
-
+    private boolean connectionPossible() {
+        return databaseQueryHandler.connecting();
+    }
 
 
     private void addComponents(String mitobench_version) {

@@ -1,4 +1,4 @@
-package view.dialogues.settings;
+package view.table;
 
 import Logging.LogClass;
 import io.datastructure.Entry;
@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import controller.ATableController;
+import view.dialogues.settings.APopupDialogue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Created by neukamm on 26.11.2016.
  */
-public class AddDataToColumnDialog extends APopupDialogue{
+public class AddDataToColumnDialog extends APopupDialogue {
 
 
     private final TextField entry_field;
@@ -44,7 +45,6 @@ public class AddDataToColumnDialog extends APopupDialogue{
         comboBox.getSelectionModel().selectFirst();
         entry_field = new TextField();
 
-
         Button okButton = new Button("OK");
         addButtonListener(okButton);
 
@@ -57,27 +57,23 @@ public class AddDataToColumnDialog extends APopupDialogue{
     }
 
     private void addButtonListener(Button okButton){
-
-
-
         okButton.setOnAction(e -> {
-            // add elements to group
-
-            //groupController.addElements(groupItems, comboBox.getValue().toString());
             HashMap<String, List<Entry>> new_data = tableController.createNewEntryList(entry_field.getText(), comboBox.getValue().toString(), false);
             tableController.updateTable(new_data);
             close();
-
         });
-
 
         DropShadow shadow = new DropShadow();
         //Adding the shadow when the mouse cursor is on
-        okButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                e -> okButton.setEffect(shadow));
+        okButton.addEventHandler(
+                MouseEvent.MOUSE_ENTERED,
+                e -> okButton.setEffect(shadow)
+        );
         //Removing the shadow when the mouse cursor is off
-        okButton.addEventHandler(MouseEvent.MOUSE_EXITED,
-                e -> okButton.setEffect(null));
+        okButton.addEventHandler(
+                MouseEvent.MOUSE_EXITED,
+                e -> okButton.setEffect(null)
+        );
 
     }
 

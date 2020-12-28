@@ -45,11 +45,6 @@ public class EditMenu {
         MenuItem filterWithMutation = new MenuItem("... haplotype filtering");
         filterWithMutation.setId("filterWithMutation");
 
-        // --------------------- MenuItem Redo filtering ------------------------------------------
-
-        MenuItem unfilterData = new MenuItem("Redo...");
-        unfilterData.setId("unfilterItem");
-
         // --------------------- MenuItem Define Haplogroup list ------------------------------------------
 
         CustomMenuItem defineHGList = new CustomMenuItem(new Label("Define Haplogroup list"));
@@ -63,12 +58,8 @@ public class EditMenu {
 
 
 
-
-
-
-
         // --------------------- Add items ------------------------------------------------------
-        menuController.setEditMenu(filterTreeBased, filterWithMutation, unfilterData, defineHGList);
+        menuController.setEditMenu(filterTreeBased, filterWithMutation, defineHGList);
 
         filterData.getItems().addAll(filterTreeBased, filterWithMutation);
         menuEdit.getItems().addAll(filterData, defineHGList);

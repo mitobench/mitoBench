@@ -2,10 +2,8 @@ package io.dialogues.Export;
 
 import Logging.LogClass;
 import controller.ChartController;
-import database.ColumnNameMapper;
 import io.writer.*;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -15,7 +13,6 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import controller.TableControllerUserBench;
 import view.MitoBenchWindow;
-import view.dialogues.information.InformationDialogue;
 import view.dialogues.information.UnalignedSequencesDialogue;
 
 import java.util.List;
@@ -26,16 +23,14 @@ import java.util.Optional;
  */
 public class ExportDialogue extends Application {
     private final String[] userdefinedHGlist;
-    private final LogClass logClass;
     private final boolean exportAllData;
-    private final ChartController cc;
     private final MitoBenchWindow mito;
-    private List<String> columnsInTable;
-    private TableControllerUserBench tableController;
-    private String MITOBENCH_VERSION;
-    private ObservableList<ObservableList> dataToExport;
-    private Logger LOG;
-    private int year=2018;
+    private final List<String> columnsInTable;
+    private final TableControllerUserBench tableController;
+    private final String MITOBENCH_VERSION;
+    private final ObservableList dataToExport;
+    private final Logger LOG;
+    private final int year=2018;
 
 
 
@@ -47,9 +42,9 @@ public class ExportDialogue extends Application {
 
         this.mito = mitoBenchWindow;
         LOG = mitoBenchWindow.getLogClass().getLogger(this.getClass());
-        this.logClass = mitoBenchWindow.getLogClass();
+        LogClass logClass = mitoBenchWindow.getLogClass();
         this.exportAllData = exportAllData;
-        this.cc = mitoBenchWindow.getChartController();
+        ChartController cc = mitoBenchWindow.getChartController();
         this.tableController = mitoBenchWindow.getTableControllerUserBench();
         this.columnsInTable = tableController.getCurrentColumnNames();
         this.MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
@@ -82,7 +77,6 @@ public class ExportDialogue extends Application {
 
         //We disallow ID and mtSequence as entries
         removeUnwantedEntries();
-        List<String> options = this.columnsInTable;
 
 
         alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, csv_button, tsv_button, xlsx_button, mito_button,
@@ -95,7 +89,7 @@ public class ExportDialogue extends Application {
         if (result.get() == arp_button) {
             if(tableController.sequencesHaveSameLength(tableController.getTableColumnByName("ID"))){
 
-                DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(options);
+                DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(this.columnsInTable);
                 String selection = dataChoiceDialogue.getSelected();
                 FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
                 SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);

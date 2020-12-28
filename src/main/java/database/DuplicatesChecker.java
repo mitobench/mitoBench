@@ -1,6 +1,9 @@
 package database;
 
-import java.util.ArrayList;
+import io.datastructure.Entry;
+
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,21 +16,16 @@ public class DuplicatesChecker {
     }
 
 
-
-    public void check(List<String> fasta_headers) {
+    public boolean isDuplicate(String acc) {
         // get all accession IDs from database
-        Set<String> accessionIDs = databaseQueryHandler.getColumnSet("accession_id");
-        List<String> duplicates = new ArrayList<>();
+        Set<String> accessionIDs_DB = new HashSet<>(databaseQueryHandler.getColumnSet("accession_id", "String"));
 
-        for (String acc_to_upload : fasta_headers){
-            if (accessionIDs.contains(acc_to_upload)){
-                duplicates.add(acc_to_upload);
-            }
+        if(accessionIDs_DB.contains(acc)){
+            System.out.println("Duplicated Accession ID detected. Getting entry from database" );
+            return true;
+        } else {
+            return false;
         }
-
-        // todo
-        for (String dup : duplicates)
-            System.out.println(dup);
 
     }
 }

@@ -9,13 +9,10 @@ import java.util.HashMap;
 public class DataCompleter {
 
     private String outfile;
+    private String delimiter = "\t";
 
     public void run(String data_template_filepath, String data_fasta_filepath, String outfolder) throws IOException {
-
-        String[] fileName = data_fasta_filepath.replaceFirst("[.][^.]+$", "").split("/");
-        String fileNameWithoutExt = fileName[fileName.length-1];
-
-        outfile = outfolder + java.time.LocalDateTime.now() + "_" + fileNameWithoutExt + "_" + "completed.csv";
+        outfile = outfolder + "data_completed.tsv";
         BufferedWriter data_meta_file_updated = new BufferedWriter(new FileWriter(outfile));
 
         MetaInfoReader metaInfoReader = new MetaInfoReader(data_template_filepath);
@@ -47,9 +44,7 @@ public class DataCompleter {
         haplogrepCaller.deleteTmpFiles();
 
         // complete geographic locations based on already given information
-        LocationCompleter locationCompleter = new LocationCompleter();
-        locationCompleter.setHeader(header);
-        locationCompleter.setIndexes();
+        LocationCompleter locationCompleter = new LocationCompleter(header);
 
         Statistics calculator = new Statistics();
 
@@ -57,7 +52,7 @@ public class DataCompleter {
 
         for (String entry : entries) {
 
-            String[] meta_info = entry.split(",", types.length);
+            String[] meta_info = entry.split(delimiter, -1);
             String accessionID_with_version = meta_info[metaInfoReader.getIndexOfArrtibute("##accession_id")].replace("\"","");
             String accessionID = accessionID_with_version.split("\\.")[0].trim();
             String sequence = fastaReader.getSequenceMap().get(accessionID);
@@ -86,14 +81,12 @@ public class DataCompleter {
                     haplotype = entryList.get(accessionID).get(3);
                     quality = entryList.get(accessionID).get(1);
                 } catch (Exception e) {
-                    System.out.println("Sequence with accession id "+ accessionID + " not contained in Haplogrep2 result file");
+                    System.out.println("Sequence with accession id "+ accessionID + " not contained in HaploGrep2 result file");
                 }
             }
 
             // complete geographic information
-            locationCompleter.setEntry(entry.split(",", types.length));
-
-            String[] entry_completed = locationCompleter.getCompletedInformation();
+            String[] entry_completed = locationCompleter.getCompletedInformation(entry.split(delimiter, -1));
             meta_info = entry_completed;
             String meta_info_parsed = "";
 
@@ -108,29 +101,32 @@ public class DataCompleter {
                 }
 
                 if(info == null) {
-                    meta_info_parsed += "NULL,";
+                    meta_info_parsed += "NULL" + delimiter;
                 } else if (info.equals("NULL")) {
-                    meta_info_parsed += "NULL,";
+                    meta_info_parsed += "NULL" + delimiter;
                 }else if (info.equals("")) {
-                    meta_info_parsed += "NULL,";
+                    meta_info_parsed += "NULL" + delimiter;
                 } else if (info.contains("'")) {
                     String hg_tmp = info.replace("'", "");
-                    meta_info_parsed += "'" + hg_tmp + "',";
+                    meta_info_parsed += "'" + hg_tmp + "'" + delimiter;
                 } else if (type.equals("String")) {
-                    meta_info_parsed += "'" + info + "',";
+                    meta_info_parsed += "'" + info + "'" + delimiter;
                 } else {
-                    meta_info_parsed += info + ",";
+                    meta_info_parsed += info + delimiter;
                 }
             }
-            if (meta_info_parsed.endsWith(",")) {
+            if (meta_info_parsed.endsWith(delimiter)) {
                 meta_info_parsed = meta_info_parsed.substring(0, meta_info_parsed.length() - 1);
             }
 
 
             // write new header
             if (!isheaderWritter) {
-                metaInfoReader.addToHeader(",percentage_n,user_alias,haplogroup_current_versions,macro_haplogroup,haplotype_current_versions,quality_haplotype_current_version, mt_sequence");
-                metaInfoReader.addTotypes(",real,String,String,String,String,real,String");
+                metaInfoReader.addToHeader(delimiter + "percentage_n" + delimiter + "user_alias" + delimiter + "haplogroup_current_versions"
+                        + delimiter + "macro_haplogroup" + delimiter +
+                        "haplotype_current_versions" + delimiter + "quality_haplotype_current_version" + delimiter + "mt_sequence");
+                metaInfoReader.addTotypes(delimiter + "real" + delimiter + "String" + delimiter + "String" +
+                         delimiter + "String" + delimiter + "String" + delimiter + "real" + delimiter + "String");
                 data_meta_file_updated.write(metaInfoReader.getHeader());
                 data_meta_file_updated.newLine();
                 data_meta_file_updated.write(metaInfoReader.getTypes());
@@ -141,8 +137,9 @@ public class DataCompleter {
             String macro =  setMacrogroup(haplogroup);
 
             // write new meta data entry
-            String values = meta_info_parsed + "," + percentageOfN + ",'" + user_alias + "','" + haplogroup + "','" +
-                    macro + "," + haplotype + "'," + quality + ",'" + fastaReader.getSequenceMap().get(accessionID) + "'";
+            String values = meta_info_parsed + delimiter + percentageOfN + delimiter+ "'" + user_alias + "'"+delimiter+"'" +
+                    haplogroup + "'"+delimiter+"'" +
+                    macro + delimiter + haplotype + "'"+delimiter + quality + delimiter+ "'" + fastaReader.getSequenceMap().get(accessionID) + "'";
 
             values = values.replace("'NULL'", "NULL");
             values = values.replace("NULL", "");
@@ -153,13 +150,16 @@ public class DataCompleter {
 
             data_meta_file_updated.write(values);
             data_meta_file_updated.newLine();
-
-
         }
-
         data_meta_file_updated.close();
     }
 
+    /**
+     * Assign macro- (or super-) haplogroup based on haplogroup.
+     *
+     * @param haplogroup
+     * @return macrogroup
+     */
     private String setMacrogroup(String haplogroup){
 
         if(haplogroup.startsWith("L0")){
@@ -226,9 +226,11 @@ public class DataCompleter {
             return "R";
         } else if(haplogroup.startsWith("P")){
             return "P";
-        } else if(haplogroup.startsWith("J") || haplogroup.startsWith("T")){
-            return "JT";
-        } else if(haplogroup.startsWith("HV")){
+        } else if(haplogroup.startsWith("J")){
+            return "J";
+        } else if(haplogroup.startsWith("T")){
+            return "T";
+        }else if(haplogroup.startsWith("HV")){
             return "HV";
         } else if(haplogroup.startsWith("H")){
             return "H";
@@ -236,8 +238,16 @@ public class DataCompleter {
             return "V";
         } else if(haplogroup.startsWith("F")){
             return "F";
-        } else if(haplogroup.startsWith("B")){
-            return "B";
+        } else if(haplogroup.startsWith("B2")){
+            return "B2";
+        } else if(haplogroup.startsWith("B3")){
+            return "B3";
+        } else if(haplogroup.startsWith("B4")){
+            return "B4";
+        } else if(haplogroup.startsWith("B5")){
+            return "B5";
+        } else if(haplogroup.startsWith("B6")){
+            return "B6";
         } else if(haplogroup.startsWith("U")){
             return "U";
         } else if(haplogroup.startsWith("K")){
@@ -245,10 +255,13 @@ public class DataCompleter {
         }  else {
             return haplogroup;
         }
-
-
     }
 
+    /**
+     * Return the path to tsv file with completed information.
+     *
+     * @return file path
+     */
     public String getOutfile() {
         return outfile;
     }

@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
@@ -38,7 +39,8 @@ public class AboutDialogue {
         dialogGrid.setHgap(10);
         dialogGrid.setVgap(10);
 
-        imageView = new ImageView("file:logo/mitoBenchLogo.jpg");
+
+        imageView = new ImageView(new Image(getClass().getResourceAsStream("/logo/mitoBenchLogo.jpg")));
         imageView.setFitHeight(144);
         imageView.setFitWidth(200);
 

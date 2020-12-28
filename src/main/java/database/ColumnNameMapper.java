@@ -53,7 +53,7 @@ public class ColumnNameMapper {
             case "geographic_info_tma_inferred_subregion":
                 return "TMA inferred Subregion";
             case "geographic_info_tma_inferred_intermediate_region":
-                return "TMA inferred Intermediate region";
+                return "TMA inferred Intermediate Region";
             case "geographic_info_tma_inferred_city":
                 return "TMA inferred City";
             case "geographic_info_tma_inferred_country":
@@ -178,13 +178,13 @@ public class ColumnNameMapper {
                 return "Archaeological Culture";
             case "mixEMT":
                 return "mixEMT";
-            case "proportion_of_contamination_DNA":
-                return "Proportion of contamination DNA (contamMix)";
+            case "proportion_of_contamination_dna":
+                return "Proportion of contaminated DNA (contamMix)";
             case "mode_of_read_length":
                 return "Mode of read length";
             case "number_of_reads":
                 return "Number of reads";
-            case "sites_more_than_5-fold_coverage":
+            case "sites_more_than_5_fold_coverage":
                 return "Sites >= 5-fold coverage";
 
 
@@ -354,14 +354,14 @@ public class ColumnNameMapper {
                 return "epoch";
             case "Archaeological Culture":
                 return "archaeological_culture";
-            case "Proportion of contamination DNA (contamMix)":
-                return "proportion_of_contamination_DNA";
+            case "Proportion of contaminated DNA (contamMix)":
+                return "proportion_of_contamination_dna";
             case "Mode of read length":
                 return "mode_of_read_length";
             case "Number of reads":
                 return "number_of_reads";
             case "Sites >= 5-fold coverage":
-                return "sites_more_than_5-fold_coverage";
+                return "sites_more_than_5_fold_coverage";
 
 
         }

@@ -13,6 +13,7 @@ public class ToolsMenu {
     private CustomMenuItem dataValidatorMenuItem;
     private CustomMenuItem dataCompleterMenuItem;
     private CustomMenuItem dataAlignerMenuItem;
+    private CustomMenuItem dataUploaderMenuItem;
 
     public ToolsMenu(MitoBenchWindow mitoBenchWindow, GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
         menuTools = new Menu("Tools");
@@ -40,6 +41,11 @@ public class ToolsMenu {
 
         dataCompleterMenuItem = new CustomMenuItem(new Label("Complete data"));
         dataValidatorMenuItem.setId("dataCompleter");
+
+        // ------------------------------ Menu Item Upload data --------------------------------------------
+
+        dataUploaderMenuItem = new CustomMenuItem(new Label("Upload data"));
+        dataUploaderMenuItem.setId("dataUploader");
 
         // ------------------------------ Add tooltips --------------------------------------------------------
 

@@ -4,13 +4,11 @@ package view.menus;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import controller.*;
-import io.datastructure.Entry;
 import io.dialogues.Export.SaveAsDialogue;
 import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
 import io.dialogues.Import.ImportDialogueAlternative;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
-import io.fileConversionPGDSpider.SpiderCoversion;
 import io.writer.ImageWriter;
 import io.writer.StatisticsWriter;
 import javafx.scene.SnapshotParameters;
@@ -21,7 +19,7 @@ import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import io.dialogues.Export.ExportDialogue;
 import view.dialogues.settings.NewProjectWarning;
-import view.dialogues.settings.SqlQueryBuilderWindow;
+import view.dialogues.settings.DatabaseConfigDownloadDialogue;
 
 import java.io.IOException;
 import java.util.*;
@@ -118,11 +116,9 @@ public class FileMenu {
         importFromDB.setId("importFromDB");
         // todo: make db query
         importFromDB.setOnAction(t -> {
-            SqlQueryBuilderWindow sqlQueryBuilderWindow = new SqlQueryBuilderWindow(mitoBenchWindow);
-            Tab sqlConfigTab = new Tab("DB search config");
-            sqlConfigTab.setContent(sqlQueryBuilderWindow.getPane());
-            mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlConfigTab);
-            mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlConfigTab);
+            DatabaseConfigDownloadDialogue sqlQueryBuilderWindow = new DatabaseConfigDownloadDialogue(mitoBenchWindow);
+            mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlQueryBuilderWindow.getSqlConfigTab());
+            mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlQueryBuilderWindow.getSqlConfigTab());
 
         });
 
@@ -185,23 +181,6 @@ public class FileMenu {
         });
 
 
-
-        /*
-                        EXPORT WITH PGDSPIDER
-         */
-
-        MenuItem exportFileSpider = new MenuItem("Convert files with PGDSpider");
-        exportFileSpider.setOnAction(t -> {
-            try {
-                SpiderCoversion spiderCoversion = new SpiderCoversion();
-                LOG.info("Running PGDSpider.");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        });
-
-
         MenuItem exportCurrStats = new MenuItem("Export statistics");
         exportCurrStats.setId("#exportCurrentStats");
         exportCurrStats.setOnAction(t -> {
@@ -234,7 +213,7 @@ public class FileMenu {
         });
 
         menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
-                exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
+                new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
 

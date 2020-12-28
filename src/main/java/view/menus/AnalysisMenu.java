@@ -79,7 +79,7 @@ public class AnalysisMenu {
             Task task = new Task() {
                 @Override
                 protected Object call() throws Exception {
-                    haplotypeCaller.call("");
+                    haplotypeCaller.call("", "");
                     return true;
                 }
             };

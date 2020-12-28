@@ -6,13 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.util.Callback;
-import view.MitoBenchWindow;
-
-import java.util.Arrays;
 
 
 /**
@@ -23,34 +19,19 @@ public class SettingsDialogueStackedBarchart extends AHGDialogue {
     private TableView<ObservableList> table;
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
-
-    private ObservableList<String> options =
-            FXCollections.observableArrayList(
-                    "Sub-Saharan Africa (L0a,L0d,L0k,L1b,L1c,L2a,L2b,L2c,L3b,L3d,L3e,L3f,L4,L5)",
-                    "Americas and the Caribbean (A2,B2,C1b,C1c,C1d,C4c,D1,D2a,D3,D4h3a,X2a,X2g)",
-                    "South-eastern Asia (M*,M7,M8,M9,G,D,N*,R*,R9,B)",
-                    "Europe (H)");
-
-    public SettingsDialogueStackedBarchart(String title, String[] groups, LogClass logClass) {
+    public SettingsDialogueStackedBarchart(String title, LogClass logClass) {
         super(title, logClass);
         dialogGrid.setId("stackedBarChartDialogue");
 
-        addComponents(groups);
-        allowDragAndDrop();
-
     }
 
-    private void addComponents(String[] groups) {
+    public void addComponents(String[] groups) {
 
         Label label_stackOrder = new Label("Please choose stack order.");
         label_stackOrder.setId("id_label_stackOrder");
 
-
-        dialogGrid.add(new Separator(), 0,++row);
         dialogGrid.add(label_stackOrder, 0,++row);
         dialogGrid.add( setTable(groups), 0,++row);
-
-
 
     }
 
@@ -78,8 +59,7 @@ public class SettingsDialogueStackedBarchart extends AHGDialogue {
     }
 
 
-    private void allowDragAndDrop(){
-
+    public void allowDragAndDrop(){
 
         table.setRowFactory(tv -> {
             TableRow<ObservableList> row = new TableRow<>();

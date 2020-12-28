@@ -3,6 +3,7 @@ package controller;
 import Logging.LogClass;
 import io.datastructure.Entry;
 import javafx.collections.ObservableList;
+import view.MitoBenchWindow;
 
 import java.util.ArrayList;
 import java.util.HashMap;

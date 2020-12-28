@@ -43,7 +43,7 @@ public class HaploStatistics {
      * @param coreHGs user defined core HGs
      */
     public void count(String[] coreHGs){
-        ObservableList<ObservableList> tableItems = tableController.getTable().getItems();
+        ObservableList tableItems = tableController.getTable().getItems();
 
         // get set of unique group and haplogroup entries
         if(!tableController.getGroupController().groupingExists()) {
@@ -96,7 +96,7 @@ public class HaploStatistics {
         Collections.sort(keys);
         keys.add("Others");
 
-        TableView<ObservableList> table = tableControllerMutations.getTable();
+        TableView table = tableControllerMutations.getTable();
         tableControllerMutations.addColumn("Group", 0);
         tableControllerMutations.addColumn("Total Number", 1);
         int k = 2;
@@ -192,7 +192,7 @@ public class HaploStatistics {
                     row.setStyle("-fx-background-color: dodgerblue;");
 
                     // set line width of corresponding line to 6px
-                    for(XYChart.Series serie : profilePlot.getPlot().getData()){
+                    for(XYChart.Series<String, Number> serie : profilePlot.getPlot().getData()){
                         if(serie.getName().equals(group)){
                             serie.getNode().setStyle(" -fx-stroke-width: 6px;");
                         }
@@ -207,7 +207,7 @@ public class HaploStatistics {
                     ObservableList rowData = row.getItem();
                     String group = rowData.get(0).toString();
 
-                    for(XYChart.Series serie : profilePlot.getPlot().getData()){
+                    for(XYChart.Series<String, Number> serie : profilePlot.getPlot().getData()){
                         if(serie.getName().equals(group)){
                             serie.getNode().setStyle(" -fx-stroke-width: 2px;");
                         }

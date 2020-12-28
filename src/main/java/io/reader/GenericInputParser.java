@@ -55,7 +55,7 @@ public class GenericInputParser implements IInputData {
             } else if (currline.startsWith("#")) {
                 headertype = currline.replace("#","").split(delimiter);
                 for(String s : headertype){
-                    s.trim().replace("\t","");
+                    s.trim().replace(delimiter,"");
                 }
 
                 continue;
@@ -68,55 +68,61 @@ public class GenericInputParser implements IInputData {
                     }
                 }
 
-                //Assume ID is always first! -> requirement
-                List<Entry> entries = new ArrayList<>();
-                //we need to take care of our different types here now, too
-                for (int i = 0; i < splitLine.length; i++) {
-                    String headerType = headertype[i];
-                    Entry e = null;
-                    if (headerType.equals("C14")) {
-                        e = new Entry(
-                                mapper.mapString(headergroup[i]),
-                                new RadioCarbonInputType(headerType),
-                                new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION)
-                        );
-                    } else if (headerType.endsWith("Location")) {
-                        e = new Entry(
-                                mapper.mapString(headergroup[i]),
-                                new LocationInputType(headerType),
-                                new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION)
-                        );
-                    } else {
-                        if (!mapper.mapString(headergroup[i]).equals("ID")) {
+                if(splitLine.length != headergroup.length || splitLine.length != headertype.length){
+                    System.err.println("Entry and headergroups/-types have unequal length.");
+                } else {
+                    //Assume ID is always first! -> requirement
+                    List<Entry> entries = new ArrayList<>();
+                    //we need to take care of our different types here now, too
+                    for (int i = 0; i < splitLine.length; i++) {
+                        String headerType = headertype[i];
+                        Entry e = null;
+                        if (headerType.equals("C14")) {
                             e = new Entry(
                                     mapper.mapString(headergroup[i]),
-                                    new CategoricInputType(headerType),
-                                    new GenericInputData(splitLine[i])
+                                    new RadioCarbonInputType(headerType),
+                                    new RadioCarbonData(splitLine[i], RadioCarbonData.PARSE_C14_DATE_INFORMATION)
                             );
+                        } else if (headerType.endsWith("Location")) {
+                            e = new Entry(
+                                    mapper.mapString(headergroup[i]),
+                                    new LocationInputType(headerType),
+                                    new LocationData(splitLine[i], LocationData.PARSE_LOCATION_INFORMATION)
+                            );
+                        } else {
+                            if (!mapper.mapString(headergroup[i]).equals("ID")) {
+                                e = new Entry(
+                                        mapper.mapString(headergroup[i]),
+                                        new CategoricInputType(headerType),
+                                        new GenericInputData(splitLine[i])
+                                );
+                            }
                         }
+
+                        if (e != null)
+                            entries.add(e);
+                    }
+                    //Now add with ID to hashmap
+                    String id = splitLine[0].split(" ")[0].trim();
+                    if (id.matches(".*[^\\d]\\d{1}$")) {
+                        id = id.split("\\.")[0];
                     }
 
-                    if (e != null)
-                        entries.add(e);
-                }
-                //Now add with ID to hashmap
-                String id = splitLine[0].split(" ")[0].trim();
-                if (id.matches(".*[^\\d]\\d{1}$")) {
-                    id = id.split("\\.")[0];
+                    // Duplicates within input file are not allowed!
+                    if(map.keySet().contains(id)){
+                        String id_plus = id + "_" + Math.random();
+                        this.list_duplicates.put(id_plus, entries);
+                        this.list_duplicates.put(id, map.get(id));
+                        map.remove(id);
+                        //DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
+                        //        "\nOnly first hit will be added");
+                        //DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
+                    } else {
+                        map.put(id , entries);
+                    }
                 }
 
-                // Duplicates within input file are not allowed!
-                if(map.keySet().contains(id)){
-                    String id_plus = id + "_" + Math.random();
-                    this.list_duplicates.put(id_plus, entries);
-                    this.list_duplicates.put(id, map.get(id));
-                    map.remove(id);
-                    //DuplicatesException duplicatesException = new DuplicatesException("The input file contains duplicates: " + id +
-                    //        "\nOnly first hit will be added");
-                    //DuplicatesErrorDialogue duplicatesErrorDialogue = new DuplicatesErrorDialogue(duplicatesException);
-                } else {
-                    map.put(id , entries);
-                }
+
 
             }
         }

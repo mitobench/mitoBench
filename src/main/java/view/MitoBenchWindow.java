@@ -3,6 +3,7 @@ package view;
 import Logging.LogClass;
 import Logging.LoggerSettingsDialogue;
 import analysis.ProgressBarHandler;
+import com.mashape.unirest.http.Unirest;
 import controller.*;
 import database.DatabaseQueryHandler;
 import javafx.application.Application;
@@ -30,7 +31,7 @@ import java.nio.file.Files;
  */
 public class MitoBenchWindow extends Application {
 
-    private final String MITOBENCH_VERSION = "1.8-beta";
+    private final String MITOBENCH_VERSION = "1.0";
 
     private BorderPane pane_root;
 
@@ -93,15 +94,15 @@ public class MitoBenchWindow extends Application {
 
         // set stage properties
         primaryStage = stage;
-        primaryStage.setTitle("mitoBench");
+        primaryStage.setTitle("mitoBench v" + getMITOBENCH_VERSION());
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
-        primaryStage.getIcons().add(new Image("file:logo/mitoBenchLogo.jpg"));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/logo/mitoBenchLogo.jpg")));
 
         // init database and menu controller
-        databaseQueryHandler = new DatabaseQueryHandler();
-        menuController = new MenuController(databaseQueryHandler, this);
+        databaseQueryHandler = new DatabaseQueryHandler(this);
+        menuController = new MenuController(this);
         dialogueController = new DialogueController(this);
 
 
@@ -198,17 +199,12 @@ public class MitoBenchWindow extends Application {
         fileMenu = new FileMenu( this);
         AnalysisMenu analysisMenu = new AnalysisMenu(this, statisticsMenu);
         ToolsMenu toolsMenu = new ToolsMenu(this, groupMenu, analysisMenu, statisticsMenu);
-        TableMenu tableMenu = new TableMenu(this);
         VisualizationMenu visualizationMenu = new VisualizationMenu(this);
         HelpMenu helpMenu = new HelpMenu();
 
         menuBar.getMenus().addAll(fileMenu.getMenuFile(),
                                   editMenu.getMenuEdit() ,
                                   toolsMenu.getMenuTools(),
-                                  //groupMenu.getMenuGroup(),
-                                  //analysisMenu.getMenuAnalysis(),
-                                  //statisticsMenu.getMenuTools(),
-                                  //tableMenu.getMenuTable(),
                                   visualizationMenu.getMenuGraphics(),
                                   helpMenu.getMenuHelp());
 
@@ -315,13 +311,24 @@ public class MitoBenchWindow extends Application {
 
         primaryStage.setOnCloseRequest(we -> {
             we.consume();
-            // delete haplogrep files
-            if (Files.exists(new File("haplogroups.hsd.dot").toPath())) {
-                try {
+
+
+            // delete all temp files
+            try {
+                if (Files.exists(new File("haplogroups.hsd.dot").toPath()))
                     Files.delete(new File("haplogroups.hsd.dot").toPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                if (Files.exists(new File("tmp_meta_data_toValidate.tsv").toPath()))
+                    Files.delete(new File("tmp_meta_data_toValidate.tsv").toPath());
+
+                if (Files.exists(new File("tmp_fasta_toValidate.fasta").toPath()))
+                    Files.delete(new File("tmp_fasta_toValidate.fasta").toPath());
+
+                if (Files.exists(new File("data_completed.tsv.fasta").toPath()))
+                    Files.delete(new File("data_completed.tsv.fasta").toPath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             LoggerSettingsDialogue loggerSettingsDialogue =
@@ -329,6 +336,26 @@ public class MitoBenchWindow extends Application {
         });
     }
 
+
+    /**
+     * Delete all temporary files that were created while data validation
+     */
+    private void deleteTmpFiles() {
+
+        try {
+            if (Files.exists(new File("tmp_meta_data_toValidate.tsv").toPath()))
+                Files.delete(new File("tmp_meta_data_toValidate.tsv").toPath());
+
+            if (Files.exists(new File("tmp_fasta_toValidate.fasta").toPath()))
+                Files.delete(new File("tmp_fasta_toValidate.fasta").toPath());
+
+            if (Files.exists(new File("data_completed.tsv.fasta").toPath()))
+                Files.delete(new File("data_completed.tsv.fasta").toPath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public Scene getScene() {

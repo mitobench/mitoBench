@@ -16,7 +16,7 @@ import view.MitoBenchWindow;
 
 import java.util.*;
 
-public class SqlQueryBuilderWindow {
+public class DatabaseConfigDownloadDialogue {
 
 
     private final BorderPane root;
@@ -25,7 +25,6 @@ public class SqlQueryBuilderWindow {
 
     private Button btn_getData;
     private CheckBox checkBox_SelectAllData;
-    private CheckBox checkBox_Select100GP;
     private HashMap<String, List<Entry>> data_map;
 
     private Button btn_importToMitoBench;
@@ -52,9 +51,10 @@ public class SqlQueryBuilderWindow {
     private Set<String> authors_entries;
     private ObservableList<String> continent_list;
     private Label label_authors;
+    private Tab sqlConfigTab;
 
 
-    public SqlQueryBuilderWindow(MitoBenchWindow mitoBenchWindow){
+    public DatabaseConfigDownloadDialogue(MitoBenchWindow mitoBenchWindow){
 
         databaseQueryHandler = mitoBenchWindow.getDatabaseQueryHandler();
         mito = mitoBenchWindow;
@@ -84,10 +84,8 @@ public class SqlQueryBuilderWindow {
         btn_importToMitoBench = new Button("Import into mitoBench");
         btn_importToMitoBench.setDisable(true);
 
-        checkBox_SelectAllData = new CheckBox("Get all data from DB (takes about 1-2 min)");
+        checkBox_SelectAllData = new CheckBox("Get all data from database");
         checkBox_SelectAllData.setPadding(new Insets(5,5,5,5));
-        checkBox_Select100GP = new CheckBox("Get all data from 1000 Genome Project (phase3) // For testing purposes");
-        checkBox_Select100GP.setPadding(new Insets(5,5,5,5));
 
         authors_entries = databaseQueryHandler.getAuthorList();
         List<String> targetList = new ArrayList<>(authors_entries);
@@ -100,7 +98,7 @@ public class SqlQueryBuilderWindow {
 
         label_population = new Label("Population");
         label_population.setPadding(new Insets(10,10,10,10));
-        population_entries = databaseQueryHandler.getColumnSet("population");
+        population_entries = new HashSet<>(databaseQueryHandler.getColumnSet("population", "String"));
         List<String> targetList_pop = new ArrayList<>(population_entries);
         java.util.Collections.sort(targetList_pop);
         population_combobox = new CheckComboBox<>(FXCollections.observableList(targetList_pop));
@@ -129,6 +127,9 @@ public class SqlQueryBuilderWindow {
         root.setTop(top);
         root.setCenter(center);
         root.setBottom(bottom);
+
+        sqlConfigTab = new Tab("DB search config");
+        sqlConfigTab.setContent(root);
 
     }
 
@@ -262,6 +263,9 @@ public class SqlQueryBuilderWindow {
 
             if(data_map.size()>0){
 
+                // display duplicates, let user decide which one to keep
+                //this.databaseQueryHandler.openDuplicateDecisionMaker(data_map.get(accession), getEntries(map, mapper), accession);
+
                 long startTime = System.currentTimeMillis();
                 mito.getLogClass().getLogger(this.getClass()).info("Import data from database.\nQuery: ");
                 mito.getTableControllerDB().updateTable(data_map);
@@ -304,7 +308,6 @@ public class SqlQueryBuilderWindow {
 
             if (newValue){
 
-                checkBox_Select100GP.setDisable(true);
                 continents_sample_origin_combobox.setDisable(true);
                 country_sample_origin_combobox.setDisable(true);
                 checkComboBoxAuthors.setDisable(true);
@@ -316,7 +319,6 @@ public class SqlQueryBuilderWindow {
 
             } else if(!newValue){
 
-                checkBox_Select100GP.setDisable(false);
                 continents_sample_origin_combobox.setDisable(false);
                 country_sample_origin_combobox.setDisable(false);
                 checkComboBoxAuthors.setDisable(false);
@@ -330,62 +332,28 @@ public class SqlQueryBuilderWindow {
         });
 
 
-        checkBox_Select100GP.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (newValue){
-
-                checkBox_SelectAllData.setDisable(true);
-                continents_sample_origin_combobox.setDisable(true);
-                country_sample_origin_combobox.setDisable(true);
-                checkComboBoxAuthors.setDisable(true);
-                label_authors.setDisable(true);
-                l_sample_origin_continent.setDisable(true);
-                l_sample_origin_country.setDisable(true);
-                label_population.setDisable(true);
-                population_combobox.setDisable(true);
-
-            } else if(!newValue){
-
-                checkBox_SelectAllData.setDisable(false);
-                continents_sample_origin_combobox.setDisable(false);
-                country_sample_origin_combobox.setDisable(false);
-                checkComboBoxAuthors.setDisable(false);
-                label_authors.setDisable(false);
-                l_sample_origin_continent.setDisable(false);
-                l_sample_origin_country.setDisable(false);
-                label_population.setDisable(false);
-                population_combobox.setDisable(false);
-            }
-
-        });
 
 
         population_combobox.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
 
             //disable / enable other fields
             if(population_combobox.getCheckModel().getCheckedItems().size()==0){
-                checkBox_Select100GP.setDisable(false);
                 checkBox_SelectAllData.setDisable(false);
-
                 continents_sample_origin_combobox.setDisable(false);
                 country_sample_origin_combobox.setDisable(false);
                 l_sample_origin_continent.setDisable(false);
                 l_sample_origin_country.setDisable(false);
-
                 checkComboBoxAuthors.setDisable(false);
                 label_authors.setDisable(false);
 
 
 
             } else {
-                checkBox_Select100GP.setDisable(true);
                 checkBox_SelectAllData.setDisable(true);
-
                 continents_sample_origin_combobox.setDisable(true);
                 country_sample_origin_combobox.setDisable(true);
                 l_sample_origin_continent.setDisable(true);
                 l_sample_origin_country.setDisable(true);
-
                 checkComboBoxAuthors.setDisable(true);
                 label_authors.setDisable(true);
             }
@@ -396,13 +364,9 @@ public class SqlQueryBuilderWindow {
 
             //disable / enable other fields
             if(checkComboBoxAuthors.getCheckModel().getCheckedItems().size()==0){
-                checkBox_Select100GP.setDisable(false);
-
                 checkBox_SelectAllData.setDisable(false);
-
                 label_population.setDisable(false);
                 population_combobox.setDisable(false);
-
                 continents_sample_origin_combobox.setDisable(false);
                 country_sample_origin_combobox.setDisable(false);
                 l_sample_origin_continent.setDisable(false);
@@ -410,13 +374,9 @@ public class SqlQueryBuilderWindow {
 
 
             } else {
-                checkBox_Select100GP.setDisable(true);
-
                 checkBox_SelectAllData.setDisable(true);
-
                 label_population.setDisable(true);
                 population_combobox.setDisable(true);
-
                 continents_sample_origin_combobox.setDisable(true);
                 country_sample_origin_combobox.setDisable(true);
                 l_sample_origin_continent.setDisable(true);
@@ -431,33 +391,19 @@ public class SqlQueryBuilderWindow {
 
             //disable / enable other fields
             if(continents_sample_origin_combobox.getCheckModel().getCheckedItems().size()==0){
-                checkBox_Select100GP.setDisable(false);
-
                 checkBox_SelectAllData.setDisable(false);
-
                 checkComboBoxAuthors.setDisable(false);
                 label_authors.setDisable(false);
-
                 label_population.setDisable(false);
                 population_combobox.setDisable(false);
             } else {
-                checkBox_Select100GP.setDisable(true);
-
                 checkBox_SelectAllData.setDisable(true);
-
                 checkComboBoxAuthors.setDisable(true);
                 label_authors.setDisable(true);
-
                 label_population.setDisable(true);
                 population_combobox.setDisable(true);
             }
-
         });
-
-
-
-
-
 
         btn_getData.setOnAction(e -> {
             if(checkBox_SelectAllData.isSelected()){
@@ -527,19 +473,6 @@ public class SqlQueryBuilderWindow {
                 label_no_data.setText("Getting data from database...\t");
                 getData(task);
 
-            } else if(checkBox_Select100GP.isSelected()) {
-                String query= "author=eq.The%201000%20Genomes%20Project%20Consortium";
-                Task task = new Task() {
-                    @Override
-                    protected Object call() {
-
-                        data_map = databaseQueryHandler.getDataSelection(query);
-                        return true;
-                    }
-                };
-                label_no_data.setText("Getting data from database...\t");
-                getData(task);
-
             } else {
                 String query= "or=(" ;
 
@@ -585,6 +518,7 @@ public class SqlQueryBuilderWindow {
             mito.setInfo_selected_items_text(mito.getTableControllerUserBench().getTable().getSelectionModel().getSelectedItems().size() + " / " +
                     mito.getTableControllerUserBench().getTable().getItems().size() +  " rows are selected");
             mito.getTableControllerDB().cleartable();
+            mito.getTabpane_statistics().getTabs().remove(sqlConfigTab);
         });
 
 
@@ -601,8 +535,6 @@ public class SqlQueryBuilderWindow {
         center.add(checkBox_SelectAllData,0,row,3,1);
 
         center.add(new Separator(),0,++row,3,1);
-
-        center.add(checkBox_Select100GP,0,++row,3,1);
 
         center.add(new Separator(),0,++row,3,1);
 
@@ -623,15 +555,13 @@ public class SqlQueryBuilderWindow {
 
     }
 
-    public BorderPane getPane() {
-        return root;
-    }
-
     public Button getBtn_importToMitoBench() {
         return btn_importToMitoBench;
     }
-
     public Label getLabel_no_data() {
         return label_no_data;
+    }
+    public Tab getSqlConfigTab() {
+        return sqlConfigTab;
     }
 }

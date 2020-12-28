@@ -12,7 +12,8 @@ public class Statistics {
             }
         }
         // round to 2 digits
-        return Math.round((count_n/(double)sequence.length()) * 100.0) / 100.0;
+        double ration_N = Math.round((count_n/(double)sequence.length()) * 100.0) / 100.0;
+        return ration_N*100;
     }
 
 }
