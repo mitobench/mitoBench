@@ -9,7 +9,6 @@ import io.dialogues.Import.IImportDialogue;
 import io.dialogues.Import.IImportDialogueFactory;
 import io.dialogues.Import.ImportDialogueAlternative;
 import io.dialogues.Import.ImportDialogueFactoryImpl;
-import io.fileConversionPGDSpider.SpiderCoversion;
 import io.writer.ImageWriter;
 import io.writer.StatisticsWriter;
 import javafx.scene.SnapshotParameters;
@@ -186,23 +185,6 @@ public class FileMenu {
         });
 
 
-
-        /*
-                        EXPORT WITH PGDSPIDER
-         */
-
-        MenuItem exportFileSpider = new MenuItem("Convert files with PGDSpider");
-        exportFileSpider.setOnAction(t -> {
-            try {
-                SpiderCoversion spiderCoversion = new SpiderCoversion();
-                LOG.info("Running PGDSpider.");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        });
-
-
         MenuItem exportCurrStats = new MenuItem("Export statistics");
         exportCurrStats.setId("#exportCurrentStats");
         exportCurrStats.setOnAction(t -> {
@@ -235,7 +217,7 @@ public class FileMenu {
         });
 
         menuFile.getItems().addAll(newProject, new SeparatorMenuItem(), importFile, importFromDB, exportFile, exportSelectedData,
-                exportFileSpider, new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
+                new SeparatorMenuItem(), exportImage, exportCurrStats , new SeparatorMenuItem(), exit);
     }
 
 
