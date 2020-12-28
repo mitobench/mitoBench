@@ -19,6 +19,8 @@ import view.MitoBenchWindow;
 import view.dialogues.settings.HGListDialogue;
 import view.dialogues.settings.DatabaseConfigDownloadDialogue;
 
+import java.io.IOException;
+
 
 public class Toolbarpane extends ToolBar {
 
@@ -101,7 +103,11 @@ public class Toolbarpane extends ToolBar {
             IImportDialogue importDialogue;
             importDialogue = importDialogueFactory.create(stage);
             importDialogue.start();
-           fileReaderController.openFile(importDialogue.getSelectedFile());
+            try {
+                fileReaderController.openFile(importDialogue.getSelectedFile());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
 
 
         });

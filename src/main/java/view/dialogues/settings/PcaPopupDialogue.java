@@ -13,10 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import org.apache.commons.collections4.bag.SynchronizedSortedBag;
 import org.controlsfx.control.CheckComboBox;
 
-import javax.sound.midi.Soundbank;
 import java.util.*;
 import java.util.List;
 

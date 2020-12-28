@@ -1,7 +1,6 @@
 package view.dialogues.settings;
 
 import Logging.LogClass;
-import controller.TableControllerDuplicates;
 import io.datastructure.Entry;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -9,15 +8,13 @@ import javafx.scene.text.Text;
 import java.util.HashMap;
 import java.util.List;
 
-public class DuplicatesHandlerDialogue extends ATabpaneDialogue{
-    private final TableControllerDuplicates tableControllerDuplicates;
+public class DuplicatesHandlerDialogue extends ATabpaneDialogue {
     private Button upload;
     private Button discard;
 
     public DuplicatesHandlerDialogue(String title, LogClass logClass) {
         super(title, logClass);
 
-        tableControllerDuplicates = new TableControllerDuplicates(logClass);
     }
 
 
@@ -32,7 +29,6 @@ public class DuplicatesHandlerDialogue extends ATabpaneDialogue{
                          List<String> labsample_id_row)
     {
 
-        //tableControllerDuplicates.updateTable(duplicates_database);
         Text label_input=new Text("Data from input dataset");
         label_input.setStyle("-fx-font-weight: bold");
 

@@ -11,32 +11,57 @@ import java.util.*;
 
 public class JsonDataParser {
 
+    private ColumnNameMapper mapper = new ColumnNameMapper();
+    private DatabaseQueryHandler databaseQueryHandler;
+    private boolean duplicates_detected;
+    private int counter;
+
+    public JsonDataParser(DatabaseQueryHandler databaseQueryHandler){
+        this.databaseQueryHandler = databaseQueryHandler;
+    }
+
     /**
      * Get all information contained in the API response object (json).
      * @param response
      * @return
      */
     public HashMap<String, List<Entry>> getData(HttpResponse<JsonNode> response) {
+        counter = 1;
 
         HashMap<String, List<Entry>> data_map = new HashMap();
-        ColumnNameMapper mapper = new ColumnNameMapper();
         for (int i = 0; i < response.getBody().getArray().length(); i++){
             JSONObject map = (JSONObject) response.getBody().getArray().get(i);
             String accession = (String) map.get("accession_id");
-            data_map.put(accession, getEntries(map, mapper));
+            if (data_map.containsKey(accession)){
+                List<Entry> entry_db = data_map.get(accession);
+                // store both entries, let user decide later which one to take
+                String acc_new = accession + "XXX" + counter;
+                duplicates_detected = true;
+                List<Entry> entryy_new = getEntries(map, mapper);
+                data_map.put(acc_new, entryy_new);
+                duplicates_detected = false;
+                counter++;
+
+            } else {
+                data_map.put(accession, getEntries(map, mapper));
+            }
+
         }
 
         return data_map;
     }
 
 
+    /**
+     * Get data from database with duplicated entries.
+     * @param response from database
+     * @return list with entries (including duplicates)
+     */
     public HashMap<Integer, List<Entry>> getDataList(HttpResponse<JsonNode> response) {
 
         HashMap<Integer, List<Entry>> data_map = new HashMap();
-        ColumnNameMapper mapper = new ColumnNameMapper();
         for (int i = 0; i < response.getBody().getArray().length(); i++){
             JSONObject map = (JSONObject) response.getBody().getArray().get(i);
-            String accession = (String) map.get("accession_id");
             data_map.put(i, getEntries(map, mapper));
         }
 
@@ -54,13 +79,14 @@ public class JsonDataParser {
 
         List<Entry> entries = new ArrayList<>();
         for (String key : json_data_map.keySet()){
-            if(key.contains(" "))
-                System.out.println(key);
 
             String d = json_data_map.get(key).toString();
             Entry e;
             // don't publish user password and alias
-            if (!key.equals("user_password") && !key.equals("user_alias")){
+            if(key.equals("accession_id") && duplicates_detected){
+                e = new Entry(mapper.mapString(key), new CategoricInputType("String"), new GenericInputData(d+"XXX"+counter));
+                entries.add(e);
+            } else if (!key.equals("user_password") && !key.equals("user_alias")){
                 e = new Entry(mapper.mapString(key), new CategoricInputType("String"), new GenericInputData(d));
                 entries.add(e);
             }

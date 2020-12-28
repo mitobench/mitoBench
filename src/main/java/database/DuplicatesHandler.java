@@ -28,7 +28,7 @@ public class DuplicatesHandler {
     private String accession;
 
     public DuplicatesHandler(MitoBenchWindow mito) {
-        this.databaseQueryHandler = new DatabaseQueryHandler();
+        this.databaseQueryHandler = new DatabaseQueryHandler(mito);
         this.logClass = mito.getLogClass();
         this.mito = mito;
         this.duplicates = new HashMap<>();

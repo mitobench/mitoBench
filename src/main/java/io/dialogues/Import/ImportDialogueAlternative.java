@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by neukamm on 31.01.17.
@@ -44,7 +45,11 @@ public class ImportDialogueAlternative {
 
     private void setAction(Button openBtn) {
         openBtn.setOnAction(e -> {
-            fileReaderController.openFile(new File(textField_filepath.getText()));
+            try {
+                fileReaderController.openFile(new File(textField_filepath.getText()));
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
             stage.close();
         });
     }

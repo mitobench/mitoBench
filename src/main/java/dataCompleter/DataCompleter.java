@@ -238,6 +238,10 @@ public class DataCompleter {
             return "V";
         } else if(haplogroup.startsWith("F")){
             return "F";
+        } else if(haplogroup.startsWith("B2")){
+            return "B2";
+        } else if(haplogroup.startsWith("B3")){
+            return "B3";
         } else if(haplogroup.startsWith("B4")){
             return "B4";
         } else if(haplogroup.startsWith("B5")){

@@ -4,6 +4,7 @@ import javafx.scene.input.*;
 import view.MitoBenchWindow;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by neukamm on 17.07.17.
@@ -47,7 +48,11 @@ public class DragAndDropManagerInput implements IDragAndDropManager {
         if (db.hasFiles()) {
             success = true;
             for (File file : db.getFiles()) {
-                mito.getFileReaderController().openFile(file);
+                try {
+                    mito.getFileReaderController().openFile(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         event.setDropCompleted(success);

@@ -101,7 +101,7 @@ public class MitoBenchWindow extends Application {
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/logo/mitoBenchLogo.jpg")));
 
         // init database and menu controller
-        databaseQueryHandler = new DatabaseQueryHandler();
+        databaseQueryHandler = new DatabaseQueryHandler(this);
         menuController = new MenuController(this);
         dialogueController = new DialogueController(this);
 

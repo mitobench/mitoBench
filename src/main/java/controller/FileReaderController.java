@@ -42,7 +42,7 @@ public class FileReaderController {
      * Method to open files with specific parser.
      * @param f
      */
-    public void openFile(File f){
+    public void openFile(File f) throws IOException {
 
         if (f != null) {
             String absolutePath = f.getAbsolutePath();
@@ -110,11 +110,8 @@ public class FileReaderController {
 
             if (absolutePath.endsWith(".xlsx") || absolutePath.endsWith(".xls")) {
                 ExcelParser excelReader = null;
-                try {
-                    excelReader = new ExcelParser(f.getPath(), LOG, message_duplications);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                excelReader = new ExcelParser(f.getPath(), LOG, message_duplications);
+
                 HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
                 tableControllerUserBench.updateTable(data_map);
                 //tableControllerUserBench.loadGroups();

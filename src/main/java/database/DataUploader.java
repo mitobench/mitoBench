@@ -32,9 +32,10 @@ public class DataUploader {
         this.mito = mito;
         this.logger = mito.getLogClass().getLogger(this.getClass());
         this.tablecontroller = mito.getTableControllerUserBench();
-        this.databaseQueryHandler = new DatabaseQueryHandler();
+        this.databaseQueryHandler = new DatabaseQueryHandler(mito);
         this.duplicatesChecker = new DuplicatesChecker(databaseQueryHandler);
         this.duplicatesHandler = duplicatesHandler;
+        Unirest.setTimeouts(0, 0);
         // write data
         GenericWriter genericWriter = new GenericWriter(tablecontroller.getTable().getItems(), "\t", true);
         try {
@@ -281,13 +282,13 @@ public class DataUploader {
         if(!error.equals("")){
             System.out.print("\tAccessionID: " + acc + ";\t");
             if(index_labsample_id != -1){
-                System.out.print("LabID: " + row.get(index_labsample_id).getData().getTableInformation() + ";\t");
+                System.out.print("LabID: " + row.get(index_labsample_id).getData().getTableInformation().trim() + ";\t");
             }
             if(index_surname != -1){
-                System.out.print("Submitter: " + row.get(index_surname).getData().getTableInformation() + ";\t");
+                System.out.print("Submitter: " + row.get(index_surname).getData().getTableInformation().trim() + ";\t");
             }
             if(index_author != -1){
-                System.out.print("Author: " + row.get(index_author).getData().getTableInformation() + " et al.;\t");
+                System.out.print("Author: " + row.get(index_author).getData().getTableInformation().trim() + " et al.;\t");
             }
             System.out.println("Reason: " + error);
 

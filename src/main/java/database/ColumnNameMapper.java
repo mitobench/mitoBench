@@ -178,7 +178,7 @@ public class ColumnNameMapper {
                 return "Archaeological Culture";
             case "mixEMT":
                 return "mixEMT";
-            case "proportion_of_contamination_DNA":
+            case "proportion_of_contamination_dna":
                 return "Proportion of contaminated DNA (contamMix)";
             case "mode_of_read_length":
                 return "Mode of read length";
@@ -355,7 +355,7 @@ public class ColumnNameMapper {
             case "Archaeological Culture":
                 return "archaeological_culture";
             case "Proportion of contaminated DNA (contamMix)":
-                return "proportion_of_contamination_DNA";
+                return "proportion_of_contamination_dna";
             case "Mode of read length":
                 return "mode_of_read_length";
             case "Number of reads":
