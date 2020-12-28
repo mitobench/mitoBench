@@ -58,10 +58,10 @@ public class ToolsMenu {
 
         // ------------------------------ Add All Items---------- --------------------------------------------
 
-        menuController.setToolsMenu(dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem,dataUploaderMenuItem);
+        menuController.setToolsMenu(dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem);
 
         menuTools.getItems().addAll(groupMenu.getMenuGroup(), analysisMenu.getMenuAnalysis(), statisticsMenu.getMenuTools(),
-                dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem,dataUploaderMenuItem);
+                dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem);
 
     }
 

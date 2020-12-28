@@ -6,8 +6,6 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.options.Options;
 import dataCompleter.DataCompleter;
 import dataValidator.Validator;
-import database.DataUploader;
-import database.DuplicatesHandler;
 import io.reader.GenericInputParser;
 import io.writer.GenericWriter;
 import io.writer.MultiFastaWriter;
@@ -78,8 +76,7 @@ public class MenuController {
     }
 
 
-    public void setToolsMenu(MenuItem dataAlignerMenuItem, MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem,
-                             MenuItem dataUploaderMenuItem) {
+    public void setToolsMenu(MenuItem dataAlignerMenuItem, MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem){
 
         dataAlignerMenuItem.setOnAction(t -> {
             SequenceAligner sequenceAligner = new SequenceAligner(mito.getLogClass().getLogger(this.getClass()), mito.getTableControllerUserBench(), mito);
@@ -166,63 +163,6 @@ public class MenuController {
             }
         });
 
-        dataUploaderMenuItem.setOnAction(t -> {
-            if(tablecontroller.getTable().getItems().size() == 0){
-                InformationDialogue informationDialogue = new InformationDialogue("Data completion", "No data for data completion", "", "");
-                System.err.println("No data for data validation");
-            } else {
-
-                // check if data is validated
-                if(!tablecontroller.isValidated()){
-                    validate();
-                    tablecontroller.setValidated(true);
-                } else {
-                    System.out.println("Data is already validated. Continue");
-                }
-
-                // if upload possible, continue with data completion
-                if(uploadPossible){
-                    // - data completion
-                    if(!tablecontroller.isCompleted()){
-                        DataCompleter dataCompleter = new DataCompleter();
-                        System.out.println("Completing meta information ....");
-
-                        try {
-                            dataCompleter.run(file_meta, file_fasta, "");
-                            GenericInputParser genericInputParser = new GenericInputParser(
-                                    dataCompleter.getOutfile(),
-                                    this.log.getLogger(this.getClass()),
-                                    "\t",
-                                    null);
-                            tablecontroller.updateTable(genericInputParser.getCorrespondingData());
-                            tablecontroller.setValidated(true);
-                            tablecontroller.setCompleted(true);
-                            InformationDialogue informationDialogue = new InformationDialogue("Data completion", "Data validation finished." +
-                                    "\nData completion finished. Data upload will start now", "", "");
-
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-
-                    // if data is validated and completed, start data upload
-                    try {
-                        Unirest.shutdown();
-                        System.out.println("Shut down database");
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    Options.refresh();
-                    System.out.println("Start Database");
-                    DuplicatesHandler duplicatesHandler = new DuplicatesHandler(mito);
-                    duplicatesHandler.startUpload();
-
-
-                }
-            }
-
-            //deleteTmpFiles();
-        });
     }
 
 
