@@ -14,7 +14,6 @@ import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
 import view.dialogues.settings.PcaPopupDialogue;
 
-import java.util.Arrays;
 
 
 /**
@@ -55,8 +54,8 @@ public class AnalysisMenu {
                     mito.getTabpane_statistics().getSelectionModel().select(fstSettingsDialogue.getTab());
                 }  else {
                     UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
-                            "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
-                                    "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",
+                            "Please align you sequences first to proceed.\n" +
+                                    "You can export you data as multiFasta\nand align them with an alignment tool of your choice.",
                             mito.getDialogueController());
 
                 }

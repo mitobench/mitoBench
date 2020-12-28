@@ -16,7 +16,6 @@ public class UnalignedSequencesDialogue {
     private final GridPane dialogGrid;
     private final DialogueController dialogueController;
     private Label textArea_message;
-    private Button align_mafft_btn;
     private Button cancel_btn;
 
     public UnalignedSequencesDialogue(String title, String message, DialogueController dialogueController){
@@ -43,19 +42,15 @@ public class UnalignedSequencesDialogue {
 
         int row=0;
         textArea_message = new Label(message);
-        align_mafft_btn = new Button("Align with MAFFT");
-        cancel_btn = new Button("Cancel");
+        cancel_btn = new Button("Ok");
 
-        dialogueController.unalignedDialogue_setAlign_mafft_btn(align_mafft_btn, dialog);
         dialogueController.unalignedDialogue_setCancel_btn(cancel_btn, dialog);
 
         textArea_message.setPadding(new Insets(10,10,10,10));
-        align_mafft_btn.setPadding(new Insets(10,10,10,10));
         cancel_btn.setPadding(new Insets(10,10,10,10));
 
         dialogGrid.add(textArea_message, 0, row, 2,1);
-        dialogGrid.add(align_mafft_btn, 0,++row, 1,1);
-        dialogGrid.add(cancel_btn, 1,row, 1,1);
+        dialogGrid.add(cancel_btn, 1,++row, 1,1);
 
     }
 
@@ -84,14 +79,6 @@ public class UnalignedSequencesDialogue {
 
     public void setTextArea_message(Label textArea_message) {
         this.textArea_message = textArea_message;
-    }
-
-    public Button getAlign_mafft_btn() {
-        return align_mafft_btn;
-    }
-
-    public void setAlign_mafft_btn(Button align_mafft_btn) {
-        this.align_mafft_btn = align_mafft_btn;
     }
 
     public Button getCancel_btn() {

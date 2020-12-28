@@ -103,8 +103,8 @@ public class ExportDialogue extends Application {
                 }
             } else {
                 UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
-                        "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
-                                "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",
+                        "Please align you sequences first to proceed.\n" +
+                                "You can export you data as multiFasta\nand align them with an alignment tool of your choice.",
                         mito.getDialogueController()
                         );
             }
@@ -135,8 +135,8 @@ public class ExportDialogue extends Application {
                 }
             } else {
                 UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
-                        "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
-                                "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",mito.getDialogueController());
+                        "Please align you sequences first to proceed.\n" +
+                                "You can export you data as multiFasta\nand align them with an alignment tool of your choice.",mito.getDialogueController());
             }
 
             //CSV Output
