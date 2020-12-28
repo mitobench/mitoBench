@@ -3,6 +3,7 @@ package io.writer;
 
 import controller.ATableController;
 import controller.TableControllerUserBench;
+import database.ColumnNameMapper;
 import io.IOutputData;
 import javafx.collections.ObservableList;
 import org.dhatim.fastexcel.Workbook;
@@ -29,15 +30,15 @@ public class ExcelWriter implements IOutputData {
 
     @Override
     public void writeData(String file, ATableController tableController) throws Exception {
+        ColumnNameMapper mapper = new ColumnNameMapper();
         //Create file extension if its not there already...
         if(!file.endsWith("xlsx")) {
             file = file + ".xlsx";
         }
 
         // create wb and sheet
-
         try (OutputStream os = new FileOutputStream(file)){
-            Workbook wb = new Workbook(os, "MyApplication", "1.0");
+            Workbook wb = new Workbook(os, "DataExport", "1.0");
             Worksheet ws = wb.newWorksheet("Sheet 1");
 
 
@@ -56,6 +57,8 @@ public class ExcelWriter implements IOutputData {
                 if(text.endsWith("(Grouping)")){
                     text = text.split(" ")[0];
                 }
+
+                text = mapper.mapString(text);
 
                 if (i==0) {
                     text = "##"+text;
