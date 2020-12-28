@@ -1,18 +1,12 @@
 package controller;
 
 import Logging.LogClass;
-import io.Exceptions.ARPException;
-import io.Exceptions.FastAException;
-import io.Exceptions.HSDException;
-import io.Exceptions.ProjectException;
+import io.Exceptions.*;
 import io.datastructure.Entry;
 import io.reader.*;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
-import view.dialogues.error.ARPErrorDialogue;
-import view.dialogues.error.DuplicatesDialogue;
-import view.dialogues.error.FastAErrorDialogue;
-import view.dialogues.error.HSDErrorDialogue;
+import view.dialogues.error.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +19,6 @@ public class FileReaderController {
     private ATableController tableControllerUserBench;
     private Logger LOG;
     private MitoBenchWindow mito;
-    private HashMap<String, List<Entry>> table_list_duplications;
 
     public FileReaderController(TableControllerUserBench tableControllerUserBench, LogClass logClass, MitoBenchWindow mitoBenchWindow){
         this.tableControllerUserBench = tableControllerUserBench;
@@ -42,7 +35,7 @@ public class FileReaderController {
      * Method to open files with specific parser.
      * @param f
      */
-    public void openFile(File f) throws IOException {
+    public void openFile(File f){
 
         if (f != null) {
             String absolutePath = f.getAbsolutePath();
@@ -54,14 +47,15 @@ public class FileReaderController {
                 try {
                     try {
                         multiFastAInput = new MultiFastaParser(f.getPath(), LOG, message_duplications);
+                        HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
+                        tableControllerUserBench.updateTable(input_multifasta);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } catch (FastAException e) {
                     FastAErrorDialogue fastAErrorDialogue = new FastAErrorDialogue(e);
                 }
-                HashMap<String, List<Entry>> input_multifasta = multiFastAInput.getCorrespondingData();
-                tableControllerUserBench.updateTable(input_multifasta);
+
             }
 
             //Input is HSD Format
@@ -70,11 +64,12 @@ public class FileReaderController {
                     HSDParser hsdInputParser = null;
                     try {
                         hsdInputParser = new HSDParser(f.getPath(), LOG, message_duplications);
+                        HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
+                        tableControllerUserBench.updateTable(data_map);
                     } catch (HSDException e) {
                         HSDErrorDialogue hsdErrorDialogue = new HSDErrorDialogue(e);
                     }
-                    HashMap<String, List<Entry>> data_map = hsdInputParser.getCorrespondingData();
-                    tableControllerUserBench.updateTable(data_map);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -85,7 +80,6 @@ public class FileReaderController {
             if (absolutePath.endsWith(".tsv")) {
                 try {
                     GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, "\t", message_duplications);
-
                     HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
                     tableControllerUserBench.updateTable(data_map);
 
@@ -93,28 +87,20 @@ public class FileReaderController {
                     e.printStackTrace();
                 }
             }
-//
-//            if (absolutePath.endsWith(".csv")) {
-//                try {
-//                    GenericInputParser genericInputParser = new GenericInputParser(f.getPath(), LOG, ",", message_duplications);
-//                    HashMap<String, List<Entry>> data_map = genericInputParser.getCorrespondingData();
-//                    //message_duplications = genericInputParser.getList_duplicates();
-//                    table_list_duplications = genericInputParser.getList_duplicates();
-//                    tableControllerUserBench.updateTable(data_map);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
 
             //Input is Excel Format
 
             if (absolutePath.endsWith(".xlsx") || absolutePath.endsWith(".xls")) {
                 ExcelParser excelReader = null;
-                excelReader = new ExcelParser(f.getPath(), LOG, message_duplications);
-
-                HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
-                tableControllerUserBench.updateTable(data_map);
-                //tableControllerUserBench.loadGroups();
+                try {
+                    excelReader = new ExcelParser(f.getPath(), LOG, message_duplications);
+                    HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
+                    tableControllerUserBench.updateTable(data_map);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (EXCELException e) {
+                    ExcelErrorDialogue excelErrorDialogue = new ExcelErrorDialogue(e);
+                }
             }
 
             //Input is in ARP Format
@@ -123,14 +109,14 @@ public class FileReaderController {
                 ARPParser arpreader = null;
                 try {
                     arpreader = new ARPParser(f.getPath(), LOG, message_duplications);
+                    HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
+                    tableControllerUserBench.updateTable(data_map);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ARPException e) {
                     ARPErrorDialogue arpErrorDialogue = new ARPErrorDialogue(e);
                 }
-                HashMap<String, List<Entry>> data_map = arpreader.getCorrespondingData();
-                tableControllerUserBench.updateTable(data_map);
-                //tableControllerUserBench.loadGroups();
+
             }
 
             if(absolutePath.endsWith(".mitoproj")){
@@ -139,7 +125,6 @@ public class FileReaderController {
 
                     projectReader.read(f, LOG);
                     projectReader.loadData(tableControllerUserBench, mito.getChartController());
-                    //tableControllerUserBench.loadGroups();
                     mito.setAnotherProjectLoaded(true);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -149,9 +134,6 @@ public class FileReaderController {
 
             }
 
-            if(table_list_duplications!= null && table_list_duplications.size()>0){
-                DuplicatesDialogue duplicatesErrorDialogue = new DuplicatesDialogue(table_list_duplications,  logClass, mito.getTableControllerDB());
-            }
 
         } else {
             try {

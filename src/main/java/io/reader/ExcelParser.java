@@ -1,7 +1,7 @@
 package io.reader;
 
 import database.ColumnNameMapper;
-import io.Exceptions.DuplicatesException;
+import io.Exceptions.EXCELException;
 import io.IInputData;
 import io.datastructure.Entry;
 import io.datastructure.generic.GenericInputData;
@@ -25,15 +25,23 @@ public class ExcelParser implements IInputData{
     private ArrayList<String> types;
     private HashMap<String, List<Entry>> map = new HashMap<>();
 
-    public ExcelParser(String filepath, Logger logger, Set<String> message_duplications) throws IOException {
+    public ExcelParser(String filepath, Logger logger, Set<String> message_duplications) throws IOException, EXCELException {
 
         Logger LOG = logger;
         LOG.info("Read Excel file: " + filepath);
-
         ColumnNameMapper mapper = new ColumnNameMapper();
+        InputStream is = new FileInputStream(filepath);
+        ReadableWorkbook wb = new ReadableWorkbook(is);
+        Sheet sheet = wb.getFirstSheet();
 
-        try (InputStream is = new FileInputStream(filepath); ReadableWorkbook wb = new ReadableWorkbook(is)) {
-            Sheet sheet = wb.getFirstSheet();
+        List<Row> rows_tmp = sheet.read();
+        if (!rows_tmp.get(0).getCellAsString(0).orElse(null).startsWith("##") ||
+                !rows_tmp.get(1).getCellAsString(0).orElse(null).startsWith("#")){
+            throw new EXCELException("This is not in correct Format!\nThe header lines are missing or incorrect. Please also check " +
+                    "if the file contains empty rows.");
+        } else {
+            rows_tmp.clear();
+
             try (Stream<Row> rows = sheet.openStream()) {
                 rows.forEach(r -> {
                     if(r.getCellAsString(0).orElse(null).startsWith("##")){
@@ -72,15 +80,16 @@ public class ExcelParser implements IInputData{
                             }
                             entries.add(new Entry(colname, new CategoricInputType("String"), new GenericInputData(data)));
                         }
-
                         map.put(id , entries);
                     }
                 });
-
-                wb.close();
-                is.close();
+            } catch (Exception e){
+                throw new EXCELException();
             }
+
         }
+        wb.close();
+        is.close();
     }
 
     @Override

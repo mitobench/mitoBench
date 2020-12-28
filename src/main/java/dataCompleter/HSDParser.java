@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,8 +154,7 @@ public class HSDParser {
             return "Inf";
         else {
             BigDecimal bigDecimal = new BigDecimal(value);
-            bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint,
-                    BigDecimal.ROUND_HALF_EVEN);
+            bigDecimal = bigDecimal.setScale(numberOfDigitsAfterDecimalPoint, RoundingMode.HALF_EVEN);
             return bigDecimal.doubleValue()+"";
         }
 

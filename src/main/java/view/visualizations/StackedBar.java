@@ -28,7 +28,6 @@ import java.util.List;
 public class StackedBar extends AChart{
 
     private final TableControllerUserBench tableController;
-    private final GroupController groupcontroller;
     private List< XYChart.Series<String, Number>> seriesList = new ArrayList<>();
     private StackedBarChart<String, Number> sbc;
     private TabPane tabPane;
@@ -39,13 +38,11 @@ public class StackedBar extends AChart{
     private VisualizationController visualizationController;
 
     public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu, ChartController cc, TableControllerUserBench tc,
-                      VisualizationController visualizationController, GroupController groupController) {
+                      VisualizationController visualizationController) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
-        this.groupcontroller = groupController;
         tabPane = vBox;
         this.graphicsMenu = graphicsMenu;
-
         chartController = cc;
         tableController = tc;
 
@@ -69,9 +66,9 @@ public class StackedBar extends AChart{
 
 
     /**
-     * This method adds data to the barplot as series
+     * This method adds data to the bar plot as series
      *
-     * @param data
+     * @param data for bar plot
      * @param name  name of the data set
      */
     public void addSeries(List<XYChart.Data<String, Number>> data, String name){
@@ -144,11 +141,7 @@ public class StackedBar extends AChart{
 
                 n.setOnMouseClicked(e -> {
                     if(MouseButton.PRIMARY.equals(e.getButton())){
-                        try {
-                            createSubBarPlot(item);
-                        } catch (MalformedURLException e1) {
-                            e1.printStackTrace();
-                        }
+                        createSubBarPlot(item);
                     }
                 });
             }
@@ -162,8 +155,7 @@ public class StackedBar extends AChart{
      * @param item
      * @throws MalformedURLException
      */
-    private void createSubBarPlot(XYChart.Data<String, Number> item)
-            throws MalformedURLException {
+    private void createSubBarPlot(XYChart.Data<String, Number> item) {
 
         String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
         String group = item.getXValue();
@@ -222,10 +214,8 @@ public class StackedBar extends AChart{
      */
 
     public void setCategories(String[] groups){
-
         ObservableList categories = FXCollections.observableArrayList();
-        for(String s : groups)
-            categories.add(s);//categories.add(s + " (" + groupcontroller.getGroupSize(s) +")");
+        categories.addAll(Arrays.asList(groups));
         xAxis.setCategories(categories);
     }
     public List<XYChart.Series<String, Number>> getSeriesList() {
@@ -234,7 +224,6 @@ public class StackedBar extends AChart{
     public StackedBarChart<String, Number> getSbc() {
         return sbc;
     }
-
     public void setHg_user_selection(String[] hg_user_selection) {
         this.hg_user_selection = hg_user_selection;
     }

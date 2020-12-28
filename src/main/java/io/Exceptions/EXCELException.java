@@ -23,6 +23,6 @@ public class EXCELException extends Exception implements IMitoException {
 
     @Override
     public String getType() {
-        return "ARP";
+        return "XSLX";
     }
 }

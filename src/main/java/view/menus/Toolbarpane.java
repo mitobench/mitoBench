@@ -103,11 +103,7 @@ public class Toolbarpane extends ToolBar {
             IImportDialogue importDialogue;
             importDialogue = importDialogueFactory.create(stage);
             importDialogue.start();
-            try {
-                fileReaderController.openFile(importDialogue.getSelectedFile());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            fileReaderController.openFile(importDialogue.getSelectedFile());
 
 
         });

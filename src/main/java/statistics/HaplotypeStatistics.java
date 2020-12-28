@@ -61,18 +61,16 @@ public class HaplotypeStatistics {
             String[] mutations = mutations_per_hg.get(hg_tmp);
             Collections.addAll(mutations_of_hg, mutations);
 
-            if(mutations!=null){
-                for(String mutation : mutations_of_hg){
-                    List<String> list = new ArrayList<>();
-                    list.add(hg);
+            for(String mutation : mutations_of_hg){
+                List<String> list = new ArrayList<>();
+                list.add(hg);
 
-                    if(hgs_per_mutation_of_current_data.containsKey(mutation)){
-                        list.addAll(hgs_per_mutation_of_current_data.get(mutation));
-                    }
-
-                    hgs_per_mutation_of_current_data.put(mutation, list);
-
+                if(hgs_per_mutation_of_current_data.containsKey(mutation)){
+                    list.addAll(hgs_per_mutation_of_current_data.get(mutation));
                 }
+
+                hgs_per_mutation_of_current_data.put(mutation, list);
+
             }
 
         }
@@ -84,10 +82,8 @@ public class HaplotypeStatistics {
         tab.setId("tab_stats_mutation_freq");
         tab.setText("Mutation frequency");
 
-        List<String> keys = new ArrayList<>();
-        keys.addAll(hgs_per_mutation_of_current_data.keySet());
-        Collections.sort(keys);
-        TableView<ObservableList> table = tableController.getTable();
+
+        TableView table = tableController.getTable();
         URL url = this.getClass().getResource("/css/tableStyle.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());
 

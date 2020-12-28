@@ -45,11 +45,7 @@ public class ImportDialogueAlternative {
 
     private void setAction(Button openBtn) {
         openBtn.setOnAction(e -> {
-            try {
-                fileReaderController.openFile(new File(textField_filepath.getText()));
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            fileReaderController.openFile(new File(textField_filepath.getText()));
             stage.close();
         });
     }

@@ -48,11 +48,7 @@ public class DragAndDropManagerInput implements IDragAndDropManager {
         if (db.hasFiles()) {
             success = true;
             for (File file : db.getFiles()) {
-                try {
-                    mito.getFileReaderController().openFile(file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                mito.getFileReaderController().openFile(file);
             }
         }
         event.setDropCompleted(success);

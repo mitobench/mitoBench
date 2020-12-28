@@ -46,7 +46,7 @@ public class MenuController {
      * @param filterWithMutation
      * @param defineHGList
      */
-    public void setEditMenu(MenuItem filterTreeBased, MenuItem filterWithMutation, MenuItem unfilterData, MenuItem defineHGList) {
+    public void setEditMenu(MenuItem filterTreeBased, MenuItem filterWithMutation, MenuItem defineHGList) {
 
         filterTreeBased.setOnAction(t -> {
 
@@ -66,10 +66,6 @@ public class MenuController {
             mito.getTabpane_statistics().getSelectionModel().select(dataFilteringMutationBasedDialogue.getTab());
         });
 
-        unfilterData.setOnAction(t -> {
-            mito.getTableControllerUserBench().resetToUnfilteredData();
-
-        });
 
         defineHGList.setOnAction(t -> {
 

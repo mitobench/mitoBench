@@ -149,7 +149,7 @@ public class VisualizationController {
         t.setFont(Font.font(25));
 
         this.stackedBar = new StackedBar(t.getText(), tabPane, visualizationMenu,
-                chartController, tableController, this, groupController);
+                chartController, tableController, this);
         //stackedBar.setStyleSheet(stage);
         URL url = this.getClass().getResource("/css/ColorsStackedBarChart.css");
         stage.getScene().getStylesheets().add(url.toExternalForm());

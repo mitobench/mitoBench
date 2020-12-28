@@ -42,7 +42,6 @@ public abstract class ATableController {
     protected List<String> col_names_sorted;
     protected GroupMenu groupMenu;
     protected LogClass logClass;
-    protected Deque<HashMap<String, List<Entry>>> data_versions = new LinkedList();
     protected String[] customColumnOrder=null;
     private boolean isValidated;
     private boolean isCompleted;
@@ -73,7 +72,6 @@ public abstract class ATableController {
         column_to_index = new HashMap<>();
         this.controller = this;
         table_content = new HashMap<>();
-        data_versions = new LinkedList<>();
     }
 
     private void copyToClipboard() {
@@ -838,20 +836,6 @@ public abstract class ATableController {
     }
 
 
-    public void resetToUnfilteredData(){
-        if(data_versions.size()>1){
-            //data_versions.removeLast();
-            HashMap<String, List<Entry>> data_tmp = data_versions.getLast();
-            if (data_tmp.equals(table.getItems())){
-                data_versions.removeLast();
-                data_tmp = data_versions.getLast();
-            }
-            data_versions.removeLast();
-            updateTable(data_tmp);
-
-        }
-    }
-
     public List<String> getColumnData(TableColumn column){
 
         List<String> columnData = new ArrayList<>();
@@ -873,12 +857,6 @@ public abstract class ATableController {
 
         res.put("ID", "String");
         return res;
-    }
-
-
-    public void cleanVersions() {
-
-        data_versions = new LinkedList<>();
     }
 
     public void copyColumn(String s, String newColname) {

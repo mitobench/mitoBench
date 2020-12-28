@@ -101,11 +101,7 @@ public class FileMenu {
             } else {
                 importDialogue = importDialogueFactory.create(stage);
                 importDialogue.start();
-                try {
-                    fileReaderController.openFile(importDialogue.getSelectedFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                fileReaderController.openFile(importDialogue.getSelectedFile());
             }
 
         });
