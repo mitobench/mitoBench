@@ -36,7 +36,7 @@ public class ImportDialogueImpl implements IImportDialogue {
                 new FileChooser.ExtensionFilter("Haplogrep 2 HSD Format (*.hsd)", "*.hsd"),
                 new FileChooser.ExtensionFilter("ARP Arlequin Input Format (*.arp)", "*.arp"),
                 new FileChooser.ExtensionFilter("Generic Input Format (*.tsv, *.csv)", "*.tsv","*.csv"),
-                new FileChooser.ExtensionFilter("Excel Input Format (*.xlsx, *.xls)", "*.xlsx","*.xls"),
+                new FileChooser.ExtensionFilter("Excel Input Format (*.xlsx)", "*.xlsx"),
                 new FileChooser.ExtensionFilter("MitoProject Input (*.mitoproj)", "*.mitoproj")
         );
     }
