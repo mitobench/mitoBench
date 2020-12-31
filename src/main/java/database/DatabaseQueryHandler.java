@@ -15,7 +15,7 @@ import java.util.*;
 public class DatabaseQueryHandler {
 
     private final MitoBenchWindow mito;
-    private JsonDataParser jsonDataParser = new JsonDataParser(this);
+    private JsonDataParser jsonDataParser = new JsonDataParser();
     private int number_of_samples;
     private int number_of_publications;
     private int number_of_countries_covered;

@@ -1,13 +1,18 @@
 package dataCompleter;
 
+
+import leafletMAP.MapView;
+import reversegeocoder.CityGeocoder;
 import uk.recurse.geocoding.reverse.Country;
 import uk.recurse.geocoding.reverse.ReverseGeocoder;
 
+import java.io.IOException;
 import java.util.*;
 
 public class LocationCompleter {
 
 
+    private CityGeocoder geocoder_city;
     private ReverseGeocoder geocoder;
     private List<String> header;
     private String[] entry;
@@ -17,6 +22,7 @@ public class LocationCompleter {
     private int index_sample_origin_subregion;
     private int index_sample_origin_intermediate_region;
     private int index_sample_origin_country;
+    private int index_sample_origin_city;
 
     private int index_sampling_latitude;
     private int index_sampling_longitude;
@@ -24,6 +30,7 @@ public class LocationCompleter {
     private int index_sampling_subregion;
     private int index_sampling_intermediate_region;
     private int index_sampling_country;
+    private int index_sampling_city;
 
     private int index_TMA_inferrred_latitude;
     private int index_TMA_inferrred_longitude;
@@ -31,6 +38,7 @@ public class LocationCompleter {
     private int index_TMA_inferrred_subregion;
     private int index_TMA_inferrred_intermediate_region;
     private int index_TMA_inferrred_country;
+    private int index_TMA_inferrred_city;
 
     private String[][] m49_list;
     private Map<String, Locale> localeMap;
@@ -40,6 +48,11 @@ public class LocationCompleter {
     public LocationCompleter(String[] header){
 
         initCountryCodeMapping();
+        try {
+            this.geocoder_city = new CityGeocoder(MapView.class.getResource("/data/osm-20151130-0.01-2.bin").getFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.geocoder = new ReverseGeocoder();
         fillListISO3();
         this.header = Arrays.asList(header);
@@ -323,6 +336,7 @@ public class LocationCompleter {
         this.index_sample_origin_subregion = header.indexOf("sample_origin_subregion");
         this.index_sample_origin_intermediate_region = header.indexOf("sample_origin_intermediate_region");
         this.index_sample_origin_country = header.indexOf("sample_origin_country");
+        this.index_sample_origin_city = header.indexOf("sample_origin_city");
 
         this.index_sampling_latitude = header.indexOf("sampling_latitude");
         this.index_sampling_longitude = header.indexOf("sampling_longitude");
@@ -330,6 +344,7 @@ public class LocationCompleter {
         this.index_sampling_subregion = header.indexOf("sampling_subregion");
         this.index_sampling_intermediate_region = header.indexOf("sampling_intermediate_region");
         this.index_sampling_country = header.indexOf("sampling_country");
+        this.index_sampling_city = header.indexOf("sampling_city");
 
         this.index_TMA_inferrred_latitude = header.indexOf("geographic_info_tma_inferred_latitude");
         this.index_TMA_inferrred_longitude = header.indexOf("geographic_info_tma_inferred_longitude");
@@ -337,6 +352,7 @@ public class LocationCompleter {
         this.index_TMA_inferrred_subregion = header.indexOf("geographic_info_tma_inferred_subregion");
         this.index_TMA_inferrred_intermediate_region = header.indexOf("geographic_info_tma_inferred_intermediate_region");
         this.index_TMA_inferrred_country = header.indexOf("geographic_info_tma_inferred_country");
+        this.index_TMA_inferrred_city = header.indexOf("geographic_info_tma_inferred_city");
 
     }
 
@@ -384,7 +400,7 @@ public class LocationCompleter {
 
         if(!lat.equals("") && !lon.equals("")){
             fillBasedOnLatLong(Double.parseDouble(lat), Double.parseDouble(lon), index_sample_origin_country, index_sample_origin_region,
-                    index_sample_origin_subregion, index_sample_origin_intermediate_region);
+                    index_sample_origin_subregion, index_sample_origin_intermediate_region, index_sample_origin_city);
 
         } else if(!country.equals("")){
             fillBasedOnCountry(country, index_sample_origin_region, index_sample_origin_subregion, index_sample_origin_intermediate_region, index_sample_origin_country);
@@ -402,7 +418,7 @@ public class LocationCompleter {
 
         if(!lat.equals("") && !lon.equals("")){
             fillBasedOnLatLong(Double.parseDouble(lat), Double.parseDouble(lon), index_sampling_country, index_sampling_region,
-                    index_sampling_subregion, index_sampling_intermediate_region);
+                    index_sampling_subregion, index_sampling_intermediate_region, index_sampling_city);
 
         } else if(!country.equals("")){
             fillBasedOnCountry(country, index_sampling_region, index_sampling_subregion, index_sampling_intermediate_region, index_sampling_country);
@@ -422,7 +438,7 @@ public class LocationCompleter {
 
         if(!lat.equals("") && !lon.equals("")){
             fillBasedOnLatLong(Double.parseDouble(lat), Double.parseDouble(lon), index_TMA_inferrred_country, index_TMA_inferrred_region,
-                    index_TMA_inferrred_subregion, index_TMA_inferrred_intermediate_region);
+                    index_TMA_inferrred_subregion, index_TMA_inferrred_intermediate_region, index_TMA_inferrred_city);
         } else if(!coun.equals("")){
             fillBasedOnCountry(coun, index_TMA_inferrred_region, index_TMA_inferrred_subregion, index_TMA_inferrred_intermediate_region, index_TMA_inferrred_country);
 
@@ -446,7 +462,10 @@ public class LocationCompleter {
      * @param index_intermediate_region
      */
     private void fillBasedOnLatLong(double lat, double lon, int index_country, int index_region,
-                                    int index_subregion, int index_intermediate_region){
+                                    int index_subregion, int index_intermediate_region, int index_city){
+
+        String[] metadata_city = geocoder_city.lookup((float)lon, (float)lat);
+        String city = metadata_city[0].split("\t")[1];
 
 
         Optional<Country> res = geocoder.getCountry(lat, lon);
@@ -458,9 +477,6 @@ public class LocationCompleter {
             if( country.iso3()==null){
                 entry[index_country] = "";
             } else {
-//                if(country.iso3().equals("USA"))
-//                    entry[index_country] = "USA";
-//                else
                 entry[index_country] = country.name();
             }
 
@@ -481,6 +497,7 @@ public class LocationCompleter {
             } else {
                 entry[index_intermediate_region] = getIntermediateRegion(country.iso3());
             }
+            entry[index_city] = city;
 
         });
     }

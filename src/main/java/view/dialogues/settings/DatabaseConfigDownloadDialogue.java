@@ -35,6 +35,7 @@ public class DatabaseConfigDownloadDialogue {
     private GridPane center;
     private Label label_info_selected_items;
     private CheckComboBox<String> checkComboBoxAuthors;
+    private ComboBox<String> checkComboBoxModernAncient;
     private CheckComboBox<String> country_sample_origin_combobox;
     private List<String> countries_africa;
     private List<String> countries_americas;
@@ -52,6 +53,7 @@ public class DatabaseConfigDownloadDialogue {
     private ObservableList<String> continent_list;
     private Label label_authors;
     private Tab sqlConfigTab;
+    private Label label_ancient;
 
 
     public DatabaseConfigDownloadDialogue(MitoBenchWindow mitoBenchWindow){
@@ -91,10 +93,23 @@ public class DatabaseConfigDownloadDialogue {
         List<String> targetList = new ArrayList<>(authors_entries);
         java.util.Collections.sort(targetList);
 
+
+        label_authors = new Label("Modern/Ancient");
+        label_authors.setPadding(new Insets(10,10,10,10));
+
+        label_ancient = new Label("Modern/Ancient");
+        label_ancient.setPadding(new Insets(10,10,10,10));
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "Modern",
+                        "Ancient"
+                );
+        checkComboBoxModernAncient = new ComboBox(options);
+
+
         label_authors = new Label("Author, year");
         label_authors.setPadding(new Insets(10,10,10,10));
         checkComboBoxAuthors = new CheckComboBox<>(FXCollections.observableList(targetList));
-
 
         label_population = new Label("Population");
         label_population.setPadding(new Insets(10,10,10,10));
@@ -344,6 +359,7 @@ public class DatabaseConfigDownloadDialogue {
                 l_sample_origin_continent.setDisable(false);
                 l_sample_origin_country.setDisable(false);
                 checkComboBoxAuthors.setDisable(false);
+                checkComboBoxModernAncient.setDisable(false);
                 label_authors.setDisable(false);
 
 
@@ -355,10 +371,12 @@ public class DatabaseConfigDownloadDialogue {
                 l_sample_origin_continent.setDisable(true);
                 l_sample_origin_country.setDisable(true);
                 checkComboBoxAuthors.setDisable(true);
+                checkComboBoxModernAncient.setDisable(true);
                 label_authors.setDisable(true);
             }
 
         });
+
 
         checkComboBoxAuthors.getCheckModel().getCheckedItems().addListener((ListChangeListener<String>) c -> {
 
@@ -369,6 +387,7 @@ public class DatabaseConfigDownloadDialogue {
                 population_combobox.setDisable(false);
                 continents_sample_origin_combobox.setDisable(false);
                 country_sample_origin_combobox.setDisable(false);
+                checkComboBoxModernAncient.setDisable(false);
                 l_sample_origin_continent.setDisable(false);
                 l_sample_origin_country.setDisable(false);
 
@@ -380,6 +399,7 @@ public class DatabaseConfigDownloadDialogue {
                 continents_sample_origin_combobox.setDisable(true);
                 country_sample_origin_combobox.setDisable(true);
                 l_sample_origin_continent.setDisable(true);
+                checkComboBoxModernAncient.setDisable(true);
                 l_sample_origin_country.setDisable(true);
             }
 
@@ -395,10 +415,12 @@ public class DatabaseConfigDownloadDialogue {
                 checkComboBoxAuthors.setDisable(false);
                 label_authors.setDisable(false);
                 label_population.setDisable(false);
+                checkComboBoxModernAncient.setDisable(false);
                 population_combobox.setDisable(false);
             } else {
                 checkBox_SelectAllData.setDisable(true);
                 checkComboBoxAuthors.setDisable(true);
+                checkComboBoxModernAncient.setDisable(true);
                 label_authors.setDisable(true);
                 label_population.setDisable(true);
                 population_combobox.setDisable(true);
@@ -418,6 +440,21 @@ public class DatabaseConfigDownloadDialogue {
                 label_no_data.setText("Getting data from database...\t");
                 getData(task);
 
+
+            } if(checkComboBoxModernAncient.getSelectionModel().getSelectedItem() != null){
+                Task task = new Task() {
+                    @Override
+                    protected Object call() {
+                        String query = "or=(";
+                        String selected_item = checkComboBoxModernAncient.getSelectionModel().getSelectedItem();
+                        query += "ancient_modern.eq." + selected_item + ")";
+                        query = query.replace(" ", "%20");
+                        data_map = databaseQueryHandler.getDataSelection(query);
+                        return true;
+                    }
+                };
+                label_no_data.setText("Getting data from database...\t");
+                getData(task);
 
             } if(checkComboBoxAuthors.getCheckModel().getCheckedItems().size() > 0){
 
@@ -541,8 +578,9 @@ public class DatabaseConfigDownloadDialogue {
         center.add(l_sample_origin_continent, 0,++row,1,1);
         center.add(continents_sample_origin_combobox, 1,row,2,1);
 
-        //center.add(l_sample_origin_country, 0,5,1,1);
-        //center.add(country_sample_origin_combobox, 1,5,1,1);
+        center.add(new Separator(),0,++row,3,1);
+        center.add(label_ancient, 0,++row,1,1);
+        center.add(checkComboBoxModernAncient, 1,row,2,1);
 
         center.add(new Separator(),0,++row,3,1);
         center.add(label_authors, 0,++row,1,1);

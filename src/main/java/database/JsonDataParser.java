@@ -12,12 +12,10 @@ import java.util.*;
 public class JsonDataParser {
 
     private ColumnNameMapper mapper = new ColumnNameMapper();
-    private DatabaseQueryHandler databaseQueryHandler;
     private boolean duplicates_detected;
     private int counter;
 
-    public JsonDataParser(DatabaseQueryHandler databaseQueryHandler){
-        this.databaseQueryHandler = databaseQueryHandler;
+    public JsonDataParser(){
     }
 
     /**
@@ -25,27 +23,25 @@ public class JsonDataParser {
      * @param response
      * @return
      */
-    public HashMap<String, List<Entry>> getData(HttpResponse<JsonNode> response) {
+    public HashMap<String, List<Entry>> getData( HttpResponse<JsonNode> response) {
         counter = 1;
 
         HashMap<String, List<Entry>> data_map = new HashMap();
         for (int i = 0; i < response.getBody().getArray().length(); i++){
             JSONObject map = (JSONObject) response.getBody().getArray().get(i);
             String accession = (String) map.get("accession_id");
+
             if (data_map.containsKey(accession)){
-                List<Entry> entry_db = data_map.get(accession);
                 // store both entries, let user decide later which one to take
-                String acc_new = accession + "XXX" + counter;
+                String acc_new = accession + "_XXX" + counter;
                 duplicates_detected = true;
                 List<Entry> entryy_new = getEntries(map, mapper);
                 data_map.put(acc_new, entryy_new);
                 duplicates_detected = false;
                 counter++;
-
             } else {
                 data_map.put(accession, getEntries(map, mapper));
             }
-
         }
 
         return data_map;
@@ -79,14 +75,16 @@ public class JsonDataParser {
 
         List<Entry> entries = new ArrayList<>();
         for (String key : json_data_map.keySet()){
-
             String d = json_data_map.get(key).toString();
             Entry e;
-            // don't publish user password and alias
+
             if(key.equals("accession_id") && duplicates_detected){
-                e = new Entry(mapper.mapString(key), new CategoricInputType("String"), new GenericInputData(d+"XXX"+counter));
+                e = new Entry(mapper.mapString(key), new CategoricInputType("String"), new GenericInputData(d+"_XXX"+counter));
                 entries.add(e);
-            } else if (!key.equals("user_password") && !key.equals("user_alias")){
+            }
+            // don't publish user password and alias
+            else if (!key.equals("user_password") && !key.equals("user_alias")){
+
                 e = new Entry(mapper.mapString(key), new CategoricInputType("String"), new GenericInputData(d));
                 entries.add(e);
             }
@@ -94,5 +92,6 @@ public class JsonDataParser {
 
         return entries;
     }
+
 
 }
