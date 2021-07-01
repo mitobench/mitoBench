@@ -45,7 +45,7 @@ public class DatabaseConfigDownloadDialogue {
     private List<String> countries;
     private List<String> countries_antarctica;
     private HashMap<String, List<String>> continent_country_map;
-    private Label l_sample_origin_continent;
+    private Label l_sample_continent;
     private Label l_sample_origin_country;
     private Label label_population;
     private Set<String> population_entries;
@@ -104,10 +104,10 @@ public class DatabaseConfigDownloadDialogue {
                         "Modern",
                         "Ancient"
                 );
-        checkComboBoxModernAncient = new ComboBox(options);
 
+        checkComboBoxModernAncient= new ComboBox(options);
 
-        label_authors = new Label("Author, year");
+        label_authors = new Label("Publication");
         label_authors.setPadding(new Insets(10,10,10,10));
         checkComboBoxAuthors = new CheckComboBox<>(FXCollections.observableList(targetList));
 
@@ -259,8 +259,8 @@ public class DatabaseConfigDownloadDialogue {
         continents_sample_origin_combobox = new CheckComboBox<>(continent_list);
         country_sample_origin_combobox = new CheckComboBox<>(country_list);
 
-        l_sample_origin_continent = new Label("Continent (sample origin):");
-        l_sample_origin_continent.setPadding(new Insets(10,10,10,10));
+        l_sample_continent = new Label("Continent:");
+        l_sample_continent.setPadding(new Insets(10,10,10,10));
 
         l_sample_origin_country = new Label("Country (sample origin):");
         l_sample_origin_country.setPadding(new Insets(10,10,10,10));
@@ -327,21 +327,24 @@ public class DatabaseConfigDownloadDialogue {
                 country_sample_origin_combobox.setDisable(true);
                 checkComboBoxAuthors.setDisable(true);
                 label_authors.setDisable(true);
-                l_sample_origin_continent.setDisable(true);
+                l_sample_continent.setDisable(true);
                 l_sample_origin_country.setDisable(true);
                 label_population.setDisable(true);
+                label_ancient.setDisable(true);
                 population_combobox.setDisable(true);
+                checkComboBoxModernAncient.setDisable(true);
 
             } else if(!newValue){
-
                 continents_sample_origin_combobox.setDisable(false);
                 country_sample_origin_combobox.setDisable(false);
                 checkComboBoxAuthors.setDisable(false);
                 label_authors.setDisable(false);
-                l_sample_origin_continent.setDisable(false);
+                l_sample_continent.setDisable(false);
                 l_sample_origin_country.setDisable(false);
+                label_ancient.setDisable(false);
                 label_population.setDisable(false);
                 population_combobox.setDisable(false);
+                checkComboBoxModernAncient.setDisable(false);
             }
 
         });
@@ -356,25 +359,24 @@ public class DatabaseConfigDownloadDialogue {
                 checkBox_SelectAllData.setDisable(false);
                 continents_sample_origin_combobox.setDisable(false);
                 country_sample_origin_combobox.setDisable(false);
-                l_sample_origin_continent.setDisable(false);
+                l_sample_continent.setDisable(false);
                 l_sample_origin_country.setDisable(false);
                 checkComboBoxAuthors.setDisable(false);
                 checkComboBoxModernAncient.setDisable(false);
                 label_authors.setDisable(false);
-
-
+                label_ancient.setDisable(false);
 
             } else {
                 checkBox_SelectAllData.setDisable(true);
                 continents_sample_origin_combobox.setDisable(true);
                 country_sample_origin_combobox.setDisable(true);
-                l_sample_origin_continent.setDisable(true);
+                l_sample_continent.setDisable(true);
                 l_sample_origin_country.setDisable(true);
                 checkComboBoxAuthors.setDisable(true);
                 checkComboBoxModernAncient.setDisable(true);
                 label_authors.setDisable(true);
+                label_ancient.setDisable(true);
             }
-
         });
 
 
@@ -388,9 +390,9 @@ public class DatabaseConfigDownloadDialogue {
                 continents_sample_origin_combobox.setDisable(false);
                 country_sample_origin_combobox.setDisable(false);
                 checkComboBoxModernAncient.setDisable(false);
-                l_sample_origin_continent.setDisable(false);
+                l_sample_continent.setDisable(false);
                 l_sample_origin_country.setDisable(false);
-
+                label_ancient.setDisable(false);
 
             } else {
                 checkBox_SelectAllData.setDisable(true);
@@ -398,8 +400,9 @@ public class DatabaseConfigDownloadDialogue {
                 population_combobox.setDisable(true);
                 continents_sample_origin_combobox.setDisable(true);
                 country_sample_origin_combobox.setDisable(true);
-                l_sample_origin_continent.setDisable(true);
                 checkComboBoxModernAncient.setDisable(true);
+                l_sample_continent.setDisable(true);
+                label_ancient.setDisable(true);
                 l_sample_origin_country.setDisable(true);
             }
 
@@ -446,7 +449,7 @@ public class DatabaseConfigDownloadDialogue {
                     @Override
                     protected Object call() {
                         String query = "or=(";
-                        String selected_item = checkComboBoxModernAncient.getSelectionModel().getSelectedItem();
+                        String selected_item = checkComboBoxModernAncient.getSelectionModel().getSelectedItem().toLowerCase();
                         query += "ancient_modern.eq." + selected_item + ")";
                         query = query.replace(" ", "%20");
                         data_map = databaseQueryHandler.getDataSelection(query);
@@ -467,7 +470,6 @@ public class DatabaseConfigDownloadDialogue {
                             query += "and(author.eq." + author_year.split(",")[0] + "," +
                                     "publication_date.eq." + author_year.split(",")[1] + "),";
                         }
-
 
                         if(query.endsWith(",")){
                             query = query.substring(0, query.length() - 1) + ")";
@@ -517,7 +519,7 @@ public class DatabaseConfigDownloadDialogue {
 
                 if (continents_origin_checked.size()>0){
                     for (String continent : continents_origin_checked){
-                        query += "sample_origin_region.eq." + continent + ",";
+                        query += "sample_origin_region.eq." + continent + "," +"sampling_region.eq." + continent + ",";
                     }
 
                 }
@@ -565,6 +567,43 @@ public class DatabaseConfigDownloadDialogue {
 
     private void fillCenterGrid(){
 
+//
+//        // Create the size toggle pane
+//        RadioButton rbSmall = new RadioButton("Small");
+//        RadioButton rbMedium = new RadioButton("Medium");
+//        RadioButton rbLarge = new RadioButton("Large");
+//        ToggleGroup sizeGroup = new ToggleGroup();
+//        sizeGroup.getToggles().addAll(rbSmall, rbMedium, rbLarge);
+//        rbMedium.setSelected(true);
+//        VBox sizeBox = new VBox(10);
+//        sizeBox.setPadding(new Insets(10));
+//        sizeBox.getChildren().addAll(rbSmall, rbMedium, rbLarge);
+//        TitledPane sizeTpane = new TitledPane("Size", sizeBox);
+//// Create the style toggle pane
+//        RadioButton rbThin = new RadioButton("Thin crust");
+//        RadioButton rbThick = new RadioButton("Thick crust");
+//        ToggleGroup styleGroup = new ToggleGroup();
+//        styleGroup.getToggles().addAll(rbThin, rbThick);
+//        rbThin.setSelected(true);
+//        VBox styleBox = new VBox(10);
+//        styleBox.setPadding(new Insets(10));
+//        styleBox.getChildren().addAll(rbThin, rbThick);
+//        TitledPane styleTpane = new TitledPane("Style", styleBox);
+//// Create the toppings toggle pane
+//        CheckBox cbPepperoni = new CheckBox("Pepperoni");
+//        CheckBox cbSausage   = new CheckBox("Sausage");
+//        CheckBox cbOlives    = new CheckBox("Olives");
+//        CheckBox cbMushrooms = new CheckBox("Mushrooms");
+//        CheckBox cbAnchovies = new CheckBox("Anchovies");
+//        VBox toppingsBox = new VBox(10);
+//        toppingsBox.setPadding(new Insets(10));
+//        toppingsBox.getChildren().addAll(cbPepperoni, cbSausage,
+//                cbOlives, cbMushrooms, cbAnchovies);
+//        TitledPane toppingsTpane = new TitledPane("Toppings", toppingsBox);
+//// Create the accordion control
+//        Accordion acc = new Accordion();
+//        acc.getPanes().addAll(sizeTpane, styleTpane, toppingsTpane);
+
         int row = 0;
 
         // filling center
@@ -575,7 +614,7 @@ public class DatabaseConfigDownloadDialogue {
 
         center.add(new Separator(),0,++row,3,1);
 
-        center.add(l_sample_origin_continent, 0,++row,1,1);
+        center.add(l_sample_continent, 0,++row,1,1);
         center.add(continents_sample_origin_combobox, 1,row,2,1);
 
         center.add(new Separator(),0,++row,3,1);
@@ -589,6 +628,8 @@ public class DatabaseConfigDownloadDialogue {
         center.add(new Separator(), 0,++row,3,1);
         center.add(label_population,0, ++row, 1, 1);
         center.add(population_combobox,1, row, 2, 1);
+
+        //center.add(acc,0,++row,3,1);
 
 
     }

@@ -160,10 +160,10 @@ public class StackedBar extends AChart{
         String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
         String group = item.getXValue();
 
-
         TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
         TableColumn group_col = graphicsMenu.getTableController().getTableColumnByName("Grouping");
         String[] selection_haplogroups;
+
         if(group_col==null){
             String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
             selection_haplogroups = cols[0];

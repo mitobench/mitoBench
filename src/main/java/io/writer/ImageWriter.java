@@ -51,9 +51,6 @@ public class ImageWriter {
                 outfile = outfile+ ".png";
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(node.snapshot(spa, null), null), "png", new File(outfile));
-                String[] formatnames = ImageIO.getReaderFormatNames();
-                for(String s : formatnames)
-                    System.out.println(s);
                 LOG.info("Save image: " + outfile);
             } catch (Exception e) {
                 System.err.println("Image cannot be saved.");

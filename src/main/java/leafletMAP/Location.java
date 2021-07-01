@@ -13,12 +13,14 @@ public class Location {
     private final double lat;
     private final double lng;
     private final String property;
+    private final String group;
 
-    public Location(String name, double lat, double lng, String property) {
+    public Location(String name, double lat, double lng, String property, String group) {
         this.name = name;
         this.lat = lat;
         this.lng = lng;
         this.property = property;
+        this.group = group;
     }
 
     public double getLat() {
@@ -31,6 +33,14 @@ public class Location {
 
     public String getProperty() {
         return property;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

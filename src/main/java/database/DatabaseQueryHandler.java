@@ -59,14 +59,21 @@ public class DatabaseQueryHandler {
     public Set<String> getAuthorList() {
         Set<String> result = new HashSet<>();
         try {
-            String query_complete = "http://mitodb.org/meta?select=author,publication_date";
+            String query_complete = "http://mitodb.org/meta?select=author,publication_date,title";
             HttpResponse<JsonNode> response_authors = Unirest.get(query_complete).asJson();
+            String title="";
 
             for (int i = 0; i < response_authors.getBody().getArray().length(); i++) {
                 JSONObject map = (JSONObject) response_authors.getBody().getArray().get(i);
                 String author = (String) map.get("author");
-                String year = map.get("publication_date") + "";
-                result.add(author.trim() + "," + year.trim());
+                String year = String.valueOf(map.get("publication_date"));
+                try {
+                    title = (String) map.get("title");
+                } catch (Exception e){
+                    title = "--";
+                }
+
+                result.add(author.trim() + "," + year.trim() + "," + title.trim());
             }
 
         } catch (UnirestException e) {

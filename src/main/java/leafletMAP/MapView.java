@@ -4,10 +4,13 @@ package leafletMAP;
  * Created by neukamm on 01.07.17.
  */
 
+import com.sun.javafx.charts.Legend;
 import controller.GroupController;
 import controller.TableControllerUserBench;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -32,6 +35,7 @@ public class MapView extends StackPane {
     private final ObservableList items;
     private final TableColumn id_col;
     private final TableColumn grouping_col;
+    private final SplitPane basicpane;
     private final BorderPane mapBasicPane;
     private final TableColumn latitude_col;
     private final TableColumn longitude_col;
@@ -41,7 +45,8 @@ public class MapView extends StackPane {
 
     public MapView(GroupController groupController, TableControllerUserBench tc, TableColumn sampling_latitude_col,
                    TableColumn sampling_longitude_col, ObservableList items,
-                   TableColumn id_col, TableColumn labID_col, TableColumn grouping_col, BorderPane mapBasicPane) {
+                   TableColumn id_col, TableColumn labID_col, TableColumn grouping_col, BorderPane mapBasicPane,
+                   SplitPane basicpane) {
 
         this.tableController = tc;
         this.groupController = groupController;
@@ -52,6 +57,7 @@ public class MapView extends StackPane {
         this.items = items;
         this.grouping_col = grouping_col;
         this.mapBasicPane = mapBasicPane;
+        this.basicpane = basicpane;
         // we define a regular JavaFX WebView that DukeScript can use for rendering
         webView = new WebView();
         webView.setContextMenuEnabled(false);
@@ -105,19 +111,63 @@ public class MapView extends StackPane {
                 String latitude  = latitude_col.getCellObservableValue(item).getValue().toString();
                 String longitude  = longitude_col.getCellObservableValue(item).getValue().toString();
                 String ancient_modern = tableController.getTableColumnByName("Modern/Ancient Data").getCellObservableValue(item).getValue().toString();
+                String group = null;
+                if(groupController.groupingExists()){
+                    group = tableController.getTableColumnByName("Grouping").getCellObservableValue(item).getValue().toString();
+                }
 
                 if(!latitude.equals("") && !longitude.equals("") ){
-                    if(labID==null){
-                        marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern));
-                    } else {
-                        marker_all.add(new Location(id + "_" + labID, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern));
-                    }
+
+
+
+                    // check if there's already a item at this location
+//                    Location loc_double = locationExists(marker_all, latitude, longitude);
+//                    if(loc_double != null){
+//                        String name_double = loc_double.getName();
+//                        String property_double = loc_double.getProperty();
+//                        String group_double = loc_double.getGroup();
+//
+//                        marker_all.remove(loc_double);
+//
+//
+//                    } else {
+                        if(labID==null){
+                            marker_all.add(new Location(id, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern, group));
+                        } else {
+                            if(group!=null){
+                                marker_all.add(new Location(id + "_" + labID + "_" + group, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern, group));
+                            } else {
+                                marker_all.add(new Location(id + "_" + labID, Double.parseDouble(latitude), Double.parseDouble(longitude), ancient_modern, group));
+                            }
+                        }
+                    //}
                 }
             }
         }
         list_locations.getItems().addAll(marker_all);
     }
 
+    /**
+     * Method iterates over already added locations and tests if certains locations
+     * have already been added.
+     *
+     * @return location that exists already, null else
+     * @param marker_all list of all already added locations
+     * @param latitude of new location
+     * @param longitude of new location
+     */
+
+
+    private Location locationExists(List<Location> marker_all, String latitude, String longitude) {
+        for (Location loc : marker_all){
+            if ((loc.getLat() == Double.parseDouble(latitude))
+                    && (loc.getLng() == Double.parseDouble(longitude))){
+
+                return loc;
+            }
+        }
+        return null;
+    }
 
 
     private void addMarker(){
@@ -128,17 +178,19 @@ public class MapView extends StackPane {
 
             if(grouping_col != null){
                 // get groups
-                List<String> columnData = new ArrayList<>();
-                for( Object item : items) {
-                    columnData.add(grouping_col.getCellObservableValue(item).getValue().toString());
-                }
-                markerIcons.setGroups(columnData);
+                markerIcons.setGroups(List.copyOf(groupController.getGroupnames()));
+//                List<String> columnData = new ArrayList<>();
+//                for( Object item : items) {
+//                    columnData.add(grouping_col.getCellObservableValue(item).getValue().toString());
+//                }
+//                markerIcons.setGroups(columnData);
             }
 
             markerIcons.addIconsToMap(map);
 
-           // Legend legend = markerIcons.getLegend();
-            //mapBasicPane.setBottom(legend);
+            Legend legend = markerIcons.getLegend();
+            //mapBasicPane.setBottom(new ScrollPane(legend));
+            basicpane.getItems().add(new ScrollPane(legend));
         } else {
             System.out.println("No items to show on geogr. map");
         }

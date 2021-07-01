@@ -20,7 +20,7 @@ public class HaploTreeModel {
     private HashMap<String, String[]> mutations_per_hg;
 
     public HaploTreeModel(String root){
-        finalTree = new TreeItem<String> (root);
+        finalTree = new TreeItem<> (root);
         finalTree.setExpanded(true);
     }
 
@@ -36,6 +36,7 @@ public class HaploTreeModel {
         mutations_per_hg = mutationParser.getHg_to_mutation();
 
     }
+
 
     public TreeItem<String> getRootItem() {
         return finalTree;

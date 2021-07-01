@@ -176,12 +176,12 @@ public class HaplotreeController {
      * @param haplo_list
      */
     private List<String> getAllSubgroups(String[] haplo_list){
-        List<String> haplo_list_extended = new ArrayList<String>();
+        List<String> haplo_list_extended = new ArrayList<>();
 
         // iterate over all specified haplogroups, get subtree of each
         for(String haplo : haplo_list){
             // get sub-haplogroups of 'haplo'
-            List<String> path = treeMap.get(haplo.toString().trim());
+            List<String> path = treeMap.get(haplo.trim());
 
             // add them to list
             haplo_list_extended.addAll(path);
@@ -209,6 +209,8 @@ public class HaplotreeController {
             it = iterator.next();
 
         }
+        // manipulate treemap and add macro-haplogroup 'L' and 'B'
+
     }
 
 

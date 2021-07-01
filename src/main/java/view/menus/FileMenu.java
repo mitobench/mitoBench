@@ -33,9 +33,7 @@ public class FileMenu {
     private TabPane viz_pane;
     private Menu menuFile;
     private TableControllerUserBench tableControllerUserBench;
-    private TableControllerDB tableControllerDB;
     private MitoBenchWindow mitoBenchWindow;
-    private String MITOBENCH_VERSION;
     private Stage stage;
     private IImportDialogueFactory importDialogueFactory;
     private FileMenu fm;
@@ -45,10 +43,7 @@ public class FileMenu {
 
     public FileMenu( MitoBenchWindow mitoBenchWindow) {
 
-        MITOBENCH_VERSION = mitoBenchWindow.getMITOBENCH_VERSION();
-
         this.mitoBenchWindow = mitoBenchWindow;
-        this.tableControllerDB = mitoBenchWindow.getTableControllerDB();
         this.tableControllerUserBench = mitoBenchWindow.getTableControllerUserBench();
         this.stage = mitoBenchWindow.getPrimaryStage();
 
@@ -71,17 +66,13 @@ public class FileMenu {
     private void addSubMenus() {
 
         // new project
-
         MenuItem newProject = new MenuItem("New Project");
         newProject.setId("menu_item_new_project");
         newProject.setOnAction(t -> {
             // ask if project should be saved
-            NewProjectWarning newProjectWarning = new NewProjectWarning("Warning!", mitoBenchWindow.getLogClass(),
+            new NewProjectWarning("Warning!", mitoBenchWindow.getLogClass(),
                     mitoBenchWindow);
-
-
         });
-
 
 
         /*
@@ -114,12 +105,10 @@ public class FileMenu {
 
         MenuItem importFromDB = new MenuItem("Import Data from DB");
         importFromDB.setId("importFromDB");
-        // todo: make db query
         importFromDB.setOnAction(t -> {
             DatabaseConfigDownloadDialogue sqlQueryBuilderWindow = new DatabaseConfigDownloadDialogue(mitoBenchWindow);
             mitoBenchWindow.getTabpane_statistics().getTabs().add(sqlQueryBuilderWindow.getSqlConfigTab());
             mitoBenchWindow.getTabpane_statistics().getSelectionModel().select(sqlQueryBuilderWindow.getSqlConfigTab());
-
         });
 
 

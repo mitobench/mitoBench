@@ -37,9 +37,7 @@ public class PieChartViz extends AChart {
             i++;
         }
 
-        /**
-         * Set Legend items color
-         */
+        //Set Legend items color
         int j = 0;
         for (Node node : chart.lookupAll(".chart-legend-item")) {
             if (node instanceof Label && ((Label) node).getGraphic() != null) {

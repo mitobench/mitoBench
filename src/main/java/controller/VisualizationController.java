@@ -251,7 +251,7 @@ public class VisualizationController {
         Tab tab = new Tab();
         tab.setId("tab_map");
         tab.setText("Map");
-        tab.setContent(geographicalMapViz.getMapBasicPane());
+        tab.setContent(geographicalMapViz.getBasicPane());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
 

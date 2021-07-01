@@ -67,7 +67,6 @@ public class ExportDialogue extends Application {
         ButtonType fasta_button = new ButtonType("FASTA");
         ButtonType arp_button = new ButtonType("ARP");
         ButtonType beast_button = new ButtonType("BEAST");
-        ButtonType csv_button = new ButtonType("CSV");
         ButtonType tsv_button = new ButtonType("TSV");
         ButtonType xlsx_button = new ButtonType("XLSX");
         ButtonType mito_button = new ButtonType("MITOPROJ");
@@ -79,7 +78,7 @@ public class ExportDialogue extends Application {
         removeUnwantedEntries();
 
 
-        alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, csv_button, tsv_button, xlsx_button, mito_button,
+        alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, tsv_button, xlsx_button, mito_button,
                 nexus_button, phylip_button, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -138,22 +137,7 @@ public class ExportDialogue extends Application {
                         "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
                                 "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",mito.getDialogueController());
             }
-
-            //CSV Output
-        } else if (result.get() == csv_button) {
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv");
-            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
-            saveAsDialogue.start(new Stage());
-            if (saveAsDialogue.getOutFile() != null) {
-                String outFileDB = saveAsDialogue.getOutFile();
-                try {
-                    GenericWriter csvWriter = new GenericWriter(dataToExport, ",", true);
-                    csvWriter.writeData(outFileDB, tableController);
-                    LOG.info("Export data into CSV format. File: " + outFileDB);
-                } catch (Exception e) {
-                    System.err.println("Caught Exception: " + e.getMessage());
-                }
-            }
+            
             //XLSX output
         } else if (result.get() == tsv_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Tab Separated Values (*.tsv)", "*.tsv");

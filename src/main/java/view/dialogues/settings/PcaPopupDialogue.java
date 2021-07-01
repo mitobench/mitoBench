@@ -74,14 +74,26 @@ public class PcaPopupDialogue extends AHGDialogue {
                 Task task = new Task() {
                     @Override
                     protected Object call() {
+                        System.out.println("Start PCA");
+                        LOG.info("Start PCA");
+                        System.out.println("\t... prepare HG list");
+                        LOG.info("\t... prepare HG list");
                         // calculate hg count statistics
                         calculateTrimmedHGList();
                         haploStatistics.count(getHg_list_trimmed());
 
                         // calculate PCA
+
                         pca_alternative = new PCA_Analysis();
+
+                        System.out.println("\t... calculate haplogroup frequencies");
+                        LOG.info("\t... calculate haplogroup frequencies");
                         pca_alternative.setData(haploStatistics.getFrequencies());
+                        System.out.println("\t... set groups");
+                        LOG.info("\t... set groups");
                         pca_alternative.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
+                        System.out.println("\t... calculate PCs");
+                        LOG.info("\t... calculate PCs");
                         pca_alternative.calculate();
 
                         result_pca = pca_alternative.getResult();

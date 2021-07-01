@@ -45,7 +45,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     protected ChartController chartcontroller;
     protected int row;
     private String[] hg_list_trimmed;
-    private Label warning_label;
 
 
     public AHGDialogue(String title, LogClass logClass) {
@@ -87,8 +86,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         this.scene = mito.getScene();
         this.haploStatistics = haploStatistics;
 
-        label = new Label("Please enter comma separated list of haplogroups " +
-                "\naccording to which the haplogroups should be grouped:");
+        label = new Label("Please enter a comma-separated list of macro-haplogroups by which to group:");
         combobox_hglist = new ComboBox(options);
         combobox_hglist.setEditable(true);
 
@@ -112,14 +110,9 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
 
-        warning_label = new Label("Warning!\nIf you want to include the haplogroup 'B' in you list, please specify " +
-                "it as 'B4,B5,B6'.\nThe current version of phylotree (v17) does not support only 'B'.");
-
         row=0;
-
         dialogGrid.add(label, 0,row,3,1);
         dialogGrid.add(combobox_hglist, 0,++row,3,1);
-        dialogGrid.add(warning_label,0,++row,3,1);
         dialogGrid.add(okBtn,0,++row,1,1);
     }
 
@@ -165,7 +158,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     public void calculateTrimmedHGList() {
 
         String[] hg_list;
-
         String p1 = combobox_hglist.getSelectionModel().getSelectedItem().toString();
 
         if (p1.contains("(") && p1.contains(")")) {
@@ -186,6 +178,8 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
                 e.printStackTrace();
             }
         }
+
+
     }
 
 
