@@ -64,7 +64,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         addHGListCombobox(haploStatistics, mito);
 
         this.LOG = this.logClass.getLogger(this.getClass());
-        addEvents();
+        addListener();
     }
 
     protected String getMacrogroupsAsString(MitoBenchWindow mito) {
@@ -117,7 +117,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     }
 
 
-    public void addEvents(){
+    public void addListener(){
         okBtn.setOnAction(e -> {
             if((combobox_hglist.getSelectionModel().getSelectedItem().toString().equals("") || combobox_hglist.getSelectionModel().getSelectedItem().toString().startsWith("Please"))){
                 combobox_hglist.getItems().add("Please enter list here.");
@@ -171,6 +171,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
             p1 = p1.replace("*", "");
             hg_list = p1.split(",");
             hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+            mito.getChartController().setCustomHGList(hg_list_trimmed);
         } else {
             try {
                 throw new HaplogroupException("Haplogroups are not in correct format.");

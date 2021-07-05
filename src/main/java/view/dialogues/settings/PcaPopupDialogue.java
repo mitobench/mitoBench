@@ -63,7 +63,7 @@ public class PcaPopupDialogue extends AHGDialogue {
 
 
     @Override
-    public void addEvents(){
+    public void addListener(){
 
         okBtn.setOnAction(e -> {
             if((combobox_hglist.getSelectionModel().getSelectedItem().toString().equals("") || combobox_hglist.getSelectionModel().getSelectedItem().toString().startsWith("Please"))){

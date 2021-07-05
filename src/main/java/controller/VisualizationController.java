@@ -171,6 +171,8 @@ public class VisualizationController {
         t.setFont(Font.font(25));
 
         pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
+        URL url = this.getClass().getResource("/css/ColorsPieChart.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
         pieChartViz.setStyleSheet(stage);
         grid_piecharts.setGridLinesVisible(true);
         grid_piecharts.add(pieChartViz.getChart(),curr_col,curr_row,1,1);

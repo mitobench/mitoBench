@@ -20,6 +20,3 @@
 .default-color18.chart-bar { -fx-bar-fill: darkgrey; }/* H */
 .default-color19.chart-bar { -fx-bar-fill: #4f4f4f; }/* HV */
 .default-color20.chart-bar { -fx-bar-fill: rgba(0, 0, 0, 0.98); }/* others */
-.default-color21.chart-bar { -fx-bar-fill: #ff00b5; }/* K */
-.default-color22.chart-bar { -fx-bar-fill: #051940; }/* K */
-.default-color23.chart-bar { -fx-bar-fill: #503c38; }/* K */
