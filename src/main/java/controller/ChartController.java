@@ -202,6 +202,7 @@ public class ChartController {
                                                                          String[] selection_haplogroups,
                                                                          String[] selection_groups) {
 
+        // todo: improve efficiency!
 
         groupOrder = new String[selection_groups.length];
         groupOrder = selection_groups.clone();
@@ -224,7 +225,11 @@ public class ChartController {
                                 double count = 0.0;
                                 for (String hg : subHGs) {
 
-                                    List<String> hgs = tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+                                    List<String> hgs = tableController.getCountPerHG(
+                                            hg,
+                                            group,
+                                            tableController.getColIndex("Haplogroup"),
+                                            tableController.getColIndex("Grouping"));
                                     count += hgs.size();
                                 }
                                 XYChart.Data<String, Number> data = new XYChart.Data<>(group, roundValue(count));

@@ -227,14 +227,14 @@ public class VisualizationMenu {
                             } catch (MalformedURLException e1) {
                                 e1.printStackTrace();
                             }
-
-                            if(selection_haplogroups.length > 20){
-                                colorScheme.setNewColors(stackedBar);
-                                stackedBar.addListener();
-                            } else {
-                                colorScheme.setNewColorsLess20(stackedBar);
-                                stackedBar.addListener();
-                            }
+                            colorScheme.setNewColors(stackedBar);
+//                            if(selection_haplogroups.length > 20){
+//                                colorScheme.setNewColors(stackedBar);
+//                                stackedBar.addListener();
+//                            } else {
+//                                colorScheme.setNewColorsLess20(stackedBar);
+//                                stackedBar.addListener();
+//                            }
 
                             // remove tab from tabpane
                             mito.getTabpane_visualization().getTabs().remove(tab);

@@ -76,10 +76,12 @@ public class PcaPopupDialogue extends AHGDialogue {
                     protected Object call() {
                         System.out.println("Start PCA");
                         LOG.info("Start PCA");
-                        System.out.println("\t... prepare HG list");
-                        LOG.info("\t... prepare HG list");
+                        System.out.println("\t... calculate trimmed HG list");
+                        LOG.info("\t... calculate trimmed HG list");
                         // calculate hg count statistics
                         calculateTrimmedHGList();
+                        System.out.println("\t... count HGs");
+                        LOG.info("\t... count HGs");
                         haploStatistics.count(getHg_list_trimmed());
 
                         // calculate PCA
@@ -91,7 +93,8 @@ public class PcaPopupDialogue extends AHGDialogue {
                         pca_alternative.setData(haploStatistics.getFrequencies());
                         System.out.println("\t... set groups");
                         LOG.info("\t... set groups");
-                        pca_alternative.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
+                        pca_alternative.setGroups(mito.getGroupController().getGroupnames().toArray(
+                                new String[mito.getGroupController().getGroupnames().size()]));
                         System.out.println("\t... calculate PCs");
                         LOG.info("\t... calculate PCs");
                         pca_alternative.calculate();
@@ -109,6 +112,8 @@ public class PcaPopupDialogue extends AHGDialogue {
                 });
 
                 task.setOnSucceeded((EventHandler<Event>) event -> {
+                    LOG.info("\t... Task successfully finished");
+                    System.out.println("\t... Task successfully finished");
                     TableView table = haploStatistics.writeToTable();
 
                     statsTabPane.getTabs().remove(getTab());

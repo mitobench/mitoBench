@@ -81,32 +81,32 @@ public class MarkerIcons {
             LatLng pos = new LatLng(loc.getLat(), loc.getLng());
 
             // ancient marker
-            MarkerOptions markerOptions_ancient = new MarkerOptions().setTitle("Ancient");
-            URL pathToIcon_ancient = this.getClass().getResource("/icons/raute.png");
-            IconOptions iconOptions_ancient = new IconOptions(pathToIcon_ancient.toExternalForm());
-            iconOptions_ancient.setIconSize(new Point(15,15));
-            Icon icon_ancient = new Icon(iconOptions_ancient);
+//            MarkerOptions markerOptions_ancient = new MarkerOptions().setTitle("Ancient");
+//            URL pathToIcon_ancient = this.getClass().getResource("/icons/raute.png");
+//            IconOptions iconOptions_ancient = new IconOptions(pathToIcon_ancient.toExternalForm());
+//            iconOptions_ancient.setIconSize(new Point(15,15));
+//            Icon icon_ancient = new Icon(iconOptions_ancient);
 
 
             // modern marker
             PathOptions pathOpt_modern = new PathOptions().setColor("BLUE");
             CircleMarker m_circle_modern = new CircleMarker(pos,  pathOpt_modern);
 
-            if (((Location) location).getProperty().equals("ancient")){
-                Popup popup = new Popup();
-                popup.setContent(location.toString());
-                Marker marker_ancient = new Marker(pos, markerOptions_ancient);
-                marker_ancient.setIcon(icon_ancient);
-                marker_ancient.bindPopup(popup);
-                marker_ancient.addTo(map);
-
-            } else{
+//            if (((Location) location).getProperty().equals("ancient")){
+//                Popup popup = new Popup();
+//                popup.setContent(location.toString());
+//                Marker marker_ancient = new Marker(pos, markerOptions_ancient);
+//                marker_ancient.setIcon(icon_ancient);
+//                marker_ancient.bindPopup(popup);
+//                marker_ancient.addTo(map);
+//
+//            } else{
                 Popup popup = new Popup();
                 popup.setContent(location.toString());
                 m_circle_modern.bindPopup(popup);
                 m_circle_modern.addTo(map);
 
-            }
+          //  }
         }
     }
 

@@ -148,7 +148,7 @@ public class MapView extends StackPane {
     }
 
     /**
-     * Method iterates over already added locations and tests if certains locations
+     * Method iterates over already added locations and tests if certain locations
      * have already been added.
      *
      * @return location that exists already, null else
@@ -190,9 +190,13 @@ public class MapView extends StackPane {
 
             Legend legend = markerIcons.getLegend();
             //mapBasicPane.setBottom(new ScrollPane(legend));
-            basicpane.getItems().add(new ScrollPane(legend));
+            ScrollPane scroll = new ScrollPane();
+            scroll.setFitToHeight(true);
+            scroll.setFitToWidth(true);
+            scroll.setContent(legend);
+            basicpane.getItems().add(scroll);
         } else {
-            System.out.println("No items to show on geogr. map");
+            System.out.println("No items to show on geographic map");
         }
 
     }

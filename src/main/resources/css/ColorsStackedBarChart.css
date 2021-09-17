@@ -1,22 +1,22 @@
 /* define color for main haplogroups*/
-.default-color0.chart-bar { -fx-bar-fill: #ffce1b; } /* L0 */
-.default-color1.chart-bar { -fx-bar-fill: #ff9030; }/* L1 */
-.default-color2.chart-bar { -fx-bar-fill: #ff4b29; }/* L2 */
-.default-color3.chart-bar { -fx-bar-fill: red; }/* L3 */
-.default-color4.chart-bar { -fx-bar-fill: #960e0c; }/* L4 */
-.default-color5.chart-bar { -fx-bar-fill: #1a2ae8; }/* M1 */
-.default-color6.chart-bar { -fx-bar-fill: #2ce99b; }/* N */
-.default-color7.chart-bar { -fx-bar-fill: #32ca29; }/* I */
-.default-color8.chart-bar { -fx-bar-fill: #009a32; }/* W */
-.default-color9.chart-bar { -fx-bar-fill: #185933; }/* X */
-.default-color10.chart-bar { -fx-bar-fill: #512603; }/* R */
-.default-color11.chart-bar { -fx-bar-fill: #814f11; }/* R0 */
-.default-color12.chart-bar { -fx-bar-fill: #dd82d1; }/* U */
-.default-color13.chart-bar { -fx-bar-fill: #740492; }/* K */
-.default-color14.chart-bar { -fx-bar-fill: #93e0df; }/* J */
-.default-color15.chart-bar { -fx-bar-fill: #178e92; }/* T */
-.default-color16.chart-bar { -fx-bar-fill: #026e75; }/* T1 */
-.default-color17.chart-bar { -fx-bar-fill: #065a83; }/* T2 */
-.default-color18.chart-bar { -fx-bar-fill: darkgrey; }/* H */
-.default-color19.chart-bar { -fx-bar-fill: #4f4f4f; }/* HV */
-.default-color20.chart-bar { -fx-bar-fill: rgba(0, 0, 0, 0.98); }/* others */
+.default-colorH.chart-bar { -fx-bar-fill: #ffce1b; } /* H */
+.default-colorHV0.chart-bar { -fx-bar-fill: #ff9030; } /*L1 */
+.default-colorR0a.chart-bar { -fx-bar-fill: #ff4b29; } /* J */
+.default-colorHV.chart-bar { -fx-bar-fill: red; }/* K */
+.default-colorJ.chart-bar { -fx-bar-fill: #960e0c; }/*L*/
+.default-colorT.chart-bar { -fx-bar-fill: #1a2ae8; }
+.default-colorU.chart-bar { -fx-bar-fill: #2ce99b; }
+.default-colorK.chart-bar { -fx-bar-fill: #32ca29; }/* R0 */
+.default-colorN1.chart-bar { -fx-bar-fill: #009a32; }
+.default-colorI.chart-bar { -fx-bar-fill: #185933; }/* U */
+.default-colorN2.chart-bar { -fx-bar-fill: #512603; }/* W */
+.default-colorW.chart-bar { -fx-bar-fill: #814f11; }/* X */
+.default-colorX.chart-bar { -fx-bar-fill: #dd82d1; }/* U */
+.default-colorL.chart-bar { -fx-bar-fill: #740492; }/* K */
+.default-colorM.chart-bar { -fx-bar-fill: #93e0df; }/* J */
+.default-color13.chart-bar { -fx-bar-fill: #178e92; }/* T */
+.default-color14.chart-bar { -fx-bar-fill: #026e75; }/* T1 */
+.default-color15.chart-bar { -fx-bar-fill: #065a83; }/* T2 */
+.default-color16.chart-bar { -fx-bar-fill: darkgrey; }/* H */
+.default-color17.chart-bar { -fx-bar-fill: #4f4f4f; }/* HV */
+.default-color18.chart-bar { -fx-bar-fill: rgba(0, 0, 0, 0.98); }/* others */

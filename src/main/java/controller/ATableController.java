@@ -403,6 +403,7 @@ public abstract class ATableController {
                     -> new SimpleStringProperty(param.getValue().get(j).toString()));
 
             col_names.add(colname);
+            //col.prefWidthProperty().bind(table.widthProperty().multiply(0.1));
             table.getColumns().addAll(col);
         }
     }

@@ -213,6 +213,11 @@ public class HaploStatistics {
     }
 
 
+    /**
+     * Calculate and return haplogroup frequencies of given dataset.
+     *
+     * @return haplogroup frequencies
+     */
     public double[][] getFrequencies(){
 
         double[][] data = getData();

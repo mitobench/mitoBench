@@ -2,8 +2,6 @@ package controller;
 
 import Logging.LogClass;
 import analysis.SequenceAligner;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.options.Options;
 import dataCompleter.DataCompleter;
 import dataValidator.Validator;
 import io.reader.GenericInputParser;
@@ -97,6 +95,7 @@ public class MenuController {
 
             }
         });
+
 
         dataValidatorMenuItem.setOnAction(t -> {
             // start validation and completion on non-empty data table only

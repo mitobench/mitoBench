@@ -224,7 +224,7 @@ public class VisualizationController {
         t.setText("Haplogroup profile");
         t.setFont(Font.font(100));
 
-        profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Frequency in %", tabPane,
+        profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Occurrences", tabPane,
                 logClass, profilePlotID, mito);
         profilePlot.setStyleSheet(stage);
 
