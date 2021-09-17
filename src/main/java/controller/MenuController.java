@@ -72,9 +72,7 @@ public class MenuController {
         });
     }
 
-
-    public void setToolsMenu(MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem){
-
+    public void setToolsMenu( MenuItem dataValidatorMenuItem, MenuItem dataCompleterMenuItem){
 
         dataValidatorMenuItem.setOnAction(t -> {
             // start validation and completion on non-empty data table only

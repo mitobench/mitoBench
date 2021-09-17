@@ -63,7 +63,7 @@ public class PcaPopupDialogue extends AHGDialogue {
 
 
     @Override
-    public void addEvents(){
+    public void addListener(){
 
         okBtn.setOnAction(e -> {
             if((combobox_hglist.getSelectionModel().getSelectedItem().toString().equals("") || combobox_hglist.getSelectionModel().getSelectedItem().toString().startsWith("Please"))){
@@ -74,14 +74,29 @@ public class PcaPopupDialogue extends AHGDialogue {
                 Task task = new Task() {
                     @Override
                     protected Object call() {
+                        System.out.println("Start PCA");
+                        LOG.info("Start PCA");
+                        System.out.println("\t... calculate trimmed HG list");
+                        LOG.info("\t... calculate trimmed HG list");
                         // calculate hg count statistics
                         calculateTrimmedHGList();
+                        System.out.println("\t... count HGs");
+                        LOG.info("\t... count HGs");
                         haploStatistics.count(getHg_list_trimmed());
 
                         // calculate PCA
+
                         pca_alternative = new PCA_Analysis();
+
+                        System.out.println("\t... calculate haplogroup frequencies");
+                        LOG.info("\t... calculate haplogroup frequencies");
                         pca_alternative.setData(haploStatistics.getFrequencies());
-                        pca_alternative.setGroups(mito.getGroupController().getGroupnames().toArray(new String[mito.getGroupController().getGroupnames().size()]));
+                        System.out.println("\t... set groups");
+                        LOG.info("\t... set groups");
+                        pca_alternative.setGroups(mito.getGroupController().getGroupnames().toArray(
+                                new String[mito.getGroupController().getGroupnames().size()]));
+                        System.out.println("\t... calculate PCs");
+                        LOG.info("\t... calculate PCs");
                         pca_alternative.calculate();
 
                         result_pca = pca_alternative.getResult();
@@ -97,6 +112,8 @@ public class PcaPopupDialogue extends AHGDialogue {
                 });
 
                 task.setOnSucceeded((EventHandler<Event>) event -> {
+                    LOG.info("\t... Task successfully finished");
+                    System.out.println("\t... Task successfully finished");
                     TableView table = haploStatistics.writeToTable();
 
                     statsTabPane.getTabs().remove(getTab());

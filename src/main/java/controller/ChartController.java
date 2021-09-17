@@ -135,10 +135,18 @@ public class ChartController {
             data_all = assignHGs(hgs_summed, selection_haplogroups, selection_groups);
         }
 
-        // sort list alphabetically
-        java.util.Collections.sort(hg_core_list);
-
         int norm = tableController.getSelectedRows().size();
+
+        // sort 'hg_core_list' according 'customHGList'
+        List<String> tmp_hg_core_list = new ArrayList<>();
+        for(String hg : customHGList){
+            for(String k : hg_core_list){
+                if(hg.equals(k)){
+                    tmp_hg_core_list.add(k);
+                }
+            }
+        }
+        hg_core_list = tmp_hg_core_list;
 
         for(String key : hg_core_list){
             if(data_all.containsKey(key)) {
@@ -194,6 +202,7 @@ public class ChartController {
                                                                          String[] selection_haplogroups,
                                                                          String[] selection_groups) {
 
+        // todo: improve efficiency!
 
         groupOrder = new String[selection_groups.length];
         groupOrder = selection_groups.clone();
@@ -203,8 +212,8 @@ public class ChartController {
         if(hg_core_list.size()>0){
 
             for(String hg_core : hg_core_list){
-
-                if(hgs_summed.keySet().contains(hg_core)){
+                System.out.println("\t\tGetting hgs for " + hg_core);
+                if(hgs_summed.containsKey(hg_core)){
                     for (String key : hgs_summed.keySet()) {
 
                         ArrayList<String> subHGs = hgs_summed.get(key);
@@ -212,15 +221,17 @@ public class ChartController {
                         for (int i = 0; i < selection_groups.length; i++) {
                             String group = selection_groups[i];
 
-
                             if(!group.equals("")){
                                 double count = 0.0;
                                 for (String hg : subHGs) {
 
-                                    List<String> hgs = tableController.getCountPerHG(hg, group, tableController.getColIndex("Haplogroup"), tableController.getColIndex("Grouping"));
+                                    List<String> hgs = tableController.getCountPerHG(
+                                            hg,
+                                            group,
+                                            tableController.getColIndex("Haplogroup"),
+                                            tableController.getColIndex("Grouping"));
                                     count += hgs.size();
                                 }
-
                                 XYChart.Data<String, Number> data = new XYChart.Data<>(group, roundValue(count));
                                 data_list.add(data);
                             }
@@ -239,7 +250,6 @@ public class ChartController {
                     data_all.put(hg_core, data_list);
                 }
             }
-
 
             // iterate over used hgs and check if there are some unused hgs
             List<String> unused_hgs = new ArrayList<>();
@@ -268,9 +278,7 @@ public class ChartController {
 
                 String hg_old = hg;
                 hg = hg.split("\\+")[0];
-                if(hg.equals("L2'3'4'6")){
-                    hg = "L2";
-                }
+
                 // get coreHG of this HG
                 String keyHG = hg;
                 for(String cHG : hg_core_list){
@@ -294,10 +302,8 @@ public class ChartController {
                 }
             }
 
-
             // remove all "newly" used HGs
             unused_hgs.removeAll(unused_hgs_tmp);
-
             // get all so far unused haplogroups to assign them to "others"
             List<XYChart.Data<String, Number>> data_list = new ArrayList<>();
             for (int i = 0; i < selection_groups.length; i++) {
@@ -311,8 +317,6 @@ public class ChartController {
                     XYChart.Data<String, Number> data = new XYChart.Data<>(group, count_others);
                     data_list.add(data);
                 }
-
-
             }
             data_all.put("Others", data_list);
 
@@ -324,10 +328,7 @@ public class ChartController {
                 e.printStackTrace();
             }
         }
-
         return null;
-
-
     }
 
     /**
@@ -364,7 +365,6 @@ public class ChartController {
      * @return
      */
 
-    //public HashMap<String, ArrayList> summarizeHaplogroups(String[] hgs, String[] coreHGs_variable){
     public HashMap<String, ArrayList> summarizeHaplogroups(List<String> hgs, String[] coreHGs_variable){
 
         HashMap<String, ArrayList> hgs_summarized = new HashMap<>();
@@ -372,10 +372,28 @@ public class ChartController {
         used_hgs = new ArrayList<>();
 
         for(String hg_core : hg_core_list){
+            List<String> core_subs;
             hg_core = hg_core.trim();
-            List<String> core_subs = treeMap.get(hg_core);
+            if(hg_core.equals("L")){
+                core_subs = treeMap.get("L0");
+                core_subs.addAll(treeMap.get("L1"));
+                core_subs.addAll(treeMap.get("L2"));
+                core_subs.addAll(treeMap.get("L3"));
+                core_subs.addAll(treeMap.get("L4"));
+                core_subs.addAll(treeMap.get("L5"));
+                core_subs.addAll(treeMap.get("L6"));
+            } else if (hg_core.equals("B")){
+                core_subs = treeMap.get("B2");
+                core_subs.addAll(treeMap.get("B4"));
+                core_subs.addAll(treeMap.get("B5"));
+                core_subs.addAll(treeMap.get("B6"));
+            } else {
+                core_subs = treeMap.get(hg_core);
+            }
+
 
             for(String hg : hgs){
+
                 if(hg.contains("+")){
                     hg = hg.split("\\+")[0];
                 }
@@ -424,6 +442,43 @@ public class ChartController {
         List<Integer> sizes = new ArrayList<>();
         HashMap<Integer, List<String>> count_to_hg = new HashMap<>();
         for(String key : coreHGs){
+            if(key.equals("L")){
+                List<String> grL0 = treeMap.get("L0");
+                List<String> grL1 = treeMap.get("L1");
+                List<String> grL2 = treeMap.get("L2");
+                List<String> grL3 = treeMap.get("L3");
+                List<String> grL4 = treeMap.get("L4");
+                List<String> grL5 = treeMap.get("L5");
+                List<String> grL6 = treeMap.get("L5");
+
+                int count = grL0.size() + grL1.size() + grL2.size() + grL3.size() + grL4.size() + grL5.size() + grL6.size();
+
+                sizes.add(count);
+                if(count_to_hg.containsKey(count)){
+                    List<String> tmp = new ArrayList<>(count_to_hg.get(count));
+                    tmp.add(key);
+                    count_to_hg.put(count, tmp);
+                } else {
+                    count_to_hg.put(count,  Arrays.asList(key));
+                }
+
+            } else if(key.equals("B")){
+                List<String> grB2 = treeMap.get("B2");
+                List<String> grB4 = treeMap.get("B4");
+                List<String> grB5 = treeMap.get("B5");
+                List<String> grB6 = treeMap.get("B6");
+
+                int count = grB2.size() + grB4.size() +grB5.size() +grB6.size();
+
+                sizes.add(count);
+                if(count_to_hg.containsKey(count)){
+                    List<String> tmp = new ArrayList<>(count_to_hg.get(count));
+                    tmp.add(key);
+                    count_to_hg.put(count, tmp);
+                } else {
+                    count_to_hg.put(count,  Arrays.asList(key));
+                }
+            } else
             if(treeMap.containsKey(key)){
                 int count = treeMap.get(key).size();
                 sizes.add(count);
@@ -504,7 +559,7 @@ public class ChartController {
         if(tmp.contains("Haplogroup") && !containsHGCol(tableController.getCurrentColumnNames())){
 
             HaplogroupException haplogroupException = new HaplogroupException("No haplogroups defined!");
-            HaplogroupErrorDialogue haplogroupErrorDialogue = new HaplogroupErrorDialogue(haplogroupException);
+            new HaplogroupErrorDialogue(haplogroupException);
 
         } else {
             String[][] res = new String[names.length][];

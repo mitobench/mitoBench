@@ -43,7 +43,7 @@ public class FileReaderController {
             //Input is FastA
             if (absolutePath.endsWith(".fasta") || absolutePath.endsWith(".fas") || absolutePath.endsWith(".fa") || absolutePath.endsWith(".fna") ) {
 
-                MultiFastaParser multiFastAInput = null;
+                MultiFastaParser multiFastAInput;
                 try {
                     try {
                         multiFastAInput = new MultiFastaParser(f.getPath(), LOG, message_duplications);
@@ -90,8 +90,8 @@ public class FileReaderController {
 
             //Input is Excel Format
 
-            if (absolutePath.endsWith(".xlsx") || absolutePath.endsWith(".xls")) {
-                ExcelParser excelReader = null;
+            if (absolutePath.endsWith(".xlsx")) {
+                ExcelParser excelReader;
                 try {
                     excelReader = new ExcelParser(f.getPath(), LOG, message_duplications);
                     HashMap<String, List<Entry>> data_map = excelReader.getCorrespondingData();
@@ -99,7 +99,7 @@ public class FileReaderController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (EXCELException e) {
-                    ExcelErrorDialogue excelErrorDialogue = new ExcelErrorDialogue(e);
+                    new ExcelErrorDialogue(e);
                 }
             }
 

@@ -67,7 +67,6 @@ public class ExportDialogue extends Application {
         ButtonType fasta_button = new ButtonType("FASTA");
         ButtonType arp_button = new ButtonType("ARP");
         ButtonType beast_button = new ButtonType("BEAST");
-        ButtonType csv_button = new ButtonType("CSV");
         ButtonType tsv_button = new ButtonType("TSV");
         ButtonType xlsx_button = new ButtonType("XLSX");
         ButtonType mito_button = new ButtonType("MITOPROJ");
@@ -79,7 +78,7 @@ public class ExportDialogue extends Application {
         removeUnwantedEntries();
 
 
-        alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, csv_button, tsv_button, xlsx_button, mito_button,
+        alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, tsv_button, xlsx_button, mito_button,
                 nexus_button, phylip_button, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -104,19 +103,22 @@ public class ExportDialogue extends Application {
             } else {
                 UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
                         "Please align you sequences first to proceed.\n" +
-                                "You can export you data as multiFasta\nand align them with an alignment tool of your choice.",
+                                "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
+
                         mito.getDialogueController()
                         );
             }
                 //fasta output
             } else  if (result.get() == fasta_button) {
-                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Fasta Format (*.fasta)", "*.fasta");
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Fasta Format (*.fasta)",
+                        "*.fasta");
                 SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
                 saveAsDialogue.start(new Stage());
                 if(saveAsDialogue.getOutFile() != null) {
                     String outfileFASTA = saveAsDialogue.getOutFile();
                     LOG.info("Export data into multi FASTA format. File: " + outfileFASTA);
-                    MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(), dataToExport, false);
+                    MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(),
+                            dataToExport, false);
                     multiFastaWriter.writeData(outfileFASTA, tableController);
 
                 }
@@ -136,8 +138,9 @@ public class ExportDialogue extends Application {
             } else {
                 UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
                         "Please align you sequences first to proceed.\n" +
-                                "You can export you data as multiFasta\nand align them with an alignment tool of your choice.",mito.getDialogueController());
-            }
+
+                                "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
+
 
             //CSV Output
         } else if (result.get() == csv_button) {
@@ -153,7 +156,9 @@ public class ExportDialogue extends Application {
                 } catch (Exception e) {
                     System.err.println("Caught Exception: " + e.getMessage());
                 }
+
             }
+            
             //XLSX output
         } else if (result.get() == tsv_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Tab Separated Values (*.tsv)", "*.tsv");

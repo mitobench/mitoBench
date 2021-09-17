@@ -48,16 +48,13 @@ public class HaploStatistics {
         // get set of unique group and haplogroup entries
         if(!tableController.getGroupController().groupingExists()) {
             number_of_groups=1;
-            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableItems);
-            //String[] selection_haplogroups = cols[0];
-            List<String> selection_haplogroups =tableController.getColumnData(tableController.getTableColumnByName("Haplogroup"));
+            String[][] cols = chartController.prepareColumnsAsList(new String[]{"Haplogroup"}, tableItems);
+            List<String> selection_haplogroups = Arrays.asList(cols[0]);
+            //List<String> selection_haplogroups =tableController.getColumnData(tableController.getTableColumnByName("Haplogroup"));
             HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(selection_haplogroups, coreHGs);
-            //data_all = chartController.assignHGsNoGrouping(hgs_summarized, selection_haplogroups);
-            data_all = chartController.assignHGsNoGrouping(hgs_summarized,selection_haplogroups );
-
+            data_all = chartController.assignHGsNoGrouping(hgs_summarized, selection_haplogroups );
 
         } else {
-
 
             String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableItems);
             String[] selection_haplogroups = cols[0];
@@ -69,14 +66,9 @@ public class HaploStatistics {
                 if(s.equals(""))
                     number_of_groups = selection_groups.length-1;
             }
-            
             HashMap<String, ArrayList> hgs_summarized = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups), coreHGs);
             data_all = chartController.assignHGs(hgs_summarized, selection_haplogroups, selection_groups);
-
-
-
         }
-
     }
 
 
@@ -221,6 +213,11 @@ public class HaploStatistics {
     }
 
 
+    /**
+     * Calculate and return haplogroup frequencies of given dataset.
+     *
+     * @return haplogroup frequencies
+     */
     public double[][] getFrequencies(){
 
         double[][] data = getData();

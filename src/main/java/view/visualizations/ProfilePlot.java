@@ -93,9 +93,6 @@ public class ProfilePlot extends AChart {
         HashMap<String, List<XYChart.Data<String, Number>>> group_hg = new HashMap<>();
         for(String key : hg_core_curr) {
 
-            //if (hg_core_curr.contains("B"))
-                //bContained = true;
-
             if (data_all.containsKey(key)) {
                 for (int i = 0; i < selection_groups.length; i++) {
                     String group = data_all.get(key).get(i).getXValue();
@@ -117,36 +114,6 @@ public class ProfilePlot extends AChart {
                 }
             }
         }
-
-//        // if hg list contained 'B', group them together
-//        if(bContained){
-//            for(String group : group_hg.keySet()){
-//                List<XYChart.Data<String, Number>> datalist = group_hg.get(group);
-//                XYChart.Data<String, Number> dataB4 = datalist.get(hg_core_curr.indexOf("B4"));
-//                XYChart.Data<String, Number> dataB5 = datalist.get(hg_core_curr.indexOf("B5"));
-//                XYChart.Data<String, Number> dataB6 = datalist.get(hg_core_curr.indexOf("B6"));
-//
-//                Number valB4 = dataB4.getYValue();
-//                Number valB5 = dataB5.getYValue();
-//                Number valB6 = dataB6.getYValue();
-//
-//                int valB = valB4.intValue() + valB5.intValue() + valB6.intValue();
-//                datalist.get(hg_core_curr.indexOf("B4")).setYValue((Number) valB);
-//                datalist.remove(dataB5);
-//                datalist.remove(dataB6);
-//            }
-//        }
-//
-//        // new hg_curr_list
-//        List<String> hg_core_curr_new = new ArrayList<>();
-//        for (int i = 0; i < hg_core_curr.size(); i++){
-//            if(i == hg_core_curr.indexOf("B4")){
-//                hg_core_curr_new.add("B");
-//            } else if(!hg_core_curr.get(i).equals("B5") && !hg_core_curr.get(i).equals("B6")){
-//                hg_core_curr_new.add(hg_core_curr.get(i));
-//            }
-//        }
-//        hg_core_curr = hg_core_curr_new;
 
         for(String group : group_hg.keySet()){
             addSeries(hg_core_curr, group_hg.get(group), group);
@@ -192,9 +159,6 @@ public class ProfilePlot extends AChart {
         new Thread(task).start();
     }
 
-    private void getYvalue() {
-
-    }
 
     private String[] remove(String[] col) {
 
@@ -246,29 +210,6 @@ public class ProfilePlot extends AChart {
     }
 
 
-    /**
-     * Add listener to tab pane
-     * @param pane_current
-     * @param pane_to_update
-     */
-
-    public void addTabPaneListener(TabPane pane_current, TabPane pane_to_update){
-        pane_current.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-
-            if (newTab != null && oldTab != null) {
-                String id_tab_current = newTab.getId().split("_")[newTab.getId().split("_").length-1];
-
-                for(Tab tab : pane_to_update.getTabs()){
-                    String id_to_update = tab.getId().split("_")[tab.getId().split("_").length-1];
-                    if(id_tab_current.equals(id_to_update)){
-                        pane_to_update.getSelectionModel().select(tab);
-                    }
-                }
-            }
-        });
-    }
-
-
 
     /*
             Getter and Setter
@@ -276,18 +217,6 @@ public class ProfilePlot extends AChart {
 
     public LineChart<String,Number>  getPlot(){
         return profilePlot;
-    }
-
-    public void setMaxBoundary(){
-        for(int i = 1; i < 6; i++){
-            if((maxVal+i)%5 == 0){
-                if((maxVal+i) > 100)
-                    yAxis.setUpperBound(100);
-                else
-                    yAxis.setUpperBound(maxVal+i);
-                break;
-            }
-        }
     }
 
 

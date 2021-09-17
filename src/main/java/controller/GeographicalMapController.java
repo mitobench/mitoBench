@@ -69,7 +69,8 @@ public class GeographicalMapController {
                 id_col,
                 tableControllerUserBench.getTableColumnByName("Labsample ID"),
                 grouping_col,
-                geographicalMapViz.getMapBasicPane()
+                geographicalMapViz.getMapBasicPane(),
+                geographicalMapViz.getBasicPane()
         );
 
         geographicalMapViz.setCenter(map);

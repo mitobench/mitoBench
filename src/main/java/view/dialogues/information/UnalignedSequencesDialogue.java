@@ -42,7 +42,8 @@ public class UnalignedSequencesDialogue {
 
         int row=0;
         textArea_message = new Label(message);
-        cancel_btn = new Button("Ok");
+        cancel_btn = new Button("Cancel");
+
 
         dialogueController.unalignedDialogue_setCancel_btn(cancel_btn, dialog);
 

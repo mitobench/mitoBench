@@ -45,7 +45,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     protected ChartController chartcontroller;
     protected int row;
     private String[] hg_list_trimmed;
-    private Label warning_label;
 
 
     public AHGDialogue(String title, LogClass logClass) {
@@ -65,7 +64,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         addHGListCombobox(haploStatistics, mito);
 
         this.LOG = this.logClass.getLogger(this.getClass());
-        addEvents();
+        addListener();
     }
 
     protected String getMacrogroupsAsString(MitoBenchWindow mito) {
@@ -87,8 +86,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         this.scene = mito.getScene();
         this.haploStatistics = haploStatistics;
 
-        label = new Label("Please enter comma separated list of haplogroups " +
-                "\naccording to which the haplogroups should be grouped:");
+        label = new Label("Please enter a comma-separated list of macro-haplogroups by which to group:");
         combobox_hglist = new ComboBox(options);
         combobox_hglist.setEditable(true);
 
@@ -112,19 +110,14 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
         okBtn = new Button("OK");
         okBtn.setId("button_ok_statistics");
 
-        warning_label = new Label("Warning!\nIf you want to include the haplogroup 'B' in you list, please specify " +
-                "it as 'B4,B5,B6'.\nThe current version of phylotree (v17) does not support only 'B'.");
-
         row=0;
-
         dialogGrid.add(label, 0,row,3,1);
         dialogGrid.add(combobox_hglist, 0,++row,3,1);
-        dialogGrid.add(warning_label,0,++row,3,1);
         dialogGrid.add(okBtn,0,++row,1,1);
     }
 
 
-    public void addEvents(){
+    public void addListener(){
         okBtn.setOnAction(e -> {
             if((combobox_hglist.getSelectionModel().getSelectedItem().toString().equals("") || combobox_hglist.getSelectionModel().getSelectedItem().toString().startsWith("Please"))){
                 combobox_hglist.getItems().add("Please enter list here.");
@@ -165,7 +158,6 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
     public void calculateTrimmedHGList() {
 
         String[] hg_list;
-
         String p1 = combobox_hglist.getSelectionModel().getSelectedItem().toString();
 
         if (p1.contains("(") && p1.contains(")")) {
@@ -179,6 +171,7 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
             p1 = p1.replace("*", "");
             hg_list = p1.split(",");
             hg_list_trimmed = Arrays.stream(hg_list).map(String::trim).toArray(String[]::new);
+            mito.getChartController().setCustomHGList(hg_list_trimmed);
         } else {
             try {
                 throw new HaplogroupException("Haplogroups are not in correct format.");
@@ -186,6 +179,8 @@ public abstract class AHGDialogue extends ATabpaneDialogue {
                 e.printStackTrace();
             }
         }
+
+
     }
 
 

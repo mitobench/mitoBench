@@ -18,10 +18,7 @@ import view.dialogues.settings.SettingsDialogueStackedBarchart;
 import controller.TableControllerUserBench;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -202,41 +199,52 @@ public class VisualizationMenu {
                         visualizationController.initStackedBarchart(this);
 
                         stackedBar = visualizationController.getStackedBar();
-                        advancedStackedBarchartDialogue.calculateTrimmedHGList();
-                        chartController.addDataStackedBarChart(
-                                stackedBar,
-                                selection_haplogroups,
-                                advancedStackedBarchartDialogue.getStackOrder(),
-                                advancedStackedBarchartDialogue.getHg_list_trimmed()
-                        );
 
                         advancedStackedBarchartDialogue.calculateTrimmedHGList();
                         String[] hg_list = advancedStackedBarchartDialogue.getHg_list_trimmed();
 
-                        stackedBar.setHg_user_selection(hg_list);
+                        if(hg_list != null && hg_list.length>1){
+                            chartController.addDataStackedBarChart(
+                                    stackedBar,
+                                    selection_haplogroups,
+                                    advancedStackedBarchartDialogue.getStackOrder(),
+                                    hg_list
+                            );
 
-                        stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
+                            //advancedStackedBarchartDialogue.calculateTrimmedHGList();
+                            //String[] hg_list = advancedStackedBarchartDialogue.getHg_list_trimmed();
 
-                        // add settings
+                            stackedBar.setHg_user_selection(hg_list);
 
-                        stackedBar.addTooltip();
-                        colorScheme = null;
-                        try {
-                            colorScheme = new ColorSchemeStackedBarChart(stage);
-                        } catch (MalformedURLException e1) {
-                            e1.printStackTrace();
-                        }
+                            stackedBar.getSbc().getData().addAll(stackedBar.getSeriesList());
 
-                        if(selection_haplogroups.length > 20){
+                            // add settings
+
+                            stackedBar.addTooltip();
+                            colorScheme = null;
+                            try {
+                                colorScheme = new ColorSchemeStackedBarChart(stage);
+                            } catch (MalformedURLException e1) {
+                                e1.printStackTrace();
+                            }
                             colorScheme.setNewColors(stackedBar);
-                            stackedBar.addListener();
+//                            if(selection_haplogroups.length > 20){
+//                                colorScheme.setNewColors(stackedBar);
+//                                stackedBar.addListener();
+//                            } else {
+//                                colorScheme.setNewColorsLess20(stackedBar);
+//                                stackedBar.addListener();
+//                            }
+
+                            // remove tab from tabpane
+                            mito.getTabpane_visualization().getTabs().remove(tab);
                         } else {
-                            colorScheme.setNewColorsLess20(stackedBar);
-                            stackedBar.addListener();
+                            new InformationDialogue("Haplogroup list",
+                                    "Please specify a list of haplogroups.", "", "haplogroup_list_info");
                         }
 
-                        // remove tab from tabpane
-                        mito.getTabpane_visualization().getTabs().remove(tab);
+
+
                     });
 
                 } else {
@@ -245,7 +253,7 @@ public class VisualizationMenu {
                             "Please determine haplogroups first.",
                             null,
                             "hgWarning");
-                    }
+                }
 
 
             } else {

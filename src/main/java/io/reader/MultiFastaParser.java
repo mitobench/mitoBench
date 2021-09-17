@@ -54,20 +54,22 @@ public class MultiFastaParser implements IInputData {
         String currSeq = "";
         message_duplicates = message_duplications;
         int init = 0;
-        boolean seq_length_should_be_equal = true;
+        //boolean seq_length_should_be_equal = true;
         int line_index = 0;
-        int seq_length = 0;
+        int seq_length = 16569;
 
         while ((currentLine = bfr.readLine()) != null) {
             currentLine = currentLine.trim();
             if (!currHeader.equals("") && currentLine.startsWith(">")) {
-                if(seq_length_should_be_equal){
-                    seq_length = currSeq.length();
-                    seq_length_should_be_equal = false;
-                }
-                //Check whether lengths are equal between individual FastA entries, this is crucial and should be the case!
+//                if(seq_length_should_be_equal){
+//                    seq_length = currSeq.length();
+//                    seq_length_should_be_equal = false;
+//                }
+                // Check whether lengths are equal to the length of rCRS (sequences have to be aligned to rCRS),
+                // this is crucial and should be the case!
 //                if(currSeq.length() != seq_length){
-//                    throw new FastAException("Your sequence lengths do not match each other. Please ensure that you performed a multiple sequence alignment of your FastA entries first, before using them here.");
+//                    throw new FastAException("Your sequence lengths do not match each other. Please ensure that you " +
+//                            "performed a multiple sequence alignment of your FastA entries first, before using them here.");
 //                }
                 //we have finished our first entry then
                 FastaEntry faentry = new FastaEntry(currSeq, currHeader);

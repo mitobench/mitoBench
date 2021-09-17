@@ -96,7 +96,7 @@ public class DBstatisticsDialogue{
 
         link.setOnAction(event -> new Thread(() -> {
             try {
-                Desktop.getDesktop().browse(new URI("https://docs.google.com/spreadsheets/d/1sNki9nNWoH8xf_6fJGzFSBKC9pPsmn7cSsRboGQwSxY/edit?usp=sharing"));
+                Desktop.getDesktop().browse(new URI("https://docs.google.com/spreadsheets/d/15gCYwA8P4gTogIChzy3wIedhgi29QmIrw9haFq949L8/edit?usp=sharing"));
             } catch (IOException | URISyntaxException e1) {
                 e1.printStackTrace();
             }

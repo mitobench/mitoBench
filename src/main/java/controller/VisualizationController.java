@@ -171,6 +171,8 @@ public class VisualizationController {
         t.setFont(Font.font(25));
 
         pieChartViz = new PieChartViz(t.getText(), tabPane, logClass);
+        URL url = this.getClass().getResource("/css/ColorsPieChart.css");
+        stage.getScene().getStylesheets().add(url.toExternalForm());
         pieChartViz.setStyleSheet(stage);
         grid_piecharts.setGridLinesVisible(true);
         grid_piecharts.add(pieChartViz.getChart(),curr_col,curr_row,1,1);
@@ -222,7 +224,7 @@ public class VisualizationController {
         t.setText("Haplogroup profile");
         t.setFont(Font.font(100));
 
-        profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Frequency in %", tabPane,
+        profilePlot = new ProfilePlot(t.getText(), "Haplogroup", "Occurrences", tabPane,
                 logClass, profilePlotID, mito);
         profilePlot.setStyleSheet(stage);
 
@@ -251,7 +253,7 @@ public class VisualizationController {
         Tab tab = new Tab();
         tab.setId("tab_map");
         tab.setText("Map");
-        tab.setContent(geographicalMapViz.getMapBasicPane());
+        tab.setContent(geographicalMapViz.getBasicPane());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
 

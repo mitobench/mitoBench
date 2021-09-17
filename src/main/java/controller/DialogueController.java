@@ -1,6 +1,6 @@
 package controller;
 
-import io.writer.MultiFastaWriter;
+
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;

@@ -55,7 +55,8 @@ public class AnalysisMenu {
                 }  else {
                     UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
                             "Please align you sequences first to proceed.\n" +
-                                    "You can export you data as multiFasta\nand align them with an alignment tool of your choice.",
+                                    "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
+
                             mito.getDialogueController());
 
                 }

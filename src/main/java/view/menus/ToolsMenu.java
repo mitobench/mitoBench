@@ -12,8 +12,6 @@ public class ToolsMenu {
     private MenuController menuController;
     private CustomMenuItem dataValidatorMenuItem;
     private CustomMenuItem dataCompleterMenuItem;
-    private CustomMenuItem dataAlignerMenuItem;
-    private CustomMenuItem dataUploaderMenuItem;
 
     public ToolsMenu(MitoBenchWindow mitoBenchWindow, GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
         menuTools = new Menu("Tools");
@@ -26,11 +24,6 @@ public class ToolsMenu {
     private void addSubMenus(GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
 
 
-        // ------------------------------ Menu Item Validate data --------------------------------------------
-
-        dataAlignerMenuItem = new CustomMenuItem(new Label("Align Sequences"));
-        dataAlignerMenuItem.setId("dataAligner");
-
 
         // ------------------------------ Menu Item Validate data --------------------------------------------
 
@@ -42,10 +35,6 @@ public class ToolsMenu {
         dataCompleterMenuItem = new CustomMenuItem(new Label("Complete data"));
         dataValidatorMenuItem.setId("dataCompleter");
 
-        // ------------------------------ Menu Item Upload data --------------------------------------------
-
-        dataUploaderMenuItem = new CustomMenuItem(new Label("Upload data"));
-        dataUploaderMenuItem.setId("dataUploader");
 
         // ------------------------------ Add tooltips --------------------------------------------------------
 
@@ -58,7 +47,7 @@ public class ToolsMenu {
 
         // ------------------------------ Add All Items---------- --------------------------------------------
 
-        menuController.setToolsMenu(dataValidatorMenuItem, dataCompleterMenuItem);
+        menuController.setToolsMenu( dataValidatorMenuItem, dataCompleterMenuItem);
 
         menuTools.getItems().addAll(groupMenu.getMenuGroup(), analysisMenu.getMenuAnalysis(), statisticsMenu.getMenuTools(),
                 dataValidatorMenuItem, dataCompleterMenuItem);

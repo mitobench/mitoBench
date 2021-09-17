@@ -1,7 +1,6 @@
 package view.visualizations;
 
 import controller.ChartController;
-import controller.GroupController;
 import controller.TableControllerUserBench;
 import controller.VisualizationController;
 import javafx.collections.FXCollections;
@@ -37,7 +36,8 @@ public class StackedBar extends AChart{
     private String[] hg_user_selection;
     private VisualizationController visualizationController;
 
-    public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu, ChartController cc, TableControllerUserBench tc,
+    public StackedBar(String title, TabPane vBox, VisualizationMenu graphicsMenu,
+                      ChartController cc, TableControllerUserBench tc,
                       VisualizationController visualizationController) {
         super("", "Frequency in %", graphicsMenu.getLogClass());
 
@@ -104,8 +104,8 @@ public class StackedBar extends AChart{
 
 
     /**
-     * This method adds a tooltip to the chart, which provides information such as the name of the Haplogroup and their
-     * occurrences.
+     * This method adds a tooltip to the chart, which provides information such as the name of the
+     * Haplogroup and their occurrences.
      *
      * @param
      */
@@ -160,21 +160,24 @@ public class StackedBar extends AChart{
         String hg = item.getNode().accessibleTextProperty().get().split(" ")[0].trim();
         String group = item.getXValue();
 
-
         TableColumn haplo_col = graphicsMenu.getTableController().getTableColumnByName("Haplogroup");
         TableColumn group_col = graphicsMenu.getTableController().getTableColumnByName("Grouping");
         String[] selection_haplogroups;
+
         if(group_col==null){
-            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"}, tableController.getSelectedRows());
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup"},
+                    tableController.getSelectedRows());
             selection_haplogroups = cols[0];
         } else{
             // get only those haplogroups that does not already correspond to another macroHG displayed
-            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"}, tableController.getSelectedRows());
+            String[][] cols = chartController.prepareColumns(new String[]{"Haplogroup", "Grouping"},
+                    tableController.getSelectedRows());
             selection_haplogroups = cols[0];
 
         }
 
-        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups), hg_user_selection);
+        HashMap<String, ArrayList> hgs_summed = chartController.summarizeHaplogroups(Arrays.asList(selection_haplogroups),
+                hg_user_selection);
         List<String> sub_hgs = hgs_summed.get(hg);
 
         if(sub_hgs != null){

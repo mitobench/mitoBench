@@ -38,8 +38,8 @@ public class PCA_Analysis {
     public void calculate(){
 
         BasicLogger.debug();
-        BasicLogger.debug(OjAlgoUtils.getTitle());
-        BasicLogger.debug(OjAlgoUtils.getDate());
+        //BasicLogger.debug(OjAlgoUtils.getTitle());
+        //BasicLogger.debug(OjAlgoUtils.getDate());
         BasicLogger.debug();
 
 
@@ -168,10 +168,10 @@ public class PCA_Analysis {
         OptionalDouble upperbound_y = Arrays.stream(pc2).max();
 
         pca_plot.create(
-                lowerbound_x.getAsDouble()-0.5,
-                lowerbound_y.getAsDouble()-0.5,
-                upperbound_x.getAsDouble()+0.5,
-                upperbound_y.getAsDouble()+0.5,
+                lowerbound_x.getAsDouble()-0.05,
+                lowerbound_y.getAsDouble()-0.05,
+                upperbound_x.getAsDouble()+0.05,
+                upperbound_y.getAsDouble()+0.05,
                 "PC1 (" + variancePC1 + " variance)",
                 "PC2 (" + variancePC2 + " variance)",
                 ""
