@@ -74,8 +74,6 @@ public class ExportDialogue extends Application {
         ButtonType phylip_button = new ButtonType("PHYLIP");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        //We disallow ID and mtSequence as entries
-        removeUnwantedEntries();
 
 
         alert.getButtonTypes().setAll(fasta_button, arp_button, beast_button, tsv_button, xlsx_button, mito_button,
@@ -86,14 +84,14 @@ public class ExportDialogue extends Application {
 
         //ARP output
         if (result.get() == arp_button) {
-            if(tableController.sequencesHaveSameLength(tableController.getTableColumnByName("ID"))){
+            if (tableController.sequencesHaveSameLength(tableController.getTableColumnByName("ID"))) {
 
                 DataChoiceDialogue dataChoiceDialogue = new DataChoiceDialogue(this.columnsInTable);
                 String selection = dataChoiceDialogue.getSelected();
                 FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Arlequin Format (*.arp)", "*.arp");
                 SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
                 saveAsDialogue.start(new Stage());
-                if(saveAsDialogue.getOutFile() != null) {
+                if (saveAsDialogue.getOutFile() != null) {
                     String outfileDB = saveAsDialogue.getOutFile();
                     LOG.info("Export data into ARP format with grouping on column '" + selection + "'. File: " + outfileDB);
                     ARPWriter arpwriter = new ARPWriter(tableController, dataToExport);
@@ -106,10 +104,10 @@ public class ExportDialogue extends Application {
                                 "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
 
                         mito.getDialogueController()
-                        );
+                );
             }
-                //fasta output
-            } else  if (result.get() == fasta_button) {
+            //fasta output
+        } else if (result.get() == fasta_button) {
                 FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Fasta Format (*.fasta)",
                         "*.fasta");
                 SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
@@ -140,23 +138,8 @@ public class ExportDialogue extends Application {
                         "Please align you sequences first to proceed.\n" +
 
                                 "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
-
-
-            //CSV Output
-        } else if (result.get() == csv_button) {
-            FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Comma Separated Values (*.csv)", "*.csv");
-            SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
-            saveAsDialogue.start(new Stage());
-            if (saveAsDialogue.getOutFile() != null) {
-                String outFileDB = saveAsDialogue.getOutFile();
-                try {
-                    GenericWriter csvWriter = new GenericWriter(dataToExport, ",", true);
-                    csvWriter.writeData(outFileDB, tableController);
-                    LOG.info("Export data into CSV format. File: " + outFileDB);
-                } catch (Exception e) {
-                    System.err.println("Caught Exception: " + e.getMessage());
-                }
-
+                        mito.getDialogueController()
+                );
             }
             
             //XLSX output
@@ -175,7 +158,7 @@ public class ExportDialogue extends Application {
                 }
             }
             //XLSX output
-        }else if (result.get() == xlsx_button) {
+        } else if (result.get() == xlsx_button) {
             FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Microsoft Excel (*.xlsx)", "*.xlsx");
             SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
             saveAsDialogue.start(new Stage());
