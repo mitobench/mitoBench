@@ -36,7 +36,7 @@ public class TableContextMenu {
         this.menu = menu;
     }
 
-    public MenuItem getAddNewGropuItem() {
+    public MenuItem getAddNewGroupItem() {
         return addNewGropuItem;
     }
 

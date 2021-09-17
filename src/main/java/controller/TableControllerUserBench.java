@@ -4,8 +4,6 @@ package controller;
 import Logging.LogClass;
 
 import io.datastructure.Entry;
-import io.datastructure.generic.GenericInputData;
-import io.inputtypes.CategoricInputType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -16,7 +14,6 @@ import view.table.CopyColumnDialogue;
 import view.table.DeleteColumnDialogue;
 import view.table.TableContextMenu;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +32,7 @@ public class TableControllerUserBench extends ATableController {
     public void createContextMenu(){
         TableContextMenu tableContextMenu = new TableContextMenu();
 
-        tableContextMenu.getAddNewGropuItem().setOnAction(event -> {
+        tableContextMenu.getAddNewGroupItem().setOnAction(event -> {
             AddNewColumnDialogue addnewColumnDialogue =
                     new AddNewColumnDialogue("Add new column", controller, logClass);
         });

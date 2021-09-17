@@ -4,13 +4,16 @@ package view.menus;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
 import org.apache.log4j.Logger;
 import view.MitoBenchWindow;
 import controller.GroupController;
 import controller.TableControllerUserBench;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by neukamm on 15.02.17.
@@ -60,6 +63,7 @@ public class GroupMenu {
                     }
 
                 });
+
             }
         }
 
@@ -82,15 +86,20 @@ public class GroupMenu {
     public void upateGroupItem(List<String> colnames, GroupController groupController){
         groupByColumnItem.getItems().removeAll(groupByColumnItem.getItems());
         for(String col : colnames ){
-            MenuItem colItem = new MenuItem(col);
-            groupByColumnItem.getItems().add(colItem);
-            colItem.setOnAction(t -> {
-                if(!colItem.getText().contains("(Grouping)")){
-                    groupController.clearGrouping();
-                    groupController.createGroupByColumn(colItem.getText(), "");
-                    LOG.info("Create grouping on column: " + colItem.getText());
-                }
-            });
+            Set tableEntries = new HashSet<>(tableController.getColumnData(tableController.getTableColumnByName(col)));
+            if(tableEntries.size() > 1){
+                MenuItem colItem = new MenuItem(col + " (" + tableEntries.size() + ")");
+                groupByColumnItem.getItems().add(colItem);
+                colItem.setOnAction(t -> {
+                    if(!colItem.getText().contains("(Grouping)")){
+                        String colname = colItem.getText().replace( " (" + tableEntries.size() + ")","");
+                        groupController.clearGrouping();
+                        groupController.createGroupByColumn(colname, "");
+                        LOG.info("Create grouping on column: " + colname);
+                    }
+                });
+            }
+
         }
     }
 

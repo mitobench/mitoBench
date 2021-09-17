@@ -4,6 +4,7 @@ import io.Exceptions.HaplogroupException;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
+import org.jetbrains.annotations.NotNull;
 import view.dialogues.error.HaplogroupErrorDialogue;
 import view.visualizations.BarChartGrouping;
 import view.visualizations.BarPlotHaplo;
@@ -114,7 +115,7 @@ public class ChartController {
      * @param hgs
      */
 
-    public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, String[] selection_groups, String[] hgs) {
+    public void addDataStackedBarChart(StackedBar stackedBar, String[] selection_haplogroups, @NotNull String[] selection_groups, String[] hgs) {
 
         // get number of elements per group
         int[] numberOfElementsPerCaregory;
@@ -592,8 +593,6 @@ public class ChartController {
 
     }
 
-
-    //public HashMap<String, List<XYChart.Data<String, Number>>> assignHGsNoGrouping(HashMap<String, ArrayList> hgs_summed, String[] selection_haplogroups) {
     public HashMap<String, List<XYChart.Data<String, Number>>> assignHGsNoGrouping(HashMap<String, ArrayList> hgs_summed, List<String> selection_haplogroups) {
 
         HashMap<String, List<XYChart.Data<String, Number>>> data_all = new HashMap<>();
