@@ -11,7 +11,7 @@ plugins {
 }
 
 group 'com.uni-tuebingen.de.it.mitobench'
-version '1.8-beta'
+version '1.0'
 
 
 tasks.withType(JavaExec) {
