@@ -12,7 +12,6 @@ public class ToolsMenu {
     private MenuController menuController;
     private CustomMenuItem dataValidatorMenuItem;
     private CustomMenuItem dataCompleterMenuItem;
-    private CustomMenuItem dataAlignerMenuItem;
 
     public ToolsMenu(MitoBenchWindow mitoBenchWindow, GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
         menuTools = new Menu("Tools");
@@ -24,11 +23,6 @@ public class ToolsMenu {
 
     private void addSubMenus(GroupMenu groupMenu, AnalysisMenu analysisMenu, StatisticsMenu statisticsMenu) {
 
-
-        // ------------------------------ Menu Item Validate data --------------------------------------------
-
-        dataAlignerMenuItem = new CustomMenuItem(new Label("Align Sequences"));
-        dataAlignerMenuItem.setId("dataAligner");
 
 
         // ------------------------------ Menu Item Validate data --------------------------------------------
@@ -53,10 +47,10 @@ public class ToolsMenu {
 
         // ------------------------------ Add All Items---------- --------------------------------------------
 
-        menuController.setToolsMenu(dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem);
+        menuController.setToolsMenu( dataValidatorMenuItem, dataCompleterMenuItem);
 
         menuTools.getItems().addAll(groupMenu.getMenuGroup(), analysisMenu.getMenuAnalysis(), statisticsMenu.getMenuTools(),
-                dataAlignerMenuItem, dataValidatorMenuItem, dataCompleterMenuItem);
+                dataValidatorMenuItem, dataCompleterMenuItem);
 
     }
 

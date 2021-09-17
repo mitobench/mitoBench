@@ -102,20 +102,22 @@ public class ExportDialogue extends Application {
                 }
             } else {
                 UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
-                        "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
-                                "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",
+                        "Please align you sequences first to proceed.\n" +
+                                "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
                         mito.getDialogueController()
                         );
             }
                 //fasta output
             } else  if (result.get() == fasta_button) {
-                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Fasta Format (*.fasta)", "*.fasta");
+                FileChooser.ExtensionFilter fex = new FileChooser.ExtensionFilter("Fasta Format (*.fasta)",
+                        "*.fasta");
                 SaveAsDialogue saveAsDialogue = new SaveAsDialogue(fex);
                 saveAsDialogue.start(new Stage());
                 if(saveAsDialogue.getOutFile() != null) {
                     String outfileFASTA = saveAsDialogue.getOutFile();
                     LOG.info("Export data into multi FASTA format. File: " + outfileFASTA);
-                    MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(), dataToExport, false);
+                    MultiFastaWriter multiFastaWriter = new MultiFastaWriter(tableController.getDataTable().getMtStorage(),
+                            dataToExport, false);
                     multiFastaWriter.writeData(outfileFASTA, tableController);
 
                 }
@@ -134,8 +136,9 @@ public class ExportDialogue extends Application {
                 }
             } else {
                 UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
-                        "Please align you sequences first to proceed.\nYou can use mitoBench, which is using the program MAFFT.\n" +
-                                "Otherwise, you can export you data as multiFasta\nand align them with an alignment tool of your choice.",mito.getDialogueController());
+                        "Please align you sequences first to proceed.\n" +
+                                "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
+                        mito.getDialogueController());
             }
             
             //XLSX output
