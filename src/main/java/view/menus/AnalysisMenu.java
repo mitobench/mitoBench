@@ -14,7 +14,6 @@ import view.dialogues.settings.FstSettingsDialogue;
 import controller.TableControllerUserBench;
 import view.dialogues.settings.PcaPopupDialogue;
 
-import java.util.Arrays;
 
 
 /**
@@ -57,6 +56,7 @@ public class AnalysisMenu {
                     UnalignedSequencesDialogue unalignedSequencesDialogue = new UnalignedSequencesDialogue("Warning: Unaligned sequences",
                             "Please align you sequences first to proceed.\n" +
                                     "You can export the sequence data as multiFasta\nand align them with an alignment tool of your choice.",
+
                             mito.getDialogueController());
 
                 }

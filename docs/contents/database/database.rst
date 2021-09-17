@@ -5,7 +5,7 @@ Database
 
 This database contains currently 22,880 complete modern and ancient published mitochondrial genomes from the 1000 Genome
 Project and other published sources with the aim of continuous expansion
-(see all publications `here <https://docs.google.com/spreadsheets/d/1AM9izcYYnGUoZrBaVGNWBQzldTgossOYX23fgJK474o/edit?usp=sharing>`_).
+(see all publications `here <https://docs.google.com/spreadsheets/d/15gCYwA8P4gTogIChzy3wIedhgi29QmIrw9haFq949L8/edit?usp=sharing>`_).
 
 Access
 -------
